@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>গ্রন্থকানন - আপনার পছন্দের বই</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div>☰</div>
+
+    <div class="moving-bar">
+        <div class="moving-text">
+            🔥 বিশেষ অফার: সকল ইসলামিক বইয়ে ১০% ছাড়! 🚚 ক্যাশ অন ডেলিভারি সুবিধা
+        </div>
+    </div>
+
+    <div>🔍 🛒</div>
+</nav>
+
+<header class="branding">
+    <div class="logo-area">
+        <img src="logoo.jpeg" alt="Logo">
+    </div>
+
+    <p class="tagline">
+        স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান
+    </p>
+
+    <div class="search">
+        <input type="text" placeholder="বইয়ের নাম লিখে খুঁজুন...">
+    </div>
+</header>
+
+<!-- BANNER -->
+<div class="banner-container">
+    <div class="slider" id="mainSlider">
+        <img src="cover.jpeg">
+        <img src="cover2.jpg">
+        <img src="cover3.jpg">
+    </div>
+</div>
+
+<!-- CATEGORY -->
+<div class="category-container">
+    <a href="#" class="cat-btn active">সব বই</a>
+    <a href="#" class="cat-btn">হাদিস</a>
+    <a href="#" class="cat-btn">তাফসীর</a>
+</div>
+
+<h2 class="section-title">বইয়ের তালিকা</h2>
+
+<div class="grid-container">
+
+    <div class="grid-item">
+        <img src="https://co.com">
+        <div class="info">
+            <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
+            <div class="price">৳220</div>
+            <button onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ',220)">কার্টে যোগ করুন</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- CART -->
+<div class="cart-floating" onclick="showCart()">
+    🛒 কার্ট <span id="count">0</span>
+</div>
+
+<div id="cartBox" class="cart-box">
+    <h3>কার্ট</h3>
+    <div id="cartItems"></div>
+
+    <p>Subtotal: ৳<span id="subtotal">0</span></p>
+
+    <select id="location" onchange="updateCartUI()">
+        <option value="60">ঢাকার ভিতরে (৳60)</option>
+        <option value="90">ঢাকার বাইরে (৳90)</option>
+    </select>
+
+    <p>Total: ৳<span id="total">0</span></p>
+
+    <button onclick="closeCart()">বন্ধ</button>
+</div>
+
+<footer>
+    © 2024 গ্রন্থকানন
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
