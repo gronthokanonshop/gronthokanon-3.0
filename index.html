@@ -1,97 +1,407 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>গ্রন্থকানন - আপনার পছন্দের বই</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>গ্রন্থকানন - আপনার পছন্দের বই</title>
+    <style>
+        /* RESET */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'SolaimanLipi', Arial, sans-serif; background: #edf2f7; color: #333; overflow-x: hidden; }
 
-<link rel="stylesheet" href="style.css">
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left { display: flex; align-items: center; }
+        
+        .nav-center {
+            flex: 1; 
+            display: flex;
+            justify-content: center;
+            padding: 0 10px;
+        }
+
+        /* সার্চ বার ফুল স্পেস ডিজাইন */
+        .nav-search-container {
+            display: flex;
+            align-items: center;
+            background: #f1f3f4;
+            border-radius: 20px;
+            padding: 6px 15px;
+            width: 100%;
+            max-width: 500px; /* পিসিতে খুব বেশি বড় হবে না, মোবাইলে ফুল থাকবে */
+            border: 1px solid #e0e0e0;
+        }
+
+        .nav-search-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .search-icon-btn { font-size: 14px; color: #27ae60; cursor: pointer; }
+
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .menu-icon { font-size: 21px; cursor: pointer; color: #27ae60; padding-right: 5px; }
+        .user-icon { font-size: 19px; cursor: pointer; color: #333; }
+        .cart-icon-wrapper { position: relative; font-size: 22px; cursor: pointer; }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #e74c3c;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        /* SIDEBAR DESIGN */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px; /* শুরুতে বামে লুকিয়ে থাকবে */
+            width: 280px;
+            height: 100%;
+            background: #fff;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            z-index: 2000;
+            transition: 0.4s;
+            padding: 20px;
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-menu-item {
+            list-style: none;
+            padding: 12px 0;
+            border-bottom: 1px solid #f9f9f9;
+            font-weight: bold;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1500;
+        }
+
+        /* BRANDING & LOGO (Ratio Preserved) */
+        .branding { text-align: center; padding: 15px 0; background: #fff; }
+        .logo-area img { width: 60px; height: auto; display: block; margin: 0 auto; }
+
+        /* BANNER SLIDER */
+        .banner-container { max-width: 1200px; margin: 15px auto; overflow: hidden; border-radius: 12px; position: relative; background: #eee; }
+        .slider { display: flex; width: 100%; overflow-x: hidden; scroll-behavior: smooth; }
+        .slider img { width: 100%; height: auto; flex-shrink: 0; display: block; }
+
+        /* CATEGORY & GRID */
+        .category-container { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; max-width: 1100px; margin: auto; }
+        .cat-btn { padding: 8px 18px; background: #fff; color: #27ae60; border: 2px solid #27ae60; border-radius: 25px; text-decoration: none; font-size: 14px; font-weight: bold; transition: 0.3s; }
+        .cat-btn.active { background: #2c3e50; color: #fff; border-color: #2c3e50; }
+
+        .section-title { text-align: center; margin: 30px 0; font-size: 1.5rem; font-weight: bold; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; padding: 0 20px; max-width: 1100px; margin: auto; }
+        .grid-item { background: #fff; border-radius: 12px; overflow: hidden; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; }
+        .grid-item img { width: 100%; height: 230px; object-fit: cover; }
+        .info { padding: 15px; }
+        .price { color: #e74c3c; font-weight: bold; margin-bottom: 10px; }
+        .btn { display: block; padding: 10px; background: #27ae60; color: white; border-radius: 6px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; width: 100%; }
+
+        /* MOVING TEXT */
+        .moving-bar { background: #ffffff; color: #27ae60; padding: 10px 0; overflow: hidden; white-space: nowrap; font-weight: bold; font-size: 15px; border-bottom: 1px solid #eee; }
+        .moving-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        /* FLOATERS */
+        .wa-float { position: fixed; bottom: 25px; right: 25px; z-index: 1000; transition: 0.3s; }
+        .wa-float img { width: 60px; height: 60px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2)); }
+        .cart-floating { position: fixed; bottom: 25px; left: 20px; background: #27ae60; color: white; padding: 10px 15px; border-radius: 30px; cursor: pointer; z-index: 1000; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+        /* FOOTER */
+        footer { background: #2c3e50; color: white; text-align: center; padding: 30px 20px; margin-top: 40px; }
+        .social-section { padding-bottom: 20px; }
+        .social-btn img { width: 40px; margin: 0 10px; }
+    </style>
 </head>
-
 <body>
 
-<nav class="navbar">
-    <div>☰</div>
+<!-- স্লাইড মেনু (Sidebar) -->
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3 style="color: #27ae60;">মেনু</h3>
+        <span style="font-size: 24px; cursor: pointer;" onclick="toggleSidebar()">×</span>
+    </div>
+    <ul>
+        <li class="sidebar-menu-item">🏠 হোম</li>
+        <li class="sidebar-menu-item">📚 সকল বই</li>
+        <li class="sidebar-menu-item">🕌 ইসলামিক ক্যাটাগরি</li>
+        <li class="sidebar-menu-item">📜 আমাদের সম্পর্কে</li>
+        <li class="sidebar-menu-item">📞 যোগাযোগ</li>
+    </ul>
+</div>
 
-    <div class="moving-bar">
-        <div class="moving-text">
-            🔥 বিশেষ অফার: সকল ইসলামিক বইয়ে ১০% ছাড়! 🚚 ক্যাশ অন ডেলিভারি সুবিধা
+<!-- মুভিং টেক্সট -->
+<div class="moving-bar">
+    <div class="moving-text">
+        🔥 বিশেষ অফার: সকল ইসলামিক বইয়ে ১০% অতিরিক্ত ছাড়! 🚚 সারাদেশে ক্যাশ অন হোম ডেলিভারি সুবিধা। 
+    </div>
+</div>
+
+<!-- নেভিগেশন বার -->
+<nav class="navbar">
+    <div class="nav-left">
+        <span class="menu-icon" onclick="toggleSidebar()">☰</span>
+    </div>
+    <div class="nav-center">
+        <div class="nav-search-container">
+            <input type="text" id="searchInput" onkeyup="filterBooks()" placeholder="বই খুঁজুন..." class="nav-search-input">
+            <span class="search-icon-btn">🔍</span>
         </div>
     </div>
-
-    <div>🔍 🛒</div>
+    <div class="nav-right">
+        <span class="user-icon">👤</span>
+        <div class="cart-icon-wrapper" onclick="showCart()">
+            <span>🛒</span>
+            <span class="cart-badge" id="count">0</span>
+        </div>
+    </div>
 </nav>
 
 <header class="branding">
     <div class="logo-area">
-        <img src="logoo.jpeg" alt="Logo">
+        <img src="logo.png" alt="Logo">
     </div>
-
-    <p class="tagline">
-        স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান
+    <p style="font-size:19px; font-weight:500; color:#1f7a4c; line-height:1.6; margin-top: 10px;">
+        স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান
     </p>
-
-    <div class="search">
-        <input type="text" placeholder="বইয়ের নাম লিখে খুঁজুন...">
-    </div>
 </header>
 
-<!-- BANNER -->
+<!-- BANNER SLIDER -->
 <div class="banner-container">
     <div class="slider" id="mainSlider">
-        <img src="cover.jpeg">
-        <img src="cover2.jpg">
-        <img src="cover3.jpg">
+        <img src="cover.jpeg" alt="">
+        <img src="cover2.jpg" alt="">
+        <img src="cover3.jpg" alt="">
     </div>
 </div>
 
-<!-- CATEGORY -->
 <div class="category-container">
     <a href="#" class="cat-btn active">সব বই</a>
     <a href="#" class="cat-btn">হাদিস</a>
     <a href="#" class="cat-btn">তাফসীর</a>
+    <a href="#" class="cat-btn">গল্পের বই</a>
+    <a href="#" class="cat-btn">শিশু-কিশোর</a>
 </div>
 
-<h2 class="section-title">বইয়ের তালিকা</h2>
+<div class="section-title">বইয়ের তালিকা</div>
 
-<div class="grid-container">
-
+<!-- প্রোডাক্ট গ্রিড -->
+<div class="grid-container" id="bookGrid">
     <div class="grid-item">
-        <img src="https://co.com">
+        <img src="https://via.placeholder.com/170x230" alt="বই">
         <div class="info">
             <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
-            <div class="price">৳220</div>
-            <button onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ',220)">কার্টে যোগ করুন</button>
+            <div class="price">৳ 220</div>
+            <button class="btn" onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ', 220)">কার্টে যোগ করুন</button>
         </div>
     </div>
-
+    <div class="grid-item">
+        <img src="https://via.placeholder.com/170x230" alt="বই">
+        <div class="info">
+            <h3>দোয়ার ডায়েরি</h3>
+            <div class="price">৳ 230</div>
+            <button class="btn" onclick="addToCart('দোয়ার ডায়েরি', 230)">কার্টে যোগ করুন</button>
+        </div>
+    </div>
+    <div class="grid-item">
+        <img src="https://via.placeholder.com/170x230" alt="বই">
+        <div class="info">
+            <h3>আমার বাড়ি</h3>
+            <div class="price">৳ 300</div>
+            <button class="btn" onclick="addToCart('আমার বাড়ি', 300)">কার্টে যোগ করুন</button>
+        </div>
+    </div>
+    <!-- আপনি এখানে আপনার বাকি বইগুলো একইভাবে যোগ করবেন -->
 </div>
 
-<!-- CART -->
+<!-- কার্ট বক্স -->
+<div id="cartBox" style="display:none; position:fixed; right:20px; bottom:80px; width:300px; background:#fff; padding:15px; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.2); z-index:9999;">
+    <h3 style="margin-bottom: 10px;">🛒 আপনার কার্ট</h3>
+    <div id="cartItems" style="max-height: 200px; overflow-y: auto; margin-bottom: 10px;"></div>
+    <hr>
+    <p style="margin-top: 10px;">Subtotal: ৳<span id="subtotal">0</span></p>
+    <p>ডেলিভারি এলাকা: 
+        <select id="location" onchange="updateCartUI()" style="width:100%; padding:5px; margin-top:5px;">
+            <option value="60">ঢাকার ভিতরে (৳60)</option>
+            <option value="90">ঢাকার বাইরে (৳90)</option>
+        </select>
+    </p>
+    <p>Delivery Charge: ৳<span id="deliveryFee">60</span></p>
+    <h4 style="color: #27ae60; margin: 10px 0;">Total: ৳<span id="total">0</span></h4>
+    <button onclick="openOrderForm()" style="width:100%; padding:10px; background:#27ae60; color:#fff; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Checkout</button>
+    <button onclick="closeCart()" style="width:100%; margin-top:10px; border:none; background:none; color:red; cursor:pointer;">❌ বন্ধ করুন</button>
+</div>
+
+<!-- শিপিং ফর্ম (অর্ডার মডাল) -->
+<div id="orderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center; padding:15px;">
+    <div style="background:#fff; padding:25px; border-radius:15px; width:100%; max-width:400px; text-align:center;">
+        <h3 style="color:#27ae60; margin-bottom:20px;">শিপিং তথ্য দিন</h3>
+        <input type="text" id="custName" placeholder="আপনার নাম" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
+        <input type="text" id="custPhone" placeholder="মোবাইল নম্বর" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
+        <textarea id="custAddress" placeholder="সম্পূর্ণ ঠিকানা" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px; height:80px;"></textarea>
+        <button onclick="confirmOrder()" style="width:100%; padding:15px; background:#27ae60; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">অর্ডার কনফার্ম করুন</button>
+        <button onclick="closeOrderForm()" style="margin-top:10px; border:none; background:none; color:#888; cursor:pointer;">এখনই নয়</button>
+    </div>
+</div>
+
+<!-- ফ্লোটিং বাটনগুলো -->
+<a href="https://wa.me/8801516595762" class="wa-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+</a>
 <div class="cart-floating" onclick="showCart()">
-    🛒 কার্ট <span id="count">0</span>
-</div>
-
-<div id="cartBox" class="cart-box">
-    <h3>কার্ট</h3>
-    <div id="cartItems"></div>
-
-    <p>Subtotal: ৳<span id="subtotal">0</span></p>
-
-    <select id="location" onchange="updateCartUI()">
-        <option value="60">ঢাকার ভিতরে (৳60)</option>
-        <option value="90">ঢাকার বাইরে (৳90)</option>
-    </select>
-
-    <p>Total: ৳<span id="total">0</span></p>
-
-    <button onclick="closeCart()">বন্ধ</button>
+    🛒 <span id="floatCount">0</span> টি বই কার্টে
 </div>
 
 <footer>
-    © 2024 গ্রন্থকানন
+    <div class="social-section">
+        <p style="margin-bottom: 10px; font-weight: bold;">আমাদের সাথে যোগাযোগ করুন:</p>
+        <a href="https://facebook.com/gronthokanon0943" target="_blank"><img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="FB" style="width:40px;"></a>
+    </div>
+    <div style="margin-bottom: 15px;">
+        <p style="color: #bbb; margin-bottom: 8px;">আমরা গ্রহণ করি:</p>
+        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" width="45" style="border-radius:5px;">
+        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" width="45" style="border-radius:5px; margin-left: 10px;">
+    </div>
+    &copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত
 </footer>
 
-<script src="script.js"></script>
+<script>
+    let cart = [];
+
+    /* সাইডবার টগল */
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('active');
+        let overlay = document.getElementById('overlay');
+        overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
+    }
+
+    /* রিয়েল-টাইম সার্চ ফিল্টার */
+    function filterBooks() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let items = document.getElementsByClassName('grid-item');
+        
+        for (let i = 0; i < items.length; i++) {
+            let title = items[i].getElementsByTagName('h3')[0].innerText.toLowerCase();
+            if (title.includes(input)) {
+                items[i].style.display = "";
+            } else {
+                items[i].style.display = "none";
+            }
+        }
+    }
+
+    /* স্লাইডার লজিক */
+    const slider = document.getElementById('mainSlider');
+    let currentImg = 0;
+    setInterval(() => {
+        const totalImages = document.querySelectorAll('.slider img').length;
+        currentImg++;
+        if (currentImg >= totalImages) currentImg = 0;
+        slider.scrollLeft = currentImg * slider.offsetWidth;
+    }, 3500);
+
+    /* কার্ট লজিক */
+    function addToCart(name, price) {
+        cart.push({ name, price: Number(price) });
+        document.getElementById('count').innerText = cart.length;
+        document.getElementById('floatCount').innerText = cart.length;
+        updateCartUI();
+        alert(name + " কার্টে যোগ হয়েছে!");
+    }
+
+    function showCart() { document.getElementById('cartBox').style.display = 'block'; }
+    function closeCart() { document.getElementById('cartBox').style.display = 'none'; }
+    function openOrderForm() { 
+        if(cart.length === 0) { alert("কার্ট খালি!"); return; }
+        document.getElementById('orderModal').style.display = 'flex'; 
+    }
+    function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; }
+
+    function updateCartUI() {
+        let box = document.getElementById('cartItems');
+        box.innerHTML = "";
+        let subtotal = 0;
+        cart.forEach((item) => {
+            box.innerHTML += `<p style="font-size:14px; margin-bottom:5px;">• ${item.name} - ৳${item.price}</p>`;
+            subtotal += item.price;
+        });
+        let delivery = Number(document.getElementById('location').value);
+        document.getElementById('subtotal').innerText = subtotal;
+        document.getElementById('deliveryFee').innerText = delivery;
+        document.getElementById('total').innerText = subtotal + delivery;
+    }
+
+    function confirmOrder() {
+        let name = document.getElementById('custName').value;
+        let phone = document.getElementById('custPhone').value;
+        let address = document.getElementById('custAddress').value;
+        let delivery = Number(document.getElementById('location').value);
+
+        if (!name || !phone || !address) { alert("সব তথ্য দিন!"); return; }
+
+        let subtotal = 0;
+        let message = `নতুন অর্ডার (গ্রন্থকানন)\n\n`;
+        cart.forEach((item, i) => {
+            message += `${i + 1}. ${item.name} - ৳${item.price}\n`;
+            subtotal += item.price;
+        });
+
+        message += `\nনাম: ${name}\nফোন: ${phone}\nঠিকানা: ${address}`;
+        message += `\n\nTotal: ৳${subtotal + delivery}`;
+
+        // হোয়াটসঅ্যাপে পাঠানো
+        let waUrl = `https://wa.me/8801516595762?text=${encodeURIComponent(message)}`;
+        window.open(waUrl, '_blank');
+
+        cart = [];
+        document.getElementById('count').innerText = 0;
+        document.getElementById('floatCount').innerText = 0;
+        closeOrderForm();
+        closeCart();
+        alert("অর্ডার হোয়াটসঅ্যাপে পাঠানো হয়েছে!");
+    }
+</script>
+
 </body>
 </html>
