@@ -55,7 +55,12 @@
 
         /* MODALS */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center; padding:15px; }
-        .modal-content { background:#fff; padding:20px; border-radius:15px; width:100%; max-width:380px; position: relative; }
+      .cart-item-row { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
+.qty-btn { background: #27ae60; color: white; border: none; width: 25px; height: 25px; border-radius: 5px; cursor: pointer; }
+.coupon-section { display: flex; gap: 5px; margin: 10px 0; }
+.coupon-input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
+.apply-btn { background: #2c3e50; color: white; border: none; padding: 0 10px; border-radius: 5px; cursor: pointer; }  .modal-content { background:#fff; padding:20px; border-radius:15px; width:100%; max-width:380px; position: relative; }
+    
     </style>
 </head> 
 <
@@ -142,20 +147,30 @@
 
 <!-- কার্ট বক্স মডাল -->
 <div id="cartBox" class="modal">
-    <div class="modal-content">
-        <h3>🛒 আপনার কার্ট</h3><br>
-        <div id="cartItems" style="max-height: 250px; overflow-y: auto;"></div>
-        <hr><br>
-        <p>বইয়ের দাম: ৳<span id="subtotal">0</span></p>
-        <p>ডেলিভারি: 
-            <select id="location" onchange="updateCartUI()" style="width:100%; padding:5px; margin:5px 0;">
-                <option value="60">ঢাকার ভিতরে (৳60)</option>
-                <option value="90">ঢাকার বাইরে (৳90)</option>
-            </select>
-        </p>
-        <h4 style="color: #27ae60;">সর্বমোট: ৳<span id="total">0</span></h4><br>
-        <button class="btn" onclick="openOrderForm()">অর্ডার করুন</button>
-        <button onclick="closeCart()" style="width:100%; margin-top:10px; color:red; border:none; background:none; cursor:pointer;">বন্ধ করুন</button>
+    <div style="background:#fff; padding:20px; border-radius:15px; width:90%; max-width:400px; position:relative;">
+        <h3 style="display:flex; justify-content:space-between;">🛒 কার্ট <span onclick="closeCart()" style="cursor:pointer;">×</span></h3>
+        <br>
+        <div id="cartItems"></div> <!-- এখানে বইগুলো জমা হবে -->
+        
+        <div class="coupon-section">
+            <input type="text" id="couponCode" placeholder="কুপন (SAVE10)" class="coupon-input">
+            <button class="apply-btn" onclick="applyCoupon()">Apply</button>
+        </div>
+
+        <div style="background:#f1f3f4; padding:15px; border-radius:10px;">
+            <p>বইয়ের দাম: ৳<span id="subtotal">0</span></p>
+            <p style="color:red;">ডিসকাউন্ট: -৳<span id="discountAmt">0</span></p>
+            <p>ডেলিভারি: 
+                <select id="location" onchange="updateCartUI()">
+                    <option value="60">ঢাকা (৳60)</option>
+                    <option value="90">ঢাকার বাইরে (৳90)</option>
+                </select>
+            </p>
+            <hr>
+            <h4 style="color:#27ae60; font-size:18px;">মোট: ৳<span id="total">0</span></h4>
+        </div>
+        <br>
+        <button class="btn" onclick="openOrderForm()">অর্ডার কনফার্ম করুন</button>
     </div>
 </div>
 
@@ -239,26 +254,74 @@
         localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
     }
 
-    function updateCartUI() {
-        let box = document.getElementById('cartItems');
-        let subtotal = 0;
-        box.innerHTML = "";
-        
-        cart.forEach((item, index) => {
-            box.innerHTML += `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; background:#f9f9f9; padding:8px; border-radius:5px;">
-                    <span style="font-size:14px;">${item.name}</span>
-                    <span>৳${item.price} <button onclick="removeItem(${index})" style="color:red; border:none; background:none; cursor:pointer; margin-left:5px;">✖</button></span>
-                </div>`;
-            subtotal += item.price;
-        });
+ let discountPercent = 0; 
 
-        let delivery = Number(document.getElementById('location').value);
-        document.getElementById('count').innerText = cart.length;
-        document.getElementById('floatCount').innerText = cart.length;
-        document.getElementById('subtotal').innerText = subtotal;
-        document.getElementById('total').innerText = subtotal + delivery;
+function updateCartUI() {
+    let box = document.getElementById('cartItems');
+    let subtotal = 0;
+    box.innerHTML = "";
+
+    if (cart.length === 0) {
+        box.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">কার্ট খালি!</p>`;
     }
+
+    // কার্টের বইগুলোকে গোছানো (Group করা)
+    let grouped = {};
+    cart.forEach(item => {
+        if (grouped[item.name]) { 
+            grouped[item.name].qty += 1; 
+        } else { 
+            grouped[item.name] = { price: item.price, qty: 1 }; 
+        }
+    });
+
+    for (let name in grouped) {
+        let item = grouped[name];
+        subtotal += (item.price * item.qty);
+        box.innerHTML += `
+            <div class="cart-item-row">
+                <div style="font-size:14px; text-align:left;"><b>${name}</b><br>৳${item.price}</div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button class="qty-btn" onclick="changeQty('${name}', -1)">-</button>
+                    <span style="font-weight:bold;">${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty('${name}', 1)">+</button>
+                </div>
+            </div>`;
+    }
+
+    let delivery = Number(document.getElementById('location').value);
+    let discountAmt = Math.round(subtotal * (discountPercent / 100));
+    
+    // UI আপডেট
+    document.getElementById('count').innerText = cart.length;
+    document.getElementById('floatCount').innerText = cart.length;
+    document.getElementById('subtotal').innerText = subtotal;
+    document.getElementById('discountAmt').innerText = discountAmt;
+    document.getElementById('total').innerText = (subtotal - discountAmt) + delivery;
+}
+
+function changeQty(name, delta) {
+    if (delta === 1) {
+        let item = cart.find(i => i.name === name);
+        cart.push({ name: item.name, price: item.price });
+    } else {
+        let index = cart.findLastIndex(i => i.name === name);
+        if (index !== -1) cart.splice(index, 1);
+    }
+    saveCart(); 
+    updateCartUI();
+}
+
+function applyCoupon() {
+    let code = document.getElementById('couponCode').value.toUpperCase();
+    if (code === "SAVE10") {
+        discountPercent = 10;
+        alert("🎉 ১০% ডিসকাউন্ট যুক্ত হয়েছে!");
+        updateCartUI();
+    } else { 
+        alert("ভুল কুপন কোড!"); }
+}
+   
 
     // ৪. স্লাইডার লজিক
     const slider = document.getElementById('mainSlider');
