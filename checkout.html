@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>চেকআউট — গ্রন্থকানন</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'SolaimanLipi', Arial, sans-serif; background: #edf2f7; color: #333; }
+
+        /* NAVBAR */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .navbar h2 { font-size: 18px; color: #27ae60; }
+        .back-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #27ae60; }
+
+        .container { max-width: 480px; margin: 20px auto; padding: 0 16px 40px; }
+
+        /* ORDER SUMMARY */
+        .order-summary { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .order-summary h3 { font-size: 15px; color: #2c3e50; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .order-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+        .order-item img { width: 40px; height: 55px; object-fit: cover; border-radius: 4px; }
+        .order-item-info { flex: 1; }
+        .order-item-name { font-size: 13px; font-weight: bold; color: #333; }
+        .order-item-price { font-size: 12px; color: #e74c3c; font-weight: bold; }
+        .order-total { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-weight: bold; font-size: 15px; color: #27ae60; }
+
+        /* FORM CARD */
+        .form-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .form-card h3 { font-size: 15px; color: #2c3e50; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
+        .form-group label span { color: #e74c3c; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 11px 14px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; transition: 0.2s; background: #fafafa;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #27ae60; background: #fff; }
+        .form-group textarea { height: 70px; resize: none; }
+        <div style="background:#f0faf4; border:1.5px solid #27ae60; border-radius:10px; padding:14px 16px; margin-top:4px;">
+    <div style="display:flex; justify-content:space-between; font-size:13px; color:#555; margin-bottom:6px;">
+        <span>বইয়ের দাম:</span>
+        <span id="subtotalShow">৳০</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; font-size:13px; color:#555; margin-bottom:6px;">
+        <span>ডেলিভারি চার্জ:</span>
+        <span id="deliveryShow">৳০</span>
+    </div>
+    <hr style="border:none; border-top:1px solid #c8e6c9; margin:8px 0;">
+    <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:bold; color:#27ae60;">
+        <span>সর্বমোট:</span>
+        <span id="summaryTotal">৳০</span>
+    </div>
+</div>
+       
+        /* PAYMENT */
+        .payment-option { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; cursor: pointer; margin-bottom: 10px; transition: 0.2s; }
+        .payment-option.selected { border-color: #27ae60; background: #f0faf4; }
+        .payment-option input { width: 18px; height: 18px; accent-color: #27ae60; }
+        .payment-option-label { font-size: 14px; font-weight: bold; color: #333; }
+        .payment-option-sub { font-size: 12px; color: #888; margin-top: 2px; }
+
+        /* BKASH BOX */
+        .bkash-box { background: #fff0f6; border: 1.5px solid #f7b5d0; border-radius: 10px; padding: 16px; margin-top: 10px; display: none; }
+        .bkash-box .step { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #555; }
+        .bkash-box .step-num { background: #e91e8c; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; flex-shrink: 0; margin-top: 1px; }
+        .bkash-number { background: #fff; border: 1.5px solid #f7b5d0; border-radius: 8px; padding: 10px 14px; font-size: 16px; font-weight: bold; color: #e91e8c; text-align: center; margin: 10px 0; letter-spacing: 2px; }
+
+        /* CONFIRM BUTTON */
+        .confirm-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(39,174,96,0.3); transition: 0.3s; }
+        .confirm-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(39,174,96,0.4); }
+        .confirm-btn:active { transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <button class="back-btn" onclick="window.history.back()">← ফিরে যান</button>
+    <h2>📦 চেকআউট</h2>
+    <div></div>
+</div>
+
+<div class="container">
+
+    <!-- ORDER SUMMARY -->
+    <div class="order-summary">
+        <h3>🛍️ আপনার অর্ডার</h3>
+        <div id="summaryItems"></div>
+        <div class="order-total">
+            <span>মোট:</span>
+            <span id="summaryTotal">৳০</span>
+        </div>
+    </div>
+
+    <!-- SHIPPING INFO -->
+    <div class="form-card">
+        <h3>📋 শিপিং তথ্য</h3>
+
+        <div class="form-group">
+            <label>নাম <span>*</span></label>
+            <input type="text" id="custName" placeholder="আপনার নাম লিখুন">
+        </div>
+
+        <div class="form-group">
+            <label>মোবাইল নম্বর <span>*</span></label>
+            <input type="tel" id="custPhone" placeholder="আপনার ফোন নাম্বার লিখুন" maxlength="11">
+        </div>
+
+        <div class="form-group">
+            <label>বিভাগ <span>*</span></label>
+            <select id="division" onchange="updateDistricts()">
+                <option value="">বিভাগ নির্বাচন করুন</option>
+                <option>ঢাকা</option>
+                <option>চট্টগ্রাম</option>
+                <option>রাজশাহী</option>
+                <option>খুলনা</option>
+                <option>বরিশাল</option>
+                <option>সিলেট</option>
+                <option>রংপুর</option>
+                <option>ময়মনসিংহ</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>জেলা <span>*</span></label>
+            <select id="district" onchange="updateThanas()">
+                <option value="">জেলা নির্বাচন করুন</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>থানা/উপজেলা <span>*</span></label>
+            <select id="thana">
+                <option value="">থানা/উপজেলা নির্বাচন করুন</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>সম্পূর্ণ ঠিকানা <span>*</span></label>
+            <textarea id="custAddress" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>ডেলিভারি চার্জ</label>
+            <select id="location" onchange="updateTotal()">
+                <option value="60">ঢাকার ভেতরে (৳60)</option>
+                <option value="90">ঢাকার বাইরে (৳90)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="form-card">
+        <h3>💳 পেমেন্ট মেথড</h3>
+
+        <label class="payment-option selected" onclick="selectPayment(this, 'cod')">
+            <input type="radio" name="payment" value="Cash on Delivery" checked>
+            <div>
+                <div class="payment-option-label">💵 ক্যাশ অন ডেলিভারি</div>
+                <div class="payment-option-sub">বই পেয়ে টাকা দিন</div>
+            </div>
+        </label>
+
+        <label class="payment-option" onclick="selectPayment(this, 'bkash')">
+            <input type="radio" name="payment" value="bKash">
+            <div>
+                <div class="payment-option-label">💖 বিকাশ</div>
+                <div class="payment-option-sub">আগে পেমেন্ট করুন, তারপর অর্ডার</div>
+            </div>
+        </label>
+
+        <label class="payment-option" onclick="selectPayment(this, 'nagad')">
+            <input type="radio" name="payment" value="Nagad">
+            <div>
+                <div class="payment-option-label">🔶 নগদ</div>
+                <div class="payment-option-sub">আগে পেমেন্ট করুন, তারপর অর্ডার</div>
+            </div>
+        </label>
+
+        <!-- BKASH BOX -->
+        <div class="bkash-box" id="bkashBox">
+            <div class="step">
+                <div class="step-num">১</div>
+                <div>আপনার বিকাশ অ্যাপ থেকে <strong>Send Money</strong> করুন</div>
+            </div>
+            <div class="bkash-number">01516595762</div>
+            <div class="step">
+                <div class="step-num">২</div>
+                <div>মোট পরিমাণ <strong id="bkashAmount">৳০</strong> পাঠান</div>
+            </div>
+            <div class="step">
+                <div class="step-num">৩</div>
+                <div>Transaction ID নিচে লিখুন</div>
+            </div>
+            <div class="form-group" style="margin-top:10px; margin-bottom:0;">
+                <input type="text" id="transactionId" placeholder="Transaction ID লিখুন (যেমন: 8AB12CD34E)">
+            </div>
+        </div>
+
+        <!-- NAGAD BOX -->
+        <div class="bkash-box" id="nagadBox" style="background:#fff8f0; border-color:#ffd0a0;">
+            <div class="step">
+                <div class="step-num" style="background:#f7941d;">১</div>
+                <div>আপনার নগদ অ্যাপ থেকে <strong>Send Money</strong> করুন</div>
+            </div>
+            <div class="bkash-number" style="color:#f7941d; border-color:#ffd0a0;">01516595762</div>
+            <div class="step">
+                <div class="step-num" style="background:#f7941d;">২</div>
+                <div>মোট পরিমাণ <strong id="nagadAmount">৳০</strong> পাঠান</div>
+            </div>
+            <div class="step">
+                <div class="step-num" style="background:#f7941d;">৩</div>
+                <div>Transaction ID নিচে লিখুন</div>
+            </div>
+            <div class="form-group" style="margin-top:10px; margin-bottom:0;">
+                <input type="text" id="nagadTransactionId" placeholder="Transaction ID লিখুন">
+            </div>
+        </div>
+    </div>
+
+    <button class="confirm-btn" onclick="confirmOrder()">✅ অর্ডার কনফার্ম করুন</button>
+
+</div>
+
+<!-- SUCCESS MODAL -->
+<div id="successModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center;">
+    <div style="background:#fff; border-radius:20px; padding:35px 30px; text-align:center; max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:popIn 0.4s ease;">
+        <div style="width:80px; height:80px; background:linear-gradient(135deg,#27ae60,#2ecc71); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow:0 8px 20px rgba(39,174,96,0.4);">
+            <span style="font-size:35px; color:white;">✓</span>
+        </div>
+        <h2 style="color:#2c3e50; margin-bottom:8px; font-size:22px;">অর্ডার নিশ্চিত হয়েছে!</h2>
+        <p style="color:#27ae60; font-weight:bold; font-size:13px; margin-bottom:20px; letter-spacing:1px;">ORDER CONFIRMED</p>
+        <div id="successInfo" style="background:#f8f9fa; border-radius:12px; padding:15px; margin-bottom:20px; text-align:left; font-size:13px; color:#555; line-height:1.8;"></div>
+        <p style="color:#888; font-size:12px; margin-bottom:20px; line-height:1.6;">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ গ্রন্থকানন এ অর্ডার করার জন্য! 📚</p>
+        <button onclick="goHome()" style="background:linear-gradient(135deg,#27ae60,#2ecc71); color:white; border:none; padding:13px 40px; border-radius:25px; font-weight:bold; cursor:pointer; font-size:15px; width:100%;">চমৎকার! 🎉</button>
+    </div>
+</div>
+
+<style>
+@keyframes popIn { from { transform:scale(0.8); opacity:0; } to { transform:scale(1); opacity:1; } }
+</style>
+
+<script>
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
+
+// Cart থেকে data নাও
+let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
+let discountPercent = JSON.parse(localStorage.getItem('gronthokanon_discount') || '0');
+
+// Order summary দেখাও
+function renderSummary() {
+    const box = document.getElementById('summaryItems');
+    if (cart.length === 0) {
+        box.innerHTML = '<p style="color:#aaa; text-align:center; padding:20px;">কার্ট খালি</p>';
+        return;
+    }
+    const grouped = {};
+    cart.forEach(item => {
+        if (grouped[item.name]) grouped[item.name].qty += 1;
+        else grouped[item.name] = { price: item.price, qty: 1, img: item.img || '' };
+    });
+    let html = '';
+    for (let name in grouped) {
+        const item = grouped[name];
+        html += `
+            <div class="order-item">
+                <img src="${item.img}" alt="বই">
+                <div class="order-item-info">
+                    <div class="order-item-name">${name}</div>
+                    <div class="order-item-price">৳${item.price} × ${item.qty} = ৳${item.price * item.qty}</div>
+                </div>
+            </div>`;
+    }
+    box.innerHTML = html;
+    updateTotal();
+}
+
+function getSubtotal() {
+    const grouped = {};
+    cart.forEach(item => {
+        if (grouped[item.name]) grouped[item.name].qty += 1;
+        else grouped[item.name] = { price: item.price, qty: 1 };
+    });
+    let total = 0;
+    for (let name in grouped) total += grouped[name].price * grouped[name].qty;
+    return total;
+}
+
+function updateTotal() {
+    const subtotal = getSubtotal();
+    const delivery = Number(document.getElementById('location').value);
+    const discount = Math.round(subtotal * (discountPercent / 100));
+    const total = subtotal - discount + delivery;
+    if (document.getElementById('summaryTotal')) document.getElementById('summaryTotal').innerText = '৳' + total;
+    if (document.getElementById('subtotalShow')) document.getElementById('subtotalShow').innerText = '৳' + subtotal;
+    if (document.getElementById('deliveryShow')) document.getElementById('deliveryShow').innerText = '৳' + delivery;
+    if (document.getElementById('bkashAmount')) document.getElementById('bkashAmount').innerText = '৳' + total;
+    if (document.getElementById('nagadAmount')) document.getElementById('nagadAmount').innerText = '৳' + total;
+}
+function selectPayment(el, type) {
+    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('bkashBox').style.display = 'none';
+    document.getElementById('nagadBox').style.display = 'none';
+    if (type === 'bkash') document.getElementById('bkashBox').style.display = 'block';
+    if (type === 'nagad') document.getElementById('nagadBox').style.display = 'block';
+}
+
+// Location data
+const locationData = {
+    "ঢাকা": {
+        "ঢাকা": ["আদাবর","বাড্ডা","বংশাল","ক্যান্টনমেন্ট","চকবাজার","দারুস সালাম","ডেমরা","ধানমন্ডি","দোহার","গেন্ডারিয়া","গুলশান","হাজারীবাগ","কদমতলী","কামরাঙ্গীরচর","কেরানীগঞ্জ","খিলগাঁও","খিলক্ষেত","কোতোয়ালি","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নবাবগঞ্জ","নিউ মার্কেট","পল্লবী","পল্টন","রমনা","সাভার","শাহজাহানপুর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","উত্তরা","উত্তর খান","দক্ষিণ খান","ওয়ারী"],
+        "গাজীপুর": ["গাজীপুর সদর","কালীগঞ্জ","কাপাসিয়া","শ্রীপুর","টঙ্গী"],
+        "নারায়ণগঞ্জ": ["নারায়ণগঞ্জ সদর","আড়াইহাজার","বন্দর","রূপগঞ্জ","সোনারগাঁও"],
+        "মানিকগঞ্জ": ["মানিকগঞ্জ সদর","দৌলতপুর","ঘিওর","হরিরামপুর","সাটুরিয়া","শিবালয়","সিংগাইর"],
+        "মুন্সীগঞ্জ": ["মুন্সীগঞ্জ সদর","গজারিয়া","লৌহজং","শ্রীনগর","সিরাজদিখান","টঙ্গীবাড়ী"],
+        "নরসিংদী": ["নরসিংদী সদর","বেলাব","মনোহরদী","পলাশ","রায়পুরা","শিবপুর"],
+        "কিশোরগঞ্জ": ["কিশোরগঞ্জ সদর","অষ্টগ্রাম","বাজিতপুর","ভৈরব","হোসেনপুর","ইটনা","করিমগঞ্জ","কটিয়াদী","কুলিয়ারচর","মিঠামইন","নিকলী","পাকুন্দিয়া","তাড়াইল"],
+        "ফরিদপুর": ["ফরিদপুর সদর","আলফাডাঙ্গা","ভাঙ্গা","বোয়ালমারী","চরভদ্রাসন","মধুখালী","নগরকান্দা","সদরপুর","সালথা"],
+        "গোপালগঞ্জ": ["গোপালগঞ্জ সদর","কাশিয়ানী","কোটালীপাড়া","মুকসুদপুর","টুঙ্গিপাড়া"],
+        "টাঙ্গাইল": ["টাঙ্গাইল সদর","বাসাইল","ভূঞাপুর","দেলদুয়ার","ধনবাড়ী","ঘাটাইল","গোপালপুর","কালিহাতী","মধুপুর","মির্জাপুর","নাগরপুর","সখিপুর"],
+        "রাজবাড়ী": ["রাজবাড়ী সদর","বালিয়াকান্দি","গোয়ালন্দ","কালুখালী","পাংশা"],
+        "শরীয়তপুর": ["শরীয়তপুর সদর","ভেদরগঞ্জ","ডামুড্যা","গোসাইরহাট","নড়িয়া","জাজিরা"],
+        "মাদারীপুর": ["মাদারীপুর সদর","কালকিনি","রাজৈর","শিবচর"]
+    },
+    "চট্টগ্রাম": {
+        "চট্টগ্রাম": ["আকবরশাহ","বাকলিয়া","বায়েজিদ","বন্দর","চান্দগাঁও","ডবলমুরিং","ইপিজেড","হালিশহর","হাটহাজারী","কোতোয়ালি","খুলশী","লোহাগাড়া","পাহাড়তলী","পতেঙ্গা","পাঁচলাইশ","রাউজান","রাঙ্গুনিয়া","সন্দ্বীপ","সাতকানিয়া","সীতাকুণ্ড"],
+        "কক্সবাজার": ["কক্সবাজার সদর","চকরিয়া","কুতুবদিয়া","মহেশখালী","পেকুয়া","রামু","টেকনাফ","উখিয়া"],
+        "কুমিল্লা": ["কুমিল্লা সদর","বরুড়া","ব্রাহ্মণপাড়া","বুড়িচং","চান্দিনা","চৌদ্দগ্রাম","দাউদকান্দি","দেবিদ্বার","হোমনা","লাকসাম","মেঘনা","মনোহরগঞ্জ","মুরাদনগর","নাঙ্গলকোট","তিতাস"],
+        "ফেনী": ["ফেনী সদর","ছাগলনাইয়া","দাগনভূঞা","ফুলগাজী","পরশুরাম","সোনাগাজী"],
+        "নোয়াখালী": ["নোয়াখালী সদর","বেগমগঞ্জ","চাটখিল","কোম্পানীগঞ্জ","হাতিয়া","কবিরহাট","সেনবাগ","সোনাইমুড়ী","সুবর্ণচর"],
+        "লক্ষ্মীপুর": ["লক্ষ্মীপুর সদর","কমলনগর","রামগঞ্জ","রামগতি","রায়পুর"],
+        "চাঁদপুর": ["চাঁদপুর সদর","ফরিদগঞ্জ","হাইমচর","হাজীগঞ্জ","কচুয়া","মতলব উত্তর","মতলব দক্ষিণ","শাহরাস্তি"],
+        "ব্রাহ্মণবাড়িয়া": ["ব্রাহ্মণবাড়িয়া সদর","আখাউড়া","বাঞ্ছারামপুর","কসবা","নাসিরনগর","নবীনগর","সরাইল"],
+        "খাগড়াছড়ি": ["খাগড়াছড়ি সদর","দিঘীনালা","গুইমারা","লক্ষ্মীছড়ি","মাটিরাঙ্গা","মানিকছড়ি","পানছড়ি","রামগড়"],
+        "রাঙামাটি": ["রাঙামাটি সদর","বাঘাইছড়ি","বরকল","কাপ্তাই","কাউখালী","লংগদু","নানিয়ারচর","রাজস্থলী","বিলাইছড়ি","জুরাছড়ি"],
+        "বান্দরবান": ["বান্দরবান সদর","আলীকদম","লামা","নাইক্ষ্যংছড়ি","রোয়াংছড়ি","রুমা","থানচি"]
+    },
+    "রাজশাহী": {
+        "রাজশাহী": ["রাজশাহী সদর","বাঘা","চারঘাট","দুর্গাপুর","গোদাগাড়ী","মোহনপুর","পবা","পুঠিয়া","তানোর"],
+        "নাটোর": ["নাটোর সদর","বড়াইগ্রাম","বাগাতিপাড়া","গুরুদাসপুর","লালপুর","সিংড়া"],
+        "নওগাঁ": ["নওগাঁ সদর","আত্রাই","বদলগাছী","ধামইরহাট","মান্দা","মহাদেবপুর","নিয়ামতপুর","পত্নীতলা","পোরশা","রাণীনগর","সাপাহার"],
+        "চাঁপাইনবাবগঞ্জ": ["চাঁপাইনবাবগঞ্জ সদর","ভোলাহাট","গোমস্তাপুর","নাচোল","শিবগঞ্জ"],
+        "পাবনা": ["পাবনা সদর","আটঘরিয়া","বেড়া","ভাঙ্গুড়া","চাটমোহর","ফরিদপুর","ঈশ্বরদী","সাঁথিয়া","সুজানগর"],
+        "সিরাজগঞ্জ": ["সিরাজগঞ্জ সদর","বেলকুচি","চৌহালি","কামারখন্দ","কাজিপুর","রায়গঞ্জ","শাহজাদপুর","তাড়াশ","উল্লাপাড়া"],
+        "বগুড়া": ["বগুড়া সদর","আদমদিঘি","ধুনট","দুপচাঁচিয়া","গাবতলী","কাহালু","নন্দীগ্রাম","সারিয়াকান্দি","শাজাহানপুর","শেরপুর","শিবগঞ্জ","সোনাতলা"],
+        "জয়পুরহাট": ["জয়পুরহাট সদর","আক্কেলপুর","কালাই","ক্ষেতলাল","পাঁচবিবি"]
+    },
+    "খুলনা": {
+        "খুলনা": ["খুলনা সদর","বটিয়াঘাটা","দাকোপ","ডুমুরিয়া","ফুলতলা","কয়রা","পাইকগাছা","রূপসা","তেরখাদা"],
+        "যশোর": ["যশোর সদর","অভয়নগর","বাঘারপাড়া","চৌগাছা","ঝিকরগাছা","কেশবপুর","মণিরামপুর","শার্শা"],
+        "সাতক্ষীরা": ["সাতক্ষীরা সদর","আশাশুনি","দেবহাটা","কলারোয়া","কালিগঞ্জ","শ্যামনগর","তালা"],
+        "বাগেরহাট": ["বাগেরহাট সদর","চিতলমারী","ফকিরহাট","কচুয়া","মোংলা","মোরেলগঞ্জ","মুলতাপাড়া","রামপাল","শরণখোলা"],
+        "নড়াইল": ["নড়াইল সদর","কালিয়া","লোহাগড়া"],
+        "মাগুরা": ["মাগুরা সদর","মহম্মদপুর","শালিখা","শ্রীপুর"],
+        "ঝিনাইদহ": ["ঝিনাইদহ সদর","হরিণাকুণ্ডু","কালীগঞ্জ","কোটচাঁদপুর","মহেশপুর","শৈলকুপা"],
+        "কুষ্টিয়া": ["কুষ্টিয়া সদর","ভেড়ামারা","দৌলতপুর","খোকসা","কুমারখালী","মিরপুর"],
+        "চুয়াডাঙ্গা": ["চুয়াডাঙ্গা সদর","আলমডাঙ্গা","দামুড়হুদা","জীবননগর"],
+        "মেহেরপুর": ["মেহেরপুর সদর","গাংনী","মুজিবনগর"]
+    },
+    "বরিশাল": {
+        "বরিশাল": ["বরিশাল সদর","আগৈলঝাড়া","বাকেরগঞ্জ","বানারীপাড়া","গৌরনদী","হিজলা","মেহেন্দিগঞ্জ","মুলাদী","উজিরপুর"],
+        "পটুয়াখালী": ["পটুয়াখালী সদর","বাউফল","দশমিনা","গলাচিপা","কলাপাড়া","মির্জাগঞ্জ","রাঙ্গাবালী"],
+        "ভোলা": ["ভোলা সদর","বোরহানউদ্দিন","চরফ্যাশন","দৌলতখান","লালমোহন","মনপুরা","তজুমদ্দিন"],
+        "ঝালকাঠি": ["ঝালকাঠি সদর","কাঁঠালিয়া","নলছিটি","রাজাপুর"],
+        "পিরোজপুর": ["পিরোজপুর সদর","ভান্ডারিয়া","কাউখালী","মঠবাড়িয়া","নাজিরপুর","নেছারাবাদ","জিয়ানগর"],
+        "বরগুনা": ["বরগুনা সদর","আমতলী","বামনা","বেতাগী","পাথরঘাটা","তালতলী"]
+    },
+    "সিলেট": {
+        "সিলেট": ["সিলেট সদর","বালাগঞ্জ","বিয়ানীবাজার","বিশ্বনাথ","কোম্পানীগঞ্জ","ফেঞ্চুগঞ্জ","গোলাপগঞ্জ","গোয়াইনঘাট","জকিগঞ্জ","কানাইঘাট","ওসমানীনগর","দক্ষিণ সুরমা","জৈন্তাপুর"],
+        "মৌলভীবাজার": ["মৌলভীবাজার সদর","বড়লেখা","জুড়ী","কমলগঞ্জ","কুলাউড়া","রাজনগর","শ্রীমঙ্গল"],
+        "হবিগঞ্জ": ["হবিগঞ্জ সদর","আজমিরীগঞ্জ","বাহুবল","বানিয়াচং","চুনারুঘাট","লাখাই","মাধবপুর","নবীগঞ্জ"],
+        "সুনামগঞ্জ": ["সুনামগঞ্জ সদর","বিশ্বম্ভরপুর","দক্ষিণ সুনামগঞ্জ","দিরাই","ধর্মপাশা","জামালগঞ্জ","জগন্নাথপুর","শাল্লা","তাহিরপুর"]
+    },
+    "রংপুর": {
+        "রংপুর": ["রংপুর সদর","বদরগঞ্জ","গঙ্গাচড়া","কাউনিয়া","মিঠাপুকুর","পীরগঞ্জ","পীরগাছা","তারাগঞ্জ"],
+        "দিনাজপুর": ["দিনাজপুর সদর","বিরামপুর","বিরল","বোচাগঞ্জ","চিরিরবন্দর","ফুলবাড়ী","ঘোড়াঘাট","হাকিমপুর","খানসামা","নবাবগঞ্জ","পার্বতীপুর"],
+        "কুড়িগ্রাম": ["কুড়িগ্রাম সদর","ভুরুঙ্গামারী","চর রাজিবপুর","চিলমারী","ফুলবাড়ী","নাগেশ্বরী","রাজারহাট","রৌমারী","উলিপুর"],
+        "গাইবান্ধা": ["গাইবান্ধা সদর","ফুলছড়ি","গোবিন্দগঞ্জ","পলাশবাড়ী","সাদুল্লাপুর","সাঘাটা","সুন্দরগঞ্জ"],
+        "নীলফামারী": ["নীলফামারী সদর","ডিমলা","ডোমার","জলঢাকা","কিশোরগঞ্জ","সৈয়দপুর"],
+        "লালমনিরহাট": ["লালমনিরহাট সদর","আদিতমারী","কালীগঞ্জ","হাতীবান্ধা","পাটগ্রাম"],
+        "ঠাকুরগাঁও": ["ঠাকুরগাঁও সদর","বালিয়াডাঙ্গী","হরিপুর","পীরগঞ্জ","রাণীশংকৈল"],
+        "পঞ্চগড়": ["পঞ্চগড় সদর","আটোয়ারী","বোদা","দেবীগঞ্জ","তেতুলিয়া"]
+    },
+    "ময়মনসিংহ": {
+        "ময়মনসিংহ": ["ময়মনসিংহ সদর","ভালুকা","ধোবাউড়া","ফুলবাড়িয়া","গফরগাঁও","গৌরীপুর","হালুয়াঘাট","ঈশ্বরগঞ্জ","মুক্তাগাছা","নান্দাইল","ফুলপুর","তারাকান্দা","ত্রিশাল"],
+        "নেত্রকোণা": ["নেত্রকোণা সদর","আটপাড়া","বারহাট্টা","দুর্গাপুর","কলমাকান্দা","কেন্দুয়া","খালিয়াজুড়ি","মদন","মোহনগঞ্জ","পূর্বধলা"],
+        "জামালপুর": ["জামালপুর সদর","বকশীগঞ্জ","দেওয়ানগঞ্জ","ইসলামপুর","মাদারগঞ্জ","মেলান্দহ","সরিষাবাড়ী"],
+        "শেরপুর": ["শেরপুর সদর","ঝিনাইগাতী","নকলা","নালিতাবাড়ী","শ্রীবরদী"]
+    }
+};
+
+function updateDistricts() {
+    const division = document.getElementById('division').value;
+    const districtSel = document.getElementById('district');
+    const thanaSel = document.getElementById('thana');
+    districtSel.innerHTML = '<option value="">জেলা নির্বাচন করুন</option>';
+    thanaSel.innerHTML = '<option value="">থানা/উপজেলা নির্বাচন করুন</option>';
+    if (division && locationData[division]) {
+        Object.keys(locationData[division]).forEach(d => {
+            districtSel.innerHTML += `<option>${d}</option>`;
+        });
+    }
+    updateTotal();
+}
+   }
+
+function updateThanas() {
+    const division = document.getElementById('division').value;
+    const district = document.getElementById('district').value;
+    const thanaSel = document.getElementById('thana');
+    thanaSel.innerHTML = '<option value="">থানা/উপজেলা নির্বাচন করুন</option>';
+    if (division && district && locationData[division][district]) {
+        locationData[division][district].forEach(t => {
+            thanaSel.innerHTML += `<option>${t}</option>`;
+        });
+    }
+    document.getElementById('location').value = district === 'ঢাকা' ? '60' : '90';
+    updateTotal();
+}
+  }
+
+function confirmOrder() {
+    const name = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const division = document.getElementById('division').value;
+    const district = document.getElementById('district').value;
+    const thana = document.getElementById('thana').value;
+    const address = document.getElementById('custAddress').value.trim();
+    const delivery = document.getElementById('location').value;
+    const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'COD';
+
+    if (!name) return alert('নাম লিখুন!');
+    if (!phone || phone.length !== 11) return alert('সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন!');
+    if (!division) return alert('বিভাগ নির্বাচন করুন!');
+    if (!district) return alert('জেলা নির্বাচন করুন!');
+    if (!thana) return alert('থানা/উপজেলা নির্বাচন করুন!');
+    if (!address) return alert('ঠিকানা লিখুন!');
+
+    let transactionId = '';
+    if (paymentMethod === 'bKash') {
+        transactionId = document.getElementById('transactionId').value.trim();
+        if (!transactionId) return alert('বিকাশ Transaction ID লিখুন!');
+    }
+    if (paymentMethod === 'Nagad') {
+        transactionId = document.getElementById('nagadTransactionId').value.trim();
+        if (!transactionId) return alert('নগদ Transaction ID লিখুন!');
+    }
+
+    const grouped = {};
+    cart.forEach(item => { grouped[item.name] = (grouped[item.name] || 0) + 1; });
+    const bookList = Object.entries(grouped).map(([k, v]) => `${k} (${v}টি)`).join(', ');
+    const total = document.getElementById('summaryTotal').innerText;
+    const fullAddress = `${thana}, ${district}, ${division} — ${address}`;
+
+    const data = {
+        name, phone,
+        address: fullAddress,
+        books: bookList,
+        payment: paymentMethod + (transactionId ? ` (TxID: ${transactionId})` : ''),
+        delivery: '৳' + delivery,
+        total
+    };
+
+    fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    // Cart clear
+    localStorage.removeItem('gronthokanon_cart');
+
+    // Success modal
+    document.getElementById('successInfo').innerHTML = `
+        👤 <strong>${name}</strong><br>
+        📞 ${phone}<br>
+        📍 ${fullAddress}<br>
+        💳 ${paymentMethod}${transactionId ? ` — TxID: ${transactionId}` : ''}<br>
+        💰 <strong style="color:#e74c3c;">${total}</strong>
+    `;
+    const modal = document.getElementById('successModal');
+    modal.style.display = 'flex';
+}
+
+function goHome() {
+    window.location.href = 'index.html';
+}
+
+window.onload = renderSummary;
+</script>
+</body>
+</html>
