@@ -267,9 +267,8 @@ function buyNow() {
     if (!currentBook) return;
     cart.push({ name: currentBook.name, price: currentBook.price, img: currentBook.img });
     localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
-    window.location.href = 'checkout.html';
+    window.location.href = 'index.html';
 }
-
 window.onload = loadBook;
 </script>
 </body>
