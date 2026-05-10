@@ -113,7 +113,6 @@ function discountPct(b) {
     if (b.original_price > b.price) return Math.round((b.original_price - b.price) / b.original_price * 100);
     return 0;
 }
-
 function makeCard(b) {
     const pct = discountPct(b);
     const idx = books.indexOf(b);
@@ -133,6 +132,15 @@ function makeCard(b) {
     </div>`;
 }
 
+<div onclick="window.location.href='index.html'" style="position:fixed; bottom:25px; left:16px; background:#1a1a2e; color:white; padding:11px 18px; border-radius:30px; cursor:pointer; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.25); z-index:999; font-family:'Hind Siliguri',Arial,sans-serif; display:flex; align-items:center; gap:8px; font-size:13px;">
+    <span style="font-size:18px;">🛍️</span>
+    <div>
+        <div style="font-size:11px; opacity:0.7; line-height:1;">শপিং ব্যাগ</div>
+        <div style="font-size:14px; font-weight:700; line-height:1.2;"><span id="floatCount">0</span> টি বই</div>
+    </div>
+</div>
+
+</body>
 function goToBook(idx) {
     navigateTo('book.html?id=' + idx);
 }
@@ -146,6 +154,8 @@ function addToCart(name, price, img) {
     toast.innerText = '✅ কার্টে যোগ হয়েছে!';
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 2000);
+   const floatEl = document.getElementById('floatCount');
+if (floatEl) floatEl.innerText = cart.length;
 }
 
 function navigateTo(url) {
