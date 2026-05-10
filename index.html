@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>গ্রন্থকানন - আসুন, বইয়ের রাজ্যে আপনাকে স্বাগতম।</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-       body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: #edf2f7; color: #333; overflow-x: hidden; }
+        body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: #edf2f7; color: #333; overflow-x: hidden; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .nav-center { flex: 1; display: flex; justify-content: center; padding: 0 10px; }
         .nav-search-container { display: flex; align-items: center; background: #f1f3f4; border-radius: 20px; padding: 6px 15px; width: 100%; max-width: 500px; border: 1px solid #e0e0e0; position: relative; }
-        .nav-search-input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; }
+        .nav-search-input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; font-family: 'Hind Siliguri', Arial, sans-serif; }
         .menu-icon { font-size: 21px; cursor: pointer; color: #27ae60; }
         .cart-icon-wrapper { position: relative; font-size: 22px; cursor: pointer; }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: #e74c3c; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
@@ -30,7 +30,7 @@
         .slider { display: flex; overflow-x: hidden; scroll-behavior: smooth; }
         .slider img { width: 100%; flex-shrink: 0; }
         .category-container { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; }
-        .cat-btn { padding: 8px 18px; background: #fff; color: #27ae60; border: 2px solid #27ae60; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 13px; }
+        .cat-btn { padding: 8px 18px; background: #fff; color: #27ae60; border: 2px solid #27ae60; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 13px; font-family: 'Hind Siliguri', Arial, sans-serif; }
         .cat-btn.active { background: #2c3e50; color: #fff; border-color: #2c3e50; }
         .sections-wrapper { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
         .cat-section { margin-bottom: 30px; }
@@ -49,9 +49,9 @@
         .price-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
         .price-sell { color: #e74c3c; font-weight: bold; font-size: 13px; }
         .price-original { color: #aaa; font-size: 11px; text-decoration: line-through; }
-        .book-card-btn { display: block; padding: 7px; background: #27ae60; color: white; border-radius: 6px; cursor: pointer; width: 100%; border: none; font-weight: bold; font-size: 12px; transition: 0.3s; text-align: center; }
+        .book-card-btn { display: block; padding: 7px; background: #27ae60; color: white; border-radius: 6px; cursor: pointer; width: 100%; border: none; font-weight: bold; font-size: 12px; transition: 0.3s; text-align: center; font-family: 'Hind Siliguri', Arial, sans-serif; }
         .book-card-btn:hover { background: #219150; }
-        .search-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; padding: 16px; max-width: 1100px; margin: 0 auto; }
+        .search-results { display: block; padding: 16px; max-width: 700px; margin: 0 auto; }
         .moving-bar { background: #fff; color: #27ae60; padding: 10px 0; overflow: hidden; white-space: nowrap; font-weight: bold; border-bottom: 1px solid #eee; }
         .moving-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
@@ -68,9 +68,9 @@
         .label { color: #555; width: 100px; font-weight: bold; }
         .text-red { color: #e74c3c; font-weight: bold; }
         .detail-desc { margin-top: 15px; font-size: 14px; line-height: 1.6; border-top: 1px solid #eee; padding-top: 10px; }
-        .order-btn-fixed { background: #27ae60; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; }
+        .order-btn-fixed { background: #27ae60; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; font-family: 'Hind Siliguri', Arial, sans-serif; }
         .wa-float { position: fixed; bottom: 25px; right: 25px; z-index: 1000; }
-        .cart-floating { position: fixed; bottom: 25px; left: 20px; background: #27ae60; color: white; padding: 10px 15px; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 999; }
+        .cart-floating { position: fixed; bottom: 25px; left: 20px; background: #27ae60; color: white; padding: 10px 15px; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 999; font-family: 'Hind Siliguri', Arial, sans-serif; }
         footer { background: #2c3e50; color: white; text-align: center; padding: 40px 20px; margin-top: 50px; }
         @media (max-width: 600px) {
             .book-card { width: 130px; }
@@ -104,10 +104,10 @@
     <div class="sidebar-sub" id="authorSub"></div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('aboutSub')">📜 আমাদের সম্পর্কে <span id="aboutArrow">▶</span></div>
     <div class="sidebar-sub" id="aboutSub" style="padding:15px 20px; font-size:13px; line-height:1.9; color:#555;">
-        <p style="margin-bottom:12px;"><strong style="color:#27ae60; font-size:15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য। আমরা বিশ্বাস করি, একটি ভালো বই মানুষের চিন্তা, চরিত্র ও জীবনকে আলোকিত করতে পারে। সেই বিশ্বাস থেকেই গ্রন্থকাননের যাত্রা শুরু।</p>
-        <p style="margin-bottom:12px;">আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি মানুষের কাছে সাশ্রয়ী মূল্যে মানসম্পন্ন ইসলামিক বই পৌঁছে দেওয়া। আমরা দেশের শীর্ষস্থানীয় প্রকাশনীগুলোর সেরা বইগুলো একত্রিত করে আপনার দোরগোড়ায় পৌঁছে দিই — দ্রুত, নির্ভরযোগ্য এবং যত্নসহকারে।</p>
-        <p style="margin-bottom:12px;">আমাদের সংগ্রহে রয়েছে আত্মশুদ্ধি, অনুপ্রেরণা, হাদিস, ইতিহাস, উপন্যাসসহ বিভিন্ন বিষয়ের শত শত বই। প্রতিটি বই যত্নসহকারে বাছাই করা হয়েছে — যাতে পাঠক সত্যিকারের উপকৃত হন।</p>
-        <p style="margin-bottom:12px;">আমরা শুধু বই বিক্রি করি না — আমরা জ্ঞানের আলো ছড়িয়ে দিতে চাই। আপনার প্রতিটি অর্ডার আমাদের কাছে একটি আমানত, এবং সেই আমানত রক্ষা করাই আমাদের প্রতিশ্রুতি।</p>
+        <p style="margin-bottom:12px;"><strong style="color:#27ae60; font-size:15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য। আমরা বিশ্বাস করি, একটি ভালো বই মানুষের চিন্তা, চরিত্র ও জীবনকে আলোকিত করতে পারে।</p>
+        <p style="margin-bottom:12px;">আমাদের মূল লক্ষ্য হলো দেশের প্রতিটি মানুষের কাছে সাশ্রয়ী মূল্যে মানসম্পন্ন ইসলামিক বই পৌঁছে দেওয়া।</p>
+        <p style="margin-bottom:12px;">আমাদের সংগ্রহে রয়েছে আত্মশুদ্ধি, অনুপ্রেরণা, হাদিস, ইতিহাস, উপন্যাসসহ বিভিন্ন বিষয়ের শত শত বই।</p>
+        <p style="margin-bottom:12px;">আমরা শুধু বই বিক্রি করি না — আমরা জ্ঞানের আলো ছড়িয়ে দিতে চাই।</p>
         <hr style="border:none; border-top:1px solid #eee; margin:12px 0;">
         <p style="color:#27ae60; font-weight:bold; margin-bottom:6px;">📞 হটলাইন: 01516595762</p>
         <p style="margin-bottom:6px;">⏰ সময়: সকাল ৯টা — রাত ১০টা</p>
@@ -156,7 +156,7 @@
 
 <div class="sections-wrapper" id="sectionsWrapper"></div>
 <div id="searchResultWrapper" style="display:none;">
-    <div class="search-grid" id="searchGrid"></div>
+    <div class="search-results" id="searchGrid"></div>
 </div>
 
 <!-- CART -->
@@ -175,12 +175,6 @@
             <div style="font-size:14px; line-height:1.8;">
                 <p style="display:flex; justify-content:space-between;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>
                 <p style="display:flex; justify-content:space-between; color:red;">ডিসকাউন্ট: <span>-৳<span id="discountAmt">0</span></span></p>
-                <p style="display:flex; justify-content:space-between;">ডেলিভারি:
-                    <select id="location" onchange="updateCartUI()" style="border:1px solid #ddd; border-radius:5px; padding:2px;">
-                        <option value="60">ঢাকা (৳60)</option>
-                        <option value="90">ঢাকার বাইরে (৳90)</option>
-                    </select>
-                </p>
                 <hr style="margin:10px 0;">
                 <h4 style="display:flex; justify-content:space-between; color:#27ae60; font-size:18px;">মোট: <span>৳<span id="total">0</span></span></h4>
             </div>
@@ -191,6 +185,7 @@
         </div>
     </div>
 </div>
+
 <a href="https://wa.me/8801516595762" class="wa-float" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:50px;">
 </a>
@@ -246,6 +241,10 @@
 </div>
 
 <script>
+// =============================================
+// ✅ নতুন বই শুধু এই LIST এ যোগ করুন
+// category: বেস্ট সেলিং | রানিং  ট্রেন্ডিং | নতুন প্রকাশিত | জনপ্রিয় লেখক | জনপ্রিয় বই
+// =============================================
 const books = [
   { name: "বেলা ফুরাবার আগে", author: "আরিফ আজাদ", price: 240, original_price: 360, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "192 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/N62FKH3Q/Bela-Furabar-Agey-Front-250x395.webp", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "এবার ভিন্ন কিছু হোক", author: "আরিফ আজাদ", price: 260, original_price: 371, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "200 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/RWCKmSk/ebar-binno.webp", desc: "শীঘ্রই আপডেট করা হবে" },
@@ -295,8 +294,6 @@ const categoryConfig = [
   { key: "জনপ্রিয় বই", label: "জনপ্রিয় বই" },
 ];
 
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
-
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let discountPercent = 0;
 let currentBookForOrder = {};
@@ -310,7 +307,7 @@ function makeCard(b) {
     const pct = discountPct(b);
     const idx = books.indexOf(b);
     return `
-  <div class="book-card" onclick="window.location.href='book.html?id=${idx}'">
+    <div class="book-card" onclick="window.location.href='book.html?id=${idx}'">
         ${pct > 0 ? `<div class="discount-badge">${pct}% ছাড়</div>` : ''}
         <img src="${b.img}" alt="বই" loading="lazy">
         <div class="book-card-info">
@@ -335,11 +332,30 @@ function renderSections(list) {
         if (catBooks.length === 0) return;
         wrapper.innerHTML += `
             <div class="cat-section" id="section-${cat.key}">
-                <div class="cat-section-title">${cat.label} <span>${catBooks.length}টি বই</span></div>
+                <div class="cat-section-title">
+                    ${cat.label}
+                    <a href="#" onclick="showAllBooks('${cat.key}'); return false;" style="font-size:13px; color:#27ae60; font-weight:600; text-decoration:none;">সবগুলো দেখুন →</a>
+                </div>
                 <div class="book-row">${catBooks.map(makeCard).join('')}</div>
             </div>`;
     });
     if (!wrapper.innerHTML) wrapper.innerHTML = '<div style="text-align:center; padding:60px; color:#aaa;">কোনো বই পাওয়া যায়নি</div>';
+}
+
+function showAllBooks(cat) {
+    const filtered = books.filter(b => b.cat === cat);
+    const wrapper = document.getElementById('sectionsWrapper');
+    document.getElementById('searchResultWrapper').style.display = 'none';
+    wrapper.style.display = 'block';
+    wrapper.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="font-size:17px; font-weight:bold; color:#2c3e50; padding-left:12px; border-left:4px solid #27ae60;">${cat} <span style="font-size:12px; color:#aaa; font-weight:normal;">${filtered.length}টি বই</span></div>
+            <a href="#" onclick="filterCategory('all', null); return false;" style="font-size:13px; color:#27ae60; font-weight:600; text-decoration:none;">← ফিরে যান</a>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
+            ${filtered.map(makeCard).join('')}
+        </div>`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function buildPublisherList() {
@@ -412,12 +428,34 @@ function filterBooks() {
         document.getElementById('sectionsWrapper').style.display = 'block';
         return;
     }
-    const filtered = books.filter(b => b.name.normalize("NFC").toLowerCase().includes(input) || b.author.normalize("NFC").toLowerCase().includes(input));
+    const filtered = books.filter(b =>
+        b.name.normalize("NFC").toLowerCase().includes(input) ||
+        b.author.normalize("NFC").toLowerCase().includes(input)
+    );
     document.getElementById('sectionsWrapper').style.display = 'none';
     document.getElementById('searchResultWrapper').style.display = 'block';
+
+    // Search result — list style with percentage
     document.getElementById('searchGrid').innerHTML = filtered.length > 0
-        ? filtered.map(makeCard).join('')
-        : '<div style="text-align:center; padding:40px; color:#aaa; grid-column:1/-1;">বইটি পাওয়া যায়নি!</div>';
+        ? filtered.map(b => {
+            const idx = books.indexOf(b);
+            const pct = discountPct(b);
+            return `
+            <div onclick="window.location.href='book.html?id=${idx}'" style="display:flex; align-items:center; gap:12px; background:#fff; border-radius:12px; padding:10px; box-shadow:0 2px 8px rgba(0,0,0,0.06); cursor:pointer; margin-bottom:8px;">
+                <img src="${b.img}" style="width:55px; height:75px; object-fit:cover; border-radius:6px; flex-shrink:0;">
+                <div style="flex:1; min-width:0;">
+                    <div style="font-size:14px; font-weight:600; color:#2c3e50; margin-bottom:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${b.name}</div>
+                    <div style="font-size:12px; color:#888;">${b.author}</div>
+                </div>
+                <div style="text-align:right; flex-shrink:0;">
+                    ${pct > 0 ? `<div style="background:#e74c3c; color:white; font-size:11px; font-weight:700; padding:3px 8px; border-radius:20px; margin-bottom:4px;">${pct}% ছাড়</div>` : ''}
+                    <div style="font-size:15px; font-weight:700; color:#e74c3c;">৳${b.price}</div>
+                </div>
+            </div>`;
+        }).join('')
+        : '<div style="text-align:center; padding:40px; color:#aaa;">বইটি পাওয়া যায়নি!</div>';
+
+    // Suggestions
     if (filtered.length > 0) {
         suggestionBox.innerHTML = filtered.slice(0, 5).map(b => `
             <div style="display:flex; align-items:center; gap:10px; padding:10px; border-bottom:1px solid #eee; cursor:pointer;" onclick="selectBook('${b.name.replace(/'/g,"\\'")}')">
@@ -494,11 +532,10 @@ function updateCartUI() {
     }
     if (document.getElementById('count')) document.getElementById('count').innerText = cart.length;
     if (document.getElementById('floatCount')) document.getElementById('floatCount').innerText = cart.length;
-    const delivery = Number(document.getElementById('location')?.value || 0);
     const discountAmt = Math.round(subtotal * (discountPercent / 100));
     if (document.getElementById('subtotal')) document.getElementById('subtotal').innerText = subtotal;
     if (document.getElementById('discountAmt')) document.getElementById('discountAmt').innerText = discountAmt;
-    if (document.getElementById('total')) document.getElementById('total').innerText = (subtotal - discountAmt) + delivery;
+    if (document.getElementById('total')) document.getElementById('total').innerText = subtotal - discountAmt;
 }
 
 function changeQty(name, delta) {
@@ -515,62 +552,11 @@ function applyCoupon() {
 
 function showCart() { document.getElementById('cartBox').style.display = 'flex'; }
 function closeCart() { document.getElementById('cartBox').style.display = 'none'; }
-function openOrderForm() { 
-    if (cart.length === 0) return alert('কার্ট খালি!'); 
-    window.location.href = 'checkout.html'; 
-}
-function closeOrderForm() { document.getElementById('orderModal').style.display = 'none'; }
-
-function confirmOrder() {
-    const name = document.getElementById('custName').value.trim();
-    const phone = document.getElementById('custPhone').value.trim();
-    const address = document.getElementById('custAddress').value.trim();
-    const delivery = document.getElementById('location').value;
-    const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'COD';
-
-    if (!name || !phone || !address) return alert('দয়া করে সব তথ্য পূরণ করুন!');
-    if (phone.length !== 11) return alert('সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন!');
-
-    const grouped = {};
-    cart.forEach(item => { grouped[item.name] = (grouped[item.name] || 0) + 1; });
-    const bookList = Object.entries(grouped).map(([k, v]) => `${k} (${v}টি)`).join(', ');
-    const total = document.getElementById('total').innerText;
-
-    fetch(SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, address, books: bookList, payment: paymentMethod, delivery: '৳' + delivery, total: '৳' + total })
-    });
-
-    closeOrderForm();
-    closeCart();
-    cart = [];
-    saveCart();
-    updateCartUI();
-
-    document.body.innerHTML += `
-        <div id="confirmMsg" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
-            <div style="background:#fff; border-radius:20px; padding:35px 30px; text-align:center; max-width:340px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:popIn 0.4s ease;">
-                <div style="width:80px; height:80px; background:linear-gradient(135deg,#27ae60,#2ecc71); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow:0 8px 20px rgba(39,174,96,0.4);">
-                    <span style="font-size:35px; color:white;">✓</span>
-                </div>
-                <h2 style="color:#2c3e50; margin-bottom:8px; font-size:22px;">অর্ডার নিশ্চিত হয়েছে!</h2>
-                <p style="color:#27ae60; font-weight:bold; font-size:13px; margin-bottom:20px; letter-spacing:1px;">ORDER CONFIRMED</p>
-                <div style="background:#f8f9fa; border-radius:12px; padding:15px; margin-bottom:20px; text-align:left;">
-                    <p style="margin-bottom:8px; font-size:13px; color:#555;">👤 <strong>${name}</strong></p>
-                    <p style="margin-bottom:8px; font-size:13px; color:#555;">📞 ${phone}</p>
-                    <p style="margin-bottom:8px; font-size:13px; color:#555;">📍 ${address}</p>
-                    <p style="margin-bottom:0; font-size:13px; color:#e74c3c; font-weight:bold;">💰 মোট: ৳${total}</p>
-                </div>
-                <p style="color:#888; font-size:12px; margin-bottom:20px; line-height:1.6;">আমরা শীঘ্রই <strong>${phone}</strong> নম্বরে যোগাযোগ করব। ধন্যবাদ গ্রন্থকানন এ অর্ডার করার জন্য! 📚</p>
-                <button onclick="document.getElementById('confirmMsg').remove()" style="background:linear-gradient(135deg,#27ae60,#2ecc71); color:white; border:none; padding:13px 40px; border-radius:25px; font-weight:bold; cursor:pointer; font-size:15px; width:100%;">চমৎকার! 🎉</button>
-            </div>
-        </div>
-        <style>@keyframes popIn { from { transform:scale(0.8); opacity:0; } to { transform:scale(1); opacity:1; } }</style>`;
+function openOrderForm() {
+    if (cart.length === 0) return alert('কার্ট খালি!');
+    window.location.href = 'checkout.html';
 }
 
-// SLIDER
 const slider = document.getElementById('mainSlider');
 let currentImg = 0;
 if (slider) {
@@ -581,23 +567,11 @@ if (slider) {
 }
 
 function openBookDetails(idx) {
-    const b = books[idx];
-    currentBookForOrder = { name: b.name, price: b.price, img: b.img };
-    const pct = discountPct(b);
-    document.getElementById('detailImg').src = b.img;
-    document.getElementById('detailTitle').innerText = b.name;
-    document.getElementById('detailPrice').innerText = '৳ ' + b.price;
-    document.getElementById('detailOrigPrice').innerText = b.original_price > b.price ? '৳ ' + b.original_price : '';
-    document.getElementById('detailDiscount').innerText = pct > 0 ? pct + '% ছাড়' : '';
-    document.getElementById('detailPub').innerText = b.pub;
-    document.getElementById('detailPages').innerText = b.pages;
-    document.getElementById('detailStock').innerText = b.stock;
-    document.getElementById('detailFullDesc').innerText = b.desc;
-    document.getElementById('bookDetailModal').style.display = 'flex';
+    window.location.href = 'book.html?id=' + idx;
 }
 
 function closeBookDetails() { document.getElementById('bookDetailModal').style.display = 'none'; }
-function buyNow() { addToCart(currentBookForOrder.name, currentBookForOrder.price, currentBookForOrder.img); closeBookDetails(); }
+function buyNow() { window.location.href = 'checkout.html'; }
 window.addEventListener('click', e => { if (e.target == document.getElementById('bookDetailModal')) closeBookDetails(); });
 </script>
 </body>
