@@ -3,198 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>গ্রন্থকানন</title>
+    <title>বইয়ের তালিকা — গ্রন্থকানন</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: #edf2f7; color: #333; overflow-x: hidden; animation: pageIn 0.35s ease; }
-        @keyframes pageIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .back-btn { background: none; border: none; font-size: 15px; cursor: pointer; color: #27ae60; font-weight: 600; font-family: 'Hind Siliguri', Arial, sans-serif; display: flex; align-items: center; gap: 5px; }
-        .navbar-title { font-size: 16px; font-weight: 700; color: #2c3e50; }
-        .cart-icon { position: relative; font-size: 22px; cursor: pointer; }
-        .cart-badge { position: absolute; top: -8px; right: -10px; background: #e74c3c; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
+        body { font-family: 'Hind Siliguri', sans-serif; background: #f4f7f6; color: #333; }
+        .navbar { display: flex; align-items: center; padding: 15px 20px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .back-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #27ae60; margin-right: 15px; }
+        .nav-title { font-size: 18px; font-weight: 700; color: #2c3e50; }
+        
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+        .page-header { margin-bottom: 20px; border-left: 5px solid #27ae60; padding-left: 15px; }
+        .page-header h2 { font-size: 24px; color: #2c3e50; }
+        .page-header p { color: #666; font-size: 14px; }
 
-        /* BOOK GRID */
-        .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px; max-width: 1100px; margin: 0 auto; }
-        .book-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.07); transition: 0.3s; cursor: pointer; position: relative; }
-        .book-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-        .book-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
-        .discount-badge { position: absolute; top: 8px; left: 8px; background: #e74c3c; color: white; font-size: 11px; font-weight: bold; padding: 3px 7px; border-radius: 20px; }
-        .book-card-info { padding: 8px; }
-        .book-card-name { font-size: 12px; font-weight: bold; color: #333; margin-bottom: 3px; line-height: 1.3; height: 32px; overflow: hidden; }
-        .book-card-author { font-size: 11px; color: #888; margin-bottom: 5px; }
-        .price-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
-        .price-sell { color: #e74c3c; font-weight: bold; font-size: 13px; }
-        .price-original { color: #aaa; font-size: 11px; text-decoration: line-through; }
-        .book-card-btn { display: block; padding: 7px; background: #27ae60; color: white; border-radius: 6px; cursor: pointer; width: 100%; border: none; font-weight: bold; font-size: 11px; text-align: center; font-family: 'Hind Siliguri', Arial, sans-serif; }
-
-        /* SECTION HEADER */
-        .section-header { padding: 16px 16px 8px; max-width: 1100px; margin: 0 auto; }
-        .section-title { font-size: 18px; font-weight: 700; color: #2c3e50; padding-left: 12px; border-left: 4px solid #27ae60; display: flex; align-items: center; gap: 8px; }
-        .section-count { font-size: 13px; color: #aaa; font-weight: 400; }
-        .empty { text-align: center; padding: 60px 20px; color: #aaa; font-size: 16px; }
+        /* Book Grid */
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        .book-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer; position: relative; border: 1px solid #eee; }
+        .book-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .book-card img { width: 100%; height: 220px; object-fit: cover; }
+        .book-card-info { padding: 12px; }
+        .book-card-name { font-size: 14px; font-weight: 700; color: #2c3e50; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; }
+        .book-card-author { font-size: 12px; color: #27ae60; margin-bottom: 8px; }
+        .price-row { display: flex; align-items: center; gap: 8px; }
+        .price-sell { font-size: 16px; font-weight: 700; color: #e74c3c; }
+        .price-original { font-size: 12px; color: #aaa; text-decoration: line-through; }
+        .discount-badge { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; z-index: 1; }
+        
+        @media (max-width: 480px) {
+            .book-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .book-card img { height: 180px; }
+        }
     </style>
 </head>
 <body>
 
-<div onclick="window.location.href='index.html'" style="position:fixed; bottom:25px; left:16px; background:#1a1a2e; color:white; padding:11px 18px; border-radius:30px; cursor:pointer; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.25); z-index:999; font-family:'Hind Siliguri',Arial,sans-serif; display:flex; align-items:center; gap:8px; font-size:13px;">
-    <span style="font-size:18px;">🛍️</span>
-    <div>
-        <div style="font-size:11px; opacity:0.7; line-height:1;">শপিং ব্যাগ</div>
-        <div style="font-size:14px; font-weight:700; line-height:1.2;"><span id="floatCount">0</span> টি বই</div>
-    </div>
-</div>
-
 <div class="navbar">
-    <button class="back-btn" onclick="goBack()">← ফিরে যান</button>
-    <div class="navbar-title" id="pageTitle">গ্রন্থকানন</div>
-    <div class="cart-icon" onclick="window.location.href='index.html'">
-        🛒<span class="cart-badge" id="cartCount">0</span>
-    </div>
+    <button class="back-btn" onclick="window.history.back()">←</button>
+    <div class="nav-title" id="navTitle">বইয়ের তালিকা</div>
 </div>
 
-<div class="section-header">
-    <div class="section-title" id="sectionTitle">
-        <span id="titleText"></span>
-        <span class="section-count" id="countText"></span>
+<div class="container">
+    <div class="page-header">
+        <h2 id="titleText">লোড হচ্ছে...</h2>
+        <p id="countText">০টি বই পাওয়া গেছে</p>
+    </div>
+
+    <div class="book-grid" id="mainContent">
+        <!-- বইগুলো এখানে লোড হবে -->
     </div>
 </div>
-
-<div id="mainContent"></div>
 
 <script>
+// ১. আপনার বইয়ের লিস্ট (অবশ্যই book.html এর সাথে মিল থাকতে হবে)
 const books = [
-  { name: "বেলা ফুরাবার আগে", author: "আরিফ আজাদ", price: 240, original_price: 360, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/N62FKH3Q/Bela-Furabar-Agey-Front-250x395.webp" },
-  { name: "এবার ভিন্ন কিছু হোক", author: "আরিফ আজাদ", price: 260, original_price: 371, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/RWCKmSk/ebar-binno.webp" },
-  { name: "আরজ আলী সমীপে", author: "আরিফ আজাদ", price: 205, original_price: 300, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/nNvqJt2Y/Aroj-Ali-Somipe-250x393.png" },
-  { name: "নবী জীবনের গল্প", author: "আরিফ আজাদ", price: 200, original_price: 290, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/xK8p9TkB/nobi-jibon.webp" },
-  { name: "জীবন যেখানে যেমন", author: "আরিফ আজাদ", price: 205, original_price: 300, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/nNPZCbQr/jibon-jekhaney.webp" },
-  { name: "মা মা মা এবং বাবা (১ম)", author: "আরিফ আজাদ", price: 180, original_price: 260, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/XPgMTVX/250x386.webp" },
-  { name: "মা মা মা এবং বাবা (২য়)", author: "আরিফ আজাদ", price: 180, original_price: 260, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/FqwRvBdp/MA-MA-MA-EBONG-BABASECOND-PART-250x386.webp" },
-  { name: "প্যারাডক্সিকেল সাজিদ ২", author: "আরিফ আজাদ", price: 280, original_price: 415, cat: "জনপ্রিয় লেখক", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/zH8nyG07/para-2.webp" },
-  { name: "হায়াতের দিন ফুরোলে", author: "আরিফ আজাদ", price: 225, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "সত্যয়ন প্রকাশনী", img: "https://i.ibb.co.com/PzjLh194/hayater-din-furole-250x375.webp" },
-  { name: "কুরআন থেকে জীবনের পাঠ", author: "আরিফ আজাদ", price: 225, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "সত্যয়ন প্রকাশনী", img: "https://i.ibb.co.com/pvcW1qBn/jibon-theke-neya-250x377.jpg" },
-  { name: "আজি হতে হাজার বছর আগে", author: "আরিফ আজাদ", price: 270, original_price: 380, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", img: "https://i.ibb.co.com/ynG7dfpq/Cover-Aji-Hote-Hajar-Bosor-Age-By-Arif-Azad-2026-jpg-250x390.webp" },
-  { name: "কথা বল যায়তুন বৃক্ষ", author: "আরিফ আজাদ", price: 135, original_price: 200, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", img: "https://i.ibb.co.com/tTzzYqq0/Cover-Kotha-Bolo-Jaitun-Brikkho-250x389.jpg" },
-  { name: "উমরা সফরের গল্প", author: "আরিফ আজাদ", price: 230, original_price: 330, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", img: "https://i.ibb.co.com/nqRGwj3D/Cover-Umrah-Soforer-Golpo-250x389.webp" },
-  { name: "কাল থেকে ভালো হয়ে যাব", author: "মাহিন মাহমুদ", price: 240, original_price: 480, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/ns3mnNyw/valo-hoye-jabo-1-250x390.png" },
-  { name: "পুন্যময়ী", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/NnpGkVrJ/punnomoyi.webp" },
-  { name: "আধার মানবী", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/7xd3JprX/Adhar-manobi-New-250x391.webp" },
-  { name: "শেষ চিঠি", author: "মাহিন মাহমুদ", price: 130, original_price: 260, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/w2hVHDy/B0027-Sesh-Chithi-scaled-250x407.webp" },
-  { name: "একটি লাল নোটবুক", author: "মাহিন মাহমুদ", price: 120, original_price: 240, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/nq0G2GH0/ekti-lal.jpg" },
-  { name: "প্রাসাদপুত্র", author: "মাহিন মাহমুদ", price: 200, original_price: 400, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/wrgFjgRJ/prashadputro-01-scaled-250x364.webp" },
-  { name: "প্রাসাদপুত্র ২", author: "মাহিন মাহমুদ", price: 200, original_price: 400, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/cKPpMnDk/1-250x386.webp" },
-  { name: "একটি হারানো বিজ্ঞপ্তি", author: "মাহিন মাহমুদ", price: 220, original_price: 440, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/6JT8mby9/ekti-harano-biggopti-250x386.webp" },
-  { name: "भावনার চিরকুট", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল মদিনাহ", img: "https://i.ibb.co.com/SDPhZwpW/vabona-250x389.webp" },
-  { name: "নফসের বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/jP26xxCk/nafs-01-scaled-250x396.webp" },
-  { name: "শয়তানের বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/QvYpMcZv/Shaitan-01-1-250x410.jpg" },
-  { name: "অলসতার বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/KxLGh10t/olosota.webp" },
-  { name: "অশ্লীলতার বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 230, original_price: 330, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/3mB9p3Hv/oslilotar-biruddhe-lorai-2-250x400.webp" },
-  { name: "হৃদয়ের সাথে হৃদয়ের কথা", author: "মাহবুব বিন নূর", price: 190, original_price: 270, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/pBNNYLJt/4d1e49bf-cf6a-49d0-bec4-c938ef99c23c-Hridoyer-sathe-hridoyer-kotha-front-250x386.jpg" },
-  { name: "নিয়ামত পেয়েও হারিয়ে ফেলো না", author: "মাহবুব বিন নূর", price: 260, original_price: 370, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/B5JjxThS/neyamot.jpg" },
-  { name: "যেসব কাজ করতে মানা", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/JRCshvvb/je-sob-kaj-korte-mana-250x389.jpg" },
-  { name: "স্বপ্ন ও স্বপ্নের ব্যখ্যা", author: "মাহবুব বিন নূর", price: 140, original_price: 200, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/5Q1StMk/Shopno-O-Shopner-Bekkha-250x390.webp" },
-  { name: "আমার শত্রু আমি", author: "মাহবুব বিন নূর", price: 125, original_price: 180, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/pvvrtgVq/250x398.webp" },
-  { name: "জীবনের আয়না", author: "মাহবুব বিন নূর", price: 180, original_price: 250, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/6chMgFBw/One-side-250x390.png" },
-  { name: "আমার প্রিয় দোয়ার ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 240, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/1Gx3d7m3/47381ff4-7de2-49a4-87ae-85076024a03f-Amar-priyo-duar-dairy-front-250x386.jpg" },
-  { name: "একটি সফল রমাদান ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 240, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/fdBYj3dh/ramadan-diary-Final01-1-250x391.jpg" },
-  { name: "যিলহজ্জের আমল ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 170, original_price: 250, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/xtVsXK9J/zilhajjer-amol-77568-250x375.webp" },
-  { name: "রাইটিং থেরাপি", author: "শারিন সফি অদ্রিতা", price: 320, original_price: 440, cat: "রানিং ট্রেন্ডিং", pub: "ইফফাহ প্রকাশন", img: "https://i.ibb.co.com/Y7k4v8hb/therapy-021-250x385.webp" },
-  { name: "A Lantern In Her Window", author: "শারিন সফি অদ্রিতা", price: 290, original_price: 429, cat: "রানিং ট্রেন্ডিং", pub: "পেনফিল্ড পাবলিকেশন", img: "https://i.ibb.co.com/Pv5G0PzT/A-lantern-in-her-window-Front-250x384.jpg" },
+  { name: "বেলা ফুরাবার আগে", author: "আরিফ আজাদ", price: 240, original_price: 360, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "192 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/N62FKH3Q/Bela-Furabar-Agey-Front-250x395.webp" },
+  { name: "এবার ভিন্ন কিছু হোক", author: "আরিফ আজাদ", price: 260, original_price: 371, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "200 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/RWCKmSk/ebar-binno.webp" },
+  { name: "আরজ আলী সমীপে", author: "আরিফ আজাদ", price: 205, original_price: 300, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "149 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/nNvqJt2Y/Aroj-Ali-Somipe-250x393.png" },
+  { name: "নবী জীবনের গল্প", author: "আরিফ আজাদ", price: 200, original_price: 290, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "144 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/xK8p9TkB/nobi-jibon.webp" },
+  { name: "জীবন যেখানে যেমন", author: "আরিফ আজাদ", price: 205, original_price: 300, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "152 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/nNPZCbQr/jibon-jekhaney.webp" },
+  { name: "মা মা মা এবং বাবা (১ম)", author: "আরিফ আজাদ", price: 180, original_price: 260, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "176 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/XPgMTVX/250x386.webp" },
+  { name: "মা মা মা এবং বাবা (২য়)", author: "আরিফ আজাদ", price: 180, original_price: 260, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "168 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/FqwRvBdp/MA-MA-MA-EBONG-BABASECOND-PART-250x386.webp" },
+  { name: "প্যারাডক্সিকেল সাজিদ ২", author: "আরিফ আজাদ", price: 280, original_price: 415, cat: "জনপ্রিয় লেখক", pub: "সমকালীন প্রকাশনী", pages: "225 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/zH8nyG07/para-2.webp" },
+  { name: "হায়াতের দিন ফুরোলে", author: "আরিফ আজাদ", price: 225, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "সত্যয়ন প্রকাশনী", pages: "184 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/PzjLh194/hayater-din-furole-250x375.webp" },
+  { name: "কুরআন থেকে জীবনের পাঠ", author: "আরিফ আজাদ", price: 225, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "সত্যয়ন প্রকাশনী", pages: "184 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/pvcW1qBn/jibon-theke-neya-250x377.jpg" },
+  { name: "আজি হতে হাজার বছর আগে", author: "আরিফ আজাদ", price: 270, original_price: 380, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", pages: "216 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/ynG7dfpq/Cover-Aji-Hote-Hajar-Bosor-Age-By-Arif-Azad-2026-jpg-250x390.webp" },
+  { name: "কথা বল যায়তুন বৃক্ষ", author: "আরিফ আজাদ", price: 135, original_price: 200, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", pages: "56 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/tTzzYqq0/Cover-Kotha-Bolo-Jaitun-Brikkho-250x389.jpg" },
+  { name: "উমরা সফরের গল্প", author: "আরিফ আজাদ", price: 230, original_price: 330, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", pages: "184 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/nqRGwj3D/Cover-Umrah-Soforer-Golpo-250x389.webp" },
+  { name: "কাল থেকে ভালো হয়ে যাব", author: "মাহিন মাহমুদ", price: 240, original_price: 480, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল হাসান", pages: "304 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/ns3mnNyw/valo-hoye-jabo-1-250x390.png" },
+  { name: "পুন্যময়ী", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", pages: "200 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/NnpGkVrJ/punnomoyi.webp" },
+  { name: "আধার মানবী", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", pages: "220 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/7xd3JprX/Adhar-manobi-New-250x391.webp" },
+  { name: "শেষ চিঠি", author: "মাহিন মাহমুদ", price: 130, original_price: 260, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", pages: "160 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/w2hVHDy/B0027-Sesh-Chithi-scaled-250x407.webp" },
+  { name: "একটি লাল নোটবুক", author: "মাহিন মাহমুদ", price: 120, original_price: 240, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল হাসান", pages: "152 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/nq0G2GH0/ekti-lal.jpg" },
+  { name: "প্রাসাদপুত্র", author: "মাহিন মাহমুদ", price: 200, original_price: 400, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", pages: "248 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/wrgFjgRJ/prashadputro-01-scaled-250x364.webp" },
+  { name: "প্রাসাদপুত্র ২", author: "মাহিন মাহমুদ", price: 200, original_price: 400, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", pages: "216 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/cKPpMnDk/1-250x386.webp" },
+  { name: "একটি হারানো বিজ্ঞপ্তি", author: "মাহিন মাহমুদ", price: 220, original_price: 440, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", pages: "288 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/6JT8mby9/ekti-harano-biggopti-250x386.webp" },
+  { name: "ভাবনার চিরকুট", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল মদিনাহ", pages: "176 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/SDPhZwpW/vabona-250x389.webp" },
+  { name: "নফসের বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "144 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/jP26xxCk/nafs-01-scaled-250x396.webp" },
+  { name: "শয়তানের বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "144 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/QvYpMcZv/Shaitan-01-1-250x410.jpg" },
+  { name: "অলসতার বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "144 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/KxLGh10t/olosota.webp" },
+  { name: "অশ্লীলতার বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 230, original_price: 330, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", pages: "224 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/3mB9p3Hv/oslilotar-biruddhe-lorai-2-250x400.webp" },
+  { name: "হৃদয়ের সাথে হৃদয়ের কথা", author: "মাহবুব বিন নূর", price: 190, original_price: 270, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "184 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/pBNNYLJt/4d1e49bf-cf6a-49d0-bec4-c938ef99c23c-Hridoyer-sathe-hridoyer-kotha-front-250x386.jpg" },
+  { name: "নিয়ামত পেয়েও হারিয়ে ফেলো না", author: "মাহবুব বিন নূর", price: 260, original_price: 370, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "248 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/B5JjxThS/neyamot.jpg" },
+  { name: "যেসব কাজ করতে মানা", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "144 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/JRCshvvb/je-sob-kaj-korte-mana-250x389.jpg" },
+  { name: "স্বপ্ন ও স্বপ্নের ব্যখ্যা", author: "মাহবুব বিন নূর", price: 140, original_price: 200, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "128 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/5Q1StMk/Shopno-O-Shopner-Bekkha-250x390.webp" },
+  { name: "আমার শত্রু আমি", author: "মাহবুব বিন নূর", price: 125, original_price: 180, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "112 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/pvvrtgVq/250x398.webp" },
+  { name: "জীবনের আয়না", author: "মাহবুব বিন নূর", price: 180, original_price: 250, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "175 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/6chMgFBw/One-side-250x390.png" },
+  { name: "আমার প্রিয় দোয়ার ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 240, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "224 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/1Gx3d7m3/47381ff4-7de2-49a4-87ae-85076024a03f-Amar-priyo-duar-dairy-front-250x386.jpg" },
+  { name: "একটি সফল রমাদান ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 240, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "224 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/fdBYj3dh/ramadan-diary-Final01-1-250x391.jpg" },
+  { name: "যিলহজ্জের আমল ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 170, original_price: 250, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", pages: "160 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/xtVsXK9J/zilhajjer-amol-77568-250x375.webp" },
+  { name: "রাইটিং থেরাপি", author: "শারিন সফি অদ্রিতা", price: 320, original_price: 440, cat: "রানিং  ট্রেন্ডিং", pub: "ইফফাহ প্রকাশন", pages: "288 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/Y7k4v8hb/therapy-021-250x385.webp" },
+  { name: "A Lantern In Her Window", author: "শারিন সফি অদ্রিতা", price: 290, original_price: 429, cat: "রানিং  ট্রেন্ডিং", pub: "পেনফিল্ড পাবলিকেশন", pages: "264 পৃষ্ঠা", stock: "10", subject: "ইসলামিক বই", img: "https://i.ibb.co.com/Pv5G0PzT/A-lantern-in-her-window-Front-250x384.jpg" },
 ];
 
-let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
-function updateUI() {
-    document.getElementById('cartCount').innerText = cart.length;
-    if(document.getElementById('floatCount')) document.getElementById('floatCount').innerText = cart.length;
-}
-updateUI();
+// ২. মেইন লজিক
+function init() {
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type'); 
+    const value = decodeURIComponent(params.get('value') || '');
+    
+    let filtered = [];
+    let displayTitle = value;
 
-function discountPct(b) {
-    if (b.original_price > b.price) return Math.round((b.original_price - b.price) / b.original_price * 100);
-    return 0;
-}
+    if (type === 'cat' && value) {
+        filtered = books.filter(b => b.cat === value);
+    } else if (type === 'author' && value) {
+        filtered = books.filter(b => b.author === value);
+    } else if (type === 'pub' && value) {
+        filtered = books.filter(b => b.pub === value);
+    } else {
+        // যদি কিছু না পায়, তবে সব বই দেখাবে
+        filtered = books;
+        displayTitle = "সব বই";
+    }
 
-function makeCard(b) {
-    const pct = discountPct(b);
-    const idx = books.indexOf(b);
-    return `
-    <div class="book-card" onclick="goToBook(${idx})">
-        ${pct > 0 ? `<div class="discount-badge">${pct}% ছাড়</div>` : ''}
-        <img src="${b.img}" alt="বই" loading="lazy">
-        <div class="book-card-info">
-            <div class="book-card-name">${b.name}</div>
-            <div class="book-card-author">${b.author}</div>
-            <div class="price-row">
-                <span class="price-sell">৳ ${b.price}</span>
-                ${b.original_price > b.price ? `<span class="price-original">৳ ${b.original_price}</span>` : ''}
-            </div>
-            <button class="book-card-btn" onclick="event.stopPropagation(); addToCart('${b.name.replace(/'/g,"\\'")}', ${b.price}, '${b.img}')">কার্টে যোগ করুন</button>
-        </div>
-    </div>`;
-}
+    // UI আপডেট
+    document.getElementById('navTitle').innerText = displayTitle;
+    document.getElementById('titleText').innerText = displayTitle;
+    document.getElementById('countText').innerText = filtered.length + 'টি বই পাওয়া গেছে';
 
-function goToBook(idx) {
-    navigateTo('book.html?id=' + idx);
-}
-
-function addToCart(name, price, img) {
-    cart.push({ name, price: Number(price), img });
-    localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
-    updateUI();
-    const toast = document.createElement('div');
-    toast.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#2c3e50;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
-    toast.innerText = '✅ কার্টে যোগ হয়েছে!';
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2000);
-}
-
-function navigateTo(url) {
-    document.body.style.animation = 'pageOut 0.25s ease forwards';
-    setTimeout(() => window.location.href = url, 250);
-}
-
-function goBack() {
-    navigateTo('index.html');
+    const content = document.getElementById('mainContent');
+    if (filtered.length === 0) {
+        content.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 50px; color: #888;">দুঃখিত, কোনো বই পাওয়া যায়নি।</p>`;
+    } else {
+        content.innerHTML = filtered.map(b => {
+            // বইটির আসল ইনডেক্স খুঁজে বের করা book.html এর জন্য
+            const originalIndex = books.findIndex(book => book.name === b.name);
+            const pct = Math.round((b.original_price - b.price) / b.original_price * 100);
+            
+            return `
+            <div class="book-card" onclick="window.location.href='book.html?id=${originalIndex}'">
+                ${pct > 0 ? `<div class="discount-badge">${pct}% ছাড়</div>` : ''}
+                <img src="${b.img}" alt="${b.name}">
+                <div class="book-card-info">
+                    <div class="book-card-name">${b.name}</div>
+                    <div class="book-card-author">${b.author}</div>
+                    <div class="price-row">
+                        <span class="price-sell">৳${b.price}</span>
+                        ${b.original_price > b.price ? `<span class="price-original">৳${b.original_price}</span>` : ''}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
 }
 
-// Page out animation
-const style = document.createElement('style');
-style.textContent = '@keyframes pageOut { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(-10px); } }';
-document.head.appendChild(style);
-
-// URL params পড়া
-const params = new URLSearchParams(window.location.search);
-const type = params.get('type'); 
-const value = decodeURIComponent(params.get('value') || '');
-
-let filtered = [];
-let titleIcon = '';
-
-if (type === 'cat') {
-    filtered = books.filter(b => b.cat === value);
-    titleIcon = '📚';
-    document.getElementById('pageTitle').innerText = value;
-} else if (type === 'author') {
-    filtered = books.filter(b => b.author === value);
-    titleIcon = '✍️';
-    document.getElementById('pageTitle').innerText = value;
-} else if (type === 'pub') {
-    filtered = books.filter(b => b.pub === value);
-    titleIcon = '🏢';
-    document.getElementById('pageTitle').innerText = value;
-}
-
-document.getElementById('titleText').innerText = titleIcon + ' ' + value;
-document.getElementById('countText').innerText = filtered.length + 'টি বই';
-
-const content = document.getElementById('mainContent');
-if (filtered.length === 0) {
-    content.innerHTML = '<div class="empty">কোনো বই পাওয়া যায়নি</div>';
-} else {
-    content.innerHTML = `<div class="grid-container">${filtered.map(makeCard).join('')}</div>`;
-}
+// পেজ লোড হলে ফাংশনটি রান করবে
+window.onload = init;
 </script>
 
 </body>
