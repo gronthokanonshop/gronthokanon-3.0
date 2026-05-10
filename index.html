@@ -196,8 +196,7 @@
 <a href="https://wa.me/8801516595762" class="wa-float" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:50px;">
 </a>
-<div class="cart-floating" onclick="showCart()">🛒 <span id="floatCount">0</span> টি বই কার্টে</div>
-
+<div class="cart-floating" onclick="showCart()">🛒 শপিং ব্যাগ দেখুন (<span id="floatCount">0</span>)</div>
 <footer>
     <div style="margin-bottom:25px;">
         <p style="margin-bottom:20px; font-weight:bold; font-size:18px;">আমাদের সাথে যুক্ত থাকুন</p>
@@ -350,25 +349,8 @@ function renderSections(list) {
 }
 
 function showAllBooks(cat) {
-    const filtered = books.filter(b => b.cat === cat);
-    const wrapper = document.getElementById('sectionsWrapper');
-    document.getElementById('searchResultWrapper').style.display = 'none';
-    wrapper.style.display = 'block';
-    wrapper.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <div style="font-size:17px; font-weight:bold; color:#2c3e50; padding-left:12px; border-left:4px solid #27ae60;">${cat} <span style="font-size:12px; color:#aaa; font-weight:normal;">${filtered.length}টি বই</span></div>
-            <a href="#" onclick="filterCategory('all', null); return false;" style="font-size:13px; color:#27ae60; font-weight:600; text-decoration:none;">← ফিরে যান</a>
-        </div>
-        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
-            ${filtered.map(makeCard).join('')}
-        </div>`;
-wrapper.classList.remove('fade-in');
-void wrapper.offsetWidth;
-wrapper.classList.add('fade-in');
-window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function buildPublisherList() {
+    navigateToFilter('cat', cat);
+}function buildPublisherList() {
     const pubs = [...new Set(books.map(b => b.pub))].sort();
     document.getElementById('pubSub').innerHTML = pubs.map(p =>
         `<div class="sidebar-sub-item" onclick="navigateToFilter('pub', '${p.replace(/'/g,"\\'")}')">${p}</div>`
@@ -508,9 +490,13 @@ function toggleSidebar() {
 
 function addToCart(name, price, img) {
     cart.push({ name: name.trim(), price: Number(price), img: img });
-    saveCart(); updateCartUI(); showCart();
+    saveCart(); updateCartUI();
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#2c3e50;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
+    toast.innerText = '✅ কার্টে যোগ হয়েছে!';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
 }
-
 function saveCart() { localStorage.setItem('gronthokanon_cart', JSON.stringify(cart)); }
 
 function updateCartUI() {
