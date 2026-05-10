@@ -99,12 +99,12 @@
     <div class="sidebar-menu-item" onclick="filterCategory('all', null); toggleSidebar()">🏠 হোম</div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('catSub')">📚 ক্যাটাগরি <span id="catArrow">▶</span></div>
     <div class="sidebar-sub" id="catSub">
-        <div class="sidebar-sub-item" onclick="filterCategory('বেস্ট সেলিং', null); toggleSidebar()">বেস্ট সেলিং</div>
-        <div class="sidebar-sub-item" onclick="filterCategory('রানিং  ট্রেন্ডিং', null); toggleSidebar()">রানিং ট্রেন্ডিং</div>
-        <div class="sidebar-sub-item" onclick="filterCategory('নতুন প্রকাশিত', null); toggleSidebar()">নতুন প্রকাশিত</div>
-        <div class="sidebar-sub-item" onclick="filterCategory('জনপ্রিয় লেখক', null); toggleSidebar()">জনপ্রিয় লেখক</div>
-        <div class="sidebar-sub-item" onclick="filterCategory('জনপ্রিয় বই', null); toggleSidebar()">জনপ্রিয় বই</div>
-    </div>
+    <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'বেস্ট সেলিং')">বেস্ট সেলিং</div>
+    <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'রানিং  ট্রেন্ডিং')">রানিং ট্রেন্ডিং</div>
+    <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'নতুন প্রকাশিত')">নতুন প্রকাশিত</div>
+    <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'জনপ্রিয় লেখক')">জনপ্রিয় লেখক</div>
+    <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'জনপ্রিয় বই')">জনপ্রিয় বই</div>
+</div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('pubSub')">🏢 প্রকাশনী <span id="pubArrow">▶</span></div>
     <div class="sidebar-sub" id="pubSub"></div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('authorSub')">✍️ লেখক <span id="authorArrow">▶</span></div>
@@ -371,17 +371,15 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
 function buildPublisherList() {
     const pubs = [...new Set(books.map(b => b.pub))].sort();
     document.getElementById('pubSub').innerHTML = pubs.map(p =>
-        `<div class="sidebar-sub-item" onclick="filterByPublisher('${p.replace(/'/g,"\\'")}'); toggleSidebar()">${p}</div>`
+        `<div class="sidebar-sub-item" onclick="navigateToFilter('pub', '${p.replace(/'/g,"\\'")}')">${p}</div>`
     ).join('');
 }
-
 function buildAuthorList() {
     const authors = [...new Set(books.map(b => b.author))].sort();
     document.getElementById('authorSub').innerHTML = authors.map(a =>
-        `<div class="sidebar-sub-item" onclick="filterByAuthor('${a.replace(/'/g,"\\'")}'); toggleSidebar()">${a}</div>`
+        `<div class="sidebar-sub-item" onclick="navigateToFilter('author', '${a.replace(/'/g,"\\'")}')">${a}</div>`
     ).join('');
 }
-
 function filterByPublisher(pub) {
     document.getElementById('searchInput').value = '';
     document.getElementById('searchSuggestions').style.display = 'none';
@@ -495,6 +493,13 @@ document.addEventListener('click', function(e) {
 
 window.onload = () => { renderSections(books); buildPublisherList(); buildAuthorList(); updateCartUI(); };
 
+function navigateToFilter(type, value) {
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.25s ease';
+    setTimeout(() => {
+        window.location.href = `filter.html?type=${type}&value=${encodeURIComponent(value)}`;
+    }, 250);
+}
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('active');
     const overlay = document.getElementById('overlay');
