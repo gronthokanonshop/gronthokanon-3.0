@@ -33,20 +33,18 @@
         .section-header { padding: 16px 16px 8px; max-width: 1100px; margin: 0 auto; }
         .section-title { font-size: 18px; font-weight: 700; color: #2c3e50; padding-left: 12px; border-left: 4px solid #27ae60; display: flex; align-items: center; gap: 8px; }
         .section-count { font-size: 13px; color: #aaa; font-weight: 400; }
-
-        /* SUBSECTION (author/publisher এর ভেতরে category) */
-        .sub-section { margin-bottom: 30px; padding: 0 16px; max-width: 1100px; margin-left: auto; margin-right: auto; }
-        .sub-title { font-size: 15px; font-weight: 600; color: #27ae60; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid #27ae60; }
-        .book-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
-        .book-row::-webkit-scrollbar { height: 4px; }
-        .book-row::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-        .book-row .book-card { flex-shrink: 0; width: 130px; }
-        .book-row .book-card img { width: 130px; height: 175px; }
-
         .empty { text-align: center; padding: 60px 20px; color: #aaa; font-size: 16px; }
     </style>
 </head>
 <body>
+
+<div onclick="window.location.href='index.html'" style="position:fixed; bottom:25px; left:16px; background:#1a1a2e; color:white; padding:11px 18px; border-radius:30px; cursor:pointer; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.25); z-index:999; font-family:'Hind Siliguri',Arial,sans-serif; display:flex; align-items:center; gap:8px; font-size:13px;">
+    <span style="font-size:18px;">🛍️</span>
+    <div>
+        <div style="font-size:11px; opacity:0.7; line-height:1;">শপিং ব্যাগ</div>
+        <div style="font-size:14px; font-weight:700; line-height:1.2;"><span id="floatCount">0</span> টি বই</div>
+    </div>
+</div>
 
 <div class="navbar">
     <button class="back-btn" onclick="goBack()">← ফিরে যান</button>
@@ -67,47 +65,51 @@
 
 <script>
 const books = [
-  { name: "বেলা ফুরাবার আগে", author: "আরিফ আজাদ", price: 240, original_price: 360, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "192 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/N62FKH3Q/Bela-Furabar-Agey-Front-250x395.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "এবার ভিন্ন কিছু হোক", author: "আরিফ আজাদ", price: 260, original_price: 371, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "200 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/RWCKmSk/ebar-binno.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "আরজ আলী সমীপে", author: "আরিফ আজাদ", price: 205, original_price: 300, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "149 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/nNvqJt2Y/Aroj-Ali-Somipe-250x393.png", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "নবী জীবনের গল্প", author: "আরিফ আজাদ", price: 200, original_price: 290, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "144 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/xK8p9TkB/nobi-jibon.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "জীবন যেখানে যেমন", author: "আরিফ আজাদ", price: 205, original_price: 300, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "152 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/nNPZCbQr/jibon-jekhaney.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "মা মা মা এবং বাবা (১ম)", author: "আরিফ আজাদ", price: 180, original_price: 260, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "176 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/XPgMTVX/250x386.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "মা মা মা এবং বাবা (২য়)", author: "আরিফ আজাদ", price: 180, original_price: 260, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", pages: "168 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/FqwRvBdp/MA-MA-MA-EBONG-BABASECOND-PART-250x386.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "প্যারাডক্সিকেল সাজিদ ২", author: "আরিফ আজাদ", price: 280, original_price: 415, cat: "জনপ্রিয় লেখক", pub: "সমকালীন প্রকাশনী", pages: "225 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/zH8nyG07/para-2.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "হায়াতের দিন ফুরোলে", author: "আরিফ আজাদ", price: 225, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "সত্যয়ন প্রকাশনী", pages: "184 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/PzjLh194/hayater-din-furole-250x375.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "কুরআন থেকে জীবনের পাঠ", author: "আরিফ আজাদ", price: 225, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "সত্যয়ন প্রকাশনী", pages: "184 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/pvcW1qBn/jibon-theke-neya-250x377.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "আজি হতে হাজার বছর আগে", author: "আরিফ আজাদ", price: 270, original_price: 380, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", pages: "216 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/ynG7dfpq/Cover-Aji-Hote-Hajar-Bosor-Age-By-Arif-Azad-2026-jpg-250x390.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "কথা বল যায়তুন বৃক্ষ", author: "আরিফ আজাদ", price: 135, original_price: 200, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", pages: "56 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/tTzzYqq0/Cover-Kotha-Bolo-Jaitun-Brikkho-250x389.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "উমরা সফরের গল্প", author: "আরিফ আজাদ", price: 230, original_price: 330, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", pages: "184 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/nqRGwj3D/Cover-Umrah-Soforer-Golpo-250x389.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "কাল থেকে ভালো হয়ে যাব", author: "মাহিন মাহমুদ", price: 240, original_price: 480, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল হাসান", pages: "304 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/ns3mnNyw/valo-hoye-jabo-1-250x390.png", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "পুন্যময়ী", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", pages: "200 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/NnpGkVrJ/punnomoyi.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "আধার মানবী", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", pages: "220 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/7xd3JprX/Adhar-manobi-New-250x391.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "শেষ চিঠি", author: "মাহিন মাহমুদ", price: 130, original_price: 260, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", pages: "160 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/w2hVHDy/B0027-Sesh-Chithi-scaled-250x407.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "একটি লাল নোটবুক", author: "মাহিন মাহমুদ", price: 120, original_price: 240, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল হাসান", pages: "152 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/nq0G2GH0/ekti-lal.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "প্রাসাদপুত্র", author: "মাহিন মাহমুদ", price: 200, original_price: 400, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", pages: "248 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/wrgFjgRJ/prashadputro-01-scaled-250x364.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "প্রাসাদপুত্র ২", author: "মাহিন মাহমুদ", price: 200, original_price: 400, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", pages: "216 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/cKPpMnDk/1-250x386.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "একটি হারানো বিজ্ঞপ্তি", author: "মাহিন মাহমুদ", price: 220, original_price: 440, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", pages: "288 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/6JT8mby9/ekti-harano-biggopti-250x386.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "ভাবনার চিরকুট", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল মদিনাহ", pages: "176 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/SDPhZwpW/vabona-250x389.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "নফসের বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "144 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/jP26xxCk/nafs-01-scaled-250x396.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "শয়তানের বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "144 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/QvYpMcZv/Shaitan-01-1-250x410.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "অলসতার বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "144 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/KxLGh10t/olosota.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "অশ্লীলতার বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 230, original_price: 330, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", pages: "224 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/3mB9p3Hv/oslilotar-biruddhe-lorai-2-250x400.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "হৃদয়ের সাথে হৃদয়ের কথা", author: "মাহবুব বিন নূর", price: 190, original_price: 270, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "184 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/pBNNYLJt/4d1e49bf-cf6a-49d0-bec4-c938ef99c23c-Hridoyer-sathe-hridoyer-kotha-front-250x386.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "নিয়ামত পেয়েও হারিয়ে ফেলো না", author: "মাহবুব বিন নূর", price: 260, original_price: 370, cat: "রানিং  ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", pages: "248 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/B5JjxThS/neyamot.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "যেসব কাজ করতে মানা", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "144 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/JRCshvvb/je-sob-kaj-korte-mana-250x389.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "স্বপ্ন ও স্বপ্নের ব্যখ্যা", author: "মাহবুব বিন নূর", price: 140, original_price: 200, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "128 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/5Q1StMk/Shopno-O-Shopner-Bekkha-250x390.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "আমার শত্রু আমি", author: "মাহবুব বিন নূর", price: 125, original_price: 180, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "112 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/pvvrtgVq/250x398.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "জীবনের আয়না", author: "মাহবুব বিন নূর", price: 180, original_price: 250, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "175 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/6chMgFBw/One-side-250x390.png", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "আমার প্রিয় দোয়ার ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 240, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "224 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/1Gx3d7m3/47381ff4-7de2-49a4-87ae-85076024a03f-Amar-priyo-duar-dairy-front-250x386.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "একটি সফল রমাদান ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 240, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", pages: "224 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/fdBYj3dh/ramadan-diary-Final01-1-250x391.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "যিলহজ্জের আমল ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 170, original_price: 250, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", pages: "160 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/xtVsXK9J/zilhajjer-amol-77568-250x375.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "রাইটিং থেরাপি", author: "শারিন সফি অদ্রিতা", price: 320, original_price: 440, cat: "রানিং  ট্রেন্ডিং", pub: "ইফফাহ প্রকাশন", pages: "288 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/Y7k4v8hb/therapy-021-250x385.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "A Lantern In Her Window", author: "শারিন সফি অদ্রিতা", price: 290, original_price: 429, cat: "রানিং  ট্রেন্ডিং", pub: "পেনফিল্ড পাবলিকেশন", pages: "264 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/Pv5G0PzT/A-lantern-in-her-window-Front-250x384.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
+  { name: "বেলা ফুরাবার আগে", author: "আরিফ আজাদ", price: 240, original_price: 360, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/N62FKH3Q/Bela-Furabar-Agey-Front-250x395.webp" },
+  { name: "এবার ভিন্ন কিছু হোক", author: "আরিফ আজাদ", price: 260, original_price: 371, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/RWCKmSk/ebar-binno.webp" },
+  { name: "আরজ আলী সমীপে", author: "আরিফ আজাদ", price: 205, original_price: 300, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/nNvqJt2Y/Aroj-Ali-Somipe-250x393.png" },
+  { name: "নবী জীবনের গল্প", author: "আরিফ আজাদ", price: 200, original_price: 290, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/xK8p9TkB/nobi-jibon.webp" },
+  { name: "জীবন যেখানে যেমন", author: "আরিফ আজাদ", price: 205, original_price: 300, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/nNPZCbQr/jibon-jekhaney.webp" },
+  { name: "মা মা মা এবং বাবা (১ম)", author: "আরিফ আজাদ", price: 180, original_price: 260, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/XPgMTVX/250x386.webp" },
+  { name: "মা মা মা এবং বাবা (২য়)", author: "আরিফ আজাদ", price: 180, original_price: 260, cat: "বেস্ট সেলিং", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/FqwRvBdp/MA-MA-MA-EBONG-BABASECOND-PART-250x386.webp" },
+  { name: "প্যারাডক্সিকেল সাজিদ ২", author: "আরিফ আজাদ", price: 280, original_price: 415, cat: "জনপ্রিয় লেখক", pub: "সমকালীন প্রকাশনী", img: "https://i.ibb.co.com/zH8nyG07/para-2.webp" },
+  { name: "হায়াতের দিন ফুরোলে", author: "আরিফ আজাদ", price: 225, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "সত্যয়ন প্রকাশনী", img: "https://i.ibb.co.com/PzjLh194/hayater-din-furole-250x375.webp" },
+  { name: "কুরআন থেকে জীবনের পাঠ", author: "আরিফ আজাদ", price: 225, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "সত্যয়ন প্রকাশনী", img: "https://i.ibb.co.com/pvcW1qBn/jibon-theke-neya-250x377.jpg" },
+  { name: "আজি হতে হাজার বছর আগে", author: "আরিফ আজাদ", price: 270, original_price: 380, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", img: "https://i.ibb.co.com/ynG7dfpq/Cover-Aji-Hote-Hajar-Bosor-Age-By-Arif-Azad-2026-jpg-250x390.webp" },
+  { name: "কথা বল যায়তুন বৃক্ষ", author: "আরিফ আজাদ", price: 135, original_price: 200, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", img: "https://i.ibb.co.com/tTzzYqq0/Cover-Kotha-Bolo-Jaitun-Brikkho-250x389.jpg" },
+  { name: "উমরা সফরের গল্প", author: "আরিফ আজাদ", price: 230, original_price: 330, cat: "বেস্ট সেলিং", pub: "সুকুন পাবলিকেশন", img: "https://i.ibb.co.com/nqRGwj3D/Cover-Umrah-Soforer-Golpo-250x389.webp" },
+  { name: "কাল থেকে ভালো হয়ে যাব", author: "মাহিন মাহমুদ", price: 240, original_price: 480, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/ns3mnNyw/valo-hoye-jabo-1-250x390.png" },
+  { name: "পুন্যময়ী", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/NnpGkVrJ/punnomoyi.webp" },
+  { name: "আধার মানবী", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/7xd3JprX/Adhar-manobi-New-250x391.webp" },
+  { name: "শেষ চিঠি", author: "মাহিন মাহমুদ", price: 130, original_price: 260, cat: "বেস্ট সেলিং", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/w2hVHDy/B0027-Sesh-Chithi-scaled-250x407.webp" },
+  { name: "একটি লাল নোটবুক", author: "মাহিন মাহমুদ", price: 120, original_price: 240, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/nq0G2GH0/ekti-lal.jpg" },
+  { name: "প্রাসাদপুত্র", author: "মাহিন মাহমুদ", price: 200, original_price: 400, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/wrgFjgRJ/prashadputro-01-scaled-250x364.webp" },
+  { name: "প্রাসাদপুত্র ২", author: "মাহিন মাহমুদ", price: 200, original_price: 400, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/cKPpMnDk/1-250x386.webp" },
+  { name: "একটি হারানো বিজ্ঞপ্তি", author: "মাহিন মাহমুদ", price: 220, original_price: 440, cat: "জনপ্রিয় লেখক", pub: "মাকতাবাতুল হাসান", img: "https://i.ibb.co.com/6JT8mby9/ekti-harano-biggopti-250x386.webp" },
+  { name: "भावনার চিরকুট", author: "মাহিন মাহমুদ", price: 170, original_price: 340, cat: "জনপ্রিয় বই", pub: "মাকতাবাতুল মদিনাহ", img: "https://i.ibb.co.com/SDPhZwpW/vabona-250x389.webp" },
+  { name: "নফসের বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/jP26xxCk/nafs-01-scaled-250x396.webp" },
+  { name: "শয়তানের বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/QvYpMcZv/Shaitan-01-1-250x410.jpg" },
+  { name: "অলসতার বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/KxLGh10t/olosota.webp" },
+  { name: "অশ্লীলতার বিরুদ্ধে লড়াই", author: "মাহবুব বিন নূর", price: 230, original_price: 330, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/3mB9p3Hv/oslilotar-biruddhe-lorai-2-250x400.webp" },
+  { name: "হৃদয়ের সাথে হৃদয়ের কথা", author: "মাহবুব বিন নূর", price: 190, original_price: 270, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/pBNNYLJt/4d1e49bf-cf6a-49d0-bec4-c938ef99c23c-Hridoyer-sathe-hridoyer-kotha-front-250x386.jpg" },
+  { name: "নিয়ামত পেয়েও হারিয়ে ফেলো না", author: "মাহবুব বিন নূর", price: 260, original_price: 370, cat: "রানিং ট্রেন্ডিং", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/B5JjxThS/neyamot.jpg" },
+  { name: "যেসব কাজ করতে মানা", author: "মাহবুব বিন নূর", price: 155, original_price: 220, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/JRCshvvb/je-sob-kaj-korte-mana-250x389.jpg" },
+  { name: "স্বপ্ন ও স্বপ্নের ব্যখ্যা", author: "মাহবুব বিন নূর", price: 140, original_price: 200, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/5Q1StMk/Shopno-O-Shopner-Bekkha-250x390.webp" },
+  { name: "আমার শত্রু আমি", author: "মাহবুব বিন নূর", price: 125, original_price: 180, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/pvvrtgVq/250x398.webp" },
+  { name: "জীবনের আয়না", author: "মাহবুব বিন নূর", price: 180, original_price: 250, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/6chMgFBw/One-side-250x390.png" },
+  { name: "আমার প্রিয় দোয়ার ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 240, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/1Gx3d7m3/47381ff4-7de2-49a4-87ae-85076024a03f-Amar-priyo-duar-dairy-front-250x386.jpg" },
+  { name: "একটি সফল রমাদান ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 240, original_price: 330, cat: "জনপ্রিয় লেখক", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/fdBYj3dh/ramadan-diary-Final01-1-250x391.jpg" },
+  { name: "যিলহজ্জের আমল ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 170, original_price: 250, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", img: "https://i.ibb.co.com/xtVsXK9J/zilhajjer-amol-77568-250x375.webp" },
+  { name: "রাইটিং থেরাপি", author: "শারিন সফি অদ্রিতা", price: 320, original_price: 440, cat: "রানিং ট্রেন্ডিং", pub: "ইফফাহ প্রকাশন", img: "https://i.ibb.co.com/Y7k4v8hb/therapy-021-250x385.webp" },
+  { name: "A Lantern In Her Window", author: "শারিন সফি অদ্রিতা", price: 290, original_price: 429, cat: "রানিং ট্রেন্ডিং", pub: "পেনফিল্ড পাবলিকেশন", img: "https://i.ibb.co.com/Pv5G0PzT/A-lantern-in-her-window-Front-250x384.jpg" },
 ];
 
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
-document.getElementById('cartCount').innerText = cart.length;
+function updateUI() {
+    document.getElementById('cartCount').innerText = cart.length;
+    if(document.getElementById('floatCount')) document.getElementById('floatCount').innerText = cart.length;
+}
+updateUI();
 
 function discountPct(b) {
     if (b.original_price > b.price) return Math.round((b.original_price - b.price) / b.original_price * 100);
@@ -133,7 +135,6 @@ function makeCard(b) {
     </div>`;
 }
 
-</body>
 function goToBook(idx) {
     navigateTo('book.html?id=' + idx);
 }
@@ -141,7 +142,7 @@ function goToBook(idx) {
 function addToCart(name, price, img) {
     cart.push({ name, price: Number(price), img });
     localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
-    document.getElementById('cartCount').innerText = cart.length;
+    updateUI();
     const toast = document.createElement('div');
     toast.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#2c3e50;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
     toast.innerText = '✅ কার্টে যোগ হয়েছে!';
@@ -165,7 +166,7 @@ document.head.appendChild(style);
 
 // URL params পড়া
 const params = new URLSearchParams(window.location.search);
-const type = params.get('type'); // cat | author | pub
+const type = params.get('type'); 
 const value = decodeURIComponent(params.get('value') || '');
 
 let filtered = [];
