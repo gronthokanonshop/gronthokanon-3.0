@@ -473,8 +473,16 @@ document.addEventListener('click', function(e) {
         document.getElementById('searchSuggestions').style.display = 'none';
 });
 
-window.onload = () => { renderSections(books); buildPublisherList(); buildAuthorList(); updateCartUI(); };
-
+window.onload = () => {
+    renderSections(books);
+    buildPublisherList();
+    buildAuthorList();
+    updateCartUI();
+    if (localStorage.getItem('gronthokanon_opencart') === '1') {
+        localStorage.removeItem('gronthokanon_opencart');
+        setTimeout(() => showCart(), 500);
+    }
+};
 function navigateToFilter(type, value) {
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.25s ease';
