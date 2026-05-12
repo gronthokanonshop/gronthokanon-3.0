@@ -59,7 +59,7 @@
 <div class="navbar">
     <button class="back-btn" onclick="goBack()">← ফিরে যান</button>
     <div class="navbar-title" id="pageTitle">গ্রন্থকানন</div>
-    <div class="cart-icon" onclick="window.location.href='index.html'">
+<div class="cart-icon" onclick="goToCart()">
         🛒<span class="cart-badge" id="cartCount">0</span>
     </div>
 </div>
@@ -202,6 +202,10 @@ if (filtered.length === 0) {
     content.innerHTML = '<div class="empty">কোনো বই পাওয়া যায়নি</div>';
 } else {
     content.innerHTML = `<div class="grid-container">${filtered.map(makeCard).join('')}</div>`;
+}
+    if (localStorage.getItem('gronthokanon_opencart') === '1') {
+    localStorage.removeItem('gronthokanon_opencart');
+    setTimeout(() => showCart(), 500);
 }
 </script>
 </body>
