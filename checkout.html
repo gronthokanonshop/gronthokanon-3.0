@@ -105,10 +105,11 @@
 
     <!-- TOTAL BOX -->
     <div class="total-box">
-        <div class="total-row"><span>বইয়ের দাম:</span><span id="subtotalShow">৳০</span></div>
-        <div class="total-row"><span>ডেলিভারি চার্জ:</span><span id="deliveryShow">৳০</span></div>
-        <div class="total-final"><span>সর্বমোট:</span><span id="grandTotal">৳০</span></div>
-    </div>
+    <div class="total-row"><span>বইয়ের দাম:</span><span id="subtotalShow">৳০</span></div>
+    <div class="total-row"><span>ডেলিভারি চার্জ:</span><span id="deliveryShow">৳০</span></div>
+    <div class="total-row" style="color:red;"><span>ডিসকাউন্ট:</span><span>-৳<span id="discountShow">0</span></span></div>
+    <div class="total-final"><span>সর্বমোট:</span><span id="grandTotal">৳০</span></div>
+</div>
 
     <!-- PAYMENT -->
 <div class="form-card">
@@ -179,6 +180,9 @@
 </div>
 
 <script>
+let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
+let discountPercent = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
+let deliveryCharge = 60;
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let deliveryCharge = 60;
@@ -196,13 +200,15 @@ function getSubtotal() {
 
 function updateTotal() {
     const subtotal = getSubtotal();
-    const total = subtotal + deliveryCharge;
+    const discountAmt = Math.round(subtotal * (discountPercent / 100));
+    const total = subtotal - discountAmt + deliveryCharge;
     document.getElementById('subtotalShow').innerText = '৳' + subtotal;
     document.getElementById('deliveryShow').innerText = '৳' + deliveryCharge;
+if (document.getElementById('discountShow')) document.getElementById('discountShow').innerText = discountAmt;
+document.getElementById('grandTotal').innerText = '৳' + total;
     document.getElementById('grandTotal').innerText = '৳' + total;
     document.getElementById('bkashAmount').innerText = '৳' + total;
 }
-
 function renderSummary() {
     const box = document.getElementById('summaryItems');
     if (cart.length === 0) {
