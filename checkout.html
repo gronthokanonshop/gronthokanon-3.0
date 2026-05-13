@@ -180,11 +180,9 @@
 </div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
-let discountPercent = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
-let deliveryCharge = 60;
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
+let discountPercent = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
 let deliveryCharge = 60;
 
 function getSubtotal() {
@@ -206,7 +204,6 @@ function updateTotal() {
     document.getElementById('deliveryShow').innerText = '৳' + deliveryCharge;
 if (document.getElementById('discountShow')) document.getElementById('discountShow').innerText = discountAmt;
 document.getElementById('grandTotal').innerText = '৳' + total;
-    document.getElementById('grandTotal').innerText = '৳' + total;
     document.getElementById('bkashAmount').innerText = '৳' + total;
 }
 function renderSummary() {
