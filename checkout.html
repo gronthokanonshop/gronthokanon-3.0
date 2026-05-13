@@ -6,57 +6,451 @@
     <title>চেকআউট — গ্রন্থকানন</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'SolaimanLipi', Arial, sans-serif; background: #edf2f7; color: #333; }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .navbar h2 { font-size: 18px; color: #27ae60; }
-        .back-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #27ae60; }
-        .container { max-width: 480px; margin: 20px auto; padding: 0 16px 40px; }
-        .order-summary { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .order-summary h3 { font-size: 15px; color: #2c3e50; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
-        .order-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
-        .order-item img { width: 40px; height: 55px; object-fit: cover; border-radius: 4px; }
-        .order-item-name { font-size: 13px; font-weight: bold; color: #333; }
-        .order-item-price { font-size: 12px; color: #e74c3c; font-weight: bold; }
-        .form-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .form-card h3 { font-size: 15px; color: #2c3e50; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 5px; }
-        .form-group label span { color: #e74c3c; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 14px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; transition: 0.2s; background: #fafafa; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #27ae60; background: #fff; }
-        .form-group textarea { height: 70px; resize: none; }
-        .total-box { background: #f0faf4; border: 1.5px solid #27ae60; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
-        .total-row { display: flex; justify-content: space-between; font-size: 13px; color: #555; margin-bottom: 6px; }
-        .total-final { display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; color: #27ae60; margin-top: 8px; padding-top: 8px; border-top: 1px solid #c8e6c9; }
-        .payment-option { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1.5px solid #e0e0e0; border-radius: 10px; cursor: pointer; margin-bottom: 10px; transition: 0.2s; }
-        .payment-option.selected { border-color: #27ae60; background: #f0faf4; }
-        .payment-option input[type="radio"] { width: 18px; height: 18px; accent-color: #27ae60; }
-        .payment-option-label { font-size: 14px; font-weight: bold; color: #333; }
-        .payment-option-sub { font-size: 12px; color: #888; margin-top: 2px; }
-        .bkash-box { border-radius: 10px; padding: 16px; margin-top: 10px; display: none; }
-        .bkash-box .step { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #555; }
-        .step-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; flex-shrink: 0; color: white; }
-        .payment-number { border-radius: 8px; padding: 10px 14px; font-size: 16px; font-weight: bold; text-align: center; margin: 10px 0; letter-spacing: 2px; }
-        .confirm-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(39,174,96,0.3); }
-        .success-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        :root {
+            --bg: #edf2f7;
+            --card: #fff;
+            --text: #333;
+            --subtext: #555;
+            --muted: #888;
+            --border: #e0e0e0;
+            --green: #27ae60;
+            --green-light: #f0faf4;
+            --green-border: #c8e6c9;
+            --red: #e74c3c;
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --input-bg: #fafafa;
+            --navbar-bg: #fff;
+            --label: #555;
+            --section-border: #eee;
+            --total-bg: #f0faf4;
+            --success-overlay: rgba(0,0,0,0.85);
+        }
+
+        body.dark {
+            --bg: #0f1117;
+            --card: #1a1d27;
+            --text: #e8eaf6;
+            --subtext: #b0b8d1;
+            --muted: #6b7394;
+            --border: #2a2d3e;
+            --green: #2ecc71;
+            --green-light: #0d1f17;
+            --green-border: #1a4a2e;
+            --red: #ff6b6b;
+            --shadow: 0 2px 16px rgba(0,0,0,0.4);
+            --input-bg: #12151f;
+            --navbar-bg: #13161f;
+            --label: #9ba3c0;
+            --section-border: #2a2d3e;
+            --total-bg: #0d1f17;
+            --success-overlay: rgba(0,0,0,0.92);
+        }
+
+        body {
+            font-family: 'SolaimanLipi', 'Hind Siliguri', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: var(--navbar-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .back-btn {
+            background: var(--green);
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(39,174,96,0.3);
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .back-btn:hover { transform: scale(1.08); box-shadow: 0 4px 14px rgba(39,174,96,0.4); }
+
+        .navbar h2 { font-size: 17px; color: var(--green); font-weight: 700; }
+
+        .dark-toggle {
+            background: var(--border);
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s, transform 0.2s;
+            color: var(--text);
+        }
+        .dark-toggle:hover { transform: rotate(20deg); }
+
+        /* CONTAINER */
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 0 16px 60px;
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            transition: background 0.3s, box-shadow 0.3s;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.15s; }
+        .card:nth-child(4) { animation-delay: 0.2s; }
+        .card:nth-child(5) { animation-delay: 0.25s; }
+
+        .card h3 {
+            font-size: 14px;
+            color: var(--green);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--section-border);
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        /* ORDER ITEMS */
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--section-border);
+        }
+        .order-item:last-child { border-bottom: none; }
+        .order-item img {
+            width: 42px;
+            height: 58px;
+            object-fit: cover;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .order-item-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+        .order-item-price { font-size: 12px; color: var(--red); font-weight: 700; }
+
+        /* FORM */
+        .form-group { margin-bottom: 13px; }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--label);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-group label span { color: var(--red); }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, background 0.3s, box-shadow 0.2s;
+            background: var(--input-bg);
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(39,174,96,0.12);
+        }
+
+        .form-group textarea { height: 72px; resize: none; }
+
+        /* TOTAL BOX */
+        .total-box {
+            background: var(--total-bg);
+            border: 1.5px solid var(--green);
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 16px;
+            transition: background 0.3s;
+            animation: fadeUp 0.4s ease 0.2s both;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--subtext);
+            margin-bottom: 7px;
+        }
+        .total-row.discount { color: var(--red); }
+        .total-final {
+            display: flex;
+            justify-content: space-between;
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--green);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--green-border);
+        }
+
+        /* PAYMENT OPTIONS */
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: border-color 0.2s, background 0.2s, transform 0.15s;
+        }
+        .payment-option:hover { transform: translateX(3px); }
+        .payment-option.selected {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+        .payment-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--green); flex-shrink: 0; }
+        .payment-option img { width: 38px; height: 38px; object-fit: contain; border-radius: 8px; flex-shrink: 0; }
+        .payment-option-label { font-size: 14px; font-weight: 700; color: var(--text); }
+        .payment-option-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .payment-option.disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* BKASH BOX */
+        .bkash-box {
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 10px;
+            display: none;
+            background: #fff0f6;
+            border: 1.5px solid #f7b5d0;
+            animation: fadeUp 0.3s ease;
+        }
+        body.dark .bkash-box { background: #1f0d15; border-color: #5a1a35; }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: var(--subtext);
+            line-height: 1.5;
+        }
+        .step-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            flex-shrink: 0;
+            color: white;
+        }
+        .payment-number {
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 17px;
+            font-weight: 800;
+            text-align: center;
+            margin: 10px 0;
+            letter-spacing: 3px;
+            color: #e91e8c;
+            border: 1.5px dashed #f7b5d0;
+            background: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+        }
+        body.dark .payment-number { background: #2a0d1a; }
+        .payment-number:hover { background: #fff0f6; }
+        .copy-hint { font-size: 10px; color: #e91e8c; opacity: 0.7; display: block; margin-top: 2px; }
+
+        /* CONFIRM BUTTON */
+        .confirm-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(39,174,96,0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.5px;
+            margin-top: 6px;
+        }
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(39,174,96,0.45);
+        }
+        .confirm-btn:active { transform: translateY(0); }
+        .confirm-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* LOADING SPINNER */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255,255,255,0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* SUCCESS MODAL */
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--success-overlay);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .success-modal.show { display: flex; }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .success-inner {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 36px 28px;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 24px rgba(39,174,96,0.4);
+            animation: bounceIn 0.6s ease 0.3s both;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .success-inner h2 { color: var(--text); margin-bottom: 6px; font-size: 20px; }
+        .success-inner p.sub { color: var(--green); font-weight: 800; font-size: 12px; margin-bottom: 18px; letter-spacing: 2px; }
+
+        .success-info {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            text-align: left;
+            font-size: 13px;
+            color: var(--subtext);
+            line-height: 2;
+            border: 1px solid var(--border);
+        }
+
+        .success-note { color: var(--muted); font-size: 12px; margin-bottom: 18px; line-height: 1.6; }
+
+        .home-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 25px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 15px;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px rgba(39,174,96,0.3);
+        }
+        .home-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39,174,96,0.4); }
+
+        /* EMPTY CART */
+        .empty-cart {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--muted);
+        }
+        .empty-cart .icon { font-size: 40px; margin-bottom: 10px; }
+        .empty-cart p { font-size: 14px; }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     </style>
 </head>
 <body>
 
 <div class="navbar">
-<button class="back-btn" onclick="window.history.back()" style="background:#27ae60; border:none; width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.15); color:white;">‹</button>
-
-
+    <button class="back-btn" onclick="window.history.back()">‹</button>
     <h2>📦 চেকআউট</h2>
-    <div></div>
+    <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark Mode">🌙</button>
 </div>
 
 <div class="container">
 
-  
     <!-- SHIPPING INFO -->
-    <div class="form-card">
+    <div class="card">
         <h3>📋 শিপিং তথ্য</h3>
         <div class="form-group">
             <label>নাম <span>*</span></label>
@@ -64,25 +458,20 @@
         </div>
         <div class="form-group">
             <label>মোবাইল নম্বর <span>*</span></label>
-            <input type="tel" id="custPhone" placeholder="আপনার ফোন নাম্বার লিখুন" maxlength="11">
+            <input type="tel" id="custPhone" placeholder="০১XXXXXXXXX" maxlength="11">
         </div>
         <div class="form-group">
             <label>বিভাগ <span>*</span></label>
-            <select id="division" onchange="updateDistricts()" onclick="updateDistricts()">
+            <select id="division" onchange="updateDistricts()">
                 <option value="">বিভাগ নির্বাচন করুন</option>
-                <option>ঢাকা</option>
-                <option>চট্টগ্রাম</option>
-                <option>রাজশাহী</option>
-                <option>খুলনা</option>
-                <option>বরিশাল</option>
-                <option>সিলেট</option>
-                <option>রংপুর</option>
-                <option>ময়মনসিংহ</option>
+                <option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option>
+                <option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option>
+                <option>রংপুর</option><option>ময়মনসিংহ</option>
             </select>
         </div>
         <div class="form-group">
             <label>জেলা <span>*</span></label>
-            <select id="district" onchange="updateThanas()" onclick="updateThanas()">
+            <select id="district" onchange="updateThanas()">
                 <option value="">জেলা নির্বাচন করুন</option>
             </select>
         </div>
@@ -97,57 +486,61 @@
             <textarea id="custAddress" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
         </div>
     </div>
-   <!-- ORDER SUMMARY -->
-    <div class="order-summary">
+
+    <!-- ORDER SUMMARY -->
+    <div class="card">
         <h3>🛍️ আপনার অর্ডার</h3>
         <div id="summaryItems"></div>
     </div>
 
-    <!-- TOTAL BOX -->
     <div class="total-box">
-    <div class="total-row"><span>বইয়ের দাম:</span><span id="subtotalShow">৳০</span></div>
-    <div class="total-row"><span>ডেলিভারি চার্জ:</span><span id="deliveryShow">৳০</span></div>
-    <div class="total-row" style="color:red;"><span>ডিসকাউন্ট:</span><span>-৳<span id="discountShow">0</span></span></div>
-    <div class="total-final"><span>সর্বমোট:</span><span id="grandTotal">৳০</span></div>
-</div>
+        <div class="total-row"><span>বইয়ের দাম:</span><span id="subtotalShow">৳০</span></div>
+        <div class="total-row"><span>ডেলিভারি চার্জ:</span><span id="deliveryShow">৳০</span></div>
+        <div class="total-row discount"><span>ডিসকাউন্ট:</span><span>-৳<span id="discountShow">0</span></span></div>
+        <div class="total-final"><span>সর্বমোট:</span><span id="grandTotal">৳০</span></div>
+    </div>
 
     <!-- PAYMENT -->
-<div class="form-card">
-    <h3>💳 পেমেন্ট মেথড</h3>
+    <div class="card">
+        <h3>💳 পেমেন্ট মেথড</h3>
 
-    <div class="payment-option selected" onclick="selectPayment(this, 'cod')">
-        <input type="radio" name="payment" value="Cash on Delivery" checked>
-        <img src="https://cdn-icons-png.flaticon.com/512/2331/2331942.png" style="width:36px; height:36px; object-fit:contain;">
-        <div>
-            <div class="payment-option-label">ক্যাশ অন ডেলিভারি</div>
-            <div class="payment-option-sub">বই পেয়ে টাকা দিন</div>
+        <div class="payment-option selected" onclick="selectPayment(this, 'cod')">
+            <input type="radio" name="payment" value="Cash on Delivery" checked>
+            <img src="https://cdn-icons-png.flaticon.com/512/2331/2331942.png" alt="COD">
+            <div>
+                <div class="payment-option-label">ক্যাশ অন ডেলিভারি</div>
+                <div class="payment-option-sub">বই পেয়ে টাকা দিন</div>
+            </div>
         </div>
-    </div>
 
-    <div class="payment-option" onclick="selectPayment(this, 'bkash')">
-        <input type="radio" name="payment" value="bKash">
-        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" style="width:36px; height:36px; object-fit:contain; border-radius:6px;">
-        <div>
-            <div class="payment-option-label">বিকাশ</div>
-            <div class="payment-option-sub">আগে পেমেন্ট করুন, তারপর অর্ডার</div>
+        <div class="payment-option" onclick="selectPayment(this, 'bkash')">
+            <input type="radio" name="payment" value="bKash">
+            <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash">
+            <div>
+                <div class="payment-option-label">বিকাশ</div>
+                <div class="payment-option-sub">আগে পেমেন্ট করুন, তারপর অর্ডার</div>
+            </div>
         </div>
-    </div>
 
-    <div class="payment-option" onclick="selectPayment(this, 'card')">
-        <input type="radio" name="payment" value="Card">
-        <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" style="width:36px; height:36px; object-fit:contain;">
-        <div>
-            <div class="payment-option-label">ব্যাংক / ভিসা কার্ড</div>
-            <div class="payment-option-sub">শীঘ্রই আসছে...</div>
+        <div class="payment-option disabled" onclick="return false;">
+            <input type="radio" name="payment" value="Card" disabled>
+            <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Card">
+            <div>
+                <div class="payment-option-label">ব্যাংক / ভিসা কার্ড</div>
+                <div class="payment-option-sub">শীঘ্রই আসছে...</div>
+            </div>
         </div>
-    </div>
+
         <!-- BKASH BOX -->
-        <div class="bkash-box" id="bkashBox" style="background:#fff0f6; border:1.5px solid #f7b5d0;">
+        <div class="bkash-box" id="bkashBox">
             <div class="step">
                 <div class="step-num" style="background:#e91e8c;">১</div>
                 <div>বিকাশ অ্যাপ থেকে <strong>Send Money</strong> করুন</div>
             </div>
-            <div class="payment-number" style="color:#e91e8c; border:1.5px solid #f7b5d0; background:#fff;">01408786396</div>
+            <div class="payment-number" onclick="copyNumber()" title="কপি করতে ক্লিক করুন">
+                01408786396
+                <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
+            </div>
             <div class="step">
                 <div class="step-num" style="background:#e91e8c;">২</div>
                 <div>মোট <strong id="bkashAmount">৳০</strong> পাঠান</div>
@@ -157,29 +550,47 @@
                 <div>Transaction ID নিচে লিখুন</div>
             </div>
             <div class="form-group" style="margin-top:10px; margin-bottom:0;">
-                <input type="text" id="transactionId" placeholder="Transaction ID (যেমন: 8AB12CD34E)">
+                <input type="text" id="transactionId" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
             </div>
-         </div>
+        </div>
 
-    <button class="confirm-btn" onclick="confirmOrder()">✅ অর্ডার কনফার্ম করুন</button>
+        <button class="confirm-btn" id="confirmBtn" onclick="confirmOrder()">✅ অর্ডার কনফার্ম করুন</button>
+    </div>
 
 </div>
 
 <!-- SUCCESS MODAL -->
 <div class="success-modal" id="successModal">
-    <div style="background:#fff; border-radius:20px; padding:35px 30px; text-align:center; max-width:340px; width:90%; animation:popIn 0.4s ease;">
-        <div style="width:80px; height:80px; background:linear-gradient(135deg,#27ae60,#2ecc71); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
-            <span style="font-size:35px; color:white;">✓</span>
+    <div class="success-inner">
+        <div class="success-icon">
+            <span style="font-size:36px; color:white;">✓</span>
         </div>
-        <h2 style="color:#2c3e50; margin-bottom:8px;">অর্ডার নিশ্চিত হয়েছে!</h2>
-        <p style="color:#27ae60; font-weight:bold; font-size:13px; margin-bottom:20px; letter-spacing:1px;">ORDER CONFIRMED</p>
-        <div id="successInfo" style="background:#f8f9fa; border-radius:12px; padding:15px; margin-bottom:20px; text-align:left; font-size:13px; color:#555; line-height:1.9;"></div>
-        <p style="color:#888; font-size:12px; margin-bottom:20px; line-height:1.6;">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! 📚</p>
-        <button onclick="window.location.href='index.html'" style="background:linear-gradient(135deg,#27ae60,#2ecc71); color:white; border:none; padding:13px 40px; border-radius:25px; font-weight:bold; cursor:pointer; font-size:15px; width:100%;">চমৎকার! 🎉</button>
+        <h2>অর্ডার নিশ্চিত হয়েছে!</h2>
+        <p class="sub">ORDER CONFIRMED</p>
+        <div class="success-info" id="successInfo"></div>
+        <p class="success-note">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! 📚</p>
+        <button class="home-btn" onclick="window.location.href='index.html'">চমৎকার! 🎉</button>
     </div>
 </div>
 
 <script>
+// ─── Dark Mode ───────────────────────────────────────────────
+function toggleDark() {
+    const isDark = document.body.classList.toggle('dark');
+    localStorage.setItem('gronthokanon_dark', isDark);
+    document.getElementById('darkToggle').textContent = isDark ? '☀️' : '🌙';
+}
+(function() {
+    const saved = localStorage.getItem('gronthokanon_dark');
+    if (saved === 'true') {
+        document.body.classList.add('dark');
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('darkToggle').textContent = '☀️';
+        });
+    }
+})();
+
+// ─── Cart & Pricing ──────────────────────────────────────────
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let discountPercent = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
@@ -192,7 +603,7 @@ function getSubtotal() {
         else grouped[item.name] = { price: item.price, qty: 1 };
     });
     let total = 0;
-    for (let name in grouped) total += grouped[name].price * grouped[name].qty;
+    for (let n in grouped) total += grouped[n].price * grouped[n].qty;
     return total;
 }
 
@@ -202,14 +613,20 @@ function updateTotal() {
     const total = subtotal - discountAmt + deliveryCharge;
     document.getElementById('subtotalShow').innerText = '৳' + subtotal;
     document.getElementById('deliveryShow').innerText = '৳' + deliveryCharge;
-if (document.getElementById('discountShow')) document.getElementById('discountShow').innerText = discountAmt;
-document.getElementById('grandTotal').innerText = '৳' + total;
+    document.getElementById('discountShow').innerText = discountAmt;
+    document.getElementById('grandTotal').innerText = '৳' + total;
     document.getElementById('bkashAmount').innerText = '৳' + total;
 }
+
 function renderSummary() {
     const box = document.getElementById('summaryItems');
     if (cart.length === 0) {
-        box.innerHTML = '<p style="color:#aaa; text-align:center; padding:20px;">কার্ট খালি</p>';
+        box.innerHTML = `
+            <div class="empty-cart">
+                <div class="icon">🛒</div>
+                <p>কার্ট খালি আছে</p>
+            </div>`;
+        updateTotal();
         return;
     }
     const grouped = {};
@@ -222,7 +639,7 @@ function renderSummary() {
         const item = grouped[name];
         html += `
             <div class="order-item">
-                <img src="${item.img}" alt="বই">
+                <img src="${item.img}" alt="বই" onerror="this.src='https://via.placeholder.com/42x58?text=📚'">
                 <div style="flex:1;">
                     <div class="order-item-name">${name}</div>
                     <div class="order-item-price">৳${item.price} × ${item.qty} = ৳${item.price * item.qty}</div>
@@ -233,6 +650,7 @@ function renderSummary() {
     updateTotal();
 }
 
+// ─── Location Data ───────────────────────────────────────────
 const locationData = {
     "ঢাকা": {
         "ঢাকা": ["আদাবর","বাড্ডা","বংশাল","ক্যান্টনমেন্ট","চকবাজার","দারুস সালাম","ডেমরা","ধানমন্ডি","দোহার","গেন্ডারিয়া","গুলশান","হাজারীবাগ","কদমতলী","কামরাঙ্গীরচর","কেরানীগঞ্জ","খিলগাঁও","খিলক্ষেত","কোতোয়ালি","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নবাবগঞ্জ","নিউ মার্কেট","পল্লবী","পল্টন","রমনা","সাভার","শাহজাহানপুর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","উত্তরা","উত্তর খান","দক্ষিণ খান","ওয়ারী"],
@@ -327,6 +745,7 @@ function updateDistricts() {
             districtSel.innerHTML += `<option>${d}</option>`;
         });
     }
+    deliveryCharge = 60;
     updateTotal();
 }
 
@@ -340,26 +759,35 @@ function updateThanas() {
             thanaSel.innerHTML += `<option>${t}</option>`;
         });
     }
-    // ঢাকা জেলা হলে ৳60, বাকি সব ৳90
     deliveryCharge = district === 'ঢাকা' ? 60 : 90;
     updateTotal();
 }
 
 function selectPayment(el, type) {
-    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.payment-option:not(.disabled)').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     el.querySelector('input[type="radio"]').checked = true;
     document.getElementById('bkashBox').style.display = 'none';
     if (type === 'bkash') document.getElementById('bkashBox').style.display = 'block';
 }
-function confirmOrder() {
+
+function copyNumber() {
+    navigator.clipboard.writeText('01408786396').then(() => {
+        const el = document.querySelector('.payment-number');
+        const orig = el.innerHTML;
+        el.innerHTML = '✅ কপি হয়েছে!<span class="copy-hint">নম্বরটি কপি করা হয়েছে</span>';
+        setTimeout(() => { el.innerHTML = orig; }, 2000);
+    }).catch(() => {});
+}
+
+async function confirmOrder() {
     const name = document.getElementById('custName').value.trim();
     const phone = document.getElementById('custPhone').value.trim();
     const division = document.getElementById('division').value;
     const district = document.getElementById('district').value;
     const thana = document.getElementById('thana').value;
     const address = document.getElementById('custAddress').value.trim();
-    const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'COD';
+    const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
 
     if (!name) return alert('নাম লিখুন!');
     if (!phone || phone.length !== 11) return alert('সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন!');
@@ -370,15 +798,15 @@ function confirmOrder() {
 
     let transactionId = '';
     if (paymentMethod === 'bKash') {
-        transactionId = document.getElementById('transactionId').value.trim();
+        transactionId = document.getElementById('transactionId').value.trim().toUpperCase();
         if (!transactionId) return alert('বিকাশ Transaction ID লিখুন!');
         if (!/^[A-Z0-9]{10}$/.test(transactionId)) return alert('সঠিক বিকাশ Transaction ID লিখুন!\nউদাহরণ: 8AB12CD34E (১০ অক্ষর)');
     }
-    if (paymentMethod === 'Nagad') {
-        transactionId = document.getElementById('nagadTransactionId').value.trim();
-        if (!transactionId) return alert('নগদ Transaction ID লিখুন!');
-        if (!/^[A-Z0-9]{10}$/.test(transactionId)) return alert('সঠিক নগদ Transaction ID লিখুন!\nউদাহরণ: 8AB12CD34E (১০ অক্ষর)');
-    }
+
+    // Loading state
+    const btn = document.getElementById('confirmBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
 
     const grouped = {};
     cart.forEach(item => { grouped[item.name] = (grouped[item.name] || 0) + 1; });
@@ -386,12 +814,21 @@ function confirmOrder() {
     const total = document.getElementById('grandTotal').innerText;
     const fullAddress = `${thana}, ${district}, ${division} — ${address}`;
 
-    fetch(SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, address: fullAddress, books: bookList, payment: paymentMethod + (transactionId ? ` (TxID: ${transactionId})` : ''), delivery: '৳' + deliveryCharge, total })
-    });
+    try {
+        await fetch(SHEET_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name, phone,
+                address: fullAddress,
+                books: bookList,
+                payment: paymentMethod + (transactionId ? ` (TxID: ${transactionId})` : ''),
+                delivery: '৳' + deliveryCharge,
+                total
+            })
+        });
+    } catch(e) {}
 
     localStorage.removeItem('gronthokanon_cart');
 
@@ -400,9 +837,14 @@ function confirmOrder() {
         📞 ${phone}<br>
         📍 ${fullAddress}<br>
         💳 ${paymentMethod}${transactionId ? ` — TxID: ${transactionId}` : ''}<br>
-        💰 <strong style="color:#e74c3c;">${total}</strong>
+        📦 ${bookList}<br>
+        💰 <strong style="color:var(--red);">${total}</strong>
     `;
-    document.getElementById('successModal').style.display = 'flex';
+
+    btn.disabled = false;
+    btn.innerHTML = '✅ অর্ডার কনফার্ম করুন';
+
+    document.getElementById('successModal').classList.add('show');
 }
 
 window.onload = renderSummary;
