@@ -286,7 +286,7 @@
         }
         .payment-number {
             border-radius: 10px;
-            padding: 12px 14px;
+            padding: 10px 14px 8px;
             font-size: 17px;
             font-weight: 800;
             text-align: center;
@@ -298,10 +298,11 @@
             cursor: pointer;
             transition: background 0.2s;
             position: relative;
+            line-height: 1.3;
         }
         body.dark .payment-number { background: #2a0d1a; }
         .payment-number:hover { background: #fff0f6; }
-        .copy-hint { font-size: 10px; color: #e91e8c; opacity: 0.7; display: block; margin-top: 2px; }
+        .copy-hint { font-size: 10px; color: #e91e8c; opacity: 0.7; display: block; margin-top: 0; line-height: 1.2; }
 
         /* CONFIRM BUTTON */
         .confirm-btn {
@@ -496,7 +497,7 @@
     <div class="total-box">
         <div class="total-row"><span>বইয়ের দাম:</span><span id="subtotalShow">৳০</span></div>
         <div class="total-row"><span>ডেলিভারি চার্জ:</span><span id="deliveryShow">৳০</span></div>
-        <div class="total-row discount"><span>ডিসকাউন্ট:</span><span>-৳<span id="discountShow">0</span></span></div>
+        <div class="total-row discount" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>):</span><span>-৳<span id="discountShow">0</span></span></div>
         <div class="total-final"><span>সর্বমোট:</span><span id="grandTotal">৳০</span></div>
     </div>
 
@@ -537,9 +538,8 @@
                 <div class="step-num" style="background:#e91e8c;">১</div>
                 <div>বিকাশ অ্যাপ থেকে <strong>Send Money</strong> করুন</div>
             </div>
-            <div class="payment-number" onclick="copyNumber()" title="কপি করতে ক্লিক করুন">
-                01408786396
-                <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
+            <div class="payment-number" onclick="copyNumber()" id="bkashNumber">
+                01408786396<span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
             </div>
             <div class="step">
                 <div class="step-num" style="background:#e91e8c;">২</div>
@@ -594,6 +594,7 @@ function toggleDark() {
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let discountPercent = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
+let couponCode = localStorage.getItem('gronthokanon_coupon') || '';
 let deliveryCharge = 60;
 
 function getSubtotal() {
@@ -613,7 +614,16 @@ function updateTotal() {
     const total = subtotal - discountAmt + deliveryCharge;
     document.getElementById('subtotalShow').innerText = '৳' + subtotal;
     document.getElementById('deliveryShow').innerText = '৳' + deliveryCharge;
-    document.getElementById('discountShow').innerText = discountAmt;
+
+    const discountRow = document.getElementById('discountRow');
+    if (discountAmt > 0) {
+        document.getElementById('discountShow').innerText = discountAmt;
+        document.getElementById('couponCodeShow').innerText = couponCode;
+        discountRow.style.display = 'flex';
+    } else {
+        discountRow.style.display = 'none';
+    }
+
     document.getElementById('grandTotal').innerText = '৳' + total;
     document.getElementById('bkashAmount').innerText = '৳' + total;
 }
@@ -773,10 +783,10 @@ function selectPayment(el, type) {
 
 function copyNumber() {
     navigator.clipboard.writeText('01408786396').then(() => {
-        const el = document.querySelector('.payment-number');
+        const el = document.getElementById('bkashNumber');
         const orig = el.innerHTML;
-        el.innerHTML = '✅ কপি হয়েছে!<span class="copy-hint">নম্বরটি কপি করা হয়েছে</span>';
-        setTimeout(() => { el.innerHTML = orig; }, 2000);
+        el.innerHTML = '✅ কপি হয়েছে!';
+        setTimeout(() => { el.innerHTML = orig; }, 1500);
     }).catch(() => {});
 }
 
