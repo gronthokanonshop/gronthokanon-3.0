@@ -23,8 +23,8 @@
         .sidebar-menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
         .sidebar-menu-item:hover { background: #f9f9f9; }
         .sidebar-sub { display: none; background: #f9f9f9; }
-        .sidebar-sub-item { padding: 12px 20px 12px 35px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 14px; color: #555; }
-        .sidebar-sub-item:hover { background: #e8f5e9; color: #27ae60; }
+        .sidebar-sub-item { padding: 12px 20px 12px 35px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 14px; color: #1a1a2e; font-weight: 700; letter-spacing: 0.3px; }
+.sidebar-sub-item:hover { background: linear-gradient(135deg, #1a1a2e, #27ae60); color: white; padding-left: 40px; transition: 0.2s; }
         .branding { text-align: center; padding: 15px 0; background: #fff; }
         .banner-container { max-width: 1200px; margin: 15px auto; overflow: hidden; border-radius: 12px; background: #eee; }
         .slider { display: flex; overflow-x: hidden; scroll-behavior: smooth; }
@@ -151,7 +151,6 @@
         <img src="cover2.jpg" alt="Banner 2">
     </div>
 </div>
-
 <div class="category-container">
     <button class="cat-btn active" onclick="filterCategory('all', this)">সব বই</button>
     <button class="cat-btn" onclick="filterCategory('বেস্ট সেলিং', this)">বেস্ট সেলিং</button>
@@ -201,6 +200,37 @@
     <div>
         <div style="font-size:11px; opacity:0.8; line-height:1;">শপিং ব্যাগ</div>
         <div style="font-size:13px; font-weight:800;"><span id="floatCount">0</span> টি বই</div>
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:16px; max-width:700px; margin:0 auto;">
+    <div style="background:linear-gradient(135deg,#1a1a2e,#16213e); border-radius:14px; padding:16px; display:flex; align-items:center; gap:12px;">
+        <span style="font-size:32px;">🚚</span>
+        <div>
+            <div style="color:white; font-weight:700; font-size:14px;">শিপিং</div>
+            <div style="color:#aad4f5; font-size:11px;">সারা বাংলাদেশে</div>
+        </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1a1a2e,#16213e); border-radius:14px; padding:16px; display:flex; align-items:center; gap:12px;">
+        <span style="font-size:32px;">💳</span>
+        <div>
+            <div style="color:white; font-weight:700; font-size:14px;">পেমেন্ট</div>
+            <div style="color:#aad4f5; font-size:11px;">নিরাপদ পেমেন্ট</div>
+        </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1a1a2e,#16213e); border-radius:14px; padding:16px; display:flex; align-items:center; gap:12px;">
+        <span style="font-size:32px;">🔄</span>
+        <div>
+            <div style="color:white; font-weight:700; font-size:14px;">রিটার্ন</div>
+            <div style="color:#aad4f5; font-size:11px;">সহজ রিটার্ন পলিসি</div>
+        </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1a1a2e,#16213e); border-radius:14px; padding:16px; display:flex; align-items:center; gap:12px;">
+        <span style="font-size:32px;">🕐</span>
+        <div>
+            <div style="color:white; font-weight:700; font-size:14px;">সাপোর্ট</div>
+            <div style="color:#aad4f5; font-size:11px;">সকাল ৯টা — রাত ১০টা</div>
+        </div>
     </div>
 </div>
 <footer>
@@ -453,14 +483,18 @@ function filterBooks() {
 
     // Suggestions
     if (filtered.length > 0) {
-        suggestionBox.innerHTML = filtered.slice(0, 5).map(b => `
-            <div style="display:flex; align-items:center; gap:10px; padding:10px; border-bottom:1px solid #eee; cursor:pointer;" onclick="selectBook('${b.name.replace(/'/g,"\\'")}')">
-                <img src="${b.img}" style="width:35px; height:50px; object-fit:cover; border-radius:4px;">
-                <div>
-                    <h4 style="margin:0; font-size:13px; color:#333;">${b.name}</h4>
-                    <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">৳ ${b.price}</p>
-                </div>
-            </div>`).join('');
+       suggestionBox.innerHTML = filtered.slice(0, 5).map(b => {
+    const pct = discountPct(b);
+    return `
+    <div style="display:flex; align-items:center; gap:10px; padding:10px; border-bottom:1px solid #eee; cursor:pointer;" onclick="selectBook('${b.name.replace(/'/g,"\\'")}')">
+        <img src="${b.img}" style="width:35px; height:50px; object-fit:cover; border-radius:4px;">
+        <div style="flex:1;">
+            <h4 style="margin:0; font-size:13px; color:#333;">${b.name}</h4>
+            <p style="margin:0; font-size:12px; color:#e74c3c; font-weight:bold;">৳ ${b.price}</p>
+        </div>
+        ${pct > 0 ? `<div style="background:#e74c3c; color:white; font-size:11px; font-weight:700; padding:3px 8px; border-radius:20px; flex-shrink:0;">${pct}% ছাড়</div>` : ''}
+    </div>`;
+}).join('');
         suggestionBox.style.display = 'block';
     } else {
         suggestionBox.innerHTML = '<div style="padding:15px; color:#888; text-align:center;">বইটি পাওয়া যায়নি!</div>';
@@ -469,11 +503,9 @@ function filterBooks() {
 }
 
 function selectBook(title) {
-    document.getElementById('searchInput').value = title;
-    document.getElementById('searchSuggestions').style.display = 'none';
-    filterBooks();
+    const idx = books.findIndex(b => b.name === title);
+    if (idx !== -1) window.location.href = 'book.html?id=' + idx;
 }
-
 document.addEventListener('click', function(e) {
     if (!document.getElementById('nav-search-container').contains(e.target))
         document.getElementById('searchSuggestions').style.display = 'none';
