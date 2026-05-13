@@ -768,9 +768,14 @@ function showCart() { document.getElementById('cartBox').style.display = 'flex';
 function closeCart() { document.getElementById('cartBox').style.display = 'none'; }
 function openOrderForm() {
     if (cart.length === 0) return alert('কার্ট খালি!');
+    const code = document.getElementById('couponCode').value.trim();
+    if (!code) {
+        localStorage.removeItem('gronthokanon_discount');
+        localStorage.removeItem('gronthokanon_coupon');
+        discountPercent = 0;
+    }
     window.location.href = 'checkout.html';
 }
-
 const slider = document.getElementById('mainSlider');
 let currentImg = 0;
 if (slider) {
