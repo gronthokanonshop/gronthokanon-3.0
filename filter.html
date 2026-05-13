@@ -47,16 +47,17 @@
     </style>
 </head>
 <body>
-<div onclick="localStorage.setItem('gronthokanon_opencart','1'); navigateTo('index.html')" style="position:fixed; bottom:25px; left:16px; background:#1a1a2e; color:white; padding:11px 18px; border-radius:30px; cursor:pointer; font-weight:600; box-shadow:0 4px 15px rgba(0,0,0,0.25); z-index:999; font-family:'Hind Siliguri',Arial,sans-serif; display:flex; align-items:center; gap:8px; font-size:13px;">
+<div onclick="localStorage.setItem('gronthokanon_opencart','1'); navigateTo('index.html')" style="position:fixed; bottom:25px; left:20px; background:linear-gradient(135deg, #1a1a2e, #27ae60); color:white; padding:12px 20px; border-radius:30px; cursor:pointer; font-weight:700; box-shadow:0 4px 20px rgba(26,26,46,0.45); z-index:999; font-family:'Hind Siliguri',Arial,sans-serif; display:flex; align-items:center; gap:10px; font-size:14px; transition:0.3s;">
     <span style="font-size:18px;">🛍️</span>
     <div>
-        <div style="font-size:11px; opacity:0.7; line-height:1;">শপিং ব্যাগ দেখুন</div>
-    </div>
+
+<div style="font-size:11px; opacity:0.7; line-height:1;">শপিং ব্যাগ দেখুন</div>
+   </div>
 </div>
 <body>
 
 <div class="navbar">
-  <button class="back-btn" onclick="goBack()">←</button>
+<button class="back-btn" onclick="goBack()" style="background:#27ae60; border:none; width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.15); color:white;">‹</button>
     <div class="navbar-title" id="pageTitle">গ্রন্থকানন</div>
 <div class="cart-icon" onclick="goToCart()">
         🛒<span class="cart-badge" id="cartCount">0</span>
@@ -115,6 +116,11 @@ const books = [
 
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 document.getElementById('cartCount').innerText = cart.length;
+
+function goToCart() {
+    localStorage.setItem('gronthokanon_opencart', '1');
+    navigateTo('index.html');
+}
 
 function discountPct(b) {
     if (b.original_price > b.price) return Math.round((b.original_price - b.price) / b.original_price * 100);
