@@ -45,19 +45,16 @@
 <body>
 
 <div class="navbar">
-    <button class="back-btn" onclick="window.location.href='index.html'">← ফিরে যান</button>
+<button class="back-btn" onclick="window.history.back()" style="background:#27ae60; border:none; width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.15); color:white;">‹</button>
+
+
     <h2>📦 চেকআউট</h2>
     <div></div>
 </div>
 
 <div class="container">
 
-    <!-- ORDER SUMMARY -->
-    <div class="order-summary">
-        <h3>🛍️ আপনার অর্ডার</h3>
-        <div id="summaryItems"></div>
-    </div>
-
+  
     <!-- SHIPPING INFO -->
     <div class="form-card">
         <h3>📋 শিপিং তথ্য</h3>
@@ -99,6 +96,11 @@
             <label>সম্পূর্ণ ঠিকানা <span>*</span></label>
             <textarea id="custAddress" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
         </div>
+    </div>
+   <!-- ORDER SUMMARY -->
+    <div class="order-summary">
+        <h3>🛍️ আপনার অর্ডার</h3>
+        <div id="summaryItems"></div>
     </div>
 
     <!-- TOTAL BOX -->
