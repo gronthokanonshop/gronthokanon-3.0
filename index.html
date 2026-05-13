@@ -593,10 +593,14 @@ function changeQty(name, delta) {
 
 function applyCoupon() {
     const code = document.getElementById('couponCode').value.toUpperCase();
-    if (code === 'FIRSTORDER') { discountPercent = 5; alert('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!'); updateCartUI(); }
-    else alert('ভুল কুপন কোড!');
+    if (code === 'FIRSTORDER') {
+        discountPercent = 5;
+        localStorage.setItem('gronthokanon_discount', '5');
+        localStorage.setItem('gronthokanon_coupon', code);
+        alert('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!');
+        updateCartUI();
+    } else alert('ভুল কুপন কোড!');
 }
-
 function showCart() { document.getElementById('cartBox').style.display = 'flex'; }
 function closeCart() { document.getElementById('cartBox').style.display = 'none'; }
 function openOrderForm() {
