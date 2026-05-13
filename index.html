@@ -196,7 +196,13 @@
 <a href="https://wa.me/8801516595762" class="wa-float" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:50px;">
 </a>
-<div class="cart-floating" onclick="showCart()">🛒 শপিং ব্যাগ দেখুন (<span id="floatCount">0</span>)</div>
+<div onclick="showCart()" style="position:fixed; bottom:25px; left:20px; background:linear-gradient(135deg, #1a1a2e, #27ae60); color:white; padding:12px 20px; border-radius:30px; cursor:pointer; font-weight:700; box-shadow:0 4px 20px rgba(26,26,46,0.45); z-index:999; font-family:'Hind Siliguri',Arial,sans-serif; display:flex; align-items:center; gap:10px; font-size:14px; transition:0.3s;">
+    <span style="font-size:20px;">🛒</span>
+    <div>
+        <div style="font-size:11px; opacity:0.8; line-height:1;">শপিং ব্যাগ</div>
+        <div style="font-size:13px; font-weight:800;"><span id="floatCount">0</span> টি বই</div>
+    </div>
+</div>
 <footer>
     <div style="margin-bottom:25px;">
         <p style="margin-bottom:20px; font-weight:bold; font-size:18px;">আমাদের সাথে যুক্ত থাকুন</p>
