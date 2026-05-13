@@ -262,16 +262,20 @@ function addToCartAndShow() {
     toast.style.display = 'block';
     setTimeout(() => { toast.style.display = 'none'; }, 2500);
 }
-
 function buyNow() {
     if (!currentBook) return;
     cart.push({ name: currentBook.name, price: currentBook.price, img: currentBook.img });
     localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
+    localStorage.setItem('gronthokanon_opencart', '1');
     window.location.href = 'index.html';
 }
 function goToCart() {
     localStorage.setItem('gronthokanon_opencart', '1');
     window.location.href = 'index.html';
+}
+
+function goBack() {
+    window.history.back();
 }
 window.onload = loadBook;
 </script>
