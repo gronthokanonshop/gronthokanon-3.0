@@ -27,6 +27,17 @@
             --navbar-bg: #1a1a2e;
             --shadow: rgba(0,0,0,0.3);
         }
+
+        /* এখন 3 column — mobile এ ছোট দেখায় */
+@media (max-width: 480px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+    .book-card img { height: 150px; }
+}
+           
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; animation: pageIn 0.35s ease; transition: background 0.3s, color 0.3s; }
         @keyframes pageIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -44,6 +55,7 @@
         .sort-bar::-webkit-scrollbar { display: none; }
         .sort-btn { padding: 6px 14px; background: var(--card); color: var(--text2); border: 1.5px solid var(--border); border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap; font-family: 'Hind Siliguri', Arial, sans-serif; transition: 0.2s; }
         .sort-btn.active { background: var(--dark); color: white; border-color: var(--dark); }
+
 
         /* BOOK GRID */
         .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px; max-width: 1100px; margin: 0 auto; }
@@ -93,7 +105,7 @@
 
 <div class="navbar">
     <button onclick="goBack()" style="background:#27ae60; border:none; width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(39,174,96,0.4); color:white;">‹</button>
-    <div class="navbar-title" id="pageTitle">গ্রন্থকানন</div>
+ <img src="logo.png" alt="Logo" style="width:40px; height:40px; object-fit:contain;">
     <div style="display:flex; align-items:center; gap:8px;">
         <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
         <div class="cart-icon" onclick="goToCart()">
@@ -115,6 +127,22 @@
     <button class="sort-btn" onclick="sortBooks('price-low', this)">💰 কম দাম</button>
     <button class="sort-btn" onclick="sortBooks('price-high', this)">💎 বেশি দাম</button>
     <button class="sort-btn" onclick="sortBooks('discount', this)">🔥 বেশি ছাড়</button>
+</div>
+
+<!-- SEARCH BAR WITHIN FILTER -->
+<div style="padding: 0 16px 10px; max-width:1100px; margin:0 auto;">
+    <div style="display:flex; align-items:center; background:var(--card); 
+        border:1.5px solid var(--border); border-radius:25px; 
+        padding:8px 16px; gap:8px; box-shadow:0 2px 8px var(--shadow);">
+        <span style="font-size:16px; color:var(--text2);">🔍</span>
+        <input type="text" id="filterSearch" oninput="searchWithin()" 
+            placeholder="এই তালিকায় খুঁজুন..." 
+            style="border:none; background:transparent; outline:none; 
+            width:100%; font-size:14px; 
+            font-family:'Hind Siliguri', Arial, sans-serif; color:var(--text);">
+        <span id="clearSearch" onclick="clearFilterSearch()" 
+            style="cursor:pointer; color:var(--text2); display:none; font-size:18px;">×</span>
+    </div>
 </div>
 
 <div id="mainContent"></div>
@@ -929,6 +957,26 @@ function sortBooks(type, btn) {
     renderBooks(sorted);
 }
 
+function searchWithin() {
+    const q = document.getElementById('filterSearch').value.toLowerCase().trim();
+    const clearBtn = document.getElementById('clearSearch');
+    clearBtn.style.display = q ? 'block' : 'none';
+    
+    if (!q) { renderBooks(filtered); return; }
+    
+    const result = filtered.filter(b =>
+        b.name.toLowerCase().includes(q) ||
+        b.author.toLowerCase().includes(q)
+    );
+    renderBooks(result);
+}
+
+function clearFilterSearch() {
+    document.getElementById('filterSearch').value = '';
+    document.getElementById('clearSearch').style.display = 'none';
+    renderBooks(filtered);
+}
+
 function goToBook(idx) {
     let recent = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
     recent = [idx, ...recent.filter(i => i !== idx)].slice(0, 8);
@@ -972,7 +1020,6 @@ if (type === 'cat') { filtered = books.filter(b => b.cat === value); titleIcon =
 else if (type === 'author') { filtered = books.filter(b => b.author === value); titleIcon = '✍️'; }
 else if (type === 'pub') { filtered = books.filter(b => b.pub === value); titleIcon = '🏢'; }
 
-document.getElementById('pageTitle').innerText = value;
 document.getElementById('titleText').innerText = titleIcon + ' ' + value;
 
 renderBooks(filtered);
