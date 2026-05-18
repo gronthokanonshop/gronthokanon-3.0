@@ -182,6 +182,15 @@
         <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'জনপ্রিয় লেখক')">✍️ জনপ্রিয় লেখক</div>
         <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'জনপ্রিয় বই')">⭐ জনপ্রিয় বই</div>
     </div>
+    
+     <!-- pubSub এর আগে এটা যোগ করো -->
+<div id="pubSearch" style="padding:8px 16px; display:none;">
+    <input type="text" oninput="filterSidebarList('pubSub', this.value)" 
+        placeholder="প্রকাশনী খুঁজুন..." 
+        style="width:100%; padding:6px 10px; border:1px solid var(--border); 
+        border-radius:8px; background:var(--card); color:var(--text); 
+        font-family:'Hind Siliguri', Arial, sans-serif; font-size:13px;">
+</div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('pubSub')">🏢 প্রকাশনী <span id="pubArrow">▶</span></div>
     <div class="sidebar-sub" id="pubSub"></div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('authorSub')">✍️ লেখক <span id="authorArrow">▶</span></div>
@@ -1148,6 +1157,10 @@ function makeCard(b) {
         ${pct > 0 ? `<div class="discount-badge">${pct}% ছাড়</div>` : ''}
         <button class="wishlist-btn ${wl ? 'active' : ''}" onclick="toggleWishlist(event, '${b.name.replace(/'/g,"\\'")}')">${wl ? '❤️' : '🤍'}</button>
         <img src="${b.img}" alt="বই" loading="lazy">
+<div style="padding:4px 10px 0; font-size:10px; color:var(--text2); 
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+    🏢 ${b.pub}
+</div>
         <div class="book-card-info">
             <div class="book-card-name">${b.name}</div>
             <div class="book-card-author">${b.author}</div>
@@ -1236,11 +1249,23 @@ function filterCategory(cat, btn) {
 function toggleSubMenu(id) {
     const sub = document.getElementById(id);
     const arrowMap = { catSub: 'catArrow', pubSub: 'pubArrow', authorSub: 'authorArrow', aboutSub: 'aboutArrow' };
-    const arrow = document.getElementById(arrowMap[id]);
+     const searchMap = { pubSub: 'pubSearch', authorSub: 'authorSearch' };;
     const isOpen = sub.style.display === 'block';
     sub.style.display = isOpen ? 'none' : 'block';
+
     if (arrow) arrow.textContent = isOpen ? '▶' : '▼';
+ if (searchMap[id]) {
+        const searchEl = document.getElementById(searchMap[id]);
+        if (searchEl) searchEl.style.display = isOpen ? 'none' : 'block';
+    }
 }
+function filterSidebarList(subId, query) {
+    const items = document.querySelectorAll(`#${subId} .sidebar-sub-item`);
+    items.forEach(item => {
+        item.style.display = item.textContent.includes(query) ? 'block' : 'none';
+    });
+}
+
 
 function filterBooks() {
     const input = document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
