@@ -34,187 +34,36 @@
             --shadow: rgba(0,0,0,0.3);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        /* ====== PRO TRANSITIONS ====== */
-        @keyframes pageLoad { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        body { 
-            font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; 
-            background: var(--bg); 
-            color: var(--text); 
-            overflow-x: hidden; 
-            transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: pageLoad 0.6s ease-out;
-        }
-        
-        /* Smooth scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { 
-            background: var(--green); 
-            border-radius: 4px; 
-            transition: background 0.3s;
-        }
-        ::-webkit-scrollbar-thumb:hover { background: #1a8244; }
-        
-        /* Text selection */
-        ::selection { background: var(--green); color: white; }
+        body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.3s, color 0.3s; }
 
         /* NAVBAR */
-        @keyframes navSlideDown { 
-            from { transform: translateY(-60px); opacity: 0; } 
-            to { transform: translateY(0); opacity: 1; } 
-        }
-        .navbar { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 10px 16px; 
-            background: var(--navbar-bg); 
-            box-shadow: 0 2px 10px var(--shadow); 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: navSlideDown 0.5s ease-out;
-        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--navbar-bg); box-shadow: 0 2px 10px var(--shadow); position: sticky; top: 0; z-index: 1000; transition: background 0.3s; }
         .nav-center { flex: 1; display: flex; justify-content: center; padding: 0 10px; }
-        .nav-search-container { 
-            display: flex; 
-            align-items: center; 
-            background: var(--search-bg); 
-            border-radius: 20px; 
-            padding: 6px 15px; 
-            width: 100%; 
-            max-width: 500px; 
-            border: 1px solid var(--border); 
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 0 0 rgba(39, 174, 96, 0);
-        }
-        .nav-search-container:focus-within {
-            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
-            border-color: var(--green);
-            transform: translateY(-1px);
-        }
-        .nav-search-input { 
-            border: none; 
-            background: transparent; 
-            outline: none; 
-            width: 100%; 
-            font-size: 14px; 
-            font-family: 'Hind Siliguri', Arial, sans-serif; 
-            color: var(--text);
-            transition: all 0.2s ease;
-        }
-        .menu-icon { 
-            font-size: 21px; 
-            cursor: pointer; 
-            color: var(--green);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .menu-icon:hover { transform: scale(1.1) rotate(15deg); }
-        .menu-icon:active { transform: scale(0.95); }
+        .nav-search-container { display: flex; align-items: center; background: var(--search-bg); border-radius: 20px; padding: 6px 15px; width: 100%; max-width: 500px; border: 1px solid var(--border); position: relative; }
+        .nav-search-input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; font-family: 'Hind Siliguri', Arial, sans-serif; color: var(--text); }
+        .menu-icon { font-size: 21px; cursor: pointer; color: var(--green); }
         .cart-icon-wrapper { position: relative; font-size: 22px; cursor: pointer; transition: transform 0.1s; }
         .cart-icon-wrapper.bounce { animation: cartBounce 0.4s ease; }
         @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.4)} 60%{transform:scale(0.9)} 80%{transform:scale(1.1)} }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
 
         /* DARK MODE TOGGLE */
-        .dark-toggle { 
-            background: none; 
-            border: 2px solid var(--border); 
-            border-radius: 20px; 
-            padding: 4px 10px; 
-            cursor: pointer; 
-            font-size: 14px; 
-            color: var(--text); 
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .dark-toggle:hover { 
-            border-color: var(--green);
-            transform: rotate(15deg) scale(1.05);
-        }
-        .dark-toggle:active { transform: scale(0.95); }
+        .dark-toggle { background: none; border: 2px solid var(--border); border-radius: 20px; padding: 4px 10px; cursor: pointer; font-size: 14px; color: var(--text); transition: 0.2s; }
+        .dark-toggle:hover { border-color: var(--green); }
 
         /* SEARCH SUGGESTIONS */
         #searchSuggestions { display: none; position: absolute; top: 105%; left: 0; width: 100%; background: var(--card); border: 1px solid var(--border); box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 9999; max-height: 350px; overflow-y: auto; border-radius: 10px; }
 
         /* SIDEBAR */
-        .sidebar { 
-            position: fixed; 
-            top: 0; 
-            left: -300px; 
-            width: 300px; 
-            height: 100%; 
-            background: var(--sidebar-bg); 
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1); 
-            z-index: 2000; 
-            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-            overflow-y: auto;
-        }
+        .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100%; background: var(--sidebar-bg); box-shadow: 4px 0 15px rgba(0,0,0,0.1); z-index: 2000; transition: 0.4s; overflow-y: auto; }
         .sidebar.active { left: 0; }
-        
-        @keyframes overlayFadeIn { 
-            from { opacity: 0; } 
-            to { opacity: 1; } 
-        }
-        .overlay { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0,0,0,0.5); 
-            display: none; 
-            z-index: 1500;
-            animation: overlayFadeIn 0.3s ease-out;
-        }
-        .sidebar-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 20px; 
-            background: var(--green); 
-            color: white;
-        }
-        .sidebar-menu-item { 
-            padding: 14px 20px; 
-            cursor: pointer; 
-            border-bottom: 1px solid var(--border); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            font-size: 15px; 
-            color: var(--text);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .sidebar-menu-item:hover { 
-            background: var(--search-bg);
-            padding-left: 25px;
-        }
-        .sidebar-sub { 
-            display: none; 
-            background: var(--search-bg);
-        }
-        .sidebar-sub-item { 
-            padding: 12px 20px 12px 35px; 
-            cursor: pointer; 
-            border-bottom: 1px solid var(--border); 
-            font-size: 14px; 
-            color: var(--navy); 
-            font-weight: 700; 
-            letter-spacing: 0.3px; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .sidebar-sub-item:hover { 
-            background: linear-gradient(135deg, #1a1a2e, #27ae60); 
-            color: white; 
-            padding-left: 40px;
-            transform: translateX(5px);
-        }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: var(--green); color: white; }
+        .sidebar-menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--text); }
+        .sidebar-menu-item:hover { background: var(--search-bg); }
+        .sidebar-sub { display: none; background: var(--search-bg); }
+        .sidebar-sub-item { padding: 12px 20px 12px 35px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--navy); font-weight: 700; letter-spacing: 0.3px; transition: 0.2s; }
+        .sidebar-sub-item:hover { background: linear-gradient(135deg, #1a1a2e, #27ae60); color: white; padding-left: 40px; }
 
         /* MARQUEE */
         .moving-bar { background: var(--card); color: var(--green); padding: 10px 0; overflow: hidden; white-space: nowrap; font-weight: bold; border-bottom: 1px solid var(--border); }
@@ -235,44 +84,10 @@
         .info-card:hover { transform: translateY(-2px); }
 
         /* CATEGORY BUTTONS */
-        .category-container { 
-            display: flex; 
-            justify-content: center; 
-            gap: 10px; 
-            padding: 20px; 
-            flex-wrap: wrap;
-        }
-        @keyframes btnBounce { 
-            0% { transform: scale(1); } 
-            50% { transform: scale(1.05); } 
-            100% { transform: scale(1); } 
-        }
-        .cat-btn { 
-            padding: 8px 18px; 
-            background: var(--card); 
-            color: var(--green); 
-            border: 2px solid var(--green); 
-            border-radius: 25px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            font-size: 13px; 
-            font-family: 'Hind Siliguri', Arial, sans-serif;
-            position: relative;
-            overflow: hidden;
-        }
-        .cat-btn.active { 
-            background: var(--dark); 
-            color: #fff; 
-            border-color: var(--dark);
-            animation: btnBounce 0.4s ease-out;
-        }
-        .cat-btn:hover:not(.active) { 
-            background: #e8f5e9;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
-        }
-        .cat-btn:active { transform: scale(0.95); }
+        .category-container { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; }
+        .cat-btn { padding: 8px 18px; background: var(--card); color: var(--green); border: 2px solid var(--green); border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.2s; font-size: 13px; font-family: 'Hind Siliguri', Arial, sans-serif; }
+        .cat-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+        .cat-btn:hover:not(.active) { background: #e8f5e9; }
 
         /* SECTIONS */
         .sections-wrapper { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
@@ -285,81 +100,10 @@
         .book-row::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
 
         /* BOOK CARD */
-        @keyframes cardFadeIn { 
-            from { opacity: 0; transform: translateY(30px) scale(0.95); } 
-            to { opacity: 1; transform: translateY(0) scale(1); } 
-        }
-        @keyframes cardShine {
-            0% { transform: translateX(-100%) translateY(-100%); }
-            100% { transform: translateX(100%) translateY(100%); }
-        }
-        .book-card { 
-            flex-shrink: 0; 
-            width: 150px; 
-            background: var(--card); 
-            border-radius: 12px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 10px var(--shadow); 
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
-            cursor: pointer; 
-            position: relative;
-            animation: cardFadeIn 0.6s ease-out both;
-        }
-        .book-card:nth-child(1) { animation-delay: 0.05s; }
-        .book-card:nth-child(2) { animation-delay: 0.1s; }
-        .book-card:nth-child(3) { animation-delay: 0.15s; }
-        .book-card:nth-child(4) { animation-delay: 0.2s; }
-        .book-card:nth-child(5) { animation-delay: 0.25s; }
-        .book-card:nth-child(n+6) { animation-delay: 0.3s; }
-        
-        .book-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s;
-            z-index: 1;
-            pointer-events: none;
-        }
-        .book-card:hover::before {
-            opacity: 1;
-            animation: cardShine 0.6s ease-in-out;
-        }
-        .book-card:hover { 
-            transform: translateY(-8px) scale(1.02); 
-            box-shadow: 0 15px 35px rgba(39, 174, 96, 0.25);
-        }
-        .book-card img { 
-            width: 150px; 
-            height: 200px; 
-            object-fit: cover; 
-            display: block;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .book-card:hover img {
-            transform: scale(1.05);
-        }
-        .discount-badge { 
-            position: absolute; 
-            top: 8px; 
-            left: 8px; 
-            background: var(--red); 
-            color: white; 
-            font-size: 11px; 
-            font-weight: bold; 
-            padding: 3px 7px; 
-            border-radius: 20px; 
-            z-index: 2;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+        .book-card { flex-shrink: 0; width: 150px; background: var(--card); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px var(--shadow); transition: 0.3s; cursor: pointer; position: relative; }
+        .book-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .book-card img { width: 150px; height: 200px; object-fit: cover; display: block; }
+        .discount-badge { position: absolute; top: 8px; left: 8px; background: var(--red); color: white; font-size: 11px; font-weight: bold; padding: 3px 7px; border-radius: 20px; z-index: 2; }
 
         /* WISHLIST BUTTON */
         .wishlist-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: 0.2s; }
@@ -442,7 +186,7 @@
     <div class="sidebar-sub" id="pubSub"></div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('authorSub')">✍️ লেখক <span id="authorArrow">▶</span></div>
     <div class="sidebar-sub" id="authorSub"></div>
-    <div class="sidebar-menu-item" onclick="showWishlist()">❤️ উইশলিস্ট <span id="wishCount" style="background:#e74c3c;color:white;border-radius:50%;padding:1px 6px;font-size:11px;">0</span></div>
+    <div class="sidebar-menu-item" onclick="showWishlist()">💖 উইশলিস্ট <span id="wishCount" style="background:#e74c3c;color:white;border-radius:50%;padding:1px 6px;font-size:11px;">0</span></div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('aboutSub')">📜 আমাদের সম্পর্কে <span id="aboutArrow">▶</span></div>
     <div class="sidebar-sub" id="aboutSub" style="padding:15px 20px; font-size:13px; line-height:1.9; color:#555;">
         <p style="margin-bottom:12px;"><strong style="color:#27ae60; font-size:15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য।</p>
@@ -484,26 +228,6 @@
     <div class="slider" id="mainSlider">
         <img src="cover.jpeg" alt="Banner 1">
         <img src="cover2.jpg" alt="Banner 2">
-    </div>
-</div>
-
-<!-- INFO GRID -->
-<div class="info-grid">
-    <div class="info-card">
-        <span style="font-size:32px;">🚚</span>
-        <div><div style="color:white;font-weight:700;font-size:14px;">শিপিং</div><div style="color:#aad4f5;font-size:11px;">সারা বাংলাদেশে</div></div>
-    </div>
-    <div class="info-card">
-        <span style="font-size:32px;">💳</span>
-        <div><div style="color:white;font-weight:700;font-size:14px;">পেমেন্ট</div><div style="color:#aad4f5;font-size:11px;">নিরাপদ পেমেন্ট</div></div>
-    </div>
-    <div class="info-card">
-        <span style="font-size:32px;">🔄</span>
-        <div><div style="color:white;font-weight:700;font-size:14px;">রিটার্ন</div><div style="color:#aad4f5;font-size:11px;">সহজ রিটার্ন পলিসি</div></div>
-    </div>
-    <div class="info-card">
-        <span style="font-size:32px;">🕐</span>
-        <div><div style="color:white;font-weight:700;font-size:14px;">সাপোর্ট</div><div style="color:#aad4f5;font-size:11px;">সকাল ৯টা — রাত ১০টা</div></div>
     </div>
 </div>
 
@@ -571,12 +295,12 @@
 <div id="wishlistBox" class="wishlist-modal">
     <div class="wishlist-content">
         <div style="padding:15px; background:#e74c3c; color:#fff; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0;">
-            <h3 style="margin:0; font-size:18px;">❤️ উইশলিস্ট</h3>
+            <h3 style="margin:0; font-size:18px;">💖উইশলিস্ট</h3>
             <span onclick="closeWishlist()" style="cursor:pointer; font-size:28px;">&times;</span>
         </div>
         <div id="wishlistItems" style="padding:10px;"></div>
     </div>
-</div>
+</div>   
 
 <a href="https://wa.me/8801516595762" class="wa-float" target="_blank">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:50px;">
@@ -587,6 +311,25 @@
     <div>
         <div style="font-size:11px; opacity:0.8; line-height:1;">শপিং ব্যাগ</div>
         <div style="font-size:13px; font-weight:800;"><span id="floatCount">0</span> টি বই</div>
+    </div>
+</div>
+    <!-- INFO GRID -->
+<div class="info-grid">
+    <div class="info-card">
+        <span style="font-size:32px;">🚚</span>
+        <div><div style="color:white;font-weight:700;font-size:14px;">শিপিং</div><div style="color:#aad4f5;font-size:11px;">সারা বাংলাদেশে ক্যাশ অন ডেলিভারি সুবিদা</div></div>
+    </div>
+    <div class="info-card">
+        <span style="font-size:32px;">💳</span>
+        <div><div style="color:white;font-weight:700;font-size:14px;">পেমেন্ট</div><div style="color:#aad4f5;font-size:11px;">সহয ও নিরাপদ পেমেন প্রক্রিয়া</div></div>
+    </div>
+    <div class="info-card">
+        <span style="font-size:32px;">🔄</span>
+        <div><div style="color:white;font-weight:700;font-size:14px;">রিটার্ন</div><div style="color:#aad4f5;font-size:11px;">সহজ রিটার্ন পলিসি</div></div>
+    </div>
+    <div class="info-card">
+        <span style="font-size:32px;">🕐</span>
+        <div><div style="color:white;font-weight:700;font-size:14px;">সাপোর্ট</div><div style="color:#aad4f5;font-size:11px;">সকাল ৯টা — রাত ১০টা</div></div>
     </div>
 </div>
 
@@ -652,7 +395,7 @@ const books = [
   { name: "যিলহজ্জের আমল ডায়েরি", author: "শারিন সফি অদ্রিতা", price: 170, original_price: 250, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", pages: "160 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/xtVsXK9J/zilhajjer-amol-77568-250x375.webp", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "রাইটিং থেরাপি", author: "শারিন সফি অদ্রিতা", price: 320, original_price: 440, cat: "রানিং  ট্রেন্ডিং", pub: "ইফফাহ প্রকাশন", pages: "288 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/Y7k4v8hb/therapy-021-250x385.webp", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "A Lantern In Her Window", author: "শারিন সফি অদ্রিতা", price: 290, original_price: 429, cat: "রানিং  ট্রেন্ডিং", pub: "পেনফিল্ড পাবলিকেশন", pages: "264 পৃষ্ঠা", stock: "10 কপি", img: "https://i.ibb.co.com/Pv5G0PzT/A-lantern-in-her-window-Front-250x384.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-   name: "গল্পগুলো অন্যরকম", author: "সম্মিলিত", price: 245, original_price: 340, cat: "জনপ্রিয় বই", pub: "সমকালীন প্রকাশন", pages: "216 পৃষ্ঠা", stock: "10 কপি", img: "", desc: "শীঘ্রই আপডেট করা হবে" },
+  { name: "গল্পগুলো অন্যরকম", author: "সম্মিলিত", price: 245, original_price: 340, cat: "জনপ্রিয় বই", pub: "সমকালীন প্রকাশন", pages: "216 পৃষ্ঠা", stock: "10 কপি", img: "", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "দরূদ পাঠের মজা", author: "মাহমুদ বিন নূর", price: 225, original_price: 300, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", stock: "10 কপি", img: "https://wafilife-media.wafilife.com/uploads/2026/05/dpm-full-cover-77577-192x288.jpeg", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "কাবার আঙ্গিনার আশ্চর্য গল্প", author: "জুবায়ের আহমেদ", price: 135, original_price: 180, cat: "নতুন প্রকাশিত", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", stock: "10 কপি", img: "https://wafilife-media.wafilife.com/uploads/2026/05/kabar-anginar-77580-192x288.jpeg", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "অলসতা থেকে মুক্তি", author: "জন জেরাস্কি, মাহমুদ বিন নূর", price: 400, original_price: 500, cat: "জনপ্রিয় বই", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", stock: "10 কপি", img: "https://wafilife-media.wafilife.com/uploads/2026/03/oloshotar_biruddhe_lorai-192x254.png", desc: "শীঘ্রই আপডেট করা হবে" },
@@ -1343,8 +1086,6 @@ const books = [
     //✅ নতুন বই এখানে যোগ করুন ↓
 ];
 
-
-
 const categoryConfig = [
   { key: "বেস্ট সেলিং", label: "🔥 বেস্ট সেলিং" },
   { key: "রানিং  ট্রেন্ডিং", label: "📈 রানিং ট্রেন্ডিং" },
@@ -1714,9 +1455,14 @@ function showCart() { document.getElementById('cartBox').style.display = 'flex';
 function closeCart() { document.getElementById('cartBox').style.display = 'none'; }
 function openOrderForm() {
     if (cart.length === 0) return alert('কার্ট খালি!');
+    const code = document.getElementById('couponCode').value.trim();
+    if (!code) {
+        localStorage.removeItem('gronthokanon_discount');
+        localStorage.removeItem('gronthokanon_coupon');
+        discountPercent = 0;
+    }
     window.location.href = 'checkout.html';
 }
-
 const slider = document.getElementById('mainSlider');
 let currentImg = 0;
 if (slider) {
@@ -1727,4 +1473,4 @@ if (slider) {
 }
 </script>
 </body>
-</html>
+</html>index
