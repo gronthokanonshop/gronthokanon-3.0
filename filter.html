@@ -6,58 +6,70 @@
     <title>গ্রন্থকানন</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-       :root {
-    --bg: #f0f4f8;
-    --card: #ffffff;
-    --text: #1a202c;
-    --text2: #718096;
-    --border: #e2e8f0;
-    --navbar-bg: #ffffff;
-    --sidebar-bg: #ffffff;
-    --search-bg: #edf2f7;
-    --footer-bg: #0f172a;
-    --shadow: rgba(0,0,0,0.08);
-    --green: #059669;
-    --green2: #10b981;
-    --dark: #0f172a;
-    --red: #dc2626;
-    --navy: #1e3a5f;
-    --gold: #d97706;
-}
+        /* ✅ CHANGE 2: Pro CSS Variables (already applied, keeping) */
+        :root {
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --text: #1a202c;
+            --text2: #718096;
+            --border: #e2e8f0;
+            --navbar-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --search-bg: #edf2f7;
+            --footer-bg: #0f172a;
+            --shadow: rgba(0,0,0,0.08);
+            --green: #059669;
+            --green2: #10b981;
+            --dark: #0f172a;
+            --red: #dc2626;
+            --navy: #1e3a5f;
+            --gold: #d97706;
+        }
+        [data-theme="dark"] {
+            --bg: #0a0f1e;
+            --card: #111827;
+            --text: #f1f5f9;
+            --text2: #94a3b8;
+            --border: #1e293b;
+            --navbar-bg: #111827;
+            --sidebar-bg: #111827;
+            --search-bg: #0a0f1e;
+            --shadow: rgba(0,0,0,0.4);
+        }
 
-[data-theme="dark"] {
-    --bg: #0a0f1e;
-    --card: #111827;
-    --text: #f1f5f9;
-    --text2: #94a3b8;
-    --border: #1e293b;
-    --navbar-bg: #111827;
-    --sidebar-bg: #111827;
-    --search-bg: #0a0f1e;
-    --shadow: rgba(0,0,0,0.4);
-}
+        /* Mobile grid */
+        @media (max-width: 480px) {
+            .grid-container { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
+            .book-card img { height: 150px; }
+        }
 
-        /* এখন 3 column — mobile এ ছোট দেখায় */
-@media (max-width: 480px) {
-    .grid-container {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 10px;
-    }
-    .book-card img { height: 150px; }
-}
-           
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; animation: pageIn 0.35s ease; transition: background 0.3s, color 0.3s; }
         @keyframes pageIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* NAVBAR */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--navbar-bg); box-shadow: 0 2px 10px var(--shadow); position: sticky; top: 0; z-index: 100; transition: background 0.3s; }
-        .navbar-title { font-size: 16px; font-weight: 700; color: var(--dark); }
-        [data-theme="dark"] .navbar-title { color: #e8e8e8; }
+        /* ✅ CHANGE 3: Pro Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #059669 100%);
+            box-shadow: 0 4px 20px rgba(5,150,105,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
         .cart-icon { position: relative; font-size: 22px; cursor: pointer; }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
-        .dark-toggle { background: none; border: 2px solid var(--border); border-radius: 20px; padding: 4px 10px; cursor: pointer; font-size: 14px; color: var(--text); transition: 0.2s; }
+        .dark-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #ffffff;
+        }
 
         /* SORT BAR */
         .sort-bar { display: flex; gap: 8px; padding: 10px 16px; overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
@@ -65,13 +77,39 @@
         .sort-btn { padding: 6px 14px; background: var(--card); color: var(--text2); border: 1.5px solid var(--border); border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap; font-family: 'Hind Siliguri', Arial, sans-serif; transition: 0.2s; }
         .sort-btn.active { background: var(--dark); color: white; border-color: var(--dark); }
 
-
         /* BOOK GRID */
         .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px; max-width: 1100px; margin: 0 auto; }
-        .book-card { background: var(--card); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px var(--shadow); transition: 0.3s; cursor: pointer; position: relative; }
-        .book-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+
+        /* ✅ CHANGE 4: Pro Book Card */
+        .book-card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            border: 1px solid var(--border);
+        }
+        .book-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(5,150,105,0.2);
+            border-color: var(--green);
+        }
         .book-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
-        .discount-badge { position: absolute; top: 8px; left: 8px; background: var(--red); color: white; font-size: 11px; font-weight: bold; padding: 3px 7px; border-radius: 20px; z-index: 2; }
+        .discount-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 20px;
+            z-index: 2;
+            box-shadow: 0 2px 6px rgba(220,38,38,0.4);
+        }
 
         /* WISHLIST BUTTON */
         .wishlist-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: 0.2s; }
@@ -84,8 +122,27 @@
         .price-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
         .price-sell { color: var(--red); font-weight: bold; font-size: 13px; }
         .price-original { color: var(--text2); font-size: 11px; text-decoration: line-through; }
-        .book-card-btn { display: block; padding: 7px; background: var(--green); color: white; border-radius: 6px; cursor: pointer; width: 100%; border: none; font-weight: bold; font-size: 11px; text-align: center; font-family: 'Hind Siliguri', Arial, sans-serif; transition: 0.2s; }
-        .book-card-btn:hover { background: #219150; }
+        .book-card-btn {
+            display: block;
+            padding: 7px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            border: none;
+            font-weight: bold;
+            font-size: 11px;
+            text-align: center;
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(5,150,105,0.3);
+        }
+        .book-card-btn:hover {
+            background: linear-gradient(135deg, #047857, #059669);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(5,150,105,0.4);
+        }
 
         /* SECTION HEADER */
         .section-header { padding: 16px 16px 8px; max-width: 1100px; margin: 0 auto; }
@@ -96,7 +153,7 @@
         .empty { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 16px; }
 
         /* FLOATING BAG */
-        .float-bag { position: fixed; bottom: 25px; left: 20px; background: linear-gradient(135deg, #1a1a2e, #27ae60); color: white; padding: 12px 20px; border-radius: 30px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 20px rgba(26,26,46,0.45); z-index: 999; font-family: 'Hind Siliguri', Arial, sans-serif; display: flex; align-items: center; gap: 10px; font-size: 14px; transition: 0.3s; }
+        .float-bag { position: fixed; bottom: 25px; left: 20px; background: linear-gradient(135deg, #0f172a, #059669); color: white; padding: 12px 20px; border-radius: 30px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 20px rgba(5,150,105,0.35); z-index: 999; font-family: 'Hind Siliguri', Arial, sans-serif; display: flex; align-items: center; gap: 10px; font-size: 14px; transition: 0.3s; }
         .float-bag:hover { transform: translateY(-2px); }
 
         @keyframes pageOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-10px)} }
@@ -113,8 +170,8 @@
 </div>
 
 <div class="navbar">
-    <button onclick="goBack()" style="background:#27ae60; border:none; width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(39,174,96,0.4); color:white;">‹</button>
- <img src="logo.png" alt="Logo" style="width:40px; height:40px; object-fit:contain;">
+    <button onclick="goBack()" style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:white;">‹</button>
+    <img src="logo.png" alt="Logo" style="width:40px; height:40px; object-fit:contain;">
     <div style="display:flex; align-items:center; gap:8px;">
         <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
         <div class="cart-icon" onclick="goToCart()">
@@ -164,7 +221,6 @@ let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
 let filtered = [];
 
-// Update counts
 document.getElementById('cartCount').innerText = cart.length;
 document.getElementById('floatCount').innerText = cart.length;
 
@@ -245,9 +301,7 @@ function searchWithin() {
     const q = document.getElementById('filterSearch').value.toLowerCase().trim();
     const clearBtn = document.getElementById('clearSearch');
     clearBtn.style.display = q ? 'block' : 'none';
-    
     if (!q) { renderBooks(filtered); return; }
-    
     const result = filtered.filter(b =>
         b.name.toLowerCase().includes(q) ||
         b.author.toLowerCase().includes(q)
@@ -274,7 +328,7 @@ function addToCart(name, price, img) {
     document.getElementById('cartCount').innerText = cart.length;
     document.getElementById('floatCount').innerText = cart.length;
     const toast = document.createElement('div');
-    toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#2c3e50;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
+    toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0f172a;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
     toast.innerText = '✅ কার্টে যোগ হয়েছে!';
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 2000);
@@ -290,6 +344,7 @@ function navigateTo(url) {
     setTimeout(() => window.location.href = url, 250);
 }
 
+/* ✅ CHANGE 1: Back Button Fix */
 function goBack() {
     navigateTo('index.html');
 }
