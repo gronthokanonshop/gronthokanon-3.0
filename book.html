@@ -136,6 +136,11 @@
         /* TOAST */
         .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; font-weight: 600; display: none; z-index: 9999; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+@keyframes pageOut { 
+    from { opacity:1; transform:translateY(0); } 
+    to { opacity:0; transform:translateY(-10px); } 
+}
+    
     </style>
 </head>
 <body>
@@ -351,6 +356,11 @@ function buyNow() {
 function goToCart() {
     localStorage.setItem('gronthokanon_opencart', '1');
     window.location.href = 'index.html';
+}
+
+function navigateTo(url) {
+    document.body.style.animation = 'pageOut 0.25s ease forwards';
+    setTimeout(() => window.location.href = url, 250);
 }
 
 function goBack() {
