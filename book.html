@@ -4,75 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>বই বিস্তারিত — গ্রন্থকানন</title>
+    <meta name="description" content="গ্রন্থকানন-এ বইয়ের বিস্তারিত দেখুন। সাশ্রয়ী মূল্যে কিনুন, সারা বাংলাদেশে ডেলিভারি।">
+    <meta property="og:title" content="বই বিস্তারিত — গ্রন্থকানন">
+    <meta property="og:type" content="product">
+    <meta name="theme-color" content="#059669">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ✅ CHANGE 2: Pro CSS Variables */
-       :root {
-    --bg: #f0fdf4;
-    --card: #ffffff;
-    --text: #1a202c;
-    --text2: #6b7280;
-    --border: #d1fae5;
-    --navbar-bg: #059669;
-    --search-bg: #ecfdf5;
-    --footer-bg: #064e3b;
-    --shadow: rgba(5,150,105,0.1);
-    --green: #059669;
-    --green2: #10b981;
-    --dark: #064e3b;
-    --red: #dc2626;
-    --navy: #059669;
-    --gold: #d97706;
-}
-[data-theme="dark"] {
-    --bg: #022c22;
-    --card: #064e3b;
-    --text: #f0fdf4;
-    --text2: #6ee7b7;
-    --border: #065f46;
-    --navbar-bg: #047857;
-    --search-bg: #022c22;
-    --shadow: rgba(0,0,0,0.4);
-}
-        [data-theme="dark"] {
-            --bg: #0a0f1e;
-            --card: #111827;
-            --text: #f1f5f9;
-            --text2: #94a3b8;
-            --border: #1e293b;
-            --navbar-bg: #111827;
-            --sidebar-bg: #111827;
-            --search-bg: #0a0f1e;
-            --shadow: rgba(0,0,0,0.4);
-            --price-bg: #0a0f1e;
+        :root {
+            --bg: #edf2f7;
+            --card: #ffffff;
+            --text: #333333;
+            --text2: #888888;
+            --border: #e0e0e0;
+            --navbar-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.08);
+            --green: #059669;
+            --dark: #2c3e50;
+            --red: #e74c3c;
+            --price-bg: #f8f9fa;
         }
-
+        [data-theme="dark"] {
+            --bg: #0f0f1a;
+            --card: #1a1a2e;
+            --text: #e8e8e8;
+            --text2: #aaaaaa;
+            --border: #2a2a3e;
+            --navbar-bg: #1a1a2e;
+            --shadow: rgba(0,0,0,0.3);
+            --price-bg: #0f0f1a;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; }
 
-        /* ✅ CHANGE 3: Pro Navbar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #059669 100%);
-            box-shadow: 0 4px 20px rgba(5,150,105,0.25);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        /* NAVBAR */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: var(--navbar-bg); box-shadow: 0 2px 10px var(--shadow); position: sticky; top: 0; z-index: 100; transition: background 0.3s; }
+        .navbar-brand { font-size: 18px; font-weight: 700; color: var(--green); }
         .cart-icon { position: relative; font-size: 22px; cursor: pointer; }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
-        .dark-toggle {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 4px 10px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #ffffff;
-        }
+        .dark-toggle { background: none; border: 2px solid var(--border); border-radius: 20px; padding: 4px 10px; cursor: pointer; font-size: 14px; color: var(--text); transition: 0.2s; }
 
         .container { max-width: 500px; margin: 0 auto; padding: 16px; }
 
@@ -83,7 +52,7 @@
         /* WISHLIST BUTTON */
         .wishlist-btn-large { position: absolute; top: 16px; right: 16px; background: var(--card); border: 2px solid var(--border); border-radius: 50%; width: 44px; height: 44px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px var(--shadow); transition: 0.2s; }
         .wishlist-btn-large:hover { transform: scale(1.1); }
-        .wishlist-btn-large.active { background: #ffe0e0; border-color: #dc2626; }
+        .wishlist-btn-large.active { background: #ffe0e0; border-color: #e74c3c; }
 
         /* BOOK INFO */
         .book-info { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px var(--shadow); margin-bottom: 16px; }
@@ -97,8 +66,8 @@
         .badge { font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 600; }
         .badge-cat { background: #e8f5e9; color: #059669; border: 1px solid #c8e6c9; }
         .badge-stock-ok { background: #e8f5e9; color: #059669; border: 1px solid #c8e6c9; }
-        .badge-stock-low { background: #fff3e0; color: #d97706; border: 1px solid #ffe0b2; }
-        .badge-stock-out { background: #fdecea; color: #dc2626; border: 1px solid #f5c6cb; }
+        .badge-stock-low { background: #fff3e0; color: #f39c12; border: 1px solid #ffe0b2; }
+        .badge-stock-out { background: #fdecea; color: #e74c3c; border: 1px solid #f5c6cb; }
 
         /* PRICE */
         .price-section { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 14px; background: var(--price-bg); border-radius: 10px; }
@@ -126,7 +95,7 @@
         .btn-wishlist.active { background: #ffe0e0; }
         .btn-cart { flex: 1; padding: 14px; background: var(--card); color: var(--green); border: 2px solid var(--green); border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Hind Siliguri', Arial, sans-serif; transition: 0.2s; }
         .btn-cart:hover { background: #f0faf4; }
-        .btn-buy { flex: 1; padding: 14px; background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Hind Siliguri', Arial, sans-serif; box-shadow: 0 5px 15px rgba(5,150,105,0.35); transition: 0.2s; }
+        .btn-buy { flex: 1; padding: 14px; background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Hind Siliguri', Arial, sans-serif; box-shadow: 0 5px 15px rgba(39,174,96,0.3); transition: 0.2s; }
         .btn-buy:hover { transform: translateY(-2px); }
         .btn-disabled { background: #ccc !important; color: #888 !important; border-color: #ccc !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
 
@@ -142,20 +111,15 @@
         .related-book-price { font-size: 12px; color: var(--red); font-weight: 700; text-align: center; margin-top: 3px; }
 
         /* TOAST */
-        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; font-weight: 600; display: none; z-index: 9999; animation: fadeIn 0.3s ease; }
+        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #2c3e50; color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; font-weight: 600; display: none; z-index: 9999; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-@keyframes pageOut { 
-    from { opacity:1; transform:translateY(0); } 
-    to { opacity:0; transform:translateY(-10px); } 
-}
-    
     </style>
 </head>
 <body>
 
 <div class="navbar">
-    <button onclick="goBack()" style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:white;">‹</button>
-    <img src="logo.png" alt="Logo" style="width:40px; height:40px; object-fit:contain;">
+    <button onclick="goBack()" style="background:#059669; border:none; width:44px; height:44px; border-radius:50%; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(39,174,96,0.4); color:white;">‹</button>
+   <img src="logo.png" alt="Logo" style="width:40px; height:40px; object-fit:contain;">
     <div style="display:flex; align-items:center; gap:10px;">
         <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
         <div class="cart-icon" onclick="goToCart()">
@@ -211,8 +175,28 @@
 
 <div class="toast" id="toast">✅ কার্টে যোগ হয়েছে!</div>
 
+<!-- TRUST STRIP -->
+<div style="background:#f0fdf4;border-top:1px solid #c6f6d5;border-bottom:1px solid #c6f6d5;padding:12px 16px;display:flex;justify-content:space-around;align-items:center;margin-bottom:0;">
+    <div style="text-align:center;"><div style="font-size:20px;">🚚</div><div style="font-size:10px;font-weight:700;color:#059669;">দ্রুত ডেলিভারি</div></div>
+    <div style="text-align:center;"><div style="font-size:20px;">✅</div><div style="font-size:10px;font-weight:700;color:#059669;">ক্যাশ অন ডেলিভারি</div></div>
+    <div style="text-align:center;"><div style="font-size:20px;">🔒</div><div style="font-size:10px;font-weight:700;color:#059669;">নিরাপদ অর্ডার</div></div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#064e3b;color:#a7f3d0;text-align:center;padding:28px 20px 28px;margin-top:0;">
+    <p style="font-weight:700;font-size:16px;margin-bottom:12px;">📚 গ্রন্থকানন</p>
+    <p style="font-size:13px;margin-bottom:8px;color:#6ee7b7;">স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
+    <p style="font-size:13px;margin-bottom:4px;">📞 হটলাইন: <a href="tel:01516595762" style="color:#a7f3d0;text-decoration:none;">01516595762</a></p>
+    <p style="font-size:12px;color:#6ee7b7;margin-top:12px;">&copy; 2025 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত</p>
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/8801516595762" target="_blank" style="position:fixed;bottom:25px;right:20px;z-index:9990;display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:#25D366;border-radius:50%;box-shadow:0 4px 14px rgba(37,211,102,0.45);text-decoration:none;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:30px;">
+</a>
+
 <script src="book.js"></script>
-<script src="main.js"></script>
+<script src="main.js"></script> 
 <script>
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
@@ -274,6 +258,7 @@ function loadBook() {
     const inStock = stockNum > 0;
     const pct = discountPct(b);
 
+    // Save to recently viewed
     let recent = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
     recent = [idx, ...recent.filter(i => i !== idx)].slice(0, 8);
     localStorage.setItem('gronthokanon_recent', JSON.stringify(recent));
@@ -288,18 +273,22 @@ function loadBook() {
     document.getElementById('bookSubject').innerText = b.subject;
     document.getElementById('bookDesc').innerText = b.desc || 'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
 
+    // Author click → filter
     document.getElementById('bookAuthor').onclick = () => {
         window.location.href = `filter.html?type=author&value=${encodeURIComponent(b.author)}`;
     };
 
+    // Original price
     const origEl = document.getElementById('bookOrigPrice');
     if (b.original_price > b.price) origEl.innerText = '৳ ' + b.original_price;
     else origEl.style.display = 'none';
 
+    // Discount badge
     const discEl = document.getElementById('bookDiscount');
     if (pct > 0) discEl.innerText = pct + '% ছাড়';
     else discEl.style.display = 'none';
 
+    // Badges
     const badgesEl = document.getElementById('bookBadges');
     badgesEl.innerHTML = `<span class="badge badge-cat">📚 ${b.cat}</span>`;
     if (!inStock) {
@@ -310,6 +299,7 @@ function loadBook() {
         badgesEl.innerHTML += `<span class="badge badge-stock-ok">✅ স্টক আছে</span>`;
     }
 
+    // Buttons
     if (!inStock) {
         document.getElementById('btnCart').classList.add('btn-disabled');
         document.getElementById('btnCart').disabled = true;
@@ -317,8 +307,10 @@ function loadBook() {
         document.getElementById('btnBuy').disabled = true;
     }
 
+    // Wishlist UI
     updateWishlistUI();
 
+    // Related books
     const related = books.filter((rb, i) => rb.author === b.author && i !== idx).slice(0, 8);
     const relatedEl = document.getElementById('relatedBooks');
     if (related.length === 0) {
@@ -357,8 +349,7 @@ function buyNow() {
     if (!currentBook) return;
     cart.push({ name: currentBook.name, price: currentBook.price, img: currentBook.img });
     localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
-    localStorage.setItem('gronthokanon_opencart', '1');
-    window.location.href = 'index.html';
+    window.location.href = 'checkout.html';
 }
 
 function goToCart() {
@@ -366,15 +357,9 @@ function goToCart() {
     window.location.href = 'index.html';
 }
 
-function navigateTo(url) {
-    document.body.style.animation = 'pageOut 0.25s ease forwards';
-    setTimeout(() => window.location.href = url, 250);
-}
-
 function goBack() {
-    navigateTo('index.html');
+    window.history.back();
 }
-
 
 window.onload = loadBook;
 </script>
