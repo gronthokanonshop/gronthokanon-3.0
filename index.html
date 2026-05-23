@@ -850,7 +850,7 @@ window.onload=()=>{
         localStorage.removeItem('gronthokanon_opencart');
         setTimeout(()=>showCart(),500);
     }
-
+};
 
 /* BANNER */
 const slider=document.getElementById('mainSlider');
@@ -861,6 +861,7 @@ if(slider){
         if(imgs.length){currentImg=(currentImg+1)%imgs.length;slider.scrollTo({left:currentImg*slider.offsetWidth,behavior:'smooth'});}
     },3500);
 }
+
 </script>
 </body>
 </html>
