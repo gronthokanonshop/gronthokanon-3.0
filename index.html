@@ -12,10 +12,9 @@
             --text: #1a202c;
             --text2: #6b7280;
             --border: #c6f6d5;
-            --navbar-bg: #ffffff;
+            --navbar-bg: #059669;
             --sidebar-bg: #ffffff;
             --search-bg: #f0fdf4;
-            --footer-bg: #064e3b;
             --shadow: rgba(5,150,105,0.08);
             --green: #059669;
             --green2: #10b981;
@@ -29,7 +28,7 @@
             --text: #ecfdf5;
             --text2: #6ee7b7;
             --border: #1a4731;
-            --navbar-bg: #0d1f17;
+            --navbar-bg: #0a5c38;
             --sidebar-bg: #132d20;
             --search-bg: #0d1f17;
             --shadow: rgba(0,0,0,0.35);
@@ -38,208 +37,109 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 75px; }
 
-        /* ── MOVING BAR: lightened #064e3b → #059669 ── */
-        .moving-bar {
-            background: #059669;
-            color: #ecfdf5;
-            padding: 7px 0;
-            overflow: hidden;
-            white-space: nowrap;
-            font-weight: 600;
-            font-size: 12.5px;
-        }
+        /* MOVING BAR */
+        .moving-bar { background: #047857; color: #a7f3d0; padding: 7px 0; overflow: hidden; white-space: nowrap; font-weight: 600; font-size: 12.5px; }
         .moving-text { display: inline-block; padding-left: 100%; animation: marquee 18s linear infinite; }
         @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 
-        /* ── NAVBAR: hamburger + site name | search pill | icons ── */
-      .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
-    box-shadow: 0 3px 16px rgba(5,150,105,0.35);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    gap: 10px;
-}
-        .navbar-left  { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-        .navbar-title { font-size: 15px; font-weight: 700; color: var(--green); white-space: nowrap; }
-        .navbar-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
-
-        .hamburger-btn {
-            background: none; border: none; cursor: pointer;
-            font-size: 24px; line-height: 1; padding: 2px;
-            color: var(--text); transition: transform 0.15s;
+        /* ✅ NAVBAR — logo | search | icons */
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 9px 14px;
+            background: #059669;
+            box-shadow: 0 2px 10px rgba(5,150,105,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            gap: 10px;
         }
-        .hamburger-btn:active { transform: scale(0.88); }
+        .navbar-logo { height: 38px; object-fit: contain; flex-shrink: 0; }
 
-        /* search trigger pill */
-        .search-trigger-btn {
-            display: flex; align-items: center; gap: 6px;
-            background: var(--search-bg);
-            border: 1.5px solid var(--border);
+        /* ✅ Search bar — inside navbar */
+        .nav-search-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.22);
             border-radius: 22px;
             padding: 7px 14px;
-            cursor: pointer;
-            color: #9ca3af;
-            font-size: 13px;
+            gap: 7px;
+            border: 1.5px solid rgba(255,255,255,0.35);
+            position: relative;
+            min-width: 0;
+        }
+        .nav-search-wrap:focus-within {
+            background: rgba(255,255,255,0.32);
+            border-color: rgba(255,255,255,0.6);
+        }
+        .nav-search-input {
+            border: none; background: transparent; outline: none;
+            width: 100%; font-size: 14px;
             font-family: 'Hind Siliguri', Arial, sans-serif;
-            flex: 1; max-width: 260px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            text-align: left;
+            color: #ffffff;
         }
-        .search-trigger-btn:hover {
-            border-color: var(--green);
-            box-shadow: 0 0 0 3px rgba(5,150,105,0.1);
-        }
+        .nav-search-input::placeholder { color: rgba(255,255,255,0.7); }
 
-        .nav-icon-btn {
-            position: relative; cursor: pointer;
-            font-size: 22px; line-height: 1; padding: 2px;
-        }
-        .nav-icon-btn:active { transform: scale(0.9); }
-        .nav-badge {
-            position: absolute; top: -6px; right: -8px;
-            background: #dc2626; color: white;
-            font-size: 9px; font-weight: bold;
-            padding: 1px 5px; border-radius: 20px;
-            min-width: 16px; text-align: center; display: none;
-        }
-        .nav-badge.show { display: block; }
-       .dark-toggle {
-    background: rgba(255,255,255,0.18);
-    border: 1.5px solid rgba(255,255,255,0.3);
-    border-radius: 20px;
-    padding: 4px 10px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #ffffff;
-}
-        .cart-icon-wrapper { position: relative; font-size: 22px; cursor: pointer; transition: transform 0.1s; }
-        .cart-icon-wrapper.bounce { animation: cartBounce 0.4s ease; }
-        @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.4)} 60%{transform:scale(0.9)} 80%{transform:scale(1.1)} }
-        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
-
-        /* ── SEARCH OVERLAY: full-screen dedicated interface ── */
-
-.search-section {
-    background: #ffffff;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 58px;
-    z-index: 999;
-}
-[data-theme="dark"] .search-section {
-    background: var(--navbar-bg);
-}
-
-.nav-search-container {
-    display: flex;
-    align-items: center;
-    background: var(--search-bg);
-    border-radius: 25px;
-    padding: 9px 16px;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    border: 1.5px solid var(--border);
-    position: relative;
-    gap: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-        .search-overlay {
+        /* search suggestions */
+        .search-suggestions-box {
             display: none;
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 5000;
-            align-items: flex-start;
-            justify-content: center;
-        }
-        .search-overlay.open { display: flex; }
-        .search-panel {
-            width: 100%; max-width: 640px;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0; right: 0;
             background: var(--card);
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            overflow: hidden;
-            animation: slideDown 0.25s cubic-bezier(0.4,0,0.2,1);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 9999;
+            max-height: 70vh;
+            overflow-y: auto;
         }
-        @keyframes slideDown { from{transform:translateY(-100%)} to{transform:translateY(0)} }
-        .search-panel-header {
-            display: flex; align-items: center; gap: 10px;
-            padding: 14px 16px;
-            border-bottom: 1.5px solid var(--border);
-            background: var(--navbar-bg);
-        }
-        .search-panel-input {
-            flex: 1; border: none; background: transparent;
-            outline: none; font-size: 16px;
-            font-family: 'Hind Siliguri', Arial, sans-serif;
-            color: var(--text);
-        }
-        .search-panel-input::placeholder { color: #9ca3af; }
-        .search-close-btn {
-            background: var(--search-bg); border: 1.5px solid var(--border);
-            border-radius: 50%; width: 32px; height: 32px;
-            cursor: pointer; font-size: 18px; display: flex;
-            align-items: center; justify-content: center; flex-shrink: 0;
-            color: var(--text); line-height: 1;
-        }
-        .search-panel-results { max-height: 65vh; overflow-y: auto; }
-        .search-hint {
-            padding: 36px 20px; text-align: center;
-            color: var(--text2); font-size: 14px;
-        }
-        .search-hint-icon { font-size: 38px; margin-bottom: 10px; }
+        .search-suggestions-box.open { display: block; }
         .search-result-item {
             display: flex; align-items: center; gap: 12px;
-            padding: 10px 16px; cursor: pointer;
+            padding: 10px 14px; cursor: pointer;
             border-bottom: 1px solid var(--border);
             transition: background 0.15s;
         }
-        .search-result-item:hover { background: var(--search-bg); }
         .search-result-item:last-child { border-bottom: none; }
-        .search-result-img { width: 44px; height: 60px; object-fit: cover; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--border); }
-        .search-result-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .search-result-author { font-size: 12px; color: var(--text2); margin-bottom: 3px; }
+        .search-result-item:hover { background: var(--search-bg); }
+        .search-result-img { width: 42px; height: 58px; object-fit: cover; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--border); }
+        .search-result-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .search-result-author { font-size: 11px; color: var(--text2); margin-bottom: 2px; }
         .search-result-price { font-size: 13px; font-weight: 700; color: var(--red); }
-        .search-result-badge { display:inline-block; background:#dc2626; color:white; font-size:10px; font-weight:700; padding:1px 6px; border-radius:20px; margin-left:6px; vertical-align: middle; }
-        .search-no-result { padding: 36px 20px; text-align: center; color: var(--text2); font-size: 14px; }
+        .search-no-result { padding: 28px; text-align: center; color: var(--text2); font-size: 14px; }
+        .search-hint { padding: 24px; text-align: center; color: var(--text2); font-size: 13px; }
 
-        /* ── BRANDING: logo centred with bigger presence ── */
-        .branding {
-            text-align: center;
-            padding: 16px 16px 14px;
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-        }
-        .branding-logo {
-            width: 70px; height: 70px;
-            object-fit: contain;
-            margin-bottom: 8px;
-            display: block; margin-left: auto; margin-right: auto;
-            filter: drop-shadow(0 2px 8px rgba(5,150,105,0.15));
-        }
-        .branding-name {
-            font-size: 20px; font-weight: 700;
-            color: var(--green); margin-bottom: 3px;
-        }
-        .branding-tagline { font-size: 13px; color: var(--text2); }
+        /* nav icons */
+        .navbar-icons { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .nav-icon-btn { position: relative; cursor: pointer; font-size: 21px; line-height: 1; color: white; }
+        .nav-icon-btn:active { transform: scale(0.9); }
+        .nav-badge { position: absolute; top: -6px; right: -8px; background: #dc2626; color: white; font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 20px; min-width: 16px; text-align: center; display: none; }
+        .nav-badge.show { display: block; }
+        .dark-toggle { background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 9px; cursor: pointer; font-size: 13px; color: white; }
+        .cart-icon-wrapper { position: relative; font-size: 21px; cursor: pointer; color: white; }
+        .cart-icon-wrapper.bounce { animation: cartBounce 0.4s ease; }
+        @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.4)} 60%{transform:scale(0.9)} 80%{transform:scale(1.1)} }
+        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: bold; }
 
         /* SIDEBAR */
         .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100%; background: var(--sidebar-bg); box-shadow: 4px 0 20px rgba(0,0,0,0.12); z-index: 2000; transition: 0.35s; overflow-y: auto; }
         .sidebar.active { left: 0; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); display: none; z-index: 1500; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #059669; color: white; }
-        .sidebar-menu-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--text); transition: 0.2s; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; z-index: 1500; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background: #059669; color: white; }
+        .sidebar-menu-item { padding: 13px 20px; cursor: pointer; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--text); transition: 0.2s; }
         .sidebar-menu-item:hover { background: var(--search-bg); color: var(--green); }
         .sidebar-sub { display: none; background: var(--search-bg); }
-        .sidebar-sub-item { padding: 12px 20px 12px 35px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--dark); font-weight: 600; transition: 0.2s; }
+        .sidebar-sub-item { padding: 11px 20px 11px 34px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--dark); font-weight: 600; transition: 0.2s; }
         [data-theme="dark"] .sidebar-sub-item { color: var(--text2); }
         .sidebar-sub-item:hover { background: #059669; color: white; padding-left: 40px; }
+
+        /* BRANDING */
+        .branding { text-align: center; padding: 14px 16px 12px; background: var(--card); border-bottom: 1px solid var(--border); }
+        .branding-logo { width: 68px; height: 68px; object-fit: contain; display: block; margin: 0 auto 8px; filter: drop-shadow(0 2px 8px rgba(5,150,105,0.15)); }
+        .branding-name { font-size: 20px; font-weight: 700; color: var(--green); margin-bottom: 3px; }
+        .branding-tagline { font-size: 13px; color: var(--text2); }
 
         /* BANNER */
         .banner-container { max-width: 1200px; margin: 12px auto; overflow: hidden; border-radius: 12px; }
@@ -252,14 +152,14 @@
         .info-card:hover { transform: translateY(-2px); }
 
         /* CATEGORY BUTTONS */
-        .category-container { display: flex; justify-content: center; gap: 8px; padding: 16px; flex-wrap: wrap; }
-        .cat-btn { padding: 7px 16px; background: var(--card); color: var(--text2); border: 1.5px solid var(--border); border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 13px; font-family: 'Hind Siliguri', Arial, sans-serif; }
+        .category-container { display: flex; justify-content: center; gap: 8px; padding: 14px 14px 10px; flex-wrap: wrap; }
+        .cat-btn { padding: 7px 15px; background: var(--card); color: var(--text2); border: 1.5px solid var(--border); border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 13px; font-family: 'Hind Siliguri', Arial, sans-serif; }
         .cat-btn:hover:not(.active) { border-color: var(--green); color: var(--green); background: rgba(5,150,105,0.05); }
         .cat-btn.active { background: #059669; color: #fff; border-color: transparent; box-shadow: 0 3px 12px rgba(5,150,105,0.3); }
 
         /* SECTIONS */
         .sections-wrapper { max-width: 1100px; margin: 0 auto; padding: 0 14px 30px; }
-        .cat-section { margin-bottom: 28px; }
+        .cat-section { margin-bottom: 26px; }
         .cat-section-title { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 12px; padding-left: 12px; border-left: 4px solid var(--green); display: flex; justify-content: space-between; align-items: center; }
         [data-theme="dark"] .cat-section-title { color: #ecfdf5; }
         .book-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: #c6f6d5 transparent; }
@@ -267,7 +167,7 @@
         .book-row::-webkit-scrollbar-thumb { background: #a7f3d0; border-radius: 4px; }
 
         /* BOOK CARD */
-        .book-card { flex-shrink: 0; width: 148px; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative; border: 1px solid var(--border); }
+        .book-card { flex-shrink: 0; width: 148px; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); cursor: pointer; position: relative; border: 1px solid var(--border); }
         .book-card:hover { transform: translateY(-5px); box-shadow: 0 12px 28px rgba(5,150,105,0.18); border-color: var(--green); }
         .book-card img { width: 148px; height: 198px; object-fit: cover; display: block; }
         .discount-badge { position: absolute; top: 7px; left: 7px; background: linear-gradient(135deg, #dc2626, #ef4444); color: white; font-size: 10px; font-weight: bold; padding: 2px 7px; border-radius: 20px; z-index: 2; box-shadow: 0 2px 6px rgba(220,38,38,0.35); }
@@ -298,17 +198,17 @@
         .recently-title { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 12px; padding-left: 12px; border-left: 4px solid #d97706; }
         [data-theme="dark"] .recently-title { color: #ecfdf5; }
 
-        /* SEARCH RESULTS (kept for compatibility) */
+        /* SEARCH RESULTS PAGE */
         .search-results { display: block; padding: 14px; max-width: 700px; margin: 0 auto; }
 
         /* CART MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.55); z-index: 10000; justify-content: flex-end; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 10000; justify-content: flex-end; }
         .modal-content { background: var(--card); width: 320px; height: 100%; display: flex; flex-direction: column; animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
         .qty-btn { background: var(--green); color: white; border: none; border-radius: 4px; cursor: pointer; width: 24px; height: 24px; font-weight: bold; font-size: 15px; }
 
         /* WISHLIST MODAL */
-        .wishlist-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.55); z-index: 10000; justify-content: flex-end; }
+        .wishlist-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 10000; justify-content: flex-end; }
         .wishlist-content { background: var(--card); width: 320px; height: 100%; display: flex; flex-direction: column; animation: slideIn 0.3s ease-out; overflow-y: auto; }
 
         /* WHATSAPP */
@@ -332,7 +232,7 @@
         .bnav-badge.show { display: block; }
 
         /* CATEGORY DRAWER */
-        .cat-drawer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 9998; }
+        .cat-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 9998; }
         .cat-drawer { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--card); border-radius: 20px 20px 0 0; z-index: 9999; transition: bottom 0.32s cubic-bezier(0.4,0,0.2,1); padding-bottom: 80px; }
         .cat-drawer.open { bottom: 0; }
         .cat-drawer-overlay.open { display: block; }
@@ -340,17 +240,14 @@
         .cat-drawer-header { display: flex; justify-content: space-between; align-items: center; padding: 13px 20px; font-size: 16px; font-weight: 700; color: var(--text); border-bottom: 1px solid var(--border); }
         .cat-drawer-item { padding: 14px 22px; font-size: 15px; font-family: 'Hind Siliguri', Arial, sans-serif; color: var(--text); border-bottom: 1px solid var(--border); cursor: pointer; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 10px; }
         .cat-drawer-item:hover { background: rgba(5,150,105,0.07); color: #059669; padding-left: 30px; }
-        .cat-drawer-item:active { background: rgba(5,150,105,0.14); }
 
-        @media (max-width: 600px) {
+        @media (max-width: 480px) {
             .book-card { width: 128px; }
             .book-card img { width: 128px; height: 172px; }
             .skeleton-card { width: 128px; }
             .skeleton-img { width: 128px; height: 172px; }
             .cat-section-title { font-size: 14px; }
-            .cat-btn { padding: 6px 11px; font-size: 12px; }
-            .navbar-title { display: none; }
-            .search-trigger-btn { max-width: 200px; }
+            .cat-btn { padding: 6px 10px; font-size: 12px; }
         }
     </style>
 </head>
@@ -367,14 +264,14 @@
     <div class="sidebar-menu-item" onclick="filterCategory('all', null); toggleSidebar()">🏠 হোম</div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('catSub')">📚 ক্যাটাগরি <span id="catArrow">▶</span></div>
     <div class="sidebar-sub" id="catSub">
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'বেস্ট সেলিং')">🔥 বেস্ট সেলিং</div>
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'রানিং  ট্রেন্ডিং')">📈 রানিং ট্রেন্ডিং</div>
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'নতুন প্রকাশিত')">✨ নতুন প্রকাশিত</div>
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'জনপ্রিয় লেখক')">✍️ জনপ্রিয় লেখক</div>
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat', 'জনপ্রিয় বই')">⭐ জনপ্রিয় বই</div>
+        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','বেস্ট সেলিং')">🔥 বেস্ট সেলিং</div>
+        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','রানিং  ট্রেন্ডিং')">📈 রানিং ট্রেন্ডিং</div>
+        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','নতুন প্রকাশিত')">✨ নতুন প্রকাশিত</div>
+        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','জনপ্রিয় লেখক')">✍️ জনপ্রিয় লেখক</div>
+        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','জনপ্রিয় বই')">⭐ জনপ্রিয় বই</div>
     </div>
     <div id="pubSearch" style="padding:8px 14px; display:none;">
-        <input type="text" oninput="filterSidebarList('pubSub', this.value)" placeholder="প্রকাশনী খুঁজুন..."
+        <input type="text" oninput="filterSidebarList('pubSub',this.value)" placeholder="প্রকাশনী খুঁজুন..."
             style="width:100%; padding:7px 10px; border:1.5px solid var(--border); border-radius:8px; background:var(--card); color:var(--text); font-family:'Hind Siliguri',Arial,sans-serif; font-size:13px; outline:none;">
     </div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('pubSub')">🏢 প্রকাশনী <span id="pubArrow">▶</span></div>
@@ -384,12 +281,12 @@
     <div class="sidebar-menu-item" onclick="showWishlistDirect()">💖 উইশলিস্ট <span id="wishCount" style="background:#dc2626;color:white;border-radius:50%;padding:1px 6px;font-size:11px;">0</span></div>
     <div class="sidebar-menu-item" onclick="toggleSubMenu('aboutSub')">📜 আমাদের সম্পর্কে <span id="aboutArrow">▶</span></div>
     <div class="sidebar-sub" id="aboutSub" style="padding:15px 20px; font-size:13px; line-height:1.9;">
-        <p style="margin-bottom:10px;"><strong style="color:#059669; font-size:15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য।</p>
-        <p style="margin-bottom:10px; color:var(--text2);">সাশ্রয়ী মূল্যে মানসম্পন্ন ইসলামিক বই পৌঁছে দেওয়াই আমাদের লক্ষ্য।</p>
-        <hr style="border:none; border-top:1px solid var(--border); margin:10px 0;">
-        <p style="color:#059669; font-weight:bold; margin-bottom:5px;">📞 হটলাইন: 01516595762</p>
-        <p style="margin-bottom:5px; color:var(--text2);">⏰ সকাল ৯টা — রাত ১০টা</p>
-        <p style="margin-bottom:5px; color:var(--text2);">🚚 সারা বাংলাদেশে ডেলিভারি</p>
+        <p style="margin-bottom:10px;"><strong style="color:#059669;font-size:15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য।</p>
+        <p style="margin-bottom:10px;color:var(--text2);">সাশ্রয়ী মূল্যে মানসম্পন্ন ইসলামিক বই পৌঁছে দেওয়াই আমাদের লক্ষ্য।</p>
+        <hr style="border:none;border-top:1px solid var(--border);margin:10px 0;">
+        <p style="color:#059669;font-weight:bold;margin-bottom:5px;">📞 হটলাইন: 01516595762</p>
+        <p style="margin-bottom:5px;color:var(--text2);">⏰ সকাল ৯টা — রাত ১০টা</p>
+        <p style="margin-bottom:5px;color:var(--text2);">🚚 সারা বাংলাদেশে ডেলিভারি</p>
         <p style="color:var(--text2);">📍 ঢাকা, বাংলাদেশ</p>
     </div>
 </div>
@@ -399,53 +296,38 @@
     <div class="moving-text">🔥 প্রথম অর্ডারে ০৫% ছাড় — কুপন: FIRSTORDER &nbsp;&nbsp;&nbsp; ✅ সারা বাংলাদেশে ক্যাশ অন ডেলিভারি &nbsp;&nbsp;&nbsp; 📞 হটলাইন: 01516595762</div>
 </div>
 
-<!-- NAVBAR -->
-<!-- পুরো <nav class="navbar"> block টা replace করো -->
+<!-- ✅ NAVBAR: logo | search | icons -->
 <nav class="navbar">
-    <img src="logo.png" alt="গ্রন্থকানন" style="height:42px; object-fit:contain; flex-shrink:0;">
-    <div style="flex:1;"></div>
-    <div style="display:flex; align-items:center; gap:12px; flex-shrink:0;">
+    <img src="logo.png" alt="গ্রন্থকানন" class="navbar-logo">
+
+    <!-- ✅ Search bar — directly in navbar -->
+    <div class="nav-search-wrap" id="navSearchWrap">
+        <span style="font-size:15px; color:rgba(255,255,255,0.8); flex-shrink:0;">🔍</span>
+        <input
+            type="text"
+            id="searchInput"
+            class="nav-search-input"
+            placeholder="বই বা লেখক খুঁজুন..."
+            oninput="filterBooks()"
+            autocomplete="off">
+        <!-- suggestions dropdown -->
+        <div class="search-suggestions-box" id="searchSuggestions"></div>
+    </div>
+
+    <!-- Icons -->
+    <div class="navbar-icons">
         <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
-        <div class="nav-icon-btn" onclick="showWishlistDirect()" style="color:white;">
-            🤍
-            <span class="nav-badge" id="navWishBadge">0</span>
+        <div class="nav-icon-btn" onclick="showWishlistDirect()">
+            🤍<span class="nav-badge" id="navWishBadge">0</span>
         </div>
-        <div class="nav-icon-btn" onclick="showLoginModal()" style="color:white;">👤</div>
-        <div class="cart-icon-wrapper" onclick="showCart()" id="cartIconWrapper" style="color:white;">
+        <div class="nav-icon-btn" onclick="showLoginModal()">👤</div>
+        <div class="cart-icon-wrapper" onclick="showCart()" id="cartIconWrapper">
             🛒<span class="cart-badge" id="count">0</span>
         </div>
     </div>
 </nav>
-<!-- </nav> এর ঠিক পরে এটা যোগ করো -->
-<div class="search-section">
-    <div class="nav-search-container" id="nav-search-container">
-        <span style="font-size:16px; color:#059669;">🔍</span>
-        <input type="text" id="searchInput" oninput="filterBooks()"
-            placeholder="বই বা লেখক খুঁজুন..."
-            class="nav-search-input">
-        <div id="searchSuggestions"></div>
-    </div>
-</div>
-<!-- SEARCH OVERLAY -->
-<div class="search-overlay" id="searchOverlay" onclick="handleOverlayClick(event)">
-    <div class="search-panel" id="searchPanel">
-        <div class="search-panel-header">
-            <span style="font-size:18px; color:#9ca3af; flex-shrink:0;">🔍</span>
-            <input type="text" id="searchInput" class="search-panel-input"
-                placeholder="বই বা লেখকের নাম লিখুন..."
-                oninput="filterBooks()" autocomplete="off">
-            <button class="search-close-btn" onclick="closeSearchOverlay()">×</button>
-        </div>
-        <div class="search-panel-results" id="searchPanelResults">
-            <div class="search-hint">
-                <div class="search-hint-icon">📚</div>
-                <p>বইয়ের নাম বা লেখকের নাম লিখুন</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- BRANDING: logo centred -->
+<!-- BRANDING -->
 <header class="branding">
     <img src="logo.png" alt="গ্রন্থকানন লোগো" class="branding-logo">
     <div class="branding-name">গ্রন্থকানন</div>
@@ -462,15 +344,15 @@
 
 <!-- CATEGORY BUTTONS -->
 <div class="category-container">
-    <button class="cat-btn active" onclick="filterCategory('all', this)">📚 সব বই</button>
-    <button class="cat-btn" onclick="filterCategory('বেস্ট সেলিং', this)">🔥 বেস্ট সেলিং</button>
-    <button class="cat-btn" onclick="filterCategory('রানিং  ট্রেন্ডিং', this)">📈 রানিং ট্রেন্ডিং</button>
-    <button class="cat-btn" onclick="filterCategory('নতুন প্রকাশিত', this)">✨ নতুন প্রকাশিত</button>
-    <button class="cat-btn" onclick="filterCategory('জনপ্রিয় লেখক', this)">✍️ জনপ্রিয় লেখক</button>
-    <button class="cat-btn" onclick="filterCategory('জনপ্রিয় বই', this)">⭐ জনপ্রিয় বই</button>
+    <button class="cat-btn active" onclick="filterCategory('all',this)">📚 সব বই</button>
+    <button class="cat-btn" onclick="filterCategory('বেস্ট সেলিং',this)">🔥 বেস্ট সেলিং</button>
+    <button class="cat-btn" onclick="filterCategory('রানিং  ট্রেন্ডিং',this)">📈 রানিং ট্রেন্ডিং</button>
+    <button class="cat-btn" onclick="filterCategory('নতুন প্রকাশিত',this)">✨ নতুন প্রকাশিত</button>
+    <button class="cat-btn" onclick="filterCategory('জনপ্রিয় লেখক',this)">✍️ জনপ্রিয় লেখক</button>
+    <button class="cat-btn" onclick="filterCategory('জনপ্রিয় বই',this)">⭐ জনপ্রিয় বই</button>
 </div>
 
-<!-- SKELETON LOADER -->
+<!-- SKELETON -->
 <div id="skeletonWrapper" class="sections-wrapper">
     <div class="cat-section">
         <div style="background:var(--border);width:150px;height:18px;border-radius:6px;margin-bottom:12px;"></div>
@@ -496,47 +378,35 @@
 
 <!-- INFO GRID -->
 <div class="info-grid">
-    <div class="info-card">
-        <span style="font-size:28px;">🚚</span>
-        <div><div style="color:white;font-weight:700;font-size:13px;">শিপিং</div><div style="color:#a7f3d0;font-size:11px;">সারা বাংলাদেশে ক্যাশ অন ডেলিভারি</div></div>
-    </div>
-    <div class="info-card">
-        <span style="font-size:28px;">💳</span>
-        <div><div style="color:white;font-weight:700;font-size:13px;">পেমেন্ট</div><div style="color:#a7f3d0;font-size:11px;">সহজ ও নিরাপদ পেমেন্ট</div></div>
-    </div>
-    <div class="info-card">
-        <span style="font-size:28px;">🔄</span>
-        <div><div style="color:white;font-weight:700;font-size:13px;">রিটার্ন</div><div style="color:#a7f3d0;font-size:11px;">সহজ রিটার্ন পলিসি</div></div>
-    </div>
-    <div class="info-card">
-        <span style="font-size:28px;">🕐</span>
-        <div><div style="color:white;font-weight:700;font-size:13px;">সাপোর্ট</div><div style="color:#a7f3d0;font-size:11px;">সকাল ৯টা — রাত ১০টা</div></div>
-    </div>
+    <div class="info-card"><span style="font-size:28px;">🚚</span><div><div style="color:white;font-weight:700;font-size:13px;">শিপিং</div><div style="color:#a7f3d0;font-size:11px;">সারা বাংলাদেশে ক্যাশ অন ডেলিভারি</div></div></div>
+    <div class="info-card"><span style="font-size:28px;">💳</span><div><div style="color:white;font-weight:700;font-size:13px;">পেমেন্ট</div><div style="color:#a7f3d0;font-size:11px;">সহজ ও নিরাপদ পেমেন্ট</div></div></div>
+    <div class="info-card"><span style="font-size:28px;">🔄</span><div><div style="color:white;font-weight:700;font-size:13px;">রিটার্ন</div><div style="color:#a7f3d0;font-size:11px;">সহজ রিটার্ন পলিসি</div></div></div>
+    <div class="info-card"><span style="font-size:28px;">🕐</span><div><div style="color:white;font-weight:700;font-size:13px;">সাপোর্ট</div><div style="color:#a7f3d0;font-size:11px;">সকাল ৯টা — রাত ১০টা</div></div></div>
 </div>
 
 <!-- CART MODAL -->
 <div id="cartBox" class="modal">
     <div class="modal-content">
-        <div style="padding:14px 16px; background:#059669; color:#fff; display:flex; justify-content:space-between; align-items:center;">
-            <h3 style="margin:0; font-size:17px;">🛍️ আপনার কার্ট</h3>
-            <span onclick="closeCart()" style="cursor:pointer; font-size:26px;">&times;</span>
+        <div style="padding:14px 16px;background:#059669;color:#fff;display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="margin:0;font-size:17px;">🛍️ আপনার কার্ট</h3>
+            <span onclick="closeCart()" style="cursor:pointer;font-size:26px;">&times;</span>
         </div>
-        <div id="cartItems" style="flex:1; overflow-y:auto; padding:10px;"></div>
-        <div style="padding:14px; background:var(--search-bg); border-top:1px solid var(--border);">
-            <div style="display:flex; gap:6px; margin-bottom:10px;">
+        <div id="cartItems" style="flex:1;overflow-y:auto;padding:10px;"></div>
+        <div style="padding:14px;background:var(--search-bg);border-top:1px solid var(--border);">
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
                 <input type="text" id="couponCode" placeholder="কুপন কোড (FIRSTORDER)"
-                    style="flex:1; padding:8px 10px; border:1.5px solid var(--border); border-radius:8px; background:var(--card); color:var(--text); font-family:'Hind Siliguri',Arial,sans-serif; font-size:13px; outline:none;">
-                <button onclick="applyCoupon()" style="background:#059669; color:white; border:none; padding:0 14px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:13px;">Apply</button>
+                    style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
+                <button onclick="applyCoupon()" style="background:#059669;color:white;border:none;padding:0 14px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;">Apply</button>
             </div>
-            <div style="font-size:14px; line-height:1.9; color:var(--text);">
-                <p style="display:flex; justify-content:space-between;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>
-                <p style="display:flex; justify-content:space-between; color:#dc2626;">ডিসকাউন্ট: <span>-৳<span id="discountAmt">0</span></span></p>
-                <hr style="margin:8px 0; border:none; border-top:1px solid var(--border);">
-                <h4 style="display:flex; justify-content:space-between; color:#059669; font-size:17px;">মোট: <span>৳<span id="total">0</span></span></h4>
+            <div style="font-size:14px;line-height:1.9;color:var(--text);">
+                <p style="display:flex;justify-content:space-between;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>
+                <p style="display:flex;justify-content:space-between;color:#dc2626;">ডিসকাউন্ট: <span>-৳<span id="discountAmt">0</span></span></p>
+                <hr style="margin:8px 0;border:none;border-top:1px solid var(--border);">
+                <h4 style="display:flex;justify-content:space-between;color:#059669;font-size:17px;">মোট: <span>৳<span id="total">0</span></span></h4>
             </div>
-            <div style="display:flex; gap:8px; margin-top:12px;">
-                <button onclick="closeCart()" style="flex:1; padding:10px; background:var(--search-bg); color:#059669; border:1.5px solid #059669; border-radius:8px; cursor:pointer; font-weight:bold; font-family:'Hind Siliguri',Arial,sans-serif;">আরও কিনুন</button>
-                <button onclick="openOrderForm()" style="flex:1; padding:10px; background:#059669; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-family:'Hind Siliguri',Arial,sans-serif;">অর্ডার করুন</button>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+                <button onclick="closeCart()" style="flex:1;padding:10px;background:var(--search-bg);color:#059669;border:1.5px solid #059669;border-radius:8px;cursor:pointer;font-weight:bold;font-family:'Hind Siliguri',Arial,sans-serif;">আরও কিনুন</button>
+                <button onclick="openOrderForm()" style="flex:1;padding:10px;background:#059669;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-family:'Hind Siliguri',Arial,sans-serif;">অর্ডার করুন</button>
             </div>
         </div>
     </div>
@@ -545,9 +415,9 @@
 <!-- WISHLIST MODAL -->
 <div id="wishlistBox" class="wishlist-modal">
     <div class="wishlist-content">
-        <div style="padding:14px 16px; background:#dc2626; color:#fff; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0;">
-            <h3 style="margin:0; font-size:17px;">💖 উইশলিস্ট</h3>
-            <span onclick="closeWishlist()" style="cursor:pointer; font-size:26px;">&times;</span>
+        <div style="padding:14px 16px;background:#dc2626;color:#fff;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;">
+            <h3 style="margin:0;font-size:17px;">💖 উইশলিস্ট</h3>
+            <span onclick="closeWishlist()" style="cursor:pointer;font-size:26px;">&times;</span>
         </div>
         <div id="wishlistItems" style="padding:10px;"></div>
     </div>
@@ -555,42 +425,38 @@
 
 <!-- WHATSAPP -->
 <a href="https://wa.me/8801516595762" class="wa-float" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:46px; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18));">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:46px;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18));">
 </a>
 
 <!-- FOOTER -->
 <footer>
     <div style="margin-bottom:22px;">
-        <p style="margin-bottom:16px; font-weight:bold; font-size:17px;">আমাদের সাথে যুক্ত থাকুন</p>
-        <div style="display:flex; justify-content:center; align-items:center; gap:14px;">
-            <a href="https://facebook.com/gronthokanon0943" target="_blank"><img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook" style="width:52px; height:52px; object-fit:contain;"></a>
-            <a href="https://wa.me/8801516595762" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:42px; height:42px;"></a>
+        <p style="margin-bottom:16px;font-weight:bold;font-size:17px;">আমাদের সাথে যুক্ত থাকুন</p>
+        <div style="display:flex;justify-content:center;align-items:center;gap:14px;">
+            <a href="https://facebook.com/gronthokanon0943" target="_blank"><img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook" style="width:52px;height:52px;object-fit:contain;"></a>
+            <a href="https://wa.me/8801516595762" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:42px;height:42px;"></a>
         </div>
     </div>
     <div style="margin-bottom:22px;">
-        <p style="margin-bottom:12px; font-size:15px; font-weight:bold;">— আমরা গ্রহণ করি —</p>
-        <div style="display:flex; justify-content:center; gap:12px;">
-            <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" width="48" style="border-radius:8px; border:1px solid #3d9970;">
-            <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" width="48" style="border-radius:8px; border:1px solid #3d9970;">
+        <p style="margin-bottom:12px;font-size:15px;font-weight:bold;">— আমরা গ্রহণ করি —</p>
+        <div style="display:flex;justify-content:center;gap:12px;">
+            <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" width="48" style="border-radius:8px;border:1px solid #3d9970;">
+            <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" width="48" style="border-radius:8px;border:1px solid #3d9970;">
         </div>
     </div>
-    <div style="margin-bottom:16px; font-size:14px; color:#a7f3d0; line-height:1.8;">
+    <div style="margin-bottom:16px;font-size:14px;color:#a7f3d0;line-height:1.8;">
         <p>📞 হটলাইন: +8801516595762</p>
         <p>📍 ঢাকা, বাংলাদেশ</p>
     </div>
-    <hr style="border:0; border-top:1px solid rgba(167,243,208,0.25); margin-bottom:16px; width:75%; margin-left:auto; margin-right:auto;">
-    <p style="color:#a7f3d0; font-size:13px;">&copy; 2025 <strong>গ্রন্থকানন</strong> | সর্বস্বত্ব সংরক্ষিত</p>
+    <hr style="border:0;border-top:1px solid rgba(167,243,208,0.25);margin-bottom:16px;width:75%;margin-left:auto;margin-right:auto;">
+    <p style="color:#a7f3d0;font-size:13px;">&copy; 2025 <strong>গ্রন্থকানন</strong> | সর্বস্বত্ব সংরক্ষিত</p>
 </footer>
 
-<!-- BOTTOM NAV (5 items: home | search | cart | category | menu) -->
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
     <div class="bottom-nav-item active" id="bnav-home" onclick="bnavActive('bnav-home'); scrollToTop()">
         <span class="bottom-nav-icon">🏠</span>
         <span class="bottom-nav-label">হোম</span>
-    </div>
-    <div class="bottom-nav-item" id="bnav-search" onclick="bnavActive('bnav-search'); openSearchOverlay()">
-        <span class="bottom-nav-icon">🔍</span>
-        <span class="bottom-nav-label">খুঁজুন</span>
     </div>
     <div class="bottom-nav-item" id="bnav-cart" onclick="bnavActive('bnav-cart'); showCart()">
         <span class="bottom-nav-icon">🛍️</span>
@@ -613,24 +479,24 @@
     <div class="cat-drawer-handle"></div>
     <div class="cat-drawer-header">
         <span>📚 ক্যাটাগরি বেছে নিন</span>
-        <span onclick="closeCategoryDrawer()" style="cursor:pointer; font-size:22px; color:var(--text2);">×</span>
+        <span onclick="closeCategoryDrawer()" style="cursor:pointer;font-size:22px;color:var(--text2);">×</span>
     </div>
-    <div class="cat-drawer-item" onclick="filterCategory('বেস্ট সেলিং', null); closeCategoryDrawer()">🔥 <span>বেস্ট সেলিং</span></div>
-    <div class="cat-drawer-item" onclick="filterCategory('রানিং  ট্রেন্ডিং', null); closeCategoryDrawer()">📈 <span>রানিং ট্রেন্ডিং</span></div>
-    <div class="cat-drawer-item" onclick="filterCategory('নতুন প্রকাশিত', null); closeCategoryDrawer()">✨ <span>নতুন প্রকাশিত</span></div>
-    <div class="cat-drawer-item" onclick="filterCategory('জনপ্রিয় লেখক', null); closeCategoryDrawer()">✍️ <span>জনপ্রিয় লেখক</span></div>
-    <div class="cat-drawer-item" onclick="filterCategory('জনপ্রিয় বই', null); closeCategoryDrawer()">⭐ <span>জনপ্রিয় বই</span></div>
+    <div class="cat-drawer-item" onclick="filterCategory('বেস্ট সেলিং',null); closeCategoryDrawer()">🔥 <span>বেস্ট সেলিং</span></div>
+    <div class="cat-drawer-item" onclick="filterCategory('রানিং  ট্রেন্ডিং',null); closeCategoryDrawer()">📈 <span>রানিং ট্রেন্ডিং</span></div>
+    <div class="cat-drawer-item" onclick="filterCategory('নতুন প্রকাশিত',null); closeCategoryDrawer()">✨ <span>নতুন প্রকাশিত</span></div>
+    <div class="cat-drawer-item" onclick="filterCategory('জনপ্রিয় লেখক',null); closeCategoryDrawer()">✍️ <span>জনপ্রিয় লেখক</span></div>
+    <div class="cat-drawer-item" onclick="filterCategory('জনপ্রিয় বই',null); closeCategoryDrawer()">⭐ <span>জনপ্রিয় বই</span></div>
 </div>
 
 <script src="book.js"></script>
 <script src="main.js"></script>
 <script>
 const categoryConfig = [
-  { key: "বেস্ট সেলিং", label: "🔥 বেস্ট সেলিং" },
-  { key: "রানিং  ট্রেন্ডিং", label: "📈 রানিং ট্রেন্ডিং" },
-  { key: "নতুন প্রকাশিত", label: "✨ নতুন প্রকাশিত" },
-  { key: "জনপ্রিয় লেখক", label: "✍️ জনপ্রিয় লেখক" },
-  { key: "জনপ্রিয় বই", label: "⭐ জনপ্রিয় বই" },
+  { key:"বেস্ট সেলিং", label:"🔥 বেস্ট সেলিং" },
+  { key:"রানিং  ট্রেন্ডিং", label:"📈 রানিং ট্রেন্ডিং" },
+  { key:"নতুন প্রকাশিত", label:"✨ নতুন প্রকাশিত" },
+  { key:"জনপ্রিয় লেখক", label:"✍️ জনপ্রিয় লেখক" },
+  { key:"জনপ্রিয় বই", label:"⭐ জনপ্রিয় বই" },
 ];
 
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
@@ -652,22 +518,6 @@ if (savedTheme) {
     document.getElementById('darkBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
 }
 
-/* SEARCH OVERLAY */
-function openSearchOverlay() {
-    document.getElementById('searchOverlay').classList.add('open');
-    setTimeout(() => document.getElementById('searchInput').focus(), 80);
-}
-function closeSearchOverlay() {
-    document.getElementById('searchOverlay').classList.remove('open');
-    document.getElementById('searchInput').value = '';
-    document.getElementById('searchPanelResults').innerHTML =
-        '<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>';
-}
-function handleOverlayClick(e) {
-    if (e.target === document.getElementById('searchOverlay')) closeSearchOverlay();
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearchOverlay(); });
-
 /* HELPERS */
 function discountPct(b) {
     if (b.original_price > b.price) return Math.round((b.original_price - b.price) / b.original_price * 100);
@@ -684,32 +534,32 @@ function toggleWishlist(e, name) {
     renderSections(books);
     renderRecentlyViewed();
 }
+
 function updateWishlistCount() {
     const count = wishlist.length;
     const el = document.getElementById('wishCount');
     if (el) el.innerText = count;
-    const navBadge = document.getElementById('navWishBadge');
-    if (navBadge) { navBadge.innerText = count; navBadge.classList.toggle('show', count > 0); }
+    const nb = document.getElementById('navWishBadge');
+    if (nb) { nb.innerText = count; nb.classList.toggle('show', count > 0); }
 }
 
 function makeCard(b) {
     const pct = discountPct(b);
     const idx = books.indexOf(b);
     const wl = isWishlisted(b.name);
-    return `
-    <div class="book-card" onclick="goToBook(${idx})">
-        ${pct > 0 ? `<div class="discount-badge">${pct}% ছাড়</div>` : ''}
+    return `<div class="book-card" onclick="goToBook(${idx})">
+        ${pct>0?`<div class="discount-badge">${pct}% ছাড়</div>`:''}
         <button class="wishlist-btn ${wl?'active':''}" onclick="toggleWishlist(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'❤️':'🤍'}</button>
         <img src="${b.img}" alt="বই" loading="lazy">
-        <div style="padding:3px 9px 0; font-size:10px; color:var(--text2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">🏢 ${b.pub}</div>
+        <div style="padding:3px 9px 0;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">🏢 ${b.pub}</div>
         <div class="book-card-info">
             <div class="book-card-name">${b.name}</div>
             <div class="book-card-author">${b.author}</div>
             <div class="price-row">
                 <span class="price-sell">৳ ${b.price}</span>
-                ${b.original_price > b.price ? `<span class="price-original">৳ ${b.original_price}</span>` : ''}
+                ${b.original_price>b.price?`<span class="price-original">৳ ${b.original_price}</span>`:''}
             </div>
-            <button class="book-card-btn" onclick="event.stopPropagation(); addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${b.img}')">কার্টে যোগ করুন</button>
+            <button class="book-card-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${b.img}')">কার্টে যোগ করুন</button>
         </div>
     </div>`;
 }
@@ -723,7 +573,7 @@ function goToBook(idx) {
 function renderRecentlyViewed() {
     const sec = document.getElementById('recentlySection');
     const row = document.getElementById('recentlyRow');
-    if (recentlyViewed.length === 0) { sec.style.display = 'none'; return; }
+    if (!recentlyViewed.length) { sec.style.display = 'none'; return; }
     sec.style.display = 'block';
     row.innerHTML = recentlyViewed.map(idx => { const b = books[idx]; return b ? makeCard(b) : ''; }).join('');
 }
@@ -731,20 +581,20 @@ function renderRecentlyViewed() {
 function renderSections(list) {
     const wrapper = document.getElementById('sectionsWrapper');
     document.getElementById('searchResultWrapper').style.display = 'none';
-    wrapper.style.display = 'block'; wrapper.innerHTML = '';
+    wrapper.style.display = 'block';
+    wrapper.innerHTML = '';
     categoryConfig.forEach(cat => {
         const catBooks = list.filter(b => b.cat === cat.key);
         if (!catBooks.length) return;
-        wrapper.innerHTML += `
-        <div class="cat-section fade-in" id="section-${cat.key}">
+        wrapper.innerHTML += `<div class="cat-section fade-in" id="section-${cat.key}">
             <div class="cat-section-title">
                 ${cat.label}
-                <a href="#" onclick="navigateToFilter('cat','${cat.key}'); return false;" style="font-size:13px; color:#059669; font-weight:600; text-decoration:none;">সবগুলো দেখুন →</a>
+                <a href="#" onclick="navigateToFilter('cat','${cat.key}');return false;" style="font-size:13px;color:#059669;font-weight:600;text-decoration:none;">সবগুলো দেখুন →</a>
             </div>
             <div class="book-row">${catBooks.map(makeCard).join('')}</div>
         </div>`;
     });
-    if (!wrapper.innerHTML) wrapper.innerHTML = '<div style="text-align:center; padding:60px; color:var(--text2);">কোনো বই পাওয়া যায়নি</div>';
+    if (!wrapper.innerHTML) wrapper.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2);">কোনো বই পাওয়া যায়নি</div>';
 }
 
 function buildPublisherList() {
@@ -759,11 +609,14 @@ function buildAuthorList() {
 }
 
 function filterCategory(cat, btn) {
-    closeSearchOverlay();
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchSuggestions').classList.remove('open');
+    document.getElementById('searchResultWrapper').style.display = 'none';
+    document.getElementById('sectionsWrapper').style.display = 'block';
     if (btn) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
     renderSections(books); renderRecentlyViewed();
     if (cat !== 'all') {
-        setTimeout(() => { const sec = document.getElementById('section-' + cat); if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        setTimeout(() => { const sec = document.getElementById('section-'+cat); if (sec) sec.scrollIntoView({behavior:'smooth',block:'start'}); }, 100);
     }
 }
 
@@ -782,13 +635,16 @@ function filterSidebarList(subId, query) {
     });
 }
 
-/* SEARCH — now drives overlay panel */
+/* ✅ SEARCH — single input, shows suggestions below navbar */
 function filterBooks() {
     const input = document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
-    const panel = document.getElementById('searchPanelResults');
+    const box = document.getElementById('searchSuggestions');
 
     if (!input) {
-        panel.innerHTML = '<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>';
+        box.classList.remove('open');
+        document.getElementById('searchResultWrapper').style.display = 'none';
+        document.getElementById('sectionsWrapper').style.display = 'block';
+        document.getElementById('recentlySection').style.display = recentlyViewed.length > 0 ? 'block' : 'none';
         return;
     }
 
@@ -797,28 +653,53 @@ function filterBooks() {
         b.author.normalize("NFC").toLowerCase().includes(input)
     );
 
-    if (!filtered.length) {
-        panel.innerHTML = '<div class="search-no-result">😔 বইটি পাওয়া যায়নি!</div>';
-        return;
-    }
-
-    panel.innerHTML = filtered.map(b => {
-        const idx = books.indexOf(b);
-        const pct = discountPct(b);
-        return `<div class="search-result-item" onclick="closeSearchOverlay(); goToBook(${idx})">
-            <img src="${b.img}" class="search-result-img" alt="">
-            <div style="flex:1; min-width:0;">
-                <div class="search-result-name">${b.name}</div>
-                <div class="search-result-author">${b.author} · ${b.pub}</div>
-                <div class="search-result-price">
-                    ৳${b.price}
-                    ${b.original_price > b.price ? `<span style="font-size:11px;color:var(--text2);text-decoration:line-through;font-weight:400;margin-left:4px;">৳${b.original_price}</span>` : ''}
-                    ${pct > 0 ? `<span class="search-result-badge">${pct}% ছাড়</span>` : ''}
+    // show full results below
+    document.getElementById('sectionsWrapper').style.display = 'none';
+    document.getElementById('recentlySection').style.display = 'none';
+    document.getElementById('searchResultWrapper').style.display = 'block';
+    document.getElementById('searchGrid').innerHTML = filtered.length
+        ? filtered.map(b => {
+            const idx = books.indexOf(b); const pct = discountPct(b);
+            return `<div onclick="goToBook(${idx})" style="display:flex;align-items:center;gap:12px;background:var(--card);border-radius:12px;padding:10px;box-shadow:0 2px 8px var(--shadow);cursor:pointer;margin-bottom:8px;border:1px solid var(--border);">
+                <img src="${b.img}" style="width:50px;height:68px;object-fit:cover;border-radius:6px;flex-shrink:0;">
+                <div style="flex:1;min-width:0;">
+                    <div style="font-size:14px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${b.name}</div>
+                    <div style="font-size:12px;color:var(--text2);margin:2px 0;">${b.author}</div>
+                    <div style="font-size:13px;font-weight:700;color:#dc2626;">৳${b.price}${b.original_price>b.price?`<span style="font-size:11px;color:var(--text2);text-decoration:line-through;font-weight:400;margin-left:5px;">৳${b.original_price}</span>`:''}</div>
                 </div>
-            </div>
-        </div>`;
-    }).join('');
+                ${pct>0?`<div style="background:#dc2626;color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;">${pct}% ছাড়</div>`:''}
+            </div>`;
+        }).join('')
+        : '<div style="text-align:center;padding:40px;color:var(--text2);">😔 বইটি পাওয়া যায়নি!</div>';
+
+    // suggestions dropdown (top 5)
+    if (filtered.length) {
+        box.innerHTML = filtered.slice(0,5).map(b => {
+            const idx = books.indexOf(b); const pct = discountPct(b);
+            return `<div class="search-result-item" onclick="closeSuggestions(); goToBook(${idx})">
+                <img src="${b.img}" class="search-result-img">
+                <div style="flex:1;min-width:0;">
+                    <div class="search-result-name">${b.name}</div>
+                    <div class="search-result-author">${b.author}</div>
+                    <div class="search-result-price">৳${b.price} ${pct>0?`<span style="background:#dc2626;color:white;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;margin-left:4px;">${pct}% ছাড়</span>`:''}</div>
+                </div>
+            </div>`;
+        }).join('');
+        box.classList.add('open');
+    } else {
+        box.innerHTML = '<div class="search-no-result">😔 বইটি পাওয়া যায়নি!</div>';
+        box.classList.add('open');
+    }
 }
+
+function closeSuggestions() {
+    document.getElementById('searchSuggestions').classList.remove('open');
+}
+
+// click outside closes suggestions
+document.addEventListener('click', e => {
+    if (!document.getElementById('navSearchWrap').contains(e.target)) closeSuggestions();
+});
 
 /* WISHLIST */
 function showWishlistDirect() {
@@ -864,7 +745,7 @@ function updateCartUI() {
     } else {
         box.innerHTML = '';
         const grouped = {};
-        cart.forEach(item => { if (grouped[item.name]) grouped[item.name].qty++; else grouped[item.name] = { price: item.price, qty: 1, img: item.img||'' }; });
+        cart.forEach(item => { if (grouped[item.name]) grouped[item.name].qty++; else grouped[item.name]={price:item.price,qty:1,img:item.img||''}; });
         for (let name in grouped) {
             const item = grouped[name]; subtotal += item.price * item.qty;
             const en = name.replace(/'/g,"\\'");
@@ -889,13 +770,13 @@ function updateCartUI() {
     if (document.getElementById('total')) document.getElementById('total').innerText = subtotal - disc;
 }
 function changeQty(name, delta) {
-    if (delta === 1) { const item = cart.find(i => i.name === name); if (item) cart.push({...item}); }
-    else { const i = cart.findLastIndex(i => i.name === name); if (i !== -1) cart.splice(i, 1); }
+    if (delta===1) { const item=cart.find(i=>i.name===name); if(item) cart.push({...item}); }
+    else { const i=cart.findLastIndex(i=>i.name===name); if(i!==-1) cart.splice(i,1); }
     saveCart(); updateCartUI();
 }
 function applyCoupon() {
     const code = document.getElementById('couponCode').value.toUpperCase();
-    if (code === 'FIRSTORDER') { discountPercent = 5; localStorage.setItem('gronthokanon_discount','5'); localStorage.setItem('gronthokanon_coupon',code); alert('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!'); updateCartUI(); }
+    if (code==='FIRSTORDER') { discountPercent=5; localStorage.setItem('gronthokanon_discount','5'); localStorage.setItem('gronthokanon_coupon',code); alert('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!'); updateCartUI(); }
     else alert('ভুল কুপন কোড!');
 }
 function showCart() { document.getElementById('cartBox').style.display = 'flex'; }
@@ -903,15 +784,15 @@ function closeCart() { document.getElementById('cartBox').style.display = 'none'
 function openOrderForm() {
     if (!cart.length) return alert('কার্ট খালি!');
     const code = document.getElementById('couponCode').value.trim();
-    if (!code) { localStorage.removeItem('gronthokanon_discount'); localStorage.removeItem('gronthokanon_coupon'); discountPercent = 0; }
+    if (!code) { localStorage.removeItem('gronthokanon_discount'); localStorage.removeItem('gronthokanon_coupon'); discountPercent=0; }
     window.location.href = 'checkout.html';
 }
 
 /* NAV */
-function bnavActive(id) { document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function bnavActive(id) { document.querySelectorAll('.bottom-nav-item').forEach(el=>el.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function openCategoryDrawer() { document.getElementById('catDrawer').classList.add('open'); document.getElementById('catDrawerOverlay').classList.add('open'); }
 function closeCategoryDrawer() { document.getElementById('catDrawer').classList.remove('open'); document.getElementById('catDrawerOverlay').classList.remove('open'); bnavActive('bnav-home'); }
-function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('active');
     const overlay = document.getElementById('overlay');
@@ -937,13 +818,13 @@ window.onload = () => {
     }
 };
 
-/* BANNER SLIDER */
+/* BANNER */
 const slider = document.getElementById('mainSlider');
 let currentImg = 0;
 if (slider) {
     setInterval(() => {
         const imgs = slider.querySelectorAll('img');
-        if (imgs.length) { currentImg = (currentImg + 1) % imgs.length; slider.scrollTo({ left: currentImg * slider.offsetWidth, behavior: 'smooth' }); }
+        if (imgs.length) { currentImg=(currentImg+1)%imgs.length; slider.scrollTo({left:currentImg*slider.offsetWidth,behavior:'smooth'}); }
     }, 3500);
 }
 </script>
