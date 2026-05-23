@@ -20,6 +20,16 @@
             --dark: #064e3b;
             --red: #dc2626;
             --gold: #d97706;
+
+            /* Navbar light gray */
+            --nav-bg: #eef0f3;
+            --nav-border: #d1d5db;
+            --nav-icon-bg: #ffffff;
+            --nav-icon-border: #d1d5db;
+            --nav-icon-hover-bg: #f0fdf4;
+            --nav-search-bg: #ffffff;
+            --nav-search-border: #c9cdd5;
+            --nav-text: #374151;
         }
         [data-theme="dark"] {
             --bg: #0d1f17;
@@ -30,6 +40,15 @@
             --sidebar-bg: #132d20;
             --search-bg: #0d1f17;
             --shadow: rgba(0,0,0,0.35);
+
+            --nav-bg: #1e2025;
+            --nav-border: #2d3139;
+            --nav-icon-bg: #282b31;
+            --nav-icon-border: #3a3f47;
+            --nav-icon-hover-bg: #1a3d2a;
+            --nav-search-bg: #282b31;
+            --nav-search-border: #3a3f47;
+            --nav-text: #d1d5db;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,95 +60,127 @@
         @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 
         /* ═══════════════════════════════════════
-           GLASSMORPHISM NAVBAR
+           LIGHT GRAY NAVBAR
         ═══════════════════════════════════════ */
         .navbar {
             display: flex;
             align-items: center;
             padding: 10px 14px;
             gap: 10px;
-            background: linear-gradient(135deg, #059669 0%, #047857 60%, #065f46 100%);
-            box-shadow: 0 4px 24px rgba(5,150,105,0.35);
+            background: var(--nav-bg);
+            border-bottom: 1.5px solid var(--nav-border);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
             position: sticky;
             top: 0;
             z-index: 1000;
+            transition: background 0.3s, border-color 0.3s;
         }
-        .navbar-logo { height: 38px; object-fit: contain; flex-shrink: 0; }
 
-        /* Glass Search Pill */
+        /* Brand / Typing area */
+        .navbar-brand {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            min-width: 120px;
+        }
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: #059669;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(5,150,105,0.25);
+        }
+        .typing-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: #059669;
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            white-space: nowrap;
+            min-width: 70px;
+        }
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 15px;
+            background: #059669;
+            margin-left: 1px;
+            vertical-align: middle;
+            border-radius: 1px;
+            animation: cursorBlink 0.7s infinite;
+        }
+        @keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* Search pill */
         .search-trigger {
             flex: 1;
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255,255,255,0.15);
-            border: 1.5px solid rgba(255,255,255,0.35);
+            background: var(--nav-search-bg);
+            border: 1.5px solid var(--nav-search-border);
             border-radius: 22px;
             padding: 8px 14px;
             cursor: pointer;
-            transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+            transition: border-color 0.22s, box-shadow 0.22s;
             min-width: 0;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 8px rgba(0,0,0,0.1);
         }
         .search-trigger:hover {
-            background: rgba(255,255,255,0.25);
-            border-color: rgba(255,255,255,0.55);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 16px rgba(0,0,0,0.15);
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5,150,105,0.09);
         }
         .search-trigger:active { transform: scale(0.98); }
-        .search-trigger-text { font-size: 13.5px; color: rgba(255,255,255,0.72); font-family: 'Hind Siliguri',Arial,sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .search-trigger-text { font-size: 13.5px; color: #9ca3af; font-family: 'Hind Siliguri',Arial,sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Glass Nav Icons */
-        .navbar-icons { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        /* Nav icon buttons */
+        .navbar-icons { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
 
         .glass-icon-btn {
             position: relative;
-            width: 38px;
-            height: 38px;
-            background: rgba(255,255,255,0.15);
-            border: 1.5px solid rgba(255,255,255,0.3);
-            border-radius: 12px;
+            width: 37px;
+            height: 37px;
+            background: var(--nav-icon-bg);
+            border: 1.5px solid var(--nav-icon-border);
+            border-radius: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 18px;
-            color: white;
-            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.12);
+            font-size: 17px;
+            color: var(--nav-text);
+            transition: border-color 0.2s, background 0.2s, transform 0.15s;
             user-select: none;
-            line-height: 1;
         }
         .glass-icon-btn:hover {
-            background: rgba(255,255,255,0.28);
-            border-color: rgba(255,255,255,0.5);
+            border-color: #059669;
+            background: var(--nav-icon-hover-bg);
             transform: translateY(-1px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 6px 18px rgba(0,0,0,0.18);
         }
         .glass-icon-btn:active { transform: scale(0.92); }
 
-        /* Dark toggle pill */
         .dark-toggle {
-            background: rgba(255,255,255,0.15);
-            border: 1.5px solid rgba(255,255,255,0.3);
+            background: var(--nav-icon-bg);
+            border: 1.5px solid var(--nav-icon-border);
             border-radius: 20px;
-            padding: 5px 10px;
+            padding: 5px 11px;
             cursor: pointer;
             font-size: 13px;
-            color: white;
+            color: var(--nav-text);
             font-family: 'Hind Siliguri',Arial,sans-serif;
-            transition: background 0.2s, transform 0.15s;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: border-color 0.2s, background 0.2s, transform 0.15s;
         }
-        .dark-toggle:hover { background: rgba(255,255,255,0.25); transform: translateY(-1px); }
+        .dark-toggle:hover {
+            border-color: #059669;
+            background: var(--nav-icon-hover-bg);
+            transform: translateY(-1px);
+        }
 
-        /* Glass badge */
+        /* Badges */
         .glass-badge {
             position: absolute;
             top: -6px; right: -7px;
@@ -141,13 +192,12 @@
             border-radius: 20px;
             min-width: 17px;
             text-align: center;
-            border: 1.5px solid rgba(4,120,87,0.7);
+            border: 1.5px solid var(--nav-bg);
             display: none;
             line-height: 1.2;
         }
         .glass-badge.show { display: block; }
 
-        /* Cart wrapper + old cart-badge id support */
         .cart-icon-wrapper { position: relative; cursor: pointer; }
         .cart-icon-wrapper.bounce .glass-icon-btn { animation: cartBounce 0.4s ease; }
         @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.35)} 60%{transform:scale(0.9)} 80%{transform:scale(1.08)} }
@@ -160,26 +210,25 @@
             padding: 2px 5px;
             border-radius: 50%;
             font-weight: bold;
-            border: 1.5px solid rgba(4,120,87,0.7);
+            border: 1.5px solid var(--nav-bg);
             min-width: 17px;
             text-align: center;
             line-height: 1.2;
         }
 
-        /* Backward compat for wishlist/user nav-icon-btn */
-        .nav-icon-btn { position: relative; cursor: pointer; font-size: 18px; color: white; line-height: 1; }
+        .nav-icon-btn { position: relative; cursor: pointer; font-size: 18px; color: var(--nav-text); line-height: 1; }
         .nav-badge { position: absolute; top: -6px; right: -8px; background: #dc2626; color: white; font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 20px; min-width: 16px; text-align: center; display: none; }
         .nav-badge.show { display: block; }
 
         /* FULL SCREEN SEARCH */
         .search-screen { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); visibility: hidden; }
         .search-screen.open { transform: translateY(0); visibility: visible; }
-        .search-screen-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: linear-gradient(135deg, #059669, #047857); flex-shrink: 0; }
-        .search-back-btn { background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 20px; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; backdrop-filter: blur(6px); }
-        .search-screen-input-wrap { flex: 1; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.38); border-radius: 22px; padding: 8px 14px; backdrop-filter: blur(6px); }
-        .search-screen-input { flex: 1; border: none; background: transparent; outline: none; font-size: 15px; font-family: 'Hind Siliguri',Arial,sans-serif; color: white; }
-        .search-screen-input::placeholder { color: rgba(255,255,255,0.65); }
-        .search-clear-btn { background: rgba(255,255,255,0.2); border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; color: white; display: none; align-items: center; justify-content: center; }
+        .search-screen-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--nav-bg); border-bottom: 1.5px solid var(--nav-border); flex-shrink: 0; }
+        .search-back-btn { background: var(--nav-icon-bg); border: 1.5px solid var(--nav-icon-border); border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 20px; color: var(--nav-text); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .search-screen-input-wrap { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--nav-search-bg); border: 1.5px solid var(--nav-search-border); border-radius: 22px; padding: 8px 14px; }
+        .search-screen-input { flex: 1; border: none; background: transparent; outline: none; font-size: 15px; font-family: 'Hind Siliguri',Arial,sans-serif; color: var(--text); }
+        .search-screen-input::placeholder { color: #9ca3af; }
+        .search-clear-btn { background: #e5e7eb; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; color: #374151; display: none; align-items: center; justify-content: center; }
         .search-clear-btn.show { display: flex; }
         .search-screen-body { flex: 1; overflow-y: auto; }
         .search-initial-hint { padding: 50px 20px; text-align: center; }
@@ -325,6 +374,8 @@
             .cat-btn { padding: 6px 10px; font-size: 12px; }
             .glass-icon-btn { width: 34px; height: 34px; font-size: 16px; border-radius: 10px; }
             .navbar { padding: 8px 10px; gap: 8px; }
+            .navbar-brand { min-width: 100px; }
+            .typing-text { font-size: 13px; }
         }
     </style>
 </head>
@@ -373,7 +424,7 @@
     <div class="search-screen-header">
         <button class="search-back-btn" onclick="closeSearchScreen()">‹</button>
         <div class="search-screen-input-wrap">
-            <span style="font-size:15px;color:rgba(255,255,255,0.8);">🔍</span>
+            <span style="font-size:15px;color:#9ca3af;">🔍</span>
             <input type="text" id="searchInput" class="search-screen-input"
                 placeholder="বই বা লেখকের নাম লিখুন..."
                 oninput="handleSearch()" autocomplete="off">
@@ -393,13 +444,17 @@
     <div class="moving-text">🔥 প্রথম অর্ডারে ০৫% ছাড় — কুপন: FIRSTORDER &nbsp;&nbsp;&nbsp; ✅ সারা বাংলাদেশে ক্যাশ অন ডেলিভারি &nbsp;&nbsp;&nbsp; 📞 হটলাইন: 01516595762</div>
 </div>
 
-<!-- ═══════════════ GLASSMORPHISM NAVBAR ═══════════════ -->
+<!-- ═══════════════ LIGHT GRAY NAVBAR ═══════════════ -->
 <nav class="navbar">
-    <img src="logo.png" alt="গ্রন্থকানন" class="navbar-logo">
+    <!-- Animated Typing Brand -->
+    <div class="navbar-brand">
+        <div class="brand-icon">📚</div>
+        <span class="typing-text" id="typingText"></span><span class="typing-cursor"></span>
+    </div>
 
-    <!-- Glass Search Pill -->
+    <!-- Search Pill -->
     <div class="search-trigger" onclick="openSearchScreen()">
-        <span style="font-size:15px;color:rgba(255,255,255,0.85);">🔍</span>
+        <span style="font-size:15px;color:#9ca3af;">🔍</span>
         <span class="search-trigger-text">বই বা লেখক খুঁজুন...</span>
     </div>
 
@@ -407,18 +462,18 @@
         <!-- Dark Mode -->
         <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
 
-        <!-- Wishlist glass button -->
+        <!-- Wishlist -->
         <div class="glass-icon-btn" onclick="showWishlistDirect()" title="উইশলিস্ট">
             🤍
             <span class="glass-badge" id="navWishBadge">0</span>
         </div>
 
-        <!-- User glass button -->
+        <!-- User -->
         <div class="glass-icon-btn" onclick="showLoginModal()" title="একাউন্ট">
             👤
         </div>
 
-        <!-- Cart / Shopping Bag glass button -->
+        <!-- Cart -->
         <div class="cart-icon-wrapper" id="cartIconWrapper" onclick="showCart()">
             <div class="glass-icon-btn" title="শপিং ব্যাগ">
                 🛒
@@ -600,6 +655,36 @@ let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let discountPercent = 0;
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
 let recentlyViewed = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
+
+/* ═══ TYPING ANIMATION ═══ */
+const typingPhrases = ['গ্রন্থকানন', 'বইয়ের রাজ্যে স্বাগতম', 'ইসলামিক বইয়ের ঘর', 'গ্রন্থকানন'];
+let tpi = 0, tci = 0, tDel = false, tWait = false;
+const tEl = document.getElementById('typingText');
+function typeAnim() {
+    if (tWait) return;
+    const word = typingPhrases[tpi];
+    if (!tDel) {
+        tEl.textContent = word.slice(0, tci + 1);
+        tci++;
+        if (tci === word.length) {
+            tWait = true;
+            setTimeout(() => { tWait = false; tDel = true; typeAnim(); }, 1900);
+            return;
+        }
+        setTimeout(typeAnim, 85);
+    } else {
+        tEl.textContent = word.slice(0, tci - 1);
+        tci--;
+        if (tci === 0) {
+            tDel = false;
+            tpi = (tpi + 1) % typingPhrases.length;
+            setTimeout(typeAnim, 380);
+            return;
+        }
+        setTimeout(typeAnim, 42);
+    }
+}
+typeAnim();
 
 /* DARK MODE */
 function toggleDarkMode() {
