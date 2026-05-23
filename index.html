@@ -52,19 +52,18 @@
         @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 
         /* ── NAVBAR: hamburger + site name | search pill | icons ── */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 16px;
-            background: var(--navbar-bg);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--border);
-            gap: 10px;
-        }
+      .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 3px 16px rgba(5,150,105,0.35);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    gap: 10px;
+}
         .navbar-left  { display:flex; align-items:center; gap:8px; flex-shrink:0; }
         .navbar-title { font-size: 15px; font-weight: 700; color: var(--green); white-space: nowrap; }
         .navbar-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
@@ -109,19 +108,48 @@
             min-width: 16px; text-align: center; display: none;
         }
         .nav-badge.show { display: block; }
-        .dark-toggle {
-            background: var(--search-bg);
-            border: 1.5px solid var(--border);
-            border-radius: 20px;
-            padding: 4px 10px;
-            cursor: pointer; font-size: 13px; color: var(--text);
-        }
+       .dark-toggle {
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #ffffff;
+}
         .cart-icon-wrapper { position: relative; font-size: 22px; cursor: pointer; transition: transform 0.1s; }
         .cart-icon-wrapper.bounce { animation: cartBounce 0.4s ease; }
         @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.4)} 60%{transform:scale(0.9)} 80%{transform:scale(1.1)} }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
 
         /* ── SEARCH OVERLAY: full-screen dedicated interface ── */
+
+.search-section {
+    background: #ffffff;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 58px;
+    z-index: 999;
+}
+[data-theme="dark"] .search-section {
+    background: var(--navbar-bg);
+}
+
+.nav-search-container {
+    display: flex;
+    align-items: center;
+    background: var(--search-bg);
+    border-radius: 25px;
+    padding: 9px 16px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1.5px solid var(--border);
+    position: relative;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
         .search-overlay {
             display: none;
             position: fixed; inset: 0;
@@ -372,29 +400,32 @@
 </div>
 
 <!-- NAVBAR -->
+<!-- পুরো <nav class="navbar"> block টা replace করো -->
 <nav class="navbar">
-    <div class="navbar-left">
-        <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="মেনু">☰</button>
-        <span class="navbar-title">গ্রন্থকানন</span>
-    </div>
-
-    <button class="search-trigger-btn" onclick="openSearchOverlay()">
-        <span style="font-size:15px;">🔍</span>
-        <span>বই বা লেখক খুঁজুন...</span>
-    </button>
-
-    <div class="navbar-right">
+    <img src="logo.png" alt="গ্রন্থকানন" style="height:42px; object-fit:contain; flex-shrink:0;">
+    <div style="flex:1;"></div>
+    <div style="display:flex; align-items:center; gap:12px; flex-shrink:0;">
         <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
-        <div class="nav-icon-btn" onclick="showWishlistDirect()">
+        <div class="nav-icon-btn" onclick="showWishlistDirect()" style="color:white;">
             🤍
             <span class="nav-badge" id="navWishBadge">0</span>
         </div>
-        <div class="cart-icon-wrapper" onclick="showCart()" id="cartIconWrapper">
+        <div class="nav-icon-btn" onclick="showLoginModal()" style="color:white;">👤</div>
+        <div class="cart-icon-wrapper" onclick="showCart()" id="cartIconWrapper" style="color:white;">
             🛒<span class="cart-badge" id="count">0</span>
         </div>
     </div>
 </nav>
-
+<!-- </nav> এর ঠিক পরে এটা যোগ করো -->
+<div class="search-section">
+    <div class="nav-search-container" id="nav-search-container">
+        <span style="font-size:16px; color:#059669;">🔍</span>
+        <input type="text" id="searchInput" oninput="filterBooks()"
+            placeholder="বই বা লেখক খুঁজুন..."
+            class="nav-search-input">
+        <div id="searchSuggestions"></div>
+    </div>
+</div>
 <!-- SEARCH OVERLAY -->
 <div class="search-overlay" id="searchOverlay" onclick="handleOverlayClick(event)">
     <div class="search-panel" id="searchPanel">
