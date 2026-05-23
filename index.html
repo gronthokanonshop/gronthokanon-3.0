@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>গ্রন্থকানন - আসুন, বইয়ের রাজ্যে আপনাকে স্বাগতম।</title>
+    <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
+    <meta name="keywords" content="ইসলামিক বই, বাংলা বই, অনলাইন বুকশপ, গ্রন্থকানন, বই কিনুন">
+    <meta property="og:title" content="গ্রন্থকানন — বইয়ের রাজ্যে স্বাগতম">
+    <meta property="og:description" content="সাশ্রয়ী মূল্যে ইসলামিক বই। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#059669">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -55,22 +61,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Hind Siliguri','SolaimanLipi',Arial,sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 75px; }
 
-        /* MOVING BAR — warm amber gradient (not too deep) */
-        .moving-bar {
-            background: linear-gradient(90deg, #b45309 0%, #d97706 40%, #f59e0b 70%, #b45309 100%);
-            background-size: 200% 100%;
-            animation: barShift 6s linear infinite;
-            color: #fff8e1;
-            padding: 7px 0;
-            overflow: hidden;
-            white-space: nowrap;
-            font-weight: 600;
-            font-size: 12.5px;
-        }
-        @keyframes barShift { 0%{background-position:0% 0} 100%{background-position:200% 0} }
+        /* MOVING BAR */
+        .moving-bar { background: #047857; color: #a7f3d0; padding: 7px 0; overflow: hidden; white-space: nowrap; font-weight: 600; font-size: 12.5px; }
         .moving-text { display: inline-block; padding-left: 100%; animation: marquee 18s linear infinite; }
         @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 
+        /* ════════════════════════════════
+           NAVBAR — Row 1: brand + icons
+        ════════════════════════════════ */
         .navbar {
             background: var(--nav-bg);
             border-bottom: 1px solid var(--nav-border);
@@ -80,12 +78,15 @@
             z-index: 1000;
             transition: background 0.3s, border-color 0.3s;
         }
+
         .navbar-top {
             display: flex;
             align-items: center;
             padding: 9px 14px;
             gap: 10px;
         }
+
+        /* Brand / Typing */
         .navbar-brand {
             flex: 1;
             display: flex;
@@ -94,92 +95,167 @@
             min-width: 0;
         }
         .brand-icon {
-            width: 34px; height: 34px;
+            width: 34px;
+            height: 34px;
             background: #059669;
             border-radius: 9px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px; flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
             box-shadow: 0 2px 8px rgba(5,150,105,0.22);
         }
         .typing-text {
-            font-size: 15px; font-weight: 700; color: #059669;
+            font-size: 15px;
+            font-weight: 700;
+            color: #059669;
             font-family: 'Hind Siliguri', Arial, sans-serif;
-            white-space: nowrap; min-width: 60px;
+            white-space: nowrap;
+            min-width: 60px;
         }
         .typing-cursor {
-            display: inline-block; width: 2px; height: 15px;
-            background: #059669; margin-left: 1px; vertical-align: middle;
-            border-radius: 1px; animation: cursorBlink 0.7s infinite;
+            display: inline-block;
+            width: 2px;
+            height: 15px;
+            background: #059669;
+            margin-left: 1px;
+            vertical-align: middle;
+            border-radius: 1px;
+            animation: cursorBlink 0.7s infinite;
         }
         @keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* Nav icons */
         .navbar-icons { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+
         .glass-icon-btn {
-            position: relative; width: 36px; height: 36px;
-            background: var(--nav-icon-bg); border: 1.5px solid var(--nav-icon-border);
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            position: relative;
+            width: 36px; height: 36px;
+            background: var(--nav-icon-bg);
+            border: 1.5px solid var(--nav-icon-border);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
             cursor: pointer; font-size: 17px; color: var(--nav-text);
-            transition: border-color 0.2s, background 0.2s, transform 0.15s; user-select: none;
+            transition: border-color 0.2s, background 0.2s, transform 0.15s;
+            user-select: none;
         }
         .glass-icon-btn:hover { border-color: #059669; background: var(--nav-icon-hover-bg); transform: translateY(-1px); }
         .glass-icon-btn:active { transform: scale(0.92); }
+
         .dark-toggle {
-            background: var(--nav-icon-bg); border: 1.5px solid var(--nav-icon-border);
-            border-radius: 20px; padding: 5px 11px; cursor: pointer; font-size: 13px;
-            color: var(--nav-text); font-family: 'Hind Siliguri',Arial,sans-serif;
+            background: var(--nav-icon-bg);
+            border: 1.5px solid var(--nav-icon-border);
+            border-radius: 20px;
+            padding: 5px 11px;
+            cursor: pointer; font-size: 13px; color: var(--nav-text);
+            font-family: 'Hind Siliguri',Arial,sans-serif;
             transition: border-color 0.2s, background 0.2s, transform 0.15s;
         }
         .dark-toggle:hover { border-color: #059669; background: var(--nav-icon-hover-bg); transform: translateY(-1px); }
+
         .glass-badge {
             position: absolute; top: -6px; right: -7px;
-            background: #ef4444; color: white; font-size: 9px; font-weight: 700;
+            background: #ef4444; color: white;
+            font-size: 9px; font-weight: 700;
             padding: 2px 5px; border-radius: 20px; min-width: 17px;
             text-align: center; border: 1.5px solid var(--nav-bg);
             display: none; line-height: 1.2;
         }
         .glass-badge.show { display: block; }
+
         .cart-icon-wrapper { position: relative; cursor: pointer; }
         .cart-icon-wrapper.bounce .glass-icon-btn { animation: cartBounce 0.4s ease; }
         @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.35)} 60%{transform:scale(0.9)} 80%{transform:scale(1.08)} }
         .cart-badge {
             position: absolute; top: -7px; right: -8px;
-            background: var(--red); color: white; font-size: 9px; padding: 2px 5px;
-            border-radius: 50%; font-weight: bold; border: 1.5px solid var(--nav-bg);
+            background: var(--red); color: white;
+            font-size: 9px; padding: 2px 5px; border-radius: 50%;
+            font-weight: bold; border: 1.5px solid var(--nav-bg);
             min-width: 17px; text-align: center; line-height: 1.2;
         }
-        .navbar-search-row { padding: 0 14px 11px; }
-        .search-trigger {
-            display: flex; align-items: center; gap: 10px;
-            background: var(--searchbar-bg); border: 1.5px solid var(--searchbar-border);
-            border-radius: 6px; padding: 10px 16px; cursor: pointer;
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; width: 100%;
+
+        /* ════════════════════════════════
+           NAVBAR — Row 2: PRO SEARCH BAR
+        ════════════════════════════════ */
+        .navbar-search-row {
+            padding: 0 14px 11px;
         }
-        .search-trigger:hover { border-color: #059669; background: #fff; box-shadow: 0 0 0 3px rgba(5,150,105,0.10); }
+
+        .search-trigger {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--searchbar-bg);
+            border: 1.5px solid var(--searchbar-border);
+            border-radius: 6px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            width: 100%;
+        }
+        .search-trigger:hover {
+            border-color: #059669;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(5,150,105,0.10);
+        }
         [data-theme="dark"] .search-trigger:hover { background: #23272e; }
         .search-trigger:active { transform: scale(0.995); }
+
         .search-icon-box {
-            width: 28px; height: 28px; background: #059669; border-radius: 5px;
+            width: 28px; height: 28px;
+            background: #059669;
+            border-radius: 5px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 14px; flex-shrink: 0;
+            font-size: 14px;
+            flex-shrink: 0;
         }
-        .search-divider { width: 1px; height: 18px; background: var(--searchbar-border); flex-shrink: 0; }
+        .search-divider {
+            width: 1px; height: 18px;
+            background: var(--searchbar-border);
+            flex-shrink: 0;
+        }
         .search-trigger-text {
-            flex: 1; font-size: 13.5px; color: #9ca3af;
+            flex: 1;
+            font-size: 13.5px;
+            color: #9ca3af;
             font-family: 'Hind Siliguri',Arial,sans-serif;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .search-kbd {
-            font-size: 11px; color: #9ca3af; background: var(--nav-icon-bg);
-            border: 1px solid var(--nav-icon-border); border-radius: 4px;
-            padding: 2px 7px; font-family: monospace; flex-shrink: 0;
+            font-size: 11px;
+            color: #9ca3af;
+            background: var(--nav-icon-bg);
+            border: 1px solid var(--nav-icon-border);
+            border-radius: 4px;
+            padding: 2px 7px;
+            font-family: monospace;
+            flex-shrink: 0;
         }
         @media (max-width: 400px) { .search-kbd { display: none; } }
 
         /* FULL SCREEN SEARCH */
         .search-screen { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); visibility: hidden; }
         .search-screen.open { transform: translateY(0); visibility: visible; }
-        .search-screen-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--nav-bg); border-bottom: 1px solid var(--nav-border); flex-shrink: 0; }
-        .search-back-btn { background: var(--nav-icon-bg); border: 1.5px solid var(--nav-icon-border); border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 20px; color: var(--nav-text); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .search-screen-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; background: var(--searchbar-bg); border: 1.5px solid var(--searchbar-border); border-radius: 6px; padding: 9px 14px; }
+        .search-screen-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px;
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--nav-border);
+            flex-shrink: 0;
+        }
+        .search-back-btn {
+            background: var(--nav-icon-bg); border: 1.5px solid var(--nav-icon-border);
+            border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
+            font-size: 20px; color: var(--nav-text);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .search-screen-input-wrap {
+            flex: 1; display: flex; align-items: center; gap: 10px;
+            background: var(--searchbar-bg);
+            border: 1.5px solid var(--searchbar-border);
+            border-radius: 6px; padding: 9px 14px;
+        }
         .search-screen-input-wrap:focus-within { border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.10); }
         .search-screen-input { flex: 1; border: none; background: transparent; outline: none; font-size: 15px; font-family: 'Hind Siliguri',Arial,sans-serif; color: var(--text); }
         .search-screen-input::placeholder { color: #9ca3af; }
@@ -217,13 +293,13 @@
         [data-theme="dark"] .sidebar-sub-item { color: var(--text2); }
         .sidebar-sub-item:hover { background: #059669; color: white; padding-left: 40px; }
 
-        /* BRANDING — logo size reduced */
-        .branding { text-align: center; padding: 10px 16px 9px; background: var(--card); border-bottom: 1px solid var(--border); }
-        .branding-logo { width: 44px; height: 44px; object-fit: contain; display: block; margin: 0 auto 5px; filter: drop-shadow(0 2px 8px rgba(5,150,105,0.15)); }
-        .branding-tagline { font-size: 12px; color: var(--text2); }
+        /* BRANDING */
+        .branding { text-align: center; padding: 14px 16px 12px; background: var(--card); border-bottom: 1px solid var(--border); }
+        .branding-logo { width: 68px; height: 68px; object-fit: contain; display: block; margin: 0 auto 8px; filter: drop-shadow(0 2px 8px rgba(5,150,105,0.15)); }
+        .branding-tagline { font-size: 13px; color: var(--text2); }
 
         /* BANNER */
-        .banner-container { max-width: 1200px; margin: 10px auto; overflow: hidden; border-radius: 12px; }
+        .banner-container { max-width: 1200px; margin: 12px auto; overflow: hidden; border-radius: 12px; }
         .slider { display: flex; overflow-x: hidden; scroll-behavior: smooth; }
         .slider img { width: 100%; flex-shrink: 0; }
 
@@ -232,8 +308,8 @@
         .info-card { background: linear-gradient(135deg, #059669 0%, #047857 100%); border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 10px; transition: transform 0.2s; box-shadow: 0 3px 10px rgba(5,150,105,0.18); }
         .info-card:hover { transform: translateY(-2px); }
 
-        /* CATEGORY BUTTONS — hidden, kept for JS compatibility */
-        .category-container { display: none; }
+        /* CATEGORY BUTTONS */
+        .category-container { display: flex; justify-content: center; gap: 8px; padding: 14px 14px 10px; flex-wrap: wrap; }
         .cat-btn { padding: 7px 15px; background: var(--card); color: var(--text2); border: 1.5px solid var(--border); border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 13px; font-family: 'Hind Siliguri',Arial,sans-serif; }
         .cat-btn:hover:not(.active) { border-color: var(--green); color: var(--green); background: rgba(5,150,105,0.05); }
         .cat-btn.active { background: #059669; color: #fff; border-color: transparent; box-shadow: 0 3px 12px rgba(5,150,105,0.3); }
@@ -396,13 +472,15 @@
     <div class="moving-text">🔥 প্রথম অর্ডারে ০৫% ছাড় — কুপন: FIRSTORDER &nbsp;&nbsp;&nbsp; ✅ সারা বাংলাদেশে ক্যাশ অন ডেলিভারি &nbsp;&nbsp;&nbsp; 📞 হটলাইন: 01516595762</div>
 </div>
 
-<!-- NAVBAR -->
+<!-- ══════════════ NAVBAR ══════════════ -->
 <nav class="navbar">
+    <!-- Row 1: Brand + Icons -->
     <div class="navbar-top">
         <div class="navbar-brand">
             <div class="brand-icon">📚</div>
             <span class="typing-text" id="typingText"></span><span class="typing-cursor"></span>
         </div>
+
         <div class="navbar-icons">
             <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
             <div class="glass-icon-btn" onclick="showWishlistDirect()" title="উইশলিস্ট">
@@ -416,6 +494,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Row 2: Pro Search Bar -->
     <div class="navbar-search-row">
         <div class="search-trigger" onclick="openSearchScreen()">
             <div class="search-icon-box">🔍</div>
@@ -440,7 +520,7 @@
     </div>
 </div>
 
-<!-- CATEGORY BUTTONS — hidden via CSS (display:none), kept for JS compatibility -->
+<!-- CATEGORY BUTTONS -->
 <div class="category-container">
     <button class="cat-btn active" onclick="filterCategory('all',this)">📚 সব বই</button>
     <button class="cat-btn" onclick="filterCategory('বেস্ট সেলিং',this)">🔥 বেস্ট সেলিং</button>
@@ -769,7 +849,13 @@ function showWishlistDirect() {
     }
     document.getElementById('wishlistBox').style.display='flex';
 }
-function showLoginModal() { alert('শীঘ্রই আসছে! 🔐\nলগইন ও রেজিস্ট্রেশন ফিচার প্রস্তুত হচ্ছে।'); }
+function showLoginModal() {
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:#1e40af;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(30,64,175,0.35);';
+    toast.innerText = '🔐 লগইন ফিচার শীঘ্রই আসছে!';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+}
 function closeWishlist() { document.getElementById('wishlistBox').style.display='none'; }
 function addToCart(name, price, img) {
     cart.push({name:name.trim(),price:Number(price),img});
@@ -821,8 +907,9 @@ function changeQty(name,delta){
 }
 function applyCoupon(){
     const code=document.getElementById('couponCode').value.toUpperCase();
-    if(code==='FIRSTORDER'){discountPercent=5;localStorage.setItem('gronthokanon_discount','5');localStorage.setItem('gronthokanon_coupon',code);alert('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!');updateCartUI();}
-    else alert('ভুল কুপন কোড!');
+    const showToast=(msg,color)=>{const t=document.createElement('div');t.style.cssText=`position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:${color};color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,0.2);`;t.innerText=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500);};
+    if(code==='FIRSTORDER'){discountPercent=5;localStorage.setItem('gronthokanon_discount','5');localStorage.setItem('gronthokanon_coupon',code);showToast('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!','#059669');updateCartUI();}
+    else showToast('❌ ভুল কুপন কোড!','#dc2626');
 }
 function showCart(){document.getElementById('cartBox').style.display='flex';}
 function closeCart(){document.getElementById('cartBox').style.display='none';}
