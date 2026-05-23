@@ -38,10 +38,10 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 75px; }
 
-        /* MOVING BAR */
+        /* ── MOVING BAR: lightened #064e3b → #059669 ── */
         .moving-bar {
-            background: #064e3b;
-            color: #a7f3d0;
+            background: #059669;
+            color: #ecfdf5;
             padding: 7px 0;
             overflow: hidden;
             white-space: nowrap;
@@ -51,7 +51,7 @@
         .moving-text { display: inline-block; padding-left: 100%; animation: marquee 18s linear infinite; }
         @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 
-        /* NAVBAR */
+        /* ── NAVBAR: hamburger + site name | search pill | icons ── */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -65,49 +65,48 @@
             border-bottom: 2px solid var(--border);
             gap: 10px;
         }
-        .nav-center { flex: 1; display: flex; justify-content: center; }
-        .nav-search-container {
-            display: flex;
-            align-items: center;
+        .navbar-left  { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+        .navbar-title { font-size: 15px; font-weight: 700; color: var(--green); white-space: nowrap; }
+        .navbar-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+
+        .hamburger-btn {
+            background: none; border: none; cursor: pointer;
+            font-size: 24px; line-height: 1; padding: 2px;
+            color: var(--text); transition: transform 0.15s;
+        }
+        .hamburger-btn:active { transform: scale(0.88); }
+
+        /* search trigger pill */
+        .search-trigger-btn {
+            display: flex; align-items: center; gap: 6px;
             background: var(--search-bg);
-            border-radius: 25px;
-            padding: 8px 14px;
-            width: 100%;
-            max-width: 480px;
             border: 1.5px solid var(--border);
-            position: relative;
-            gap: 6px;
-        }
-        .nav-search-input {
-            border: none;
-            background: transparent;
-            outline: none;
-            width: 100%;
-            font-size: 14px;
-            font-family: 'Hind Siliguri', Arial, sans-serif;
-            color: var(--text);
-        }
-        .nav-search-input::placeholder { color: #9ca3af; }
-        .nav-icon-btn {
-            position: relative;
+            border-radius: 22px;
+            padding: 7px 14px;
             cursor: pointer;
-            font-size: 22px;
-            line-height: 1;
-            padding: 2px;
+            color: #9ca3af;
+            font-size: 13px;
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            flex: 1; max-width: 260px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            text-align: left;
+        }
+        .search-trigger-btn:hover {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(5,150,105,0.1);
+        }
+
+        .nav-icon-btn {
+            position: relative; cursor: pointer;
+            font-size: 22px; line-height: 1; padding: 2px;
         }
         .nav-icon-btn:active { transform: scale(0.9); }
         .nav-badge {
-            position: absolute;
-            top: -6px; right: -8px;
-            background: #dc2626;
-            color: white;
-            font-size: 9px;
-            font-weight: bold;
-            padding: 1px 5px;
-            border-radius: 20px;
-            min-width: 16px;
-            text-align: center;
-            display: none;
+            position: absolute; top: -6px; right: -8px;
+            background: #dc2626; color: white;
+            font-size: 9px; font-weight: bold;
+            padding: 1px 5px; border-radius: 20px;
+            min-width: 16px; text-align: center; display: none;
         }
         .nav-badge.show { display: block; }
         .dark-toggle {
@@ -115,17 +114,92 @@
             border: 1.5px solid var(--border);
             border-radius: 20px;
             padding: 4px 10px;
-            cursor: pointer;
-            font-size: 13px;
-            color: var(--text);
+            cursor: pointer; font-size: 13px; color: var(--text);
         }
         .cart-icon-wrapper { position: relative; font-size: 22px; cursor: pointer; transition: transform 0.1s; }
         .cart-icon-wrapper.bounce { animation: cartBounce 0.4s ease; }
         @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.4)} 60%{transform:scale(0.9)} 80%{transform:scale(1.1)} }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
 
-        /* SEARCH SUGGESTIONS */
-        #searchSuggestions { display: none; position: absolute; top: 105%; left: 0; width: 100%; background: var(--card); border: 1px solid var(--border); box-shadow: 0 8px 20px rgba(0,0,0,0.12); z-index: 9999; max-height: 350px; overflow-y: auto; border-radius: 12px; }
+        /* ── SEARCH OVERLAY: full-screen dedicated interface ── */
+        .search-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 5000;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .search-overlay.open { display: flex; }
+        .search-panel {
+            width: 100%; max-width: 640px;
+            background: var(--card);
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: slideDown 0.25s cubic-bezier(0.4,0,0.2,1);
+        }
+        @keyframes slideDown { from{transform:translateY(-100%)} to{transform:translateY(0)} }
+        .search-panel-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 16px;
+            border-bottom: 1.5px solid var(--border);
+            background: var(--navbar-bg);
+        }
+        .search-panel-input {
+            flex: 1; border: none; background: transparent;
+            outline: none; font-size: 16px;
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            color: var(--text);
+        }
+        .search-panel-input::placeholder { color: #9ca3af; }
+        .search-close-btn {
+            background: var(--search-bg); border: 1.5px solid var(--border);
+            border-radius: 50%; width: 32px; height: 32px;
+            cursor: pointer; font-size: 18px; display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+            color: var(--text); line-height: 1;
+        }
+        .search-panel-results { max-height: 65vh; overflow-y: auto; }
+        .search-hint {
+            padding: 36px 20px; text-align: center;
+            color: var(--text2); font-size: 14px;
+        }
+        .search-hint-icon { font-size: 38px; margin-bottom: 10px; }
+        .search-result-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 16px; cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+        .search-result-item:hover { background: var(--search-bg); }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-img { width: 44px; height: 60px; object-fit: cover; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--border); }
+        .search-result-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .search-result-author { font-size: 12px; color: var(--text2); margin-bottom: 3px; }
+        .search-result-price { font-size: 13px; font-weight: 700; color: var(--red); }
+        .search-result-badge { display:inline-block; background:#dc2626; color:white; font-size:10px; font-weight:700; padding:1px 6px; border-radius:20px; margin-left:6px; vertical-align: middle; }
+        .search-no-result { padding: 36px 20px; text-align: center; color: var(--text2); font-size: 14px; }
+
+        /* ── BRANDING: logo centred with bigger presence ── */
+        .branding {
+            text-align: center;
+            padding: 16px 16px 14px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+        }
+        .branding-logo {
+            width: 70px; height: 70px;
+            object-fit: contain;
+            margin-bottom: 8px;
+            display: block; margin-left: auto; margin-right: auto;
+            filter: drop-shadow(0 2px 8px rgba(5,150,105,0.15));
+        }
+        .branding-name {
+            font-size: 20px; font-weight: 700;
+            color: var(--green); margin-bottom: 3px;
+        }
+        .branding-tagline { font-size: 13px; color: var(--text2); }
 
         /* SIDEBAR */
         .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100%; background: var(--sidebar-bg); box-shadow: 4px 0 20px rgba(0,0,0,0.12); z-index: 2000; transition: 0.35s; overflow-y: auto; }
@@ -139,9 +213,6 @@
         [data-theme="dark"] .sidebar-sub-item { color: var(--text2); }
         .sidebar-sub-item:hover { background: #059669; color: white; padding-left: 40px; }
 
-        /* BRANDING */
-        .branding { text-align: center; padding: 12px 0 8px; background: var(--card); border-bottom: 1px solid var(--border); }
-
         /* BANNER */
         .banner-container { max-width: 1200px; margin: 12px auto; overflow: hidden; border-radius: 12px; }
         .slider { display: flex; overflow-x: hidden; scroll-behavior: smooth; }
@@ -149,29 +220,12 @@
 
         /* INFO GRID */
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px; max-width: 700px; margin: 0 auto; }
-        .info-card {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            border-radius: 14px; padding: 14px;
-            display: flex; align-items: center; gap: 10px;
-            transition: transform 0.2s;
-            box-shadow: 0 3px 10px rgba(5,150,105,0.18);
-        }
+        .info-card { background: linear-gradient(135deg, #059669 0%, #047857 100%); border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 10px; transition: transform 0.2s; box-shadow: 0 3px 10px rgba(5,150,105,0.18); }
         .info-card:hover { transform: translateY(-2px); }
 
         /* CATEGORY BUTTONS */
         .category-container { display: flex; justify-content: center; gap: 8px; padding: 16px; flex-wrap: wrap; }
-        .cat-btn {
-            padding: 7px 16px;
-            background: var(--card);
-            color: var(--text2);
-            border: 1.5px solid var(--border);
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            font-size: 13px;
-            font-family: 'Hind Siliguri', Arial, sans-serif;
-        }
+        .cat-btn { padding: 7px 16px; background: var(--card); color: var(--text2); border: 1.5px solid var(--border); border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 13px; font-family: 'Hind Siliguri', Arial, sans-serif; }
         .cat-btn:hover:not(.active) { border-color: var(--green); color: var(--green); background: rgba(5,150,105,0.05); }
         .cat-btn.active { background: #059669; color: #fff; border-color: transparent; box-shadow: 0 3px 12px rgba(5,150,105,0.3); }
 
@@ -185,24 +239,10 @@
         .book-row::-webkit-scrollbar-thumb { background: #a7f3d0; border-radius: 4px; }
 
         /* BOOK CARD */
-        .book-card {
-            flex-shrink: 0; width: 148px;
-            background: var(--card);
-            border-radius: 14px; overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer; position: relative;
-            border: 1px solid var(--border);
-        }
+        .book-card { flex-shrink: 0; width: 148px; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative; border: 1px solid var(--border); }
         .book-card:hover { transform: translateY(-5px); box-shadow: 0 12px 28px rgba(5,150,105,0.18); border-color: var(--green); }
         .book-card img { width: 148px; height: 198px; object-fit: cover; display: block; }
-        .discount-badge {
-            position: absolute; top: 7px; left: 7px;
-            background: linear-gradient(135deg, #dc2626, #ef4444);
-            color: white; font-size: 10px; font-weight: bold;
-            padding: 2px 7px; border-radius: 20px; z-index: 2;
-            box-shadow: 0 2px 6px rgba(220,38,38,0.35);
-        }
+        .discount-badge { position: absolute; top: 7px; left: 7px; background: linear-gradient(135deg, #dc2626, #ef4444); color: white; font-size: 10px; font-weight: bold; padding: 2px 7px; border-radius: 20px; z-index: 2; box-shadow: 0 2px 6px rgba(220,38,38,0.35); }
         .wishlist-btn { position: absolute; top: 7px; right: 7px; background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 27px; height: 27px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.12); transition: 0.2s; }
         .wishlist-btn:hover { transform: scale(1.2); }
         .wishlist-btn.active { background: #ffe4e4; }
@@ -212,14 +252,7 @@
         .price-row { display: flex; align-items: center; gap: 5px; margin-bottom: 7px; flex-wrap: wrap; }
         .price-sell { color: var(--red); font-weight: bold; font-size: 13px; }
         .price-original { color: var(--text2); font-size: 11px; text-decoration: line-through; }
-        .book-card-btn {
-            display: block; padding: 6px;
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white; border-radius: 8px; cursor: pointer;
-            width: 100%; border: none; font-weight: bold; font-size: 11px;
-            text-align: center; font-family: 'Hind Siliguri', Arial, sans-serif;
-            transition: all 0.2s; box-shadow: 0 2px 8px rgba(5,150,105,0.25);
-        }
+        .book-card-btn { display: block; padding: 6px; background: linear-gradient(135deg, #059669, #10b981); color: white; border-radius: 8px; cursor: pointer; width: 100%; border: none; font-weight: bold; font-size: 11px; text-align: center; font-family: 'Hind Siliguri', Arial, sans-serif; transition: all 0.2s; box-shadow: 0 2px 8px rgba(5,150,105,0.25); }
         .book-card-btn:hover { background: linear-gradient(135deg, #047857, #059669); transform: translateY(-1px); }
 
         /* SKELETON */
@@ -237,7 +270,7 @@
         .recently-title { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 12px; padding-left: 12px; border-left: 4px solid #d97706; }
         [data-theme="dark"] .recently-title { color: #ecfdf5; }
 
-        /* SEARCH RESULTS */
+        /* SEARCH RESULTS (kept for compatibility) */
         .search-results { display: block; padding: 14px; max-width: 700px; margin: 0 auto; }
 
         /* CART MODAL */
@@ -254,32 +287,14 @@
         .wa-float { position: fixed; bottom: 82px; right: 16px; z-index: 997; }
 
         /* FOOTER */
-        footer {
-            background: linear-gradient(160deg, #064e3b 0%, #047857 100%);
-            color: white; text-align: center;
-            padding: 36px 20px; margin-top: 40px;
-            border-top: 2px solid rgba(167,243,208,0.3);
-        }
+        footer { background: linear-gradient(160deg, #064e3b 0%, #047857 100%); color: white; text-align: center; padding: 36px 20px; margin-top: 40px; border-top: 2px solid rgba(167,243,208,0.3); }
 
         @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         .fade-in { animation: fadeIn 0.3s ease; }
 
         /* BOTTOM NAV */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0;
-            width: 100%;
-            background: var(--card);
-            display: flex; justify-content: space-around; align-items: center;
-            padding: 8px 0 12px;
-            box-shadow: 0 -2px 14px rgba(0,0,0,0.09);
-            z-index: 998;
-            border-top: 1.5px solid var(--border);
-        }
-        .bottom-nav-item {
-            display: flex; flex-direction: column; align-items: center;
-            gap: 3px; cursor: pointer; padding: 5px 18px;
-            border-radius: 12px; transition: all 0.2s; position: relative;
-        }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; align-items: center; padding: 8px 0 12px; box-shadow: 0 -2px 14px rgba(0,0,0,0.09); z-index: 998; border-top: 1.5px solid var(--border); }
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 5px 14px; border-radius: 12px; transition: all 0.2s; position: relative; }
         .bottom-nav-item:active { transform: scale(0.9); }
         .bottom-nav-icon { font-size: 21px; line-height: 1; }
         .bottom-nav-label { font-size: 10px; color: #9ca3af; font-family: 'Hind Siliguri', Arial, sans-serif; font-weight: 700; }
@@ -306,6 +321,8 @@
             .skeleton-img { width: 128px; height: 172px; }
             .cat-section-title { font-size: 14px; }
             .cat-btn { padding: 6px 11px; font-size: 12px; }
+            .navbar-title { display: none; }
+            .search-trigger-btn { max-width: 200px; }
         }
     </style>
 </head>
@@ -356,30 +373,52 @@
 
 <!-- NAVBAR -->
 <nav class="navbar">
-    <img src="logo.png" alt="Logo" style="width:38px; height:38px; object-fit:contain; flex-shrink:0;">
-    <div class="nav-center">
-        <div class="nav-search-container" id="nav-search-container">
-            <span style="font-size:15px; color:#9ca3af;">🔍</span>
-            <input type="text" id="searchInput" oninput="filterBooks()" placeholder="বই বা লেখক খুঁজুন..." class="nav-search-input">
-            <div id="searchSuggestions"></div>
-        </div>
+    <div class="navbar-left">
+        <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="মেনু">☰</button>
+        <span class="navbar-title">গ্রন্থকানন</span>
     </div>
-    <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+
+    <button class="search-trigger-btn" onclick="openSearchOverlay()">
+        <span style="font-size:15px;">🔍</span>
+        <span>বই বা লেখক খুঁজুন...</span>
+    </button>
+
+    <div class="navbar-right">
         <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
         <div class="nav-icon-btn" onclick="showWishlistDirect()">
             🤍
             <span class="nav-badge" id="navWishBadge">0</span>
         </div>
-        <div class="nav-icon-btn" onclick="showLoginModal()">👤</div>
         <div class="cart-icon-wrapper" onclick="showCart()" id="cartIconWrapper">
             🛒<span class="cart-badge" id="count">0</span>
         </div>
     </div>
 </nav>
 
-<!-- BRANDING -->
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay" onclick="handleOverlayClick(event)">
+    <div class="search-panel" id="searchPanel">
+        <div class="search-panel-header">
+            <span style="font-size:18px; color:#9ca3af; flex-shrink:0;">🔍</span>
+            <input type="text" id="searchInput" class="search-panel-input"
+                placeholder="বই বা লেখকের নাম লিখুন..."
+                oninput="filterBooks()" autocomplete="off">
+            <button class="search-close-btn" onclick="closeSearchOverlay()">×</button>
+        </div>
+        <div class="search-panel-results" id="searchPanelResults">
+            <div class="search-hint">
+                <div class="search-hint-icon">📚</div>
+                <p>বইয়ের নাম বা লেখকের নাম লিখুন</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BRANDING: logo centred -->
 <header class="branding">
-    <p style="font-size:15px; color:#059669; font-weight:700; letter-spacing:0.3px;">গ্রন্থকানন — স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
+    <img src="logo.png" alt="গ্রন্থকানন লোগো" class="branding-logo">
+    <div class="branding-name">গ্রন্থকানন</div>
+    <div class="branding-tagline">স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</div>
 </header>
 
 <!-- BANNER -->
@@ -512,20 +551,24 @@
     <p style="color:#a7f3d0; font-size:13px;">&copy; 2025 <strong>গ্রন্থকানন</strong> | সর্বস্বত্ব সংরক্ষিত</p>
 </footer>
 
-<!-- BOTTOM NAV -->
+<!-- BOTTOM NAV (5 items: home | search | cart | category | menu) -->
 <div class="bottom-nav">
     <div class="bottom-nav-item active" id="bnav-home" onclick="bnavActive('bnav-home'); scrollToTop()">
         <span class="bottom-nav-icon">🏠</span>
         <span class="bottom-nav-label">হোম</span>
     </div>
-    <div class="bottom-nav-item" id="bnav-cat" onclick="bnavActive('bnav-cat'); openCategoryDrawer()">
-        <span class="bottom-nav-icon">⊞</span>
-        <span class="bottom-nav-label">ক্যাটাগরি</span>
+    <div class="bottom-nav-item" id="bnav-search" onclick="bnavActive('bnav-search'); openSearchOverlay()">
+        <span class="bottom-nav-icon">🔍</span>
+        <span class="bottom-nav-label">খুঁজুন</span>
     </div>
     <div class="bottom-nav-item" id="bnav-cart" onclick="bnavActive('bnav-cart'); showCart()">
         <span class="bottom-nav-icon">🛍️</span>
         <span class="bnav-badge" id="bnavBadge">0</span>
         <span class="bottom-nav-label">শপিং ব্যাগ</span>
+    </div>
+    <div class="bottom-nav-item" id="bnav-cat" onclick="bnavActive('bnav-cat'); openCategoryDrawer()">
+        <span class="bottom-nav-icon">⊞</span>
+        <span class="bottom-nav-label">ক্যাটাগরি</span>
     </div>
     <div class="bottom-nav-item" id="bnav-menu" onclick="bnavActive('bnav-menu'); toggleSidebar()">
         <span class="bottom-nav-icon">☰</span>
@@ -564,6 +607,7 @@ let discountPercent = 0;
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
 let recentlyViewed = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
 
+/* DARK MODE */
 function toggleDarkMode() {
     const html = document.documentElement;
     const isDark = html.getAttribute('data-theme') === 'dark';
@@ -577,6 +621,23 @@ if (savedTheme) {
     document.getElementById('darkBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
 }
 
+/* SEARCH OVERLAY */
+function openSearchOverlay() {
+    document.getElementById('searchOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('searchInput').focus(), 80);
+}
+function closeSearchOverlay() {
+    document.getElementById('searchOverlay').classList.remove('open');
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchPanelResults').innerHTML =
+        '<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>';
+}
+function handleOverlayClick(e) {
+    if (e.target === document.getElementById('searchOverlay')) closeSearchOverlay();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearchOverlay(); });
+
+/* HELPERS */
 function discountPct(b) {
     if (b.original_price > b.price) return Math.round((b.original_price - b.price) / b.original_price * 100);
     return 0;
@@ -592,7 +653,6 @@ function toggleWishlist(e, name) {
     renderSections(books);
     renderRecentlyViewed();
 }
-
 function updateWishlistCount() {
     const count = wishlist.length;
     const el = document.getElementById('wishCount');
@@ -668,8 +728,7 @@ function buildAuthorList() {
 }
 
 function filterCategory(cat, btn) {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('searchSuggestions').style.display = 'none';
+    closeSearchOverlay();
     if (btn) { document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
     renderSections(books); renderRecentlyViewed();
     if (cat !== 'all') {
@@ -692,54 +751,45 @@ function filterSidebarList(subId, query) {
     });
 }
 
+/* SEARCH — now drives overlay panel */
 function filterBooks() {
     const input = document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
-    const suggestionBox = document.getElementById('searchSuggestions');
+    const panel = document.getElementById('searchPanelResults');
+
     if (!input) {
-        suggestionBox.style.display = 'none';
-        document.getElementById('searchResultWrapper').style.display = 'none';
-        document.getElementById('sectionsWrapper').style.display = 'block';
-        document.getElementById('recentlySection').style.display = recentlyViewed.length > 0 ? 'block' : 'none';
+        panel.innerHTML = '<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>';
         return;
     }
-    const filtered = books.filter(b => b.name.normalize("NFC").toLowerCase().includes(input) || b.author.normalize("NFC").toLowerCase().includes(input));
-    document.getElementById('sectionsWrapper').style.display = 'none';
-    document.getElementById('recentlySection').style.display = 'none';
-    document.getElementById('searchResultWrapper').style.display = 'block';
-    document.getElementById('searchGrid').innerHTML = filtered.length
-        ? filtered.map(b => {
-            const idx = books.indexOf(b); const pct = discountPct(b);
-            return `<div onclick="goToBook(${idx})" style="display:flex;align-items:center;gap:12px;background:var(--card);border-radius:12px;padding:10px;box-shadow:0 2px 8px var(--shadow);cursor:pointer;margin-bottom:8px;border:1px solid var(--border);">
-                <img src="${b.img}" style="width:52px;height:72px;object-fit:cover;border-radius:6px;flex-shrink:0;">
-                <div style="flex:1;min-width:0;">
-                    <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${b.name}</div>
-                    <div style="font-size:12px;color:var(--text2);">${b.author}</div>
-                </div>
-                <div style="text-align:right;flex-shrink:0;">
-                    ${pct>0?`<div style="background:#dc2626;color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;margin-bottom:4px;">${pct}% ছাড়</div>`:''}
-                    <div style="font-size:14px;font-weight:700;color:#dc2626;">৳${b.price}</div>
-                </div>
-            </div>`;
-        }).join('')
-        : '<div style="text-align:center;padding:40px;color:var(--text2);">বইটি পাওয়া যায়নি!</div>';
 
-    if (filtered.length) {
-        suggestionBox.innerHTML = filtered.slice(0,5).map(b => {
-            return `<div style="display:flex;align-items:center;gap:10px;padding:10px;border-bottom:1px solid var(--border);cursor:pointer;background:var(--card);" onclick="selectBook('${b.name.replace(/'/g,"\\'")}')">
-                <img src="${b.img}" style="width:32px;height:46px;object-fit:cover;border-radius:4px;">
-                <div style="flex:1;"><h4 style="margin:0;font-size:13px;color:var(--text);">${b.name}</h4><p style="margin:0;font-size:12px;color:#dc2626;font-weight:bold;">৳ ${b.price}</p></div>
-            </div>`;
-        }).join('');
-        suggestionBox.style.display = 'block';
-    } else {
-        suggestionBox.innerHTML = '<div style="padding:14px;color:var(--text2);text-align:center;">বইটি পাওয়া যায়নি!</div>';
-        suggestionBox.style.display = 'block';
+    const filtered = books.filter(b =>
+        b.name.normalize("NFC").toLowerCase().includes(input) ||
+        b.author.normalize("NFC").toLowerCase().includes(input)
+    );
+
+    if (!filtered.length) {
+        panel.innerHTML = '<div class="search-no-result">😔 বইটি পাওয়া যায়নি!</div>';
+        return;
     }
+
+    panel.innerHTML = filtered.map(b => {
+        const idx = books.indexOf(b);
+        const pct = discountPct(b);
+        return `<div class="search-result-item" onclick="closeSearchOverlay(); goToBook(${idx})">
+            <img src="${b.img}" class="search-result-img" alt="">
+            <div style="flex:1; min-width:0;">
+                <div class="search-result-name">${b.name}</div>
+                <div class="search-result-author">${b.author} · ${b.pub}</div>
+                <div class="search-result-price">
+                    ৳${b.price}
+                    ${b.original_price > b.price ? `<span style="font-size:11px;color:var(--text2);text-decoration:line-through;font-weight:400;margin-left:4px;">৳${b.original_price}</span>` : ''}
+                    ${pct > 0 ? `<span class="search-result-badge">${pct}% ছাড়</span>` : ''}
+                </div>
+            </div>
+        </div>`;
+    }).join('');
 }
 
-function selectBook(title) { const idx = books.findIndex(b => b.name === title); if (idx !== -1) goToBook(idx); }
-document.addEventListener('click', e => { if (!document.getElementById('nav-search-container').contains(e.target)) document.getElementById('searchSuggestions').style.display = 'none'; });
-
+/* WISHLIST */
 function showWishlistDirect() {
     if (document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
     const box = document.getElementById('wishlistItems');
@@ -758,34 +808,10 @@ function showWishlistDirect() {
     }
     document.getElementById('wishlistBox').style.display = 'flex';
 }
-
 function showLoginModal() { alert('শীঘ্রই আসছে! 🔐\nলগইন ও রেজিস্ট্রেশন ফিচার প্রস্তুত হচ্ছে।'); }
 function closeWishlist() { document.getElementById('wishlistBox').style.display = 'none'; }
 
-window.onload = () => {
-    setTimeout(() => {
-        document.getElementById('skeletonWrapper').style.display = 'none';
-        document.getElementById('sectionsWrapper').style.display = 'block';
-        renderSections(books); renderRecentlyViewed();
-    }, 800);
-    buildPublisherList(); buildAuthorList();
-    updateCartUI(); updateWishlistCount();
-    if (localStorage.getItem('gronthokanon_opencart') === '1') {
-        localStorage.removeItem('gronthokanon_opencart');
-        setTimeout(() => showCart(), 500);
-    }
-};
-
-function navigateToFilter(type, value) {
-    document.body.style.opacity = '0'; document.body.style.transition = 'opacity 0.25s ease';
-    setTimeout(() => { window.location.href = `filter.html?type=${type}&value=${encodeURIComponent(value)}`; }, 250);
-}
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('active');
-    const overlay = document.getElementById('overlay');
-    overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
-}
-
+/* CART */
 function addToCart(name, price, img) {
     cart.push({ name: name.trim(), price: Number(price), img });
     saveCart(); updateCartUI();
@@ -798,9 +824,7 @@ function addToCart(name, price, img) {
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 2000);
 }
-
 function saveCart() { localStorage.setItem('gronthokanon_cart', JSON.stringify(cart)); }
-
 function updateCartUI() {
     const box = document.getElementById('cartItems'); if (!box) return;
     let subtotal = 0;
@@ -833,7 +857,6 @@ function updateCartUI() {
     if (document.getElementById('discountAmt')) document.getElementById('discountAmt').innerText = disc;
     if (document.getElementById('total')) document.getElementById('total').innerText = subtotal - disc;
 }
-
 function changeQty(name, delta) {
     if (delta === 1) { const item = cart.find(i => i.name === name); if (item) cart.push({...item}); }
     else { const i = cart.findLastIndex(i => i.name === name); if (i !== -1) cart.splice(i, 1); }
@@ -853,11 +876,37 @@ function openOrderForm() {
     window.location.href = 'checkout.html';
 }
 
+/* NAV */
 function bnavActive(id) { document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 function openCategoryDrawer() { document.getElementById('catDrawer').classList.add('open'); document.getElementById('catDrawerOverlay').classList.add('open'); }
 function closeCategoryDrawer() { document.getElementById('catDrawer').classList.remove('open'); document.getElementById('catDrawerOverlay').classList.remove('open'); bnavActive('bnav-home'); }
 function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
+    const overlay = document.getElementById('overlay');
+    overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+}
+function navigateToFilter(type, value) {
+    document.body.style.opacity = '0'; document.body.style.transition = 'opacity 0.25s ease';
+    setTimeout(() => { window.location.href = `filter.html?type=${type}&value=${encodeURIComponent(value)}`; }, 250);
+}
 
+/* INIT */
+window.onload = () => {
+    setTimeout(() => {
+        document.getElementById('skeletonWrapper').style.display = 'none';
+        document.getElementById('sectionsWrapper').style.display = 'block';
+        renderSections(books); renderRecentlyViewed();
+    }, 800);
+    buildPublisherList(); buildAuthorList();
+    updateCartUI(); updateWishlistCount();
+    if (localStorage.getItem('gronthokanon_opencart') === '1') {
+        localStorage.removeItem('gronthokanon_opencart');
+        setTimeout(() => showCart(), 500);
+    }
+};
+
+/* BANNER SLIDER */
 const slider = document.getElementById('mainSlider');
 let currentImg = 0;
 if (slider) {
