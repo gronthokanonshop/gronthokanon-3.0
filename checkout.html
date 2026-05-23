@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,656 +8,674 @@
     <meta name="theme-color" content="#059669">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #edf2f7;
-            --card: #fff;
-            --text: #333;
-            --subtext: #555;
-            --muted: #888;
-            --border: #e0e0e0;
-            --green: #059669;
-            --green-light: #f0faf4;
-            --green-border: #c8e6c9;
-            --red: #e74c3c;
-            --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --input-bg: #fafafa;
-            --navbar-bg: #fff;
-            --label: #555;
-            --section-border: #eee;
-            --total-bg: #f0faf4;
-            --success-overlay: rgba(0,0,0,0.85);
+        *{box-sizing:border-box;margin:0;padding:0;}
+        :root{
+            --bg:#f0f4f8;
+            --card:#fff;
+            --text:#1a202c;
+            --subtext:#4a5568;
+            --muted:#a0aec0;
+            --border:#e2e8f0;
+            --green:#059669;
+            --green2:#10b981;
+            --green-light:#ecfdf5;
+            --green-border:#a7f3d0;
+            --red:#ef4444;
+            --shadow:0 2px 16px rgba(0,0,0,0.07);
+            --shadow-lg:0 8px 32px rgba(0,0,0,0.12);
+            --input-bg:#fff;
+            --navbar-bg:#fff;
+            --label:#374151;
+            --total-bg:#ecfdf5;
+            --success-overlay:rgba(0,0,0,0.85);
+            --step-active:#059669;
+            --radius:16px;
+        }
+        [data-theme="dark"]{
+            --bg:#0d1117;
+            --card:#161b27;
+            --text:#e2e8f0;
+            --subtext:#94a3b8;
+            --muted:#4a5568;
+            --border:#1e293b;
+            --green:#10b981;
+            --green2:#34d399;
+            --green-light:#052e16;
+            --green-border:#14532d;
+            --red:#f87171;
+            --shadow:0 2px 16px rgba(0,0,0,0.5);
+            --shadow-lg:0 8px 32px rgba(0,0,0,0.6);
+            --input-bg:#0f172a;
+            --navbar-bg:#111827;
+            --label:#94a3b8;
+            --total-bg:#052e16;
+            --success-overlay:rgba(0,0,0,0.95);
         }
 
-        [data-theme="dark"] {
-            --bg: #0f1117;
-            --card: #1a1d27;
-            --text: #e8eaf6;
-            --subtext: #b0b8d1;
-            --muted: #6b7394;
-            --border: #2a2d3e;
-            --green: #10b981;
-            --green-light: #0d1f17;
-            --green-border: #1a4a2e;
-            --red: #ff6b6b;
-            --shadow: 0 2px 16px rgba(0,0,0,0.4);
-            --input-bg: #12151f;
-            --navbar-bg: #13161f;
-            --label: #9ba3c0;
-            --section-border: #2a2d3e;
-            --total-bg: #0d1f17;
-            --success-overlay: rgba(0,0,0,0.92);
+        body{
+            font-family:'Hind Siliguri','SolaimanLipi',Arial,sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            transition:background .3s,color .3s;
+            min-height:100vh;
         }
 
-        body {
-            font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: background 0.3s, color 0.3s;
-            min-height: 100vh;
+        /* ── NAVBAR ── */
+        .navbar{
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:10px 16px;
+            background:var(--navbar-bg);
+            box-shadow:0 1px 0 var(--border);
+            position:sticky;top:0;z-index:200;
+            transition:background .3s;
+        }
+        .back-btn{
+            width:40px;height:40px;border-radius:50%;
+            border:none;background:var(--green-light);
+            color:var(--green);font-size:20px;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;
+            flex-shrink:0;transition:.2s;
+        }
+        .back-btn:hover{background:var(--green);color:#fff;}
+        .navbar-title{flex:1;font-size:16px;font-weight:700;color:var(--text);}
+        .navbar-title span{color:var(--green);}
+        .dark-toggle{
+            width:40px;height:40px;border-radius:50%;
+            border:1.5px solid var(--border);background:transparent;
+            font-size:18px;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;
+            color:var(--text);transition:.2s;
+        }
+        .dark-toggle:hover{background:var(--border);}
+
+        /* ── PROGRESS BAR ── */
+        .progress-wrap{
+            background:var(--navbar-bg);
+            padding:14px 20px 16px;
+            border-bottom:1px solid var(--border);
+        }
+        .progress-steps{
+            display:flex;align-items:center;
+            max-width:480px;margin:0 auto;
+        }
+        .p-step{
+            display:flex;flex-direction:column;align-items:center;gap:4px;
+            flex:1;
+        }
+        .p-circle{
+            width:32px;height:32px;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:13px;font-weight:700;
+            transition:.3s;
+        }
+        .p-circle.done{background:var(--green);color:#fff;}
+        .p-circle.active{background:var(--green);color:#fff;box-shadow:0 0 0 4px rgba(5,150,105,.2);}
+        .p-circle.pending{background:var(--border);color:var(--muted);}
+        .p-label{font-size:10px;font-weight:600;color:var(--muted);}
+        .p-label.active{color:var(--green);}
+        .p-line{flex:1;height:2px;background:var(--border);margin:0 4px;margin-bottom:18px;transition:.3s;}
+        .p-line.done{background:var(--green);}
+
+        /* ── CONTAINER ── */
+        .container{max-width:520px;margin:0 auto;padding:16px 14px 100px;}
+
+        /* ── TRUST BAR ── */
+        .trust-bar{
+            display:flex;justify-content:space-around;
+            background:var(--card);
+            border-radius:var(--radius);
+            padding:14px 8px;
+            margin-bottom:14px;
+            box-shadow:var(--shadow);
+            border:1px solid var(--border);
+        }
+        .trust-item{text-align:center;}
+        .trust-icon{font-size:20px;margin-bottom:3px;}
+        .trust-label{font-size:9.5px;font-weight:700;color:var(--subtext);line-height:1.4;}
+
+        /* ── SECTION CARD ── */
+        .card{
+            background:var(--card);
+            border-radius:var(--radius);
+            padding:20px;
+            margin-bottom:14px;
+            box-shadow:var(--shadow);
+            border:1px solid var(--border);
+            animation:fadeUp .35s ease both;
+        }
+        @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+        .card-header{
+            display:flex;align-items:center;gap:10px;
+            margin-bottom:18px;
+            padding-bottom:14px;
+            border-bottom:1px solid var(--border);
+        }
+        .card-icon{
+            width:36px;height:36px;border-radius:10px;
+            background:var(--green-light);
+            display:flex;align-items:center;justify-content:center;
+            font-size:18px;flex-shrink:0;
+        }
+        .card-title{font-size:15px;font-weight:700;color:var(--text);}
+        .card-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+
+        /* ── FORM ── */
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+        .form-group{margin-bottom:14px;position:relative;}
+        .form-group:last-child{margin-bottom:0;}
+        label{
+            display:block;
+            font-size:12px;font-weight:700;
+            color:var(--label);
+            margin-bottom:6px;
+            letter-spacing:.3px;
+        }
+        label .req{color:var(--red);}
+        .input-wrap{position:relative;}
+        .input-icon{
+            position:absolute;left:12px;top:50%;transform:translateY(-50%);
+            font-size:16px;pointer-events:none;
+        }
+        .input-wrap input,
+        .input-wrap select,
+        .input-wrap textarea{padding-left:40px!important;}
+
+        input,select,textarea{
+            width:100%;
+            padding:11px 14px;
+            border:1.5px solid var(--border);
+            border-radius:10px;
+            font-size:14px;
+            outline:none;
+            background:var(--input-bg);
+            color:var(--text);
+            font-family:'Hind Siliguri',Arial,sans-serif;
+            transition:border-color .2s,box-shadow .2s;
+        }
+        input:focus,select:focus,textarea:focus{
+            border-color:var(--green);
+            box-shadow:0 0 0 3px rgba(5,150,105,.12);
+        }
+        input::placeholder{color:var(--muted);}
+        textarea{height:76px;resize:none;}
+        select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+
+        /* ── ORDER ITEMS ── */
+        .order-item{
+            display:flex;align-items:center;gap:12px;
+            padding:10px 0;
+            border-bottom:1px solid var(--border);
+        }
+        .order-item:last-child{border-bottom:none;padding-bottom:0;}
+        .order-item img{
+            width:44px;height:60px;
+            object-fit:cover;border-radius:8px;
+            border:1px solid var(--border);flex-shrink:0;
+        }
+        .order-item-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.3;}
+        .order-item-price{font-size:12px;color:var(--muted);}
+        .order-item-price strong{color:var(--green);font-size:14px;}
+
+        /* ── TOTAL BOX ── */
+        .total-box{
+            background:var(--total-bg);
+            border:1.5px solid var(--green-border);
+            border-radius:12px;
+            padding:14px 16px;
+            margin-top:14px;
+        }
+        .total-row{
+            display:flex;justify-content:space-between;
+            font-size:13px;color:var(--subtext);
+            margin-bottom:8px;
+        }
+        .total-row.red{color:var(--red);}
+        .total-final{
+            display:flex;justify-content:space-between;
+            font-size:17px;font-weight:800;
+            color:var(--green);
+            margin-top:10px;padding-top:10px;
+            border-top:1.5px dashed var(--green-border);
         }
 
-        /* NAVBAR */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 20px;
-            background: var(--navbar-bg);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transition: background 0.3s, box-shadow 0.3s;
+        /* ── PAYMENT OPTIONS ── */
+        .payment-grid{display:flex;flex-direction:column;gap:10px;}
+        .payment-option{
+            display:flex;align-items:center;gap:12px;
+            padding:14px;
+            border:1.5px solid var(--border);
+            border-radius:12px;
+            cursor:pointer;
+            transition:.2s;
+            position:relative;
         }
+        .payment-option:hover{border-color:var(--green);background:var(--green-light);}
+        .payment-option.selected{
+            border-color:var(--green);
+            background:var(--green-light);
+        }
+        .payment-option.selected::after{
+            content:'✓';
+            position:absolute;right:14px;top:50%;transform:translateY(-50%);
+            width:22px;height:22px;border-radius:50%;
+            background:var(--green);color:#fff;
+            font-size:12px;font-weight:800;
+            display:flex;align-items:center;justify-content:center;
+        }
+        .payment-option.disabled{opacity:.45;cursor:not-allowed;}
+        .payment-option.disabled:hover{border-color:var(--border);background:transparent;}
+        .payment-option input[type="radio"]{display:none;}
+        .pay-logo{
+            width:44px;height:44px;
+            border-radius:10px;
+            object-fit:contain;
+            border:1px solid var(--border);
+            background:#fff;
+            padding:4px;
+            flex-shrink:0;
+        }
+        .pay-logo.cod{
+            display:flex;align-items:center;justify-content:center;
+            font-size:22px;
+            background:var(--green-light);
+            border-color:var(--green-border);
+        }
+        .payment-label{font-size:14px;font-weight:700;color:var(--text);}
+        .payment-sub{font-size:11px;color:var(--muted);margin-top:2px;}
 
-        .back-btn {
-            background: var(--green);
-            border: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            font-size: 22px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(39,174,96,0.3);
-            color: white;
-            transition: transform 0.2s, box-shadow 0.2s;
+        /* ── BKASH BOX ── */
+        .bkash-box{
+            background:#fff0f6;
+            border:1.5px solid #fbcfe8;
+            border-radius:12px;
+            padding:16px;
+            margin-top:12px;
+            display:none;
+            animation:fadeUp .3s ease;
         }
-        .back-btn:hover { transform: scale(1.08); box-shadow: 0 4px 14px rgba(39,174,96,0.4); }
+        [data-theme="dark"] .bkash-box{background:#1a0a12;border-color:#4a1a30;}
+        .bkash-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+        .bstep{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--subtext);}
+        .bstep-num{
+            min-width:24px;height:24px;border-radius:50%;
+            background:#db2777;color:#fff;
+            font-size:11px;font-weight:800;
+            display:flex;align-items:center;justify-content:center;
+            flex-shrink:0;
+        }
+        .bkash-number{
+            background:#fff;
+            border:2px dashed #fbcfe8;
+            border-radius:10px;
+            padding:10px 14px;
+            text-align:center;
+            font-size:20px;font-weight:800;
+            letter-spacing:3px;
+            color:#be185d;
+            cursor:pointer;
+            transition:.2s;
+            margin-bottom:12px;
+        }
+        [data-theme="dark"] .bkash-number{background:#2d0a1e;}
+        .bkash-number:hover{background:#fdf2f8;}
+        .copy-hint{display:block;font-size:10px;color:#db2777;opacity:.7;letter-spacing:0;font-weight:600;margin-top:3px;}
+        .bkash-input input{border-color:#fbcfe8;}
+        .bkash-input input:focus{border-color:#db2777;box-shadow:0 0 0 3px rgba(219,39,119,.12);}
 
-        .navbar h2 { font-size: 17px; color: var(--green); font-weight: 700; }
+        /* ── CONFIRM BUTTON ── */
+        .confirm-btn{
+            width:100%;
+            padding:17px;
+            background:linear-gradient(135deg,var(--green),var(--green2));
+            color:#fff;
+            border:none;
+            border-radius:14px;
+            font-size:16px;font-weight:800;
+            cursor:pointer;
+            box-shadow:0 6px 24px rgba(5,150,105,.35);
+            transition:.2s;
+            letter-spacing:.3px;
+            font-family:'Hind Siliguri',Arial,sans-serif;
+            margin-top:4px;
+        }
+        .confirm-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(5,150,105,.45);}
+        .confirm-btn:active{transform:translateY(0);}
+        .confirm-btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+        .spinner{
+            display:inline-block;
+            width:18px;height:18px;
+            border:2.5px solid rgba(255,255,255,.4);
+            border-top-color:#fff;
+            border-radius:50%;
+            animation:spin .7s linear infinite;
+            vertical-align:middle;margin-right:8px;
+        }
+        @keyframes spin{to{transform:rotate(360deg)}}
 
-        .dark-toggle {
-            background: var(--border);
-            border: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s, transform 0.2s;
-            color: var(--text);
-        }
-        .dark-toggle:hover { transform: rotate(20deg); }
+        /* ── EMPTY CART ── */
+        .empty-cart{text-align:center;padding:30px 20px;color:var(--muted);}
+        .empty-cart .e-icon{font-size:42px;margin-bottom:10px;}
 
-        /* CONTAINER */
-        .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 0 16px 60px;
+        /* ── SUCCESS MODAL ── */
+        .success-modal{
+            display:none;
+            position:fixed;inset:0;
+            background:var(--success-overlay);
+            z-index:99999;
+            align-items:center;justify-content:center;
+            backdrop-filter:blur(6px);
         }
+        .success-modal.show{display:flex;}
+        .success-inner{
+            background:var(--card);
+            border-radius:24px;
+            padding:36px 28px;
+            text-align:center;
+            max-width:340px;width:92%;
+            animation:popIn .45s cubic-bezier(.34,1.56,.64,1);
+            box-shadow:0 24px 64px rgba(0,0,0,.4);
+        }
+        @keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+        .success-anim{
+            width:80px;height:80px;border-radius:50%;
+            background:linear-gradient(135deg,var(--green),var(--green2));
+            margin:0 auto 20px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:36px;
+            box-shadow:0 8px 24px rgba(5,150,105,.4);
+            animation:bounceIn .6s ease .3s both;
+        }
+        @keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+        .success-inner h2{font-size:21px;font-weight:800;color:var(--text);margin-bottom:4px;}
+        .success-sub{font-size:11px;font-weight:800;color:var(--green);letter-spacing:2px;margin-bottom:18px;}
+        .success-info{
+            background:var(--bg);
+            border:1px solid var(--border);
+            border-radius:12px;
+            padding:14px 16px;
+            text-align:left;
+            font-size:13px;
+            color:var(--subtext);
+            line-height:2;
+            margin-bottom:18px;
+        }
+        .success-note{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+        .home-btn{
+            width:100%;
+            padding:14px;
+            background:linear-gradient(135deg,var(--green),var(--green2));
+            color:#fff;border:none;border-radius:12px;
+            font-size:15px;font-weight:800;cursor:pointer;
+            font-family:'Hind Siliguri',Arial,sans-serif;
+            transition:.2s;
+        }
+        .home-btn:hover{transform:translateY(-2px);}
 
-        /* CARDS */
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            transition: background 0.3s, box-shadow 0.3s;
-            animation: fadeUp 0.4s ease both;
+        /* ── VALIDATION TOAST ── */
+        .v-toast{
+            position:fixed;bottom:30px;left:50%;
+            transform:translateX(-50%) translateY(20px);
+            background:#dc2626;color:#fff;
+            padding:12px 22px;border-radius:30px;
+            font-size:13px;font-weight:700;
+            z-index:99999;
+            box-shadow:0 6px 20px rgba(220,38,38,.35);
+            opacity:0;
+            transition:opacity .25s,transform .25s;
+            white-space:nowrap;
+            font-family:'Hind Siliguri',Arial,sans-serif;
+            pointer-events:none;
         }
+        .v-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* ── WHATSAPP ── */
+        .wa-float{
+            position:fixed;bottom:24px;right:18px;
+            width:52px;height:52px;border-radius:50%;
+            background:#25D366;
+            display:flex;align-items:center;justify-content:center;
+            box-shadow:0 4px 16px rgba(37,211,102,.5);
+            z-index:9990;text-decoration:none;
+            transition:.2s;
         }
+        .wa-float:hover{transform:scale(1.1);}
+        .wa-float img{width:30px;}
 
-        .card:nth-child(1) { animation-delay: 0.05s; }
-        .card:nth-child(2) { animation-delay: 0.1s; }
-        .card:nth-child(3) { animation-delay: 0.15s; }
-        .card:nth-child(4) { animation-delay: 0.2s; }
-        .card:nth-child(5) { animation-delay: 0.25s; }
+        ::-webkit-scrollbar{width:5px;}
+        ::-webkit-scrollbar-track{background:var(--bg);}
+        ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
 
-        .card h3 {
-            font-size: 14px;
-            color: var(--green);
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--section-border);
-            font-weight: 700;
-            letter-spacing: 0.3px;
+        @media(max-width:400px){
+            .form-row{grid-template-columns:1fr;}
         }
-
-        /* ORDER ITEMS */
-        .order-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--section-border);
-        }
-        .order-item:last-child { border-bottom: none; }
-        .order-item img {
-            width: 42px;
-            height: 58px;
-            object-fit: cover;
-            border-radius: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-        .order-item-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-        .order-item-price { font-size: 12px; color: var(--red); font-weight: 700; }
-
-        /* FORM */
-        .form-group { margin-bottom: 13px; }
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--label);
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .form-group label span { color: var(--red); }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 11px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s, background 0.3s, box-shadow 0.2s;
-            background: var(--input-bg);
-            color: var(--text);
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: var(--green);
-            box-shadow: 0 0 0 3px rgba(39,174,96,0.12);
-        }
-
-        .form-group textarea { height: 72px; resize: none; }
-
-        /* TOTAL BOX */
-        .total-box {
-            background: var(--total-bg);
-            border: 1.5px solid var(--green);
-            border-radius: 14px;
-            padding: 16px 18px;
-            margin-bottom: 16px;
-            transition: background 0.3s;
-            animation: fadeUp 0.4s ease 0.2s both;
-        }
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--subtext);
-            margin-bottom: 7px;
-        }
-        .total-row.discount { color: var(--red); }
-        .total-final {
-            display: flex;
-            justify-content: space-between;
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--green);
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid var(--green-border);
-        }
-
-        /* PAYMENT OPTIONS */
-        .payment-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            transition: border-color 0.2s, background 0.2s, transform 0.15s;
-        }
-        .payment-option:hover { transform: translateX(3px); }
-        .payment-option.selected {
-            border-color: var(--green);
-            background: var(--green-light);
-        }
-        .payment-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--green); flex-shrink: 0; }
-        .payment-option img { width: 38px; height: 38px; object-fit: contain; border-radius: 8px; flex-shrink: 0; }
-        .payment-option-label { font-size: 14px; font-weight: 700; color: var(--text); }
-        .payment-option-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-        .payment-option.disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* BKASH BOX */
-        .bkash-box {
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 10px;
-            display: none;
-            background: #fff0f6;
-            border: 1.5px solid #f7b5d0;
-            animation: fadeUp 0.3s ease;
-        }
-        [data-theme="dark"] .bkash-box { background: #1f0d15; border-color: #5a1a35; }
-
-        .step {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 13px;
-            color: var(--subtext);
-            line-height: 1.5;
-        }
-        .step-num {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 800;
-            flex-shrink: 0;
-            color: white;
-        }
-        .payment-number {
-            border-radius: 10px;
-            padding: 10px 14px 8px;
-            font-size: 17px;
-            font-weight: 800;
-            text-align: center;
-            margin: 10px 0;
-            letter-spacing: 3px;
-            color: #e91e8c;
-            border: 1.5px dashed #f7b5d0;
-            background: #fff;
-            cursor: pointer;
-            transition: background 0.2s;
-            position: relative;
-            line-height: 1.3;
-        }
-        [data-theme="dark"] .payment-number { background: #2a0d1a; }
-        .payment-number:hover { background: #fff0f6; }
-        .copy-hint { font-size: 10px; color: #e91e8c; opacity: 0.7; display: block; margin-top: 0; line-height: 1.2; }
-
-        /* CONFIRM BUTTON */
-        .confirm-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(39,174,96,0.35);
-            transition: transform 0.2s, box-shadow 0.2s;
-            letter-spacing: 0.5px;
-            margin-top: 6px;
-        }
-        .confirm-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(39,174,96,0.45);
-        }
-        .confirm-btn:active { transform: translateY(0); }
-        .confirm-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* LOADING SPINNER */
-        .spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2.5px solid rgba(255,255,255,0.4);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* SUCCESS MODAL */
-        .success-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--success-overlay);
-            z-index: 99999;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(4px);
-        }
-        .success-modal.show { display: flex; }
-
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .success-inner {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 36px 28px;
-            text-align: center;
-            max-width: 350px;
-            width: 90%;
-            animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-        }
-
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #059669, #10b981);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            box-shadow: 0 8px 24px rgba(39,174,96,0.4);
-            animation: bounceIn 0.6s ease 0.3s both;
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0); }
-            60% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-
-        .success-inner h2 { color: var(--text); margin-bottom: 6px; font-size: 20px; }
-        .success-inner p.sub { color: var(--green); font-weight: 800; font-size: 12px; margin-bottom: 18px; letter-spacing: 2px; }
-
-        .success-info {
-            background: var(--bg);
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 18px;
-            text-align: left;
-            font-size: 13px;
-            color: var(--subtext);
-            line-height: 2;
-            border: 1px solid var(--border);
-        }
-
-        .success-note { color: var(--muted); font-size: 12px; margin-bottom: 18px; line-height: 1.6; }
-
-        .home-btn {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
-            border: none;
-            padding: 14px 40px;
-            border-radius: 25px;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 15px;
-            width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 14px rgba(39,174,96,0.3);
-        }
-        .home-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39,174,96,0.4); }
-
-        /* EMPTY CART */
-        .empty-cart {
-            text-align: center;
-            padding: 30px 20px;
-            color: var(--muted);
-        }
-        .empty-cart .icon { font-size: 40px; margin-bottom: 10px; }
-        .empty-cart p { font-size: 14px; }
-
-        /* VALIDATION TOAST */
-        .v-toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: #dc2626;
-            color: white;
-            padding: 12px 22px;
-            border-radius: 25px;
-            font-size: 13px;
-            font-weight: 700;
-            z-index: 99999;
-            box-shadow: 0 4px 16px rgba(220,38,38,0.35);
-            opacity: 0;
-            transition: opacity 0.25s, transform 0.25s;
-            white-space: nowrap;
-            font-family: 'Hind Siliguri', Arial, sans-serif;
-        }
-        .v-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        /* TRUST BADGES */
-        .trust-bar {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: var(--card);
-            border-radius: 14px;
-            padding: 14px 10px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            animation: fadeUp 0.4s ease both;
-        }
-        .trust-item { text-align: center; }
-        .trust-icon { font-size: 22px; margin-bottom: 4px; }
-        .trust-label { font-size: 10px; font-weight: 700; color: var(--subtext); line-height: 1.3; }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     </style>
 </head>
 <body>
 
+<!-- NAVBAR -->
 <div class="navbar">
     <button class="back-btn" onclick="window.history.back()">‹</button>
-    <h2>📦 চেকআউট</h2>
-    <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Dark Mode">🌙</button>
+    <div class="navbar-title">📦 <span>চেকআউট</span></div>
+    <button class="dark-toggle" id="darkToggle" onclick="toggleDark()">🌙</button>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+    <div class="progress-steps">
+        <div class="p-step">
+            <div class="p-circle done">✓</div>
+            <div class="p-label">কার্ট</div>
+        </div>
+        <div class="p-line done"></div>
+        <div class="p-step">
+            <div class="p-circle active">২</div>
+            <div class="p-label active">শিপিং</div>
+        </div>
+        <div class="p-line"></div>
+        <div class="p-step">
+            <div class="p-circle pending">৩</div>
+            <div class="p-label">সম্পন্ন</div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
 
-    <!-- TRUST BADGES -->
+    <!-- TRUST BAR -->
     <div class="trust-bar">
         <div class="trust-item"><div class="trust-icon">🔒</div><div class="trust-label">নিরাপদ<br>পেমেন্ট</div></div>
         <div class="trust-item"><div class="trust-icon">🚚</div><div class="trust-label">দ্রুত<br>ডেলিভারি</div></div>
         <div class="trust-item"><div class="trust-icon">✅</div><div class="trust-label">ক্যাশ অন<br>ডেলিভারি</div></div>
-        <div class="trust-item"><div class="trust-icon">📞</div><div class="trust-label">২৪/৭<br>সাপোর্ট</div></div>
-    </div>
-
-    <!-- SHIPPING INFO -->
-    <div class="card">
-        <h3>📋 শিপিং তথ্য</h3>
-        <div class="form-group">
-            <label>নাম <span>*</span></label>
-            <input type="text" id="custName" placeholder="আপনার নাম লিখুন">
-        </div>
-        <div class="form-group">
-            <label>মোবাইল নম্বর <span>*</span></label>
-            <input type="tel" id="custPhone" placeholder="০১XXXXXXXXX" maxlength="11">
-        </div>
-        <div class="form-group">
-            <label>বিভাগ <span>*</span></label>
-            <select id="division" onchange="updateDistricts()">
-                <option value="">বিভাগ নির্বাচন করুন</option>
-                <option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option>
-                <option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option>
-                <option>রংপুর</option><option>ময়মনসিংহ</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>জেলা <span>*</span></label>
-            <select id="district" onchange="updateThanas()">
-                <option value="">জেলা নির্বাচন করুন</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>থানা/উপজেলা <span>*</span></label>
-            <select id="thana">
-                <option value="">থানা/উপজেলা নির্বাচন করুন</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>সম্পূর্ণ ঠিকানা <span>*</span></label>
-            <textarea id="custAddress" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
-        </div>
+        <div class="trust-item"><div class="trust-icon">📞</div><div class="trust-label">কাস্টমার<br>সাপোর্ট</div></div>
     </div>
 
     <!-- ORDER SUMMARY -->
     <div class="card">
-        <h3>🛍️ আপনার অর্ডার</h3>
+        <div class="card-header">
+            <div class="card-icon">🛍️</div>
+            <div><div class="card-title">আপনার অর্ডার</div><div class="card-sub" id="itemCountSub"></div></div>
+        </div>
         <div id="summaryItems"></div>
+        <div class="total-box">
+            <div class="total-row"><span>বইয়ের দাম</span><span id="subtotalShow">৳০</span></div>
+            <div class="total-row"><span>ডেলিভারি চার্জ</span><span id="deliveryShow">৳৬০</span></div>
+            <div class="total-row red" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>)</span><span>-৳<span id="discountShow">0</span></span></div>
+            <div class="total-final"><span>সর্বমোট</span><span id="grandTotal">৳০</span></div>
+        </div>
     </div>
 
-    <div class="total-box">
-        <div class="total-row"><span>বইয়ের দাম:</span><span id="subtotalShow">৳০</span></div>
-        <div class="total-row"><span>ডেলিভারি চার্জ:</span><span id="deliveryShow">৳০</span></div>
-        <div class="total-row discount" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>):</span><span>-৳<span id="discountShow">0</span></span></div>
-        <div class="total-final"><span>সর্বমোট:</span><span id="grandTotal">৳০</span></div>
+    <!-- SHIPPING INFO -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon">📋</div>
+            <div><div class="card-title">ডেলিভারি তথ্য</div><div class="card-sub">সঠিক তথ্য দিন, দ্রুত পৌঁছাবে</div></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>নাম <span class="req">*</span></label>
+                <div class="input-wrap">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="custName" placeholder="আপনার নাম">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>মোবাইল নম্বর <span class="req">*</span></label>
+                <div class="input-wrap">
+                    <span class="input-icon">📱</span>
+                    <input type="tel" id="custPhone" placeholder="০১XXXXXXXXX" maxlength="11">
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>বিভাগ <span class="req">*</span></label>
+                <div class="input-wrap">
+                    <span class="input-icon">🗺️</span>
+                    <select id="division" onchange="updateDistricts()">
+                        <option value="">বিভাগ বেছে নিন</option>
+                        <option>ঢাকা</option><option>চট্টগ্রাম</option>
+                        <option>রাজশাহী</option><option>খুলনা</option>
+                        <option>বরিশাল</option><option>সিলেট</option>
+                        <option>রংপুর</option><option>ময়মনসিংহ</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>জেলা <span class="req">*</span></label>
+                <div class="input-wrap">
+                    <span class="input-icon">📍</span>
+                    <select id="district" onchange="updateThanas()">
+                        <option value="">জেলা বেছে নিন</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>থানা / উপজেলা <span class="req">*</span></label>
+            <div class="input-wrap">
+                <span class="input-icon">🏘️</span>
+                <select id="thana">
+                    <option value="">থানা বেছে নিন</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>সম্পূর্ণ ঠিকানা <span class="req">*</span></label>
+            <textarea id="custAddress" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
+        </div>
     </div>
 
     <!-- PAYMENT -->
     <div class="card">
-        <h3>💳 পেমেন্ট মেথড</h3>
-
-        <div class="payment-option selected" onclick="selectPayment(this, 'cod')">
-            <input type="radio" name="payment" value="Cash on Delivery" checked>
-            <img src="https://cdn-icons-png.flaticon.com/512/2331/2331942.png" alt="COD">
-            <div>
-                <div class="payment-option-label">ক্যাশ অন ডেলিভারি</div>
-                <div class="payment-option-sub">বই পেয়ে টাকা দিন</div>
-            </div>
+        <div class="card-header">
+            <div class="card-icon">💳</div>
+            <div><div class="card-title">পেমেন্ট পদ্ধতি</div><div class="card-sub">আপনার পছন্দের মাধ্যম বেছে নিন</div></div>
         </div>
-
-        <div class="payment-option" onclick="selectPayment(this, 'bkash')">
-            <input type="radio" name="payment" value="bKash">
-            <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash">
-            <div>
-                <div class="payment-option-label">বিকাশ</div>
-                <div class="payment-option-sub">আগে পেমেন্ট করুন, তারপর অর্ডার</div>
+        <div class="payment-grid">
+            <div class="payment-option selected" onclick="selectPayment(this,'cod')">
+                <input type="radio" name="payment" value="Cash on Delivery" checked>
+                <div class="pay-logo cod">💵</div>
+                <div>
+                    <div class="payment-label">ক্যাশ অন ডেলিভারি</div>
+                    <div class="payment-sub">বই পাওয়ার পর টাকা দিন — কোনো ঝামেলা নেই</div>
+                </div>
             </div>
-        </div>
-
-        <div class="payment-option disabled" onclick="return false;">
-            <input type="radio" name="payment" value="Card" disabled>
-            <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Card">
-            <div>
-                <div class="payment-option-label">ব্যাংক / ভিসা কার্ড</div>
-                <div class="payment-option-sub">শীঘ্রই আসছে...</div>
+            <div class="payment-option" onclick="selectPayment(this,'bkash')">
+                <input type="radio" name="payment" value="bKash">
+                <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" class="pay-logo" alt="bKash">
+                <div>
+                    <div class="payment-label">বিকাশ</div>
+                    <div class="payment-sub">আগে পাঠান, তারপর অর্ডার নিশ্চিত করুন</div>
+                </div>
+            </div>
+            <div class="payment-option disabled">
+                <input type="radio" name="payment" value="Card" disabled>
+                <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" class="pay-logo" alt="Card">
+                <div>
+                    <div class="payment-label">ব্যাংক কার্ড</div>
+                    <div class="payment-sub">শীঘ্রই আসছে...</div>
+                </div>
             </div>
         </div>
 
         <!-- BKASH BOX -->
         <div class="bkash-box" id="bkashBox">
-            <div class="step">
-                <div class="step-num" style="background:#e91e8c;">১</div>
-                <div>বিকাশ অ্যাপ থেকে <strong>Send Money</strong> করুন</div>
+            <div class="bkash-steps">
+                <div class="bstep"><div class="bstep-num">১</div><div>বিকাশ অ্যাপ থেকে <strong>Send Money</strong> করুন নিচের নম্বরে</div></div>
+                <div class="bstep"><div class="bstep-num">২</div><div>মোট <strong id="bkashAmount">৳০</strong> পাঠান</div></div>
+                <div class="bstep"><div class="bstep-num">৩</div><div>Transaction ID নিচে লিখুন</div></div>
             </div>
-            <div class="payment-number" onclick="copyNumber()" id="bkashNumber">
-                01408786396<span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
+            <div class="bkash-number" onclick="copyBkashNumber()" id="bkashNumber">
+                01408786396
+                <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
             </div>
-            <div class="step">
-                <div class="step-num" style="background:#e91e8c;">২</div>
-                <div>মোট <strong id="bkashAmount">৳০</strong> পাঠান</div>
-            </div>
-            <div class="step">
-                <div class="step-num" style="background:#e91e8c;">৩</div>
-                <div>Transaction ID নিচে লিখুন</div>
-            </div>
-            <div class="form-group" style="margin-top:10px; margin-bottom:0;">
+            <div class="bkash-input">
                 <input type="text" id="transactionId" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
             </div>
         </div>
-
-        <button class="confirm-btn" id="confirmBtn" onclick="confirmOrder()">✅ অর্ডার কনফার্ম করুন</button>
     </div>
+
+    <!-- CONFIRM BUTTON -->
+    <button class="confirm-btn" id="confirmBtn" onclick="confirmOrder()">
+        ✅ অর্ডার কনফার্ম করুন
+    </button>
 
 </div>
 
 <!-- SUCCESS MODAL -->
 <div class="success-modal" id="successModal">
     <div class="success-inner">
-        <div class="success-icon">
-            <span style="font-size:36px; color:white;">✓</span>
-        </div>
+        <div class="success-anim">✓</div>
         <h2>অর্ডার নিশ্চিত হয়েছে!</h2>
-        <p class="sub">ORDER CONFIRMED</p>
+        <p class="success-sub">ORDER CONFIRMED</p>
         <div class="success-info" id="successInfo"></div>
         <p class="success-note">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! 📚</p>
         <button class="home-btn" onclick="window.location.href='index.html'">চমৎকার! 🎉</button>
     </div>
 </div>
 
+<!-- VALIDATION TOAST -->
+<div class="v-toast" id="vToast"></div>
+
 <!-- WHATSAPP -->
-<a href="https://wa.me/8801516595762" target="_blank" style="position:fixed;bottom:25px;right:20px;z-index:9990;display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:#25D366;border-radius:50%;box-shadow:0 4px 14px rgba(37,211,102,0.45);text-decoration:none;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:30px;">
+<a href="https://wa.me/8801516595762" target="_blank" class="wa-float">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
 </a>
 
+<script src="book.js"></script>
 <script>
-function showValidationToast(msg) {
-    let t = document.getElementById('vToast');
-    if (!t) {
-        t = document.createElement('div');
-        t.id = 'vToast';
-        t.className = 'v-toast';
-        document.body.appendChild(t);
-    }
-    t.innerText = msg;
-    t.classList.add('show');
-    clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.classList.remove('show'), 2800);
-}
-// ─── Dark Mode ───────────────────────────────────────────────function toggleDark() {
+// ── DARK MODE ──
+function toggleDark() {
     const html = document.documentElement;
     const isDark = html.getAttribute('data-theme') === 'dark';
     html.setAttribute('data-theme', isDark ? 'light' : 'dark');
     localStorage.setItem('gronthokanon_theme', isDark ? 'light' : 'dark');
     document.getElementById('darkToggle').textContent = isDark ? '🌙' : '☀️';
 }
-(function() {
-    const saved = localStorage.getItem('gronthokanon_theme');
-    if (saved === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
+(function(){
+    const s = localStorage.getItem('gronthokanon_theme');
+    if(s === 'dark'){
+        document.documentElement.setAttribute('data-theme','dark');
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('darkToggle').textContent = '☀️';
         });
     }
 })();
 
-// ─── Cart & Pricing ──────────────────────────────────────────
+// ── TOAST ──
+function showToast(msg, color) {
+    const t = document.getElementById('vToast');
+    t.innerText = msg;
+    t.style.background = color || '#dc2626';
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── CART & PRICING ──
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let discountPercent = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
@@ -665,32 +683,23 @@ let couponCode = localStorage.getItem('gronthokanon_coupon') || '';
 let deliveryCharge = 60;
 
 function getSubtotal() {
-    const grouped = {};
-    cart.forEach(item => {
-        if (grouped[item.name]) grouped[item.name].qty += 1;
-        else grouped[item.name] = { price: item.price, qty: 1 };
-    });
-    let total = 0;
-    for (let n in grouped) total += grouped[n].price * grouped[n].qty;
-    return total;
+    const g = {};
+    cart.forEach(i => { g[i.name] = g[i.name] ? {price:i.price,qty:g[i.name].qty+1} : {price:i.price,qty:1}; });
+    return Object.values(g).reduce((s,i) => s + i.price*i.qty, 0);
 }
 
 function updateTotal() {
-    const subtotal = getSubtotal();
-    const discountAmt = Math.round(subtotal * (discountPercent / 100));
-    const total = subtotal - discountAmt + deliveryCharge;
-    document.getElementById('subtotalShow').innerText = '৳' + subtotal;
+    const sub = getSubtotal();
+    const disc = Math.round(sub * discountPercent / 100);
+    const total = sub - disc + deliveryCharge;
+    document.getElementById('subtotalShow').innerText = '৳' + sub;
     document.getElementById('deliveryShow').innerText = '৳' + deliveryCharge;
-
-    const discountRow = document.getElementById('discountRow');
-    if (discountAmt > 0) {
-        document.getElementById('discountShow').innerText = discountAmt;
+    const dr = document.getElementById('discountRow');
+    if (disc > 0) {
+        document.getElementById('discountShow').innerText = disc;
         document.getElementById('couponCodeShow').innerText = couponCode;
-        discountRow.style.display = 'flex';
-    } else {
-        discountRow.style.display = 'none';
-    }
-
+        dr.style.display = 'flex';
+    } else { dr.style.display = 'none'; }
     document.getElementById('grandTotal').innerText = '৳' + total;
     document.getElementById('bkashAmount').innerText = '৳' + total;
 }
@@ -698,128 +707,52 @@ function updateTotal() {
 function renderSummary() {
     const box = document.getElementById('summaryItems');
     if (cart.length === 0) {
-        box.innerHTML = `
-            <div class="empty-cart">
-                <div class="icon">🛒</div>
-                <p>কার্ট খালি আছে</p>
-            </div>`;
-        updateTotal();
-        return;
+        box.innerHTML = '<div class="empty-cart"><div class="e-icon">🛒</div><p>কার্ট খালি আছে</p></div>';
+        document.getElementById('itemCountSub').innerText = '';
+        updateTotal(); return;
     }
-    const grouped = {};
-    cart.forEach(item => {
-        if (grouped[item.name]) grouped[item.name].qty += 1;
-        else grouped[item.name] = { price: item.price, qty: 1, img: item.img || '' };
+    const g = {};
+    cart.forEach(i => {
+        if (g[i.name]) g[i.name].qty++;
+        else g[i.name] = {price:i.price, qty:1, img:i.img||''};
     });
     let html = '';
-    for (let name in grouped) {
-        const item = grouped[name];
-        html += `
-            <div class="order-item">
-                <img src="${item.img}" alt="বই" onerror="this.src='https://via.placeholder.com/42x58?text=📚'">
-                <div style="flex:1;">
-                    <div class="order-item-name">${name}</div>
-                    <div class="order-item-price">৳${item.price} × ${item.qty} = ৳${item.price * item.qty}</div>
-                </div>
-            </div>`;
+    for (const [name, item] of Object.entries(g)) {
+        html += `<div class="order-item">
+            <img src="${item.img}" onerror="this.src='https://placehold.co/44x60/ecfdf5/059669?text=📚'">
+            <div style="flex:1;">
+                <div class="order-item-name">${name}</div>
+                <div class="order-item-price">৳${item.price} × ${item.qty} = <strong>৳${item.price*item.qty}</strong></div>
+            </div>
+        </div>`;
     }
     box.innerHTML = html;
+    const totalItems = cart.length;
+    document.getElementById('itemCountSub').innerText = totalItems + 'টি বই';
     updateTotal();
 }
 
-// ─── Location Data ───────────────────────────────────────────
+// ── LOCATION DATA ──
 const locationData = {
-    "ঢাকা": {
-        "ঢাকা": ["আদাবর","বাড্ডা","বংশাল","ক্যান্টনমেন্ট","চকবাজার","দারুস সালাম","ডেমরা","ধানমন্ডি","দোহার","গেন্ডারিয়া","গুলশান","হাজারীবাগ","কদমতলী","কামরাঙ্গীরচর","কেরানীগঞ্জ","খিলগাঁও","খিলক্ষেত","কোতোয়ালি","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নবাবগঞ্জ","নিউ মার্কেট","পল্লবী","পল্টন","রমনা","সাভার","শাহজাহানপুর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","উত্তরা","উত্তর খান","দক্ষিণ খান","ওয়ারী"],
-        "গাজীপুর": ["গাজীপুর সদর","কালীগঞ্জ","কাপাসিয়া","শ্রীপুর","টঙ্গী"],
-        "নারায়ণগঞ্জ": ["নারায়ণগঞ্জ সদর","আড়াইহাজার","বন্দর","রূপগঞ্জ","সোনারগাঁও"],
-        "মানিকগঞ্জ": ["মানিকগঞ্জ সদর","দৌলতপুর","ঘিওর","হরিরামপুর","সাটুরিয়া","শিবালয়","সিংগাইর"],
-        "মুন্সীগঞ্জ": ["মুন্সীগঞ্জ সদর","গজারিয়া","লৌহজং","শ্রীনগর","সিরাজদিখান","টঙ্গীবাড়ী"],
-        "নরসিংদী": ["নরসিংদী সদর","বেলাব","মনোহরদী","পলাশ","রায়পুরা","শিবপুর"],
-        "কিশোরগঞ্জ": ["কিশোরগঞ্জ সদর","অষ্টগ্রাম","বাজিতপুর","ভৈরব","হোসেনপুর","ইটনা","করিমগঞ্জ","কটিয়াদী","কুলিয়ারচর","মিঠামইন","নিকলী","পাকুন্দিয়া","তাড়াইল"],
-        "ফরিদপুর": ["ফরিদপুর সদর","আলফাডাঙ্গা","ভাঙ্গা","বোয়ালমারী","চরভদ্রাসন","মধুখালী","নগরকান্দা","সদরপুর","সালথা"],
-        "গোপালগঞ্জ": ["গোপালগঞ্জ সদর","কাশিয়ানী","কোটালীপাড়া","মুকসুদপুর","টুঙ্গিপাড়া"],
-        "টাঙ্গাইল": ["টাঙ্গাইল সদর","বাসাইল","ভূঞাপুর","দেলদুয়ার","ধনবাড়ী","ঘাটাইল","গোপালপুর","কালিহাতী","মধুপুর","মির্জাপুর","নাগরপুর","সখিপুর"],
-        "রাজবাড়ী": ["রাজবাড়ী সদর","বালিয়াকান্দি","গোয়ালন্দ","কালুখালী","পাংশা"],
-        "শরীয়তপুর": ["শরীয়তপুর সদর","ভেদরগঞ্জ","ডামুড্যা","গোসাইরহাট","নড়িয়া","জাজিরা"],
-        "মাদারীপুর": ["মাদারীপুর সদর","কালকিনি","রাজৈর","শিবচর"]
-    },
-    "চট্টগ্রাম": {
-        "চট্টগ্রাম": ["আকবরশাহ","বাকলিয়া","বায়েজিদ","বন্দর","চান্দগাঁও","ডবলমুরিং","ইপিজেড","হালিশহর","হাটহাজারী","কোতোয়ালি","খুলশী","লোহাগাড়া","পাহাড়তলী","পতেঙ্গা","পাঁচলাইশ","রাউজান","রাঙ্গুনিয়া","সন্দ্বীপ","সাতকানিয়া","সীতাকুণ্ড"],
-        "কক্সবাজার": ["কক্সবাজার সদর","চকরিয়া","কুতুবদিয়া","মহেশখালী","পেকুয়া","রামু","টেকনাফ","উখিয়া"],
-        "কুমিল্লা": ["কুমিল্লা সদর","বরুড়া","ব্রাহ্মণপাড়া","বুড়িচং","চান্দিনা","চৌদ্দগ্রাম","দাউদকান্দি","দেবিদ্বার","হোমনা","লাকসাম","মেঘনা","মনোহরগঞ্জ","মুরাদনগর","নাঙ্গলকোট","তিতাস"],
-        "ফেনী": ["ফেনী সদর","ছাগলনাইয়া","দাগনভূঞা","ফুলগাজী","পরশুরাম","সোনাগাজী"],
-        "নোয়াখালী": ["নোয়াখালী সদর","বেগমগঞ্জ","চাটখিল","কোম্পানীগঞ্জ","হাতিয়া","কবিরহাট","সেনবাগ","সোনাইমুড়ী","সুবর্ণচর"],
-        "লক্ষ্মীপুর": ["লক্ষ্মীপুর সদর","কমলনগর","রামগঞ্জ","রামগতি","রায়পুর"],
-        "চাঁদপুর": ["চাঁদপুর সদর","ফরিদগঞ্জ","হাইমচর","হাজীগঞ্জ","কচুয়া","মতলব উত্তর","মতলব দক্ষিণ","শাহরাস্তি"],
-        "ব্রাহ্মণবাড়িয়া": ["ব্রাহ্মণবাড়িয়া সদর","আখাউড়া","বাঞ্ছারামপুর","কসবা","নাসিরনগর","নবীনগর","সরাইল"],
-        "খাগড়াছড়ি": ["খাগড়াছড়ি সদর","দিঘীনালা","গুইমারা","লক্ষ্মীছড়ি","মাটিরাঙ্গা","মানিকছড়ি","পানছড়ি","রামগড়"],
-        "রাঙামাটি": ["রাঙামাটি সদর","বাঘাইছড়ি","বরকল","কাপ্তাই","কাউখালী","লংগদু","নানিয়ারচর","রাজস্থলী","বিলাইছড়ি","জুরাছড়ি"],
-        "বান্দরবান": ["বান্দরবান সদর","আলীকদম","লামা","নাইক্ষ্যংছড়ি","রোয়াংছড়ি","রুমা","থানচি"]
-    },
-    "রাজশাহী": {
-        "রাজশাহী": ["রাজশাহী সদর","বাঘা","চারঘাট","দুর্গাপুর","গোদাগাড়ী","মোহনপুর","পবা","পুঠিয়া","তানোর"],
-        "নাটোর": ["নাটোর সদর","বড়াইগ্রাম","বাগাতিপাড়া","গুরুদাসপুর","লালপুর","সিংড়া"],
-        "নওগাঁ": ["নওগাঁ সদর","আত্রাই","বদলগাছী","ধামইরহাট","মান্দা","মহাদেবপুর","নিয়ামতপুর","পত্নীতলা","পোরশা","রাণীনগর","সাপাহার"],
-        "চাঁপাইনবাবগঞ্জ": ["চাঁপাইনবাবগঞ্জ সদর","ভোলাহাট","গোমস্তাপুর","নাচোল","শিবগঞ্জ"],
-        "পাবনা": ["পাবনা সদর","আটঘরিয়া","বেড়া","ভাঙ্গুড়া","চাটমোহর","ফরিদপুর","ঈশ্বরদী","সাঁথিয়া","সুজানগর"],
-        "সিরাজগঞ্জ": ["সিরাজগঞ্জ সদর","বেলকুচি","চৌহালি","কামারখন্দ","কাজিপুর","রায়গঞ্জ","শাহজাদপুর","তাড়াশ","উল্লাপাড়া"],
-        "বগুড়া": ["বগুড়া সদর","আদমদিঘি","ধুনট","দুপচাঁচিয়া","গাবতলী","কাহালু","নন্দীগ্রাম","সারিয়াকান্দি","শাজাহানপুর","শেরপুর","শিবগঞ্জ","সোনাতলা"],
-        "জয়পুরহাট": ["জয়পুরহাট সদর","আক্কেলপুর","কালাই","ক্ষেতলাল","পাঁচবিবি"]
-    },
-    "খুলনা": {
-        "খুলনা": ["খুলনা সদর","বটিয়াঘাটা","দাকোপ","ডুমুরিয়া","ফুলতলা","কয়রা","পাইকগাছা","রূপসা","তেরখাদা"],
-        "যশোর": ["যশোর সদর","অভয়নগর","বাঘারপাড়া","চৌগাছা","ঝিকরগাছা","কেশবপুর","মণিরামপুর","শার্শা"],
-        "সাতক্ষীরা": ["সাতক্ষীরা সদর","আশাশুনি","দেবহাটা","কলারোয়া","কালিগঞ্জ","শ্যামনগর","তালা"],
-        "বাগেরহাট": ["বাগেরহাট সদর","চিতলমারী","ফকিরহাট","কচুয়া","মোংলা","মোরেলগঞ্জ","মুলতাপাড়া","রামপাল","শরণখোলা"],
-        "নড়াইল": ["নড়াইল সদর","কালিয়া","লোহাগড়া"],
-        "মাগুরা": ["মাগুরা সদর","মহম্মদপুর","শালিখা","শ্রীপুর"],
-        "ঝিনাইদহ": ["ঝিনাইদহ সদর","হরিণাকুণ্ডু","কালীগঞ্জ","কোটচাঁদপুর","মহেশপুর","শৈলকুপা"],
-        "কুষ্টিয়া": ["কুষ্টিয়া সদর","ভেড়ামারা","দৌলতপুর","খোকসা","কুমারখালী","মিরপুর"],
-        "চুয়াডাঙ্গা": ["চুয়াডাঙ্গা সদর","আলমডাঙ্গা","দামুড়হুদা","জীবননগর"],
-        "মেহেরপুর": ["মেহেরপুর সদর","গাংনী","মুজিবনগর"]
-    },
-    "বরিশাল": {
-        "বরিশাল": ["বরিশাল সদর","আগৈলঝাড়া","বাকেরগঞ্জ","বানারীপাড়া","গৌরনদী","হিজলা","মেহেন্দিগঞ্জ","মুলাদী","উজিরপুর"],
-        "পটুয়াখালী": ["পটুয়াখালী সদর","বাউফল","দশমিনা","গলাচিপা","কলাপাড়া","মির্জাগঞ্জ","রাঙ্গাবালী"],
-        "ভোলা": ["ভোলা সদর","বোরহানউদ্দিন","চরফ্যাশন","দৌলতখান","লালমোহন","মনপুরা","তজুমদ্দিন"],
-        "ঝালকাঠি": ["ঝালকাঠি সদর","কাঁঠালিয়া","নলছিটি","রাজাপুর"],
-        "পিরোজপুর": ["পিরোজপুর সদর","ভান্ডারিয়া","কাউখালী","মঠবাড়িয়া","নাজিরপুর","নেছারাবাদ","জিয়ানগর"],
-        "বরগুনা": ["বরগুনা সদর","আমতলী","বামনা","বেতাগী","পাথরঘাটা","তালতলী"]
-    },
-    "সিলেট": {
-        "সিলেট": ["সিলেট সদর","বালাগঞ্জ","বিয়ানীবাজার","বিশ্বনাথ","কোম্পানীগঞ্জ","ফেঞ্চুগঞ্জ","গোলাপগঞ্জ","গোয়াইনঘাট","জকিগঞ্জ","কানাইঘাট","ওসমানীনগর","দক্ষিণ সুরমা","জৈন্তাপুর"],
-        "মৌলভীবাজার": ["মৌলভীবাজার সদর","বড়লেখা","জুড়ী","কমলগঞ্জ","কুলাউড়া","রাজনগর","শ্রীমঙ্গল"],
-        "হবিগঞ্জ": ["হবিগঞ্জ সদর","আজমিরীগঞ্জ","বাহুবল","বানিয়াচং","চুনারুঘাট","লাখাই","মাধবপুর","নবীগঞ্জ"],
-        "সুনামগঞ্জ": ["সুনামগঞ্জ সদর","বিশ্বম্ভরপুর","দক্ষিণ সুনামগঞ্জ","দিরাই","ধর্মপাশা","জামালগঞ্জ","জগন্নাথপুর","শাল্লা","তাহিরপুর"]
-    },
-    "রংপুর": {
-        "রংপুর": ["রংপুর সদর","বদরগঞ্জ","গঙ্গাচড়া","কাউনিয়া","মিঠাপুকুর","পীরগঞ্জ","পীরগাছা","তারাগঞ্জ"],
-        "দিনাজপুর": ["দিনাজপুর সদর","বিরামপুর","বিরল","বোচাগঞ্জ","চিরিরবন্দর","ফুলবাড়ী","ঘোড়াঘাট","হাকিমপুর","খানসামা","নবাবগঞ্জ","পার্বতীপুর"],
-        "কুড়িগ্রাম": ["কুড়িগ্রাম সদর","ভুরুঙ্গামারী","চর রাজিবপুর","চিলমারী","ফুলবাড়ী","নাগেশ্বরী","রাজারহাট","রৌমারী","উলিপুর"],
-        "গাইবান্ধা": ["গাইবান্ধা সদর","ফুলছড়ি","গোবিন্দগঞ্জ","পলাশবাড়ী","সাদুল্লাপুর","সাঘাটা","সুন্দরগঞ্জ"],
-        "নীলফামারী": ["নীলফামারী সদর","ডিমলা","ডোমার","জলঢাকা","কিশোরগঞ্জ","সৈয়দপুর"],
-        "লালমনিরহাট": ["লালমনিরহাট সদর","আদিতমারী","কালীগঞ্জ","হাতীবান্ধা","পাটগ্রাম"],
-        "ঠাকুরগাঁও": ["ঠাকুরগাঁও সদর","বালিয়াডাঙ্গী","হরিপুর","পীরগঞ্জ","রাণীশংকৈল"],
-        "পঞ্চগড়": ["পঞ্চগড় সদর","আটোয়ারী","বোদা","দেবীগঞ্জ","তেতুলিয়া"]
-    },
-    "ময়মনসিংহ": {
-        "ময়মনসিংহ": ["ময়মনসিংহ সদর","ভালুকা","ধোবাউড়া","ফুলবাড়িয়া","গফরগাঁও","গৌরীপুর","হালুয়াঘাট","ঈশ্বরগঞ্জ","মুক্তাগাছা","নান্দাইল","ফুলপুর","তারাকান্দা","ত্রিশাল"],
-        "নেত্রকোণা": ["নেত্রকোণা সদর","আটপাড়া","বারহাট্টা","দুর্গাপুর","কলমাকান্দা","কেন্দুয়া","খালিয়াজুড়ি","মদন","মোহনগঞ্জ","পূর্বধলা"],
-        "জামালপুর": ["জামালপুর সদর","বকশীগঞ্জ","দেওয়ানগঞ্জ","ইসলামপুর","মাদারগঞ্জ","মেলান্দহ","সরিষাবাড়ী"],
-        "শেরপুর": ["শেরপুর সদর","ঝিনাইগাতী","নকলা","নালিতাবাড়ী","শ্রীবরদী"]
-    }
+    "ঢাকা":{"ঢাকা":["আদাবর","বাড্ডা","বংশাল","ক্যান্টনমেন্ট","চকবাজার","দারুস সালাম","ডেমরা","ধানমন্ডি","দোহার","গেন্ডারিয়া","গুলশান","হাজারীবাগ","কদমতলী","কামরাঙ্গীরচর","কেরানীগঞ্জ","খিলগাঁও","খিলক্ষেত","কোতোয়ালি","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নবাবগঞ্জ","নিউ মার্কেট","পল্লবী","পল্টন","রমনা","সাভার","শাহজাহানপুর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","উত্তরা","উত্তর খান","দক্ষিণ খান","ওয়ারী"],"গাজীপুর":["গাজীপুর সদর","কালীগঞ্জ","কাপাসিয়া","শ্রীপুর","টঙ্গী"],"নারায়ণগঞ্জ":["নারায়ণগঞ্জ সদর","আড়াইহাজার","বন্দর","রূপগঞ্জ","সোনারগাঁও"],"মানিকগঞ্জ":["মানিকগঞ্জ সদর","দৌলতপুর","ঘিওর","হরিরামপুর","সাটুরিয়া","শিবালয়","সিংগাইর"],"মুন্সীগঞ্জ":["মুন্সীগঞ্জ সদর","গজারিয়া","লৌহজং","শ্রীনগর","সিরাজদিখান","টঙ্গীবাড়ী"],"নরসিংদী":["নরসিংদী সদর","বেলাব","মনোহরদী","পলাশ","রায়পুরা","শিবপুর"],"কিশোরগঞ্জ":["কিশোরগঞ্জ সদর","অষ্টগ্রাম","বাজিতপুর","ভৈরব","হোসেনপুর","ইটনা","করিমগঞ্জ","কটিয়াদী","কুলিয়ারচর","মিঠামইন","নিকলী","পাকুন্দিয়া","তাড়াইল"],"ফরিদপুর":["ফরিদপুর সদর","আলফাডাঙ্গা","ভাঙ্গা","বোয়ালমারী","চরভদ্রাসন","মধুখালী","নগরকান্দা","সদরপুর","সালথা"],"গোপালগঞ্জ":["গোপালগঞ্জ সদর","কাশিয়ানী","কোটালীপাড়া","মুকসুদপুর","টুঙ্গিপাড়া"],"টাঙ্গাইল":["টাঙ্গাইল সদর","বাসাইল","ভূঞাপুর","দেলদুয়ার","ধনবাড়ী","ঘাটাইল","গোপালপুর","কালিহাতী","মধুপুর","মির্জাপুর","নাগরপুর","সখিপুর"],"রাজবাড়ী":["রাজবাড়ী সদর","বালিয়াকান্দি","গোয়ালন্দ","কালুখালী","পাংশা"],"শরীয়তপুর":["শরীয়তপুর সদর","ভেদরগঞ্জ","ডামুড্যা","গোসাইরহাট","নড়িয়া","জাজিরা"],"মাদারীপুর":["মাদারীপুর সদর","কালকিনি","রাজৈর","শিবচর"]},
+    "চট্টগ্রাম":{"চট্টগ্রাম":["আকবরশাহ","বাকলিয়া","বায়েজিদ","বন্দর","চান্দগাঁও","ডবলমুরিং","ইপিজেড","হালিশহর","হাটহাজারী","কোতোয়ালি","খুলশী","লোহাগাড়া","পাহাড়তলী","পতেঙ্গা","পাঁচলাইশ","রাউজান","রাঙ্গুনিয়া","সন্দ্বীপ","সাতকানিয়া","সীতাকুণ্ড"],"কক্সবাজার":["কক্সবাজার সদর","চকরিয়া","কুতুবদিয়া","মহেশখালী","পেকুয়া","রামু","টেকনাফ","উখিয়া"],"কুমিল্লা":["কুমিল্লা সদর","বরুড়া","ব্রাহ্মণপাড়া","বুড়িচং","চান্দিনা","চৌদ্দগ্রাম","দাউদকান্দি","দেবিদ্বার","হোমনা","লাকসাম","মেঘনা","মনোহরগঞ্জ","মুরাদনগর","নাঙ্গলকোট","তিতাস"],"ফেনী":["ফেনী সদর","ছাগলনাইয়া","দাগনভূঞা","ফুলগাজী","পরশুরাম","সোনাগাজী"],"ব্রাহ্মণবাড়িয়া":["ব্রাহ্মণবাড়িয়া সদর","আখাউড়া","বাঞ্ছারামপুর","কসবা","নাসিরনগর","নবীনগর","সরাইল"],"চাঁদপুর":["চাঁদপুর সদর","ফরিদগঞ্জ","হাজীগঞ্জ","কচুয়া","মতলব উত্তর","মতলব দক্ষিণ","শাহরাস্তি"],"লক্ষ্মীপুর":["লক্ষ্মীপুর সদর","কমলনগর","রামগঞ্জ","রামগতি","রায়পুর"],"নোয়াখালী":["নোয়াখালী সদর","বেগমগঞ্জ","চাটখিল","কোম্পানীগঞ্জ","হাতিয়া","কবিরহাট","সেনবাগ","সুবর্ণচর"]},
+    "রাজশাহী":{"রাজশাহী":["রাজশাহী সদর","বাঘা","চারঘাট","দুর্গাপুর","গোদাগাড়ী","মোহনপুর","পবা","পুঠিয়া","তানোর"],"নাটোর":["নাটোর সদর","বড়াইগ্রাম","বাগাতিপাড়া","গুরুদাসপুর","লালপুর","সিংড়া"],"নওগাঁ":["নওগাঁ সদর","আত্রাই","বদলগাছী","ধামইরহাট","মান্দা","মহাদেবপুর","নিয়ামতপুর","পত্নীতলা","পোরশা","রাণীনগর","সাপাহার"],"চাঁপাইনবাবগঞ্জ":["চাঁপাইনবাবগঞ্জ সদর","ভোলাহাট","গোমস্তাপুর","নাচোল","শিবগঞ্জ"],"পাবনা":["পাবনা সদর","আটঘরিয়া","বেড়া","ভাঙ্গুড়া","চাটমোহর","ফরিদপুর","ঈশ্বরদী","সাঁথিয়া","সুজানগর"],"সিরাজগঞ্জ":["সিরাজগঞ্জ সদর","বেলকুচি","চৌহালি","কামারখন্দ","কাজিপুর","রায়গঞ্জ","শাহজাদপুর","তাড়াশ","উল্লাপাড়া"],"বগুড়া":["বগুড়া সদর","আদমদিঘি","ধুনট","দুপচাঁচিয়া","গাবতলী","কাহালু","নন্দীগ্রাম","সারিয়াকান্দি","শাজাহানপুর","শেরপুর","শিবগঞ্জ","সোনাতলা"],"জয়পুরহাট":["জয়পুরহাট সদর","আক্কেলপুর","কালাই","ক্ষেতলাল","পাঁচবিবি"]},
+    "খুলনা":{"খুলনা":["খুলনা সদর","বটিয়াঘাটা","দাকোপ","ডুমুরিয়া","ফুলতলা","কয়রা","পাইকগাছা","রূপসা","তেরখাদা"],"যশোর":["যশোর সদর","অভয়নগর","বাঘারপাড়া","চৌগাছা","ঝিকরগাছা","কেশবপুর","মণিরামপুর","শার্শা"],"সাতক্ষীরা":["সাতক্ষীরা সদর","আশাশুনি","দেবহাটা","কলারোয়া","কালিগঞ্জ","শ্যামনগর","তালা"],"বাগেরহাট":["বাগেরহাট সদর","চিতলমারী","ফকিরহাট","কচুয়া","মোংলা","মোরেলগঞ্জ","রামপাল","শরণখোলা"],"নড়াইল":["নড়াইল সদর","কালিয়া","লোহাগড়া"],"মাগুরা":["মাগুরা সদর","মহম্মদপুর","শালিখা","শ্রীপুর"],"ঝিনাইদহ":["ঝিনাইদহ সদর","হরিণাকুণ্ডু","কালীগঞ্জ","কোটচাঁদপুর","মহেশপুর","শৈলকুপা"],"কুষ্টিয়া":["কুষ্টিয়া সদর","ভেড়ামারা","দৌলতপুর","খোকসা","কুমারখালী","মিরপুর"],"চুয়াডাঙ্গা":["চুয়াডাঙ্গা সদর","আলমডাঙ্গা","দামুড়হুদা","জীবননগর"],"মেহেরপুর":["মেহেরপুর সদর","গাংনী","মুজিবনগর"]},
+    "বরিশাল":{"বরিশাল":["বরিশাল সদর","আগৈলঝাড়া","বাকেরগঞ্জ","বানারীপাড়া","গৌরনদী","হিজলা","মেহেন্দিগঞ্জ","মুলাদী","উজিরপুর"],"পটুয়াখালী":["পটুয়াখালী সদর","বাউফল","দশমিনা","গলাচিপা","কলাপাড়া","মির্জাগঞ্জ","রাঙ্গাবালী"],"ভোলা":["ভোলা সদর","বোরহানউদ্দিন","চরফ্যাশন","দৌলতখান","লালমোহন","মনপুরা","তজুমদ্দিন"],"ঝালকাঠি":["ঝালকাঠি সদর","কাঁঠালিয়া","নলছিটি","রাজাপুর"],"পিরোজপুর":["পিরোজপুর সদর","ভান্ডারিয়া","কাউখালী","মঠবাড়িয়া","নাজিরপুর","নেছারাবাদ","জিয়ানগর"],"বরগুনা":["বরগুনা সদর","আমতলী","বামনা","বেতাগী","পাথরঘাটা","তালতলী"]},
+    "সিলেট":{"সিলেট":["সিলেট সদর","বালাগঞ্জ","বিয়ানীবাজার","বিশ্বনাথ","কোম্পানীগঞ্জ","ফেঞ্চুগঞ্জ","গোলাপগঞ্জ","গোয়াইনঘাট","জকিগঞ্জ","কানাইঘাট","ওসমানীনগর","দক্ষিণ সুরমা"],"মৌলভীবাজার":["মৌলভীবাজার সদর","বড়লেখা","জুড়ী","কমলগঞ্জ","কুলাউড়া","রাজনগর","শ্রীমঙ্গল"],"হবিগঞ্জ":["হবিগঞ্জ সদর","আজমিরীগঞ্জ","বাহুবল","বানিয়াচং","চুনারুঘাট","লাখাই","মাধবপুর","নবীগঞ্জ"],"সুনামগঞ্জ":["সুনামগঞ্জ সদর","বিশ্বম্ভরপুর","দক্ষিণ সুনামগঞ্জ","দিরাই","ধর্মপাশা","জামালগঞ্জ","জগন্নাথপুর","শাল্লা","তাহিরপুর"]},
+    "রংপুর":{"রংপুর":["রংপুর সদর","বদরগঞ্জ","গঙ্গাচড়া","কাউনিয়া","মিঠাপুকুর","পীরগঞ্জ","পীরগাছা","তারাগঞ্জ"],"দিনাজপুর":["দিনাজপুর সদর","বিরামপুর","বিরল","বোচাগঞ্জ","চিরিরবন্দর","ফুলবাড়ী","ঘোড়াঘাট","হাকিমপুর","খানসামা","নবাবগঞ্জ","পার্বতীপুর"],"কুড়িগ্রাম":["কুড়িগ্রাম সদর","ভুরুঙ্গামারী","চর রাজিবপুর","চিলমারী","ফুলবাড়ী","নাগেশ্বরী","রাজারহাট","রৌমারী","উলিপুর"],"গাইবান্ধা":["গাইবান্ধা সদর","ফুলছড়ি","গোবিন্দগঞ্জ","পলাশবাড়ী","সাদুল্লাপুর","সাঘাটা","সুন্দরগঞ্জ"],"নীলফামারী":["নীলফামারী সদর","ডিমলা","ডোমার","জলঢাকা","কিশোরগঞ্জ","সৈয়দপুর"],"লালমনিরহাট":["লালমনিরহাট সদর","আদিতমারী","কালীগঞ্জ","হাতীবান্ধা","পাটগ্রাম"],"ঠাকুরগাঁও":["ঠাকুরগাঁও সদর","বালিয়াডাঙ্গী","হরিপুর","পীরগঞ্জ","রাণীশংকৈল"],"পঞ্চগড়":["পঞ্চগড় সদর","আটোয়ারী","বোদা","দেবীগঞ্জ","তেতুলিয়া"]},
+    "ময়মনসিংহ":{"ময়মনসিংহ":["ময়মনসিংহ সদর","ভালুকা","ধোবাউড়া","ফুলবাড়িয়া","গফরগাঁও","গৌরীপুর","হালুয়াঘাট","ঈশ্বরগঞ্জ","মুক্তাগাছা","নান্দাইল","ফুলপুর","তারাকান্দা","ত্রিশাল"],"নেত্রকোণা":["নেত্রকোণা সদর","আটপাড়া","বারহাট্টা","দুর্গাপুর","কলমাকান্দা","কেন্দুয়া","খালিয়াজুড়ি","মদন","মোহনগঞ্জ","পূর্বধলা"],"জামালপুর":["জামালপুর সদর","বকশীগঞ্জ","দেওয়ানগঞ্জ","ইসলামপুর","মাদারগঞ্জ","মেলান্দহ","সরিষাবাড়ী"],"শেরপুর":["শেরপুর সদর","ঝিনাইগাতী","নকলা","নালিতাবাড়ী","শ্রীবরদী"]}
 };
 
 function updateDistricts() {
-    const division = document.getElementById('division').value;
-    const districtSel = document.getElementById('district');
+    const div = document.getElementById('division').value;
+    const distSel = document.getElementById('district');
     const thanaSel = document.getElementById('thana');
-    districtSel.innerHTML = '<option value="">জেলা নির্বাচন করুন</option>';
-    thanaSel.innerHTML = '<option value="">থানা/উপজেলা নির্বাচন করুন</option>';
-    if (division && locationData[division]) {
-        Object.keys(locationData[division]).forEach(d => {
-            districtSel.innerHTML += `<option>${d}</option>`;
+    distSel.innerHTML = '<option value="">জেলা বেছে নিন</option>';
+    thanaSel.innerHTML = '<option value="">থানা বেছে নিন</option>';
+    if (div && locationData[div]) {
+        Object.keys(locationData[div]).forEach(d => {
+            distSel.innerHTML += `<option value="${d}">${d}</option>`;
         });
     }
     deliveryCharge = 60;
@@ -827,36 +760,34 @@ function updateDistricts() {
 }
 
 function updateThanas() {
-    const division = document.getElementById('division').value;
-    const district = document.getElementById('district').value;
+    const div = document.getElementById('division').value;
+    const dist = document.getElementById('district').value;
     const thanaSel = document.getElementById('thana');
-    thanaSel.innerHTML = '<option value="">থানা/উপজেলা নির্বাচন করুন</option>';
-    if (division && district && locationData[division][district]) {
-        locationData[division][district].forEach(t => {
-            thanaSel.innerHTML += `<option>${t}</option>`;
+    thanaSel.innerHTML = '<option value="">থানা বেছে নিন</option>';
+    if (div && dist && locationData[div] && locationData[div][dist]) {
+        locationData[div][dist].forEach(t => {
+            thanaSel.innerHTML += `<option value="${t}">${t}</option>`;
         });
     }
-    deliveryCharge = district === 'ঢাকা' ? 60 : 90;
+    deliveryCharge = dist === 'ঢাকা' ? 60 : 90;
     updateTotal();
 }
 
+// ── PAYMENT ──
 function selectPayment(el, type) {
     document.querySelectorAll('.payment-option:not(.disabled)').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     el.querySelector('input[type="radio"]').checked = true;
-    document.getElementById('bkashBox').style.display = 'none';
-    if (type === 'bkash') document.getElementById('bkashBox').style.display = 'block';
+    document.getElementById('bkashBox').style.display = type === 'bkash' ? 'block' : 'none';
 }
 
-function copyNumber() {
+function copyBkashNumber() {
     navigator.clipboard.writeText('01408786396').then(() => {
-        const el = document.getElementById('bkashNumber');
-        const orig = el.innerHTML;
-        el.innerHTML = '✅ কপি হয়েছে!';
-        setTimeout(() => { el.innerHTML = orig; }, 1500);
-    }).catch(() => {});
+        showToast('✅ নম্বর কপি হয়েছে!', '#059669');
+    }).catch(() => showToast('01408786396 কপি করুন', '#059669'));
 }
 
+// ── CONFIRM ORDER ──
 async function confirmOrder() {
     const name = document.getElementById('custName').value.trim();
     const phone = document.getElementById('custPhone').value.trim();
@@ -866,61 +797,60 @@ async function confirmOrder() {
     const address = document.getElementById('custAddress').value.trim();
     const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
 
-    if (!name) return showValidationToast('⚠️ নাম লিখুন!');
-    if (!phone || phone.length !== 11) return showValidationToast('⚠️ সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন!');
-    if (!division) return showValidationToast('⚠️ বিভাগ নির্বাচন করুন!');
-    if (!district) return showValidationToast('⚠️ জেলা নির্বাচন করুন!');
-    if (!thana) return showValidationToast('⚠️ থানা/উপজেলা নির্বাচন করুন!');
-    if (!address) return showValidationToast('⚠️ ঠিকানা লিখুন!');
+    if (!name) return showToast('⚠️ নাম লিখুন!');
+    if (!phone || phone.length !== 11) return showToast('⚠️ সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন!');
+    if (!division) return showToast('⚠️ বিভাগ নির্বাচন করুন!');
+    if (!district) return showToast('⚠️ জেলা নির্বাচন করুন!');
+    if (!thana) return showToast('⚠️ থানা/উপজেলা নির্বাচন করুন!');
+    if (!address) return showToast('⚠️ ঠিকানা লিখুন!');
 
-    let transactionId = '';
+    let txId = '';
     if (paymentMethod === 'bKash') {
-        transactionId = document.getElementById('transactionId').value.trim().toUpperCase();
-        if (!transactionId) return showValidationToast('⚠️ বিকাশ Transaction ID লিখুন!');
-        if (!/^[A-Z0-9]{10}$/.test(transactionId)) return showValidationToast('⚠️ সঠিক বিকাশ Transaction ID লিখুন! (১০ অক্ষর)');
+        txId = document.getElementById('transactionId').value.trim().toUpperCase();
+        if (!txId) return showToast('⚠️ বিকাশ Transaction ID লিখুন!');
+        if (!/^[A-Z0-9]{8,12}$/.test(txId)) return showToast('⚠️ সঠিক Transaction ID দিন!');
     }
 
-    // Loading state
     const btn = document.getElementById('confirmBtn');
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
 
-    const grouped = {};
-    cart.forEach(item => { grouped[item.name] = (grouped[item.name] || 0) + 1; });
-    const bookList = Object.entries(grouped).map(([k, v]) => `${k} (${v}টি)`).join(', ');
+    const g = {};
+    cart.forEach(i => { g[i.name] = (g[i.name]||0) + 1; });
+    const bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
     const total = document.getElementById('grandTotal').innerText;
     const fullAddress = `${thana}, ${district}, ${division} — ${address}`;
 
     try {
         await fetch(SHEET_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+            method:'POST', mode:'no-cors',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
                 name, phone,
-                address: fullAddress,
-                books: bookList,
-                payment: paymentMethod + (transactionId ? ` (TxID: ${transactionId})` : ''),
-                delivery: '৳' + deliveryCharge,
+                address:fullAddress,
+                books:bookList,
+                payment:paymentMethod + (txId ? ` (TxID: ${txId})` : ''),
+                delivery:'৳' + deliveryCharge,
                 total
             })
         });
     } catch(e) {}
 
     localStorage.removeItem('gronthokanon_cart');
+    localStorage.removeItem('gronthokanon_discount');
+    localStorage.removeItem('gronthokanon_coupon');
 
     document.getElementById('successInfo').innerHTML = `
         👤 <strong>${name}</strong><br>
-        📞 ${phone}<br>
+        📱 ${phone}<br>
         📍 ${fullAddress}<br>
-        💳 ${paymentMethod}${transactionId ? ` — TxID: ${transactionId}` : ''}<br>
+        💳 ${paymentMethod}${txId ? ` (TxID: ${txId})` : ''}<br>
         📦 ${bookList}<br>
-        💰 <strong style="color:var(--red);">${total}</strong>
+        💰 <strong style="color:var(--green);">${total}</strong>
     `;
 
     btn.disabled = false;
     btn.innerHTML = '✅ অর্ডার কনফার্ম করুন';
-
     document.getElementById('successModal').classList.add('show');
 }
 
