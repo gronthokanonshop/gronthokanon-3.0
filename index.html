@@ -40,127 +40,154 @@
         .moving-text { display: inline-block; padding-left: 100%; animation: marquee 18s linear infinite; }
         @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
 
-        /* NAVBAR */
+        /* ═══════════════════════════════════════
+           GLASSMORPHISM NAVBAR
+        ═══════════════════════════════════════ */
         .navbar {
-            display: flex; align-items: center;
-            padding: 9px 14px; gap: 10px;
-            background: #059669;
-            box-shadow: 0 2px 10px rgba(5,150,105,0.3);
-            position: sticky; top: 0; z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            gap: 10px;
+            background: linear-gradient(135deg, #059669 0%, #047857 60%, #065f46 100%);
+            box-shadow: 0 4px 24px rgba(5,150,105,0.35);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .navbar-logo { height: 38px; object-fit: contain; flex-shrink: 0; }
 
-        /* ✅ Search trigger — fake pill in navbar */
+        /* Glass Search Pill */
         .search-trigger {
             flex: 1;
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
             border: 1.5px solid rgba(255,255,255,0.35);
             border-radius: 22px;
             padding: 8px 14px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
             min-width: 0;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 8px rgba(0,0,0,0.1);
         }
-        .search-trigger:hover { background: rgba(255,255,255,0.28); }
-        .search-trigger-text { font-size: 14px; color: rgba(255,255,255,0.75); font-family: 'Hind Siliguri',Arial,sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .search-trigger:hover {
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.55);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .search-trigger:active { transform: scale(0.98); }
+        .search-trigger-text { font-size: 13.5px; color: rgba(255,255,255,0.72); font-family: 'Hind Siliguri',Arial,sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* nav icons */
-        .navbar-icons { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-        .nav-icon-btn { position: relative; cursor: pointer; font-size: 21px; color: white; line-height: 1; }
-        .nav-icon-btn:active { transform: scale(0.9); }
+        /* Glass Nav Icons */
+        .navbar-icons { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+        .glass-icon-btn {
+            position: relative;
+            width: 38px;
+            height: 38px;
+            background: rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 6px rgba(0,0,0,0.12);
+            user-select: none;
+            line-height: 1;
+        }
+        .glass-icon-btn:hover {
+            background: rgba(255,255,255,0.28);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-1px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 6px 18px rgba(0,0,0,0.18);
+        }
+        .glass-icon-btn:active { transform: scale(0.92); }
+
+        /* Dark toggle pill */
+        .dark-toggle {
+            background: rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 13px;
+            color: white;
+            font-family: 'Hind Siliguri',Arial,sans-serif;
+            transition: background 0.2s, transform 0.15s;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .dark-toggle:hover { background: rgba(255,255,255,0.25); transform: translateY(-1px); }
+
+        /* Glass badge */
+        .glass-badge {
+            position: absolute;
+            top: -6px; right: -7px;
+            background: #ef4444;
+            color: white;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 20px;
+            min-width: 17px;
+            text-align: center;
+            border: 1.5px solid rgba(4,120,87,0.7);
+            display: none;
+            line-height: 1.2;
+        }
+        .glass-badge.show { display: block; }
+
+        /* Cart wrapper + old cart-badge id support */
+        .cart-icon-wrapper { position: relative; cursor: pointer; }
+        .cart-icon-wrapper.bounce .glass-icon-btn { animation: cartBounce 0.4s ease; }
+        @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.35)} 60%{transform:scale(0.9)} 80%{transform:scale(1.08)} }
+        .cart-badge {
+            position: absolute;
+            top: -7px; right: -8px;
+            background: var(--red);
+            color: white;
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 50%;
+            font-weight: bold;
+            border: 1.5px solid rgba(4,120,87,0.7);
+            min-width: 17px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Backward compat for wishlist/user nav-icon-btn */
+        .nav-icon-btn { position: relative; cursor: pointer; font-size: 18px; color: white; line-height: 1; }
         .nav-badge { position: absolute; top: -6px; right: -8px; background: #dc2626; color: white; font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 20px; min-width: 16px; text-align: center; display: none; }
         .nav-badge.show { display: block; }
-        .dark-toggle { background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 9px; cursor: pointer; font-size: 13px; color: white; }
-        .cart-icon-wrapper { position: relative; font-size: 21px; cursor: pointer; color: white; }
-        .cart-icon-wrapper.bounce { animation: cartBounce 0.4s ease; }
-        @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.4)} 60%{transform:scale(0.9)} 80%{transform:scale(1.1)} }
-        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 50%; font-weight: bold; }
 
-        /* ✅ FULL SCREEN SEARCH INTERFACE */
-        .search-screen {
-            position: fixed; inset: 0;
-            background: var(--bg);
-            z-index: 5000;
-            display: flex; flex-direction: column;
-            transform: translateY(-100%);
-            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-            visibility: hidden;
-        }
-        .search-screen.open {
-            transform: translateY(0);
-            visibility: visible;
-        }
-
-        /* search screen header */
-        .search-screen-header {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 14px;
-            background: #059669;
-            flex-shrink: 0;
-        }
-        .search-back-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 50%;
-            width: 38px; height: 38px;
-            cursor: pointer; font-size: 20px; color: white;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .search-screen-input-wrap {
-            flex: 1;
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(255,255,255,0.22);
-            border: 1.5px solid rgba(255,255,255,0.4);
-            border-radius: 22px;
-            padding: 8px 14px;
-        }
-        .search-screen-input {
-            flex: 1; border: none; background: transparent;
-            outline: none; font-size: 15px;
-            font-family: 'Hind Siliguri',Arial,sans-serif;
-            color: white;
-        }
-        .search-screen-input::placeholder { color: rgba(255,255,255,0.7); }
-        .search-clear-btn {
-            background: rgba(255,255,255,0.2);
-            border: none; border-radius: 50%;
-            width: 24px; height: 24px; cursor: pointer;
-            font-size: 14px; color: white;
-            display: none; align-items: center; justify-content: center;
-        }
+        /* FULL SCREEN SEARCH */
+        .search-screen { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); visibility: hidden; }
+        .search-screen.open { transform: translateY(0); visibility: visible; }
+        .search-screen-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: linear-gradient(135deg, #059669, #047857); flex-shrink: 0; }
+        .search-back-btn { background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 20px; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; backdrop-filter: blur(6px); }
+        .search-screen-input-wrap { flex: 1; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.38); border-radius: 22px; padding: 8px 14px; backdrop-filter: blur(6px); }
+        .search-screen-input { flex: 1; border: none; background: transparent; outline: none; font-size: 15px; font-family: 'Hind Siliguri',Arial,sans-serif; color: white; }
+        .search-screen-input::placeholder { color: rgba(255,255,255,0.65); }
+        .search-clear-btn { background: rgba(255,255,255,0.2); border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; color: white; display: none; align-items: center; justify-content: center; }
         .search-clear-btn.show { display: flex; }
-
-        /* search screen body */
         .search-screen-body { flex: 1; overflow-y: auto; }
-
-        /* initial hint */
-        .search-initial-hint {
-            padding: 50px 20px; text-align: center;
-        }
+        .search-initial-hint { padding: 50px 20px; text-align: center; }
         .search-initial-hint .hint-icon { font-size: 52px; margin-bottom: 14px; }
         .search-initial-hint p { font-size: 15px; color: var(--text2); }
-
-        /* results count bar */
-        .search-count-bar {
-            padding: 10px 16px;
-            font-size: 13px; color: var(--text2);
-            border-bottom: 1px solid var(--border);
-            background: var(--card);
-            display: none;
-        }
+        .search-count-bar { padding: 10px 16px; font-size: 13px; color: var(--text2); border-bottom: 1px solid var(--border); background: var(--card); display: none; }
         .search-count-bar.show { display: block; }
-
-        /* result card */
-        .search-result-card {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            background: var(--card);
-            transition: background 0.15s;
-        }
+        .search-result-card { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); cursor: pointer; background: var(--card); transition: background 0.15s; }
         .search-result-card + .search-result-card { margin-top: 4px; }
         .search-result-card:hover { background: var(--search-bg); }
         .search-result-card:active { background: rgba(5,150,105,0.08); }
@@ -296,6 +323,8 @@
             .skeleton-card { width: 128px; }
             .skeleton-img { width: 128px; height: 172px; }
             .cat-btn { padding: 6px 10px; font-size: 12px; }
+            .glass-icon-btn { width: 34px; height: 34px; font-size: 16px; border-radius: 10px; }
+            .navbar { padding: 8px 10px; gap: 8px; }
         }
     </style>
 </head>
@@ -339,7 +368,7 @@
     </div>
 </div>
 
-<!-- ✅ FULL SCREEN SEARCH INTERFACE -->
+<!-- FULL SCREEN SEARCH -->
 <div class="search-screen" id="searchScreen">
     <div class="search-screen-header">
         <button class="search-back-btn" onclick="closeSearchScreen()">‹</button>
@@ -364,22 +393,37 @@
     <div class="moving-text">🔥 প্রথম অর্ডারে ০৫% ছাড় — কুপন: FIRSTORDER &nbsp;&nbsp;&nbsp; ✅ সারা বাংলাদেশে ক্যাশ অন ডেলিভারি &nbsp;&nbsp;&nbsp; 📞 হটলাইন: 01516595762</div>
 </div>
 
-<!-- NAVBAR -->
+<!-- ═══════════════ GLASSMORPHISM NAVBAR ═══════════════ -->
 <nav class="navbar">
     <img src="logo.png" alt="গ্রন্থকানন" class="navbar-logo">
-    <!-- ✅ fake search pill — click করলে search screen খুলবে -->
+
+    <!-- Glass Search Pill -->
     <div class="search-trigger" onclick="openSearchScreen()">
-        <span style="font-size:15px;color:rgba(255,255,255,0.8);">🔍</span>
+        <span style="font-size:15px;color:rgba(255,255,255,0.85);">🔍</span>
         <span class="search-trigger-text">বই বা লেখক খুঁজুন...</span>
     </div>
+
     <div class="navbar-icons">
+        <!-- Dark Mode -->
         <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
-        <div class="nav-icon-btn" onclick="showWishlistDirect()">
-            🤍<span class="nav-badge" id="navWishBadge">0</span>
+
+        <!-- Wishlist glass button -->
+        <div class="glass-icon-btn" onclick="showWishlistDirect()" title="উইশলিস্ট">
+            🤍
+            <span class="glass-badge" id="navWishBadge">0</span>
         </div>
-        <div class="nav-icon-btn" onclick="showLoginModal()">👤</div>
-        <div class="cart-icon-wrapper" onclick="showCart()" id="cartIconWrapper">
-            🛒<span class="cart-badge" id="count">0</span>
+
+        <!-- User glass button -->
+        <div class="glass-icon-btn" onclick="showLoginModal()" title="একাউন্ট">
+            👤
+        </div>
+
+        <!-- Cart / Shopping Bag glass button -->
+        <div class="cart-icon-wrapper" id="cartIconWrapper" onclick="showCart()">
+            <div class="glass-icon-btn" title="শপিং ব্যাগ">
+                🛒
+                <span class="cart-badge" id="count">0</span>
+            </div>
         </div>
     </div>
 </nav>
@@ -511,7 +555,6 @@
         <span class="bottom-nav-icon">🏠</span>
         <span class="bottom-nav-label">হোম</span>
     </div>
-  
     <div class="bottom-nav-item" id="bnav-cart" onclick="bnavActive('bnav-cart');showCart()">
         <span class="bottom-nav-icon">🛍️</span>
         <span class="bnav-badge" id="bnavBadge">0</span>
@@ -572,7 +615,7 @@ if (savedTheme) {
     document.getElementById('darkBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
 }
 
-/* ✅ SEARCH SCREEN */
+/* SEARCH SCREEN */
 function openSearchScreen() {
     document.getElementById('searchScreen').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -597,24 +640,19 @@ function handleSearch() {
     const input = document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
     const clearBtn = document.getElementById('searchClearBtn');
     const body = document.getElementById('searchBody');
-
     clearBtn.classList.toggle('show', input.length > 0);
-
     if (!input) {
         body.innerHTML = `<div class="search-initial-hint"><div class="hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>`;
         return;
     }
-
     const filtered = books.filter(b =>
         b.name.normalize("NFC").toLowerCase().includes(input) ||
         b.author.normalize("NFC").toLowerCase().includes(input)
     );
-
     if (!filtered.length) {
         body.innerHTML = `<div class="search-no-result"><div class="no-icon">😔</div><p>কোনো বই পাওয়া যায়নি</p></div>`;
         return;
     }
-
     body.innerHTML = `<div class="search-count-bar show">🔍 "${document.getElementById('searchInput').value}" — ${filtered.length}টি বই পাওয়া গেছে</div>` +
         filtered.map(b => {
             const idx = books.indexOf(b);
@@ -635,7 +673,6 @@ function handleSearch() {
         }).join('');
 }
 
-/* back button on phone closes search */
 window.addEventListener('popstate', () => {
     if (document.getElementById('searchScreen').classList.contains('open')) {
         closeSearchScreen();
@@ -762,9 +799,9 @@ function closeWishlist() { document.getElementById('wishlistBox').style.display=
 function addToCart(name, price, img) {
     cart.push({name:name.trim(),price:Number(price),img});
     saveCart(); updateCartUI();
-    const icon=document.getElementById('cartIconWrapper');
-    icon.classList.remove('bounce'); void icon.offsetWidth; icon.classList.add('bounce');
-    setTimeout(()=>icon.classList.remove('bounce'),400);
+    const wrapper=document.getElementById('cartIconWrapper');
+    wrapper.classList.remove('bounce'); void wrapper.offsetWidth; wrapper.classList.add('bounce');
+    setTimeout(()=>wrapper.classList.remove('bounce'),400);
     const toast=document.createElement('div');
     toast.style.cssText='position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:#059669;color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(5,150,105,0.35);';
     toast.innerText='✅ কার্টে যোগ হয়েছে!';
@@ -852,7 +889,7 @@ window.onload=()=>{
     }
 };
 
-/* BANNER */
+/* BANNER AUTO-SLIDE */
 const slider=document.getElementById('mainSlider');
 let currentImg=0;
 if(slider){
@@ -861,7 +898,6 @@ if(slider){
         if(imgs.length){currentImg=(currentImg+1)%imgs.length;slider.scrollTo({left:currentImg*slider.offsetWidth,behavior:'smooth'});}
     },3500);
 }
-
 </script>
 </body>
 </html>
