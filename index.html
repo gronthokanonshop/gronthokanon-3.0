@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>গ্রন্থকানন — বইয়ের রাজ্যে স্বাগতম</title>
     <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
-    <meta name="theme-color" content="#eef0f3">
-    <meta name="theme-color" content="#eef0f3">
+    <meta name="theme-color" content="#ffffff">
 <!-- OG Meta Tags -->
 <meta property="og:title" content="গ্রন্থকানন — ইসলামিক বইয়ের দোকান">
 <meta property="og:description" content="স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান। ক্যাশ অন ডেলিভারি সুবিধা।">
@@ -14,6 +13,7 @@
 <meta property="og:url" content="https://gronthokanonshop.github.io/gronthokanon-3.0/"><meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
+    <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
         
         
@@ -42,7 +42,7 @@
         
         .nav-badge.show { display: block; }
         .cart-wrap { position: relative; cursor: pointer; }
-        .cart-wrap.bounce 
+        .cart-wrap.bounce { animation: cartBounce 0.4s ease; }
         @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.35)} 60%{transform:scale(0.9)} 80%{transform:scale(1.08)} }
 
         .menu-btn { width:36px; height:36px; background:#059669; border:none; border-radius:10px; font-size:18px; color:white; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; box-shadow:0 2px 8px rgba(5,150,105,0.3); transition:0.2s; }
@@ -60,8 +60,8 @@
         @media (max-width: 400px) { .search-kbd { display: none; } }
 
         /* ═══════ FULL SEARCH SCREEN ═══════ */
-        .search-screen { position: fixed; bottom: 0; left: 0; right: 0; height: 65vh; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); visibility: hidden; border-radius: 20px 20px 0 0; box-shadow: 0 -6px 30px rgba(0,0,0,0.18); }
-        .search-screen::before { content:""; display:block; width:36px; height:4px; background:var(--border); border-radius:4px; margin:10px auto 6px; flex-shrink:0; }
+        .search-screen { position: fixed; top: 0; left: 0; right: 0; max-height: 70vh; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(-105%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); visibility: hidden; border-radius: 0 0 20px 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.18); }
+        .search-screen::after { content:""; display:block; width:36px; height:4px; background:var(--border); border-radius:4px; margin:6px auto 10px; flex-shrink:0; }
         .search-screen.open { transform: translateY(0); visibility: visible; }
         .search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:4999; }
         .search-overlay.open { display:block; }
