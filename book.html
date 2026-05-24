@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>বই বিস্তারিত — গ্রন্থকানন</title>
-    <meta name="theme-color" content="#eef0f3">
+    <meta name="theme-color" content="#ffffff">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
+    <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
         
         
@@ -470,7 +471,7 @@ async function incrementView(bookId) {
     });
     // UI তে দেখাও
     const el = document.getElementById('viewCount');
-    if (el) el.innerText = `👁 ${toBN(count)} জন দেখেছেন`;
+    if (el) el.innerText = `📖 ${toBN(count)} জন দেখেছেন`;
 }
 
 window.onload = function() {
