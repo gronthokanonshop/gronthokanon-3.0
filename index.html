@@ -11,8 +11,7 @@
 <meta property="og:title" content="গ্রন্থকানন — ইসলামিক বইয়ের দোকান">
 <meta property="og:description" content="স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান। ক্যাশ অন ডেলিভারি সুবিধা।">
 <meta property="og:image" content="https://gronthokanonshop.github.io/gronthokanon-3.0/logo.png">
-<meta property="og:url" content="https://gronthokanonshop.github.io/gronthokanon-3.0/">
-<meta property="og:type" content="website">
+<meta property="og:url" content="https://gronthokanonshop.github.io/gronthokanon-3.0/"><meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <style>
@@ -46,6 +45,9 @@
         .cart-wrap.bounce 
         @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.35)} 60%{transform:scale(0.9)} 80%{transform:scale(1.08)} }
 
+        .menu-btn { width:36px; height:36px; background:#059669; border:none; border-radius:10px; font-size:18px; color:white; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; box-shadow:0 2px 8px rgba(5,150,105,0.3); transition:0.2s; }
+        .menu-btn:hover { background:#047857; }
+
         /* ═══════ SEARCH ROW ═══════ */
         .navbar-search { padding: 0 14px 11px; }
         .search-trigger { display: flex; align-items: center; gap: 10px; background: var(--search-input-bg); border: 1.5px solid var(--search-input-border); border-radius: 6px; padding: 10px 16px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; width: 100%; }
@@ -58,8 +60,11 @@
         @media (max-width: 400px) { .search-kbd { display: none; } }
 
         /* ═══════ FULL SEARCH SCREEN ═══════ */
-        .search-screen { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); visibility: hidden; }
+        .search-screen { position: fixed; bottom: 0; left: 0; right: 0; height: 65vh; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); visibility: hidden; border-radius: 20px 20px 0 0; box-shadow: 0 -6px 30px rgba(0,0,0,0.18); }
+        .search-screen::before { content:""; display:block; width:36px; height:4px; background:var(--border); border-radius:4px; margin:10px auto 6px; flex-shrink:0; }
         .search-screen.open { transform: translateY(0); visibility: visible; }
+        .search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:4999; }
+        .search-overlay.open { display:block; }
         .search-screen-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--nav-bg); border-bottom: 1px solid var(--nav-border); flex-shrink: 0; }
         .search-back { background: var(--nav-icon-bg); border: 1.5px solid var(--nav-icon-border); border-radius: 50%; width: 38px; height: 38px; cursor: pointer; font-size: 20px; color: var(--nav-text); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; background: var(--search-input-bg); border: 1.5px solid var(--search-input-border); border-radius: 6px; padding: 9px 14px; }
@@ -254,6 +259,7 @@
 </div>
 
 <!-- ═══════ SEARCH SCREEN ═══════ -->
+<div class="search-overlay" id="searchOverlay" onclick="closeSearch()"></div>
 <div class="search-screen" id="searchScreen">
     <div class="search-screen-header">
         <button class="search-back" onclick="closeSearch()">‹</button>
@@ -276,6 +282,7 @@
 <!-- ═══════ NAVBAR ═══════ -->
 <nav class="navbar">
     <div class="navbar-top">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
         <div class="navbar-brand">
             <div class="brand-icon">📚</div>
             <span class="typing-text" id="typingText"></span><span class="typing-cursor"></span>
@@ -479,8 +486,8 @@ typeAnim();
 /* DARK MODE */
 
 /* SEARCH */
-function openSearch(){document.getElementById('searchScreen').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('searchInput').focus(),300);}
-function closeSearch(){document.getElementById('searchScreen').classList.remove('open');document.body.style.overflow='';clearSearch();bnavActive('bnav-home');}
+function openSearch(){document.getElementById('searchScreen').classList.add('open');document.getElementById('searchOverlay').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('searchInput').focus(),300);}
+function closeSearch(){document.getElementById('searchScreen').classList.remove('open');document.getElementById('searchOverlay').classList.remove('open');document.body.style.overflow='';clearSearch();bnavActive('bnav-home');}
 function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClearBtn').classList.remove('show');document.getElementById('searchBody').innerHTML=`<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>`;}
 function handleSearch(){
     const q=document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
