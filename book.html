@@ -4,343 +4,237 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>বই বিস্তারিত — গ্রন্থকানন</title>
-    <meta name="description" content="গ্রন্থকানন-এ বইয়ের বিস্তারিত দেখুন। সাশ্রয়ী মূল্যে কিনুন, সারা বাংলাদেশে ডেলিভারি।">
-    <meta property="og:title" content="বই বিস্তারিত — গ্রন্থকানন">
-    <meta property="og:type" content="product">
-    <meta name="theme-color" content="#059669">
+    <meta name="theme-color" content="#eef0f3">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
     <style>
-        :root {
-            --bg: #edf2f7;
-            --card: #ffffff;
-            --text: #333333;
-            --text2: #888888;
-            --border: #e0e0e0;
-            --navbar-bg: #ffffff;
-            --shadow: rgba(0,0,0,0.08);
-            --green: #059669;
-            --dark: #2c3e50;
-            --red: #e74c3c;
-            --price-bg: #f8f9fa;
-            --progress-h: 3px;
-        }
-        [data-theme="dark"] {
-            --bg: #0f0f1a;
-            --card: #1a1a2e;
-            --text: #e8e8e8;
-            --text2: #aaaaaa;
-            --border: #2a2a3e;
-            --navbar-bg: #1a1a2e;
-            --shadow: rgba(0,0,0,0.3);
-            --price-bg: #0f0f1a;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Hind Siliguri', 'SolaimanLipi', Arial, sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; padding-bottom: 90px; }
+        
+        
+        body{font-family:'Hind Siliguri','SolaimanLipi',Arial,sans-serif;background:var(--bg);color:var(--text);transition:background 0.3s,color 0.3s;padding-bottom:90px;}
 
-        /* ── READING PROGRESS BAR ── */
-        #readingProgress {
-            position: fixed; top: 0; left: 0; height: var(--progress-h);
-            background: linear-gradient(90deg, #059669, #10b981, #34d399);
-            width: 0%; z-index: 9999; transition: width 0.1s linear;
-            border-radius: 0 2px 2px 0;
-        }
+        /* READING PROGRESS */
+        #readProg{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#059669,#10b981,#34d399);width:0%;z-index:9999;transition:width 0.1s linear;border-radius:0 2px 2px 0;}
 
-        /* ── NAVBAR ── */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: var(--navbar-bg); box-shadow: 0 2px 10px var(--shadow); position: sticky; top: 0; z-index: 100; transition: background 0.3s; margin-top: var(--progress-h); }
-        .cart-icon { position: relative; font-size: 22px; cursor: pointer; }
-        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; font-weight: bold; }
-        .dark-toggle { background: none; border: 2px solid var(--border); border-radius: 20px; padding: 4px 10px; cursor: pointer; font-size: 14px; color: var(--text); transition: 0.2s; }
+        /* NAVBAR — consistent with index */
+        
+        
+        
+        
+        .nav-logo{width:32px;height:32px;object-fit:contain;}
+        
+        
+        
+        
+        
+        .cart-badge{position:absolute;top:-6px;right:-7px;background:#ef4444;color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:20px;min-width:17px;text-align:center;border:1.5px solid var(--nav-bg);line-height:1.2;}
 
-        .container { max-width: 500px; margin: 0 auto; padding: 16px; }
+        /* CONTAINER */
+        .container{max-width:500px;margin:0 auto;padding:16px 14px 20px;}
 
-        /* ── BOOK IMAGE ── */
-        .book-image-wrap { background: var(--card); border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 4px 15px var(--shadow); margin-bottom: 16px; position: relative; }
-        .book-img-container { position: relative; display: inline-block; cursor: zoom-in; }
-        .book-img-container img { width: 180px; height: 260px; object-fit: cover; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); transition: transform 0.3s ease; display: block; }
-        .book-img-container img:hover { transform: scale(1.04); }
-        .img-skeleton { width: 180px; height: 260px; border-radius: 8px; background: linear-gradient(90deg, var(--border) 25%, var(--bg) 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; display: none; }
-        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        /* IMAGE ZOOM */
+        #imgModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9998;align-items:center;justify-content:center;cursor:zoom-out;}
+        #imgModal.open{display:flex;}
+        #imgModal img{max-width:90vw;max-height:90vh;border-radius:12px;}
 
-        /* ── IMAGE ZOOM MODAL ── */
-        #imgModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:9998; align-items:center; justify-content:center; cursor:zoom-out; }
-        #imgModal.open { display:flex; }
-        #imgModal img { max-width:90vw; max-height:90vh; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+        /* IMAGE CARD */
+        .img-card{background:var(--card);border-radius:16px;padding:24px;text-align:center;box-shadow:0 4px 15px var(--shadow);margin-bottom:16px;position:relative;border:1px solid var(--border);}
+        .book-img-wrap{position:relative;display:inline-block;cursor:zoom-in;}
+        .book-img-wrap img{width:180px;height:260px;object-fit:cover;border-radius:10px;box-shadow:0 8px 25px rgba(0,0,0,0.2);transition:transform 0.3s;}
+        .book-img-wrap img:hover{transform:scale(1.04);}
+        .img-skel{width:180px;height:260px;border-radius:10px;background:linear-gradient(90deg,var(--border) 25%,var(--bg) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;display:none;}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-        /* ── WISHLIST BUTTON ── */
-        .wishlist-btn-large { position: absolute; top: 16px; right: 16px; background: var(--card); border: 2px solid var(--border); border-radius: 50%; width: 44px; height: 44px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px var(--shadow); transition: 0.2s; }
-        .wishlist-btn-large:hover { transform: scale(1.15); }
-        .wishlist-btn-large.active { background: #ffe0e0; border-color: #e74c3c; }
+        .share-btn{position:absolute;top:14px;left:14px;background:var(--card);border:1.5px solid var(--border);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px var(--shadow);transition:0.2s;}
+        .share-btn:hover{transform:scale(1.12);border-color:#059669;}
+        .wl-btn-lg{position:absolute;top:14px;right:14px;background:var(--card);border:1.5px solid var(--border);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:19px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px var(--shadow);transition:0.2s;}
+        .wl-btn-lg:hover{transform:scale(1.12);}
+        .wl-btn-lg.active{background:#ffe4e4;border-color:#dc2626;}
 
-        /* ── SHARE BUTTON ── */
-        .share-btn { position: absolute; top: 16px; left: 16px; background: var(--card); border: 2px solid var(--border); border-radius: 50%; width: 44px; height: 44px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px var(--shadow); transition: 0.2s; }
-        .share-btn:hover { transform: scale(1.15); background: #e8f5e9; border-color: var(--green); }
+        #sharePanel{position:absolute;top:62px;left:10px;background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:10px;box-shadow:0 8px 24px var(--shadow);z-index:50;display:none;min-width:190px;}
+        #sharePanel.open{display:block;animation:fadeDown 0.2s ease;}
+        @keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+        .share-opt{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;transition:0.15s;}
+        .share-opt:hover{background:var(--bg);}
 
-        /* ── SHARE PANEL ── */
-        #sharePanel { position: absolute; top: 68px; left: 10px; background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 12px; box-shadow: 0 8px 24px var(--shadow); z-index: 50; display: none; min-width: 200px; }
-        #sharePanel.open { display: block; animation: fadeDown 0.2s ease; }
-        @keyframes fadeDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
-        .share-option { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.15s; }
-        .share-option:hover { background: var(--bg); }
+        /* BOOK INFO CARD */
+        .info-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 4px 15px var(--shadow);margin-bottom:16px;border:1px solid var(--border);}
+        .book-title{font-size:22px;font-weight:700;color:var(--dark);margin-bottom:6px;line-height:1.3;}
+        .book-author{font-size:15px;color:#059669;font-weight:600;margin-bottom:10px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+        .book-author:hover{text-decoration:underline;}
 
-        /* ── SOCIAL PROOF ── */
-        .social-proof { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding: 8px 12px; background: #fef3c7; border-radius: 8px; border: 1px solid #fde68a; }
-        [data-theme="dark"] .social-proof { background: #1e1a0a; border-color: #44380a; }
-        .social-proof-text { font-size: 12px; font-weight: 600; color: #92400e; }
-        [data-theme="dark"] .social-proof-text { color: #fcd34d; }
-        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; animation: pulse-dot 1.5s infinite; flex-shrink: 0; }
-        @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)} }
+        /* BADGES */
+        .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+        .badge{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:600;}
+        .b-cat{background:#e8f5e9;color:#059669;border:1px solid #c8e6c9;}
+        .b-ok{background:#e8f5e9;color:#059669;border:1px solid #c8e6c9;}
+        .b-low{background:#fff3e0;color:#f39c12;border:1px solid #ffe0b2;}
+        .b-out{background:#fdecea;color:#e74c3c;border:1px solid #f5c6cb;}
+        [data-theme="dark"] .b-cat,[data-theme="dark"] .b-ok{background:#0a2e1a;}
+        [data-theme="dark"] .b-low{background:#2e1e0a;}
+        [data-theme="dark"] .b-out{background:#2e0a0a;}
 
-        /* ── BOOK INFO ── */
-        .book-info { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px var(--shadow); margin-bottom: 16px; }
-        .book-title { font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 6px; line-height: 1.3; }
-        [data-theme="dark"] .book-title { color: #e8e8e8; }
-        .book-author { font-size: 15px; color: var(--green); font-weight: 600; margin-bottom: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-        .book-author:hover { text-decoration: underline; }
+        /* PRICE */
+        .price-section{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:14px;background:var(--price-bg);border-radius:10px;border:1px solid var(--border);}
+        .price-sell{font-size:28px;font-weight:700;color:var(--red);}
+        .price-orig{font-size:16px;color:var(--text2);text-decoration:line-through;}
+        .price-disc{background:var(--red);color:white;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;}
 
-        /* ── RATING ── */
-        .rating-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-        .stars { color: #f59e0b; font-size: 16px; letter-spacing: 1px; }
-        .rating-num { font-size: 14px; font-weight: 700; color: var(--text); }
-        .rating-count { font-size: 12px; color: var(--text2); }
+        /* QTY */
+        .qty-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+        .qty-label{font-size:14px;font-weight:600;color:var(--text2);}
+        .qty-wrap{display:flex;align-items:center;border:2px solid var(--border);border-radius:10px;overflow:hidden;}
+        .qty-btn{width:38px;height:38px;border:none;background:var(--bg);color:var(--text);font-size:20px;cursor:pointer;font-weight:700;transition:0.15s;display:flex;align-items:center;justify-content:center;}
+        .qty-btn:hover{background:#059669;color:white;}
+        .qty-num{width:40px;text-align:center;font-size:16px;font-weight:700;color:var(--text);background:var(--card);border:none;outline:none;}
 
-        /* ── BADGES ── */
-        .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-        .badge { font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 600; }
-        .badge-cat { background: #e8f5e9; color: #059669; border: 1px solid #c8e6c9; }
-        .badge-stock-ok { background: #e8f5e9; color: #059669; border: 1px solid #c8e6c9; }
-        .badge-stock-low { background: #fff3e0; color: #f39c12; border: 1px solid #ffe0b2; }
-        .badge-stock-out { background: #fdecea; color: #e74c3c; border: 1px solid #f5c6cb; }
-        [data-theme="dark"] .badge-cat { background: #0a2e1a; }
-        [data-theme="dark"] .badge-stock-ok { background: #0a2e1a; }
-        [data-theme="dark"] .badge-stock-low { background: #2e1e0a; }
-        [data-theme="dark"] .badge-stock-out { background: #2e0a0a; }
+        /* INFO TABLE */
+        .info-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+        .info-table tr{border-bottom:1px solid var(--border);}
+        .info-table td{padding:10px 4px;font-size:14px;}
+        .info-label{color:var(--text2);width:110px;font-weight:500;}
+        .info-val{color:var(--text);font-weight:600;}
 
-        /* ── PRICE ── */
-        .price-section { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 14px; background: var(--price-bg); border-radius: 10px; }
-        .price-sell { font-size: 28px; font-weight: 700; color: var(--red); }
-        .price-original { font-size: 16px; color: var(--text2); text-decoration: line-through; }
-        .price-discount { background: var(--red); color: white; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+        /* DELIVERY CARD */
+        .delivery-card{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1.5px solid #6ee7b7;border-radius:12px;padding:14px 16px;margin-bottom:16px;}
+        [data-theme="dark"] .delivery-card{background:linear-gradient(135deg,#0a2e1a,#0d3d22);border-color:#065f46;}
+        .d-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+        .d-row:last-child{margin-bottom:0;}
+        .d-icon{font-size:18px;width:26px;text-align:center;}
+        .d-text{font-size:13px;font-weight:600;color:#065f46;}
+        [data-theme="dark"] .d-text{color:#34d399;}
+        .d-sub{font-size:11px;color:#059669;}
+        [data-theme="dark"] .d-sub{color:#6ee7b7;}
 
-        /* ── QUANTITY SELECTOR ── */
-        .qty-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-        .qty-label { font-size: 14px; font-weight: 600; color: var(--text2); }
-        .qty-control { display: flex; align-items: center; gap: 0; border: 2px solid var(--border); border-radius: 10px; overflow: hidden; }
-        .qty-btn { width: 38px; height: 38px; border: none; background: var(--bg); color: var(--text); font-size: 20px; cursor: pointer; font-weight: 700; transition: 0.15s; display: flex; align-items: center; justify-content: center; }
-        .qty-btn:hover { background: var(--green); color: white; }
-        .qty-btn:active { transform: scale(0.92); }
-        .qty-num { width: 40px; text-align: center; font-size: 16px; font-weight: 700; color: var(--text); background: var(--card); border: none; outline: none; font-family: 'Hind Siliguri', Arial, sans-serif; }
+        /* BUTTONS */
+        .btn-wl{width:100%;padding:12px;background:var(--card);color:var(--red);border:2px solid var(--red);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.2s;margin-bottom:10px;}
+        .btn-wl:hover{background:#ffe0e0;}
+        .btn-wl.active{background:#ffe0e0;}
+        .btn-row{display:flex;gap:10px;margin-bottom:10px;}
+        .btn-cart{flex:1;padding:14px;background:var(--card);color:#059669;border:2px solid #059669;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.2s;}
+        .btn-cart:hover{background:#f0faf4;}
+        .btn-buy{flex:1;padding:14px;background:linear-gradient(135deg,#059669,#10b981);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 5px 15px rgba(5,150,105,0.3);transition:0.2s;}
+        .btn-buy:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(5,150,105,0.4);}
+        .btn-disabled{background:#ccc!important;color:#888!important;border-color:#ccc!important;cursor:not-allowed!important;box-shadow:none!important;transform:none!important;}
 
-        /* ── INFO TABLE ── */
-        .info-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-        .info-table tr { border-bottom: 1px solid var(--border); }
-        .info-table td { padding: 10px 4px; font-size: 14px; }
-        .info-label { color: var(--text2); width: 110px; font-weight: 500; }
-        .info-value { color: var(--text); font-weight: 600; }
+        /* STICKY BAR */
+        #stickyBar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--card);border-top:1.5px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px var(--shadow);transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
+        #stickyBar.visible{transform:translateY(0);}
+        .sticky-price{font-size:20px;font-weight:800;color:var(--red);white-space:nowrap;}
+        .sticky-qty-wrap{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;}
+        .sticky-qty-btn{width:32px;height:36px;border:none;background:var(--bg);color:var(--text);font-size:18px;font-weight:700;cursor:pointer;transition:0.15s;}
+        .sticky-qty-btn:hover{background:#059669;color:white;}
+        .sticky-qty-num{width:34px;text-align:center;font-size:14px;font-weight:700;background:var(--card);color:var(--text);}
+        .sticky-buy{flex:1;padding:12px;background:linear-gradient(135deg,#059669,#10b981);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 3px 10px rgba(5,150,105,0.3);transition:0.2s;}
+        .sticky-buy:hover{transform:translateY(-1px);}
 
-        /* ── DELIVERY CARD ── */
-        .delivery-card { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1.5px solid #6ee7b7; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
-        [data-theme="dark"] .delivery-card { background: linear-gradient(135deg, #0a2e1a, #0d3d22); border-color: #065f46; }
-        .delivery-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
-        .delivery-row:last-child { margin-bottom: 0; }
-        .delivery-icon { font-size: 18px; width: 26px; text-align: center; }
-        .delivery-text { font-size: 13px; font-weight: 600; color: #065f46; }
-        [data-theme="dark"] .delivery-text { color: #34d399; }
-        .delivery-sub { font-size: 11px; color: #059669; }
-        [data-theme="dark"] .delivery-sub { color: #6ee7b7; }
+        /* DESC */
+        .desc-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 4px 15px var(--shadow);margin-bottom:16px;border:1px solid var(--border);}
+        .desc-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--border);}
+        [data-theme="dark"] .desc-card h3{color:#ecfdf5;}
+        .desc-text{font-size:14px;color:var(--text2);line-height:1.8;}
+        .desc-toggle{display:inline-block;margin-top:8px;color:#059669;font-size:13px;font-weight:700;cursor:pointer;}
 
-        /* ── BUTTONS ── */
-        .btn-wishlist { width: 100%; padding: 12px; background: var(--card); color: var(--red); border: 2px solid var(--red); border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Hind Siliguri', Arial, sans-serif; transition: 0.2s; margin-bottom: 10px; }
-        .btn-wishlist:hover { background: #ffe0e0; }
-        .btn-wishlist.active { background: #ffe0e0; }
-        .btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .btn-cart { flex: 1; padding: 14px; background: var(--card); color: var(--green); border: 2px solid var(--green); border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Hind Siliguri', Arial, sans-serif; transition: 0.2s; }
-        .btn-cart:hover { background: #f0faf4; }
-        .btn-buy { flex: 1; padding: 14px; background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Hind Siliguri', Arial, sans-serif; box-shadow: 0 5px 15px rgba(39,174,96,0.3); transition: 0.2s; }
-        .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(39,174,96,0.4); }
-        .btn-disabled { background: #ccc !important; color: #888 !important; border-color: #ccc !important; cursor: not-allowed !important; box-shadow: none !important; transform: none !important; }
+        /* RELATED */
+        .related-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 4px 15px var(--shadow);margin-bottom:16px;border:1px solid var(--border);}
+        .related-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--border);}
+        [data-theme="dark"] .related-card h3{color:#ecfdf5;}
+        .rel-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+        .rel-row::-webkit-scrollbar{height:4px;}
+        .rel-row::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+        .rel-book{flex-shrink:0;width:110px;cursor:pointer;transition:0.2s;}
+        .rel-book:hover{transform:translateY(-4px);}
+        .rel-book img{width:110px;height:150px;object-fit:cover;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:6px;border:1px solid var(--border);}
+        .rel-name{font-size:11px;font-weight:600;color:var(--text);line-height:1.3;text-align:center;}
+        .rel-price{font-size:12px;color:var(--red);font-weight:700;text-align:center;margin-top:3px;}
 
-        /* ── STICKY BOTTOM BAR ── */
-        #stickyBar {
-            position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-            background: var(--card); border-top: 1.5px solid var(--border);
-            padding: 10px 16px; display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 -4px 20px var(--shadow);
-            transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-        }
-        #stickyBar.visible { transform: translateY(0); }
-        .sticky-price { font-size: 20px; font-weight: 800; color: var(--red); white-space: nowrap; }
-        .sticky-qty { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; }
-        .sticky-qty-btn { width: 32px; height: 36px; border: none; background: var(--bg); color: var(--text); font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.15s; }
-        .sticky-qty-btn:hover { background: var(--green); color: white; }
-        .sticky-qty-num { width: 34px; text-align: center; font-size: 14px; font-weight: 700; background: var(--card); color: var(--text); }
-        .sticky-buy { flex: 1; padding: 12px; background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Hind Siliguri', Arial, sans-serif; box-shadow: 0 3px 10px rgba(39,174,96,0.3); transition: 0.2s; }
-        .sticky-buy:hover { transform: translateY(-1px); }
+        /* TOAST */
+        .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(0);background:#1a2e1a;color:#86efac;padding:12px 24px;border-radius:25px;font-size:14px;font-weight:600;display:none;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #166534;}
+        .toast.show{display:block;animation:toastIn 0.3s ease;}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-        /* ── DESCRIPTION ── */
-        .desc-card { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px var(--shadow); margin-bottom: 16px; }
-        .desc-card h3 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
-        [data-theme="dark"] .desc-card h3 { color: #e8e8e8; }
-        .desc-text { font-size: 14px; color: var(--text2); line-height: 1.8; }
-        .desc-toggle { display: inline-block; margin-top: 8px; color: var(--green); font-size: 13px; font-weight: 700; cursor: pointer; }
+        /* FLY CART */
+        .fly-item{position:fixed;font-size:28px;z-index:9999;pointer-events:none;transition:all 0.6s cubic-bezier(0.4,0,0.2,1);}
 
-        /* ── RELATED ── */
-        .related-card { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px var(--shadow); margin-bottom: 16px; }
-        .related-card h3 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
-        [data-theme="dark"] .related-card h3 { color: #e8e8e8; }
-        .related-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
-        .related-row::-webkit-scrollbar { height: 4px; }
-        .related-row::-webkit-scrollbar-track { background: transparent; }
-        .related-row::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        .related-book { flex-shrink: 0; width: 110px; cursor: pointer; transition: 0.2s; }
-        .related-book:hover { transform: translateY(-4px); }
-        .related-book img { width: 110px; height: 150px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 6px; }
-        .related-book-name { font-size: 11px; font-weight: 600; color: var(--text); line-height: 1.3; text-align: center; }
-        .related-book-price { font-size: 12px; color: var(--red); font-weight: 700; text-align: center; margin-top: 3px; }
+        /* TRUST STRIP */
+        .trust-strip{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-around;align-items:center;}
+        .trust-item{text-align:center;}
+        .trust-icon{font-size:20px;}
+        .trust-text{font-size:10px;font-weight:700;color:#059669;}
 
-        /* ── RECENTLY VIEWED ── */
-        .recent-card { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px var(--shadow); margin-bottom: 16px; }
-        .recent-card h3 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
-        [data-theme="dark"] .recent-card h3 { color: #e8e8e8; }
-
-        /* ── TOAST ── */
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(0); background: #1a2e1a; color: #86efac; padding: 12px 24px; border-radius: 25px; font-size: 14px; font-weight: 600; display: none; z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,0.3); border: 1px solid #166534; }
-        .toast.show { display: block; animation: toastIn 0.3s ease; }
-        @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(12px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-
-        /* ── FLYING CART ANIMATION ── */
-        .fly-item { position: fixed; font-size: 28px; z-index: 9999; pointer-events: none; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        /* ── TRUST STRIP ── */
-        .trust-strip { background: #f0fdf4; border-top: 1px solid #c6f6d5; border-bottom: 1px solid #c6f6d5; padding: 12px 16px; display: flex; justify-content: space-around; align-items: center; }
-        .trust-item { text-align: center; }
-        .trust-icon { font-size: 20px; }
-        .trust-text { font-size: 10px; font-weight: 700; color: #059669; }
-
-        /* ── RESPONSIVE ── */
-        @media (min-width: 500px) {
-            .container { padding: 20px; }
-        }
+        /* WHATSAPP */
+        
+        
     </style>
 </head>
 <body>
 
-<!-- READING PROGRESS BAR -->
-<div id="readingProgress"></div>
-
-<!-- IMAGE ZOOM MODAL -->
-<div id="imgModal" onclick="closeImgModal()">
-    <img id="modalImg" src="" alt="বই">
-</div>
+<div id="readProg"></div>
+<div id="imgModal" onclick="closeImgModal()"><img id="modalImg" src="" alt="বই"></div>
 
 <!-- NAVBAR -->
-<div class="navbar">
-    <button onclick="goBack()" style="background:#059669;border:none;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(39,174,96,0.4);color:white;">‹</button>
-    <img src="logo.png" alt="Logo" style="width:40px;height:40px;object-fit:contain;">
-    <div style="display:flex;align-items:center;gap:10px;">
-        <button class="dark-toggle" onclick="toggleDarkMode()" id="darkBtn">🌙</button>
-        <div class="cart-icon" onclick="goToCart()">
-            🛒<span class="cart-badge" id="cartCount">0</span>
+<nav class="navbar">
+    <div class="navbar-top">
+        <button class="back-btn" onclick="goBack()">‹</button>
+        <img src="logo.png" class="nav-logo" alt="গ্রন্থকানন" style="margin-left:6px;">
+        <div class="navbar-icons">
+            <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+            <div class="nav-btn" onclick="goToCart()" title="কার্ট">
+                🛒<span class="cart-badge" id="cartCount">0</span>
+            </div>
         </div>
     </div>
-</div>
+</nav>
 
 <div class="container">
 
-    <!-- BOOK IMAGE -->
-    <div class="book-image-wrap">
-        <button class="share-btn" onclick="toggleSharePanel(event)" title="শেয়ার করুন">🔗</button>
+    <!-- IMAGE -->
+    <div class="img-card">
+        <button class="share-btn" onclick="toggleShare(event)" title="শেয়ার">🔗</button>
         <div id="sharePanel">
-            <div class="share-option" onclick="shareWhatsApp()">
-                <span>📲</span><span>WhatsApp শেয়ার</span>
-            </div>
-            <div class="share-option" onclick="copyLink()">
-                <span>🔗</span><span id="copyLinkText">লিঙ্ক কপি করুন</span>
-            </div>
+            <div class="share-opt" onclick="shareWA()">📲 <span>WhatsApp শেয়ার</span></div>
+            <div class="share-opt" onclick="copyLink()">🔗 <span id="copyTxt">লিঙ্ক কপি করুন</span></div>
         </div>
-
-        <div class="book-img-container" onclick="openImgModal()">
-            <div class="img-skeleton" id="imgSkeleton"></div>
+        <div class="book-img-wrap" onclick="openImgModal()">
+            <div class="img-skel" id="imgSkel"></div>
             <img id="bookImg" src="" alt="বই" onload="onImgLoad()" onerror="onImgLoad()">
         </div>
         <div style="margin-top:8px;font-size:11px;color:var(--text2);">📷 ট্যাপ করুন বড় করে দেখতে</div>
+        <button class="wl-btn-lg" id="wlBtnLg" onclick="toggleWL()">🤍</button>
 
-        <button class="wishlist-btn-large" id="wishlistBtnLarge" onclick="toggleWishlist()">🤍</button>
     </div>
 
-    <!-- BOOK INFO -->
-    <div class="book-info" id="mainButtons">
+    <!-- INFO -->
+    <div class="info-card" id="mainSection">
         <div class="book-title" id="bookTitle"></div>
         <div class="book-author" id="bookAuthor"></div>
-
-        <!-- RATING -->
-        <div class="rating-row">
-            <div class="stars" id="bookStars">★★★★★</div>
-            <div class="rating-num" id="ratingNum">4.8</div>
-            <div class="rating-count" id="ratingCount">(১২৪ রিভিউ)</div>
-        </div>
-
         <div class="badges" id="bookBadges"></div>
-
         <div class="price-section">
             <div class="price-sell" id="bookPrice"></div>
-            <div class="price-original" id="bookOrigPrice"></div>
-            <div class="price-discount" id="bookDiscount"></div>
+            <div class="price-orig" id="bookOrigPrice"></div>
+            <div class="price-disc" id="bookDisc"></div>
         </div>
-
-        <!-- QUANTITY SELECTOR -->
         <div class="qty-row">
             <span class="qty-label">পরিমাণ:</span>
-            <div class="qty-control">
+            <div class="qty-wrap">
                 <button class="qty-btn" onclick="changeQty(-1)">−</button>
                 <div class="qty-num" id="qtyNum">১</div>
                 <button class="qty-btn" onclick="changeQty(1)">+</button>
             </div>
         </div>
-
         <table class="info-table">
-            <tr><td class="info-label">প্রকাশনী</td><td class="info-value" id="bookPub"></td></tr>
-            <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-value" id="bookPages"></td></tr>
-            <tr><td class="info-label">বিষয়</td><td class="info-value" id="bookSubject"></td></tr>
+            <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
+            <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
+            <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
         </table>
-
-        <!-- DELIVERY CARD -->
-        <div class="delivery-card" id="deliveryCard">
-            <div class="delivery-row">
-                <div class="delivery-icon">🚚</div>
-                <div>
-                    <div class="delivery-text" id="deliveryText">ঢাকায় ডেলিভারি: ১-২ দিন</div>
-                    <div class="delivery-sub">বাইরে: ৩-৫ কার্যদিবস</div>
-                </div>
-            </div>
-            <div class="delivery-row">
-                <div class="delivery-icon">💵</div>
-                <div>
-                    <div class="delivery-text">ক্যাশ অন ডেলিভারি সুবিধা</div>
-                    <div class="delivery-sub">ডেলিভারি পেয়ে টাকা দিন</div>
-                </div>
-            </div>
-            <div class="delivery-row">
-                <div class="delivery-icon">🔄</div>
-                <div>
-                    <div class="delivery-text">সহজ রিটার্ন পলিসি</div>
-                    <div class="delivery-sub">৭ দিনের মধ্যে ফেরত দিন</div>
-                </div>
-            </div>
+        <div class="delivery-card">
+            <div class="d-row"><div class="d-icon">🚚</div><div><div class="d-text" id="deliveryText">ঢাকায় ডেলিভারি: ১-২ দিন</div><div class="d-sub">বাইরে: ৩-৫ কার্যদিবস</div></div></div>
+            <div class="d-row"><div class="d-icon">💵</div><div><div class="d-text">ক্যাশ অন ডেলিভারি সুবিধা</div><div class="d-sub">ডেলিভারি পেয়ে টাকা দিন</div></div></div>
+            <div class="d-row"><div class="d-icon">🔄</div><div><div class="d-text">সহজ রিটার্ন পলিসি</div><div class="d-sub">৭ দিনের মধ্যে ফেরত দিন</div></div></div>
+            <div class="d-row"><div class="d-icon">👁</div><div><div class="d-text" id="viewCount">লোড হচ্ছে...</div><div class="d-sub">এই বইটি কতজন দেখেছেন</div></div></div>
         </div>
-
-        <!-- SOCIAL PROOF -->
-        <div class="social-proof" id="socialProof">
-            <div class="live-dot"></div>
-            <div class="social-proof-text" id="socialProofText">আজ ৮ জন এই বই কিনেছেন</div>
-        </div>
-
-        <br>
-
-        <!-- WISHLIST BUTTON -->
-        <button class="btn-wishlist" id="wishlistBtn" onclick="toggleWishlist()">🤍 উইশলিস্টে যোগ করুন</button>
-
+        <button class="btn-wl" id="wlBtn" onclick="toggleWL()">🤍 উইশলিস্টে যোগ করুন</button>
         <div class="btn-row" id="btnRow">
-            <button class="btn-cart" id="btnCart" onclick="addToCartAndShow()">🛒 কার্টে যোগ করুন</button>
+            <button class="btn-cart" id="btnCart" onclick="addToCartShow()">🛒 কার্টে যোগ করুন</button>
             <button class="btn-buy" id="btnBuy" onclick="buyNow()">⚡ এখনই কিনুন</button>
         </div>
     </div>
@@ -352,24 +246,21 @@
         <span class="desc-toggle" id="descToggle" onclick="toggleDesc()" style="display:none;">আরো দেখুন ▼</span>
     </div>
 
-    <!-- RELATED BOOKS -->
+    <!-- RELATED -->
     <div class="related-card" id="relatedSection">
         <h3>📚 একই লেখকের বই</h3>
-        <div class="related-row" id="relatedBooks"></div>
+        <div class="rel-row" id="relatedBooks"></div>
     </div>
 
     <!-- RECENTLY VIEWED -->
-    <div class="recent-card" id="recentSection" style="display:none;">
+    <div class="related-card" id="recentSection" style="display:none;">
         <h3>🕐 সম্প্রতি দেখেছেন</h3>
-        <div class="related-row" id="recentBooks"></div>
+        <div class="rel-row" id="recentBooks"></div>
     </div>
-
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast">✅ কার্টে যোগ হয়েছে!</div>
 
-<!-- TRUST STRIP -->
 <div class="trust-strip">
     <div class="trust-item"><div class="trust-icon">🚚</div><div class="trust-text">দ্রুত ডেলিভারি</div></div>
     <div class="trust-item"><div class="trust-icon">✅</div><div class="trust-text">ক্যাশ অন ডেলিভারি</div></div>
@@ -377,374 +268,218 @@
     <div class="trust-item"><div class="trust-icon">🔄</div><div class="trust-text">রিটার্ন পলিসি</div></div>
 </div>
 
-<!-- FOOTER -->
 <footer style="background:#064e3b;color:#a7f3d0;text-align:center;padding:28px 20px;">
-    <p style="font-weight:700;font-size:16px;margin-bottom:12px;">📚 গ্রন্থকানন</p>
-    <p style="font-size:13px;margin-bottom:8px;color:#6ee7b7;">স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
-    <p style="font-size:13px;margin-bottom:4px;">📞 হটলাইন: <a href="tel:01516595762" style="color:#a7f3d0;text-decoration:none;">01516595762</a></p>
-    <p style="font-size:12px;color:#6ee7b7;margin-top:12px;">&copy; 2025 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত</p>
+    <p style="font-weight:700;font-size:16px;margin-bottom:8px;">📚 গ্রন্থকানন</p>
+    <p style="font-size:13px;margin-bottom:6px;color:#6ee7b7;">স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
+    <p style="font-size:13px;">📞 <a href="tel:01516595762" style="color:#a7f3d0;text-decoration:none;">01516595762</a></p>
+    <p style="font-size:12px;color:#6ee7b7;margin-top:10px;">&copy; 2025 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত</p>
 </footer>
 
-<!-- WHATSAPP -->
-<a href="https://wa.me/8801516595762" target="_blank" style="position:fixed;bottom:80px;right:20px;z-index:9990;display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:#25D366;border-radius:50%;box-shadow:0 4px 14px rgba(37,211,102,0.45);text-decoration:none;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:30px;">
+<a href="https://wa.me/8801516595762" target="_blank" class="wa-btn">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:28px;">
 </a>
 
-<!-- STICKY BOTTOM BAR -->
 <div id="stickyBar">
     <div class="sticky-price" id="stickyPrice">৳ 0</div>
-    <div class="sticky-qty">
+    <div class="sticky-qty-wrap">
         <button class="sticky-qty-btn" onclick="changeQty(-1)">−</button>
-        <div class="sticky-qty-num" id="stickyQty">১</div>
+        <div class="sticky-qty-num" id="stickyQtyNum">১</div>
         <button class="sticky-qty-btn" onclick="changeQty(1)">+</button>
     </div>
-    <button class="sticky-buy" id="stickyBuyBtn" onclick="buyNow()">⚡ এখনই কিনুন</button>
+    <button class="sticky-buy" id="stickyBuy" onclick="buyNow()">⚡ এখনই কিনুন</button>
 </div>
 
 <script src="book.js"></script>
 <script src="main.js"></script>
 <script>
-/* ══════════════════════════════════════════
-   STATE
-══════════════════════════════════════════ */
-let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
-let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
-let currentBook = null;
-let currentIdx = -1;
-let qty = 1;
-let descExpanded = false;
+let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
+let wishlist=JSON.parse(localStorage.getItem('gronthokanon_wishlist'))||[];
+let curBook=null,curIdx=-1,qty=1,descExp=false;
 
-/* ── DARK MODE ── */
-function toggleDarkMode() {
-    const html = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('darkBtn').innerText = isDark ? '🌙' : '☀️';
-    localStorage.setItem('gronthokanon_theme', isDark ? 'light' : 'dark');
-}
-const savedTheme = localStorage.getItem('gronthokanon_theme');
-if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.getElementById('darkBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
-}
+/* DARK */
 
-/* ── READING PROGRESS BAR ── */
-window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-    document.getElementById('readingProgress').style.width = pct + '%';
-
-    // Sticky bar toggle
-    const btnRowRect = document.getElementById('mainButtons').getBoundingClientRect();
-    const bar = document.getElementById('stickyBar');
-    if (btnRowRect.bottom < 0) {
-        bar.classList.add('visible');
-    } else {
-        bar.classList.remove('visible');
-    }
+/* READING PROGRESS + STICKY */
+window.addEventListener('scroll',()=>{
+    const p=document.documentElement.scrollHeight-window.innerHeight;
+    document.getElementById('readProg').style.width=p>0?(window.scrollY/p*100)+'%':'0%';
+    const r=document.getElementById('mainSection').getBoundingClientRect();
+    document.getElementById('stickyBar').classList.toggle('visible',r.bottom<0);
 });
 
-/* ── CART COUNT ── */
-function updateCartCount() {
-    document.getElementById('cartCount').innerText = cart.length;
+function updateCartCount(){document.getElementById('cartCount').innerText=cart.length;}
+function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
+
+/* WL */
+function updateWLUI(){
+    const wl=wishlist.includes(curBook?.name);
+    const lg=document.getElementById('wlBtnLg');const btn=document.getElementById('wlBtn');
+    if(lg){lg.innerText=wl?'❤️':'🤍';lg.classList.toggle('active',wl);}
+    if(btn){btn.innerHTML=wl?'❤️ উইশলিস্ট থেকে সরান':'🤍 উইশলিস্টে যোগ করুন';btn.classList.toggle('active',wl);}
+}
+function toggleWL(){
+    if(!curBook)return;
+    if(wishlist.includes(curBook.name)){wishlist=wishlist.filter(w=>w!==curBook.name);showToast('💔 উইশলিস্ট থেকে সরানো হয়েছে');}
+    else{wishlist.push(curBook.name);showToast('❤️ উইশলিস্টে যোগ হয়েছে!');}
+    localStorage.setItem('gronthokanon_wishlist',JSON.stringify(wishlist));updateWLUI();
 }
 
-/* ── DISCOUNT ── */
-function discountPct(b) {
-    if (b.original_price > b.price) return Math.round((b.original_price - b.price) / b.original_price * 100);
-    return 0;
+/* QTY */
+const BN=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+function toBN(n){return String(n).split('').map(d=>BN[d]||d).join('');}
+function changeQty(d){
+    qty=Math.max(1,Math.min(10,qty+d));
+    document.getElementById('qtyNum').innerText=toBN(qty);
+    document.getElementById('stickyQtyNum').innerText=toBN(qty);
+    if(curBook)document.getElementById('stickyPrice').innerText='৳ '+(curBook.price*qty);
 }
 
-/* ── WISHLIST ── */
-function updateWishlistUI() {
-    const isWl = wishlist.includes(currentBook?.name);
-    const btnLarge = document.getElementById('wishlistBtnLarge');
-    const btn = document.getElementById('wishlistBtn');
-    if (btnLarge) { btnLarge.innerText = isWl ? '❤️' : '🤍'; btnLarge.classList.toggle('active', isWl); }
-    if (btn) { btn.innerHTML = isWl ? '❤️ উইশলিস্ট থেকে সরান' : '🤍 উইশলিস্টে যোগ করুন'; btn.classList.toggle('active', isWl); }
-}
-function toggleWishlist() {
-    if (!currentBook) return;
-    if (wishlist.includes(currentBook.name)) {
-        wishlist = wishlist.filter(w => w !== currentBook.name);
-        showToast('💔 উইশলিস্ট থেকে সরানো হয়েছে');
-    } else {
-        wishlist.push(currentBook.name);
-        showToast('❤️ উইশলিস্টে যোগ হয়েছে!');
-    }
-    localStorage.setItem('gronthokanon_wishlist', JSON.stringify(wishlist));
-    updateWishlistUI();
+/* IMAGE */
+function onImgLoad(){document.getElementById('imgSkel').style.display='none';document.getElementById('bookImg').style.display='block';}
+function openImgModal(){const s=document.getElementById('bookImg').src;document.getElementById('modalImg').src=s;document.getElementById('imgModal').classList.add('open');}
+function closeImgModal(){document.getElementById('imgModal').classList.remove('open');}
+
+/* SHARE */
+function toggleShare(e){e.stopPropagation();document.getElementById('sharePanel').classList.toggle('open');}
+document.addEventListener('click',()=>document.getElementById('sharePanel').classList.remove('open'));
+function shareWA(){if(!curBook)return;const t=encodeURIComponent(`📚 "${curBook.name}" — ${curBook.author}\n৳ ${curBook.price} | গ্রন্থকানন\n${window.location.href}`);window.open('https://wa.me/?text='+t,'_blank');document.getElementById('sharePanel').classList.remove('open');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copyTxt').innerText='✅ কপি হয়েছে!';setTimeout(()=>document.getElementById('copyTxt').innerText='লিঙ্ক কপি করুন',2000);});}
+
+/* DESC TOGGLE */
+function toggleDesc(){
+    descExp=!descExp;
+    const el=document.getElementById('bookDesc');
+    el.style.maxHeight=descExp?'none':'80px';el.style.overflow=descExp?'visible':'hidden';
+    document.getElementById('descToggle').innerHTML=descExp?'কম দেখুন ▲':'আরো দেখুন ▼';
 }
 
-/* ── QUANTITY ── */
-const BN_NUMS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-function toBN(n) { return String(n).split('').map(d => BN_NUMS[d] || d).join(''); }
-function changeQty(delta) {
-    qty = Math.max(1, Math.min(10, qty + delta));
-    document.getElementById('qtyNum').innerText = toBN(qty);
-    document.getElementById('stickyQty').innerText = toBN(qty);
-    if (currentBook) {
-        document.getElementById('stickyPrice').innerText = '৳ ' + (currentBook.price * qty);
-    }
+/* TOAST */
+let toastT;
+function showToast(msg){const t=document.getElementById('toast');t.innerText=msg||'✅ কার্টে যোগ হয়েছে!';t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2500);}
+
+/* FLY CART */
+function flyToCart(x,y){
+    const el=document.createElement('div');el.className='fly-item';el.innerText='📗';
+    el.style.left=x+'px';el.style.top=y+'px';document.body.appendChild(el);
+    const r=document.getElementById('cartCount').getBoundingClientRect();
+    requestAnimationFrame(()=>{el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top+r.height/2)+'px';el.style.opacity='0';el.style.transform='scale(0.3)';});
+    setTimeout(()=>el.remove(),650);
 }
 
-/* ── IMAGE ── */
-function onImgLoad() {
-    document.getElementById('imgSkeleton').style.display = 'none';
-    document.getElementById('bookImg').style.display = 'block';
-}
-function openImgModal() {
-    const src = document.getElementById('bookImg').src;
-    document.getElementById('modalImg').src = src;
-    document.getElementById('imgModal').classList.add('open');
-}
-function closeImgModal() {
-    document.getElementById('imgModal').classList.remove('open');
-}
-
-/* ── SHARE ── */
-function toggleSharePanel(e) {
-    e.stopPropagation();
-    document.getElementById('sharePanel').classList.toggle('open');
-}
-document.addEventListener('click', () => {
-    document.getElementById('sharePanel').classList.remove('open');
-});
-function shareWhatsApp() {
-    if (!currentBook) return;
-    const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(`📚 "${currentBook.name}" — ${currentBook.author}\n৳ ${currentBook.price} | গ্রন্থকানন\n${window.location.href}`);
-    window.open('https://wa.me/?text=' + text, '_blank');
-    document.getElementById('sharePanel').classList.remove('open');
-}
-function copyLink() {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-        document.getElementById('copyLinkText').innerText = '✅ কপি হয়েছে!';
-        setTimeout(() => { document.getElementById('copyLinkText').innerText = 'লিঙ্ক কপি করুন'; }, 2000);
-    });
-}
-
-/* ── DESCRIPTION TOGGLE ── */
-function toggleDesc() {
-    descExpanded = !descExpanded;
-    const el = document.getElementById('bookDesc');
-    el.style.maxHeight = descExpanded ? 'none' : '80px';
-    el.style.overflow = descExpanded ? 'visible' : 'hidden';
-    document.getElementById('descToggle').innerHTML = descExpanded ? 'কম দেখুন ▲' : 'আরো দেখুন ▼';
-}
-
-/* ── TOAST ── */
-let toastTimer;
-function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.innerText = msg || '✅ কার্টে যোগ হয়েছে!';
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-/* ── FLYING CART ANIMATION ── */
-function flyToCart(x, y) {
-    const el = document.createElement('div');
-    el.className = 'fly-item';
-    el.innerText = '📗';
-    el.style.left = x + 'px';
-    el.style.top = y + 'px';
-    document.body.appendChild(el);
-    const cartBadge = document.getElementById('cartCount');
-    const r = cartBadge.getBoundingClientRect();
-    requestAnimationFrame(() => {
-        el.style.left = (r.left + r.width/2) + 'px';
-        el.style.top = (r.top + r.height/2) + 'px';
-        el.style.opacity = '0';
-        el.style.transform = 'scale(0.3)';
-    });
-    setTimeout(() => el.remove(), 650);
-}
-
-/* ── ADD TO CART ── */
-function addToCartAndShow(fromBtn) {
-    if (!currentBook) return;
-    const btn = document.getElementById('btnCart');
-    const rect = btn.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-
-    for (let i = 0; i < qty; i++) {
-        cart.push({ name: currentBook.name, price: currentBook.price, img: currentBook.img });
-    }
-    localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
-    updateCartCount();
-    flyToCart(cx, cy);
+/* ADD TO CART */
+function addToCartShow(){
+    if(!curBook)return;
+    const btn=document.getElementById('btnCart'),r=btn.getBoundingClientRect();
+    for(let i=0;i<qty;i++)cart.push({name:curBook.name,price:curBook.price,img:curBook.img});
+    localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
+    updateCartCount();flyToCart(r.left+r.width/2,r.top+r.height/2);
     showToast(`✅ ${toBN(qty)}টি বই কার্টে যোগ হয়েছে!`);
 }
-
-function buyNow() {
-    if (!currentBook) return;
-    for (let i = 0; i < qty; i++) {
-        cart.push({ name: currentBook.name, price: currentBook.price, img: currentBook.img });
-    }
-    localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
-    window.location.href = 'checkout.html';
+function buyNow(){
+    if(!curBook)return;
+    for(let i=0;i<qty;i++)cart.push({name:curBook.name,price:curBook.price,img:curBook.img});
+    localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
+    window.location.href='checkout.html';
 }
 
-/* ── RECENTLY VIEWED ── */
-function loadRecentlyViewed() {
-    let recent = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
-    recent = recent.filter(i => i !== currentIdx).slice(0, 6);
-    if (recent.length === 0 || typeof books === 'undefined') return;
-    const el = document.getElementById('recentBooks');
-    el.innerHTML = recent.map(ri => {
-        if (!books[ri]) return '';
-        const rb = books[ri];
-        return `<div class="related-book" onclick="window.location.href='book.html?id=${ri}'">
+/* RECENTLY VIEWED */
+function loadRecent(){
+    let r=JSON.parse(localStorage.getItem('gronthokanon_recent'))||[];
+    r=r.filter(i=>i!==curIdx).slice(0,6);
+    if(!r.length)return;
+    document.getElementById('recentSection').style.display='block';
+    document.getElementById('recentBooks').innerHTML=r.map(ri=>{
+        const rb=books[ri];if(!rb)return '';
+        return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'">
             <img src="${rb.img}" alt="${rb.name}" loading="lazy">
-            <div class="related-book-name">${rb.name}</div>
-            <div class="related-book-price">৳ ${rb.price}</div>
-        </div>`;
+            <div class="rel-name">${rb.name}</div>
+            <div class="rel-price">৳ ${rb.price}</div></div>`;
     }).join('');
-    document.getElementById('recentSection').style.display = 'block';
 }
 
-/* ── RATING ── */
-function renderStars(rating) {
-    const full = Math.floor(rating);
-    const half = rating % 1 >= 0.5;
-    let s = '';
-    for (let i = 0; i < full; i++) s += '★';
-    if (half) s += '☆';
-    for (let i = full + (half ? 1 : 0); i < 5; i++) s += '☆';
-    return s;
+/* LOAD BOOK */
+function loadBook(){
+    const idx=parseInt(new URLSearchParams(window.location.search).get('id'));
+    if(isNaN(idx)||!books[idx]){window.location.href='index.html';return;}
+    curIdx=idx;curBook=books[idx];
+    const b=curBook,stock=parseInt(b.stock||'10'),inStock=stock>0,pct=discPct(b);
+
+    let r=JSON.parse(localStorage.getItem('gronthokanon_recent'))||[];
+    r=[idx,...r.filter(i=>i!==idx)].slice(0,8);
+    localStorage.setItem('gronthokanon_recent',JSON.stringify(r));
+
+    document.title=b.name+' — গ্রন্থকানন';
+    document.getElementById('imgSkel').style.display='block';
+    document.getElementById('bookImg').style.display='none';
+    document.getElementById('bookImg').src=b.img;
+    document.getElementById('bookTitle').innerText=b.name;
+    document.getElementById('bookAuthor').innerText='✍️ '+b.author;
+    document.getElementById('bookPrice').innerText='৳ '+b.price;
+    document.getElementById('stickyPrice').innerText='৳ '+b.price;
+    document.getElementById('bookPub').innerText=b.pub;
+    document.getElementById('bookPages').innerText=b.pages;
+    document.getElementById('bookSubject').innerText=b.subject;
+
+    document.getElementById('bookAuthor').onclick=()=>window.location.href=`filter.html?type=author&value=${encodeURIComponent(b.author)}`;
+
+    const desc=b.desc||'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
+    const descEl=document.getElementById('bookDesc');descEl.innerText=desc;
+    if(desc.length>200){descEl.style.maxHeight='80px';descEl.style.overflow='hidden';document.getElementById('descToggle').style.display='inline-block';}
+
+    const origEl=document.getElementById('bookOrigPrice');
+    if(b.original_price>b.price)origEl.innerText='৳ '+b.original_price;else origEl.style.display='none';
+    const discEl=document.getElementById('bookDisc');
+    if(pct>0)discEl.innerText=pct+'% ছাড়';else discEl.style.display='none';
+
+    const badges=document.getElementById('bookBadges');
+    badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span>`;
+    if(!inStock)badges.innerHTML+=`<span class="badge b-out">❌ স্টক শেষ</span>`;
+    else if(stock<=3)badges.innerHTML+=`<span class="badge b-low">⚠️ মাত্র ${toBN(stock)} কপি!</span>`;
+    else badges.innerHTML+=`<span class="badge b-ok">✅ স্টক আছে</span>`;
+
+    const today=new Date();today.setDate(today.getDate()+2);
+    document.getElementById('deliveryText').innerText=`ঢাকায় ডেলিভারি: ১-২ কার্যদিবস`;
+
+    if(!inStock){
+        ['btnCart','btnBuy','stickyBuy'].forEach(id=>{const el=document.getElementById(id);if(el){el.classList.add('btn-disabled');el.disabled=true;}});
+    }
+
+    updateWLUI();
+
+    const related=books.filter((rb,i)=>rb.author===b.author&&i!==idx).slice(0,8);
+    if(!related.length){document.getElementById('relatedSection').style.display='none';}
+    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'"><img src="${rb.img}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
+
+    loadRecent();updateCartCount();
+}
+function goToCart(){localStorage.setItem('gronthokanon_opencart','1');window.location.href='index.html';}
+function goBack(){window.history.back();}
+
+/* ═══ FIREBASE VIEW COUNTER ═══ */
+const DB_URL = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com';
+
+async function incrementView(bookId) {
+    const url = `${DB_URL}/views/${bookId}.json`;
+    // আগের count নাও
+    const res = await fetch(url);
+    const data = await res.json();
+    const count = (data || 0) + 1;
+    // নতুন count save করো
+    await fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(count)
+    });
+    // UI তে দেখাও
+    const el = document.getElementById('viewCount');
+    if (el) el.innerText = `👁 ${toBN(count)} জন দেখেছেন`;
 }
 
-/* ── LOAD BOOK ── */
-function loadBook() {
-    const params = new URLSearchParams(window.location.search);
-    const idx = parseInt(params.get('id'));
-    if (isNaN(idx) || !books[idx]) { window.location.href = 'index.html'; return; }
-
-    currentIdx = idx;
-    currentBook = books[idx];
-    const b = currentBook;
-    const stockNum = parseInt(b.stock);
-    const inStock = stockNum > 0;
-    const pct = discountPct(b);
-
-    // Save to recently viewed
-    let recent = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
-    recent = [idx, ...recent.filter(i => i !== idx)].slice(0, 8);
-    localStorage.setItem('gronthokanon_recent', JSON.stringify(recent));
-
-    document.title = b.name + ' — গ্রন্থকানন';
-    document.getElementById('imgSkeleton').style.display = 'block';
-    document.getElementById('bookImg').style.display = 'none';
-    document.getElementById('bookImg').src = b.img;
-    document.getElementById('bookTitle').innerText = b.name;
-    document.getElementById('bookAuthor').innerText = '✍️ ' + b.author;
-    document.getElementById('bookPrice').innerText = '৳ ' + b.price;
-    document.getElementById('stickyPrice').innerText = '৳ ' + b.price;
-    document.getElementById('bookPub').innerText = b.pub;
-    document.getElementById('bookPages').innerText = b.pages;
-    document.getElementById('bookSubject').innerText = b.subject;
-
-    // Description with truncate
-    const desc = b.desc || 'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
-    const descEl = document.getElementById('bookDesc');
-    descEl.innerText = desc;
-    const descToggle = document.getElementById('descToggle');
-    if (desc.length > 200) {
-        descEl.style.maxHeight = '80px';
-        descEl.style.overflow = 'hidden';
-        descToggle.style.display = 'inline-block';
-    }
-
-    // Author click
-    document.getElementById('bookAuthor').onclick = () => {
-        window.location.href = `filter.html?type=author&value=${encodeURIComponent(b.author)}`;
-    };
-
-    // Original price
-    const origEl = document.getElementById('bookOrigPrice');
-    if (b.original_price > b.price) origEl.innerText = '৳ ' + b.original_price;
-    else origEl.style.display = 'none';
-
-    // Discount badge
-    const discEl = document.getElementById('bookDiscount');
-    if (pct > 0) discEl.innerText = pct + '% ছাড়';
-    else discEl.style.display = 'none';
-
-    // Badges
-    const badgesEl = document.getElementById('bookBadges');
-    badgesEl.innerHTML = `<span class="badge badge-cat">📚 ${b.cat}</span>`;
-    if (!inStock) {
-        badgesEl.innerHTML += `<span class="badge badge-stock-out">❌ স্টক শেষ</span>`;
-    } else if (stockNum <= 3) {
-        badgesEl.innerHTML += `<span class="badge badge-stock-low">⚠️ মাত্র ${toBN(stockNum)} কপি বাকি!</span>`;
-    } else {
-        badgesEl.innerHTML += `<span class="badge badge-stock-ok">✅ স্টক আছে</span>`;
-    }
-
-    // Rating (random-seeded from book name for consistency)
-    const seed = b.name.charCodeAt(0) + (b.name.charCodeAt(1) || 0);
-    const rating = 4.2 + (seed % 9) * 0.08;
-    const reviewCount = 40 + (seed % 200);
-    document.getElementById('bookStars').innerText = renderStars(rating);
-    document.getElementById('ratingNum').innerText = rating.toFixed(1);
-    document.getElementById('ratingCount').innerText = '(' + toBN(reviewCount) + ' রিভিউ)';
-
-    // Social proof
-    const bought = 3 + (seed % 15);
-    document.getElementById('socialProofText').innerText = `আজ ${toBN(bought)} জন এই বই কিনেছেন`;
-
-    // Delivery estimate
-    const today = new Date();
-    const dhaka = new Date(today); dhaka.setDate(today.getDate() + 2);
-    const options = { day: 'numeric', month: 'long' };
-    document.getElementById('deliveryText').innerText = `ঢাকায় ডেলিভারি: ${dhaka.toLocaleDateString('bn-BD', options)} এর মধ্যে`;
-
-    // Buttons
-    if (!inStock) {
-        document.getElementById('btnCart').classList.add('btn-disabled');
-        document.getElementById('btnCart').disabled = true;
-        document.getElementById('btnBuy').classList.add('btn-disabled');
-        document.getElementById('btnBuy').disabled = true;
-        document.getElementById('stickyBuyBtn').classList.add('btn-disabled');
-        document.getElementById('stickyBuyBtn').disabled = true;
-    }
-
-    // Wishlist
-    updateWishlistUI();
-
-    // Related books
-    const related = books.filter((rb, i) => rb.author === b.author && i !== idx).slice(0, 8);
-    const relatedEl = document.getElementById('relatedBooks');
-    if (related.length === 0) {
-        document.getElementById('relatedSection').style.display = 'none';
-    } else {
-        relatedEl.innerHTML = related.map(rb => {
-            const ri = books.indexOf(rb);
-            return `<div class="related-book" onclick="window.location.href='book.html?id=${ri}'">
-                <img src="${rb.img}" alt="${rb.name}" loading="lazy">
-                <div class="related-book-name">${rb.name}</div>
-                <div class="related-book-price">৳ ${rb.price}</div>
-            </div>`;
-        }).join('');
-    }
-
-    // Recently viewed
-    loadRecentlyViewed();
-
-    updateCartCount();
-}
-
-function goToCart() {
-    localStorage.setItem('gronthokanon_opencart', '1');
-    window.location.href = 'index.html';
-}
-function goBack() { window.history.back(); }
-
-window.onload = loadBook;
+window.onload = function() {
+    loadBook();
+    // Book load হওয়ার পর view count করো
+    const idx = parseInt(new URLSearchParams(window.location.search).get('id'));
+    if (!isNaN(idx)) incrementView(idx);
+};
 </script>
+<script src="common.js"></script>
 </body>
 </html>
