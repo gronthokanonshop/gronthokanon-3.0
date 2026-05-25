@@ -13,6 +13,16 @@ function toggleDark() {
     localStorage.setItem('gronthokanon_theme', isDark ? 'light' : 'dark');
 }
 
+/* Dark theme auto-apply on page load */
+(function () {
+    const saved = localStorage.getItem('gronthokanon_theme');
+    if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        const btn = document.getElementById('darkBtn');
+        if (btn) btn.innerText = saved === 'dark' ? '☀️' : '🌙';
+    }
+})();
+
 /* ═══ TOAST NOTIFICATION ═══ */
 function showToast(msg, color) {
     const t = document.createElement('div');
