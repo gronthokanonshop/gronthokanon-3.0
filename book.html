@@ -575,7 +575,9 @@ function loadReviews(bookId){
     curBookId=bookId;
     const el=document.getElementById('reviewsList');
     el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div>';
-    db.ref('reviews/'+bookId).orderByChild('createdAt').limitToLast(15).get()
+    function doLoad(){
+        if(typeof db==='undefined'||!db){setTimeout(doLoad,200);return;}
+        db.ref('reviews/'+bookId).orderByChild('createdAt').limitToLast(15).get()
         .then(snap=>{
             if(!snap.exists()){
                 el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">এখনো কোনো রিভিউ নেই। প্রথম হন! 🌟</div>';
@@ -595,6 +597,8 @@ function loadReviews(bookId){
         }).catch(()=>{
             el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';
         });
+    }
+    doLoad();
 }
 
 async function submitReview(){
