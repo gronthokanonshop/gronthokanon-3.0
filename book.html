@@ -477,7 +477,7 @@ window.onload = function() {
     const idx = parseInt(new URLSearchParams(window.location.search).get('id'));
     if (!isNaN(idx)){
         incrementView(idx);
-        setTimeout(()=>loadReviews(idx), 500);
+        setTimeout(()=>loadReviews(idx), 1500);
     }
 };
 </script>
@@ -532,6 +532,12 @@ function closeWLModal(){
 }
 </script>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+
 <!-- ═══ REVIEW SECTION ═══ -->
 <div style="padding:14px;margin-bottom:80px;">
     <div style="background:var(--card);border-radius:16px;padding:18px;box-shadow:0 2px 12px var(--shadow);">
@@ -577,22 +583,24 @@ function loadReviews(bookId){
     el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div>';
     function doLoad(){
         if(typeof db==='undefined'||!db){setTimeout(doLoad,200);return;}
-        db.ref('reviews/'+bookId).orderByChild('createdAt').limitToLast(15).get()
+        db.ref('reviews/'+bookId).get()
         .then(snap=>{
             if(!snap.exists()){
                 el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">এখনো কোনো রিভিউ নেই। প্রথম হন! 🌟</div>';
                 return;
             }
             const reviews=[];
-            snap.forEach(child=>reviews.unshift(child.val()));
-            el.innerHTML=reviews.map(r=>`
+            snap.forEach(child=>reviews.push(child.val()));
+            reviews.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+            const latest=reviews.slice(0,15);
+            el.innerHTML=latest.map(r=>`
                 <div class="rv-card">
                     <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-                        <span style="font-size:13px;font-weight:700;">${r.name}</span>
+                        <span style="font-size:13px;font-weight:700;">${r.name||'অজ্ঞাত'}</span>
                         <span style="font-size:11px;color:var(--text2);">${new Date(r.createdAt).toLocaleDateString('bn-BD')}</span>
                     </div>
-                    <div style="color:#d97706;font-size:15px;margin-bottom:5px;">${'★'.repeat(r.rating)+'☆'.repeat(5-r.rating)}</div>
-                    <div style="font-size:13px;line-height:1.5;">${r.comment}</div>
+                    <div style="color:#d97706;font-size:15px;margin-bottom:5px;">${'★'.repeat(r.rating||0)+'☆'.repeat(5-(r.rating||0))}</div>
+                    <div style="font-size:13px;line-height:1.5;">${r.comment||''}</div>
                 </div>`).join('');
         }).catch(()=>{
             el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';
@@ -621,11 +629,6 @@ async function submitReview(){
 }
 </script>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="firebase-config.js"></script>
 <script src="common.js"></script>
 </body>
 </html>
