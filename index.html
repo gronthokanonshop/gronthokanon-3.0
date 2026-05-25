@@ -300,7 +300,10 @@
             <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
             <div class="nav-btn" onclick="showWishlist()" title="উইশলিস্ট">🤍<span class="nav-badge" id="navWishBadge">0</span></div>
             <div class="cart-wrap" id="cartWrap" onclick="showCart()">
-                <div class="nav-btn" title="কার্ট">🛒<span class="nav-badge show" id="cartCount">0</span></div>
+                <div class="nav-btn" title="কার্ট">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    <span class="nav-badge show" id="cartCount">0</span>
+                </div>
             </div>
         </div>
     </div>
@@ -371,7 +374,7 @@
 <div id="cartBox" class="modal">
     <div class="modal-content">
         <div style="padding:14px 16px;background:#059669;color:#fff;display:flex;justify-content:space-between;align-items:center;">
-            <h3 style="margin:0;font-size:17px;">🛍️ আপনার কার্ট</h3>
+            <h3 style="margin:0;font-size:17px;display:flex;align-items:center;gap:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg> আপনার কার্ট</h3>
             <span onclick="closeCart()" style="cursor:pointer;font-size:26px;">&times;</span>
         </div>
         <div id="cartItems" style="flex:1;overflow-y:auto;padding:10px;"></div>
@@ -663,7 +666,7 @@ function saveCart(){localStorage.setItem('gronthokanon_cart',JSON.stringify(cart
 function updateCartUI(){
     const box=document.getElementById('cartItems');if(!box)return;
     let subtotal=0;
-    if(!cart.length){box.innerHTML='<div style="text-align:center;padding:50px 20px;color:var(--text2);"><div style="font-size:48px;margin-bottom:10px;">🛒</div><p>কার্ট এখনও খালি</p></div>';}
+    if(!cart.length){box.innerHTML='<div style="text-align:center;padding:50px 20px;color:var(--text2);"><div style="margin-bottom:10px;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><p>কার্ট এখনও খালি</p></div>';}
     else{
         box.innerHTML='';
         const grouped={};
