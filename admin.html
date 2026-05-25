@@ -154,13 +154,13 @@ function showDashboard(){
 }
 
 function loadOrders(){
-    db.ref('orders').on('value',snap=>{
+    db.ref('orders').once('value').then(snap=>{
         allOrders=[];
         snap.forEach(child=>allOrders.push(child.val()));
         allOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         updateStats();
         renderOrders();
-    },err=>{
+    }).catch(err=>{
         console.log('DB error:',err);
         document.getElementById('orderList').innerHTML='<div class="empty-admin">❌ অর্ডার লোড হয়নি, পেজ রিফ্রেশ করুন</div>';
     });
