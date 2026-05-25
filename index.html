@@ -254,7 +254,9 @@
     <div class="sidebar-sub" id="pubSub"></div>
     <div class="sidebar-item" onclick="toggleSubMenu('authorSub')">✍️ লেখক <span id="authorArrow">▶</span></div>
     <div class="sidebar-sub" id="authorSub"></div>
-    <div class="sidebar-item" onclick="showWishlist()">💖 উইশলিস্ট <span id="wishCount" style="background:#dc2626;color:white;border-radius:50%;padding:1px 6px;font-size:11px;">0</span></div>
+    <div class="sidebar-item" onclick="showWishlist()">💖 উইশলিস্ট 
+        <div class="sidebar-item" onclick="navigateTo('track.html')">📦 আমার অর্ডার <span>›</span></div>
+        <span id="wishCount" style="background:#dc2626;color:white;border-radius:50%;padding:1px 6px;font-size:11px;">0</span></div>
     <div class="sidebar-item" onclick="toggleSubMenu('aboutSub')">📜 আমাদের সম্পর্কে <span id="aboutArrow">▶</span></div>
     <div class="sidebar-sub" id="aboutSub" style="padding:15px 20px;font-size:13px;line-height:1.9;">
         <p style="margin-bottom:10px;"><strong style="color:#059669;font-size:15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য।</p>
@@ -487,6 +489,13 @@
         <span class="bnav-label">ক্যাটাগরি</span>
     </div>
 
+  <!-- অর্ডার ট্র্যাক -->
+<div class="bnav-item" id="bnav-track" onclick="navigateTo('track.html')">
+    <svg class="bnav-svg" viewBox="0 0 24 24">
+        <path d="M21 10H3M16 6l5 4-5 4M3 6l-2 4 2 4"/>
+    </svg>
+    <span class="bnav-label">ট্র্যাক</span>
+</div>
     <!-- লগইন / রেজিস্টার -->
     <div class="bnav-login-pill" onclick="showLoginModal()">
         <div class="bnav-login-inner">
