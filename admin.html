@@ -153,7 +153,10 @@ function showDashboard(){
     setTimeout(loadOrders, 300);
 }
 
+let ordersLoaded=false;
 function loadOrders(){
+    if(ordersLoaded)return;
+    ordersLoaded=true;
     db.ref('orders').once('value').then(snap=>{
         allOrders=[];
         snap.forEach(child=>allOrders.push(child.val()));
@@ -161,6 +164,7 @@ function loadOrders(){
         updateStats();
         renderOrders();
     }).catch(err=>{
+        ordersLoaded=false;
         console.log('DB error:',err);
         document.getElementById('orderList').innerHTML='<div class="empty-admin">❌ অর্ডার লোড হয়নি, পেজ রিফ্রেশ করুন</div>';
     });
