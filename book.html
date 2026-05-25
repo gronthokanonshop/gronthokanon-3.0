@@ -565,30 +565,38 @@ function closeWLModal(){
 <script>
 let selectedRating=0;
 let curBookId=null;
+
 function setRating(n){
     selectedRating=n;
     document.querySelectorAll('.rv-star').forEach((s,i)=>s.innerText=i<n?'★':'☆');
 }
+
 function loadReviews(bookId){
     curBookId=bookId;
-    fsdb.collection('reviews').doc(String(bookId)).collection('comments')
-        .orderBy('createdAt','desc').limit(15).get()
+    const el=document.getElementById('reviewsList');
+    el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div>';
+    db.ref('reviews/'+bookId).orderByChild('createdAt').limitToLast(15).get()
         .then(snap=>{
-            const el=document.getElementById('reviewsList');
-            if(snap.empty){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">এখনো কোনো রিভিউ নেই। প্রথম হন!</div>';return;}
-            el.innerHTML=snap.docs.map(d=>{
-                const r=d.data();
-                return `<div class="rv-card">
+            if(!snap.exists()){
+                el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">এখনো কোনো রিভিউ নেই। প্রথম হন! 🌟</div>';
+                return;
+            }
+            const reviews=[];
+            snap.forEach(child=>reviews.unshift(child.val()));
+            el.innerHTML=reviews.map(r=>`
+                <div class="rv-card">
                     <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
                         <span style="font-size:13px;font-weight:700;">${r.name}</span>
                         <span style="font-size:11px;color:var(--text2);">${new Date(r.createdAt).toLocaleDateString('bn-BD')}</span>
                     </div>
                     <div style="color:#d97706;font-size:15px;margin-bottom:5px;">${'★'.repeat(r.rating)+'☆'.repeat(5-r.rating)}</div>
                     <div style="font-size:13px;line-height:1.5;">${r.comment}</div>
-                </div>`;
-            }).join('');
-        }).catch(()=>{document.getElementById('reviewsList').innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';});
+                </div>`).join('');
+        }).catch(()=>{
+            el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';
+        });
 }
+
 async function submitReview(){
     const name=document.getElementById('reviewName').value.trim();
     const comment=document.getElementById('reviewText').value.trim();
@@ -596,10 +604,16 @@ async function submitReview(){
     if(!comment)return showToast('মতামত লিখুন','#d97706');
     if(!name)return showToast('নাম লিখুন','#d97706');
     try{
-        await fsdb.collection('reviews').doc(String(curBookId)).collection('comments').add({name,comment,rating:selectedRating,createdAt:Date.now()});
-        document.getElementById('reviewText').value='';document.getElementById('reviewName').value='';setRating(0);selectedRating=0;
-        showToast('✅ রিভিউ দেওয়া হয়েছে!','#059669');loadReviews(curBookId);
-    }catch(e){showToast('❌ রিভিউ পাঠানো যায়নি','#dc2626');}
+        const newRef=db.ref('reviews/'+curBookId).push();
+        await newRef.set({name,comment,rating:selectedRating,createdAt:Date.now()});
+        document.getElementById('reviewText').value='';
+        document.getElementById('reviewName').value='';
+        setRating(0);selectedRating=0;
+        showToast('✅ রিভিউ দেওয়া হয়েছে!','#059669');
+        loadReviews(curBookId);
+    }catch(e){
+        showToast('❌ রিভিউ পাঠানো যায়নি','#dc2626');
+    }
 }
 </script>
 
@@ -607,7 +621,6 @@ async function submitReview(){
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="common.js"></script>
 </body>
