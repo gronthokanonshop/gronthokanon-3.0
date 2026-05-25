@@ -232,7 +232,6 @@
             <div class="d-row"><div class="d-icon">🚚</div><div><div class="d-text" id="deliveryText">ঢাকায় ডেলিভারি: ১-২ দিন</div><div class="d-sub">বাইরে: ৩-৫ কার্যদিবস</div></div></div>
             <div class="d-row"><div class="d-icon">💵</div><div><div class="d-text">ক্যাশ অন ডেলিভারি সুবিধা</div><div class="d-sub">ডেলিভারি পেয়ে টাকা দিন</div></div></div>
             <div class="d-row"><div class="d-icon">🔄</div><div><div class="d-text">সহজ রিটার্ন পলিসি</div><div class="d-sub">৭ দিনের মধ্যে ফেরত দিন</div></div></div>
-            <div class="d-row"><div class="d-icon">👁</div><div><div class="d-text" id="viewCount">লোড হচ্ছে...</div><div class="d-sub">এই বইটি কতজন দেখেছেন</div></div></div>
         </div>
         <button class="btn-wl" id="wlBtn" onclick="toggleWL()">🤍 উইশলিস্টে যোগ করুন</button>
         <div class="btn-row" id="btnRow">
@@ -320,9 +319,12 @@ function updateWLUI(){
 }
 function toggleWL(){
     if(!curBook)return;
-    if(wishlist.includes(curBook.name)){wishlist=wishlist.filter(w=>w!==curBook.name);showToast('💔 উইশলিস্ট থেকে সরানো হয়েছে');}
-    else{wishlist.push(curBook.name);showToast('❤️ উইশলিস্টে যোগ হয়েছে!');}
-    localStorage.setItem('gronthokanon_wishlist',JSON.stringify(wishlist));updateWLUI();
+    let added;
+    if(wishlist.includes(curBook.name)){wishlist=wishlist.filter(w=>w!==curBook.name);added=false;}
+    else{wishlist.push(curBook.name);added=true;}
+    localStorage.setItem('gronthokanon_wishlist',JSON.stringify(wishlist));
+    updateWLUI();
+    openWLModal(added);
 }
 
 /* QTY */
@@ -456,32 +458,61 @@ function loadBook(){
 function goToCart(){localStorage.setItem('gronthokanon_opencart','1');window.location.href='index.html';}
 function goBack(){window.history.back();}
 
-/* ═══ FIREBASE VIEW COUNTER ═══ */
-const DB_URL = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com';
-
-async function incrementView(bookId) {
-    const url = `${DB_URL}/views/${bookId}.json`;
-    // আগের count নাও
-    const res = await fetch(url);
-    const data = await res.json();
-    const count = (data || 0) + 1;
-    // নতুন count save করো
-    await fetch(url, {
-        method: 'PUT',
-        body: JSON.stringify(count)
-    });
-    // UI তে দেখাও
-    const el = document.getElementById('viewCount');
-    if (el) el.innerText = `📖 ${toBN(count)} জন দেখেছেন`;
-}
-
 window.onload = function() {
     loadBook();
-    // Book load হওয়ার পর view count করো
-    const idx = parseInt(new URLSearchParams(window.location.search).get('id'));
-    if (!isNaN(idx)) incrementView(idx);
 };
 </script>
+<!-- ═══ WISHLIST MODAL ═══ -->
+<div id="wlOverlay" onclick="closeWLModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9998;"></div>
+<div id="wlModal" style="
+    display:none;position:fixed;bottom:0;left:0;right:0;
+    background:var(--card);border-radius:24px 24px 0 0;
+    z-index:9999;padding:0 0 40px;
+    transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+">
+    <div style="width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 20px;"></div>
+    <div id="wlModalInner" style="padding:0 20px;"></div>
+</div>
+
+<script>
+function openWLModal(added){
+    const b = curBook;
+    const inner = document.getElementById('wlModalInner');
+    inner.innerHTML = `
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+            <img src="${b.img}" style="width:64px;height:86px;object-fit:cover;border-radius:10px;border:1px solid var(--border);flex-shrink:0;">
+            <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${b.name}</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${b.author}</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#ecfdf5':'#fff5f5'};border:1.5px solid ${added?'#6ee7b7':'#fca5a5'};border-radius:20px;padding:5px 12px;">
+                    <span style="font-size:15px;">${added?'❤️':'💔'}</span>
+                    <span style="font-size:12px;font-weight:700;color:${added?'#059669':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>
+                </div>
+            </div>
+        </div>
+        ${added ? `
+        <div style="display:flex;gap:10px;">
+            <button onclick="closeWLModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--text);border:1.5px solid var(--border);border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">কেনাকাটা চালিয়ে যান</button>
+            <button onclick="closeWLModal();localStorage.setItem('gronthokanon_opencart','wl');window.location.href='index.html';" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
+        </div>` : `
+        <button onclick="closeWLModal()" style="width:100%;padding:12px;background:#059669;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">ঠিক আছে</button>
+        `}
+    `;
+    document.getElementById('wlOverlay').style.display = 'block';
+    const modal = document.getElementById('wlModal');
+    modal.style.display = 'block';
+    requestAnimationFrame(()=>{ modal.style.transform = 'translateY(0)'; });
+}
+function closeWLModal(){
+    const modal = document.getElementById('wlModal');
+    modal.style.transform = 'translateY(100%)';
+    setTimeout(()=>{
+        modal.style.display = 'none';
+        document.getElementById('wlOverlay').style.display = 'none';
+    }, 350);
+}
+</script>
+
 <script src="common.js"></script>
 </body>
 </html>
