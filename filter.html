@@ -124,7 +124,8 @@
         <div class="navbar-icons">
             <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
             <div class="nav-btn" onclick="goToCart()" title="কার্ট" style="position:relative;">
-                🛒<span class="cart-badge-nav" id="cartCount">0</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                <span class="cart-badge-nav" id="cartCount">0</span>
             </div>
         </div>
     </div>
@@ -165,7 +166,7 @@
 </div>
 
 <div class="float-cart" onclick="goToCart()">
-    <span style="font-size:20px;">🛍️</span>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
     <div><div style="font-size:11px;opacity:0.8;line-height:1;">শপিং ব্যাগ</div><div style="font-size:13px;font-weight:800;"><span id="floatCount">0</span> টি বই</div></div>
 </div>
 <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
