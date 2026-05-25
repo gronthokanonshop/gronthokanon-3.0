@@ -178,7 +178,7 @@
     <!-- ORDER SUMMARY -->
     <div class="card">
         <div class="card-header">
-            <div class="card-icon">🛍️</div>
+            <div class="card-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
             <div><div class="card-title">আপনার অর্ডার</div><div class="card-sub" id="itemCountSub"></div></div>
         </div>
         <div id="summaryItems"></div>
@@ -321,7 +321,7 @@ function updateTotal(){
 
 function renderSummary(){
     const box=document.getElementById('summaryItems');
-    if(!cart.length){box.innerHTML='<div class="empty-cart"><div style="font-size:40px;margin-bottom:10px;">🛒</div><p>কার্ট খালি আছে</p></div>';document.getElementById('itemCountSub').innerText='';updateTotal();return;}
+    if(!cart.length){box.innerHTML='<div class="empty-cart"><div style="margin-bottom:10px;"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><p>কার্ট খালি আছে</p></div>';document.getElementById('itemCountSub').innerText='';updateTotal();return;}
     const g={};cart.forEach(i=>{if(g[i.name])g[i.name].qty++;else g[i.name]={price:i.price,qty:1,img:i.img||''};});
     box.innerHTML=Object.entries(g).map(([name,item])=>`<div class="order-item">
         <img src="${item.img}" onerror="this.src='https://placehold.co/44x60/ecfdf5/059669?text=📚'">
