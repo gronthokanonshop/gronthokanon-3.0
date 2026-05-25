@@ -475,7 +475,10 @@ async function incrementView(bookId) {
 window.onload = function() {
     loadBook();
     const idx = parseInt(new URLSearchParams(window.location.search).get('id'));
-    if (!isNaN(idx)) incrementView(idx);
+    if (!isNaN(idx)){
+        incrementView(idx);
+        setTimeout(()=>loadReviews(idx), 500);
+    }
 };
 </script>
 <!-- ═══ WISHLIST MODAL ═══ -->
@@ -529,6 +532,83 @@ function closeWLModal(){
 }
 </script>
 
+<!-- ═══ REVIEW SECTION ═══ -->
+<div style="padding:14px;margin-bottom:80px;">
+    <div style="background:var(--card);border-radius:16px;padding:18px;box-shadow:0 2px 12px var(--shadow);">
+        <h3 style="font-size:16px;margin-bottom:16px;">⭐ পাঠকদের মতামত</h3>
+        <div id="reviewForm" style="margin-bottom:20px;padding:14px;background:var(--bg);border-radius:12px;border:1.5px solid var(--border);">
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">আপনার রিভিউ লিখুন</div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <span class="rv-star" onclick="setRating(1)">☆</span>
+                <span class="rv-star" onclick="setRating(2)">☆</span>
+                <span class="rv-star" onclick="setRating(3)">☆</span>
+                <span class="rv-star" onclick="setRating(4)">☆</span>
+                <span class="rv-star" onclick="setRating(5)">☆</span>
+            </div>
+            <textarea id="reviewText" placeholder="আপনার মতামত লিখুন..." style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;resize:none;height:80px;outline:none;box-sizing:border-box;"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+                <input id="reviewName" placeholder="আপনার নাম" style="flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
+                <button onclick="submitReview()" style="padding:9px 16px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">পাঠাও</button>
+            </div>
+        </div>
+        <div id="reviewsList"><div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div></div>
+    </div>
+</div>
+
+<style>
+.rv-star{font-size:26px;cursor:pointer;color:#d97706;transition:transform 0.1s;}
+.rv-star:active{transform:scale(1.2);}
+.rv-card{padding:12px 0;border-bottom:1px solid var(--border);}
+.rv-card:last-child{border:none;}
+</style>
+
+<script>
+let selectedRating=0;
+let curBookId=null;
+function setRating(n){
+    selectedRating=n;
+    document.querySelectorAll('.rv-star').forEach((s,i)=>s.innerText=i<n?'★':'☆');
+}
+function loadReviews(bookId){
+    curBookId=bookId;
+    fsdb.collection('reviews').doc(String(bookId)).collection('comments')
+        .orderBy('createdAt','desc').limit(15).get()
+        .then(snap=>{
+            const el=document.getElementById('reviewsList');
+            if(snap.empty){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">এখনো কোনো রিভিউ নেই। প্রথম হন!</div>';return;}
+            el.innerHTML=snap.docs.map(d=>{
+                const r=d.data();
+                return `<div class="rv-card">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                        <span style="font-size:13px;font-weight:700;">${r.name}</span>
+                        <span style="font-size:11px;color:var(--text2);">${new Date(r.createdAt).toLocaleDateString('bn-BD')}</span>
+                    </div>
+                    <div style="color:#d97706;font-size:15px;margin-bottom:5px;">${'★'.repeat(r.rating)+'☆'.repeat(5-r.rating)}</div>
+                    <div style="font-size:13px;line-height:1.5;">${r.comment}</div>
+                </div>`;
+            }).join('');
+        }).catch(()=>{document.getElementById('reviewsList').innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';});
+}
+async function submitReview(){
+    const name=document.getElementById('reviewName').value.trim();
+    const comment=document.getElementById('reviewText').value.trim();
+    if(!selectedRating)return showToast('⭐ রেটিং দিন','#d97706');
+    if(!comment)return showToast('মতামত লিখুন','#d97706');
+    if(!name)return showToast('নাম লিখুন','#d97706');
+    try{
+        await fsdb.collection('reviews').doc(String(curBookId)).collection('comments').add({name,comment,rating:selectedRating,createdAt:Date.now()});
+        document.getElementById('reviewText').value='';document.getElementById('reviewName').value='';setRating(0);selectedRating=0;
+        showToast('✅ রিভিউ দেওয়া হয়েছে!','#059669');loadReviews(curBookId);
+    }catch(e){showToast('❌ রিভিউ পাঠানো যায়নি','#dc2626');}
+}
+</script>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script src="common.js"></script>
 </body>
 </html>
