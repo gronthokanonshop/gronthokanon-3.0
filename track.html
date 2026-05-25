@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অর্ডার ট্র্যাক — গ্রন্থকানন</title>
+    <meta name="theme-color" content="#ffffff">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+    <style>
+        body{font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        .navbar-title{flex:1;font-size:15px;font-weight:700;color:var(--text);}
+        .page-wrap{padding:16px;max-width:480px;margin:0 auto;padding-bottom:60px;}
+
+        /* Search Box */
+        .track-search{background:var(--card);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 12px var(--shadow);}
+        .track-search h3{font-size:16px;margin-bottom:4px;color:var(--text);}
+        .track-search p{font-size:12px;color:var(--text2);margin-bottom:14px;}
+        .track-input-row{display:flex;gap:8px;}
+        .track-input{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;outline:none;}
+        .track-input:focus{border-color:#059669;}
+        .track-btn{padding:11px 18px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
+
+        /* Order Card */
+        .order-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 12px var(--shadow);margin-bottom:14px;display:none;}
+        .order-id-badge{display:inline-block;background:#ecfdf5;color:#059669;border:1.5px solid #a7f3d0;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:14px;}
+        .order-info-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);}
+        .order-info-row:last-child{border:none;}
+        .order-info-row span:first-child{color:var(--text2);}
+        .order-info-row span:last-child{font-weight:600;color:var(--text);}
+
+        /* Status Timeline */
+        .timeline{margin-top:20px;}
+        .timeline-title{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em;}
+        .tl-step{display:flex;gap:14px;margin-bottom:0;position:relative;}
+        .tl-left{display:flex;flex-direction:column;align-items:center;width:28px;flex-shrink:0;}
+        .tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;z-index:1;}
+        .tl-dot.done{background:#059669;color:white;}
+        .tl-dot.active{background:#059669;color:white;box-shadow:0 0 0 4px rgba(5,150,105,0.2);}
+        .tl-dot.pending{background:var(--bg);border:2px solid var(--border);color:var(--text2);}
+        .tl-line{width:2px;flex:1;background:var(--border);margin:2px 0;}
+        .tl-line.done{background:#059669;}
+        .tl-right{padding:4px 0 20px;}
+        .tl-label{font-size:14px;font-weight:700;color:var(--text);}
+        .tl-label.pending-txt{color:var(--text2);}
+        .tl-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+
+        /* Empty State */
+        .track-empty{text-align:center;padding:40px 20px;display:none;}
+        .track-empty svg{margin-bottom:12px;opacity:0.3;}
+        .track-empty p{color:var(--text2);font-size:14px;}
+
+        /* Error */
+        .track-error{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:14px;color:#dc2626;font-size:13px;text-align:center;display:none;margin-bottom:14px;}
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-top">
+        <button class="back-btn" onclick="navigateTo('index.html')">‹</button>
+        <span class="navbar-title">অর্ডার ট্র্যাক করুন</span>
+        <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+    <!-- Search -->
+    <div class="track-search">
+        <h3>📦 অর্ডার খুঁজুন</h3>
+        <p>অর্ডার কনফার্মের পর আপনি যে ID পেয়েছেন সেটি লিখুন</p>
+        <div class="track-input-row">
+            <input class="track-input" id="trackInput" placeholder="যেমন: GK-ABC123" oninput="this.value=this.value.toUpperCase()">
+            <button class="track-btn" onclick="searchOrder()">খুঁজুন</button>
+        </div>
+    </div>
+
+    <!-- Error -->
+    <div class="track-error" id="trackError">❌ এই ID দিয়ে কোনো অর্ডার পাওয়া যায়নি</div>
+
+    <!-- Order Card -->
+    <div class="order-card" id="orderCard">
+        <div id="orderIdBadge" class="order-id-badge"></div>
+        <div id="orderInfoRows"></div>
+        <div class="timeline">
+            <div class="timeline-title">অর্ডার অবস্থান</div>
+            <div id="timelineSteps"></div>
+        </div>
+    </div>
+
+    <!-- Empty (last order) -->
+    <div id="lastOrderHint" style="text-align:center;padding:10px;font-size:12px;color:var(--text2);"></div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+const STATUSES=[
+    {key:'pending',   icon:'🕐', label:'অর্ডার গৃহীত',      sub:'আপনার অর্ডারটি আমরা পেয়েছি'},
+    {key:'confirmed', icon:'✅', label:'অর্ডার কনফার্ম',     sub:'অর্ডার নিশ্চিত করা হয়েছে'},
+    {key:'processing',icon:'📦', label:'প্যাকেজিং',          sub:'বই প্যাক করা হচ্ছে'},
+    {key:'shipped',   icon:'🚚', label:'ডেলিভারিতে',         sub:'বই রওনা দিয়েছে'},
+    {key:'delivered', icon:'🎉', label:'ডেলিভারি সম্পন্ন',  sub:'আপনার কাছে পৌঁছে গেছে'},
+];
+
+async function searchOrder(){
+    const id=document.getElementById('trackInput').value.trim();
+    if(!id){showToast('অর্ডার ID লিখুন','#dc2626');return;}
+    document.getElementById('trackError').style.display='none';
+    document.getElementById('orderCard').style.display='none';
+    try{
+        const snap=await firebase.database().ref('orders/'+id).get();
+        if(!snap.exists()){document.getElementById('trackError').style.display='block';return;}
+        renderOrder(snap.val());
+    }catch(e){showToast('সংযোগ সমস্যা হয়েছে','#dc2626');}
+}
+
+function renderOrder(o){
+    document.getElementById('orderIdBadge').innerText=o.orderId;
+    document.getElementById('orderInfoRows').innerHTML=`
+        <div class="order-info-row"><span>নাম</span><span>${o.name}</span></div>
+        <div class="order-info-row"><span>ফোন</span><span>${o.phone}</span></div>
+        <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${o.address}</span></div>
+        <div class="order-info-row"><span>পেমেন্ট</span><span>${o.payment}</span></div>
+        <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${o.books}</span></div>
+        <div class="order-info-row"><span>মোট</span><span style="color:#059669;font-size:15px;">৳${o.total}</span></div>
+    `;
+    const curIdx=STATUSES.findIndex(s=>s.key===o.status);
+    let html='';
+    STATUSES.forEach((s,i)=>{
+        const isDone=i<curIdx;
+        const isActive=i===curIdx;
+        const dotClass=isDone?'done':isActive?'active':'pending';
+        const labelClass=isDone||isActive?'':'pending-txt';
+        const showLine=i<STATUSES.length-1;
+        html+=`<div class="tl-step">
+            <div class="tl-left">
+                <div class="tl-dot ${dotClass}">${isDone?'✓':s.icon}</div>
+                ${showLine?`<div class="tl-line ${isDone?'done':''}"></div>`:''}
+            </div>
+            <div class="tl-right">
+                <div class="tl-label ${labelClass}">${s.label}</div>
+                <div class="tl-sub">${s.sub}</div>
+            </div>
+        </div>`;
+    });
+    document.getElementById('timelineSteps').innerHTML=html;
+    document.getElementById('orderCard').style.display='block';
+}
+
+window.onload=function(){
+    const urlId=new URLSearchParams(window.location.search).get('id');
+    const lastId=localStorage.getItem('gronthokanon_lastorder');
+    if(urlId){
+        document.getElementById('trackInput').value=urlId;
+        searchOrder();
+    } else if(lastId){
+        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#059669;cursor:pointer;" onclick="document.getElementById('trackInput').value='${lastId}';searchOrder()">${lastId}</strong>`;
+    }
+};
+</script>
+<script src="common.js"></script>
+</body>
+</html>

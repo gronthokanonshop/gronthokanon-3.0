@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel — গ্রন্থকানন</title>
+    <meta name="theme-color" content="#ffffff">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+    <style>
+        body{font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        .navbar-title{flex:1;font-size:15px;font-weight:700;color:var(--text);}
+        .page-wrap{padding:14px;max-width:600px;margin:0 auto;padding-bottom:40px;}
+
+        /* Login Gate */
+        #loginGate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;gap:12px;padding:20px;}
+        #loginGate h2{font-size:18px;color:var(--text);}
+        #loginGate p{font-size:13px;color:var(--text2);text-align:center;}
+        .a-input{width:100%;max-width:320px;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;outline:none;box-sizing:border-box;}
+        .a-input:focus{border-color:#059669;}
+        .a-btn{width:100%;max-width:320px;padding:13px;background:#059669;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
+        #loginErr{color:#dc2626;font-size:12px;min-height:16px;}
+
+        /* Dashboard */
+        #dashboard{display:none;}
+        .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+        .stat-card{background:var(--card);border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 10px var(--shadow);}
+        .stat-num{font-size:22px;font-weight:800;color:#059669;}
+        .stat-label{font-size:11px;color:var(--text2);margin-top:2px;}
+
+        /* Filter Tabs */
+        .filter-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;scrollbar-width:none;}
+        .filter-tabs::-webkit-scrollbar{display:none;}
+        .ftab{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:0.2s;}
+        .ftab.active{background:#059669;color:white;border-color:#059669;}
+
+        /* Order Cards */
+        .order-card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:0 2px 10px var(--shadow);}
+        .order-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+        .order-id{font-size:13px;font-weight:800;color:#059669;}
+        .status-badge{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;}
+        .badge-pending{background:#fef3c7;color:#92400e;}
+        .badge-confirmed{background:#dbeafe;color:#1e40af;}
+        .badge-processing{background:#ede9fe;color:#5b21b6;}
+        .badge-shipped{background:#fff7ed;color:#9a3412;}
+        .badge-delivered{background:#ecfdf5;color:#065f46;}
+        .order-detail{font-size:12px;color:var(--text2);line-height:1.8;}
+        .order-detail strong{color:var(--text);}
+        .status-select{width:100%;margin-top:10px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;outline:none;cursor:pointer;}
+
+        /* Empty */
+        .empty-admin{text-align:center;padding:40px;color:var(--text2);font-size:14px;}
+
+        /* Loading */
+        .loading-spin{text-align:center;padding:30px;font-size:13px;color:var(--text2);}
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-top">
+        <button class="back-btn" onclick="navigateTo('index.html')">‹</button>
+        <span class="navbar-title">🔐 Admin Panel</span>
+        <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+    <!-- Login Gate -->
+    <div id="loginGate">
+        <div style="font-size:48px;">🔐</div>
+        <h2>Admin লগইন</h2>
+        <p>শুধুমাত্র admin এর জন্য</p>
+        <p id="loginErr"></p>
+        <input class="a-input" id="adminEmail" type="email" placeholder="Admin ইমেইল">
+        <input class="a-input" id="adminPass" type="password" placeholder="পাসওয়ার্ড" style="margin-top:8px;">
+        <button class="a-btn" onclick="adminLogin()" style="margin-top:10px;">লগইন করুন</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard">
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-num" id="statTotal">0</div>
+                <div class="stat-label">মোট অর্ডার</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statPending">0</div>
+                <div class="stat-label">পেন্ডিং</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statDelivered">0</div>
+                <div class="stat-label">ডেলিভারড</div>
+            </div>
+        </div>
+
+        <!-- Filter -->
+        <div class="filter-tabs">
+            <button class="ftab active" onclick="filterOrders('all',this)">সব</button>
+            <button class="ftab" onclick="filterOrders('pending',this)">পেন্ডিং</button>
+            <button class="ftab" onclick="filterOrders('confirmed',this)">কনফার্ম</button>
+            <button class="ftab" onclick="filterOrders('processing',this)">প্যাকেজিং</button>
+            <button class="ftab" onclick="filterOrders('shipped',this)">শিপড</button>
+            <button class="ftab" onclick="filterOrders('delivered',this)">ডেলিভারড</button>
+        </div>
+
+        <div id="orderList"><div class="loading-spin">লোড হচ্ছে...</div></div>
+    </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+const ADMIN_EMAIL='gronthokanon4309@gmail.com'; // ← আপনার admin email দিন
+let allOrders=[];
+let curFilter='all';
+
+const STATUS_LABELS={
+    pending:'পেন্ডিং',confirmed:'কনফার্ম',
+    processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'
+};
+const STATUS_CLASS={
+    pending:'badge-pending',confirmed:'badge-confirmed',
+    processing:'badge-processing',shipped:'badge-shipped',delivered:'badge-delivered'
+};
+
+async function adminLogin(){
+    const email=document.getElementById('adminEmail').value.trim();
+    const pass=document.getElementById('adminPass').value;
+    const err=document.getElementById('loginErr');
+    err.innerText='';
+    try{
+        const cred=await auth.signInWithEmailAndPassword(email,pass);
+        if(cred.user.email!==ADMIN_EMAIL){
+            await auth.signOut();err.innerText='⚠️ Admin access নেই';return;
+        }
+        showDashboard();
+    }catch(e){err.innerText='⚠️ ইমেইল বা পাসওয়ার্ড ভুল';}
+}
+
+function showDashboard(){
+    document.getElementById('loginGate').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    loadOrders();
+}
+
+function loadOrders(){
+    db.ref('orders').orderByChild('createdAt').on('value',snap=>{
+        allOrders=[];
+        snap.forEach(child=>allOrders.unshift(child.val()));
+        updateStats();
+        renderOrders();
+    });
+}
+
+function updateStats(){
+    document.getElementById('statTotal').innerText=allOrders.length;
+    document.getElementById('statPending').innerText=allOrders.filter(o=>o.status==='pending').length;
+    document.getElementById('statDelivered').innerText=allOrders.filter(o=>o.status==='delivered').length;
+}
+
+function filterOrders(f,el){
+    curFilter=f;
+    document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    renderOrders();
+}
+
+function renderOrders(){
+    const list=curFilter==='all'?allOrders:allOrders.filter(o=>o.status===curFilter);
+    const el=document.getElementById('orderList');
+    if(!list.length){el.innerHTML='<div class="empty-admin">কোনো অর্ডার নেই</div>';return;}
+    el.innerHTML=list.map(o=>`
+        <div class="order-card">
+            <div class="order-top">
+                <div>
+                    <div class="order-id">${o.orderId}</div>
+                    <div style="font-size:11px;color:var(--text2);">${new Date(o.createdAt).toLocaleString('bn-BD')}</div>
+                </div>
+                <span class="status-badge ${STATUS_CLASS[o.status]||'badge-pending'}">${STATUS_LABELS[o.status]||o.status}</span>
+            </div>
+            <div class="order-detail">
+                <strong>${o.name}</strong> · ${o.phone}<br>
+                📍 ${o.address}<br>
+                📚 ${o.books}<br>
+                💳 ${o.payment} · 💰 <strong>${o.total}</strong>
+            </div>
+            <select class="status-select" onchange="updateStatus('${o.orderId}',this.value)">
+                <option value="pending" ${o.status==='pending'?'selected':''}>🕐 পেন্ডিং</option>
+                <option value="confirmed" ${o.status==='confirmed'?'selected':''}>✅ কনফার্ম</option>
+                <option value="processing" ${o.status==='processing'?'selected':''}>📦 প্যাকেজিং</option>
+                <option value="shipped" ${o.status==='shipped'?'selected':''}>🚚 শিপড</option>
+                <option value="delivered" ${o.status==='delivered'?'selected':''}>🎉 ডেলিভারড</option>
+            </select>
+        </div>
+    `).join('');
+}
+
+async function updateStatus(orderId,status){
+    try{
+        await db.ref('orders/'+orderId+'/status').set(status);
+        showToast('✅ অবস্থান আপডেট হয়েছে','#059669');
+    }catch(e){showToast('❌ আপডেট ব্যর্থ হয়েছে','#dc2626');}
+}
+
+function showToast(msg,color){
+    const t=document.createElement('div');
+    t.style.cssText=`position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:${color||'#059669'};color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;`;
+    t.innerText=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
+}
+
+auth.onAuthStateChanged(user=>{
+    if(user&&user.email===ADMIN_EMAIL)showDashboard();
+});
+</script>
+<script src="common.js"></script>
+</body>
+</html>
