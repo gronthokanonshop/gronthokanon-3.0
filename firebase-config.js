@@ -1,6 +1,5 @@
 /* ═══════════════════════════════════════
    গ্রন্থকানন — Firebase Config
-   সব page এ shared হয় এই file
 ═══════════════════════════════════════ */
 
 const firebaseConfig = {
@@ -18,5 +17,10 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-const auth  = firebase.auth();
-const db    = firebase.database();
+const auth = firebase.auth();
+const db   = firebase.database();
+
+// Firestore — শুধু book.html এ load হবে
+if (typeof firebase.firestore === 'function') {
+    window.fsdb = firebase.firestore();
+}
