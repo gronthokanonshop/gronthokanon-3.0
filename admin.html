@@ -63,6 +63,7 @@
     <div class="navbar-top">
         <button class="back-btn" onclick="navigateTo('index.html')">‹</button>
         <span class="navbar-title">🔐 Admin Panel</span>
+        <button id="logoutBtn" style="display:none;padding:6px 12px;background:#dc2626;color:white;border:none;border-radius:8px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:700;cursor:pointer;" onclick="adminLogout()">লগআউট</button>
         <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
     </div>
 </nav>
@@ -148,10 +149,11 @@ async function adminLogin(){
 function showDashboard(){
     document.getElementById('loginGate').style.display='none';
     document.getElementById('dashboard').style.display='block';
-    loadOrders();
+    document.getElementById('logoutBtn').style.display='block';
+    setTimeout(loadOrders, 300);
 }
 
-function loadOrders(){
+function loadOrders(){/*REPLACE*/
     db.ref('orders').orderByChild('createdAt').on('value',snap=>{
         allOrders=[];
         snap.forEach(child=>allOrders.unshift(child.val()));
@@ -208,6 +210,14 @@ async function updateStatus(orderId,status){
         await db.ref('orders/'+orderId+'/status').set(status);
         showToast('✅ অবস্থান আপডেট হয়েছে','#059669');
     }catch(e){showToast('❌ আপডেট ব্যর্থ হয়েছে','#dc2626');}
+}
+
+async function adminLogout(){
+    await auth.signOut();
+    document.getElementById('dashboard').style.display='none';
+    document.getElementById('loginGate').style.display='flex';
+    document.getElementById('logoutBtn').style.display='none';
+    allOrders=[];
 }
 
 function showToast(msg,color){
