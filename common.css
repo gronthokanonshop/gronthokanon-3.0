@@ -17,9 +17,8 @@
     --gold: #d97706;
     --shadow: rgba(0,0,0,0.06);
     --price-bg: #f8fafc;
-    --nav-bg: #ffffff;
-    --nav-border: #e5e7eb;
-    --search-bg: #f0fdf4;
+    --nav-bg: #eef0f3;
+    --nav-border: #d1d5db;
     --nav-icon-bg: #ffffff;
     --nav-icon-border: #d1d5db;
     --nav-icon-hover: #f0fdf4;
@@ -38,9 +37,8 @@
     --dark: #ecfdf5;
     --shadow: rgba(0,0,0,0.3);
     --price-bg: #0d1f17;
-    --nav-bg: #111827;
+    --nav-bg: #1a1d22;
     --nav-border: #2d3139;
-    --search-bg: #0d2318;
     --nav-icon-bg: #23272e;
     --nav-icon-border: #3a3f47;
     --nav-icon-hover: #1a3d2a;
