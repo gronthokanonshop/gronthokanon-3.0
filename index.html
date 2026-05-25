@@ -20,14 +20,55 @@
 
         
 
-        /* ═══════ MARQUEE ═══════ */
-        .moving-bar { background: #047857; color: #a7f3d0; padding: 7px 0; overflow: hidden; white-space: nowrap; font-weight: 600; font-size: 12.5px; }
-        .moving-text { display: inline-block; padding-left: 100%; animation: marquee 20s linear infinite; }
-        @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
+        
 
         
         
         
+        /* ═══════ GLAMOROUS BACKGROUND ═══════ */
+        body {
+            background:
+                radial-gradient(ellipse at 15% 20%, rgba(5,150,105,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 10%, rgba(16,185,129,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(4,120,87,0.05) 0%, transparent 60%),
+                var(--bg);
+            background-attachment: fixed;
+        }
+        [data-theme="dark"] body {
+            background:
+                radial-gradient(ellipse at 15% 20%, rgba(5,150,105,0.13) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 10%, rgba(16,185,129,0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(4,120,87,0.09) 0%, transparent 60%),
+                var(--bg);
+            background-attachment: fixed;
+        }
+        body::before {
+            content:'';position:fixed;top:-120px;right:-80px;width:380px;height:380px;
+            background:radial-gradient(circle,rgba(5,150,105,0.11) 0%,transparent 70%);
+            border-radius:50%;pointer-events:none;z-index:0;
+            animation:floatOrb 8s ease-in-out infinite;
+        }
+        body::after {
+            content:'';position:fixed;bottom:100px;left:-100px;width:300px;height:300px;
+            background:radial-gradient(circle,rgba(16,185,129,0.08) 0%,transparent 70%);
+            border-radius:50%;pointer-events:none;z-index:0;
+            animation:floatOrb 10s ease-in-out infinite reverse;
+        }
+        @keyframes floatOrb{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(18px) scale(1.05)}}
+
+        .cat-section {
+            background:rgba(255,255,255,0.55);
+            backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+            border-radius:18px;padding:14px;
+            border:1px solid rgba(5,150,105,0.08);
+            box-shadow:0 2px 20px rgba(5,150,105,0.07);
+            margin-bottom:16px;
+        }
+        [data-theme="dark"] .cat-section {
+            background:rgba(17,24,39,0.62);
+            border:1px solid rgba(5,150,105,0.13);
+        }
+
         .navbar-brand { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
         .brand-icon { width: 34px; height: 34px; background: #059669; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(5,150,105,0.22); }
         .typing-text { font-size: 15px; font-weight: 700; color: #059669; white-space: nowrap; min-width: 60px; }
@@ -110,9 +151,18 @@
         .branding-tagline { font-size: 13px; color: var(--text2); }
 
         /* ═══════ BANNER ═══════ */
-        .banner-wrap { max-width: 1200px; margin: 12px auto; overflow: hidden; border-radius: 12px; }
-        .slider { display: flex; overflow-x: hidden; scroll-behavior: smooth; }
-        .slider img { width: 100%; flex-shrink: 0; }
+        .banner-wrap { max-width: 1200px; margin: 12px auto; overflow: hidden; border-radius: 16px; position: relative; box-shadow: 0 6px 24px rgba(0,0,0,0.13); }
+        .banner-slider { display: flex; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
+        .banner-slide { flex-shrink: 0; width: 100%; min-height: 155px; display: flex; align-items: center; justify-content: space-between; padding: 22px 22px; position: relative; overflow: hidden; box-sizing: border-box; }
+        .banner-slide-inner { position: relative; z-index: 2; }
+        .banner-bg-circle { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.09); }
+        .banner-dots { display: flex; justify-content: center; gap: 7px; padding: 10px 0 8px; background: var(--card); }
+        .banner-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all 0.3s; border: none; padding: 0; }
+        .banner-dot.active { background: #059669; width: 22px; border-radius: 4px; }
+        .banner-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.92); background: rgba(255,255,255,0.18); display: inline-block; padding: 3px 9px; border-radius: 20px; margin-bottom: 6px; }
+        .banner-title { color: #fff; font-size: 17px; font-weight: 800; line-height: 1.35; margin-bottom: 5px; }
+        .banner-sub { color: rgba(255,255,255,0.78); font-size: 12px; }
+        .banner-emoji { font-size: 52px; line-height: 1; opacity: 0.92; flex-shrink: 0; margin-left: 10px; }
 
         /* ═══════ INFO CARDS ═══════ */
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px; max-width: 700px; margin: 0 auto; }
@@ -222,9 +272,15 @@
             .skeleton-card { width: 128px; }
             .skel-img { width: 128px; height: 172px; }
             .cat-pill { padding: 6px 10px; font-size: 12px; }
-            
-            
             .navbar-search { padding: 0 10px 10px; }
+
+            /* Banner mobile fix */
+            .banner-slide { padding: 14px 12px; min-height: 130px; }
+            .banner-slide img[alt="গ্রন্থকানন"] { width: 46px !important; height: 46px !important; }
+            .banner-emoji { font-size: 36px !important; margin-left: 6px !important; }
+            .banner-label { font-size: 9px; padding: 2px 7px; margin-bottom: 4px; }
+            .banner-title { font-size: 13px; margin-bottom: 3px; }
+            .banner-sub { font-size: 10px; }
         }
     </style>
 </head>
@@ -254,9 +310,9 @@
     <div class="sidebar-sub" id="pubSub"></div>
     <div class="sidebar-item" onclick="toggleSubMenu('authorSub')">✍️ লেখক <span id="authorArrow">▶</span></div>
     <div class="sidebar-sub" id="authorSub"></div>
-    <div class="sidebar-item" onclick="showWishlist()">💖 উইশলিস্ট 
-         <span id="wishCount" style="background:#dc2626;color:white;border-radius:50%;padding:1px 6px;font-size:11px;">0</span></div>
-    <div class="sidebar-item" onclick="navigateTo('track.html')">📦 আমার অর্ডার <span>›</span></div>
+    <div class="sidebar-item" onclick="showWishlist()">💖 উইশলিস্ট
+<span id="wishCount" style="background:#dc2626;color:white;border-radius:50%;padding:1px 6px;font-size:11px;">0</span></div>
+<div class="sidebar-item" onclick="navigateTo('track.html')">📦 আমার অর্ডার <span>›</span></div>
     <div class="sidebar-item" onclick="toggleSubMenu('aboutSub')">📜 আমাদের সম্পর্কে <span id="aboutArrow">▶</span></div>
     <div class="sidebar-sub" id="aboutSub" style="padding:15px 20px;font-size:13px;line-height:1.9;">
         <p style="margin-bottom:10px;"><strong style="color:#059669;font-size:15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য।</p>
@@ -285,26 +341,40 @@
     </div>
 </div>
 
-<!-- ═══════ FLASH SALE BANNER ═══════ -->
-<div id="flashBanner" style="background:linear-gradient(135deg,#dc2626,#b91c1c);color:white;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;">
+<!-- ═══════ EID MELA FLASH BANNER ═══════ -->
+<div id="flashBanner" style="background:linear-gradient(135deg,#b91c1c,#991b1b);color:white;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;">
     <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:18px;">⚡</span>
+        <span style="font-size:20px;">🌙</span>
         <div>
-            <div style="font-size:12px;font-weight:800;letter-spacing:0.05em;">FLASH SALE চলছে!</div>
-            <div style="font-size:11px;opacity:0.85;">নির্বাচিত বইয়ে বিশেষ ছাড়</div>
+            <div style="font-size:12px;font-weight:800;letter-spacing:0.05em;">ঈদ মেলা অফার চলছে!</div>
+            <div style="font-size:11px;opacity:0.85;">৭ দিনের বিশেষ ছাড় — সীমিত সময়</div>
         </div>
     </div>
-    <div style="text-align:center;">
-        <div style="font-size:10px;opacity:0.8;margin-bottom:2px;">শেষ হবে</div>
-        <div id="flashEnd" style="font-size:18px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:2px;">00:00:00</div>
+    <div style="display:flex;gap:5px;align-items:center;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;text-align:center;">
+            <div id="eid_d2" style="color:#fff;font-size:14px;font-weight:800;">০৭</div>
+            <div style="color:#fecaca;font-size:8px;">দিন</div>
+        </div>
+        <div style="color:#fecaca;font-weight:700;font-size:14px;">:</div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;text-align:center;">
+            <div id="eid_h2" style="color:#fff;font-size:14px;font-weight:800;">০০</div>
+            <div style="color:#fecaca;font-size:8px;">ঘণ্টা</div>
+        </div>
+        <div style="color:#fecaca;font-weight:700;font-size:14px;">:</div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;text-align:center;">
+            <div id="eid_m2" style="color:#fff;font-size:14px;font-weight:800;">০০</div>
+            <div style="color:#fecaca;font-size:8px;">মিনিট</div>
+        </div>
+        <div style="color:#fecaca;font-weight:700;font-size:14px;">:</div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;text-align:center;">
+            <div id="eid_s2" style="color:#fff;font-size:14px;font-weight:800;">০০</div>
+            <div style="color:#fecaca;font-size:8px;">সেকেন্ড</div>
+        </div>
     </div>
     <button onclick="document.getElementById('flashBanner').style.display='none'" style="background:rgba(255,255,255,0.2);border:none;color:white;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">×</button>
 </div>
 
 <!-- ═══════ MARQUEE ═══════ -->
-<div class="moving-bar">
-    <div class="moving-text">🔥 প্রথম অর্ডারে ০৫% ছাড় — কুপন: FIRSTORDER &nbsp;&nbsp;&nbsp; ✅ সারা বাংলাদেশে ক্যাশ অন ডেলিভারি &nbsp;&nbsp;&nbsp; 📞 হটলাইন: 01516595762</div>
-</div>
 
 <!-- ═══════ NAVBAR ═══════ -->
 <nav class="navbar">
@@ -343,21 +413,84 @@
 
 <!-- ═══════ BANNER ═══════ -->
 <div class="banner-wrap">
-    <div class="slider" id="mainSlider">
-        <img src="cover.jpeg" alt="Banner 1">
-        <img src="cover2.jpg" alt="Banner 2">
+    <div class="banner-slider" id="mainSlider">
+
+        <!-- Slide 1: Eid Mela -->
+        <div class="banner-slide" style="background:linear-gradient(135deg,#dc2626 0%,#b91c1c 100%);">
+            <div class="banner-bg-circle" style="width:130px;height:130px;right:-30px;top:-30px;"></div>
+            <div class="banner-bg-circle" style="width:70px;height:70px;left:10px;bottom:-20px;"></div>
+            <img src="logo.png" alt="গ্রন্থকানন" style="position:relative;z-index:2;width:64px;height:64px;object-fit:contain;flex-shrink:0;filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.3));">
+            <div class="banner-slide-inner" style="flex:1;text-align:center;">
+                <div class="banner-label">🌙 ঈদ মেলা অফার</div>
+                <div class="banner-title">৭ দিনের মহা<br><span style="color:#fecaca;">ঈদ মেলা সেল!</span></div>
+                <div class="banner-sub">সীমিত সময়ের জন্য বিশেষ ছাড়</div>
+            </div>
+            <div class="banner-emoji">🎉</div>
+        </div>
+
+        <!-- Slide 2: Free Book -->
+        <div class="banner-slide" style="background:linear-gradient(135deg,#059669 0%,#047857 100%);">
+            <div class="banner-bg-circle" style="width:120px;height:120px;right:-25px;top:-25px;"></div>
+            <div class="banner-bg-circle" style="width:60px;height:60px;left:5px;bottom:-15px;"></div>
+            <img src="logo.png" alt="গ্রন্থকানন" style="position:relative;z-index:2;width:64px;height:64px;object-fit:contain;flex-shrink:0;filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.3));">
+            <div class="banner-slide-inner" style="flex:1;text-align:center;">
+                <div class="banner-label">🎁 ফ্রি বই অফার</div>
+                <div class="banner-title">৳১২৯৯+ অর্ডারে<br><span style="color:#a7f3d0;">১টি বই সম্পূর্ণ ফ্রি!</span></div>
+                <div class="banner-sub">এখনই অর্ডার করুন</div>
+            </div>
+            <div class="banner-emoji">📚</div>
+        </div>
+
+        <!-- Slide 3: Free Delivery -->
+        <div class="banner-slide" style="background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);">
+            <div class="banner-bg-circle" style="width:120px;height:120px;right:-25px;top:-25px;"></div>
+            <div class="banner-bg-circle" style="width:65px;height:65px;left:8px;bottom:-18px;"></div>
+            <img src="logo.png" alt="গ্রন্থকানন" style="position:relative;z-index:2;width:64px;height:64px;object-fit:contain;flex-shrink:0;filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.3));">
+            <div class="banner-slide-inner" style="flex:1;text-align:center;">
+                <div class="banner-label">🚚 ফ্রি ডেলিভারি</div>
+                <div class="banner-title">৳১৪৯৯+ অর্ডারে<br><span style="color:#bfdbfe;">মাত্র ২৬৳ ডেলিভারি!</span></div>
+                <div class="banner-sub">কুপন: <strong style="color:#fff;letter-spacing:1px;">EID26</strong></div>
+            </div>
+            <div class="banner-emoji">🚚</div>
+        </div>
+
+        <!-- Slide 4: Bookmark -->
+        <div class="banner-slide" style="background:linear-gradient(135deg,#d97706 0%,#b45309 100%);">
+            <div class="banner-bg-circle" style="width:115px;height:115px;right:-22px;top:-22px;"></div>
+            <div class="banner-bg-circle" style="width:60px;height:60px;left:5px;bottom:-15px;"></div>
+            <img src="logo.png" alt="গ্রন্থকানন" style="position:relative;z-index:2;width:64px;height:64px;object-fit:contain;flex-shrink:0;filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.3));">
+            <div class="banner-slide-inner" style="flex:1;text-align:center;">
+                <div class="banner-label">🔖 প্রিমিয়াম গিফট</div>
+                <div class="banner-title">৳৪৯৯+ অর্ডারে<br><span style="color:#fde68a;">প্রিমিয়াম বুকমার্ক ফ্রি!</span></div>
+                <div class="banner-sub">সব বই দেখুন</div>
+            </div>
+            <div class="banner-emoji">🔖</div>
+        </div>
+
+        <!-- Slide 5: First Order -->
+        <div class="banner-slide" style="background:linear-gradient(135deg,#7c3aed 0%,#5b21b6 100%);">
+            <div class="banner-bg-circle" style="width:120px;height:120px;right:-25px;top:-25px;"></div>
+            <div class="banner-bg-circle" style="width:65px;height:65px;left:8px;bottom:-18px;"></div>
+            <img src="logo.png" alt="গ্রন্থকানন" style="position:relative;z-index:2;width:64px;height:64px;object-fit:contain;flex-shrink:0;filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.3));">
+            <div class="banner-slide-inner" style="flex:1;text-align:center;">
+                <div class="banner-label">✨ প্রথম অর্ডার ডিসকাউন্ট</div>
+                <div class="banner-title">যেকোনো অর্ডারে<br><span style="color:#ddd6fe;">৫% ছাড় পান!</span></div>
+                <div class="banner-sub">কুপন: <strong style="color:#fff;letter-spacing:1px;">FIRSTORDER</strong></div>
+            </div>
+            <div class="banner-emoji">🎊</div>
+        </div>
+
+    </div>
+    <div class="banner-dots" id="bannerDots">
+        <button class="banner-dot active" onclick="goBannerSlide(0)"></button>
+        <button class="banner-dot" onclick="goBannerSlide(1)"></button>
+        <button class="banner-dot" onclick="goBannerSlide(2)"></button>
+        <button class="banner-dot" onclick="goBannerSlide(3)"></button>
+        <button class="banner-dot" onclick="goBannerSlide(4)"></button>
     </div>
 </div>
 
-<!-- ═══════ CATEGORY PILLS ═══════ -->
-<div class="cat-pills">
-    <button class="cat-pill active" onclick="filterCategory('all',this)">📚 সব বই</button>
-    <button class="cat-pill" onclick="filterCategory('বেস্ট সেলিং',this)">🔥 বেস্ট সেলিং</button>
-    <button class="cat-pill" onclick="filterCategory('রানিং  ট্রেন্ডিং',this)">📈 রানিং ট্রেন্ডিং</button>
-    <button class="cat-pill" onclick="filterCategory('নতুন প্রকাশিত',this)">✨ নতুন প্রকাশিত</button>
-    <button class="cat-pill" onclick="filterCategory('জনপ্রিয় লেখক',this)">✍️ জনপ্রিয় লেখক</button>
-    <button class="cat-pill" onclick="filterCategory('জনপ্রিয় বই',this)">⭐ জনপ্রিয় বই</button>
-</div>
+
 
 <!-- ═══════ SKELETON ═══════ -->
 <div id="skeletonWrapper" class="sections">
@@ -396,6 +529,7 @@
             <span onclick="closeCart()" style="cursor:pointer;font-size:26px;">&times;</span>
         </div>
         <div id="cartItems" style="flex:1;overflow-y:auto;padding:10px;"></div>
+        <div id="cartOfferBanner" style="display:none;margin:0 10px 6px;border-radius:10px;overflow:hidden;"></div>
         <div style="padding:14px;background:var(--search-bg);border-top:1px solid var(--border);">
             <div style="display:flex;gap:6px;margin-bottom:10px;">
                 <input type="text" id="couponCode" placeholder="কুপন কোড (FIRSTORDER)" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
@@ -489,14 +623,14 @@
         <span class="bnav-label">ক্যাটাগরি</span>
     </div>
 
-  <!-- অর্ডার ট্র্যাক -->
+    <!-- লগইন / রেজিস্টার -->
+<!-- অর্ডার ট্র্যাক -->
 <div class="bnav-item" id="bnav-track" onclick="navigateTo('track.html')">
     <svg class="bnav-svg" viewBox="0 0 24 24">
         <path d="M21 10H3M16 6l5 4-5 4M3 6l-2 4 2 4"/>
     </svg>
     <span class="bnav-label">ট্র্যাক</span>
 </div>
-    <!-- লগইন / রেজিস্টার -->
     <div class="bnav-login-pill" onclick="showLoginModal()">
         <div class="bnav-login-inner">
             <svg class="bnav-login-svg" viewBox="0 0 24 24">
@@ -775,6 +909,27 @@ function updateCartUI(){
     if(document.getElementById('subtotal'))document.getElementById('subtotal').innerText=subtotal;
     if(document.getElementById('discountAmt'))document.getElementById('discountAmt').innerText=disc;
     if(document.getElementById('total'))document.getElementById('total').innerText=subtotal-disc;
+    // Cart offer banner
+    const ob=document.getElementById('cartOfferBanner');
+    if(ob){
+        if(subtotal<=0){ob.style.display='none';}
+        else if(subtotal>=1499){
+            ob.style.display='block';
+            ob.innerHTML=`<div style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">🚚</span><div><div style="font-weight:800;font-size:12px;">মাত্র ২৬৳ ডেলিভারি পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">কুপন ব্যবহার করুন: <strong style="letter-spacing:1px;">EID26</strong></div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
+        }else if(subtotal>=1299){
+            ob.style.display='block';
+            const need=1499-subtotal;
+            ob.innerHTML=`<div style="background:linear-gradient(135deg,#059669,#047857);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">🎁</span><div><div style="font-weight:800;font-size:12px;">১টি বই বিনামূল্যে পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">আরও ৳${need} যোগ করলে মাত্র ২৬৳ ডেলিভারি পাবেন</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
+        }else if(subtotal>=499){
+            ob.style.display='block';
+            const need=1299-subtotal;
+            ob.innerHTML=`<div style="background:linear-gradient(135deg,#d97706,#b45309);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">🔖</span><div><div style="font-weight:800;font-size:12px;">প্রিমিয়াম বুকমার্ক পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">আরও ৳${need} যোগ করলে ১টি বই ফ্রি পাবেন</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
+        }else{
+            ob.style.display='block';
+            const need=499-subtotal;
+            ob.innerHTML=`<div style="background:linear-gradient(135deg,#6b7280,#4b5563);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">💡</span><div><div style="font-weight:800;font-size:12px;">আরও ৳${need} যোগ করুন</div><div style="font-size:10px;opacity:0.85;">প্রিমিয়াম বুকমার্ক পাবেন!</div></div></div>`;
+        }
+    }
 }
 function changeQty(name,delta){
     if(delta===1){const item=cart.find(i=>i.name===name);if(item)cart.push({...item});}
@@ -827,30 +982,33 @@ window.onload=()=>{
     auth.onAuthStateChanged(user=>updateAuthUI(user));
 };
 
-/* FLASH SALE TIMER */
+/* FLASH SALE TIMER — fixed end: June 4, 2026 23:59:59 (Eid Mela 7 days from May 28) */
 function startFlashSaleTimer(){
-    const endEl=document.getElementById('flashEnd');
-    if(!endEl)return;
-    let saved=localStorage.getItem('gronthokanon_flashend');
-    if(!saved||Date.now()>parseInt(saved)){
-        saved=Date.now()+12*60*60*1000; // 12 ঘণ্টা
-        localStorage.setItem('gronthokanon_flashend',saved);
-    }
+    const eidEndFixed = new Date('2026-06-04T23:59:59').getTime();
     function tick(){
-        const diff=parseInt(saved)-Date.now();
-        if(diff<=0){document.getElementById('flashBanner').style.display='none';return;}
-        const h=Math.floor(diff/3600000);
+        const diff=Math.max(0,eidEndFixed-Date.now());
+        if(diff<=0){const fb=document.getElementById('flashBanner');if(fb)fb.style.display='none';return;}
+        const d=Math.floor(diff/86400000);
+        const h=Math.floor((diff%86400000)/3600000);
         const m=Math.floor((diff%3600000)/60000);
         const s=Math.floor((diff%60000)/1000);
-        endEl.innerText=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        const BN=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+        function toBN(n){return String(n).padStart(2,'0').split('').map(c=>BN[c]).join('');}
+        ['eid_d2','eid_h2','eid_m2','eid_s2'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.innerText=toBN([d,h,m,s][i]);});
     }
     tick();setInterval(tick,1000);
 }
 
 /* BANNER SLIDE */
-const slider=document.getElementById('mainSlider');
-let curImg=0;
-if(slider){setInterval(()=>{const imgs=slider.querySelectorAll('img');if(imgs.length){curImg=(curImg+1)%imgs.length;slider.scrollTo({left:curImg*slider.offsetWidth,behavior:'smooth'});}},3500);}
+let curBanner=0;
+const totalBannerSlides=5;
+function goBannerSlide(idx){
+    curBanner=idx;
+    const slider=document.getElementById('mainSlider');
+    if(slider)slider.style.transform=`translateX(-${idx*100}%)`;
+    document.querySelectorAll('.banner-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+setInterval(()=>{goBannerSlide((curBanner+1)%totalBannerSlides);},3800);
 </script>
 <!-- ═══════ AUTH MODAL ═══════ -->
 <div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;" onclick="e=>e.target===this&&closeAuthModal()">
