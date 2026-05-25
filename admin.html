@@ -153,12 +153,16 @@ function showDashboard(){
     setTimeout(loadOrders, 300);
 }
 
-function loadOrders(){/*REPLACE*/
-    db.ref('orders').orderByChild('createdAt').on('value',snap=>{
+function loadOrders(){
+    db.ref('orders').on('value',snap=>{
         allOrders=[];
-        snap.forEach(child=>allOrders.unshift(child.val()));
+        snap.forEach(child=>allOrders.push(child.val()));
+        allOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         updateStats();
         renderOrders();
+    },err=>{
+        console.log('DB error:',err);
+        document.getElementById('orderList').innerHTML='<div class="empty-admin">❌ অর্ডার লোড হয়নি, পেজ রিফ্রেশ করুন</div>';
     });
 }
 
