@@ -166,16 +166,23 @@ async function searchByPhone(){
     document.getElementById('phoneError').style.display='none';
     document.getElementById('myOrdersList').innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">খোঁজা হচ্ছে...</div>';
     try{
-        const snap=await firebase.database().ref('orders').orderByChild('phone').equalTo(phone).get();
-        if(!snap.exists()){
+        // Try indexed query first, fallback to full scan if index missing
+        let orders=[];
+        try{
+            const snap=await firebase.database().ref('orders').orderByChild('phone').equalTo(phone).get();
+            if(snap.exists())snap.forEach(c=>orders.unshift(c.val()));
+        }catch(indexErr){
+            // Index not set — fallback: load all and filter client-side
+            const snap=await firebase.database().ref('orders').get();
+            if(snap.exists())snap.forEach(c=>{const v=c.val();if(v.phone===phone)orders.unshift(v);});
+        }
+        if(!orders.length){
             document.getElementById('myOrdersList').innerHTML='';
             document.getElementById('phoneError').style.display='block';
             return;
         }
-        const orders=[];
-        snap.forEach(c=>orders.unshift(c.val()));
         renderMyOrders(orders);
-    }catch(e){showToast('সংযোগ সমস্যা হয়েছে','#dc2626');}
+    }catch(e){showToast('সংযোগ সমস্যা হয়েছে','#dc2626');document.getElementById('myOrdersList').innerHTML='';}
 }
 
 function renderMyOrders(orders){
