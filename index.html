@@ -283,6 +283,22 @@
     </div>
 </div>
 
+<!-- ═══════ FLASH SALE BANNER ═══════ -->
+<div id="flashBanner" style="background:linear-gradient(135deg,#dc2626,#b91c1c);color:white;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:18px;">⚡</span>
+        <div>
+            <div style="font-size:12px;font-weight:800;letter-spacing:0.05em;">FLASH SALE চলছে!</div>
+            <div style="font-size:11px;opacity:0.85;">নির্বাচিত বইয়ে বিশেষ ছাড়</div>
+        </div>
+    </div>
+    <div style="text-align:center;">
+        <div style="font-size:10px;opacity:0.8;margin-bottom:2px;">শেষ হবে</div>
+        <div id="flashEnd" style="font-size:18px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:2px;">00:00:00</div>
+    </div>
+    <button onclick="document.getElementById('flashBanner').style.display='none'" style="background:rgba(255,255,255,0.2);border:none;color:white;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">×</button>
+</div>
+
 <!-- ═══════ MARQUEE ═══════ -->
 <div class="moving-bar">
     <div class="moving-text">🔥 প্রথম অর্ডারে ০৫% ছাড় — কুপন: FIRSTORDER &nbsp;&nbsp;&nbsp; ✅ সারা বাংলাদেশে ক্যাশ অন ডেলিভারি &nbsp;&nbsp;&nbsp; 📞 হটলাইন: 01516595762</div>
@@ -642,9 +658,69 @@ function showWishlist(){
     document.getElementById('wishlistBox').style.display='flex';
 }
 function showLoginModal(){
-    const t=document.createElement('div');
-    t.style.cssText='position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:#1e40af;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(30,64,175,0.35);';
-    t.innerText='🔐 লগইন ফিচার শীঘ্রই আসছে!';document.body.appendChild(t);setTimeout(()=>t.remove(),2500);
+    document.getElementById('authModal').style.display='flex';
+    document.getElementById('authModal').style.animation='fadeInUp 0.3s ease';
+}
+function closeAuthModal(){
+    document.getElementById('authModal').style.display='none';
+    document.getElementById('authError').innerText='';
+}
+function switchTab(tab){
+    document.getElementById('loginTab').classList.toggle('auth-tab-active', tab==='login');
+    document.getElementById('registerTab').classList.toggle('auth-tab-active', tab==='register');
+    document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
+    document.getElementById('registerForm').style.display=tab==='register'?'block':'none';
+    document.getElementById('authError').innerText='';
+}
+async function doLogin(){
+    const email=document.getElementById('loginEmail').value.trim();
+    const pass=document.getElementById('loginPass').value;
+    const btn=document.getElementById('loginBtn');
+    if(!email||!pass){setAuthErr('ইমেইল ও পাসওয়ার্ড দিন');return;}
+    btn.innerText='লোড হচ্ছে...';btn.disabled=true;
+    try{
+        await auth.signInWithEmailAndPassword(email,pass);
+        closeAuthModal();showToast('✅ স্বাগতম!','#059669');
+    }catch(e){
+        setAuthErr(e.code==='auth/wrong-password'?'পাসওয়ার্ড ভুল':e.code==='auth/user-not-found'?'একাউন্ট নেই':'লগইন ব্যর্থ হয়েছে');
+    }
+    btn.innerText='লগইন করুন';btn.disabled=false;
+}
+async function doRegister(){
+    const name=document.getElementById('regName').value.trim();
+    const email=document.getElementById('regEmail').value.trim();
+    const pass=document.getElementById('regPass').value;
+    const btn=document.getElementById('registerBtn');
+    if(!name||!email||!pass){setAuthErr('সব তথ্য পূরণ করুন');return;}
+    if(pass.length<6){setAuthErr('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে');return;}
+    btn.innerText='লোড হচ্ছে...';btn.disabled=true;
+    try{
+        const cred=await auth.createUserWithEmailAndPassword(email,pass);
+        await cred.user.updateProfile({displayName:name});
+        await db.ref('users/'+cred.user.uid).set({name,email,createdAt:Date.now()});
+        closeAuthModal();showToast('✅ রেজিস্ট্রেশন সফল!','#059669');
+    }catch(e){
+        setAuthErr(e.code==='auth/email-already-in-use'?'এই ইমেইলে আগেই একাউন্ট আছে':'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
+    }
+    btn.innerText='রেজিস্টার করুন';btn.disabled=false;
+}
+async function doLogout(){
+    await auth.signOut();showToast('লগআউট হয়েছে','#6b7280');updateAuthUI(null);
+}
+function setAuthErr(msg){document.getElementById('authError').innerText=msg;}
+function updateAuthUI(user){
+    const pill=document.querySelector('.bnav-login-pill .bnav-login-inner');
+    const txt=document.querySelector('.bnav-login-pill .bnav-login-text');
+    const lbl=document.querySelector('.bnav-login-pill .bnav-label');
+    if(!pill)return;
+    if(user){
+        txt.innerText=user.displayName?user.displayName.split(' ')[0]:'একাউন্ট';
+        lbl.innerText='লগআউট';
+        document.querySelector('.bnav-login-pill').onclick=doLogout;
+    }else{
+        txt.innerText='লগইন';lbl.innerText='একাউন্ট';
+        document.querySelector('.bnav-login-pill').onclick=showLoginModal;
+    }
 }
 function closeWishlist(){document.getElementById('wishlistBox').style.display='none';}
 
@@ -738,13 +814,79 @@ window.onload=()=>{
         localStorage.removeItem('gronthokanon_opencart');
         setTimeout(()=>showCart(),500);
     }
+    startFlashSaleTimer();
+    auth.onAuthStateChanged(user=>updateAuthUI(user));
 };
+
+/* FLASH SALE TIMER */
+function startFlashSaleTimer(){
+    const endEl=document.getElementById('flashEnd');
+    if(!endEl)return;
+    let saved=localStorage.getItem('gronthokanon_flashend');
+    if(!saved||Date.now()>parseInt(saved)){
+        saved=Date.now()+12*60*60*1000; // 12 ঘণ্টা
+        localStorage.setItem('gronthokanon_flashend',saved);
+    }
+    function tick(){
+        const diff=parseInt(saved)-Date.now();
+        if(diff<=0){document.getElementById('flashBanner').style.display='none';return;}
+        const h=Math.floor(diff/3600000);
+        const m=Math.floor((diff%3600000)/60000);
+        const s=Math.floor((diff%60000)/1000);
+        endEl.innerText=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+    tick();setInterval(tick,1000);
+}
 
 /* BANNER SLIDE */
 const slider=document.getElementById('mainSlider');
 let curImg=0;
 if(slider){setInterval(()=>{const imgs=slider.querySelectorAll('img');if(imgs.length){curImg=(curImg+1)%imgs.length;slider.scrollTo({left:curImg*slider.offsetWidth,behavior:'smooth'});}},3500);}
 </script>
+<!-- ═══════ AUTH MODAL ═══════ -->
+<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;" onclick="e=>e.target===this&&closeAuthModal()">
+    <div style="background:var(--card);width:100%;border-radius:24px 24px 0 0;padding:0 0 40px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()">
+        <div style="width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 0;"></div>
+        <!-- Tabs -->
+        <div style="display:flex;border-bottom:1.5px solid var(--border);margin:16px 20px 0;">
+            <button id="loginTab" class="auth-tab auth-tab-active" onclick="switchTab('login')">লগইন</button>
+            <button id="registerTab" class="auth-tab" onclick="switchTab('register')">রেজিস্টার</button>
+        </div>
+        <div style="padding:20px;">
+            <p id="authError" style="color:#dc2626;font-size:12px;margin-bottom:10px;min-height:16px;"></p>
+            <!-- Login Form -->
+            <div id="loginForm">
+                <input id="loginEmail" type="email" placeholder="ইমেইল" class="auth-input">
+                <input id="loginPass" type="password" placeholder="পাসওয়ার্ড" class="auth-input">
+                <button id="loginBtn" onclick="doLogin()" class="auth-btn">লগইন করুন</button>
+            </div>
+            <!-- Register Form -->
+            <div id="registerForm" style="display:none;">
+                <input id="regName" type="text" placeholder="আপনার নাম" class="auth-input">
+                <input id="regEmail" type="email" placeholder="ইমেইল" class="auth-input">
+                <input id="regPass" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" class="auth-input">
+                <button id="registerBtn" onclick="doRegister()" class="auth-btn">রেজিস্টার করুন</button>
+            </div>
+            <button onclick="closeAuthModal()" style="width:100%;margin-top:10px;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;cursor:pointer;">বাতিল</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.auth-tab{flex:1;padding:10px;background:transparent;border:none;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;}
+.auth-tab-active{color:#059669;border-bottom-color:#059669;}
+.auth-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;}
+.auth-input:focus{border-color:#059669;}
+.auth-btn{width:100%;padding:13px;background:#059669;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
+@keyframes fadeInUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
+
+<!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script src="common.js"></script>
 </body>
 </html>
