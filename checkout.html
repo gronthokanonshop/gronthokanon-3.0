@@ -281,6 +281,7 @@
         <p class="success-sub">ORDER CONFIRMED</p>
         <div class="success-info" id="successInfo"></div>
         <p class="success-note">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! 📚</p>
+        <button onclick="downloadInvoice()" style="width:100%;padding:13px;background:#1e40af;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;">📄 Invoice PDF ডাউনলোড করুন</button>
         <button class="home-btn" onclick="window.location.href='index.html'">চমৎকার! 🎉</button>
     </div>
 </div>
@@ -377,14 +378,189 @@ async function confirmOrder(){
     const bookList=Object.entries(g).map(([k,v])=>`${k} (${v}টি)`).join(', ');
     const total=document.getElementById('grandTotal').innerText;
     const fullAddr=`${thana}, ${district}, ${division} — ${address}`;
+
+    /* ── Firebase এ order save করো ── */
+    const orderId='GK-'+Date.now().toString(36).toUpperCase();
+    const orderData={
+        orderId,name,phone,
+        address:fullAddr,
+        items:cart,
+        books:bookList,
+        payment:payMethod+(txId?` (TxID: ${txId})`:''),
+        delivery:'৳'+delivCharge,
+        total,
+        status:'pending',
+        createdAt:Date.now(),
+        userId:firebase.auth().currentUser?.uid||'guest'
+    };
+    try{
+        await firebase.database().ref('orders/'+orderId).set(orderData);
+        localStorage.setItem('gronthokanon_lastorder',orderId);
+        lastOrderData=orderData;
+    }catch(e){console.log('Firebase error:',e);}
+
+    /* ── Google Sheet (পুরনো) ── */
     try{await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,address:fullAddr,books:bookList,payment:payMethod+(txId?` (TxID: ${txId})`:''),delivery:'৳'+delivCharge,total})});}catch(e){}
+
     localStorage.removeItem('gronthokanon_cart');localStorage.removeItem('gronthokanon_discount');localStorage.removeItem('gronthokanon_coupon');
-    document.getElementById('successInfo').innerHTML=`👤 <strong>${name}</strong><br>📱 ${phone}<br>📍 ${fullAddr}<br>💳 ${payMethod}${txId?` (TxID: ${txId})`:''}<br>📦 ${bookList}<br>💰 <strong style="color:var(--green);">${total}</strong>`;
+    document.getElementById('successInfo').innerHTML=`
+        <div style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:12px;text-align:left;">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">অর্ডার আইডি</div>
+            <div style="font-size:16px;font-weight:800;color:#059669;letter-spacing:1px;">${orderId}</div>
+        </div>
+        👤 <strong>${name}</strong><br>📱 ${phone}<br>📍 ${fullAddr}<br>💳 ${payMethod}${txId?` (TxID: ${txId})`:''}<br>📦 ${bookList}<br>💰 <strong style="color:var(--green);">${total}</strong>
+        <br><br><button onclick="window.location.href='track.html?id=${orderId}'" style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;">📦 অর্ডার ট্র্যাক করুন</button>
+    `;
     btn.disabled=false;btn.innerHTML='✅ অর্ডার কনফার্ম করুন';
     document.getElementById('successModal').classList.add('show');
 }
+
+/* ═══ PDF INVOICE ═══ */
+let lastOrderData=null;
+
+function downloadInvoice(){
+    const o=lastOrderData;
+    if(!o){showToast('অর্ডার তথ্য পাওয়া যায়নি','#dc2626');return;}
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const W=210,pad=18;
+    let y=0;
+
+    // ── Header Background ──
+    doc.setFillColor(5,150,105);
+    doc.rect(0,0,W,38,'F');
+
+    // ── Logo area ──
+    doc.setFillColor(255,255,255);
+    doc.roundedRect(pad,8,22,22,4,4,'F');
+    doc.setTextColor(5,150,105);
+    doc.setFontSize(14);doc.setFont('helvetica','bold');
+    doc.text('GK',pad+11,22,{align:'center'});
+
+    // ── Shop Name ──
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(18);doc.setFont('helvetica','bold');
+    doc.text('Gronthokanon',pad+28,18);
+    doc.setFontSize(9);doc.setFont('helvetica','normal');
+    doc.text('www.gronthokanonshop.github.io',pad+28,25);
+    doc.text('01516595762  |  Dhaka, Bangladesh',pad+28,31);
+
+    // ── INVOICE label ──
+    doc.setFontSize(10);doc.setFont('helvetica','bold');
+    doc.setTextColor(255,255,255);
+    doc.text('INVOICE',W-pad,16,{align:'right'});
+    doc.setFontSize(8);doc.setFont('helvetica','normal');
+    doc.text(o.orderId,W-pad,23,{align:'right'});
+    doc.text(new Date(o.createdAt).toLocaleDateString('en-GB'),W-pad,29,{align:'right'});
+
+    y=48;
+
+    // ── Divider info row ──
+    doc.setFillColor(240,253,244);
+    doc.roundedRect(pad,y,W-pad*2,26,3,3,'F');
+    doc.setDrawColor(167,243,208);
+    doc.roundedRect(pad,y,W-pad*2,26,3,3,'S');
+
+    doc.setTextColor(30,30,30);
+    doc.setFontSize(8);doc.setFont('helvetica','bold');
+    doc.text('BILL TO',pad+6,y+7);
+    doc.setFont('helvetica','normal');
+    doc.text(o.name,pad+6,y+13);
+    doc.text(o.phone,pad+6,y+19);
+
+    doc.setFont('helvetica','bold');
+    doc.text('DELIVERY ADDRESS',W/2+4,y+7);
+    doc.setFont('helvetica','normal');
+    const addrLines=doc.splitTextToSize(o.address,80);
+    doc.text(addrLines,W/2+4,y+13);
+
+    y+=34;
+
+    // ── Items Table Header ──
+    doc.setFillColor(5,150,105);
+    doc.rect(pad,y,W-pad*2,8,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(8);doc.setFont('helvetica','bold');
+    doc.text('বইয়ের নাম',pad+3,y+5.5);
+    doc.text('পরিমাণ',W-pad-50,y+5.5,{align:'center'});
+    doc.text('মূল্য',W-pad-3,y+5.5,{align:'right'});
+    y+=8;
+
+    // ── Items ──
+    const grouped={};
+    o.items.forEach(i=>{
+        if(!grouped[i.name])grouped[i.name]={qty:0,price:i.price};
+        grouped[i.name].qty++;
+    });
+    let subtotal=0;let rowIdx=0;
+    Object.entries(grouped).forEach(([name,[,info]])=>{
+        const entry=grouped[name];
+        const lineTotal=entry.price*entry.qty;
+        subtotal+=lineTotal;
+        if(rowIdx%2===0){doc.setFillColor(249,250,251);}
+        else{doc.setFillColor(255,255,255);}
+        doc.rect(pad,y,W-pad*2,8,'F');
+        doc.setTextColor(30,30,30);doc.setFont('helvetica','normal');doc.setFontSize(8);
+        const nameLines=doc.splitTextToSize(name,100);
+        doc.text(nameLines[0],pad+3,y+5.5);
+        doc.text(String(entry.qty),W-pad-50,y+5.5,{align:'center'});
+        doc.text('Tk '+lineTotal,W-pad-3,y+5.5,{align:'right'});
+        y+=8;rowIdx++;
+    });
+
+    // ── Totals ──
+    y+=4;
+    doc.setDrawColor(167,243,208);
+    doc.line(pad,y,W-pad,y);y+=5;
+
+    const delivery=parseInt(o.delivery.replace(/[^\d]/g,''))||0;
+    const discount=parseInt(o.discount||0);
+
+    const drawRow=(label,val,bold,color)=>{
+        doc.setFont('helvetica',bold?'bold':'normal');
+        doc.setFontSize(bold?10:8);
+        if(color)doc.setTextColor(...color);
+        else doc.setTextColor(80,80,80);
+        doc.text(label,W-pad-55,y);
+        doc.setTextColor(30,30,30);
+        doc.text(val,W-pad-3,y,{align:'right'});
+        y+=6;
+    };
+    drawRow('Subtotal:','Tk '+subtotal);
+    if(discount>0)drawRow('Discount:','-Tk '+discount,false,[220,38,38]);
+    drawRow('Delivery:','Tk '+delivery);
+    doc.line(W-pad-58,y,W-pad,y);y+=4;
+    drawRow('TOTAL:','Tk '+o.total,true,[5,150,105]);
+
+    // ── Payment ──
+    y+=4;
+    doc.setFillColor(240,253,244);
+    doc.roundedRect(pad,y,W-pad*2,14,3,3,'F');
+    doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);
+    doc.text('Payment Method:',pad+4,y+5.5);
+    doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+    doc.text(o.payment,pad+4,y+11);
+
+    // ── Footer ──
+    y=275;
+    doc.setFillColor(5,150,105);
+    doc.rect(0,y,W,22,'F');
+    doc.setTextColor(255,255,255);doc.setFontSize(8);doc.setFont('helvetica','normal');
+    doc.text('ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! Thank you for shopping with Gronthokanon.',W/2,y+7,{align:'center'});
+    doc.text('Track your order: gronthokanonshop.github.io/track.html?id='+o.orderId,W/2,y+13,{align:'center'});
+    doc.setFontSize(7);doc.setTextColor(167,243,208);
+    doc.text('This is a computer-generated invoice.',W/2,y+19,{align:'center'});
+
+    doc.save('Gronthokanon-Invoice-'+o.orderId+'.pdf');
+}
 window.onload=renderSummary;
 </script>
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script src="common.js"></script>
 </body>
 </html>
