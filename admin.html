@@ -230,8 +230,12 @@ function showToast(msg,color){
     t.innerText=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
 }
 
+let dashboardLoaded=false;
 auth.onAuthStateChanged(user=>{
-    if(user&&user.email===ADMIN_EMAIL)showDashboard();
+    if(user&&user.email===ADMIN_EMAIL&&!dashboardLoaded){
+        dashboardLoaded=true;
+        showDashboard();
+    }
 });
 </script>
 <script src="common.js"></script>
