@@ -458,8 +458,24 @@ function loadBook(){
 function goToCart(){localStorage.setItem('gronthokanon_opencart','1');window.location.href='index.html';}
 function goBack(){window.history.back();}
 
+/* ═══ FIREBASE VIEW COUNTER ═══ */
+const DB_URL = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com';
+
+async function incrementView(bookId) {
+    const url = `${DB_URL}/views/${bookId}.json`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const count = (data || 0) + 1;
+    await fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(count)
+    });
+}
+
 window.onload = function() {
     loadBook();
+    const idx = parseInt(new URLSearchParams(window.location.search).get('id'));
+    if (!isNaN(idx)) incrementView(idx);
 };
 </script>
 <!-- ═══ WISHLIST MODAL ═══ -->
