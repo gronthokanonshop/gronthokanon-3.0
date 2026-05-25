@@ -248,10 +248,15 @@ function showDashboard(){
     setTimeout(loadOrders, 300);
 }
 
-function loadOrders(){/*REPLACE*/
-    db.ref('orders').orderByChild('createdAt').on('value',snap=>{
+function loadOrders(){
+    db.ref('orders').on('value',snap=>{
         allOrders=[];
-        snap.forEach(child=>allOrders.unshift(child.val()));
+        snap.forEach(child=>{
+            const val=child.val();
+            if(val&&val.orderId)allOrders.push(val);
+        });
+        // Sort by createdAt descending (newest first), fallback for missing createdAt
+        allOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         updateStats();
         renderOrders();
     });
