@@ -381,6 +381,8 @@ async function confirmOrder(){
 
     /* ── Firebase এ order save করো ── */
     const orderId='GK-'+Date.now().toString(36).toUpperCase();
+    const sub=getSubtotal();
+    const discountAmt=Math.round(sub*discPct/100);
     const orderData={
         orderId,name,phone,
         address:fullAddr,
@@ -389,6 +391,9 @@ async function confirmOrder(){
         payment:payMethod+(txId?` (TxID: ${txId})`:''),
         delivery:'৳'+delivCharge,
         total,
+        discount:discountAmt,
+        discountPct:discPct,
+        coupon:coupon,
         status:'pending',
         createdAt:Date.now(),
         userId:firebase.auth().currentUser?.uid||'guest'
@@ -439,7 +444,12 @@ function buildInvoiceHTML(o){
         </tr>`;
     }).join('');
     const delivery=parseInt((o.delivery||'').replace(/[^\d]/g,''))||0;
-    const totalNum=o.totalNum||(subtotal+delivery);
+    const discount=o.discount||0;
+    const totalNum=o.totalNum||(subtotal+delivery-discount);
+    const discountRow=discount>0?`
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#dc2626;border-bottom:1px solid #e5e7eb;">
+            <span>ছাড় (${o.coupon||''})</span><span>-Tk ${discount}</span>
+        </div>`:'';
     return `
     <div id="invoiceBox" style="width:700px;font-family:'Hind Siliguri',Arial,sans-serif;background:#fff;color:#1a202c;">
         <div style="background:#059669;padding:24px 28px;display:flex;justify-content:space-between;align-items:center;">
@@ -486,6 +496,7 @@ function buildInvoiceHTML(o){
                 <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#6b7280;border-bottom:1px solid #e5e7eb;">
                     <span>Delivery</span><span>Tk ${delivery}</span>
                 </div>
+                ${discountRow}
                 <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:16px;font-weight:800;color:#059669;">
                     <span>TOTAL</span><span>Tk ${totalNum}</span>
                 </div>
