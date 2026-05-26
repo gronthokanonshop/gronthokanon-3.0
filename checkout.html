@@ -293,7 +293,6 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:28px;">
 </a>
 
-<script src="book.js"></script>
 <script>
 const SHEET_URL='https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
 let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
@@ -418,7 +417,7 @@ async function confirmOrder(){
     const fullAddr=`${thana}, ${district}, ${division} — ${address}`;
 
     /* ── Firebase এ order save করো ── */
-    const orderId='GK-'+Date.now().toString(36).toUpperCase();
+    const orderId='GK-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,4).toUpperCase();
     const sub=getSubtotal();
     const discountAmt=Math.round(sub*discPct/100);
     const unlockedOffers=getUnlockedOffers(sub);
@@ -584,12 +583,12 @@ async function downloadInvoice(){
 window.onload=renderSummary;
 </script>
 <!-- html2canvas + jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
-<script src="common.js"></script>
-</body>
+<script src="book.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="common.js"></script></body>
 </html>
