@@ -147,6 +147,13 @@
                 </div>
             </div>
 
+            <!-- Offers section -->
+            <div class="modal-section" id="modalOffersSection" style="display:none;">
+                <div class="modal-section-title">🎁 অফার / গিফট তথ্য (প্যাকেজ করুন)</div>
+                <div id="modalOffers" style="background:#fff7ed;border:1.5px solid #fde68a;border-radius:10px;padding:12px 14px;font-size:13px;line-height:2;"></div>
+                <div style="font-size:11px;color:#92400e;margin-top:6px;padding:6px 8px;background:#fef3c7;border-radius:6px;">📦 অর্ডার পাঠানোর আগে এই গিফটগুলো বইয়ের সাথে প্যাকেজ করুন</div>
+            </div>
+
             <!-- Status Update -->
             <div class="modal-section">
                 <div class="modal-section-title">🔄 স্ট্যাটাস আপডেট</div>
@@ -248,15 +255,10 @@ function showDashboard(){
     setTimeout(loadOrders, 300);
 }
 
-function loadOrders(){
-    db.ref('orders').on('value',snap=>{
+function loadOrders(){/*REPLACE*/
+    db.ref('orders').orderByChild('createdAt').on('value',snap=>{
         allOrders=[];
-        snap.forEach(child=>{
-            const val=child.val();
-            if(val&&val.orderId)allOrders.push(val);
-        });
-        // Sort by createdAt descending (newest first), fallback for missing createdAt
-        allOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        snap.forEach(child=>allOrders.unshift(child.val()));
         updateStats();
         renderOrders();
     });
@@ -315,6 +317,16 @@ function openModal(orderId){
     document.getElementById('modalBooks').innerText=o.books;
     document.getElementById('modalPayment').innerText=o.payment;
     document.getElementById('modalTotal').innerText=o.total;
+    /* Offers */
+    const offerSec=document.getElementById('modalOffersSection');
+    const offerEl=document.getElementById('modalOffers');
+    if(o.offers&&o.offers.length){
+        offerSec.style.display='block';
+        offerEl.innerHTML=o.offers.map(of=>`<div>${of.icon} <strong>${of.label}</strong></div>`).join('');
+    } else {
+        offerSec.style.display='none';
+        offerEl.innerHTML='';
+    }
     document.getElementById('modalStatusSelect').value=o.status||'pending';
     document.getElementById('orderModal').classList.add('open');
     document.body.style.overflow='hidden';
