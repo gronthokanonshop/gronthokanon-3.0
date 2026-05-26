@@ -188,6 +188,7 @@
             <div class="total-row red" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>)</span><span>-৳<span id="discountShow">0</span></span></div>
             <div class="total-final"><span>সর্বমোট</span><span id="grandTotal">৳০</span></div>
         </div>
+        <div id="checkoutOfferBanner" style="margin-top:10px;display:none;"></div>
     </div>
 
     <!-- SHIPPING -->
@@ -300,6 +301,17 @@ let discPct=parseInt(localStorage.getItem('gronthokanon_discount')||'0');
 let coupon=localStorage.getItem('gronthokanon_coupon')||'';
 let delivCharge=60;
 
+/* ═══ OFFERS (EID26 coupon based) ═══ */
+const EID_OFFERS=[
+    {min:499,  icon:'🔖', label:'ফ্রি প্রিমিয়াম বুকমার্ক গিফট'},
+    {min:1299, icon:'📚', label:'১টি বই সম্পূর্ণ ফ্রি!'},
+    {min:1499, icon:'🚚', label:'মাত্র ২৬৳ হোম ডেলিভারি'},
+];
+function getUnlockedOffers(sub){
+    if(coupon!=='EID26')return[];
+    return EID_OFFERS.filter(o=>sub>=o.min);
+}
+
 /* DARK */
 
 (function(){const s=localStorage.getItem('gronthokanon_theme');if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.addEventListener('DOMContentLoaded',()=>{document.getElementById('darkBtn').textContent='☀️';});}})();
@@ -310,7 +322,13 @@ function showToast(msg,color){const t=document.getElementById('vToast');t.innerT
 /* PRICING */
 function getSubtotal(){const g={};cart.forEach(i=>{g[i.name]=g[i.name]?{price:i.price,qty:g[i.name].qty+1}:{price:i.price,qty:1};});return Object.values(g).reduce((s,i)=>s+i.price*i.qty,0);}
 function updateTotal(){
-    const sub=getSubtotal(),disc=Math.round(sub*discPct/100),total=sub-disc+delivCharge;
+    const sub=getSubtotal();
+    /* recalculate delivery based on EID26+1499 */
+    const eid26=localStorage.getItem('gronthokanon_delivery_eid')==='26'||coupon==='EID26';
+    const dist=document.getElementById('district')?.value||'';
+    if(eid26&&sub>=1499) delivCharge=26;
+    else delivCharge=dist==='ঢাকা'?60:90;
+    const disc=Math.round(sub*discPct/100),total=sub-disc+delivCharge;
     document.getElementById('subtotalShow').innerText='৳'+sub;
     document.getElementById('deliveryShow').innerText='৳'+delivCharge;
     const dr=document.getElementById('discountRow');
@@ -318,6 +336,15 @@ function updateTotal(){
     else dr.style.display='none';
     document.getElementById('grandTotal').innerText='৳'+total;
     document.getElementById('bkashAmt').innerText='৳'+total;
+    /* offer banner */
+    const unlocked=getUnlockedOffers(sub);
+    const offerEl=document.getElementById('checkoutOfferBanner');
+    if(offerEl&&unlocked.length){
+        offerEl.style.display='block';
+        offerEl.innerHTML=`<div style="background:linear-gradient(90deg,#7f1d1d,#b91c1c);padding:7px 12px;border-radius:10px 10px 0 0;"><span style="color:#fca5a5;font-size:11px;font-weight:700;">🎁 আপনি পাচ্ছেন:</span></div><div style="padding:8px 10px;background:#fff9f9;border-radius:0 0 10px 10px;border:1px solid #fecaca;">`+
+        unlocked.map(o=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;color:#059669;font-weight:700;">${o.icon} ${o.label} ✅</div>`).join('')+
+        `</div>`;
+    } else if(offerEl) offerEl.style.display='none';
 }
 
 function renderSummary(){
@@ -352,7 +379,11 @@ function updateThanas(){
     let tOpts='<option value="">থানা বেছে নিন</option>';
     if(div&&dist&&locationData[div]&&locationData[div][dist])locationData[div][dist].forEach(t=>{tOpts+=`<option value="${t}">${t}</option>`;});
     ts.innerHTML=tOpts;
-    delivCharge=dist==='ঢাকা'?60:90;updateTotal();
+    const sub=getSubtotal();
+    const eid26=localStorage.getItem('gronthokanon_delivery_eid')==='26'||coupon==='EID26';
+    if(eid26&&sub>=1499) delivCharge=26;
+    else delivCharge=dist==='ঢাকা'?60:90;
+    updateTotal();
 }
 
 /* PAYMENT */
@@ -390,6 +421,7 @@ async function confirmOrder(){
     const orderId='GK-'+Date.now().toString(36).toUpperCase();
     const sub=getSubtotal();
     const discountAmt=Math.round(sub*discPct/100);
+    const unlockedOffers=getUnlockedOffers(sub);
     const orderData={
         orderId,name,phone,
         address:fullAddr,
@@ -401,6 +433,7 @@ async function confirmOrder(){
         discount:discountAmt,
         discountPct:discPct,
         coupon:coupon,
+        offers:unlockedOffers,
         status:'pending',
         createdAt:Date.now(),
         userId:firebase.auth().currentUser?.uid||'guest'
@@ -516,6 +549,12 @@ function buildInvoiceHTML(o){
             <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Payment Method</div>
             <div style="font-size:14px;font-weight:700;">${o.payment}</div>
         </div>
+        ${o.offers&&o.offers.length?`
+        <div style="margin:0 28px 16px;background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1.5px solid #fde68a;border-radius:10px;padding:14px 18px;">
+            <div style="font-size:12px;font-weight:800;color:#92400e;margin-bottom:8px;">🎁 আপনার অর্ডারে যে অফার পাচ্ছেন:</div>
+            ${o.offers.map(of=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;color:#065f46;font-weight:700;">${of.icon} ${of.label} ✅</div>`).join('')}
+            <div style="font-size:11px;color:#92400e;margin-top:8px;padding-top:8px;border-top:1px solid #fde68a;">📦 এই অফারগুলো বইয়ের সাথে প্যাকেজ করে পাঠানো হবে</div>
+        </div>`:''}
         <div style="background:#059669;padding:14px 28px;text-align:center;margin-top:8px;">
             <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! 📚</div>
             <div style="color:#a7f3d0;font-size:11px;margin-top:4px;">Track: gronthokanonshop.github.io/track.html?id=${o.orderId}</div>
