@@ -255,12 +255,19 @@ function showDashboard(){
     setTimeout(loadOrders, 300);
 }
 
-function loadOrders(){/*REPLACE*/
-    db.ref('orders').orderByChild('createdAt').on('value',snap=>{
-        allOrders=[];
-        snap.forEach(child=>allOrders.unshift(child.val()));
+function loadOrders(){
+    const el=document.getElementById('orderList');
+    el.innerHTML='<div class="loading-spin">⏳ লোড হচ্ছে...</div>';
+    // orderByChild('createdAt') requires index — use limitToLast for reliability
+    db.ref('orders').on('value', snap => {
+        allOrders = [];
+        snap.forEach(child => allOrders.push(child.val()));
+        // Sort by createdAt descending (newest first)
+        allOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
         updateStats();
         renderOrders();
+    }, err => {
+        el.innerHTML = `<div class="empty-admin">❌ লোড ব্যর্থ: ${err.message}</div>`;
     });
 }
 
