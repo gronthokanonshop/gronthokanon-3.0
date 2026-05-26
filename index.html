@@ -1320,7 +1320,9 @@ function updateEID26Banner(){
         return;
     }
     const subtotalEl = document.getElementById('subtotal');
-    const subtotal = subtotalEl ? (parseInt(subtotalEl.innerText.replace(/[^০-৯0-9]/g,'')) || 0) : 0;
+    const rawText = subtotalEl ? subtotalEl.innerText : '0';
+    const englishText = rawText.replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d)).replace(/[^0-9]/g,'');
+    const subtotal = parseInt(englishText) || 0;
     const BN_MAP = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
     function toBN(n){ return String(n).split('').map(c=>BN_MAP[c]||c).join(''); }
     const offers = [
