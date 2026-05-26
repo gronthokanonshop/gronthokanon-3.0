@@ -462,14 +462,7 @@ function goBack(){window.history.back();}
 const DB_URL = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com';
 
 async function incrementView(bookId) {
-    const url = `${DB_URL}/views/${bookId}.json`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const count = (data || 0) + 1;
-    await fetch(url, {
-        method: 'PUT',
-        body: JSON.stringify(count)
-    });
+    db.ref('views/'+bookId).transaction(v => (v||0)+1);
 }
 
 window.onload = function() {
