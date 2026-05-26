@@ -1248,22 +1248,30 @@ function updateCartUI(){
     // Cart offer banner
     const ob=document.getElementById('cartOfferBanner');
     if(ob){
+        const activeCoupon=localStorage.getItem('gronthokanon_coupon');
         if(subtotal<=0){ob.style.display='none';}
-        else if(subtotal>=1499){
+        else if(activeCoupon==='EID26'){
+            // EID26 applied — show tier banners
+            if(subtotal>=1499){
+                ob.style.display='block';
+                ob.innerHTML=`<div style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;"><span style="font-size:20px;">🚚</span><div><div style="font-weight:800;font-size:12px;">মাত্র ২৬৳ ডেলিভারি পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">EID26 কুপন সক্রিয় আছে ✅</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
+            }else if(subtotal>=1299){
+                ob.style.display='block';
+                const need=1499-subtotal;
+                ob.innerHTML=`<div style="background:linear-gradient(135deg,#059669,#047857);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;"><span style="font-size:20px;">🎁</span><div><div style="font-weight:800;font-size:12px;">১টি বই বিনামূল্যে পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">আরও ৳${need} যোগ করলে মাত্র ২৬৳ ডেলিভারি পাবেন</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
+            }else if(subtotal>=499){
+                ob.style.display='block';
+                const need=1299-subtotal;
+                ob.innerHTML=`<div style="background:linear-gradient(135deg,#d97706,#b45309);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;"><span style="font-size:20px;">🔖</span><div><div style="font-weight:800;font-size:12px;">প্রিমিয়াম বুকমার্ক পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">আরও ৳${need} যোগ করলে ১টি বই ফ্রি পাবেন</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
+            }else{
+                ob.style.display='block';
+                const need=499-subtotal;
+                ob.innerHTML=`<div style="background:linear-gradient(135deg,#6b7280,#4b5563);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;"><span style="font-size:18px;">💡</span><div><div style="font-weight:800;font-size:12px;">আরও ৳${need} যোগ করুন</div><div style="font-size:10px;opacity:0.85;">প্রিমিয়াম বুকমার্ক পাবেন!</div></div></div>`;
+            }
+        } else {
+            // No EID26 — show promo to apply coupon
             ob.style.display='block';
-            ob.innerHTML=`<div style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">🚚</span><div><div style="font-weight:800;font-size:12px;">মাত্র ২৬৳ ডেলিভারি পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">কুপন ব্যবহার করুন: <strong style="letter-spacing:1px;">EID26</strong></div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
-        }else if(subtotal>=1299){
-            ob.style.display='block';
-            const need=1499-subtotal;
-            ob.innerHTML=`<div style="background:linear-gradient(135deg,#059669,#047857);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">🎁</span><div><div style="font-weight:800;font-size:12px;">১টি বই বিনামূল্যে পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">আরও ৳${need} যোগ করলে মাত্র ২৬৳ ডেলিভারি পাবেন</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
-        }else if(subtotal>=499){
-            ob.style.display='block';
-            const need=1299-subtotal;
-            ob.innerHTML=`<div style="background:linear-gradient(135deg,#d97706,#b45309);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">🔖</span><div><div style="font-weight:800;font-size:12px;">প্রিমিয়াম বুকমার্ক পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">আরও ৳${need} যোগ করলে ১টি বই ফ্রি পাবেন</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
-        }else{
-            ob.style.display='block';
-            const need=499-subtotal;
-            ob.innerHTML=`<div style="background:linear-gradient(135deg,#6b7280,#4b5563);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">💡</span><div><div style="font-weight:800;font-size:12px;">আরও ৳${need} যোগ করুন</div><div style="font-size:10px;opacity:0.85;">প্রিমিয়াম বুকমার্ক পাবেন!</div></div></div>`;
+            ob.innerHTML=`<div style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;cursor:pointer;" onclick="document.getElementById('couponSection').querySelector('input')&&(document.getElementById('couponSection').querySelector('input').focus())"><span style="font-size:20px;">🏷️</span><div><div style="font-weight:800;font-size:12px;">বিশেষ ঈদ অফার পেতে চান?</div><div style="font-size:10px;opacity:0.90;">কুপন কোড ব্যবহার করুন: <strong style="letter-spacing:1.5px;background:rgba(255,255,255,0.2);padding:1px 6px;border-radius:4px;">EID26</strong></div></div><span style="margin-left:auto;font-size:16px;">→</span></div>`;
         }
     }
 }
