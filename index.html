@@ -870,10 +870,7 @@
         <div id="cartItems" style="flex:1;overflow-y:auto;padding:10px;"></div>
         <div id="cartOfferBanner" style="display:none;margin:0 10px 6px;border-radius:10px;overflow:hidden;"></div>
         <div style="padding:14px;background:var(--search-bg);border-top:1px solid var(--border);">
-            <div style="display:flex;gap:6px;margin-bottom:10px;">
-                <input type="text" id="couponCode" placeholder="" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
-                <button onclick="applyCoupon()" style="background:#059669;color:white;border:none;padding:0 14px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;">Apply</button>
-            </div>
+            <div id="couponSection" style="margin-bottom:10px;"></div>
             <div style="font-size:14px;line-height:1.9;color:var(--text);">
                 <p style="display:flex;justify-content:space-between;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>
                 <p style="display:flex;justify-content:space-between;color:#dc2626;">ডিসকাউন্ট: <span>-৳<span id="discountAmt">0</span></span></p>
@@ -1275,6 +1272,38 @@ function changeQty(name,delta){
     else{const i=cart.findLastIndex(i=>i.name===name);if(i!==-1)cart.splice(i,1);}
     saveCart();updateCartUI();
 }
+function renderCouponSection(){
+    const sec=document.getElementById('couponSection');
+    if(!sec)return;
+    const applied=localStorage.getItem('gronthokanon_coupon');
+    if(applied){
+        const labelMap={'EID26':'🌙 EID26 — ঈদ অফার সক্রিয়','FIRSTORDER':'🎉 FIRSTORDER — ৫% ডিসকাউন্ট'};
+        const label=labelMap[applied]||('✅ '+applied);
+        sec.innerHTML=`
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(5,150,105,0.08);border:1.5px dashed #059669;border-radius:8px;">
+            <span style="flex:1;font-size:13px;font-weight:700;color:#059669;">${label}</span>
+            <button onclick="removeCoupon()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">✕ বাতিল</button>
+        </div>`;
+    } else {
+        sec.innerHTML=`
+        <div style="display:flex;gap:6px;">
+            <input type="text" id="couponCode" placeholder="কুপন কোড লিখুন" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
+            <button onclick="applyCoupon()" style="background:#059669;color:white;border:none;padding:0 14px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;">Apply</button>
+        </div>`;
+    }
+}
+function removeCoupon(){
+    localStorage.removeItem('gronthokanon_coupon');
+    localStorage.removeItem('gronthokanon_discount');
+    localStorage.removeItem('gronthokanon_delivery_eid');
+    localStorage.removeItem('gronthokanon_eid26_used');
+    localStorage.removeItem('gronthokanon_eid26_active');
+    discountPercent=0;
+    showToast('🗑️ কুপন বাতিল হয়েছে','#6b7280');
+    updateCartUI();
+    updateEID26Banner();
+    renderCouponSection();
+}
 function applyCoupon(){
     const code=document.getElementById('couponCode').value.toUpperCase();
     if(code==='FIRSTORDER'){
@@ -1284,6 +1313,7 @@ function applyCoupon(){
         showToast('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!','#059669');
         updateCartUI();
         updateEID26Banner();
+        renderCouponSection();
     } else if(code==='EID26'){
         if(localStorage.getItem('gronthokanon_eid26_used')==='1'){
             showToast('⚠️ এই কুপন আগেই ব্যবহার করা হয়েছে!','#dc2626');
@@ -1297,6 +1327,7 @@ function applyCoupon(){
         showToast('🌙 EID26 কুপন সক্রিয়! অফারগুলো নিচে দেখুন।','#059669');
         updateCartUI();
         updateEID26Banner();
+        renderCouponSection();
     } else {
         showToast('❌ ভুল কুপন কোড!','#dc2626');
     }
@@ -1349,12 +1380,14 @@ function updateEID26Banner(){
     banner.style.display='block';
     banner.innerHTML=`<div style="background:linear-gradient(90deg,#7f1d1d,#b91c1c);padding:7px 12px;border-radius:10px 10px 0 0;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">🌙</span><span style="color:#fca5a5;font-size:11px;font-weight:700;letter-spacing:0.04em;">EID26 সক্রিয় — প্রযোজ্য অফারসমূহ</span></div><div style="padding:8px 10px;background:var(--card);border-radius:0 0 10px 10px;">${rows}</div>`;
 }
-function showCart(){document.getElementById('cartBox').style.display='flex';setTimeout(updateEID26Banner,100);}
+function showCart(){document.getElementById('cartBox').style.display='flex';setTimeout(updateEID26Banner,100);renderCouponSection();}
 function closeCart(){document.getElementById('cartBox').style.display='none';}
 function openOrderForm(){
     if(!cart.length)return showToast('⚠️ কার্ট খালি!','#dc2626');
-    const code=document.getElementById('couponCode').value.trim();
-    if(!code){localStorage.removeItem('gronthokanon_discount');localStorage.removeItem('gronthokanon_coupon');discountPercent=0;}
+    const inp=document.getElementById('couponCode');
+    const code=inp?inp.value.trim():'';
+    const appliedCoupon=localStorage.getItem('gronthokanon_coupon');
+    if(!code&&!appliedCoupon){localStorage.removeItem('gronthokanon_discount');localStorage.removeItem('gronthokanon_coupon');discountPercent=0;}
     window.location.href='checkout.html';
 }
 
