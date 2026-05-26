@@ -419,12 +419,18 @@
     <div class="sidebar-item" onclick="filterCategory('all',null);toggleSidebar()">🏠 হোম</div>
     <div class="sidebar-item" onclick="toggleSubMenu('catSub')">📚 ক্যাটাগরি <span id="catArrow">▶</span></div>
     <div class="sidebar-sub" id="catSub">
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','বেস্ট সেলিং')">🔥 বেস্ট সেলিং</div>
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','রানিং  ট্রেন্ডিং')">📈 রানিং ট্রেন্ডিং</div>
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','নতুন প্রকাশিত')">✨ নতুন প্রকাশিত</div>
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','জনপ্রিয় লেখক')">✍️ জনপ্রিয় লেখক</div>
-        <div class="sidebar-sub-item" onclick="navigateToFilter('cat','জনপ্রিয় বই')">⭐ জনপ্রিয় বই</div>
-    </div>
+  <div class="sidebar-sub-item" onclick="navigateToFilter('cat','Best Selling');closeDrawer()">🔥 <span>Best Selling</span></div>
+<div class="sidebar-sub-item" onclick="navigateToFilter('cat','Trending');closeDrawer()">📈 <span>Trending</span></div>
+<div class="sidebar-sub-item" onclick="navigateToFilter('cat','নতুন প্রকাশিত');closeDrawer()">✨ <span>নতুন প্রকাশিত</span></div>
+<div class="sidebar-sub-item" onclick="navigateToFilter('cat','Pre Order');closeDrawer()">🛒 <span>Pre Order</span></div>
+<div class="sidebar-sub-item" onclick="navigateToFilter('cat','ইসলামি বই');closeDrawer()">☪️ <span>ইসলামি বই</span></div>
+<div class="sidebar-sub-item" onclick="navigateToFilter('cat','Academic');closeDrawer()">🎓 <span>Academic</span></div>
+<div class="sidebar-sub-item" onclick="navigateToFilter('cat','দরসি কিতাব');closeDrawer()">🕌 <span>দরসি কিতাব</span></div>
+<div class="sidebar-sub-item" onclick="navigateToFilter('cat','সুন্নাহ আইটেম');closeDrawer()">📿 <span>সুন্নাহ আইটেম</span></div>
+<div class="sidebar-sub-item" onclick="navigateToFilter('cat','Stationery');closeDrawer()">🖊️ <span>Stationery</span></div>
+
+
+</div>
     <div id="pubSearchWrap" style="padding:8px 14px;display:none;">
         <input type="text" oninput="filterSidebarList('pubSub',this.value)" placeholder="প্রকাশনী খুঁজুন..." style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
     </div>
@@ -985,22 +991,29 @@
 <div class="cat-drawer" id="catDrawer">
     <div class="drawer-handle"></div>
     <div class="drawer-header"><span>📚 ক্যাটাগরি বেছে নিন</span><span onclick="closeDrawer()" style="cursor:pointer;font-size:22px;color:var(--text2);">×</span></div>
-    <div class="drawer-item" onclick="filterCategory('বেস্ট সেলিং',null);closeDrawer()">🔥 <span>বেস্ট সেলিং</span></div>
-    <div class="drawer-item" onclick="filterCategory('রানিং  ট্রেন্ডিং',null);closeDrawer()">📈 <span>রানিং ট্রেন্ডিং</span></div>
-    <div class="drawer-item" onclick="filterCategory('নতুন প্রকাশিত',null);closeDrawer()">✨ <span>নতুন প্রকাশিত</span></div>
-    <div class="drawer-item" onclick="filterCategory('জনপ্রিয় লেখক',null);closeDrawer()">✍️ <span>জনপ্রিয় লেখক</span></div>
-    <div class="drawer-item" onclick="filterCategory('জনপ্রিয় বই',null);closeDrawer()">⭐ <span>জনপ্রিয় বই</span></div>
+    <div class="drawer-item" onclick="navigateToFilter('cat','Best Selling');closeDrawer()">🔥 <span>Best Selling</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','Trending');closeDrawer()">📈 <span>Trending</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','নতুন প্রকাশিত');closeDrawer()">✨ <span>নতুন প্রকাশিত</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','Pre Order');closeDrawer()">🛒 <span>Pre Order</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','ইসলামি বই');closeDrawer()">☪️ <span>ইসলামি বই</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','Academic');closeDrawer()">🎓 <span>Academic</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','দরসি কিতাব');closeDrawer()">🕌 <span>দরসি কিতাব</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','সুন্নাহ আইটেম');closeDrawer()">📿 <span>সুন্নাহ আইটেম</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','Stationery');closeDrawer()">🖊️ <span>Stationery</span></div>
 </div>
 
 <script src="book.js"></script>
-<script src="main.js"></script>
 <script>
 const categoryConfig = [
-    {key:"বেস্ট সেলিং",label:"🔥 বেস্ট সেলিং"},
-    {key:"রানিং  ট্রেন্ডিং",label:"📈 রানিং ট্রেন্ডিং"},
-    {key:"নতুন প্রকাশিত",label:"✨ নতুন প্রকাশিত"},
-    {key:"জনপ্রিয় লেখক",label:"✍️ জনপ্রিয় লেখক"},
-    {key:"জনপ্রিয় বই",label:"⭐ জনপ্রিয় বই"},
+    {key:"Best Selling",    label:"🔥 Best Selling"},
+    {key:"Trending",        label:"📈 Trending"},
+    {key:"নতুন প্রকাশিত",  label:"✨ নতুন প্রকাশিত"},
+    {key:"Pre Order",       label:"🛒 Pre Order"},
+    {key:"ইসলামি বই",      label:"☪️ ইসলামি বই"},
+    {key:"Academic",        label:"🎓 Academic"},
+    {key:"দরসি কিতাব",     label:"🕌 দরসি কিতাব"},
+    {key:"সুন্নাহ আইটেম",  label:"📿 সুন্নাহ আইটেম"},
+    {key:"Stationery",      label:"🖊️ Stationery"},
 ];
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let discountPercent = 0;
@@ -1472,7 +1485,7 @@ setInterval(()=>{goBannerSlide((curBanner+1)%totalBannerSlides);},3800);
 })();
 </script>
 <!-- ═══════ AUTH MODAL ═══════ -->
-<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closeAuthModal()"
+<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closeAuthModal()">
     <div style="background:var(--card);width:100%;border-radius:24px 24px 0 0;padding:0 0 40px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()">
         <div style="width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 0;"></div>
         <!-- Tabs -->
