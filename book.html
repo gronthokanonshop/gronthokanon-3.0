@@ -226,6 +226,7 @@
         <table class="info-table">
             <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
             <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
+            <tr><td class="info-label">কভার</td><td class="info-val" id="bookCover"></td></tr>
             <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
         </table>
         <div class="delivery-card">
@@ -405,7 +406,7 @@ function loadBook(){
     const idx=parseInt(new URLSearchParams(window.location.search).get('id'));
     if(isNaN(idx)||!books[idx]){window.location.href='index.html';return;}
     curIdx=idx;curBook=books[idx];
-    const b=curBook,stock=parseInt(b.stock||'10'),inStock=stock>0,pct=discPct(b);
+    const b=curBook,pct=discPct(b);
 
     let r=JSON.parse(localStorage.getItem('gronthokanon_recent'))||[];
     r=[idx,...r.filter(i=>i!==idx)].slice(0,8);
@@ -421,7 +422,8 @@ function loadBook(){
     document.getElementById('stickyPrice').innerText='৳ '+b.price;
     document.getElementById('bookPub').innerText=b.pub;
     document.getElementById('bookPages').innerText=b.pages;
-    document.getElementById('bookSubject').innerText=b.subject;
+    document.getElementById('bookCover').innerText=b.cover||'Paperback';
+    document.getElementById('bookSubject').innerText=b.subject||b.cat;
 
     document.getElementById('bookAuthor').onclick=()=>window.location.href=`filter.html?type=author&value=${encodeURIComponent(b.author)}`;
 
@@ -435,17 +437,10 @@ function loadBook(){
     if(pct>0)discEl.innerText=pct+'% ছাড়';else discEl.style.display='none';
 
     const badges=document.getElementById('bookBadges');
-    badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span>`;
-    if(!inStock)badges.innerHTML+=`<span class="badge b-out">❌ স্টক শেষ</span>`;
-    else if(stock<=3)badges.innerHTML+=`<span class="badge b-low">⚠️ মাত্র ${toBN(stock)} কপি!</span>`;
-    else badges.innerHTML+=`<span class="badge b-ok">✅ স্টক আছে</span>`;
+    badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span><span class="badge b-ok">✅ স্টক আছে</span>`;
 
     const today=new Date();today.setDate(today.getDate()+2);
     document.getElementById('deliveryText').innerText=`ঢাকায় ডেলিভারি: ১-২ কার্যদিবস`;
-
-    if(!inStock){
-        ['btnCart','btnBuy','stickyBuy'].forEach(id=>{const el=document.getElementById(id);if(el){el.classList.add('btn-disabled');el.disabled=true;}});
-    }
 
     updateWLUI();
 
