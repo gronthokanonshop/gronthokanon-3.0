@@ -62,13 +62,20 @@
         label{display:block;font-size:12px;font-weight:700;color:var(--label);margin-bottom:6px;letter-spacing:.3px;}
         label .req{color:var(--red);}
         .input-wrap{position:relative;}
-        .input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;}
-        .input-wrap input,.input-wrap select,.input-wrap textarea{padding-left:40px!important;}
+        .input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;z-index:1;}
+        /* input/textarea get left padding for icon */
+        .input-wrap input,.input-wrap textarea{padding-left:40px!important;}
+        /* select: icon shows behind, but select itself stays full-width clickable — NO padding-left override on iOS */
+        .input-wrap select{padding-left:36px;}
         input,select,textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;background:var(--input-bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;transition:border-color .2s,box-shadow .2s;}
         input:focus,select:focus,textarea:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.12);}
         input::placeholder{color:var(--muted);}
         textarea{height:76px;resize:none;}
-      select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;}
+        select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;}
+        /* iPhone Safari: ensure select is always tappable */
+        @supports (-webkit-touch-callout: none){
+            .input-wrap select{-webkit-appearance:menulist-button;padding-left:8px;background-image:none;}
+        }
 
         /* ORDER ITEMS */
         .order-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
@@ -188,7 +195,8 @@
             <div class="total-row red" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>)</span><span>-৳<span id="discountShow">0</span></span></div>
             <div class="total-final"><span>সর্বমোট</span><span id="grandTotal">৳০</span></div>
         </div>
-        <div id="checkoutOfferBanner" style="margin-top:10px;display:none;"></div>
+        <div id="checkoutCouponBadge" style="margin-top:10px;display:none;"></div>
+        <div id="checkoutOfferBanner" style="margin-top:6px;display:none;"></div>
     </div>
 
     <!-- SHIPPING -->
@@ -335,6 +343,25 @@ function updateTotal(){
     else dr.style.display='none';
     document.getElementById('grandTotal').innerText='৳'+total;
     document.getElementById('bkashAmt').innerText='৳'+total;
+    /* coupon badge */
+    const ccb=document.getElementById('checkoutCouponBadge');
+    if(ccb){
+        if(coupon){
+            let desc='';
+            if(coupon==='FIRSTORDER') desc=discPct+'% ডিসকাউন্ট পাচ্ছেন';
+            else if(coupon==='EID26') desc='পরিমাণ অনুযায়ী অফার আনলক';
+            ccb.style.display='block';
+            ccb.innerHTML=`<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1.5px solid rgba(5,150,105,0.3);border-radius:8px;padding:8px 11px;">
+                <span style="font-size:16px;">🏷️</span>
+                <div>
+                    <div style="font-size:12px;font-weight:800;color:#059669;letter-spacing:0.5px;">${coupon} <span style="background:#059669;color:white;font-size:9px;padding:1px 7px;border-radius:10px;">সক্রিয়</span></div>
+                    <div style="font-size:10px;color:var(--muted);">${desc}</div>
+                </div>
+            </div>`;
+        } else {
+            ccb.style.display='none';ccb.innerHTML='';
+        }
+    }
     /* offer banner */
     const unlocked=getUnlockedOffers(sub);
     const offerEl=document.getElementById('checkoutOfferBanner');
@@ -451,7 +478,10 @@ async function confirmOrder(){
     /* ── Google Sheet (পুরনো) ── */
     try{await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,address:fullAddr,books:bookList,payment:payMethod+(txId?` (TxID: ${txId})`:''),delivery:'৳'+delivCharge,total})});}catch(e){}
 
-    localStorage.removeItem('gronthokanon_cart');localStorage.removeItem('gronthokanon_discount');localStorage.removeItem('gronthokanon_coupon');
+    localStorage.removeItem('gronthokanon_cart');
+    localStorage.removeItem('gronthokanon_discount');
+    localStorage.removeItem('gronthokanon_coupon');
+    localStorage.removeItem('gronthokanon_delivery_eid');
     document.getElementById('successInfo').innerHTML=`
         <div style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:12px;text-align:left;">
             <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">অর্ডার আইডি</div>
@@ -544,9 +574,15 @@ function buildInvoiceHTML(o){
                 </div>
             </div>
         </div>
-        <div style="margin:16px 28px;background:#f0fdf4;border:1.5px solid #a7f3d0;border-radius:10px;padding:14px 18px;">
-            <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Payment Method</div>
-            <div style="font-size:14px;font-weight:700;">${o.payment}</div>
+        <div style="margin:16px 28px;display:flex;gap:0;background:#f0fdf4;border:1.5px solid #a7f3d0;border-radius:10px;overflow:hidden;">
+            <div style="flex:1;padding:14px 18px;${o.coupon?'border-right:1.5px solid #a7f3d0;':''}">
+                <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Payment Method</div>
+                <div style="font-size:14px;font-weight:700;">${o.payment}</div>
+            </div>
+            ${o.coupon?`<div style="flex:1;padding:14px 18px;">
+                <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Coupon Applied</div>
+                <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;">🏷️ ${o.coupon}</div>
+            </div>`:''}
         </div>
         ${o.offers&&o.offers.length?`
         <div style="margin:0 28px 16px;background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1.5px solid #fde68a;border-radius:10px;padding:14px 18px;">
