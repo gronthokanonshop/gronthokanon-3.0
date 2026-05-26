@@ -396,6 +396,7 @@ function updateDistricts(){
     if(div&&locationData[div])Object.keys(locationData[div]).forEach(d=>{dOpts+=`<option value="${d}">${d}</option>`;});
     ds.innerHTML=dOpts;
     ts.innerHTML='<option value="">থানা বেছে নিন</option>';
+    ds.dispatchEvent(new Event('change'));
     delivCharge=60;updateTotal();
 }
 function updateThanas(){
@@ -406,8 +407,10 @@ function updateThanas(){
     if(div&&dist&&locationData[div]&&locationData[div][dist])locationData[div][dist].forEach(t=>{tOpts+=`<option value="${t}">${t}</option>`;});
     ts.innerHTML=tOpts;
     const sub=getSubtotal();
-    const eid26=localStorage.getItem('gronthokanon_delivery_eid')==='26'||coupon==='EID26';
-    if(eid26&&sub>=1499) delivCharge=26;
+    const couponActive=localStorage.getItem('gronthokanon_coupon')==='EID26';
+    const eid26Flag=localStorage.getItem('gronthokanon_delivery_eid')==='26';
+    const eid26=(couponActive||eid26Flag)&&sub>=1499;
+    if(eid26) delivCharge=26;
     else delivCharge=dist==='ঢাকা'?60:90;
     updateTotal();
 }
