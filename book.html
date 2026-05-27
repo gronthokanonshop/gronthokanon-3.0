@@ -292,6 +292,8 @@
 </div>
 
 <script src="book.js"></script>
+<script src="img.js"></script>
+<script src="desc.js"></script>
 <script src="main.js"></script>
 <script>
 let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
@@ -394,8 +396,9 @@ function loadRecent(){
     document.getElementById('recentSection').style.display='block';
     document.getElementById('recentBooks').innerHTML=r.map(ri=>{
         const rb=books[ri];if(!rb)return '';
+        const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';
         return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'">
-            <img src="${rb.img}" alt="${rb.name}" loading="lazy">
+            <img src="${rImg}" alt="${rb.name}" loading="lazy">
             <div class="rel-name">${rb.name}</div>
             <div class="rel-price">৳ ${rb.price}</div></div>`;
     }).join('');
@@ -415,7 +418,8 @@ function loadBook(){
     document.title=b.name+' — গ্রন্থকানন';
     document.getElementById('imgSkel').style.display='block';
     document.getElementById('bookImg').style.display='none';
-    document.getElementById('bookImg').src=b.img;
+    const bookImg = (typeof bookImgs!=='undefined' && bookImgs[b.name]) || b.img || '';
+    document.getElementById('bookImg').src=bookImg;
     document.getElementById('bookTitle').innerText=b.name;
     document.getElementById('bookAuthor').innerText='✍️ '+b.author;
     document.getElementById('bookPrice').innerText='৳ '+b.price;
@@ -427,7 +431,7 @@ function loadBook(){
 
     document.getElementById('bookAuthor').onclick=()=>window.location.href=`filter.html?type=author&value=${encodeURIComponent(b.author)}`;
 
-    const desc=b.desc||'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
+    const desc=(typeof bookDescs!=='undefined' && bookDescs[b.name] && bookDescs[b.name]!=='শীঘ্রই আপডেট করা হবে' ? bookDescs[b.name] : null) || b.desc || 'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
     const descEl=document.getElementById('bookDesc');descEl.innerText=desc;
     if(desc.length>200){descEl.style.maxHeight='80px';descEl.style.overflow='hidden';document.getElementById('descToggle').style.display='inline-block';}
 
@@ -446,7 +450,7 @@ function loadBook(){
 
     const related=books.filter((rb,i)=>rb.author===b.author&&i!==idx).slice(0,8);
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
-    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'"><img src="${rb.img}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
+    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'"><img src="${rImg}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
 
     loadRecent();updateCartCount();
 }
@@ -484,10 +488,11 @@ window.onload = function() {
 <script>
 function openWLModal(added){
     const b = curBook;
+    const bImg = (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
     const inner = document.getElementById('wlModalInner');
     inner.innerHTML = `
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
-            <img src="${b.img}" style="width:64px;height:86px;object-fit:cover;border-radius:10px;border:1px solid var(--border);flex-shrink:0;">
+            <img src="${bImg}" style="width:64px;height:86px;object-fit:cover;border-radius:10px;border:1px solid var(--border);flex-shrink:0;">
             <div>
                 <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${b.name}</div>
                 <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${b.author}</div>
