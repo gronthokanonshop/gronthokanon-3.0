@@ -129,6 +129,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script>
+function escapeHTML(str){
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 const STATUSES=[
     {key:'pending',   icon:'🕐', label:'অর্ডার গৃহীত',      sub:'আপনার অর্ডারটি আমরা পেয়েছি'},
     {key:'confirmed', icon:'✅', label:'অর্ডার কনফার্ম',     sub:'অর্ডার নিশ্চিত করা হয়েছে'},
@@ -162,7 +165,7 @@ async function searchOrder(){
 
 async function searchByPhone(){
     const phone=document.getElementById('phoneInput').value.trim();
-    if(!phone){showToast('মোবাইল নম্বর লিখুন','#dc2626');return;}
+if(!phone||!/^01[3-9]\d{8}$/.test(phone)){showToast('⚠️ সঠিক মোবাইল নম্বর দিন!','#dc2626');return;}
     document.getElementById('phoneError').style.display='none';
     document.getElementById('myOrdersList').innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">খোঁজা হচ্ছে...</div>';
     try{
@@ -211,15 +214,15 @@ function viewOrder(id){
 function renderOrder(o){
     document.getElementById('orderIdBadge').innerText=o.orderId;
     const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${o.coupon||''})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
-    document.getElementById('orderInfoRows').innerHTML=`
-        <div class="order-info-row"><span>নাম</span><span>${o.name}</span></div>
-        <div class="order-info-row"><span>ফোন</span><span>${o.phone}</span></div>
-        <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${o.address}</span></div>
-        <div class="order-info-row"><span>পেমেন্ট</span><span>${o.payment}</span></div>
-        <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${o.books}</span></div>
-        ${discRow}
-        <div class="order-info-row"><span>মোট</span><span style="color:#059669;font-size:15px;">${o.total}</span></div>
-    `;
+   document.getElementById('orderInfoRows').innerHTML=`
+    <div class="order-info-row"><span>নাম</span><span>${escapeHTML(o.name)}</span></div>
+    <div class="order-info-row"><span>ফোন</span><span>${escapeHTML(o.phone)}</span></div>
+    <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address)}</span></div>
+    <div class="order-info-row"><span>পেমেন্ট</span><span>${escapeHTML(o.payment)}</span></div>
+    <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.books)}</span></div>
+    ${discRow}
+    <div class="order-info-row"><span>মোট</span><span style="color:#059669;font-size:15px;">${escapeHTML(o.total)}</span></div>
+`;
     const curIdx=STATUSES.findIndex(s=>s.key===o.status);
     let html='';
     STATUSES.forEach((s,i)=>{
