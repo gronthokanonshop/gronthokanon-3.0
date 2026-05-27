@@ -221,6 +221,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script>
+function escapeHTML(str){
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 const ADMIN_EMAIL='gronthokanon4309@gmail.com'; // ← আপনার admin email দিন
 let allOrders=[];
 let curFilter='all';
@@ -258,11 +261,13 @@ function showDashboard(){
 function loadOrders(){
     const el=document.getElementById('orderList');
     el.innerHTML='<div class="loading-spin">⏳ লোড হচ্ছে...</div>';
-    // orderByChild('createdAt') requires index — use limitToLast for reliability
+    db.ref('orders').off(); // আগের সব listener সরাও
     db.ref('orders').on('value', snap => {
         allOrders = [];
-        snap.forEach(child => allOrders.push(child.val()));
-        // Sort by createdAt descending (newest first)
+        snap.forEach(child => {
+            const val = child.val();
+            if(val && val.orderId) allOrders.push(val);
+        });
         allOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
         updateStats();
         renderOrders();
@@ -270,7 +275,6 @@ function loadOrders(){
         el.innerHTML = `<div class="empty-admin">❌ লোড ব্যর্থ: ${err.message}</div>`;
     });
 }
-
 function updateStats(){
     document.getElementById('statTotal').innerText=allOrders.length;
     document.getElementById('statPending').innerText=allOrders.filter(o=>o.status==='pending').length;
@@ -297,15 +301,14 @@ function renderOrders(){
                 </div>
                 <span class="status-badge ${STATUS_CLASS[o.status]||'badge-pending'}">${STATUS_LABELS[o.status]||o.status}</span>
             </div>
-            <div class="order-detail">
-                <strong>${o.name}</strong> · ${o.phone}<br>
-                📍 ${o.address}<br>
-                📚 ${o.books}<br>
-                💳 ${o.payment} · 💰 <strong>${o.total}</strong>
-            </div>
-        </div>
-    `).join('');
-}
+           <div class="order-detail">
+    <strong>${o.name}</strong> · ${o.phone}<br>
+    📍 ${o.address}<br>
+    📚 ${o.books}<br>
+    💳 ${o.payment} · 💰 <strong>${o.total}</strong>
+    ${o.coupon?`<br>🏷️ কুপন: <strong>${o.coupon}</strong> · ছাড়: ৳${o.discount}`:''}
+    ${o.offers&&o.offers.length?`<br>🎁 <strong>${o.offers.map(of=>of.label).join(', ')}</strong>`:''}
+</div>
 
 let modalOrderId=null;
 
@@ -360,13 +363,13 @@ async function updateStatusFromModal(){
 }
 
 async function adminLogout(){
+    db.ref('orders').off();
     await auth.signOut();
     document.getElementById('dashboard').style.display='none';
     document.getElementById('loginGate').style.display='flex';
     document.getElementById('logoutBtn').style.display='none';
     allOrders=[];
 }
-
 function showToast(msg,color){
     const t=document.createElement('div');
     t.style.cssText=`position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:${color||'#059669'};color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;`;
