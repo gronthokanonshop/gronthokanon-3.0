@@ -1003,6 +1003,7 @@
 </div>
 
 <script src="book.js"></script>
+<script src="img.js"></script>
 <script>
 const categoryConfig = [
     {key:"Best Selling",    label:"🔥 Best Selling"},
@@ -1048,7 +1049,7 @@ function handleSearch(){
     body.innerHTML=`<div class="search-count show">🔍 "${document.getElementById('searchInput').value}" — ${found.length}টি বই</div>`+found.map(b=>{
         const idx=books.indexOf(b),pct=discPct(b);
         return `<div class="search-item" onclick="closeSearch();goToBook(${idx})">
-            <img src="${b.img}" class="search-item-img" alt="">
+            <img src="${getImg(b)}" class="search-item-img" alt="">
             <div style="flex:1;min-width:0;">
                 <div class="si-name">${b.name}</div>
                 <div class="si-author">✍️ ${b.author}</div>
@@ -1061,6 +1062,7 @@ window.addEventListener('popstate',()=>{if(document.getElementById('searchScreen
 
 /* HELPERS */
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
+function getImg(b){return (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';}
 function isWL(name){return wishlist.includes(name);}
 function toggleWL(e,name){
     e.stopPropagation();
@@ -1078,13 +1080,13 @@ function makeCard(b){
     return `<div class="book-card" onclick="goToBook(${idx})">
         ${pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:''}
         <button class="wl-btn ${wl?'active':''}" onclick="toggleWL(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'❤️':'🤍'}</button>
-        <img src="${b.img}" alt="বই" loading="lazy">
+        <img src="${getImg(b)}" alt="বই" loading="lazy">
         <div class="book-card-info">
             <div class="bc-pub">🏢 ${b.pub}</div>
             <div class="bc-name">${b.name}</div>
             <div class="bc-author">${b.author}</div>
             <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-            <button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${b.img}')">কার্টে যোগ করুন</button>
+            <button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>
         </div></div>`;
 }
 function goToBook(idx){
@@ -1142,7 +1144,7 @@ function showWishlist(){
     if(!wishlist.length){box.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';}
     else{box.innerHTML=wishlist.map(name=>{const b=books.find(bk=>bk.name===name);if(!b)return '';const idx=books.indexOf(b);
         return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="goToBook(${idx})">
-            <img src="${b.img}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">
+            <img src="${getImg(b)}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">
             <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${b.name}</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳${b.price}</div></div>
             <button onclick="event.stopPropagation();toggleWL(event,'${b.name.replace(/'/g,"\\'")}')" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button>
         </div>`;
