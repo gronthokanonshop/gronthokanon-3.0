@@ -175,6 +175,7 @@
 </a>
 
 <script src="book.js"></script>
+<script src="img.js"></script>
 <script src="main.js"></script>
 <script>
 let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
@@ -185,6 +186,7 @@ function updateCounts(){const c=cart.length;document.getElementById('cartCount')
 updateCounts();
 
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
+function getImg(b){return (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';}
 function isWL(name){return wishlist.includes(name);}
 function toggleWL(e,name){
     e.stopPropagation();
@@ -198,13 +200,13 @@ function makeCard(b,delay){
     return `<div class="book-card" onclick="goToBook(${idx})" style="animation-delay:${delay*0.04}s">
         ${pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:''}
         <button class="wl-btn ${wl?'active':''}" onclick="toggleWL(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'❤️':'🤍'}</button>
-        <img src="${b.img}" alt="বই" loading="lazy">
+        <img src="${getImg(b)}" alt="বই" loading="lazy">
         <div class="bc-info">
             <div class="bc-pub">🏢 ${b.pub}</div>
             <div class="bc-name">${b.name}</div>
             <div class="bc-author">✍️ ${b.author}</div>
             <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-            <button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${b.img}')">কার্টে যোগ করুন</button>
+            <button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>
         </div></div>`;
 }
 
