@@ -1,2 +1,2 @@
 User-agent: *
-Disallow: /admin.html
+Disallow: /admin-gk09x43.html
