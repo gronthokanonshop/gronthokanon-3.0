@@ -1292,7 +1292,7 @@ function updateCartUI(){
 }
 function changeQty(name,delta){
     if(delta===1){const item=cart.find(i=>i.name===name);if(item)cart.push({...item});}
-    else{const i=cart.findLastIndex(i=>i.name===name);if(i!==-1)cart.splice(i,1);}
+    else{let i=-1;for(let j=cart.length-1;j>=0;j--){if(cart[j].name===name){i=j;break;}}if(i!==-1)cart.splice(i,1);}
     saveCart();updateCartUI();
 }
 function renderCouponSection(){
