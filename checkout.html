@@ -272,7 +272,7 @@
                 <div class="bstep"><div class="bstep-num">৩</div><div>Transaction ID নিচে লিখুন</div></div>
             </div>
             <div class="bkash-num" onclick="copyBkash()">
-                01408786396
+                <script>document.write(BKASH_NUMBER)</script>
                 <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
             </div>
             <input type="text" id="transactionId" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
@@ -302,6 +302,7 @@
 </a>
 
 <script>
+const BKASH_NUMBER='01408786396';
 const SHEET_URL='https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
 let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
 let discPct=parseInt(localStorage.getItem('gronthokanon_discount')||'0');
@@ -421,7 +422,7 @@ function selectPay(el,type){
     el.classList.add('selected');el.querySelector('input[type="radio"]').checked=true;
     document.getElementById('bkashBox').style.display=type==='bkash'?'block':'none';
 }
-function copyBkash(){navigator.clipboard.writeText('01408786396').then(()=>showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(()=>showToast('01408786396','#059669'));}
+function copyBkash(){navigator.clipboard.writeText(BKASH_NUMBER).then(()=>showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(()=>showToast('01408786396','#059669'));}
 
 /* CONFIRM */
 async function confirmOrder(){
@@ -438,8 +439,12 @@ async function confirmOrder(){
     if(!district)return showToast('⚠️ জেলা নির্বাচন করুন!');
     if(!thana)return showToast('⚠️ থানা নির্বাচন করুন!');
     if(!address)return showToast('⚠️ ঠিকানা লিখুন!');
+    if(coupon==='FIRSTORDER'){
+    const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone).get();
+    if(used.exists())return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626');
+}
     let txId='';
-    if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId)return showToast('⚠️ Transaction ID লিখুন!');if(!/^[A-Z0-9]{8,12}$/.test(txId))return showToast('⚠️ সঠিক Transaction ID দিন!');}
+    if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId)return showToast('⚠️ Transaction ID লিখুন!');if(!/^[A-Z0-9]{10}$/.test(txId))return showToast('⚠️ সঠিক Transaction ID দিন! (১০ সংখ্যা)');}
     const btn=document.getElementById('confirmBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
     const g={};cart.forEach(i=>{g[i.name]=(g[i.name]||0)+1;});
     const bookList=Object.entries(g).map(([k,v])=>`${k} (${v}টি)`).join(', ');
@@ -470,6 +475,9 @@ async function confirmOrder(){
     try{
         await firebase.database().ref('orders/'+orderId).set(orderData);
         localStorage.setItem('gronthokanon_lastorder',orderId);
+        if(coupon==='FIRSTORDER'){
+    await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone).set(true);
+}
         lastOrderData=orderData;
     }catch(e){
         console.log('Firebase error:',e);
