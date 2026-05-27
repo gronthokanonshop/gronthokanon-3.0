@@ -275,6 +275,7 @@ function loadOrders(){
         el.innerHTML = `<div class="empty-admin">❌ লোড ব্যর্থ: ${err.message}</div>`;
     });
 }
+
 function updateStats(){
     document.getElementById('statTotal').innerText=allOrders.length;
     document.getElementById('statPending').innerText=allOrders.filter(o=>o.status==='pending').length;
@@ -301,14 +302,17 @@ function renderOrders(){
                 </div>
                 <span class="status-badge ${STATUS_CLASS[o.status]||'badge-pending'}">${STATUS_LABELS[o.status]||o.status}</span>
             </div>
-           <div class="order-detail">
-    <strong>${o.name}</strong> · ${o.phone}<br>
-    📍 ${o.address}<br>
-    📚 ${o.books}<br>
-    💳 ${o.payment} · 💰 <strong>${o.total}</strong>
-    ${o.coupon?`<br>🏷️ কুপন: <strong>${o.coupon}</strong> · ছাড়: ৳${o.discount}`:''}
-    ${o.offers&&o.offers.length?`<br>🎁 <strong>${o.offers.map(of=>of.label).join(', ')}</strong>`:''}
-</div>
+            <div class="order-detail">
+                <strong>${o.name}</strong> · ${o.phone}<br>
+                📍 ${o.address}<br>
+                📚 ${o.books}<br>
+                💳 ${o.payment} · 💰 <strong>${o.total}</strong>
+                ${o.coupon?`<br>🏷️ কুপন: <strong>${o.coupon}</strong> · ছাড়: ৳${o.discount}`:''}
+                ${o.offers&&o.offers.length?`<br>🎁 <strong>${o.offers.map(of=>of.label).join(', ')}</strong>`:''}
+            </div>
+        </div>
+    `).join('');
+}
 
 let modalOrderId=null;
 
@@ -370,6 +374,7 @@ async function adminLogout(){
     document.getElementById('logoutBtn').style.display='none';
     allOrders=[];
 }
+
 function showToast(msg,color){
     const t=document.createElement('div');
     t.style.cssText=`position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:${color||'#059669'};color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;`;
