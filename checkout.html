@@ -272,8 +272,7 @@
                 <div class="bstep"><div class="bstep-num">৩</div><div>Transaction ID নিচে লিখুন</div></div>
             </div>
             <div class="bkash-num" onclick="copyBkash()">
-              <span id="bkashNumDisplay"></span>
-<script>document.getElementById('bkashNumDisplay').textContent = BKASH_NUMBER;</script>
+            <span id="bkashNumDisplay">01408786396</span>
                 <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
             </div>
             <input type="text" id="transactionId" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
@@ -456,7 +455,7 @@ localStorage.setItem('gk_last_submit', Date.now().toString());
     if(!thana)return showToast('⚠️ থানা নির্বাচন করুন!');
     if(!address)return showToast('⚠️ ঠিকানা লিখুন!');
     if(coupon==='FIRSTORDER'){
-    const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone).get();
+  const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g, '_')).get();
     if(used.exists())return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626');
 }
     let txId='';
@@ -492,7 +491,7 @@ localStorage.setItem('gk_last_submit', Date.now().toString());
         await firebase.database().ref('orders/'+orderId).set(orderData);
         localStorage.setItem('gronthokanon_lastorder',orderId);
         if(coupon==='FIRSTORDER'){
-    await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone).set(true);
+   await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g, '_')).set(true);
 }
         lastOrderData=orderData;
     }catch(e){
