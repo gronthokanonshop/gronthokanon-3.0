@@ -321,6 +321,7 @@ function getUnlockedOffers(sub){
 }
 
 /* DARK */
+
 (function(){const s=localStorage.getItem('gronthokanon_theme');if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.addEventListener('DOMContentLoaded',()=>{document.getElementById('darkBtn').textContent='☀️';});}})();
 
 /* TOAST */
@@ -423,154 +424,90 @@ function selectPay(el,type){
 }
 function copyBkash(){navigator.clipboard.writeText(BKASH_NUMBER).then(()=>showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(()=>showToast('01408786396','#059669'));}
 
-/* ═══ CONFIRM ORDER (FIXED) ═══ */
+/* CONFIRM */
 async function confirmOrder(){
-    const btn = document.getElementById('confirmBtn');
-
-    // ── Fix 2: books load হয়েছে কিনা check ──
-    if(typeof books === 'undefined' || !books || !books.length){
-        showToast('⚠️ পেজ একটু লোড হচ্ছে, আবার চেষ্টা করুন!', '#dc2626');
-        return;
-    }
-
-    // ── Form values ──
-    const name = document.getElementById('custName').value.trim();
-    const phone = document.getElementById('custPhone').value.trim();
-    const division = document.getElementById('division').value;
-    const district = document.getElementById('district').value;
-    const thana = document.getElementById('thana').value;
-    const address = document.getElementById('custAddress').value.trim();
-    const payMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
-
-    // ── Validation আগে ──
-    if(!name) return showToast('⚠️ নাম লিখুন!');
-    if(!phone || !/^01[3-9]\d{8}$/.test(phone)) return showToast('⚠️ সঠিক বাংলাদেশি নম্বর দিন! (যেমন: 01XXXXXXXXX)');
-    if(!division) return showToast('⚠️ বিভাগ নির্বাচন করুন!');
-    if(!district) return showToast('⚠️ জেলা নির্বাচন করুন!');
-    if(!thana) return showToast('⚠️ থানা নির্বাচন করুন!');
-    if(!address) return showToast('⚠️ ঠিকানা লিখুন!');
-
-    // ── Price Verification ──
+const lastSubmit = parseInt(localStorage.getItem('gk_last_submit') || '0');
+if (Date.now() - lastSubmit < 60000) {
+    showToast('⚠️ একটু অপেক্ষা করুন, তারপর আবার চেষ্টা করুন।', '#dc2626');
+    return;
+}
+localStorage.setItem('gk_last_submit', Date.now().toString());
+    // ══ Price Verification ══
     const valid = cart.every(item => {
         const book = books.find(b => b.name === item.name);
         return book && book.price === item.price;
     });
-    if(!valid){
+    if (!valid) {
         showToast('❌ কার্টে সমস্যা হয়েছে। পেজ রিফ্রেশ করুন।', '#dc2626');
         return;
     }
+    const name=document.getElementById('custName').value.trim();
+    const phone=document.getElementById('custPhone').value.trim();
+    const division=document.getElementById('division').value;
+    const district=document.getElementById('district').value;
+    const thana=document.getElementById('thana').value;
+    const address=document.getElementById('custAddress').value.trim();
+    const payMethod=document.querySelector('input[name="payment"]:checked')?.value||'Cash on Delivery';
+    if(!name)return showToast('⚠️ নাম লিখুন!');
+    if(!phone||!/^01[3-9]\d{8}$/.test(phone))return showToast('⚠️ সঠিক বাংলাদেশি নম্বর দিন! (যেমন: 01XXXXXXXXX)');
+    if(!division)return showToast('⚠️ বিভাগ নির্বাচন করুন!');
+    if(!district)return showToast('⚠️ জেলা নির্বাচন করুন!');
+    if(!thana)return showToast('⚠️ থানা নির্বাচন করুন!');
+    if(!address)return showToast('⚠️ ঠিকানা লিখুন!');
+    if(coupon==='FIRSTORDER'){
+  const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g, '_')).get();
+    if(used.exists())return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626');
+}
+    let txId='';
+    if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId)return showToast('⚠️ Transaction ID লিখুন!');if(!/^[A-Z0-9]{8,12}$/.test(txId))return showToast('⚠️ সঠিক Transaction ID দিন!');}
+    const btn=document.getElementById('confirmBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
+    const g={};cart.forEach(i=>{g[i.name]=(g[i.name]||0)+1;});
+    const bookList=Object.entries(g).map(([k,v])=>`${k} (${v}টি)`).join(', ');
+    const total=document.getElementById('grandTotal').innerText;
+    const fullAddr=`${thana}, ${district}, ${division} — ${address}`;
 
-    // ── bKash Transaction ID ──
-    let txId = '';
-    if(payMethod === 'bKash'){
-        txId = document.getElementById('transactionId').value.trim().toUpperCase();
-        if(!txId) return showToast('⚠️ Transaction ID লিখুন!');
-        if(!/^[A-Z0-9]{8,12}$/.test(txId)) return showToast('⚠️ সঠিক Transaction ID দিন!');
-    }
-
-    // ── FIRSTORDER coupon check ──
-    if(coupon === 'FIRSTORDER'){
-        const used = await firebase.database()
-            .ref('usedCoupons/FIRSTORDER/' + phone.replace(/\+/g, '_'))
-            .get();
-        if(used.exists()) return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!', '#dc2626');
-    }
-
-    // ── Fix 1: Phone based duplicate check (Firebase) ──
-    const phoneKey = phone.replace(/\D/g, '');
-    try {
-        const recentCheck = await firebase.database()
-            .ref('recentOrders/' + phoneKey)
-            .get();
-        if(recentCheck.exists()){
-            const lastTime = recentCheck.val();
-            if(Date.now() - lastTime < 120000){
-                showToast('⚠️ এই নম্বর থেকে সম্প্রতি অর্ডার হয়েছে! ২ মিনিট পর চেষ্টা করুন।', '#dc2626');
-                return;
-            }
-        }
-    } catch(e){
-        console.log('Recent check error:', e);
-        // check fail হলেও order continue করতে দিন
-    }
-
-    // ── সব ঠিক, এখন submit ──
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
-
-    const g = {};
-    cart.forEach(i => { g[i.name] = (g[i.name] || 0) + 1; });
-    const bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
-    const total = document.getElementById('grandTotal').innerText;
-    const fullAddr = `${thana}, ${district}, ${division} — ${address}`;
-
-    const orderId = 'GK-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
-    const sub = getSubtotal();
-    const discountAmt = Math.round(sub * discPct / 100);
-    const unlockedOffers = getUnlockedOffers(sub);
-
-    const orderData = {
-        orderId, name, phone,
-        address: fullAddr,
-        items: cart,
-        books: bookList,
-        payment: payMethod + (txId ? ` (TxID: ${txId})` : ''),
-        delivery: '৳' + delivCharge,
+    /* ── Firebase এ order save করো ── */
+    const orderId='GK-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase();
+    const sub=getSubtotal();
+    const discountAmt=Math.round(sub*discPct/100);
+    const unlockedOffers=getUnlockedOffers(sub);
+    const orderData={
+        orderId,name,phone,
+        address:fullAddr,
+        items:cart,
+        books:bookList,
+        payment:payMethod+(txId?` (TxID: ${txId})`:''),
+        delivery:'৳'+delivCharge,
         total,
-        discount: discountAmt,
-        discountPct: discPct,
-        coupon: coupon,
-        offers: unlockedOffers,
-        status: 'pending',
-        createdAt: Date.now(),
-        userId: firebase.auth().currentUser?.uid || 'guest'
+        discount:discountAmt,
+        discountPct:discPct,
+        coupon:coupon,
+        offers:unlockedOffers,
+        status:'pending',
+        createdAt:Date.now(),
+        userId:firebase.auth().currentUser?.uid||'guest'
     };
-
-    try {
-        await firebase.database().ref('orders/' + orderId).set(orderData);
-        localStorage.setItem('gronthokanon_lastorder', orderId);
-
-        // ── FIRSTORDER coupon mark as used ──
-        if(coupon === 'FIRSTORDER'){
-            await firebase.database()
-                .ref('usedCoupons/FIRSTORDER/' + phone.replace(/\+/g, '_'))
-                .set(true);
-        }
-
-        // ── Fix 1: Firebase এ phone timestamp save ──
-        await firebase.database()
-            .ref('recentOrders/' + phoneKey)
-            .set(Date.now());
-
-        // ── localStorage timer (validation এর পরে) ──
-        localStorage.setItem('gk_last_submit', Date.now().toString());
-
-        lastOrderData = orderData;
-
-    } catch(e){
-        console.log('Firebase error:', e);
-        btn.disabled = false;
-        btn.innerHTML = '✅ অর্ডার কনফার্ম করুন';
-        showToast('❌ অর্ডার সেভ হয়নি! ইন্টারনেট চেক করে আবার চেষ্টা করুন।', '#dc2626');
+    try{
+        await firebase.database().ref('orders/'+orderId).set(orderData);
+        localStorage.setItem('gronthokanon_lastorder',orderId);
+        if(coupon==='FIRSTORDER'){
+   await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g, '_')).set(true);
+}
+        lastOrderData=orderData;
+    }catch(e){
+        console.log('Firebase error:',e);
+        btn.disabled=false;btn.innerHTML='✅ অর্ডার কনফার্ম করুন';
+        showToast('❌ অর্ডার সেভ হয়নি! ইন্টারনেট চেক করে আবার চেষ্টা করুন।','#dc2626');
         return;
     }
 
-    // ── Google Sheet ──
-    try {
-        await fetch(SHEET_URL, {
-            method: 'POST', mode: 'no-cors',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({name, phone, address: fullAddr, books: bookList, payment: payMethod+(txId?` (TxID: ${txId})`:''), delivery:'৳'+delivCharge, total})
-        });
-    } catch(e){}
+    /* ── Google Sheet (পুরনো) ── */
+    try{await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,address:fullAddr,books:bookList,payment:payMethod+(txId?` (TxID: ${txId})`:''),delivery:'৳'+delivCharge,total})});}catch(e){}
 
-    // ── Cart clear ──
     localStorage.removeItem('gronthokanon_cart');
     localStorage.removeItem('gronthokanon_discount');
     localStorage.removeItem('gronthokanon_coupon');
     localStorage.removeItem('gronthokanon_delivery_eid');
-
-    // ── Success Modal ──
     document.getElementById('successInfo').innerHTML=`
         <div style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:12px;text-align:left;">
             <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">অর্ডার আইডি</div>
@@ -579,9 +516,7 @@ async function confirmOrder(){
         👤 <strong>${name}</strong><br>📱 ${phone}<br>📍 ${fullAddr}<br>💳 ${payMethod}${txId?` (TxID: ${txId})`:''}<br>📦 ${bookList}<br>💰 <strong style="color:var(--green);">${total}</strong>
         <br><br><button onclick="window.location.href='track.html?id=${orderId}'" style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;">📦 অর্ডার ট্র্যাক করুন</button>
     `;
-
-    btn.disabled = false;
-    btn.innerHTML = '✅ অর্ডার কনফার্ম করুন';
+    btn.disabled=false;btn.innerHTML='✅ অর্ডার কনফার্ম করুন';
     document.getElementById('successModal').classList.add('show');
 }
 
@@ -707,7 +642,6 @@ async function downloadInvoice(){
     }catch(e){showToast('❌ PDF তৈরি হয়নি','#dc2626');console.error(e);}
     document.body.removeChild(wrap);
 }
-
 window.onload=renderSummary;
 </script>
 <!-- html2canvas + jsPDF -->
