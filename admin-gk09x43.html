@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel — গ্রন্থকানন</title>
     <meta name="theme-color" content="#ffffff">
+    <meta name="robots" content="noindex, nofollow">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
@@ -48,6 +49,13 @@
         .order-detail{font-size:12px;color:var(--text2);line-height:1.8;}
         .order-detail strong{color:var(--text);}
         .status-select{width:100%;margin-top:10px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;outline:none;cursor:pointer;}
+
+        /* Book Management */
+        .book-manage-item{background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow);display:flex;justify-content:space-between;align-items:center;}
+        .book-manage-name{font-size:13px;font-weight:700;color:var(--text);flex:1;margin-right:10px;}
+        .stock-toggle{padding:6px 14px;border-radius:20px;border:none;font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+        .stock-on{background:#ecfdf5;color:#059669;border:1.5px solid #a7f3d0;}
+        .stock-off{background:#fef2f2;color:#dc2626;border:1.5px solid #fca5a5;}
 
         /* Empty */
         .empty-admin{text-align:center;padding:40px;color:var(--text2);font-size:14px;}
@@ -209,6 +217,7 @@
             <button class="ftab" onclick="filterOrders('processing',this)">প্যাকেজিং</button>
             <button class="ftab" onclick="filterOrders('shipped',this)">শিপড</button>
             <button class="ftab" onclick="filterOrders('delivered',this)">ডেলিভারড</button>
+            <button class="ftab" onclick="filterOrders('books',this)">📚 বই ম্যানেজ</button>
         </div>
 
         <div id="orderList"><div class="loading-spin">লোড হচ্ছে...</div></div>
@@ -220,13 +229,15 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
+<script src="book.js"></script>
 <script>
 function escapeHTML(str){
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-const ADMIN_EMAIL='gronthokanon4309@gmail.com'; // ← আপনার admin email দিন
+const ADMIN_EMAIL='gronthokanon4309@gmail.com';
 let allOrders=[];
 let curFilter='all';
+let stockData={};
 
 const STATUS_LABELS={
     pending:'পেন্ডিং',confirmed:'কনফার্ম',
@@ -261,7 +272,7 @@ function showDashboard(){
 function loadOrders(){
     const el=document.getElementById('orderList');
     el.innerHTML='<div class="loading-spin">⏳ লোড হচ্ছে...</div>';
-    db.ref('orders').off(); // আগের সব listener সরাও
+    db.ref('orders').off();
     db.ref('orders').on('value', snap => {
         allOrders = [];
         snap.forEach(child => {
@@ -270,7 +281,8 @@ function loadOrders(){
         });
         allOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
         updateStats();
-        renderOrders();
+        if(curFilter==='books') renderBookManage();
+        else renderOrders();
     }, err => {
         el.innerHTML = `<div class="empty-admin">❌ লোড ব্যর্থ: ${err.message}</div>`;
     });
@@ -286,6 +298,7 @@ function filterOrders(f,el){
     curFilter=f;
     document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
     el.classList.add('active');
+    if(f==='books'){renderBookManage();return;}
     renderOrders();
 }
 
@@ -303,15 +316,71 @@ function renderOrders(){
                 <span class="status-badge ${STATUS_CLASS[o.status]||'badge-pending'}">${STATUS_LABELS[o.status]||o.status}</span>
             </div>
             <div class="order-detail">
-                <strong>${o.name}</strong> · ${o.phone}<br>
-                📍 ${o.address}<br>
-                📚 ${o.books}<br>
-                💳 ${o.payment} · 💰 <strong>${o.total}</strong>
-                ${o.coupon?`<br>🏷️ কুপন: <strong>${o.coupon}</strong> · ছাড়: ৳${o.discount}`:''}
-                ${o.offers&&o.offers.length?`<br>🎁 <strong>${o.offers.map(of=>of.label).join(', ')}</strong>`:''}
+                <strong>${escapeHTML(o.name)}</strong> · ${escapeHTML(o.phone)}<br>
+                📍 ${escapeHTML(o.address)}<br>
+                📚 ${escapeHTML(o.books)}<br>
+                💳 ${escapeHTML(o.payment)} · 💰 <strong>${escapeHTML(o.total)}</strong>
+                ${o.coupon?`<br>🏷️ কুপন: <strong>${escapeHTML(o.coupon)}</strong> · ছাড়: ৳${o.discount}`:''}
+                ${o.offers&&o.offers.length?`<br>🎁 <strong>${o.offers.map(of=>escapeHTML(of.label)).join(', ')}</strong>`:''}
             </div>
         </div>
     `).join('');
+}
+
+/* ═══ BOOK MANAGEMENT ═══ */
+function loadStockData(callback){
+    db.ref('stock').once('value').then(snap=>{
+        stockData=snap.val()||{};
+        if(callback)callback();
+    });
+}
+
+function renderBookManage(){
+    const el=document.getElementById('orderList');
+    el.innerHTML='<div class="loading-spin">⏳ বই লোড হচ্ছে...</div>';
+    loadStockData(()=>{
+        if(typeof books==='undefined'||!books.length){
+            el.innerHTML='<div class="empty-admin">বই পাওয়া যায়নি</div>';return;
+        }
+        el.innerHTML=`
+            <div style="margin-bottom:12px;">
+                <input id="bookSearch" placeholder="🔍 বই খুঁজুন..." oninput="filterBookManage()" 
+                style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;box-sizing:border-box;">
+            </div>
+            <div id="bookManageList"></div>
+        `;
+        renderBookList(books);
+    });
+}
+
+function renderBookList(list){
+    const el=document.getElementById('bookManageList');
+    if(!el)return;
+    el.innerHTML=list.map((b,i)=>{
+        const idx=books.indexOf(b);
+        const inStock=stockData[idx]!==false;
+        return `<div class="book-manage-item">
+            <div class="book-manage-name">${escapeHTML(b.name)}</div>
+            <button class="stock-toggle ${inStock?'stock-on':'stock-off'}" onclick="toggleStock(${idx},${inStock})">
+                ${inStock?'✅ স্টক আছে':'❌ স্টক শেষ'}
+            </button>
+        </div>`;
+    }).join('');
+}
+
+function filterBookManage(){
+    const q=document.getElementById('bookSearch').value.toLowerCase().trim();
+    const filtered=q?books.filter(b=>b.name.toLowerCase().includes(q)):books;
+    renderBookList(filtered);
+}
+async function toggleStock(idx,currentState){
+    const newState=!currentState;
+    try{
+        await db.ref('stock/'+idx).set(newState);
+        stockData[idx]=newState;
+        showToast(newState?'✅ স্টক আছে':'❌ স্টক শেষ করা হয়েছে','#059669');
+        renderBookManage();
+    }catch(e){showToast('❌ আপডেট ব্যর্থ','#dc2626');}
 }
 
 let modalOrderId=null;
@@ -331,7 +400,6 @@ function openModal(orderId){
     document.getElementById('modalBooks').innerText=o.books;
     document.getElementById('modalPayment').innerText=o.payment;
     document.getElementById('modalTotal').innerText=o.total;
-    /* Offers */
     const offerSec=document.getElementById('modalOffersSection');
     const offerEl=document.getElementById('modalOffers');
     if(o.offers&&o.offers.length){
@@ -373,6 +441,7 @@ async function adminLogout(){
     document.getElementById('loginGate').style.display='flex';
     document.getElementById('logoutBtn').style.display='none';
     allOrders=[];
+    stockData={};
 }
 
 function showToast(msg,color){
