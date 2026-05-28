@@ -191,7 +191,7 @@ if(!phone||!/^01[3-9]\d{8}$/.test(phone)){showToast('⚠️ সঠিক মো�
 function renderMyOrders(orders){
     const el=document.getElementById('myOrdersList');
     el.innerHTML=orders.map(o=>`
-        <div class="my-order-item" onclick="viewOrder('${o.orderId}')">
+        <div class="my-order-item" data-orderid="${escapeHTML(o.orderId)}" onclick="viewOrder(this.dataset.orderid)">
             <div class="my-order-top">
                 <div class="my-oid">${o.orderId}</div>
                 <span class="my-status" style="${STATUS_COLORS[o.status]||STATUS_COLORS.pending}">${STATUS_LABELS[o.status]||o.status}</span>
@@ -214,10 +214,10 @@ function viewOrder(id){
 function renderOrder(o){
     document.getElementById('orderIdBadge').innerText=o.orderId;
     const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${o.coupon||''})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
-   document.getElementById('orderInfoRows').innerHTML=`
-    <div class="order-info-row"><span>নাম</span><span>${escapeHTML(o.name)}</span></div>
-    <div class="order-info-row"><span>ফোন</span><span>${escapeHTML(o.phone)}</span></div>
-    <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address)}</span></div>
+  document.getElementById('orderInfoRows').innerHTML=`
+    <div class="order-info-row"><span>নাম</span><span>${escapeHTML(o.name[0]+'*'.repeat(o.name.length-2)+o.name[o.name.length-1])}</span></div>
+    <div class="order-info-row"><span>ফোন</span><span>${escapeHTML(o.phone.slice(0,4)+'****'+o.phone.slice(-3))}</span></div>
+    <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address.slice(0,15)+'...')}</span></div>
     <div class="order-info-row"><span>পেমেন্ট</span><span>${escapeHTML(o.payment)}</span></div>
     <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.books)}</span></div>
     ${discRow}
