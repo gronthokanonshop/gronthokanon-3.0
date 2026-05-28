@@ -426,12 +426,6 @@ function copyBkash(){navigator.clipboard.writeText(BKASH_NUMBER).then(()=>showTo
 
 /* CONFIRM */
 async function confirmOrder(){
-const lastSubmit = parseInt(localStorage.getItem('gk_last_submit') || '0');
-if (Date.now() - lastSubmit < 60000) {
-    showToast('⚠️ একটু অপেক্ষা করুন, তারপর আবার চেষ্টা করুন।', '#dc2626');
-    return;
-}
-localStorage.setItem('gk_last_submit', Date.now().toString());
     // ══ Price Verification ══
     const valid = cart.every(item => {
         const book = books.find(b => b.name === item.name);
