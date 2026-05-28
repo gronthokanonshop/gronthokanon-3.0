@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="light">
 <head>
+<link rel="icon" href="logo.png" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>চেকআউট — গ্রন্থকানন</title>
@@ -21,8 +22,7 @@
         .navbar-title{flex:1;font-size:15px;font-weight:700;color:var(--text);}
         .navbar-title span{color:#059669;}
         
-        
-        
+      
         
 
         /* PROGRESS */
@@ -459,7 +459,7 @@ localStorage.setItem('gk_last_submit', Date.now().toString());
     if(used.exists())return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626');
 }
     let txId='';
-    if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId)return showToast('⚠️ Transaction ID লিখুন!');if(!/^[A-Z0-9]{10}$/.test(txId))return showToast('⚠️ সঠিক Transaction ID দিন! (১০ সংখ্যা)');}
+    if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId)return showToast('⚠️ Transaction ID লিখুন!');if(!/^[A-Z0-9]{8,12}$/.test(txId))return showToast('⚠️ সঠিক Transaction ID দিন!');}
     const btn=document.getElementById('confirmBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
     const g={};cart.forEach(i=>{g[i.name]=(g[i.name]||0)+1;});
     const bookList=Object.entries(g).map(([k,v])=>`${k} (${v}টি)`).join(', ');
@@ -467,7 +467,7 @@ localStorage.setItem('gk_last_submit', Date.now().toString());
     const fullAddr=`${thana}, ${district}, ${division} — ${address}`;
 
     /* ── Firebase এ order save করো ── */
-    const orderId='GK-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,4).toUpperCase();
+    const orderId='GK-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase();
     const sub=getSubtotal();
     const discountAmt=Math.round(sub*discPct/100);
     const unlockedOffers=getUnlockedOffers(sub);
