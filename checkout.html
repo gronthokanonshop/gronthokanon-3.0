@@ -272,7 +272,8 @@
                 <div class="bstep"><div class="bstep-num">৩</div><div>Transaction ID নিচে লিখুন</div></div>
             </div>
             <div class="bkash-num" onclick="copyBkash()">
-                <script>document.write(BKASH_NUMBER)</script>
+              <span id="bkashNumDisplay"></span>
+<script>document.getElementById('bkashNumDisplay').textContent = BKASH_NUMBER;</script>
                 <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
             </div>
             <input type="text" id="transactionId" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
@@ -426,6 +427,21 @@ function copyBkash(){navigator.clipboard.writeText(BKASH_NUMBER).then(()=>showTo
 
 /* CONFIRM */
 async function confirmOrder(){
+const lastSubmit = parseInt(localStorage.getItem('gk_last_submit') || '0');
+if (Date.now() - lastSubmit < 60000) {
+    showToast('⚠️ একটু অপেক্ষা করুন, তারপর আবার চেষ্টা করুন।', '#dc2626');
+    return;
+}
+localStorage.setItem('gk_last_submit', Date.now().toString());
+    // ══ Price Verification ══
+    const valid = cart.every(item => {
+        const book = books.find(b => b.name === item.name);
+        return book && book.price === item.price;
+    });
+    if (!valid) {
+        showToast('❌ কার্টে সমস্যা হয়েছে। পেজ রিফ্রেশ করুন।', '#dc2626');
+        return;
+    }
     const name=document.getElementById('custName').value.trim();
     const phone=document.getElementById('custPhone').value.trim();
     const division=document.getElementById('division').value;
