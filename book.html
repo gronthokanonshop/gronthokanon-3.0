@@ -441,8 +441,18 @@ function loadBook(){
     if(pct>0)discEl.innerText=pct+'% ছাড়';else discEl.style.display='none';
 
     const badges=document.getElementById('bookBadges');
-    badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span><span class="badge b-ok">✅ স্টক আছে</span>`;
-
+  db.ref('stock/'+idx).once('value').then(snap=>{
+    const inStock=snap.val()!==false;
+    badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span><span class="${inStock?'badge b-ok':'badge b-out'}">${inStock?'✅ স্টক আছে':'❌ স্টক শেষ'}</span>`;
+    if(!inStock){
+        document.getElementById('btnCart').classList.add('btn-disabled');
+        document.getElementById('btnCart').onclick=()=>showToast('❌ এই বইটি এখন স্টকে নেই!');
+        document.getElementById('btnBuy').classList.add('btn-disabled');
+        document.getElementById('btnBuy').onclick=()=>showToast('❌ এই বইটি এখন স্টকে নেই!');
+        document.getElementById('stickyBuy').classList.add('btn-disabled');
+        document.getElementById('stickyBuy').onclick=()=>showToast('❌ এই বইটি এখন স্টকে নেই!');
+    }
+});
     const today=new Date();today.setDate(today.getDate()+2);
     document.getElementById('deliveryText').innerText=`ঢাকায় ডেলিভারি: ১-২ কার্যদিবস`;
 
@@ -562,6 +572,9 @@ function closeWLModal(){
 </style>
 
 <script>
+function escapeHTML(str){
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 let selectedRating=0;
 let curBookId=null;
 
@@ -589,11 +602,11 @@ function loadReviews(bookId){
             el.innerHTML=latest.map(r=>`
                 <div class="rv-card">
                     <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-                        <span style="font-size:13px;font-weight:700;">${r.name||'অজ্ঞাত'}</span>
+                        <span style="font-size:13px;font-weight:700;">${escapeHTML(r.name||'অজ্ঞাত')}</span>
                         <span style="font-size:11px;color:var(--text2);">${new Date(r.createdAt).toLocaleDateString('bn-BD')}</span>
                     </div>
                     <div style="color:#d97706;font-size:15px;margin-bottom:5px;">${'★'.repeat(r.rating||0)+'☆'.repeat(5-(r.rating||0))}</div>
-                    <div style="font-size:13px;line-height:1.5;">${r.comment||''}</div>
+                  <div style="font-size:13px;line-height:1.5;">${escapeHTML(r.comment||'')}</div>
                 </div>`).join('');
         }).catch(()=>{
             el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';
