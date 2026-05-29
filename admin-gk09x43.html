@@ -219,6 +219,7 @@
             <button class="ftab" onclick="filterOrders('shipped',this)">শিপড</button>
             <button class="ftab" onclick="filterOrders('delivered',this)">ডেলিভারড</button>
             <button class="ftab" onclick="filterOrders('books',this)">📚 বই ম্যানেজ</button>
+            <button class="ftab" onclick="migratePhoneIndex()" style="background:#7c3aed;color:white;border-color:#7c3aed;" id="migrateBtn">🔄 Phone Index ঠিক করুন</button>
         </div>
 
         <div id="orderList"><div class="loading-spin">লোড হচ্ছে...</div></div>
@@ -433,6 +434,28 @@ async function updateStatusFromModal(){
         showToast('✅ অবস্থান আপডেট হয়েছে','#059669');
         closeModal();
     }catch(e){showToast('❌ আপডেট ব্যর্থ হয়েছে','#dc2626');}
+}
+
+async function migratePhoneIndex(){
+    const btn=document.getElementById('migrateBtn');
+    btn.innerText='⏳ চলছে...';btn.disabled=true;
+    try{
+        const snap=await db.ref('orders').get();
+        if(!snap.exists()){showToast('কোনো order নেই','#dc2626');btn.innerText='🔄 Phone Index ঠিক করুন';btn.disabled=false;return;}
+        const updates={};
+        snap.forEach(c=>{
+            const o=c.val();
+            if(o.phone&&o.orderId){
+                updates['phoneIndex/'+o.phone+'/'+o.orderId]=true;
+            }
+        });
+        await db.ref().update(updates);
+        showToast('✅ সব orders migrate সম্পন্ন!','#059669');
+        btn.innerText='✅ সম্পন্ন';
+    }catch(e){
+        showToast('❌ migrate ব্যর্থ হয়েছে','#dc2626');
+        btn.innerText='🔄 Phone Index ঠিক করুন';btn.disabled=false;
+    }
 }
 
 async function adminLogout(){
