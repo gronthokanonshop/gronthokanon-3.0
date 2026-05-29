@@ -108,17 +108,22 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/firebase@9.23.0/firebase-app-compat.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/firebase@9.23.0/firebase-auth-compat.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/firebase@9.23.0/firebase-database-compat.min.js"></script>
-<script src="firebase-config.js"></script>
 <script>
-// iPhone/WebKit এ goOnline force করা
-if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    firebase.database().goOnline();
-}
+// ── Firebase REST API base URL (SDK নেই, সরাসরি fetch) ──
+const DB = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com';
+
 function escapeHTML(str){
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Firebase REST GET helper
+async function fbGet(path){
+    const res = await fetch(DB + path + '.json', {
+        method: 'GET',
+        headers: {'Accept': 'application/json'}
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
 }
 
 const STATUSES=[
@@ -139,23 +144,23 @@ function switchTab(tab){
     document.getElementById('tab2').classList.toggle('active',!isId);
 }
 
-/* ── ORDER ID দিয়ে সরাসরি পড়া — orders/$orderId public read ── */
+/* ── ORDER ID দিয়ে খোঁজা ── */
 async function searchOrder(){
     const id=document.getElementById('trackInput').value.trim();
     if(!id){showToast('অর্ডার ID লিখুন','#dc2626');return;}
     document.getElementById('trackError').style.display='none';
     document.getElementById('orderCard').style.display='none';
     try{
-        const snap=await firebase.database().ref('orders/'+id).get();
-        if(!snap.exists()){document.getElementById('trackError').style.display='block';return;}
-        renderOrder(snap.val());
+        const data = await fbGet('/orders/' + encodeURIComponent(id));
+        if(!data){document.getElementById('trackError').style.display='block';return;}
+        renderOrder(data);
     }catch(e){
         console.error(e);
         showToast('সংযোগ সমস্যা হয়েছে','#dc2626');
     }
 }
 
-/* ── PHONE দিয়ে খোঁজা — phoneIndex থেকে orderId list নিয়ে প্রতিটা আলাদা পড়া ── */
+/* ── PHONE দিয়ে খোঁজা ── */
 async function searchByPhone(){
     const phone=document.getElementById('phoneInput').value.trim();
     if(!phone||!/^01[3-9]\d{8}$/.test(phone)){
@@ -164,22 +169,20 @@ async function searchByPhone(){
     document.getElementById('phoneError').style.display='none';
     document.getElementById('myOrdersList').innerHTML='<div class="loading-spinner">🔍 খোঁজা হচ্ছে...</div>';
     try{
-        // Step 1: phoneIndex/01XXXXXXXX = { "GK-ABC": true, "GK-XYZ": true }
-        // এই node public readable — শুধু নির্দিষ্ট নম্বরের order ID গুলো দেয়
-        const idxSnap=await firebase.database().ref('phoneIndex/'+phone).get();
-        if(!idxSnap.exists()){
+        // Step 1: phoneIndex থেকে order ID গুলো নাও
+        const idx = await fbGet('/phoneIndex/' + phone);
+        if(!idx){
             document.getElementById('myOrdersList').innerHTML='';
             document.getElementById('phoneError').style.display='block';
             return;
         }
-        const orderIds=Object.keys(idxSnap.val());
+        const orderIds = Object.keys(idx);
 
-        // Step 2: প্রতিটা orderId আলাদাভাবে পড়া — orders/$orderId public readable
-        const snaps=await Promise.all(
-            orderIds.map(oid=>firebase.database().ref('orders/'+oid).get())
+        // Step 2: প্রতিটা order আলাদাভাবে fetch করো
+        const results = await Promise.all(
+            orderIds.map(oid => fbGet('/orders/' + encodeURIComponent(oid)))
         );
-        let orders=[];
-        snaps.forEach(s=>{if(s.exists())orders.push(s.val());});
+        let orders = results.filter(o => o !== null);
         orders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
 
         if(!orders.length){
