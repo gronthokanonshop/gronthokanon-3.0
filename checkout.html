@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="light">
 <head>
-<link rel="icon" href="logo.png" type="image/png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="logo.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>চেকআউট — গ্রন্থকানন</title>
     <meta name="theme-color" content="#ffffff">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
     <style>
         
         
-        body{font-family:'Hind Siliguri','SolaimanLipi',Arial,sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;}
+        body{font-family:'Hind Siliguri','SolaimanLipi',Arial,sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;-webkit-tap-highlight-color:transparent;}
 
         /* NAVBAR — consistent */
         
@@ -22,7 +22,8 @@
         .navbar-title{flex:1;font-size:15px;font-weight:700;color:var(--text);}
         .navbar-title span{color:#059669;}
         
-      
+        
+        
         
 
         /* PROGRESS */
@@ -272,7 +273,7 @@
                 <div class="bstep"><div class="bstep-num">৩</div><div>Transaction ID নিচে লিখুন</div></div>
             </div>
             <div class="bkash-num" onclick="copyBkash()">
-            <span id="bkashNumDisplay">01408786396</span>
+                <span id="bkashNumDisplay">01408786396</span>
                 <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
             </div>
             <input type="text" id="transactionId" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
@@ -422,16 +423,31 @@ function selectPay(el,type){
     el.classList.add('selected');el.querySelector('input[type="radio"]').checked=true;
     document.getElementById('bkashBox').style.display=type==='bkash'?'block':'none';
 }
-function copyBkash(){navigator.clipboard.writeText(BKASH_NUMBER).then(()=>showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(()=>showToast('01408786396','#059669'));}
+function copyBkash(){
+    if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(BKASH_NUMBER).then(()=>showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(()=>fallbackCopy());
+    } else { fallbackCopy(); }
+}
+function fallbackCopy(){
+    const el=document.createElement('input');
+    el.value=BKASH_NUMBER;
+    el.style.cssText='position:fixed;top:0;left:0;opacity:0;';
+    document.body.appendChild(el);
+    el.focus();el.select();
+    try{document.execCommand('copy');showToast('✅ নম্বর কপি হয়েছে!','#059669');}
+    catch(e){showToast(BKASH_NUMBER,'#059669');}
+    document.body.removeChild(el);
+}
 
 /* CONFIRM */
 async function confirmOrder(){
-const lastSubmit = parseInt(localStorage.getItem('gk_last_submit') || '0');
-if (Date.now() - lastSubmit < 60000) {
-    showToast('⚠️ একটু অপেক্ষা করুন, তারপর আবার চেষ্টা করুন।', '#dc2626');
-    return;
-}
-localStorage.setItem('gk_last_submit', Date.now().toString());
+    // ══ Rate Limiting ══
+    const lastSubmit = parseInt(localStorage.getItem('gk_last_submit') || '0');
+    if (Date.now() - lastSubmit < 60000) {
+        showToast('⚠️ একটু অপেক্ষা করুন, তারপর আবার চেষ্টা করুন।', '#dc2626');
+        return;
+    }
+    localStorage.setItem('gk_last_submit', Date.now().toString());
     // ══ Price Verification ══
     const valid = cart.every(item => {
         const book = books.find(b => b.name === item.name);
@@ -455,7 +471,7 @@ localStorage.setItem('gk_last_submit', Date.now().toString());
     if(!thana)return showToast('⚠️ থানা নির্বাচন করুন!');
     if(!address)return showToast('⚠️ ঠিকানা লিখুন!');
     if(coupon==='FIRSTORDER'){
-  const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g, '_')).get();
+    const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).get();
     if(used.exists())return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626');
 }
     let txId='';
@@ -491,7 +507,7 @@ localStorage.setItem('gk_last_submit', Date.now().toString());
         await firebase.database().ref('orders/'+orderId).set(orderData);
         localStorage.setItem('gronthokanon_lastorder',orderId);
         if(coupon==='FIRSTORDER'){
-   await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g, '_')).set(true);
+    await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).set(true);
 }
         lastOrderData=orderData;
     }catch(e){
@@ -508,6 +524,8 @@ localStorage.setItem('gk_last_submit', Date.now().toString());
     localStorage.removeItem('gronthokanon_discount');
     localStorage.removeItem('gronthokanon_coupon');
     localStorage.removeItem('gronthokanon_delivery_eid');
+    localStorage.removeItem('gronthokanon_eid26_used');
+    localStorage.removeItem('gronthokanon_eid26_active');
     document.getElementById('successInfo').innerHTML=`
         <div style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:12px;text-align:left;">
             <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">অর্ডার আইডি</div>
