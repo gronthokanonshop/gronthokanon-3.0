@@ -109,14 +109,12 @@
 </div>
 
 <script>
-// ── Firebase REST API base URL (SDK নেই, সরাসরি fetch) ──
 const DB = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com';
 
 function escapeHTML(str){
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// Firebase REST GET helper
 async function fbGet(path){
     const res = await fetch(DB + path + '.json', {
         method: 'GET',
@@ -144,7 +142,6 @@ function switchTab(tab){
     document.getElementById('tab2').classList.toggle('active',!isId);
 }
 
-/* ── ORDER ID দিয়ে খোঁজা ── */
 async function searchOrder(){
     const id=document.getElementById('trackInput').value.trim();
     if(!id){showToast('অর্ডার ID লিখুন','#dc2626');return;}
@@ -156,11 +153,10 @@ async function searchOrder(){
         renderOrder(data);
     }catch(e){
         console.error(e);
-        showToast('সংযোগ সমস্যা হয়েছে','#dc2626');
+        showToast('সংযোগ সমস্যা হয়েছে, আবার চেষ্টা করুন','#dc2626');
     }
 }
 
-/* ── PHONE দিয়ে খোঁজা ── */
 async function searchByPhone(){
     const phone=document.getElementById('phoneInput').value.trim();
     if(!phone||!/^01[3-9]\d{8}$/.test(phone)){
@@ -169,7 +165,6 @@ async function searchByPhone(){
     document.getElementById('phoneError').style.display='none';
     document.getElementById('myOrdersList').innerHTML='<div class="loading-spinner">🔍 খোঁজা হচ্ছে...</div>';
     try{
-        // Step 1: phoneIndex থেকে order ID গুলো নাও
         const idx = await fbGet('/phoneIndex/' + phone);
         if(!idx){
             document.getElementById('myOrdersList').innerHTML='';
@@ -178,11 +173,13 @@ async function searchByPhone(){
         }
         const orderIds = Object.keys(idx);
 
-        // Step 2: প্রতিটা order আলাদাভাবে fetch করো
-        const results = await Promise.all(
+        // Promise.allSettled — একটা fail করলেও বাকিগুলো চলবে
+        const results = await Promise.allSettled(
             orderIds.map(oid => fbGet('/orders/' + encodeURIComponent(oid)))
         );
-        let orders = results.filter(o => o !== null);
+        let orders = results
+            .filter(r => r.status === 'fulfilled' && r.value !== null)
+            .map(r => r.value);
         orders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
 
         if(!orders.length){
@@ -193,7 +190,7 @@ async function searchByPhone(){
         renderMyOrders(orders);
     }catch(e){
         console.error(e);
-        showToast('সংযোগ সমস্যা হয়েছে','#dc2626');
+        showToast('সংযোগ সমস্যা হয়েছে, আবার চেষ্টা করুন','#dc2626');
         document.getElementById('myOrdersList').innerHTML='';
     }
 }
@@ -225,8 +222,8 @@ function renderOrder(o){
     document.getElementById('orderIdBadge').innerText=o.orderId;
     const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${escapeHTML(o.coupon||'')})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
     document.getElementById('orderInfoRows').innerHTML=`
-        <div class="order-info-row"><span>নাম</span><span>${o.name.length>2?escapeHTML(o.name[0]+'*'.repeat(o.name.length-2)+o.name[o.name.length-1]):escapeHTML(o.name)}</span></div>
-        <div class="order-info-row"><span>ফোন</span><span>${escapeHTML(o.phone.length>5?o.phone.slice(0,3)+'*'.repeat(o.phone.length-5)+o.phone.slice(-2):o.phone)}</span></div>
+        <div class="order-info-row"><span>নাম</span><span>${(()=>{const n=o.name||'';return n.length>2?escapeHTML(n[0]+'*'.repeat(n.length-2)+n[n.length-1]):escapeHTML(n);})()}</span></div>
+        <div class="order-info-row"><span>ফোন</span><span>${(()=>{const p=o.phone||'';return escapeHTML(p.length>5?p.slice(0,3)+'*'.repeat(p.length-5)+p.slice(-2):p);})()}</span></div>
         <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address)}</span></div>
         <div class="order-info-row"><span>পেমেন্ট</span><span>${escapeHTML(o.payment)}</span></div>
         <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.books)}</span></div>
