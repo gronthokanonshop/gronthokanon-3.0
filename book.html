@@ -251,7 +251,7 @@
 
     <!-- RELATED -->
     <div class="related-card" id="relatedSection">
-        <h3>📚 একই লেখকের বই</h3>
+    <h3>📚 একই বিষয়ের বই</h3>
         <div class="rel-row" id="relatedBooks"></div>
     </div>
 
@@ -459,7 +459,11 @@ function loadBook(){
 
     updateWLUI();
 
-    const related=books.filter((rb,i)=>rb.author===b.author&&i!==idx).slice(0,8);
+  const related=books.filter((rb,i)=>
+    i!==idx &&
+    rb.author!==b.author &&
+    (rb.subject===b.subject || rb.cat===b.cat)
+).slice(0,8);
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
     else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'"><img src="${rImg}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
 
