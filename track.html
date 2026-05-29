@@ -13,8 +13,6 @@
         body{-webkit-tap-highlight-color:transparent;font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
         .navbar-title{flex:1;font-size:15px;font-weight:700;color:var(--text);}
         .page-wrap{padding:16px;max-width:480px;margin:0 auto;padding-bottom:60px;}
-
-        /* Search Box */
         .track-search{background:var(--card);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 12px var(--shadow);}
         .track-search h3{font-size:16px;margin-bottom:4px;color:var(--text);}
         .track-search p{font-size:12px;color:var(--text2);margin-bottom:14px;}
@@ -22,29 +20,21 @@
         .track-input{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;outline:none;}
         .track-input:focus{border-color:#059669;}
         .track-btn{padding:11px 18px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
-
-        /* Tab toggle */
         .track-tabs{display:flex;gap:8px;margin-bottom:16px;}
         .ttab{flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;}
         .ttab.active{background:#059669;color:white;border-color:#059669;}
-
-        /* My Orders list */
         .my-order-item{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 10px var(--shadow);cursor:pointer;border:1.5px solid var(--border);transition:.2s;}
         .my-order-item:hover{border-color:#059669;}
         .my-order-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
         .my-oid{font-size:13px;font-weight:800;color:#059669;}
         .my-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
         .my-info{font-size:12px;color:var(--text2);line-height:1.7;}
-
-        /* Order Card */
         .order-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 12px var(--shadow);margin-bottom:14px;display:none;}
         .order-id-badge{display:inline-block;background:#ecfdf5;color:#059669;border:1.5px solid #a7f3d0;border-radius:20px;padding:4px 14px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:14px;}
         .order-info-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);}
         .order-info-row:last-child{border:none;}
         .order-info-row span:first-child{color:var(--text2);}
         .order-info-row span:last-child{font-weight:600;color:var(--text);}
-
-        /* Status Timeline */
         .timeline{margin-top:20px;}
         .timeline-title{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em;}
         .tl-step{display:flex;gap:14px;margin-bottom:0;position:relative;}
@@ -59,19 +49,12 @@
         .tl-label{font-size:14px;font-weight:700;color:var(--text);}
         .tl-label.pending-txt{color:var(--text2);}
         .tl-sub{font-size:11px;color:var(--text2);margin-top:2px;}
-
-        /* Empty State */
-        .track-empty{text-align:center;padding:40px 20px;display:none;}
-        .track-empty svg{margin-bottom:12px;opacity:0.3;}
-        .track-empty p{color:var(--text2);font-size:14px;}
-
-        /* Error */
         .track-error{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:14px;color:#dc2626;font-size:13px;text-align:center;display:none;margin-bottom:14px;}
+        .loading-spinner{text-align:center;padding:20px;color:var(--text2);font-size:13px;}
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <div class="navbar-top">
         <button class="back-btn" onclick="navigateTo('index.html')">‹</button>
@@ -82,13 +65,12 @@
 
 <div class="page-wrap">
 
-    <!-- Tabs -->
     <div class="track-tabs">
         <button class="ttab active" id="tab1" onclick="switchTab('id')">🔍 ID দিয়ে খুঁজুন</button>
         <button class="ttab" id="tab2" onclick="switchTab('phone')">📱 আমার অর্ডারসমূহ</button>
     </div>
 
-    <!-- Search by ID -->
+    <!-- Search by Order ID -->
     <div id="panelId">
         <div class="track-search">
             <h3>📦 অর্ডার খুঁজুন</h3>
@@ -133,6 +115,7 @@
 function escapeHTML(str){
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
 const STATUSES=[
     {key:'pending',   icon:'🕐', label:'অর্ডার গৃহীত',      sub:'আপনার অর্ডারটি আমরা পেয়েছি'},
     {key:'confirmed', icon:'✅', label:'অর্ডার কনফার্ম',     sub:'অর্ডার নিশ্চিত করা হয়েছে'},
@@ -140,7 +123,6 @@ const STATUSES=[
     {key:'shipped',   icon:'🚚', label:'ডেলিভারিতে',         sub:'বই রওনা দিয়েছে'},
     {key:'delivered', icon:'🎉', label:'ডেলিভারি সম্পন্ন',  sub:'আপনার কাছে পৌঁছে গেছে'},
 ];
-
 const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
 const STATUS_COLORS={pending:'background:#fef3c7;color:#92400e;',confirmed:'background:#dbeafe;color:#1e40af;',processing:'background:#ede9fe;color:#5b21b6;',shipped:'background:#fff7ed;color:#9a3412;',delivered:'background:#ecfdf5;color:#065f46;'};
 
@@ -152,6 +134,7 @@ function switchTab(tab){
     document.getElementById('tab2').classList.toggle('active',!isId);
 }
 
+/* ── ORDER ID দিয়ে সরাসরি পড়া — orders/$orderId public read ── */
 async function searchOrder(){
     const id=document.getElementById('trackInput').value.trim();
     if(!id){showToast('অর্ডার ID লিখুন','#dc2626');return;}
@@ -161,32 +144,50 @@ async function searchOrder(){
         const snap=await firebase.database().ref('orders/'+id).get();
         if(!snap.exists()){document.getElementById('trackError').style.display='block';return;}
         renderOrder(snap.val());
-    }catch(e){showToast('সংযোগ সমস্যা হয়েছে','#dc2626');}
+    }catch(e){
+        console.error(e);
+        showToast('সংযোগ সমস্যা হয়েছে','#dc2626');
+    }
 }
 
+/* ── PHONE দিয়ে খোঁজা — phoneIndex থেকে orderId list নিয়ে প্রতিটা আলাদা পড়া ── */
 async function searchByPhone(){
     const phone=document.getElementById('phoneInput').value.trim();
-if(!phone||!/^01[3-9]\d{8}$/.test(phone)){showToast('⚠️ সঠিক মোবাইল নম্বর দিন!','#dc2626');return;}
+    if(!phone||!/^01[3-9]\d{8}$/.test(phone)){
+        showToast('⚠️ সঠিক মোবাইল নম্বর দিন!','#dc2626');return;
+    }
     document.getElementById('phoneError').style.display='none';
-    document.getElementById('myOrdersList').innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">খোঁজা হচ্ছে...</div>';
+    document.getElementById('myOrdersList').innerHTML='<div class="loading-spinner">🔍 খোঁজা হচ্ছে...</div>';
     try{
-        // Try indexed query first, fallback to full scan if index missing
-        let orders=[];
-        try{
-            const snap=await firebase.database().ref('orders').orderByChild('phone').equalTo(phone).get();
-            if(snap.exists())snap.forEach(c=>orders.unshift(c.val()));
-        }catch(indexErr){
-            // Index not set — fallback: load all and filter client-side
-            const snap=await firebase.database().ref('orders').get();
-            if(snap.exists())snap.forEach(c=>{const v=c.val();if(v.phone===phone)orders.unshift(v);});
+        // Step 1: phoneIndex/01XXXXXXXX = { "GK-ABC": true, "GK-XYZ": true }
+        // এই node public readable — শুধু নির্দিষ্ট নম্বরের order ID গুলো দেয়
+        const idxSnap=await firebase.database().ref('phoneIndex/'+phone).get();
+        if(!idxSnap.exists()){
+            document.getElementById('myOrdersList').innerHTML='';
+            document.getElementById('phoneError').style.display='block';
+            return;
         }
+        const orderIds=Object.keys(idxSnap.val());
+
+        // Step 2: প্রতিটা orderId আলাদাভাবে পড়া — orders/$orderId public readable
+        const snaps=await Promise.all(
+            orderIds.map(oid=>firebase.database().ref('orders/'+oid).get())
+        );
+        let orders=[];
+        snaps.forEach(s=>{if(s.exists())orders.push(s.val());});
+        orders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
         if(!orders.length){
             document.getElementById('myOrdersList').innerHTML='';
             document.getElementById('phoneError').style.display='block';
             return;
         }
         renderMyOrders(orders);
-    }catch(e){showToast('সংযোগ সমস্যা হয়েছে','#dc2626');document.getElementById('myOrdersList').innerHTML='';}
+    }catch(e){
+        console.error(e);
+        showToast('সংযোগ সমস্যা হয়েছে','#dc2626');
+        document.getElementById('myOrdersList').innerHTML='';
+    }
 }
 
 function renderMyOrders(orders){
@@ -194,12 +195,12 @@ function renderMyOrders(orders){
     el.innerHTML=orders.map(o=>`
         <div class="my-order-item" data-orderid="${escapeHTML(o.orderId)}" onclick="viewOrder(this.dataset.orderid)">
             <div class="my-order-top">
-                <div class="my-oid">${o.orderId}</div>
-                <span class="my-status" style="${STATUS_COLORS[o.status]||STATUS_COLORS.pending}">${STATUS_LABELS[o.status]||o.status}</span>
+                <div class="my-oid">${escapeHTML(o.orderId)}</div>
+                <span class="my-status" style="${STATUS_COLORS[o.status]||STATUS_COLORS.pending}">${STATUS_LABELS[o.status]||escapeHTML(o.status)}</span>
             </div>
             <div class="my-info">
-                📚 ${o.books}<br>
-                💰 <strong>${o.total}</strong> · 💳 ${o.payment}<br>
+                📚 ${escapeHTML(o.books)}<br>
+                💰 <strong>${escapeHTML(o.total)}</strong> · 💳 ${escapeHTML(o.payment)}<br>
                 🗓️ ${new Date(o.createdAt).toLocaleDateString('bn-BD')}
             </div>
         </div>
@@ -214,16 +215,16 @@ function viewOrder(id){
 
 function renderOrder(o){
     document.getElementById('orderIdBadge').innerText=o.orderId;
-    const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${o.coupon||''})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
-   document.getElementById('orderInfoRows').innerHTML=`
-    <div class="order-info-row"><span>নাম</span><span>${o.name.length>2?escapeHTML(o.name[0]+'*'.repeat(o.name.length-2)+o.name[o.name.length-1]):escapeHTML(o.name)}</span></div>
-    <div class="order-info-row"><span>ফোন</span><span>${escapeHTML(o.phone)}</span></div>
-    <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address)}</span></div>
-    <div class="order-info-row"><span>পেমেন্ট</span><span>${escapeHTML(o.payment)}</span></div>
-    <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.books)}</span></div>
-    ${discRow}
-    <div class="order-info-row"><span>মোট</span><span style="color:#059669;font-size:15px;">${escapeHTML(o.total)}</span></div>
-`;
+    const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${escapeHTML(o.coupon||'')})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
+    document.getElementById('orderInfoRows').innerHTML=`
+        <div class="order-info-row"><span>নাম</span><span>${o.name.length>2?escapeHTML(o.name[0]+'*'.repeat(o.name.length-2)+o.name[o.name.length-1]):escapeHTML(o.name)}</span></div>
+        <div class="order-info-row"><span>ফোন</span><span>${escapeHTML(o.phone.length>5?o.phone.slice(0,3)+'*'.repeat(o.phone.length-5)+o.phone.slice(-2):o.phone)}</span></div>
+        <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address)}</span></div>
+        <div class="order-info-row"><span>পেমেন্ট</span><span>${escapeHTML(o.payment)}</span></div>
+        <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.books)}</span></div>
+        ${discRow}
+        <div class="order-info-row"><span>মোট</span><span style="color:#059669;font-size:15px;">${escapeHTML(o.total)}</span></div>
+    `;
     const curIdx=STATUSES.findIndex(s=>s.key===o.status);
     let html='';
     STATUSES.forEach((s,i)=>{
@@ -254,7 +255,7 @@ window.onload=function(){
         document.getElementById('trackInput').value=urlId;
         searchOrder();
     } else if(lastId){
-        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#059669;cursor:pointer;" onclick="document.getElementById('trackInput').value='${lastId}';searchOrder()">${lastId}</strong>`;
+        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#059669;cursor:pointer;" onclick="document.getElementById('trackInput').value='${escapeHTML(lastId)}';searchOrder()">${escapeHTML(lastId)}</strong>`;
     }
 };
 </script>
