@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="light">
 <head>
-<link rel="icon" href="logo.png" type="image/png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="logo.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>গ্রন্থকানন — বই খুঁজুন</title>
     <meta name="theme-color" content="#ffffff">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -112,7 +112,8 @@
         /* TOAST */
         .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#059669;color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(5,150,105,0.35);animation:toastIn 0.3s ease;}
         @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-    </style>
+    * { -webkit-tap-highlight-color: transparent; }
+</style>
 </head>
 <body>
 
