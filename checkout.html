@@ -471,9 +471,17 @@ async function confirmOrder(){
     if(!thana)return showToast('⚠️ থানা নির্বাচন করুন!');
     if(!address)return showToast('⚠️ ঠিকানা লিখুন!');
     if(coupon==='FIRSTORDER'){
-    const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).get();
-    if(used.exists())return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626');
-}
+        try{
+            const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).get();
+            if(used.exists()){
+                btn.disabled=false;btn.innerText='অর্ডার নিশ্চিত করুন';
+                return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626');
+            }
+        }catch(e){
+            btn.disabled=false;btn.innerText='অর্ডার নিশ্চিত করুন';
+            return showToast('⚠️ কুপন যাচাই করা যাচ্ছে না। কুপন ছাড়া অর্ডার করুন।','#dc2626');
+        }
+    }
     let txId='';
     if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId)return showToast('⚠️ Transaction ID লিখুন!');if(!/^[A-Z0-9]{8,12}$/.test(txId))return showToast('⚠️ সঠিক Transaction ID দিন!');}
     const btn=document.getElementById('confirmBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
