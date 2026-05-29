@@ -513,6 +513,7 @@ async function confirmOrder(){
     };
     try{
         await firebase.database().ref('orders/'+orderId).set(orderData);
+        await firebase.database().ref('phoneIndex/'+orderData.phone+'/'+orderId).set(true);
         localStorage.setItem('gronthokanon_lastorder',orderId);
         if(coupon==='FIRSTORDER'){
     await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).set(true);
