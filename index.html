@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="light">
 <head>
-<link rel="icon" href="logo.png" type="image/png">
- <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>গ্রন্থকানন — বইয়ের রাজ্যে স্বাগতম</title>
     <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
     <meta name="theme-color" content="#ffffff">
@@ -97,7 +97,7 @@
         .search-trigger:active { transform: scale(0.998); }
         .search-pill-icon { width: 28px; height: 28px; background: #059669; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
         .search-vline { width: 1px; height: 18px; background: var(--search-input-border); flex-shrink: 0; }
-        .search-placeholder { flex: 1; font-size: 13.5px; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .search-placeholder { flex: 1; font-size: 13px; color: #059669; font-weight: 700; font-family: 'Hind Siliguri', Arial, sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.2px; }
         .search-kbd { font-size: 11px; color: #9ca3af; background: var(--nav-icon-bg); border: 1px solid var(--nav-icon-border); border-radius: 4px; padding: 2px 7px; font-family: monospace; flex-shrink: 0; }
         @media (max-width: 400px) { .search-kbd { display: none; } }
 
@@ -461,7 +461,7 @@
         <button class="search-back" onclick="closeSearch()">‹</button>
         <div class="search-input-wrap">
             <div class="search-pill-icon" style="font-size:13px;">🔍</div>
-            <input type="text" id="searchInput" class="search-input" placeholder="বই বা লেখকের নাম লিখুন..." oninput="handleSearch()" autocomplete="off">
+            <input type="text" id="searchInput" class="search-input" placeholder="সম্মানিত গ্রাহক, আপনার পছন্দের বই টি সার্চ করুন... ওয়েবসাইটে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨" oninput="handleSearch()" autocomplete="off">
             <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()">×</button>
         </div>
     </div>
@@ -528,7 +528,7 @@
         <div class="search-trigger" onclick="openSearch()">
             <div class="search-pill-icon">🔍</div>
             <div class="search-vline"></div>
-            <span class="search-placeholder">বই, লেখক বা প্রকাশনী খুঁজুন...</span>
+            <span class="search-placeholder">সম্মানিত গ্রাহক, আপনার পছন্দের বই টি সার্চ করুন...</span>
             <span class="search-kbd">⌘K</span>
         </div>
     </div>
@@ -537,7 +537,7 @@
 <!-- ═══════ BRANDING ═══════ -->
 <header class="branding">
     <img src="logo.png" alt="গ্রন্থকানন" class="branding-logo">
-    <div class="branding-tagline">স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</div>
+    <div class="branding-tagline"><span style="color:#059669;font-weight:700;">স্বল্প মূল্যে</span> <span style="color:#dc2626;font-weight:700;">ইসলামিক বইয়ের</span> <span style="color:#059669;font-weight:700;">নির্ভরযোগ্য প্রতিষ্ঠান</span></div>
 </header>
 
 <!-- ═══════ BANNER ═══════ -->
@@ -1004,7 +1004,6 @@
 </div>
 
 <script src="book.js"></script>
-<script src="img.js"></script>
 <script>
 const categoryConfig = [
     {key:"Best Selling",    label:"🔥 Best Selling"},
@@ -1046,7 +1045,7 @@ function handleSearch(){
     const body=document.getElementById('searchBody');
     if(!q){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>`;return;}
     const found=books.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||b.author.normalize("NFC").toLowerCase().includes(q));
-    if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">😔</div><p>কোনো বই পাওয়া যায়নি</p></div>`;return;}
+    if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
     body.innerHTML=`<div class="search-count show">🔍 "${document.getElementById('searchInput').value}" — ${found.length}টি বই</div>`+found.map(b=>{
         const idx=books.indexOf(b),pct=discPct(b);
         return `<div class="search-item" onclick="closeSearch();goToBook(${idx})">
