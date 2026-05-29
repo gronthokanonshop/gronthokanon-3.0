@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="light">
 <head>
+    <meta charset="UTF-8">
     <link rel="icon" href="logo.png" type="image/png">
-     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>অর্ডার ট্র্যাক — গ্রন্থকানন</title>
     <meta name="theme-color" content="#ffffff">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
-        body{font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        body{-webkit-tap-highlight-color:transparent;font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
         .navbar-title{flex:1;font-size:15px;font-weight:700;color:var(--text);}
         .page-wrap{padding:16px;max-width:480px;margin:0 auto;padding-bottom:60px;}
 
@@ -215,10 +215,10 @@ function viewOrder(id){
 function renderOrder(o){
     document.getElementById('orderIdBadge').innerText=o.orderId;
     const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${o.coupon||''})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
-  document.getElementById('orderInfoRows').innerHTML=`
-    <div class="order-info-row"><span>নাম</span><span>${escapeHTML(o.name[0]+'*'.repeat(o.name.length-2)+o.name[o.name.length-1])}</span></div>
-    <div class="order-info-row"><span>ফোন</span><span>${escapeHTML(o.phone.slice(0,4)+'****'+o.phone.slice(-3))}</span></div>
-    <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address.slice(0,15)+'...')}</span></div>
+   document.getElementById('orderInfoRows').innerHTML=`
+    <div class="order-info-row"><span>নাম</span><span>${o.name.length>2?escapeHTML(o.name[0]+'*'.repeat(o.name.length-2)+o.name[o.name.length-1]):escapeHTML(o.name)}</span></div>
+    <div class="order-info-row"><span>ফোন</span><span>${escapeHTML(o.phone)}</span></div>
+    <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address)}</span></div>
     <div class="order-info-row"><span>পেমেন্ট</span><span>${escapeHTML(o.payment)}</span></div>
     <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.books)}</span></div>
     ${discRow}
