@@ -176,7 +176,7 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:26px;">
 </a>
 
-<script src="book.js"></script>
+<script src="book.js" defer></script>
 <script>
 let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
 let wishlist=JSON.parse(localStorage.getItem('gronthokanon_wishlist'))||[];
@@ -188,6 +188,7 @@ updateCounts();
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
 function getImg(b){return (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';}
 function isWL(name){return wishlist.includes(name);}
+function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function toggleWL(e,name){
     e.stopPropagation();
     wishlist.includes(name)?wishlist=wishlist.filter(w=>w!==name):wishlist.push(name);
@@ -199,14 +200,14 @@ function makeCard(b,delay){
     const pct=discPct(b),idx=books.indexOf(b),wl=isWL(b.name);
     return `<div class="book-card" onclick="goToBook(${idx})" style="animation-delay:${delay*0.04}s">
         ${pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:''}
-        <button class="wl-btn ${wl?'active':''}" onclick="toggleWL(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'❤️':'🤍'}</button>
+        <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'❤️':'🤍'}</button>
         <img src="${getImg(b)}" alt="বই" loading="lazy">
         <div class="bc-info">
             <div class="bc-pub">🏢 ${b.pub}</div>
             <div class="bc-name">${b.name}</div>
             <div class="bc-author">✍️ ${b.author}</div>
             <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-            <button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>
+            <button class="bc-btn" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">কার্টে যোগ করুন</button>
         </div></div>`;
 }
 
