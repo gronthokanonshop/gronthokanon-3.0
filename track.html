@@ -217,7 +217,7 @@ function viewOrder(id){
     document.getElementById('trackInput').value=id;
     searchOrder();
 }
-
+function fillLastOrder(id){document.getElementById('trackInput').value=id;}
 function renderOrder(o){
     document.getElementById('orderIdBadge').innerText=o.orderId;
     const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${escapeHTML(o.coupon||'')})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
@@ -260,7 +260,7 @@ window.onload=function(){
         document.getElementById('trackInput').value=urlId;
         searchOrder();
     } else if(lastId){
-        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#059669;cursor:pointer;" onclick="document.getElementById('trackInput').value='${escapeHTML(lastId)}';searchOrder()">${escapeHTML(lastId)}</strong>`;
+        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#059669;cursor:pointer;" data-id="${escapeHTML(lastId)}" onclick="fillLastOrder(this.dataset.id)"
     }
 };
 </script>
