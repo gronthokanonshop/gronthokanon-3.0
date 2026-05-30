@@ -17,10 +17,6 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-// App Check
-const appCheck = firebase.appCheck();
-appCheck.activate('6Ldh1gMtAAAAOb15gX3zTqLni_ke6eEmDlknbNV', true);
-
 const auth = firebase.auth();
 const db   = firebase.database();
 
