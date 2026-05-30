@@ -304,7 +304,9 @@
 
 <script>
 const BKASH_NUMBER='01408786396';
-const SHEET_URL='https://script.google.com/macros/s/AKfycbwUu3eqNtc6hvNcotrw58TRLjjcpyhm7XSMni6FOvEVIWZWeSkE5TEwJ0eNpzdkIV1YgQ/exec';
+function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+const SHEET_URL='https://script.google.com/macros/s/AKfycbz6upCtsRyDtEdJZqVUjFFuDuSmB47ZC5IInHUQAGsaNAS7XCsXtgtBNXcsXK71UbELfQ/exec';
+const SHEET_TOKEN='GK_SECRET_2026';
 let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
 let discPct=parseInt(localStorage.getItem('gronthokanon_discount')||'0');
 let coupon=localStorage.getItem('gronthokanon_coupon')||'';
@@ -380,8 +382,8 @@ function renderSummary(){
     if(!cart.length){box.innerHTML='<div class="empty-cart"><div style="margin-bottom:10px;"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><p>কার্ট খালি আছে</p></div>';document.getElementById('itemCountSub').innerText='';updateTotal();return;}
     const g={};cart.forEach(i=>{if(g[i.name])g[i.name].qty++;else g[i.name]={price:i.price,qty:1,img:i.img||''};});
     box.innerHTML=Object.entries(g).map(([name,item])=>`<div class="order-item">
-        <img src="${item.img}" onerror="this.src='https://placehold.co/44x60/ecfdf5/059669?text=📚'">
-        <div style="flex:1;"><div class="oi-name">${name}</div><div class="oi-price">৳${item.price} × ${item.qty} = <strong>৳${item.price*item.qty}</strong></div></div>
+        <img src="${escapeHTML(item.img)}" onerror="this.src='https://placehold.co/44x60/ecfdf5/059669?text=📚'">
+        <div style="flex:1;"><div class="oi-name">${escapeHTML(name)}</div><div class="oi-price">৳${item.price} × ${item.qty} = <strong>৳${item.price*item.qty}</strong></div></div>
     </div>`).join('');
     document.getElementById('itemCountSub').innerText=cart.length+'টি বই';
     updateTotal();
@@ -440,36 +442,34 @@ function fallbackCopy(){
 }
 
 /* CONFIRM */
+let isSubmitting=false;
 async function confirmOrder(){
-    // ══ Rate Limiting ══
-    const lastSubmit = parseInt(localStorage.getItem('gk_last_submit') || '0');
-    if (Date.now() - lastSubmit < 60000) {
-        showToast('⚠️ একটু অপেক্ষা করুন, তারপর আবার চেষ্টা করুন।', '#dc2626');
-        return;
-    }
-    localStorage.setItem('gk_last_submit', Date.now().toString());
+    if(isSubmitting)return;
+    isSubmitting=true;
+    const btn=document.getElementById('confirmBtn');
     // ══ Price Verification ══
     const valid = cart.every(item => {
         const book = books.find(b => b.name === item.name);
         return book && book.price === item.price;
     });
     if (!valid) {
+        isSubmitting=false;
         showToast('❌ কার্টে সমস্যা হয়েছে। পেজ রিফ্রেশ করুন।', '#dc2626');
         return;
     }
     const name=document.getElementById('custName').value.trim();
-    const phone=document.getElementById('custPhone').value.trim();
+    const phone=document.getElementById('custPhone').value.trim().replace(/[\s\-]/g,'');
     const division=document.getElementById('division').value;
     const district=document.getElementById('district').value;
     const thana=document.getElementById('thana').value;
     const address=document.getElementById('custAddress').value.trim();
     const payMethod=document.querySelector('input[name="payment"]:checked')?.value||'Cash on Delivery';
-    if(!name)return showToast('⚠️ নাম লিখুন!');
-    if(!phone||!/^01[3-9]\d{8}$/.test(phone))return showToast('⚠️ সঠিক বাংলাদেশি নম্বর দিন! (যেমন: 01XXXXXXXXX)');
-    if(!division)return showToast('⚠️ বিভাগ নির্বাচন করুন!');
-    if(!district)return showToast('⚠️ জেলা নির্বাচন করুন!');
-    if(!thana)return showToast('⚠️ থানা নির্বাচন করুন!');
-    if(!address)return showToast('⚠️ ঠিকানা লিখুন!');
+    if(!name){isSubmitting=false;return showToast('⚠️ নাম লিখুন!');}
+    if(!phone||!/^01[3-9]\d{8}$/.test(phone)){isSubmitting=false;return showToast('⚠️ সঠিক বাংলাদেশি নম্বর দিন! (যেমন: 01XXXXXXXXX)');}
+    if(!division){isSubmitting=false;return showToast('⚠️ বিভাগ নির্বাচন করুন!');}
+    if(!district){isSubmitting=false;return showToast('⚠️ জেলা নির্বাচন করুন!');}
+    if(!thana){isSubmitting=false;return showToast('⚠️ থানা নির্বাচন করুন!');}
+    if(!address){isSubmitting=false;return showToast('⚠️ ঠিকানা লিখুন!');}
     if(coupon==='FIRSTORDER'){
         try{
             const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).get();
@@ -483,8 +483,8 @@ async function confirmOrder(){
         }
     }
     let txId='';
-    if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId)return showToast('⚠️ Transaction ID লিখুন!');if(!/^[A-Z0-9]{8,12}$/.test(txId))return showToast('⚠️ সঠিক Transaction ID দিন!');}
-    const btn=document.getElementById('confirmBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
+    if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId){isSubmitting=false;return showToast('⚠️ Transaction ID লিখুন!');}if(!/^[A-Z0-9]{8,12}$/.test(txId)){isSubmitting=false;return showToast('⚠️ সঠিক Transaction ID দিন!');}}
+    btn.disabled=true;btn.innerHTML='<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
     const g={};cart.forEach(i=>{g[i.name]=(g[i.name]||0)+1;});
     const bookList=Object.entries(g).map(([k,v])=>`${k} (${v}টি)`).join(', ');
     const total=document.getElementById('grandTotal').innerText;
@@ -522,12 +522,13 @@ async function confirmOrder(){
     }catch(e){
         console.log('Firebase error:',e);
         btn.disabled=false;btn.innerHTML='✅ অর্ডার কনফার্ম করুন';
+        isSubmitting=false;
         showToast('❌ অর্ডার সেভ হয়নি! ইন্টারনেট চেক করে আবার চেষ্টা করুন।','#dc2626');
         return;
     }
 
     /* ── Google Sheet (পুরনো) ── */
-    try{await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,address:fullAddr,books:bookList,payment:payMethod+(txId?` (TxID: ${txId})`:''),delivery:'৳'+delivCharge,total})});}catch(e){}
+    try{await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:SHEET_TOKEN,name,phone,address:fullAddr,books:bookList,payment:payMethod+(txId?` (TxID: ${txId})`:''),delivery:'৳'+delivCharge,total})});}catch(e){}
 
     localStorage.removeItem('gronthokanon_cart');
     localStorage.removeItem('gronthokanon_discount');
@@ -540,10 +541,11 @@ async function confirmOrder(){
             <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">অর্ডার আইডি</div>
             <div style="font-size:16px;font-weight:800;color:#059669;letter-spacing:1px;">${orderId}</div>
         </div>
-        👤 <strong>${name}</strong><br>📱 ${phone}<br>📍 ${fullAddr}<br>💳 ${payMethod}${txId?` (TxID: ${txId})`:''}<br>📦 ${bookList}<br>💰 <strong style="color:var(--green);">${total}</strong>
-        <br><br><button onclick="window.location.href='track.html?id=${orderId}'" style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;">📦 অর্ডার ট্র্যাক করুন</button>
+        👤 <strong>${escapeHTML(name)}</strong><br>📱 ${escapeHTML(phone)}<br>📍 ${escapeHTML(fullAddr)}<br>💳 ${escapeHTML(payMethod)}${txId?` (TxID: ${escapeHTML(txId)})`:''}<br>📦 ${escapeHTML(bookList)}<br>💰 <strong style="color:var(--green);">${total}</strong>
+        <br><br><button onclick="window.location.href='track.html?id=${escapeHTML(orderId)}'" style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;">📦 অর্ডার ট্র্যাক করুন</button>
     `;
     btn.disabled=false;btn.innerHTML='✅ অর্ডার কনফার্ম করুন';
+    isSubmitting=false;
     document.getElementById('successModal').classList.add('show');
 }
 
