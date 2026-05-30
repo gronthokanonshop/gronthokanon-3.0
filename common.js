@@ -18,8 +18,7 @@ function toggleDark() {
     const saved = localStorage.getItem('gronthokanon_theme');
     if (saved) {
         document.documentElement.setAttribute('data-theme', saved);
-        const btn = document.getElementById('darkBtn');
-        if (btn) btn.innerText = saved === 'dark' ? '☀️' : '🌙';
+
     }
 })();
 
