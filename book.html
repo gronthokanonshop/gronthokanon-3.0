@@ -199,7 +199,7 @@
         </div>
         <div class="book-img-wrap" onclick="openImgModal()">
             <div class="img-skel" id="imgSkel"></div>
-            <img id="bookImg" src="" alt="বই" onload="onImgLoad()" onerror="onImgLoad()">
+            <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
         </div>
         <div style="margin-top:8px;font-size:11px;color:var(--text2);">📷 ট্যাপ করুন বড় করে দেখতে</div>
         <button class="wl-btn-lg" id="wlBtnLg" onclick="toggleWL()">🤍</button>
@@ -292,10 +292,7 @@
     <button class="sticky-buy" id="stickyBuy" onclick="buyNow()">⚡ এখনই কিনুন</button>
 </div>
 
-<script src="book.js" defer></script>
-<script src="img.js"></script>
-<script src="desc.js"></script>
-<script src="main.js"></script>
+<script src="book.js"></script>
 <script>
 let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
 let wishlist=JSON.parse(localStorage.getItem('gronthokanon_wishlist'))||[];
