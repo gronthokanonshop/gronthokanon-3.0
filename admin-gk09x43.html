@@ -231,7 +231,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
-<script src="book.js"></script>
+<script src="book.js" defer></script>
 <script>
 function escapeHTML(str){
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -271,11 +271,13 @@ function showDashboard(){
     setTimeout(loadOrders, 300);
 }
 
+let ordersRef=null;
 function loadOrders(){
     const el=document.getElementById('orderList');
     el.innerHTML='<div class="loading-spin">⏳ লোড হচ্ছে...</div>';
-    db.ref('orders').off();
-    db.ref('orders').on('value', snap => {
+    if(ordersRef)ordersRef.off();
+    ordersRef=db.ref('orders');
+    ordersRef.on('value', snap => {
         allOrders = [];
         snap.forEach(child => {
             const val = child.val();
@@ -406,7 +408,7 @@ function openModal(orderId){
     const offerEl=document.getElementById('modalOffers');
     if(o.offers&&o.offers.length){
         offerSec.style.display='block';
-        offerEl.innerHTML=o.offers.map(of=>`<div>${of.icon} <strong>${of.label}</strong></div>`).join('');
+        offerEl.innerHTML=o.offers.map(of=>`<div>${escapeHTML(of.icon)} <strong>${escapeHTML(of.label)}</strong></div>`).join('');
     } else {
         offerSec.style.display='none';
         offerEl.innerHTML='';
@@ -459,7 +461,7 @@ async function migratePhoneIndex(){
 }
 
 async function adminLogout(){
-    db.ref('orders').off();
+    if(ordersRef)ordersRef.off();
     await auth.signOut();
     document.getElementById('dashboard').style.display='none';
     document.getElementById('loginGate').style.display='flex';
