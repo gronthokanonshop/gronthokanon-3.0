@@ -260,7 +260,7 @@ window.onload=function(){
         document.getElementById('trackInput').value=urlId;
         searchOrder();
     } else if(lastId){
-        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#059669;cursor:pointer;" data-id="${escapeHTML(lastId)}" onclick="fillLastOrder(this.dataset.id)"
+        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#059669;cursor:pointer;" data-id="${escapeHTML(lastId)}" onclick="fillLastOrder(this.dataset.id)">${escapeHTML(lastId)}</strong>`;
     }
 };
 </script>
