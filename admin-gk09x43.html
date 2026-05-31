@@ -6,98 +6,262 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Admin Panel — গ্রন্থকানন</title>
     <meta name="robots" content="noindex, nofollow">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#064e3b">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
-        body{-webkit-tap-highlight-color:transparent;font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-        .navbar-title{flex:1;font-size:15px;font-weight:700;color:var(--text);}
-        .page-wrap{padding:14px;max-width:600px;margin:0 auto;padding-bottom:40px;}
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:'Hind Siliguri',Arial,sans-serif;background:#f0fdf4;color:#1a202c;min-height:100vh;-webkit-tap-highlight-color:transparent;}
 
-        /* Login Gate */
-        #loginGate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;gap:12px;padding:20px;}
-        #loginGate h2{font-size:18px;color:var(--text);}
-        #loginGate p{font-size:13px;color:var(--text2);text-align:center;}
-        .a-input{width:100%;max-width:320px;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;outline:none;box-sizing:border-box;}
-        .a-input:focus{border-color:#059669;}
-        .a-btn{width:100%;max-width:320px;padding:13px;background:#059669;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
-        #loginErr{color:#dc2626;font-size:12px;min-height:16px;}
+        /* ── DARK MODE ── */
+        [data-theme="dark"] body{background:#022c22;color:#e2e8f0;}
+        [data-theme="dark"] .stat-card,[data-theme="dark"] .order-card,[data-theme="dark"] .modal-box,
+        [data-theme="dark"] .book-manage-item,[data-theme="dark"] .login-box,
+        [data-theme="dark"] .book-editor-panel,[data-theme="dark"] .day-group{background:#064e3b;border-color:#047857;}
+        [data-theme="dark"] .admin-tabs{background:#022c22;}
+        [data-theme="dark"] .tab-btn{color:#6ee7b7;}
+        [data-theme="dark"] .tab-btn.active{background:#059669;color:#fff;}
+        [data-theme="dark"] .stat-label,[data-theme="dark"] .order-info,[data-theme="dark"] .stat-change{color:#6ee7b7;}
+        [data-theme="dark"] .order-name{color:#ecfdf5;}
+        [data-theme="dark"] .modal-info-item,[data-theme="dark"] .modal-books,[data-theme="dark"] .search-input{background:#022c22;color:#ecfdf5;border-color:#047857;}
+        [data-theme="dark"] .modal-status-select,[data-theme="dark"] .a-input,[data-theme="dark"] .be-input,[data-theme="dark"] .be-textarea{background:#022c22;color:#ecfdf5;border-color:#047857;}
+        [data-theme="dark"] .modal-section-title,[data-theme="dark"] .be-label{color:#6ee7b7;}
+        [data-theme="dark"] .modal-info-label{color:#6ee7b7;}
+        [data-theme="dark"] .modal-info-value,[data-theme="dark"] .book-manage-name{color:#ecfdf5;}
+        [data-theme="dark"] select,[data-theme="dark"] select option{background:#0d1b35;color:#e2e8f0;}
+        [data-theme="dark"] .day-title{color:#a7f3d0;}
+        [data-theme="dark"] .be-book-item{background:#022c22;border-color:#047857;}
+        [data-theme="dark"] .be-book-summary:hover{background:#033b2c;}
+        [data-theme="dark"] .be-edit-panel{background:#011a14;}
+        [data-theme="dark"] .sec-title{color:#e2e8f0;}
 
-        /* Dashboard */
+        /* ── NAVBAR ── */
+        .navbar{background:linear-gradient(135deg,#022c22 0%,#064e3b 100%);border-bottom:1.5px solid #10b981;position:sticky;top:0;z-index:1000;box-shadow:0 2px 16px rgba(5,150,105,.18);}
+        .nav-top{display:flex;align-items:center;gap:8px;padding:9px 14px;}
+        .nav-brand{flex:1;display:flex;align-items:center;gap:8px;}
+        .nav-book-icon{width:32px;height:32px;background:linear-gradient(135deg,#059669,#10b981);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+        .nav-brand-text{font-size:14px;font-weight:700;color:#6ee7b7;}
+        .nav-brand-sub{font-size:10px;color:#a7f3d0;}
+        .nav-right{display:flex;align-items:center;gap:7px;}
+        .ni{width:34px;height:34px;border-radius:9px;background:#065f46;border:1px solid #047857;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:#C0CDE0;transition:.15s;}
+        .ni:hover{background:#047857;border-color:#34d399;}
+        #logoutBtn{display:none;padding:5px 12px;background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.4);border-radius:8px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;}
+        #logoutBtn:hover{background:rgba(220,38,38,.3);}
+
+        /* ── PAGE ── */
+        .page-wrap{padding:12px;max-width:620px;margin:0 auto;padding-bottom:50px;}
+
+        /* ── LOGIN ── */
+        #loginGate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:75vh;gap:12px;padding:20px;}
+        .login-box{background:#ffffff;border-radius:18px;padding:28px 24px;width:100%;max-width:340px;border:0.5px solid #bbf7d0;box-shadow:0 8px 32px rgba(5,150,105,.10);}
+        .login-logo{width:52px;height:52px;background:linear-gradient(135deg,#059669,#10b981);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;}
+        .login-title{font-size:17px;font-weight:700;color:#064e3b;text-align:center;margin-bottom:4px;}
+        .login-sub{font-size:12px;color:#6b7280;text-align:center;margin-bottom:18px;}
+        .a-input{width:100%;padding:11px 14px;border:1px solid #bbf7d0;border-radius:10px;background:#f0fdf4;color:#1a202c;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;outline:none;margin-bottom:10px;}
+        .a-input:focus{border-color:#059669;background:#ffffff;}
+        .a-btn{width:100%;padding:13px;background:linear-gradient(135deg,#059669,#10b981);color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 4px 14px rgba(5,150,105,.3);}
+        #loginErr{color:#dc2626;font-size:12px;min-height:16px;text-align:center;}
+
+        /* ── DASHBOARD ── */
         #dashboard{display:none;}
-        .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-        .stat-card{background:var(--card);border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 10px var(--shadow);}
-        .stat-num{font-size:22px;font-weight:800;color:#059669;}
-        .stat-label{font-size:11px;color:var(--text2);margin-top:2px;}
 
-        /* Filter Tabs */
-        .filter-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;scrollbar-width:none;}
-        .filter-tabs::-webkit-scrollbar{display:none;}
-        .ftab{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:0.2s;}
-        .ftab.active{background:#059669;color:white;border-color:#059669;}
+        /* ── TABS ── */
+        .admin-tabs{display:flex;gap:4px;margin-bottom:14px;background:#e8faf2;border-radius:12px;padding:4px;}
+        .tab-btn{flex:1;padding:9px 4px;font-size:11px;font-weight:600;background:transparent;color:#6b7280;border:none;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:.15s;border-radius:8px;}
+        .tab-btn.active{background:#059669;color:#fff;box-shadow:0 2px 8px rgba(5,150,105,.3);}
+        .tab-btn:hover:not(.active){background:#f0fdf4;color:#064e3b;}
 
-        /* Order Cards */
-        .order-card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:0 2px 10px var(--shadow);}
-        .order-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
-        .order-id{font-size:13px;font-weight:800;color:#059669;}
-        .status-badge{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;}
-        .badge-pending{background:#fef3c7;color:#92400e;}
-        .badge-confirmed{background:#dbeafe;color:#1e40af;}
-        .badge-processing{background:#ede9fe;color:#5b21b6;}
-        .badge-shipped{background:#fff7ed;color:#9a3412;}
-        .badge-delivered{background:#ecfdf5;color:#065f46;}
-        .order-detail{font-size:12px;color:var(--text2);line-height:1.8;}
-        .order-detail strong{color:var(--text);}
-        .status-select{width:100%;margin-top:10px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;outline:none;cursor:pointer;}
+        /* ── STATS ── */
+        .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+        .stat-card{background:#ffffff;border-radius:14px;padding:14px;border:0.5px solid #bbf7d0;position:relative;overflow:hidden;}
+        .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+        .stat-card:nth-child(1)::before{background:linear-gradient(90deg,#059669,#10b981);}
+        .stat-card:nth-child(2)::before{background:linear-gradient(90deg,#DC2626,#ef4444);}
+        .stat-card:nth-child(3)::before{background:linear-gradient(90deg,#047857,#059669);}
+        .stat-card:nth-child(4)::before{background:linear-gradient(90deg,#059669,#10b981);}
+        .stat-icon{font-size:22px;float:right;margin-top:2px;}
+        .stat-label{font-size:10px;color:#6b7280;margin-bottom:5px;font-weight:600;}
+        .stat-num{font-size:22px;font-weight:700;color:#059669;line-height:1;}
+        .stat-num.red{color:#DC2626;}
+        .stat-num.blue{color:#0369a1;}
+        .stat-change{font-size:10px;color:#6b7280;margin-top:4px;}
 
-        /* Book Management */
-        .book-manage-item{background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 8px var(--shadow);display:flex;justify-content:space-between;align-items:center;}
-        .book-manage-name{font-size:13px;font-weight:700;color:var(--text);flex:1;margin-right:10px;}
-        .stock-toggle{padding:6px 14px;border-radius:20px;border:none;font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
-        .stock-on{background:#ecfdf5;color:#059669;border:1.5px solid #a7f3d0;}
-        .stock-off{background:#fef2f2;color:#dc2626;border:1.5px solid #fca5a5;}
+        /* ── FILTER CHIPS ── */
+        .filter-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;margin-bottom:10px;scrollbar-width:none;}
+        .filter-chips::-webkit-scrollbar{display:none;}
+        .fchip{padding:6px 14px;border-radius:20px;border:1px solid #bbf7d0;background:#ffffff;color:#6b7280;font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.15s;flex-shrink:0;}
+        .fchip.active{background:#064e3b;color:#fff;border-color:#064e3b;}
 
-        /* Empty */
-        .empty-admin{text-align:center;padding:40px;color:var(--text2);font-size:14px;}
+        /* ── SECTION TITLE ── */
+        .sec-title{font-size:13px;font-weight:700;color:#064e3b;padding-left:10px;border-left:3px solid #059669;margin-bottom:12px;}
 
-        /* Loading */
-        .loading-spin{text-align:center;padding:30px;font-size:13px;color:var(--text2);}
+        /* ── ORDER CARD ── */
+        .order-card{background:#ffffff;border-radius:12px;padding:13px 14px;margin-bottom:8px;border:0.5px solid #bbf7d0;cursor:pointer;transition:.15s;}
+        .order-card:hover{border-color:#059669;box-shadow:0 4px 16px rgba(5,150,105,.10);}
+        .order-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}
+        .order-id{font-size:12px;font-weight:700;color:#059669;}
+        .order-date{font-size:10px;color:#8fa8c8;margin-top:1px;}
+        .order-status{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;}
+        .status-pending{background:#FFF3CD;color:#B8860B;}
+        .status-confirmed{background:#E6F0FF;color:#1B3A6B;}
+        .status-processing{background:#EDE9FE;color:#5b21b6;}
+        .status-shipped{background:#FFF7ED;color:#9a3412;}
+        .status-delivered{background:#E8F5E9;color:#1B5E20;}
+        .order-name{font-size:13px;font-weight:700;color:#1a202c;margin-bottom:3px;}
+        .order-info{font-size:11px;color:#6b7280;line-height:1.7;}
+        .order-info strong{color:#1a202c;}
+        .order-amt{font-size:13px;font-weight:700;color:#DC2626;margin-top:6px;}
+        .order-actions{display:flex;gap:7px;margin-top:9px;}
+        .oa-btn{flex:1;padding:7px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .oa-btn.outline{background:transparent;color:#6b7280;border:0.5px solid #bbf7d0;}
 
-        /* Order Detail Modal */
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:2000;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px);}
+        /* ── DAY GROUP (প্রতিদিনের অর্ডার) ── */
+        .day-group{background:#ffffff;border-radius:14px;margin-bottom:12px;border:0.5px solid #bbf7d0;overflow:hidden;}
+        .day-title{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(135deg,#e8faf2,#f0fdf4);cursor:pointer;font-size:13px;font-weight:700;color:#064e3b;}
+        .day-title .day-count{font-size:11px;font-weight:600;background:#059669;color:#fff;padding:2px 9px;border-radius:10px;}
+        .day-title .day-revenue{font-size:12px;font-weight:700;color:#DC2626;}
+        .day-body{display:none;padding:8px;}
+        .day-body.open{display:block;}
+
+        /* ── BOOK MANAGE ── */
+        .book-manage-item{background:#ffffff;border-radius:10px;padding:11px 13px;margin-bottom:7px;border:0.5px solid #bbf7d0;display:flex;justify-content:space-between;align-items:center;}
+        .book-manage-name{font-size:13px;font-weight:600;color:#1a202c;flex:1;margin-right:10px;}
+        .stock-toggle{padding:6px 13px;border-radius:20px;border:none;font-family:'Hind Siliguri',Arial,sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:.15s;}
+        .stock-on{background:#E8F5E9;color:#1B5E20;border:1px solid #a7f3d0;}
+        .stock-off{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;}
+        .search-input{width:100%;padding:10px 14px;border:1px solid #bbf7d0;border-radius:10px;background:#f0fdf4;color:#1a202c;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:12px;}
+        .search-input:focus{border-color:#059669;}
+
+        /* ────── BOOK EDITOR PANEL ────── */
+        .book-editor-panel{background:#ffffff;border-radius:14px;border:0.5px solid #bbf7d0;overflow:hidden;margin-bottom:10px;}
+
+        /* editor toolbar */
+        .be-toolbar{display:flex;gap:8px;padding:12px;flex-wrap:wrap;border-bottom:1px solid #e8faf2;}
+        .be-search{flex:1;min-width:180px;padding:9px 13px;border:1px solid #bbf7d0;border-radius:9px;background:#f0fdf4;color:#1a202c;font-size:13px;outline:none;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .be-search:focus{border-color:#059669;}
+        .be-filter-btn{padding:9px 12px;border-radius:9px;border:1px solid #bbf7d0;background:#f0fdf4;color:#6b7280;font-size:11px;font-weight:600;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .be-filter-btn.active{background:#064e3b;color:#fff;border-color:#064e3b;}
+
+        /* add book toggle */
+        .be-add-toggle{width:100%;padding:10px;border-radius:0;border:none;border-bottom:1px solid #e8faf2;background:#f0fdf4;color:#059669;font-size:13px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .be-add-toggle.open{color:#dc2626;background:#fff0f0;}
+        .be-add-form{padding:14px;display:none;border-bottom:1px solid #e8faf2;background:#f9fefb;}
+        .be-add-form.open{display:block;}
+        .be-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+        .be-field label{display:block;font-size:10px;color:#6b7280;margin-bottom:3px;font-weight:600;}
+        .be-input{width:100%;background:#ffffff;border:1px solid #bbf7d0;border-radius:7px;padding:8px 10px;color:#1a202c;font-size:12px;outline:none;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .be-input:focus{border-color:#059669;}
+        .be-textarea{width:100%;background:#ffffff;border:1px solid #bbf7d0;border-radius:7px;padding:8px 10px;color:#1a202c;font-size:12px;outline:none;font-family:'Hind Siliguri',Arial,sans-serif;resize:vertical;}
+        .be-textarea:focus{border-color:#059669;}
+        .be-full{grid-column:1/-1;}
+        .be-form-actions{margin-top:10px;display:flex;gap:8px;}
+
+        /* book list */
+        .be-list{padding:10px;}
+        .be-book-item{border-radius:10px;border:1px solid #e8faf2;margin-bottom:6px;overflow:hidden;}
+        .be-book-item.missing{border-left:3px solid #fca5a5;}
+        .be-book-item.hasimg{border-left:3px solid #a7f3d0;}
+        .be-book-summary{display:flex;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;}
+        .be-book-summary:hover{background:#f9fefb;}
+        .be-cover{width:36px;height:50px;border-radius:5px;overflow:hidden;background:#e8faf2;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;}
+        .be-cover img{width:100%;height:100%;object-fit:cover;}
+        .be-info{flex:1;min-width:0;}
+        .be-name{font-size:13px;font-weight:700;color:#1a202c;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .be-meta{font-size:11px;color:#6b7280;}
+        .be-img-badge{font-size:10px;margin-top:2px;}
+        .be-img-badge.ok{color:#059669;}
+        .be-img-badge.miss{color:#dc2626;}
+        .be-arrow{color:#6b7280;font-size:11px;transition:transform .2s;flex-shrink:0;}
+        .be-arrow.open{transform:rotate(180deg);}
+
+        /* edit panel */
+        .be-edit-panel{display:none;padding:13px;border-top:1px solid #e8faf2;background:#f9fefb;}
+        .be-edit-panel.open{display:block;}
+        .be-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px;}
+        .be-label{display:block;font-size:10px;color:#6b7280;margin-bottom:3px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;}
+        .be-img-preview{margin-top:6px;width:100%;height:80px;border-radius:6px;background:#e8faf2;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #bbf7d0;}
+        .be-img-preview img{max-height:100%;max-width:100%;object-fit:contain;}
+        .be-empty-img{font-size:11px;color:#6b7280;}
+        .be-edit-actions{display:flex;gap:7px;flex-wrap:wrap;}
+
+        /* btns */
+        .btn-green{padding:8px 16px;border-radius:8px;background:#059669;color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .btn-green:hover{background:#047857;}
+        .btn-red{padding:8px 12px;border-radius:8px;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;font-size:12px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .btn-gray{padding:8px 12px;border-radius:8px;background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb;font-size:12px;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .btn-purple{padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#9333ea);color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .btn-purple:hover{opacity:.9;}
+
+        /* be stats bar */
+        .be-stats{display:flex;gap:10px;padding:10px 14px;background:#f0fdf4;border-bottom:1px solid #e8faf2;font-size:12px;}
+        .be-stat{font-weight:700;}
+        .be-stat span{color:#6b7280;font-weight:400;}
+
+        /* sync banner */
+        .sync-banner{background:linear-gradient(135deg,#064e3b,#059669);border-radius:12px;padding:12px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
+        .sync-text{font-size:12px;color:#a7f3d0;}
+        .sync-text strong{color:#fff;font-size:13px;display:block;margin-bottom:2px;}
+        .sync-btn{padding:8px 14px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:8px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+        .sync-btn:hover{background:rgba(255,255,255,.3);}
+        .sync-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+        /* ── EMPTY / LOADING ── */
+        .empty-state{text-align:center;padding:50px 20px;color:#8fa8c8;font-size:14px;}
+        .loading-spin{text-align:center;padding:40px;font-size:13px;color:#8fa8c8;}
+
+        /* ── MODAL ── */
+        .modal-overlay{position:fixed;inset:0;background:rgba(4,47,46,.6);z-index:2000;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);}
         .modal-overlay.open{display:flex;}
-        .modal-box{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;padding:0 0 30px;animation:slideUp .3s ease;}
+        .modal-box{background:#ffffff;border-radius:22px 22px 0 0;width:100%;max-width:620px;max-height:92vh;overflow-y:auto;padding:0 0 30px;animation:slideUp .3s ease;}
         @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-        .modal-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 0;}
-        .modal-head{padding:16px 20px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+        .modal-handle{width:38px;height:4px;background:#C7D2E8;border-radius:4px;margin:12px auto 0;}
+        .modal-head{padding:14px 18px 12px;border-bottom:1px solid #e8faf2;display:flex;justify-content:space-between;align-items:center;}
         .modal-oid{font-size:15px;font-weight:800;color:#059669;}
-        .modal-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--border);color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-        .modal-body{padding:16px 20px;}
-        .modal-section{margin-bottom:18px;}
-        .modal-section-title{font-size:10px;font-weight:800;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
-        .modal-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-        .modal-info-item{background:var(--bg);border-radius:10px;padding:10px 12px;}
-        .modal-info-label{font-size:10px;color:var(--text2);font-weight:600;margin-bottom:3px;}
-        .modal-info-value{font-size:13px;font-weight:700;color:var(--text);}
-        .modal-books{background:var(--bg);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);line-height:1.6;}
-        .modal-total{background:#ecfdf5;border:1.5px solid #a7f3d0;border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-        .modal-total-label{font-size:12px;color:#065f46;font-weight:700;}
-        .modal-total-val{font-size:20px;font-weight:900;color:#059669;}
-        .modal-status-select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;outline:none;cursor:pointer;}
-        .modal-status-select:focus{border-color:#059669;}
-        .modal-update-btn{width:100%;padding:14px;background:linear-gradient(135deg,#059669,#10b981);color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:10px;box-shadow:0 4px 14px rgba(5,150,105,0.3);}
+        .modal-close{width:30px;height:30px;border-radius:50%;border:none;background:#f0fdf4;color:#6b7280;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+        .modal-body{padding:14px 18px;}
+        .modal-section{margin-bottom:16px;}
+        .modal-section-title{font-size:10px;font-weight:700;color:#6b7280;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+        .modal-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+        .modal-info-item{background:#f0fdf4;border-radius:10px;padding:10px 12px;}
+        .modal-info-label{font-size:10px;color:#6b7280;font-weight:600;margin-bottom:2px;}
+        .modal-info-value{font-size:13px;font-weight:700;color:#1a202c;}
+        .modal-books{background:#f0fdf4;border-radius:10px;padding:12px 14px;font-size:13px;color:#1a202c;line-height:1.6;}
+        .modal-total-box{background:linear-gradient(135deg,#064e3b,#059669);border-radius:12px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+        .modal-total-label{font-size:11px;color:#a7f3d0;font-weight:600;}
+        .modal-total-val{font-size:20px;font-weight:800;color:#6ee7b7;}
+        .modal-pay-val{font-size:13px;font-weight:700;color:#fff;margin-top:2px;}
+        .modal-status-select{width:100%;padding:11px 14px;border:1px solid #bbf7d0;border-radius:10px;background:#f0fdf4;color:#1a202c;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:600;outline:none;cursor:pointer;margin-bottom:10px;}
+        .modal-update-btn{width:100%;padding:14px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 18px rgba(5,150,105,.35);transition:.2s;}
+        .modal-offers-box{background:#FFF8E6;border:1px solid #E6B800;border-radius:10px;padding:11px 13px;font-size:13px;line-height:2;}
+        .modal-status-badge{font-size:13px;padding:5px 16px;}
+
+        /* ── MIGRATE BTN ── */
+        .migrate-btn{padding:7px 14px;border-radius:20px;border:1px solid #7c3aed;background:rgba(124,58,237,.12);color:#7c3aed;font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:.15s;}
+
+        /* ── TOAST ── */
+        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;color:white;z-index:9999;pointer-events:none;}
+
+        @media (max-width:400px){
+            .be-add-grid,.be-edit-grid{grid-template-columns:1fr;}
+        }
     </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav class="navbar">
-    <div class="navbar-top">
-        <button class="back-btn" onclick="navigateTo('index.html')">‹</button>
-        <span class="navbar-title">🔐 Admin Panel</span>
-        <button id="logoutBtn" style="display:none;padding:6px 12px;background:#dc2626;color:white;border:none;border-radius:8px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:12px;font-weight:700;cursor:pointer;" onclick="adminLogout()">লগআউট</button>
-        <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+    <div class="nav-top">
+        <div class="nav-brand">
+            <div class="nav-book-icon">📚</div>
+            <div>
+                <div class="nav-brand-text">গ্রন্থকানন</div>
+                <div class="nav-brand-sub">Admin Panel</div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <button id="logoutBtn" onclick="adminLogout()">লগআউট</button>
+            <div class="ni" onclick="toggleDark()" id="darkBtn" title="Dark Mode">🌙</div>
+        </div>
     </div>
 </nav>
 
@@ -110,60 +274,37 @@
             <button class="modal-close" onclick="closeModal()">✕</button>
         </div>
         <div class="modal-body">
-            <!-- Status Badge -->
-            <div style="text-align:center;margin-bottom:16px;">
-                <span id="modalStatusBadge" class="status-badge" style="font-size:13px;padding:6px 18px;"></span>
-                <div id="modalDate" style="font-size:11px;color:var(--text2);margin-top:6px;"></div>
+            <div style="text-align:center;margin-bottom:14px;">
+                <span id="modalStatusBadge" class="order-status modal-status-badge"></span>
+                <div id="modalDate" style="font-size:11px;color:#8fa8c8;margin-top:5px;"></div>
             </div>
-
-            <!-- Customer Info -->
             <div class="modal-section">
                 <div class="modal-section-title">👤 গ্রাহকের তথ্য</div>
                 <div class="modal-info-grid">
-                    <div class="modal-info-item">
-                        <div class="modal-info-label">নাম</div>
-                        <div class="modal-info-value" id="modalName"></div>
-                    </div>
-                    <div class="modal-info-item">
-                        <div class="modal-info-label">ফোন</div>
-                        <div class="modal-info-value" id="modalPhone"></div>
-                    </div>
+                    <div class="modal-info-item"><div class="modal-info-label">নাম</div><div class="modal-info-value" id="modalName"></div></div>
+                    <div class="modal-info-item"><div class="modal-info-label">ফোন</div><div class="modal-info-value" id="modalPhone"></div></div>
                 </div>
-                <div class="modal-info-item" style="margin-top:10px;border-radius:10px;background:var(--bg);padding:10px 12px;">
+                <div class="modal-info-item" style="margin-top:8px;border-radius:10px;background:#f0fdf4;padding:10px 12px;">
                     <div class="modal-info-label">📍 ঠিকানা</div>
-                    <div class="modal-info-value" id="modalAddress" style="line-height:1.5;"></div>
+                    <div class="modal-info-value" id="modalAddress" style="line-height:1.5;margin-top:3px;"></div>
                 </div>
             </div>
-
-            <!-- Books -->
             <div class="modal-section">
                 <div class="modal-section-title">📚 অর্ডারকৃত বই</div>
                 <div class="modal-books" id="modalBooks"></div>
             </div>
-
-            <!-- Payment & Total -->
             <div class="modal-section">
                 <div class="modal-section-title">💳 পেমেন্ট ও মূল্য</div>
-                <div class="modal-total">
-                    <div>
-                        <div class="modal-total-label">পেমেন্ট পদ্ধতি</div>
-                        <div id="modalPayment" style="font-size:14px;font-weight:700;color:var(--text);margin-top:3px;"></div>
-                    </div>
-                    <div style="text-align:right;">
-                        <div class="modal-total-label">মোট</div>
-                        <div class="modal-total-val" id="modalTotal"></div>
-                    </div>
+                <div class="modal-total-box">
+                    <div><div class="modal-total-label">পেমেন্ট পদ্ধতি</div><div class="modal-pay-val" id="modalPayment"></div></div>
+                    <div style="text-align:right;"><div class="modal-total-label">মোট</div><div class="modal-total-val" id="modalTotal"></div></div>
                 </div>
             </div>
-
-            <!-- Offers section -->
             <div class="modal-section" id="modalOffersSection" style="display:none;">
-                <div class="modal-section-title">🎁 অফার / গিফট তথ্য (প্যাকেজ করুন)</div>
-                <div id="modalOffers" style="background:#fff7ed;border:1.5px solid #fde68a;border-radius:10px;padding:12px 14px;font-size:13px;line-height:2;"></div>
-                <div style="font-size:11px;color:#92400e;margin-top:6px;padding:6px 8px;background:#fef3c7;border-radius:6px;">📦 অর্ডার পাঠানোর আগে এই গিফটগুলো বইয়ের সাথে প্যাকেজ করুন</div>
+                <div class="modal-section-title">🎁 গিফট — প্যাকেজ করুন</div>
+                <div class="modal-offers-box" id="modalOffers"></div>
+                <div style="font-size:11px;color:#92400e;margin-top:6px;padding:5px 8px;background:#fef3c7;border-radius:6px;">📦 পাঠানোর আগে গিফটগুলো বইয়ের সাথে প্যাকেজ করুন</div>
             </div>
-
-            <!-- Status Update -->
             <div class="modal-section">
                 <div class="modal-section-title">🔄 স্ট্যাটাস আপডেট</div>
                 <select class="modal-status-select" id="modalStatusSelect">
@@ -181,50 +322,141 @@
 
 <div class="page-wrap">
 
-    <!-- Login Gate -->
+    <!-- LOGIN GATE -->
     <div id="loginGate">
-        <div style="font-size:48px;">🔐</div>
-        <h2>Admin লগইন</h2>
-        <p>শুধুমাত্র admin এর জন্য</p>
-        <p id="loginErr"></p>
-        <input class="a-input" id="adminEmail" type="email" placeholder="Admin ইমেইল">
-        <input class="a-input" id="adminPass" type="password" placeholder="পাসওয়ার্ড" style="margin-top:8px;">
-        <button class="a-btn" onclick="adminLogin()" style="margin-top:10px;">লগইন করুন</button>
+        <div class="login-box">
+            <div class="login-logo">🔐</div>
+            <div class="login-title">Admin লগইন</div>
+            <div class="login-sub">শুধুমাত্র অনুমোদিত admin এর জন্য</div>
+            <p id="loginErr"></p>
+            <input class="a-input" id="adminEmail" type="email" placeholder="Admin ইমেইল">
+            <input class="a-input" id="adminPass" type="password" placeholder="পাসওয়ার্ড" onkeydown="if(event.key==='Enter')adminLogin()">
+            <button class="a-btn" onclick="adminLogin()">লগইন করুন →</button>
+        </div>
     </div>
 
-    <!-- Dashboard -->
+    <!-- DASHBOARD -->
     <div id="dashboard">
-        <!-- Stats -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-num" id="statTotal">0</div>
-                <div class="stat-label">মোট অর্ডার</div>
+
+        <!-- TABS -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" id="tabOrders" onclick="switchTab('orders',this)">📦 অর্ডার</button>
+            <button class="tab-btn" id="tabDaily" onclick="switchTab('daily',this)">📅 দৈনিক</button>
+            <button class="tab-btn" id="tabBooks" onclick="switchTab('books',this)">📚 স্টক</button>
+            <button class="tab-btn" id="tabEditor" onclick="switchTab('editor',this)">✏️ বই এডিট</button>
+            <button class="tab-btn" id="tabTools" onclick="switchTab('tools',this)">🔧 টুলস</button>
+        </div>
+
+        <!-- ═══════════════ ORDERS TAB ═══════════════ -->
+        <div id="tabPanelOrders">
+            <div class="stats-row">
+                <div class="stat-card"><span class="stat-icon">📦</span><div class="stat-label">মোট অর্ডার</div><div class="stat-num" id="statTotal">0</div><div class="stat-change">সর্বমোট</div></div>
+                <div class="stat-card"><span class="stat-icon">🕐</span><div class="stat-label">পেন্ডিং</div><div class="stat-num red" id="statPending">0</div><div class="stat-change">অপেক্ষায়</div></div>
+                <div class="stat-card"><span class="stat-icon">🚚</span><div class="stat-label">শিপড</div><div class="stat-num blue" id="statShipped">0</div><div class="stat-change">রওনায়</div></div>
+                <div class="stat-card"><span class="stat-icon">🎉</span><div class="stat-label">ডেলিভারড</div><div class="stat-num" id="statDelivered">0</div><div class="stat-change">সম্পন্ন</div></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-num" id="statPending">0</div>
-                <div class="stat-label">পেন্ডিং</div>
+            <div class="filter-chips">
+                <button class="fchip active" onclick="filterOrders('all',this)">সব</button>
+                <button class="fchip" onclick="filterOrders('pending',this)">🕐 পেন্ডিং</button>
+                <button class="fchip" onclick="filterOrders('confirmed',this)">✅ কনফার্ম</button>
+                <button class="fchip" onclick="filterOrders('processing',this)">📦 প্যাকেজিং</button>
+                <button class="fchip" onclick="filterOrders('shipped',this)">🚚 শিপড</button>
+                <button class="fchip" onclick="filterOrders('delivered',this)">🎉 ডেলিভারড</button>
             </div>
-            <div class="stat-card">
-                <div class="stat-num" id="statDelivered">0</div>
-                <div class="stat-label">ডেলিভারড</div>
+            <div class="sec-title" id="ordersSecTitle">সব অর্ডার</div>
+            <div id="orderList"><div class="loading-spin">⏳ লোড হচ্ছে...</div></div>
+        </div>
+
+        <!-- ═══════════════ DAILY ORDERS TAB ═══════════════ -->
+        <div id="tabPanelDaily" style="display:none;">
+            <div class="sec-title">📅 প্রতিদিনের অর্ডার</div>
+            <div id="dailyOrderList"><div class="loading-spin">⏳ লোড হচ্ছে...</div></div>
+        </div>
+
+        <!-- ═══════════════ BOOKS STOCK TAB ═══════════════ -->
+        <div id="tabPanelBooks" style="display:none;">
+            <div class="sec-title">বই স্টক ম্যানেজ</div>
+            <div id="bookManageWrap"><div class="loading-spin">⏳ বই লোড হচ্ছে...</div></div>
+        </div>
+
+        <!-- ═══════════════ BOOK EDITOR TAB ═══════════════ -->
+        <div id="tabPanelEditor" style="display:none;">
+
+            <!-- Sync Banner -->
+            <div class="sync-banner">
+                <div class="sync-text">
+                    <strong>🔄 Firebase Sync</strong>
+                    বই আপডেট করলে সরাসরি website-এ দেখাবে
+                </div>
+                <button class="sync-btn" id="syncAllBtn" onclick="syncAllBooksToFirebase()">☁️ সব সেভ করুন</button>
+            </div>
+
+            <!-- Book Editor Panel -->
+            <div class="book-editor-panel">
+
+                <!-- Stats Bar -->
+                <div class="be-stats">
+                    <div class="be-stat" id="beStatTotal">📖 মোট: <span>0</span></div>
+                    <div class="be-stat" id="beStatOk">✅ ছবি আছে: <span>0</span></div>
+                    <div class="be-stat" id="beStatMiss">⚠️ ছবি নেই: <span>0</span></div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="be-toolbar">
+                    <input class="be-search" id="beSearch" placeholder="🔍 নাম, লেখক বা প্রকাশনী..." oninput="beRenderList()">
+                    <button class="be-filter-btn active" id="beFAll" onclick="beSetFilter('all')">সব</button>
+                    <button class="be-filter-btn" id="beFLinked" onclick="beSetFilter('linked')">✅ ছবি</button>
+                    <button class="be-filter-btn" id="beFMissing" onclick="beSetFilter('missing')">⚠️ ছবি নেই</button>
+                </div>
+
+                <!-- Add New Book -->
+                <button class="be-add-toggle" id="beAddToggle" onclick="beToggleAddForm()">+ নতুন বই যোগ করুন</button>
+                <div class="be-add-form" id="beAddForm">
+                    <div style="font-size:12px;color:#059669;font-weight:700;margin-bottom:10px;">নতুন বই যোগ করুন</div>
+                    <div class="be-add-grid">
+                        <div class="be-field"><label>বইয়ের নাম *</label><input class="be-input" id="fa_name" placeholder="বইয়ের নাম"></div>
+                        <div class="be-field"><label>লেখক</label><input class="be-input" id="fa_author" placeholder="লেখকের নাম"></div>
+                        <div class="be-field"><label>মূল্য (৳)</label><input class="be-input" id="fa_price" type="number" placeholder="250"></div>
+                        <div class="be-field"><label>আসল মূল্য (৳)</label><input class="be-input" id="fa_oprice" type="number" placeholder="350"></div>
+                        <div class="be-field"><label>প্রকাশনী</label><input class="be-input" id="fa_pub" placeholder="প্রকাশনীর নাম"></div>
+                        <div class="be-field"><label>পৃষ্ঠা</label><input class="be-input" id="fa_pages" placeholder="200 পৃষ্ঠা"></div>
+                        <div class="be-field"><label>কভার</label><input class="be-input" id="fa_cover" placeholder="Paperback"></div>
+                        <div class="be-field"><label>বিভাগ</label><input class="be-input" id="fa_cat" placeholder="ইসলামি বই"></div>
+                        <div class="be-field"><label>বিষয়</label><input class="be-input" id="fa_subject" placeholder="ইসলামি বই"></div>
+                        <div class="be-field"><label>ছবির লিংক</label><input class="be-input" id="fa_img" placeholder="https://..."></div>
+                        <div class="be-field be-full"><label>বিবরণ</label><textarea class="be-textarea" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
+                    </div>
+                    <div class="be-form-actions">
+                        <button class="btn-green" onclick="beAddBook()">✅ যোগ করুন ও Firebase-এ সেভ</button>
+                        <button class="btn-gray" onclick="beToggleAddForm()">বাতিল</button>
+                    </div>
+                </div>
+
+                <!-- Book List -->
+                <div class="be-list" id="beBookList"></div>
             </div>
         </div>
 
-        <!-- Filter -->
-        <div class="filter-tabs">
-            <button class="ftab active" onclick="filterOrders('all',this)">সব</button>
-            <button class="ftab" onclick="filterOrders('pending',this)">পেন্ডিং</button>
-            <button class="ftab" onclick="filterOrders('confirmed',this)">কনফার্ম</button>
-            <button class="ftab" onclick="filterOrders('processing',this)">প্যাকেজিং</button>
-            <button class="ftab" onclick="filterOrders('shipped',this)">শিপড</button>
-            <button class="ftab" onclick="filterOrders('delivered',this)">ডেলিভারড</button>
-            <button class="ftab" onclick="filterOrders('books',this)">📚 বই ম্যানেজ</button>
-            <button class="ftab" onclick="migratePhoneIndex()" style="background:#7c3aed;color:white;border-color:#7c3aed;" id="migrateBtn">🔄 Phone Index ঠিক করুন</button>
+        <!-- ═══════════════ TOOLS TAB ═══════════════ -->
+        <div id="tabPanelTools" style="display:none;">
+            <div class="sec-title">টুলস ও ইউটিলিটি</div>
+            <div style="background:#ffffff;border-radius:12px;padding:16px;border:0.5px solid #bbf7d0;margin-bottom:10px;">
+                <div style="font-size:13px;font-weight:700;color:#064e3b;margin-bottom:5px;">🔄 Phone Index Migration</div>
+                <div style="font-size:12px;color:#6b7280;margin-bottom:12px;">পুরনো orders এর phoneIndex ঠিক করতে।</div>
+                <button class="migrate-btn" onclick="migratePhoneIndex()" id="migrateBtn" style="width:100%;padding:10px;border-radius:10px;font-size:13px;">🔄 Phone Index ঠিক করুন</button>
+            </div>
+            <div style="background:#ffffff;border-radius:12px;padding:16px;border:0.5px solid #bbf7d0;margin-bottom:10px;">
+                <div style="font-size:13px;font-weight:700;color:#064e3b;margin-bottom:5px;">📊 অর্ডার সংক্ষেপ</div>
+                <div id="orderSummary" style="font-size:12px;color:#6b7280;line-height:2;">লোড হচ্ছে...</div>
+            </div>
+            <div style="background:#ffffff;border-radius:12px;padding:16px;border:0.5px solid #bbf7d0;">
+                <div style="font-size:13px;font-weight:700;color:#064e3b;margin-bottom:5px;">📥 book.js ডাউনলোড</div>
+                <div style="font-size:12px;color:#6b7280;margin-bottom:12px;">বর্তমান বইয়ের লিস্ট book.js হিসেবে ডাউনলোড করুন।</div>
+                <button class="btn-green" onclick="downloadBookJs()" style="width:100%;">📥 book.js ডাউনলোড করুন</button>
+            </div>
         </div>
 
-        <div id="orderList"><div class="loading-spin">লোড হচ্ছে...</div></div>
     </div>
-
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -233,23 +465,44 @@
 <script src="firebase-config.js"></script>
 <script src="book.js" defer></script>
 <script>
+/* ═══════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════ */
 function escapeHTML(str){
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+function isRealUrl(img){ return img && String(img).startsWith('http'); }
+
 const ADMIN_EMAIL='gronthokanon4309@gmail.com';
 let allOrders=[];
 let curFilter='all';
 let stockData={};
+let ordersRef=null;
 
-const STATUS_LABELS={
-    pending:'পেন্ডিং',confirmed:'কনফার্ম',
-    processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'
-};
-const STATUS_CLASS={
-    pending:'badge-pending',confirmed:'badge-confirmed',
-    processing:'badge-processing',shipped:'badge-shipped',delivered:'badge-delivered'
-};
+const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
+const STATUS_CLASS={pending:'status-pending',confirmed:'status-confirmed',processing:'status-processing',shipped:'status-shipped',delivered:'status-delivered'};
 
+/* ── DARK MODE ── */
+function toggleDark(){
+    const h=document.documentElement;
+    const isDark=h.getAttribute('data-theme')==='dark';
+    h.setAttribute('data-theme',isDark?'light':'dark');
+    const btn=document.getElementById('darkBtn');
+    if(btn)btn.innerText=isDark?'🌙':'☀️';
+    localStorage.setItem('gronthokanon_theme',isDark?'light':'dark');
+}
+(function(){
+    const saved=localStorage.getItem('gronthokanon_theme');
+    if(saved){
+        document.documentElement.setAttribute('data-theme',saved);
+        const btn=document.getElementById('darkBtn');
+        if(btn)btn.innerText=saved==='dark'?'☀️':'🌙';
+    }
+})();
+
+/* ══════════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════════ */
 async function adminLogin(){
     const email=document.getElementById('adminEmail').value.trim();
     const pass=document.getElementById('adminPass').value;
@@ -257,9 +510,7 @@ async function adminLogin(){
     err.innerText='';
     try{
         const cred=await auth.signInWithEmailAndPassword(email,pass);
-        if(cred.user.email!==ADMIN_EMAIL){
-            await auth.signOut();err.innerText='⚠️ Admin access নেই';return;
-        }
+        if(cred.user.email!==ADMIN_EMAIL){await auth.signOut();err.innerText='⚠️ Admin access নেই';return;}
         showDashboard();
     }catch(e){err.innerText='⚠️ ইমেইল বা পাসওয়ার্ড ভুল';}
 }
@@ -268,91 +519,165 @@ function showDashboard(){
     document.getElementById('loginGate').style.display='none';
     document.getElementById('dashboard').style.display='block';
     document.getElementById('logoutBtn').style.display='block';
-    setTimeout(loadOrders, 300);
+    setTimeout(()=>{
+        loadOrders();
+        // Load books from Firebase if available
+        loadBooksFromFirebase();
+    },300);
 }
 
-let ordersRef=null;
+/* ══════════════════════════════════════════════
+   TABS
+══════════════════════════════════════════════ */
+function switchTab(tab, btnEl){
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btnEl.classList.add('active');
+    ['Orders','Daily','Books','Editor','Tools'].forEach(t=>{
+        document.getElementById('tabPanel'+t).style.display=tab===t.toLowerCase()?'block':'none';
+    });
+    if(tab==='books') renderBookManage();
+    if(tab==='tools') renderOrderSummary();
+    if(tab==='editor') beInit();
+    if(tab==='daily') renderDailyOrders();
+}
+
+/* ══════════════════════════════════════════════
+   ORDERS TAB
+══════════════════════════════════════════════ */
 function loadOrders(){
     const el=document.getElementById('orderList');
     el.innerHTML='<div class="loading-spin">⏳ লোড হচ্ছে...</div>';
     if(ordersRef)ordersRef.off();
     ordersRef=db.ref('orders');
-    ordersRef.on('value', snap => {
-        allOrders = [];
-        snap.forEach(child => {
-            const val = child.val();
-            if(val && val.orderId) allOrders.push(val);
-        });
-        allOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    ordersRef.on('value',snap=>{
+        allOrders=[];
+        snap.forEach(child=>{const val=child.val();if(val&&val.orderId)allOrders.push(val);});
+        allOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         updateStats();
-        if(curFilter==='books') renderBookManage();
-        else renderOrders();
-    }, err => {
-        el.innerHTML = `<div class="empty-admin">❌ লোড ব্যর্থ: ${err.message}</div>`;
+        renderOrders();
+        // re-render daily if visible
+        if(document.getElementById('tabPanelDaily').style.display==='block') renderDailyOrders();
+    },err=>{
+        el.innerHTML=`<div class="empty-state">❌ লোড ব্যর্থ: ${escapeHTML(err.message)}</div>`;
     });
 }
 
 function updateStats(){
     document.getElementById('statTotal').innerText=allOrders.length;
     document.getElementById('statPending').innerText=allOrders.filter(o=>o.status==='pending').length;
+    document.getElementById('statShipped').innerText=allOrders.filter(o=>o.status==='shipped').length;
     document.getElementById('statDelivered').innerText=allOrders.filter(o=>o.status==='delivered').length;
 }
 
 function filterOrders(f,el){
     curFilter=f;
-    document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.fchip').forEach(t=>t.classList.remove('active'));
     el.classList.add('active');
-    if(f==='books'){renderBookManage();return;}
+    const titles={all:'সব অর্ডার',pending:'পেন্ডিং অর্ডার',confirmed:'কনফার্ম অর্ডার',processing:'প্যাকেজিং',shipped:'শিপড অর্ডার',delivered:'ডেলিভারড অর্ডার'};
+    document.getElementById('ordersSecTitle').innerText=titles[f]||'অর্ডার';
     renderOrders();
 }
 
 function renderOrders(){
     const list=curFilter==='all'?allOrders:allOrders.filter(o=>o.status===curFilter);
     const el=document.getElementById('orderList');
-    if(!list.length){el.innerHTML='<div class="empty-admin">কোনো অর্ডার নেই</div>';return;}
-    el.innerHTML=list.map(o=>`
-        <div class="order-card" onclick="openModal('${o.orderId}')" style="cursor:pointer;">
-            <div class="order-top">
-                <div>
-                    <div class="order-id">${o.orderId}</div>
-                    <div style="font-size:11px;color:var(--text2);">${new Date(o.createdAt).toLocaleString('bn-BD')}</div>
-                </div>
-                <span class="status-badge ${STATUS_CLASS[o.status]||'badge-pending'}">${STATUS_LABELS[o.status]||o.status}</span>
-            </div>
-            <div class="order-detail">
-                <strong>${escapeHTML(o.name)}</strong> · ${escapeHTML(o.phone)}<br>
-                📍 ${escapeHTML(o.address)}<br>
-                📚 ${escapeHTML(o.books)}<br>
-                💳 ${escapeHTML(o.payment)} · 💰 <strong>${escapeHTML(o.total)}</strong>
-                ${o.coupon?`<br>🏷️ কুপন: <strong>${escapeHTML(o.coupon)}</strong> · ছাড়: ৳${o.discount}`:''}
-                ${o.offers&&o.offers.length?`<br>🎁 <strong>${o.offers.map(of=>escapeHTML(of.label)).join(', ')}</strong>`:''}
-            </div>
-        </div>
-    `).join('');
+    if(!list.length){el.innerHTML='<div class="empty-state">📭 কোনো অর্ডার নেই</div>';return;}
+    el.innerHTML=list.map(o=>orderCardHTML(o)).join('');
 }
 
-/* ═══ BOOK MANAGEMENT ═══ */
-function loadStockData(callback){
-    db.ref('stock').once('value').then(snap=>{
-        stockData=snap.val()||{};
-        if(callback)callback();
+function orderCardHTML(o){
+    const isPending=!o.status||o.status==='pending';
+    return `<div class="order-card" onclick="openModal('${escapeHTML(o.orderId)}')">
+        <div class="order-header">
+            <div>
+                <div class="order-id">${escapeHTML(o.orderId)}</div>
+                <div class="order-date">${new Date(o.createdAt).toLocaleString('bn-BD')}</div>
+            </div>
+            <span class="order-status ${STATUS_CLASS[o.status]||'status-pending'}">${STATUS_LABELS[o.status]||escapeHTML(o.status)}</span>
+        </div>
+        <div class="order-name">${escapeHTML(o.name)}</div>
+        <div class="order-info">
+            📍 ${escapeHTML(o.address)}<br>
+            📱 ${escapeHTML(o.phone)} · 📚 ${escapeHTML(o.books)}
+            ${o.coupon?`<br>🏷️ কুপন: <strong>${escapeHTML(o.coupon)}</strong> · ছাড়: ৳${o.discount}`:''}
+            ${o.offers&&o.offers.length?`<br>🎁 <strong>${o.offers.map(of=>escapeHTML(of.label)).join(', ')}</strong>`:''}
+        </div>
+        <div class="order-amt">💰 ${escapeHTML(o.total)} · 💳 ${escapeHTML(o.payment)}</div>
+        ${isPending?`<div class="order-actions" onclick="event.stopPropagation()">
+            <button class="oa-btn" onclick="quickConfirm('${escapeHTML(o.orderId)}')">✅ কনফার্ম করুন</button>
+            <button class="oa-btn outline" onclick="openModal('${escapeHTML(o.orderId)}')">বিস্তারিত →</button>
+        </div>`:''}
+    </div>`;
+}
+
+async function quickConfirm(orderId){
+    try{
+        await db.ref('orders/'+orderId+'/status').set('confirmed');
+        showToast('✅ অর্ডার কনফার্ম হয়েছে','#059669');
+    }catch(e){showToast('❌ আপডেট ব্যর্থ','#dc2626');}
+}
+
+/* ══════════════════════════════════════════════
+   DAILY ORDERS TAB
+══════════════════════════════════════════════ */
+function renderDailyOrders(){
+    const el=document.getElementById('dailyOrderList');
+    if(!allOrders.length){el.innerHTML='<div class="empty-state">📭 কোনো অর্ডার নেই</div>';return;}
+
+    // Group by date
+    const groups={};
+    allOrders.forEach(o=>{
+        const d=new Date(o.createdAt);
+        const dateKey=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const dateLabel=d.toLocaleDateString('bn-BD',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+        if(!groups[dateKey])groups[dateKey]={label:dateLabel,orders:[],revenue:0};
+        groups[dateKey].orders.push(o);
+        const amt=parseInt(String(o.total||'').replace(/[^\d]/g,''))||0;
+        groups[dateKey].revenue+=amt;
     });
+
+    const sortedKeys=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+
+    el.innerHTML=sortedKeys.map((key,idx)=>{
+        const g=groups[key];
+        return `<div class="day-group">
+            <div class="day-title" onclick="toggleDayGroup('day_${idx}')">
+                <div>
+                    <div>${g.label}</div>
+                    <div style="font-size:11px;color:#6b7280;font-weight:400;margin-top:2px;">${g.orders.filter(o=>o.status==='pending').length} পেন্ডিং · ${g.orders.filter(o=>o.status==='delivered').length} ডেলিভারড</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="day-revenue">৳${g.revenue.toLocaleString('bn-BD')}</div>
+                    <div class="day-count">${g.orders.length}</div>
+                </div>
+            </div>
+            <div class="day-body ${idx===0?'open':''}" id="day_${idx}">
+                ${g.orders.map(o=>orderCardHTML(o)).join('')}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function toggleDayGroup(id){
+    const el=document.getElementById(id);
+    if(el)el.classList.toggle('open');
+}
+
+/* ══════════════════════════════════════════════
+   BOOK STOCK TAB
+══════════════════════════════════════════════ */
+function loadStockData(cb){
+    db.ref('stock').once('value').then(snap=>{stockData=snap.val()||{};if(cb)cb();});
 }
 
 function renderBookManage(){
-    const el=document.getElementById('orderList');
-    el.innerHTML='<div class="loading-spin">⏳ বই লোড হচ্ছে...</div>';
+    const wrap=document.getElementById('bookManageWrap');
+    wrap.innerHTML='<div class="loading-spin">⏳ বই লোড হচ্ছে...</div>';
     loadStockData(()=>{
-        if(typeof books==='undefined'||!books.length){
-            el.innerHTML='<div class="empty-admin">বই পাওয়া যায়নি</div>';return;
-        }
-        el.innerHTML=`
-            <div style="margin-bottom:12px;">
-                <input id="bookSearch" placeholder="🔍 বই খুঁজুন..." oninput="filterBookManage()" 
-                style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;box-sizing:border-box;">
-            </div>
-            <div id="bookManageList"></div>
-        `;
+        if(typeof books==='undefined'||!books.length){wrap.innerHTML='<div class="empty-state">বই পাওয়া যায়নি</div>';return;}
+        wrap.innerHTML=`
+            <input class="search-input" id="bookSearch" placeholder="🔍 বই খুঁজুন..." oninput="filterBookManage()">
+            <div id="bookManageList"></div>`;
         renderBookList(books);
     });
 }
@@ -360,13 +685,13 @@ function renderBookManage(){
 function renderBookList(list){
     const el=document.getElementById('bookManageList');
     if(!el)return;
-    el.innerHTML=list.map((b,i)=>{
+    el.innerHTML=list.map(b=>{
         const idx=books.indexOf(b);
         const inStock=stockData[idx]!==false;
         return `<div class="book-manage-item">
             <div class="book-manage-name">${escapeHTML(b.name)}</div>
             <button class="stock-toggle ${inStock?'stock-on':'stock-off'}" onclick="toggleStock(${idx},${inStock})">
-                ${inStock?'✅ স্টক আছে':'❌ স্টক শেষ'}
+                ${inStock?'✅ আছে':'❌ শেষ'}
             </button>
         </div>`;
     }).join('');
@@ -374,9 +699,9 @@ function renderBookList(list){
 
 function filterBookManage(){
     const q=document.getElementById('bookSearch').value.toLowerCase().trim();
-    const filtered=q?books.filter(b=>b.name.toLowerCase().includes(q)):books;
-    renderBookList(filtered);
+    renderBookList(q?books.filter(b=>b.name.toLowerCase().includes(q)):books);
 }
+
 async function toggleStock(idx,currentState){
     const newState=!currentState;
     try{
@@ -387,6 +712,283 @@ async function toggleStock(idx,currentState){
     }catch(e){showToast('❌ আপডেট ব্যর্থ','#dc2626');}
 }
 
+/* ══════════════════════════════════════════════
+   BOOK EDITOR TAB
+══════════════════════════════════════════════ */
+let beFilter='all';
+let beOpenIdx=null;
+let beAddFormOpen=false;
+// Local editable copy of books
+let localBooks=[];
+
+function loadBooksFromFirebase(){
+    // Try loading from Firebase first; fallback to book.js variable
+    db.ref('bookList').once('value').then(snap=>{
+        if(snap.exists()){
+            const data=snap.val();
+            if(Array.isArray(data)&&data.length){
+                localBooks=data;
+                beUpdateStats();
+                if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
+                return;
+            }
+        }
+        // fallback to book.js
+        if(typeof books!=='undefined'&&books.length){
+            localBooks=JSON.parse(JSON.stringify(books));
+        }
+        beUpdateStats();
+        if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
+    }).catch(()=>{
+        if(typeof books!=='undefined'&&books.length){
+            localBooks=JSON.parse(JSON.stringify(books));
+        }
+        beUpdateStats();
+    });
+}
+
+function beInit(){
+    if(!localBooks.length&&typeof books!=='undefined'&&books.length){
+        localBooks=JSON.parse(JSON.stringify(books));
+    }
+    beUpdateStats();
+    beRenderList();
+}
+
+function beUpdateStats(){
+    const total=localBooks.length;
+    const ok=localBooks.filter(b=>isRealUrl(b.img)).length;
+    document.getElementById('beStatTotal').innerHTML=`📖 মোট: <span>${total}</span>`;
+    document.getElementById('beStatOk').innerHTML=`✅ ছবি আছে: <span>${ok}</span>`;
+    document.getElementById('beStatMiss').innerHTML=`⚠️ ছবি নেই: <span>${total-ok}</span>`;
+}
+
+function beSetFilter(f){
+    beFilter=f;
+    ['beFAll','beFLinked','beFMissing'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
+    const map={all:'beFAll',linked:'beFLinked',missing:'beFMissing'};
+    document.getElementById(map[f])?.classList.add('active');
+    beRenderList();
+}
+
+function beToggleAddForm(){
+    beAddFormOpen=!beAddFormOpen;
+    document.getElementById('beAddForm').classList.toggle('open',beAddFormOpen);
+    const btn=document.getElementById('beAddToggle');
+    btn.classList.toggle('open',beAddFormOpen);
+    btn.textContent=beAddFormOpen?'✕ বন্ধ করুন':'+ নতুন বই যোগ করুন';
+}
+
+function beAddBook(){
+    const name=document.getElementById('fa_name').value.trim();
+    if(!name){showToast('⚠️ বইয়ের নাম দিন','#dc2626');return;}
+    const newBook={
+        name,
+        author:document.getElementById('fa_author').value.trim(),
+        price:Number(document.getElementById('fa_price').value)||0,
+        original_price:Number(document.getElementById('fa_oprice').value)||0,
+        cat:document.getElementById('fa_cat').value||'ইসলামি বই',
+        subject:document.getElementById('fa_subject').value||'ইসলামি বই',
+        cover:document.getElementById('fa_cover').value||'Paperback',
+        pub:document.getElementById('fa_pub').value.trim(),
+        pages:document.getElementById('fa_pages').value||'পৃষ্ঠা',
+        img:document.getElementById('fa_img').value.trim(),
+        desc:document.getElementById('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
+    };
+    localBooks.push(newBook);
+    ['fa_name','fa_author','fa_price','fa_oprice','fa_pub','fa_pages','fa_cover','fa_cat','fa_subject','fa_img','fa_desc'].forEach(id=>{
+        document.getElementById(id).value='';
+    });
+    beToggleAddForm();
+    beOpenIdx=localBooks.length-1;
+    beUpdateStats();
+    beRenderList();
+    // Auto sync to Firebase
+    syncBookToFirebase(localBooks.length-1, newBook, '✅ নতুন বই যোগ ও Firebase-এ সেভ হয়েছে');
+}
+
+function beToggleBook(idx){
+    beOpenIdx=beOpenIdx===idx?null:idx;
+    beRenderList();
+}
+
+function beSaveBook(idx){
+    const fields=['name','author','price','original_price','pub','pages','cover','cat','subject','img','desc'];
+    fields.forEach(f=>{
+        const el=document.getElementById(`be_${f}_${idx}`);
+        if(!el)return;
+        localBooks[idx][f]=(f==='price'||f==='original_price')?(Number(el.value)||0):el.value;
+    });
+    beUpdateStats();
+    beRenderList();
+    beOpenIdx=idx;
+    // Sync this book to Firebase
+    syncBookToFirebase(idx, localBooks[idx], '✅ সেভ ও Firebase-এ আপলোড হয়েছে');
+}
+
+function beDeleteBook(idx){
+    if(!confirm('এই বইটি মুছে ফেলবেন? Firebase থেকেও মুছে যাবে।'))return;
+    localBooks.splice(idx,1);
+    beOpenIdx=null;
+    beUpdateStats();
+    beRenderList();
+    // Sync full list
+    syncAllBooksToFirebase(true);
+}
+
+function beUpdateImgPreview(idx){
+    const el=document.getElementById(`be_img_${idx}`);
+    const prev=document.getElementById(`beImgPrev_${idx}`);
+    if(!el||!prev)return;
+    const v=el.value.trim();
+    prev.innerHTML=v.startsWith('http')
+        ?`<img src="${escapeHTML(v)}" onerror="this.style.display='none'">`
+        :`<span class="be-empty-img">ছবি নেই</span>`;
+}
+
+function beRenderList(){
+    const search=document.getElementById('beSearch')?.value.toLowerCase()||'';
+    const list=document.getElementById('beBookList');
+    if(!list)return;
+
+    const filtered=localBooks.map((b,i)=>({...b,_i:i})).filter(b=>{
+        const matchSearch=!search
+            ||b.name.toLowerCase().includes(search)
+            ||(b.author||'').toLowerCase().includes(search)
+            ||(b.pub||'').toLowerCase().includes(search);
+        if(!matchSearch)return false;
+        if(beFilter==='linked')return isRealUrl(b.img);
+        if(beFilter==='missing')return !isRealUrl(b.img);
+        return true;
+    });
+
+    if(!filtered.length){list.innerHTML='<div class="empty-state">কোনো বই পাওয়া যায়নি</div>';return;}
+
+    list.innerHTML=filtered.map(b=>{
+        const i=b._i;
+        const hasImg=isRealUrl(b.img);
+        const isOpen=beOpenIdx===i;
+        const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" onerror="this.style.display='none'">`:`📖`;
+        const imgPrevHtml=hasImg?`<img src="${escapeHTML(b.img)}" onerror="this.style.display='none'">`:`<span class="be-empty-img">ছবি নেই</span>`;
+
+        return `<div class="be-book-item ${hasImg?'hasimg':'missing'}">
+            <div class="be-book-summary" onclick="beToggleBook(${i})">
+                <div class="be-cover">${coverHtml}</div>
+                <div class="be-info">
+                    <div class="be-name">${escapeHTML(b.name)}</div>
+                    <div class="be-meta">${escapeHTML(b.author||'')} · ${escapeHTML(b.pub||'')} · ৳${b.price}</div>
+                    <div class="be-img-badge ${hasImg?'ok':'miss'}">${hasImg?'✅ ছবি আছে':'⚠️ ছবি নেই'}</div>
+                </div>
+                <div class="be-arrow ${isOpen?'open':''}">▼</div>
+            </div>
+            <div class="be-edit-panel ${isOpen?'open':''}">
+                <div class="be-edit-grid">
+                    <div class="be-field"><label class="be-label">বইয়ের নাম</label><input class="be-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
+                    <div class="be-field"><label class="be-label">লেখক</label><input class="be-input" id="be_author_${i}" value="${escapeHTML(b.author||'')}"></div>
+                    <div class="be-field"><label class="be-label">মূল্য (৳)</label><input class="be-input" id="be_price_${i}" type="number" value="${b.price}"></div>
+                    <div class="be-field"><label class="be-label">আসল মূল্য (৳)</label><input class="be-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
+                    <div class="be-field"><label class="be-label">প্রকাশনী</label><input class="be-input" id="be_pub_${i}" value="${escapeHTML(b.pub||'')}"></div>
+                    <div class="be-field"><label class="be-label">পৃষ্ঠা</label><input class="be-input" id="be_pages_${i}" value="${escapeHTML(b.pages||'')}"></div>
+                    <div class="be-field"><label class="be-label">কভার</label><input class="be-input" id="be_cover_${i}" value="${escapeHTML(b.cover||'')}"></div>
+                    <div class="be-field"><label class="be-label">বিভাগ</label><input class="be-input" id="be_cat_${i}" value="${escapeHTML(b.cat||'')}"></div>
+                    <div class="be-field"><label class="be-label">বিষয়</label><input class="be-input" id="be_subject_${i}" value="${escapeHTML(b.subject||'')}"></div>
+                    <div class="be-field">
+                        <label class="be-label">ছবির লিংক</label>
+                        <input class="be-input" id="be_img_${i}" value="${escapeHTML(b.img||'')}" oninput="beUpdateImgPreview(${i})">
+                        <div class="be-img-preview" id="beImgPrev_${i}">${imgPrevHtml}</div>
+                    </div>
+                    <div class="be-field be-full">
+                        <label class="be-label">বিবরণ</label>
+                        <textarea class="be-textarea" id="be_desc_${i}" rows="2">${escapeHTML(b.desc||'')}</textarea>
+                    </div>
+                </div>
+                <div class="be-edit-actions">
+                    <button class="btn-green" onclick="beSaveBook(${i})">☁️ সেভ ও আপলোড</button>
+                    <button class="btn-gray" onclick="beToggleBook(${i})">✕ বন্ধ</button>
+                    <button class="btn-red" onclick="beDeleteBook(${i})">🗑️ মুছুন</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+/* ── FIREBASE SYNC ── */
+async function syncBookToFirebase(idx, bookData, msg){
+    try{
+        await db.ref('bookList/'+idx).set(bookData);
+        showToast(msg||'✅ Firebase-এ সেভ হয়েছে','#059669');
+    }catch(e){showToast('❌ Firebase sync ব্যর্থ: '+e.message,'#dc2626');}
+}
+
+async function syncAllBooksToFirebase(silent=false){
+    const btn=document.getElementById('syncAllBtn');
+    if(btn){btn.disabled=true;btn.textContent='⏳ সেভ হচ্ছে...';}
+    try{
+        await db.ref('bookList').set(localBooks);
+        if(!silent)showToast('✅ সব বই Firebase-এ সেভ হয়েছে! Website আপডেট হবে।','#059669');
+    }catch(e){showToast('❌ Firebase sync ব্যর্থ','#dc2626');}
+    if(btn){btn.disabled=false;btn.textContent='☁️ সব সেভ করুন';}
+}
+
+/* ── DOWNLOAD book.js ── */
+function downloadBookJs(){
+    const FIELDS=['name','author','price','original_price','cat','subject','cover','pub','pages','img','desc'];
+    const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
+    const lines=src.map(b=>{
+        const fields=FIELDS.map(f=>{
+            const v=b[f]??'';
+            if(f==='price'||f==='original_price')return `${f}: ${Number(v)||0}`;
+            return `${f}: "${String(v).replace(/\\/g,'\\\\').replace(/"/g,'\\"')}"`;
+        }).join(', ');
+        return `  { ${fields} }`;
+    });
+    const code=`const books = [\n${lines.join(',\n')}\n];`;
+    const blob=new Blob([code],{type:'text/javascript;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='book.js';a.click();
+    URL.revokeObjectURL(url);
+    showToast('📥 book.js ডাউনলোড হচ্ছে...','#059669');
+}
+
+/* ══════════════════════════════════════════════
+   ORDER SUMMARY
+══════════════════════════════════════════════ */
+function renderOrderSummary(){
+    const el=document.getElementById('orderSummary');
+    if(!allOrders.length){el.innerText='কোনো ডেটা নেই';return;}
+    const totalRev=allOrders.reduce((s,o)=>{
+        const t=String(o.total||'').replace(/[^\d]/g,'');
+        return s+(parseInt(t)||0);
+    },0);
+    const byStatus={};
+    allOrders.forEach(o=>{byStatus[o.status]=(byStatus[o.status]||0)+1;});
+
+    // Today's orders
+    const today=new Date();
+    const todayKey=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+    const todayOrders=allOrders.filter(o=>{
+        const d=new Date(o.createdAt);
+        return d.getFullYear()===today.getFullYear()&&d.getMonth()===today.getMonth()&&d.getDate()===today.getDate();
+    });
+    const todayRev=todayOrders.reduce((s,o)=>{
+        const t=String(o.total||'').replace(/[^\d]/g,'');
+        return s+(parseInt(t)||0);
+    },0);
+
+    el.innerHTML=`
+        <strong>আজকের অর্ডার:</strong> ${todayOrders.length} · <strong>আজকের রেভেনিউ:</strong> ৳${todayRev.toLocaleString()}<br>
+        মোট অর্ডার: <strong>${allOrders.length}</strong><br>
+        পেন্ডিং: <strong>${byStatus.pending||0}</strong> · কনফার্ম: <strong>${byStatus.confirmed||0}</strong><br>
+        প্যাকেজিং: <strong>${byStatus.processing||0}</strong> · শিপড: <strong>${byStatus.shipped||0}</strong><br>
+        ডেলিভারড: <strong>${byStatus.delivered||0}</strong><br>
+        মোট আনুমানিক রেভেনিউ: <strong>৳${totalRev.toLocaleString()}</strong>
+    `;
+}
+
+/* ══════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════ */
 let modalOrderId=null;
 
 function openModal(orderId){
@@ -396,7 +998,7 @@ function openModal(orderId){
     document.getElementById('modalOid').innerText=o.orderId;
     document.getElementById('modalDate').innerText=new Date(o.createdAt).toLocaleString('bn-BD');
     const badge=document.getElementById('modalStatusBadge');
-    badge.className='status-badge '+(STATUS_CLASS[o.status]||'badge-pending');
+    badge.className='order-status modal-status-badge '+(STATUS_CLASS[o.status]||'status-pending');
     badge.innerText=STATUS_LABELS[o.status]||o.status;
     document.getElementById('modalName').innerText=o.name;
     document.getElementById('modalPhone').innerText=o.phone;
@@ -409,10 +1011,7 @@ function openModal(orderId){
     if(o.offers&&o.offers.length){
         offerSec.style.display='block';
         offerEl.innerHTML=o.offers.map(of=>`<div>${escapeHTML(of.icon)} <strong>${escapeHTML(of.label)}</strong></div>`).join('');
-    } else {
-        offerSec.style.display='none';
-        offerEl.innerHTML='';
-    }
+    }else{offerSec.style.display='none';offerEl.innerHTML='';}
     document.getElementById('modalStatusSelect').value=o.status||'pending';
     document.getElementById('orderModal').classList.add('open');
     document.body.style.overflow='hidden';
@@ -433,11 +1032,14 @@ async function updateStatusFromModal(){
     const status=document.getElementById('modalStatusSelect').value;
     try{
         await db.ref('orders/'+modalOrderId+'/status').set(status);
-        showToast('✅ অবস্থান আপডেট হয়েছে','#059669');
+        showToast('✅ স্ট্যাটাস আপডেট হয়েছে','#059669');
         closeModal();
-    }catch(e){showToast('❌ আপডেট ব্যর্থ হয়েছে','#dc2626');}
+    }catch(e){showToast('❌ আপডেট ব্যর্থ','#dc2626');}
 }
 
+/* ══════════════════════════════════════════════
+   MIGRATE
+══════════════════════════════════════════════ */
 async function migratePhoneIndex(){
     const btn=document.getElementById('migrateBtn');
     btn.innerText='⏳ চলছে...';btn.disabled=true;
@@ -445,41 +1047,46 @@ async function migratePhoneIndex(){
         const snap=await db.ref('orders').get();
         if(!snap.exists()){showToast('কোনো order নেই','#dc2626');btn.innerText='🔄 Phone Index ঠিক করুন';btn.disabled=false;return;}
         const updates={};
-        snap.forEach(c=>{
-            const o=c.val();
-            if(o.phone&&o.orderId){
-                updates['phoneIndex/'+o.phone+'/'+o.orderId]=true;
-            }
-        });
+        snap.forEach(c=>{const o=c.val();if(o.phone&&o.orderId)updates['phoneIndex/'+o.phone+'/'+o.orderId]=true;});
         await db.ref().update(updates);
         showToast('✅ সব orders migrate সম্পন্ন!','#059669');
         btn.innerText='✅ সম্পন্ন';
     }catch(e){
-        showToast('❌ migrate ব্যর্থ হয়েছে','#dc2626');
+        showToast('❌ migrate ব্যর্থ','#dc2626');
         btn.innerText='🔄 Phone Index ঠিক করুন';btn.disabled=false;
     }
 }
 
+/* ══════════════════════════════════════════════
+   LOGOUT
+══════════════════════════════════════════════ */
 async function adminLogout(){
     if(ordersRef)ordersRef.off();
     await auth.signOut();
     document.getElementById('dashboard').style.display='none';
     document.getElementById('loginGate').style.display='flex';
     document.getElementById('logoutBtn').style.display='none';
-    allOrders=[];
-    stockData={};
+    allOrders=[];stockData={};localBooks=[];
 }
 
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
 function showToast(msg,color){
     const t=document.createElement('div');
-    t.style.cssText=`position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:${color||'#059669'};color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;`;
-    t.innerText=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
+    t.className='toast';
+    t.style.background=color||'#064e3b';
+    t.innerText=msg;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2500);
 }
 
+/* ══════════════════════════════════════════════
+   AUTH STATE
+══════════════════════════════════════════════ */
 auth.onAuthStateChanged(user=>{
     if(user&&user.email===ADMIN_EMAIL)showDashboard();
 });
 </script>
-<script src="common.js"></script>
 </body>
 </html>
