@@ -726,8 +726,15 @@ function loadBooksFromFirebase(){
     db.ref('bookList').once('value').then(snap=>{
         if(snap.exists()){
             const data=snap.val();
+            let arr=null;
             if(Array.isArray(data)&&data.length){
-                localBooks=data;
+                arr=data;
+            } else if(data&&typeof data==='object'){
+                // Firebase sometimes returns object with numeric keys
+                arr=Object.values(data).filter(Boolean);
+            }
+            if(arr&&arr.length){
+                localBooks=arr;
                 beUpdateStats();
                 if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
                 return;
@@ -739,7 +746,8 @@ function loadBooksFromFirebase(){
         }
         beUpdateStats();
         if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
-    }).catch(()=>{
+    }).catch((e)=>{
+        console.error('Firebase book load error:',e);
         if(typeof books!=='undefined'&&books.length){
             localBooks=JSON.parse(JSON.stringify(books));
         }
@@ -828,12 +836,14 @@ function beSaveBook(idx){
 
 function beDeleteBook(idx){
     if(!confirm('এই বইটি মুছে ফেলবেন? Firebase থেকেও মুছে যাবে।'))return;
+    const deletedName=localBooks[idx]?.name||'বইটি';
     localBooks.splice(idx,1);
     beOpenIdx=null;
     beUpdateStats();
     beRenderList();
-    // Sync full list
-    syncAllBooksToFirebase(true);
+    // Sync full list after delete
+    syncAllBooksToFirebase(false);
+    showToast('🗑️ "'+deletedName+'" মুছে ফেলা হয়েছে','#dc2626');
 }
 
 function beUpdateImgPreview(idx){
@@ -913,11 +923,24 @@ function beRenderList(){
 }
 
 /* ── FIREBASE SYNC ── */
+function beBookKey(idx){
+    // Use a stable key based on book name slug; fallback to idx
+    const b=localBooks[idx];
+    if(b&&b.name){
+        return b.name.replace(/[^a-zA-Z0-9\u0980-\u09FF]/g,'_').substring(0,40)+'_'+idx;
+    }
+    return 'book_'+idx;
+}
+
 async function syncBookToFirebase(idx, bookData, msg){
     try{
-        await db.ref('bookList/'+idx).set(bookData);
+        // Save full array so order is preserved
+        await db.ref('bookList').set(localBooks);
         showToast(msg||'✅ Firebase-এ সেভ হয়েছে','#059669');
-    }catch(e){showToast('❌ Firebase sync ব্যর্থ: '+e.message,'#dc2626');}
+    }catch(e){
+        console.error('Firebase sync error:',e);
+        showToast('❌ Firebase sync ব্যর্থ: '+e.message,'#dc2626');
+    }
 }
 
 async function syncAllBooksToFirebase(silent=false){
@@ -1047,12 +1070,14 @@ async function migratePhoneIndex(){
         const snap=await db.ref('orders').get();
         if(!snap.exists()){showToast('কোনো order নেই','#dc2626');btn.innerText='🔄 Phone Index ঠিক করুন';btn.disabled=false;return;}
         const updates={};
-        snap.forEach(c=>{const o=c.val();if(o.phone&&o.orderId)updates['phoneIndex/'+o.phone+'/'+o.orderId]=true;});
-        await db.ref().update(updates);
+        snap.forEach(c=>{const o=c.val();if(o.phone&&o.orderId)updates[o.phone+'/'+o.orderId]=true;});
+        // ✅ root "/" এর বদলে শুধু phoneIndex path-এ update
+        await db.ref('phoneIndex').update(updates);
         showToast('✅ সব orders migrate সম্পন্ন!','#059669');
         btn.innerText='✅ সম্পন্ন';
     }catch(e){
-        showToast('❌ migrate ব্যর্থ','#dc2626');
+        console.error('Migrate error:',e);
+        showToast('❌ migrate ব্যর্থ: '+e.message,'#dc2626');
         btn.innerText='🔄 Phone Index ঠিক করুন';btn.disabled=false;
     }
 }
