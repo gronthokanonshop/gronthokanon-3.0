@@ -491,10 +491,16 @@
                     <h4>🔄 Firebase Sync</h4>
                     <p>বই আপডেট করলে সরাসরি website-এ দেখাবে</p>
                 </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <button class="sync-btn" id="syncAllBtn" onclick="syncAllBooksToFirebase()">
                     <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     সব সেভ করুন
                 </button>
+                <button class="sync-btn" id="reloadBookJsBtn" onclick="reloadFromBookJs()" style="background:#0369a1;">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white;fill:none;stroke-width:2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.5"></path></svg>
+                    book.js রিলোড
+                </button>
+                </div>
             </div>
 
             <!-- Stats Bar -->
@@ -571,7 +577,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
-<script src="book.js" defer></script>
+<script src="book.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════
    UTILS
@@ -862,6 +868,20 @@ function loadBooksFromFirebase(){
         }
         beUpdateStats();
     });
+}
+
+function reloadFromBookJs(){
+    if(typeof books==='undefined'||!books.length){
+        showToast('book.js পাওয়া যাচ্ছে না!','#dc2626');
+        return;
+    }
+    const btn=document.getElementById('reloadBookJsBtn');
+    if(btn){btn.disabled=true;btn.innerHTML='⏳ লোড হচ্ছে...';}
+    localBooks=JSON.parse(JSON.stringify(books));
+    beUpdateStats();
+    beRenderList();
+    if(btn){btn.disabled=false;btn.innerHTML='<svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white;fill:none;stroke-width:2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.5"></path></svg> book.js রিলোড';}
+    showToast('✅ book.js থেকে '+books.length+'টি বই লোড হয়েছে। এখন "সব সেভ করুন" চাপুন।','#0369a1');
 }
 
 function beInit(){
