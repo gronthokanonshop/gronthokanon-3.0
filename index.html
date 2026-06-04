@@ -567,23 +567,23 @@
         @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         .fade-in { animation: fadeIn 0.3s ease; }
 
-        /* ═══════ BOTTOM NAV — GLASSY FLOATING PILL ═══════ */
+        /* ═══════ BOTTOM NAV — RECTANGULAR ═══════ */
         .bottom-nav {
-            position: fixed; bottom: 20px; left: 14px; right: 14px;
-            background: rgba(255, 255, 255, 0.88);
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.55);
-            border-radius: 50px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.13), 0 2px 8px rgba(5,150,105,0.07);
+            border-top: 1px solid rgba(0,0,0,0.08);
+            border-radius: 0;
+            box-shadow: 0 -2px 16px rgba(0,0,0,0.08);
             display: flex; justify-content: space-around; align-items: center;
-            padding: 10px 6px; z-index: 998;
+            padding: 6px 4px 10px; z-index: 998;
         }
         [data-theme="dark"] .bottom-nav {
-            background: rgba(17, 24, 39, 0.88);
-            border-color: rgba(255,255,255,0.07);
+            background: rgba(17, 24, 39, 0.97);
+            border-top-color: rgba(255,255,255,0.07);
         }
         @media (min-width: 768px) {
-            .bottom-nav { left: 50%; transform: translateX(-50%); width: 580px; right: auto; }
+            .bottom-nav { left: 50%; transform: translateX(-50%); width: 580px; right: auto; border-radius: 0; }
         }
         .bnav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 6px 14px; border-radius: 40px; transition: all 0.25s cubic-bezier(0.2,0.8,0.2,1); position: relative; -webkit-tap-highlight-color: transparent; }
         .bnav-item:active { transform: scale(0.86); }
@@ -699,31 +699,26 @@
 
 <!-- ═══════ NAVBAR ═══════ -->
 <nav class="navbar">
-    <div class="navbar-top" style="display:flex;align-items:center;padding:10px 16px;gap:14px;background:#fff;">
+    <div class="navbar-top" style="display:flex;align-items:center;padding:7px 12px;gap:0;background:#fff;justify-content:space-between;">
 
-        <!-- LOGO -->
-        <div class="navbar-brand" onclick="scrollToTop()" style="flex-shrink:0;">
-            <img src="logo.png" alt="গ্রন্থকানন" style="height:52px;width:auto;object-fit:contain;display:block;">
+        <!-- LEFT: MENU BUTTON -->
+        <div style="flex:1;display:flex;align-items:center;justify-content:flex-start;">
+            <button class="nav-icon-btn-g" onclick="toggleSidebar()" title="মেনু" style="width:38px;height:38px;font-size:18px;border-radius:6px;">☰</button>
         </div>
 
-        <!-- SEARCH BAR -->
-        <div class="navbar-search-bar">
-            <input class="navbar-search-input" id="navSearchInput"
-                   placeholder="বই, লেখক বা প্রকাশনী খুঁজুন..."
-                   oninput="navSearchLive(this.value)"
-                   onfocus="openSearch()"
-                   autocomplete="off">
-            <button class="navbar-search-btn" onclick="openSearch()">🔍 সার্চ</button>
+        <!-- CENTER: LOGO -->
+        <div class="navbar-brand" onclick="scrollToTop()" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <img src="logo.png" alt="গ্রন্থকানন" style="height:36px;width:auto;object-fit:contain;display:block;">
         </div>
 
-        <!-- ICONS -->
-        <div class="navbar-icons" style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
-            <button class="nav-icon-btn-g" onclick="toggleDark()" id="darkBtn" title="থিম">🌙</button>
-            <button class="nav-icon-btn-g" onclick="showWishlist()" title="উইশলিস্ট" style="position:relative;">
+        <!-- RIGHT: ICONS -->
+        <div class="navbar-icons" style="flex:1;display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-shrink:0;">
+            <button class="nav-icon-btn-g" onclick="toggleDark()" id="darkBtn" title="থিম" style="width:38px;height:38px;font-size:18px;">🌙</button>
+            <button class="nav-icon-btn-g" onclick="showWishlist()" title="উইশলিস্ট" style="position:relative;width:38px;height:38px;font-size:18px;">
                 🤍<span class="nav-badge" id="navWishBadge">0</span>
             </button>
             <div class="cart-wrap" id="cartWrap" onclick="showCart()">
-                <button class="nav-icon-btn-g" style="position:relative;">
+                <button class="nav-icon-btn-g" style="position:relative;width:38px;height:38px;font-size:18px;">
                     🛒<span class="nav-badge show" id="cartCount">0</span>
                 </button>
             </div>
