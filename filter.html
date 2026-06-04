@@ -5,133 +5,180 @@
     <link rel="icon" href="logo.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>গ্রন্থকানন — বই খুঁজুন</title>
-    <meta name="theme-color" content="#ffffff">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0a2e1a">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
-        
-        
-        
-        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes fadeOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-8px)} }
+        :root {
+            --green:#059669; --green-dark:#047857; --green-deeper:#064e3b;
+            --green-light:#ecfdf5; --green-mid:#d1fae5;
+            --text:#111827; --text2:#6b7280; --text3:#9ca3af;
+            --card:#ffffff; --bg:#f0fdf4;
+            --border:#e5e7eb; --border-g:#d1fae5;
+            --shadow:rgba(5,150,105,0.10);
+            --red:#ef4444; --red-dark:#dc2626;
+            --nav-bg:#064e3b; --nav-border:rgba(16,185,129,0.3);
+        }
+        [data-theme="dark"] {
+            --text:#f1f5f9; --text2:#94a3b8; --text3:#64748b;
+            --card:#0f2318; --bg:#0a1a10;
+            --border:#1a3a26; --border-g:#1a3a26;
+            --shadow:rgba(0,0,0,0.3);
+            --green-light:rgba(5,150,105,0.12); --green-mid:rgba(5,150,105,0.2);
+        }
+        * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+        body { font-family:'Hind Siliguri',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
-        /* NAVBAR */
-        
-        
-        
-        
-        
-        .page-title{flex:1;font-size:15px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-        
-        
-        
-        
-        
-        
+        /* ── NAVBAR ── */
+        .navbar { background:var(--nav-bg); position:sticky; top:0; z-index:100; box-shadow:0 2px 20px rgba(0,0,0,0.25); }
+        .nav-top { display:flex; align-items:center; padding:0 16px; height:56px; gap:12px; }
+        .back-btn { width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:20px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; line-height:1; transition:.2s; }
+        .back-btn:hover { background:rgba(255,255,255,0.2); }
+        .page-title { flex:1; font-size:15px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .navbar-icons { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+        .dark-pill { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:8px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; color:#fff; transition:.2s; }
+        .dark-pill:hover { background:rgba(255,255,255,0.2); }
+        .nav-cart-btn { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:8px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; position:relative; transition:.2s; }
+        .nav-cart-btn:hover { background:rgba(255,255,255,0.2); }
+        .nav-badge { position:absolute; top:-5px; right:-5px; background:#ef4444; color:#fff; font-size:9px; font-weight:800; min-width:16px; height:16px; border-radius:8px; display:flex; align-items:center; justify-content:center; border:2px solid var(--nav-bg); padding:0 3px; }
 
-        /* SEARCH ROW */
-        .navbar-search{padding:0 14px 11px;}
-        .search-box{display:flex;align-items:center;gap:10px;background:var(--search-input-bg);border:1.5px solid var(--search-input-border);border-radius:6px;padding:9px 14px;transition:border-color 0.2s,box-shadow 0.2s;}
-        .search-box:focus-within{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.10);background:var(--card);}
-        .search-icon-box{width:26px;height:26px;background:#059669;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
-        .search-vline{width:1px;height:16px;background:var(--search-input-border);flex-shrink:0;}
-        .search-input{flex:1;border:none;background:transparent;outline:none;font-size:13.5px;font-family:'Hind Siliguri',Arial,sans-serif;color:var(--text);}
-        .search-input::placeholder{color:#9ca3af;}
-        .search-clear{background:none;border:none;color:var(--text2);font-size:18px;cursor:pointer;display:none;line-height:1;padding:0;}
-        .search-clear.show{display:block;}
+        /* SEARCH */
+        .nav-search { padding:0 16px 12px; }
+        .search-box { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.15); border-radius:10px; padding:8px 12px; transition:.2s; }
+        .search-box:focus-within { background:rgba(255,255,255,0.15); border-color:rgba(16,185,129,0.6); }
+        .search-icon-box { width:24px; height:24px; background:#059669; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+        .search-vline { width:1px; height:14px; background:rgba(255,255,255,0.2); flex-shrink:0; }
+        .search-input { flex:1; border:none; background:transparent; outline:none; font-size:13.5px; font-family:'Hind Siliguri',sans-serif; color:#fff; }
+        .search-input::placeholder { color:rgba(255,255,255,0.45); }
+        .search-clear { background:none; border:none; color:rgba(255,255,255,0.6); font-size:18px; cursor:pointer; display:none; line-height:1; padding:0; }
+        .search-clear.show { display:block; }
 
-        /* SORT BAR */
-        .filter-bar{display:flex;align-items:center;gap:8px;padding:10px 14px 6px;overflow-x:auto;scrollbar-width:none;max-width:1100px;margin:0 auto;}
-        .filter-bar::-webkit-scrollbar{display:none;}
-        .filter-label{font-size:12px;color:var(--text2);font-weight:600;white-space:nowrap;flex-shrink:0;}
-        .sort-chip{padding:6px 13px;background:var(--card);color:var(--text2);border:1.5px solid var(--border);border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;font-family:'Hind Siliguri',Arial,sans-serif;transition:all 0.2s;flex-shrink:0;}
-        .sort-chip:hover{border-color:#059669;color:#059669;}
-        .sort-chip.active{background:#059669;color:white;border-color:transparent;box-shadow:0 2px 8px rgba(5,150,105,0.28);}
+        /* HERO STRIP */
+        .hero-strip { background:linear-gradient(135deg, #0a2e1a 0%, #064e3b 60%, #059669 100%); padding:18px 16px 22px; position:relative; overflow:hidden; }
+        .hero-strip::before { content:''; position:absolute; right:-30px; top:-30px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,0.04); }
+        .hero-strip::after { content:''; position:absolute; left:-20px; bottom:-30px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,0.04); }
+        .hero-eyebrow { font-size:10px; font-weight:700; color:#6ee7b7; letter-spacing:3px; margin-bottom:4px; }
+        .hero-heading { font-family:'Playfair Display',serif; font-size:22px; font-weight:900; color:#fff; line-height:1.25; margin-bottom:0; }
+        .hero-heading span { color:#6ee7b7; }
 
-        /* RESULT BAR */
-        .result-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 14px 6px;max-width:1100px;margin:0 auto;}
-        .section-title{font-size:15px;font-weight:700;color:var(--dark);padding-left:10px;border-left:3px solid #059669;}
-        .result-count{font-size:12px;color:var(--text2);font-weight:600;background:var(--card);border:1px solid var(--border);padding:3px 10px;border-radius:20px;white-space:nowrap;}
+        /* FILTER TABS */
+        .filter-tabs { display:flex; background:var(--nav-bg); border-top:1px solid rgba(255,255,255,0.07); overflow-x:auto; scrollbar-width:none; }
+        .filter-tabs::-webkit-scrollbar { display:none; }
+        .ftab { padding:11px 18px; font-size:12.5px; font-weight:700; color:rgba(255,255,255,0.5); cursor:pointer; white-space:nowrap; border-bottom:2.5px solid transparent; transition:.2s; flex-shrink:0; }
+        .ftab:hover { color:#6ee7b7; }
+        .ftab.active { color:#6ee7b7; border-bottom-color:#6ee7b7; }
 
-        /* BOOK GRID */
-        .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:10px 14px;max-width:1100px;margin:0 auto;}
-        @media(max-width:480px){.grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;}.book-card img{height:155px;}}
+        /* SUB CHIPS */
+        .sub-chips { display:none; padding:10px 14px; gap:8px; overflow-x:auto; scrollbar-width:none; background:var(--card); border-bottom:1.5px solid var(--border-g); flex-wrap:nowrap; }
+        .sub-chips::-webkit-scrollbar { display:none; }
+        .sub-chips.show { display:flex; }
+        .chip { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1.5px solid var(--border-g); background:var(--green-light); color:var(--green-dark); white-space:nowrap; transition:.2s; flex-shrink:0; }
+        .chip.active { background:var(--green); border-color:var(--green); color:#fff; }
+        .chip:hover:not(.active) { border-color:var(--green); color:var(--green); }
 
-        .book-card{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px var(--shadow);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);cursor:pointer;position:relative;border:1px solid var(--border);animation:cardIn 0.3s ease both;}
-        @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-        .book-card:hover{transform:translateY(-5px);box-shadow:0 12px 28px rgba(5,150,105,0.18);border-color:#059669;}
-        .book-card img{width:100%;height:175px;object-fit:cover;display:block;}
-        .disc-badge{position:absolute;top:7px;left:7px;background:linear-gradient(135deg,#dc2626,#ef4444);color:white;font-size:10px;font-weight:bold;padding:2px 7px;border-radius:20px;z-index:2;box-shadow:0 2px 6px rgba(220,38,38,0.35);}
-        .wl-btn{position:absolute;top:7px;right:7px;background:rgba(255,255,255,0.92);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 2px 6px rgba(0,0,0,0.12);transition:transform 0.2s;}
-        .wl-btn:hover{transform:scale(1.2);}
-        .wl-btn.active{background:#ffe4e4;}
-        .bc-info{padding:8px 9px 9px;}
-        .bc-pub{font-size:10px;color:var(--text2);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-        .bc-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;line-height:1.3;height:31px;overflow:hidden;}
-        .bc-author{font-size:11px;color:var(--text2);margin-bottom:5px;}
-        .price-row{display:flex;align-items:center;gap:5px;margin-bottom:7px;flex-wrap:wrap;}
-        .price-sell{color:var(--red);font-weight:bold;font-size:13px;}
-        .price-orig{color:var(--text2);font-size:11px;text-decoration:line-through;}
-        .bc-btn{display:block;padding:6px;background:linear-gradient(135deg,#059669,#10b981);color:white;border-radius:8px;cursor:pointer;width:100%;border:none;font-weight:bold;font-size:11px;text-align:center;font-family:'Hind Siliguri',Arial,sans-serif;transition:all 0.2s;box-shadow:0 2px 8px rgba(5,150,105,0.25);}
-        .bc-btn:hover{background:linear-gradient(135deg,#047857,#059669);transform:translateY(-1px);}
+        /* SORT ROW */
+        .sort-row { display:flex; align-items:center; justify-content:space-between; padding:9px 14px; background:var(--card); border-bottom:1px solid var(--border); }
+        .sort-chips { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; }
+        .sort-chips::-webkit-scrollbar { display:none; }
+        .sort-chip { padding:5px 12px; border-radius:16px; font-size:11.5px; font-weight:600; cursor:pointer; border:1.5px solid var(--border); background:var(--bg); color:var(--text2); white-space:nowrap; font-family:'Hind Siliguri',sans-serif; transition:.2s; flex-shrink:0; }
+        .sort-chip:hover { border-color:var(--green); color:var(--green); }
+        .sort-chip.active { background:var(--green); color:#fff; border-color:transparent; box-shadow:0 2px 10px rgba(5,150,105,0.3); }
+        .rcount { font-size:11.5px; color:var(--text3); background:var(--green-light); border:1px solid var(--border-g); padding:4px 10px; border-radius:16px; white-space:nowrap; font-weight:600; flex-shrink:0; margin-left:10px; }
+
+        /* SECTION BAR */
+        .section-bar { display:flex; justify-content:space-between; align-items:center; padding:12px 16px 8px; }
+        .section-title { font-size:14.5px; font-weight:700; color:var(--text); padding-left:10px; border-left:3px solid var(--green); line-height:1.3; }
+        .result-count { font-size:11.5px; color:var(--text3); font-weight:600; }
+
+        /* GRID */
+        .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; padding:4px 14px 14px; }
+        @media(max-width:700px) { .grid { grid-template-columns:repeat(3,1fr); gap:11px; padding:4px 11px 11px; } }
+        @media(max-width:430px) { .grid { grid-template-columns:repeat(3,1fr); gap:8px; padding:4px 10px 80px; } }
+
+        /* BOOK CARD */
+        .book-card { background:var(--card); border-radius:14px; overflow:hidden; border:1.5px solid var(--border); cursor:pointer; position:relative; transition:all .25s cubic-bezier(.4,0,.2,1); animation:cardIn .3s ease both; }
+        @keyframes cardIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .book-card:hover { transform:translateY(-5px); box-shadow:0 14px 32px var(--shadow); border-color:var(--green); }
+
+        .book-img-wrap { position:relative; overflow:hidden; }
+        .book-card img { width:100%; height:170px; object-fit:cover; display:block; transition:transform .3s ease; }
+        @media(max-width:430px) { .book-card img { height:140px; } }
+        .book-card:hover img { transform:scale(1.04); }
+
+        .disc-badge { position:absolute; top:0; left:0; background:#ef4444; color:#fff; font-size:10px; font-weight:800; padding:4px 8px; border-radius:0 0 10px 0; z-index:2; }
+        .wl-btn { position:absolute; top:7px; right:7px; background:rgba(255,255,255,0.92); border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.15); transition:transform .2s; }
+        .wl-btn:hover { transform:scale(1.2); }
+        .wl-btn.active { background:#ffe4e4; }
+
+        /* card label ribbon */
+        .cat-label { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding:20px 7px 5px; font-size:9px; font-weight:700; color:rgba(255,255,255,0.9); letter-spacing:.5px; }
+
+        .bc-info { padding:7px 9px 9px; }
+        .bc-pub { font-size:9.5px; color:var(--text3); margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .bc-name { font-size:12px; font-weight:700; color:var(--text); margin-bottom:1px; line-height:1.3; height:30px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+        .bc-author { font-size:10.5px; color:var(--text2); margin-bottom:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .price-row { display:flex; align-items:baseline; gap:5px; margin-bottom:7px; }
+        .price-sell { color:var(--green); font-weight:800; font-size:14px; }
+        .price-orig { color:var(--text3); font-size:10.5px; text-decoration:line-through; }
+
+        .bc-btn { display:block; padding:7px; background:var(--green); color:#fff; border-radius:9px; cursor:pointer; width:100%; border:none; font-weight:700; font-size:11px; text-align:center; font-family:'Hind Siliguri',sans-serif; transition:all .2s; }
+        .bc-btn:hover { background:var(--green-dark); transform:translateY(-1px); }
+        .bc-btn.added { background:var(--green-light); color:var(--green-dark); border:1.5px solid var(--border-g); }
 
         /* SKELETON */
-        .skel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:10px 14px;max-width:1100px;margin:0 auto;}
-        @media(max-width:480px){.skel-grid{grid-template-columns:repeat(2,1fr);}}
-        .skel-card{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--border);}
-        .skel-img{height:175px;background:linear-gradient(90deg,#e8f5ee 25%,#f0fdf4 50%,#e8f5ee 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
-        [data-theme="dark"] .skel-img{background:linear-gradient(90deg,#132d20 25%,#1a4731 50%,#132d20 75%);background-size:200% 100%;}
-        .skel-line{height:11px;margin:9px;border-radius:6px;background:linear-gradient(90deg,#e8f5ee 25%,#f0fdf4 50%,#e8f5ee 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
-        [data-theme="dark"] .skel-line{background:linear-gradient(90deg,#132d20 25%,#1a4731 50%,#132d20 75%);background-size:200% 100%;}
-        .skel-line.s{width:60%;}
-        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        .skel-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; padding:4px 14px; }
+        @media(max-width:700px) { .skel-grid { grid-template-columns:repeat(3,1fr); gap:11px; padding:4px 11px; } }
+        @media(max-width:430px) { .skel-grid { grid-template-columns:repeat(3,1fr); gap:8px; padding:4px 10px; } }
+        .skel-card { background:var(--card); border-radius:14px; overflow:hidden; border:1.5px solid var(--border); }
+        .skel-img { height:170px; animation:shimmer 1.4s infinite; background:linear-gradient(90deg,var(--green-light) 25%,var(--green-mid) 50%,var(--green-light) 75%); background-size:200% 100%; }
+        @media(max-width:430px) { .skel-img { height:140px; } }
+        .skel-line { height:10px; margin:8px 9px; border-radius:5px; animation:shimmer 1.4s infinite; background:linear-gradient(90deg,var(--green-light) 25%,var(--green-mid) 50%,var(--green-light) 75%); background-size:200% 100%; }
+        .skel-line.s { width:55%; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
         /* EMPTY STATE */
-        .empty-state{text-align:center;padding:70px 30px;animation:pageIn 0.4s ease;}
-        .empty-icon{font-size:56px;margin-bottom:14px;animation:float 2.5s ease-in-out infinite;}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        .empty-title{font-size:17px;font-weight:700;color:var(--dark);margin-bottom:6px;}
-        .empty-sub{font-size:14px;color:var(--text2);margin-bottom:20px;}
-        .empty-btn{display:inline-block;padding:10px 24px;background:#059669;color:white;border-radius:25px;cursor:pointer;font-weight:700;font-size:14px;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 4px 14px rgba(5,150,105,0.3);transition:transform 0.2s,box-shadow 0.2s;}
-        .empty-btn:hover{transform:translateY(-2px);}
+        .empty-state { text-align:center; padding:60px 30px; }
+        .empty-icon { font-size:54px; margin-bottom:12px; animation:floatBounce 2.5s ease-in-out infinite; display:block; }
+        @keyframes floatBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        .empty-title { font-size:16px; font-weight:700; color:var(--text); margin-bottom:5px; }
+        .empty-sub { font-size:13px; color:var(--text2); margin-bottom:18px; }
+        .empty-btn { display:inline-block; padding:10px 24px; background:var(--green); color:#fff; border-radius:25px; cursor:pointer; font-weight:700; font-size:14px; font-family:'Hind Siliguri',sans-serif; box-shadow:0 4px 14px rgba(5,150,105,0.3); transition:transform .2s; }
+        .empty-btn:hover { transform:translateY(-2px); }
 
         /* FLOAT CART */
-        .float-cart{position:fixed;bottom:24px;left:16px;background:linear-gradient(135deg,#064e3b,#059669);color:white;padding:11px 18px;border-radius:30px;cursor:pointer;font-weight:700;box-shadow:0 4px 18px rgba(5,150,105,0.4);z-index:997;font-family:'Hind Siliguri',Arial,sans-serif;display:flex;align-items:center;gap:10px;font-size:14px;transition:transform 0.2s,box-shadow 0.2s;}
-        .float-cart:hover{transform:translateY(-2px);}
+        .float-cart { position:fixed; bottom:22px; left:16px; background:linear-gradient(135deg,#064e3b,#059669); color:#fff; padding:11px 18px; border-radius:30px; cursor:pointer; font-weight:700; box-shadow:0 6px 24px rgba(5,150,105,0.45); z-index:997; font-family:'Hind Siliguri',sans-serif; display:flex; align-items:center; gap:10px; font-size:14px; transition:transform .2s,box-shadow .2s; border:1.5px solid rgba(255,255,255,0.15); }
+        .float-cart:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(5,150,105,0.5); }
 
         /* SCROLL TOP */
-        
-        
-        
+        .scroll-top { position:fixed; bottom:22px; right:16px; width:40px; height:40px; background:var(--green); color:#fff; border:none; border-radius:50%; font-size:18px; cursor:pointer; box-shadow:0 4px 14px rgba(5,150,105,0.35); z-index:997; display:none; transition:.2s; }
+        .scroll-top.show { display:flex; align-items:center; justify-content:center; }
+        .scroll-top:hover { background:var(--green-dark); }
 
-        /* WHATSAPP */
-        
-        
+        /* WA BUTTON */
+        .wa-btn { position:fixed; bottom:72px; right:16px; width:42px; height:42px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(37,211,102,.5); z-index:9990; text-decoration:none; transition:.2s; }
+        .wa-btn:hover { transform:scale(1.1); }
 
         /* TOAST */
-        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#059669;color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(5,150,105,0.35);animation:toastIn 0.3s ease;}
-        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-    * { -webkit-tap-highlight-color: transparent; }
-</style>
+        .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#059669; color:#fff; padding:10px 22px; border-radius:25px; font-size:13px; font-weight:600; z-index:9999; box-shadow:0 4px 14px rgba(5,150,105,0.35); animation:toastIn .3s ease; white-space:nowrap; }
+        @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+    </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <div class="navbar-top">
-        <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
-            <button class="back-btn" onclick="goBack()">‹</button>
-            <div class="page-title" id="pageTitle">বই খুঁজছি...</div>
-        </div>
+    <div class="nav-top">
+        <button class="back-btn" onclick="goBack()">‹</button>
+        <div class="page-title" id="pageTitle">বই খুঁজছি...</div>
         <div class="navbar-icons">
-            <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
-            <div class="nav-btn" onclick="goToCart()" title="কার্ট" style="position:relative;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-               <span class="nav-badge" id="cartCount">0</span>
+            <button class="dark-pill" id="darkBtn" onclick="toggleDark()">🌙</button>
+            <div class="nav-cart-btn" onclick="goToCart()">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                <span class="nav-badge" id="cartCount">0</span>
             </div>
         </div>
     </div>
-    <div class="navbar-search">
+    <div class="nav-search">
         <div class="search-box">
             <div class="search-icon-box">🔍</div>
             <div class="search-vline"></div>
@@ -141,22 +188,43 @@
     </div>
 </nav>
 
-<div class="filter-bar">
-    <span class="filter-label">সাজান:</span>
-    <button class="sort-chip active" onclick="sortBooks('default',this)">ডিফল্ট</button>
-    <button class="sort-chip" onclick="sortBooks('price-low',this)">💰 কম দামে</button>
-    <button class="sort-chip" onclick="sortBooks('price-high',this)">💎 বেশি দামে</button>
-    <button class="sort-chip" onclick="sortBooks('discount',this)">🔥 বেশি ছাড়ে</button>
-    <button class="sort-chip" onclick="sortBooks('alpha',this)">🔤 নাম অনুযায়ী</button>
+<!-- HERO -->
+<div class="hero-strip">
+    <div class="hero-eyebrow">GRONTHOKANON</div>
+    <div class="hero-heading" id="heroHeading">বই <span>খুঁজুন</span></div>
 </div>
 
-<div class="result-bar">
+<!-- FILTER TABS -->
+<div class="filter-tabs" id="filterTabs" style="display:none">
+    <div class="ftab active" onclick="setFilterTab(this,'all')">সকল</div>
+    <div class="ftab" onclick="setFilterTab(this,'cat')">ক্যাটাগরি</div>
+    <div class="ftab" onclick="setFilterTab(this,'pub')">প্রকাশনী</div>
+    <div class="ftab" onclick="setFilterTab(this,'auth')">লেখক</div>
+</div>
+<div class="sub-chips" id="subChips"></div>
+
+<!-- SORT + COUNT -->
+<div class="sort-row">
+    <div class="sort-chips">
+        <button class="sort-chip active" onclick="sortBooks('default',this)">ডিফল্ট</button>
+        <button class="sort-chip" onclick="sortBooks('price-low',this)">💰 কম দামে</button>
+        <button class="sort-chip" onclick="sortBooks('price-high',this)">💎 বেশি দামে</button>
+        <button class="sort-chip" onclick="sortBooks('discount',this)">🔥 বেশি ছাড়ে</button>
+        <button class="sort-chip" onclick="sortBooks('alpha',this)">🔤 নাম অনুযায়ী</button>
+    </div>
+    <div class="rcount" id="countText">...</div>
+</div>
+
+<!-- SECTION BAR -->
+<div class="section-bar">
     <div class="section-title" id="titleText"></div>
-    <div class="result-count" id="countText">লোড হচ্ছে...</div>
 </div>
 
+<!-- CONTENT -->
 <div id="mainContent">
     <div class="skel-grid" id="skelGrid">
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
         <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
         <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
         <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
@@ -168,100 +236,209 @@
 </div>
 
 <div class="float-cart" onclick="goToCart()">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-    <div><div style="font-size:11px;opacity:0.8;line-height:1;">শপিং ব্যাগ</div><div style="font-size:13px;font-weight:800;"><span id="floatCount">0</span> টি বই</div></div>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <div>
+        <div style="font-size:10px;opacity:.8;line-height:1;">শপিং ব্যাগ</div>
+        <div style="font-size:13px;font-weight:800;"><span id="floatCount">0</span> টি বই</div>
+    </div>
 </div>
+
 <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
 <a href="https://wa.me/8801516595762" target="_blank" class="wa-btn">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:26px;">
 </a>
 
 <script src="book.js"></script>
 <script>
-let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
-let wishlist=JSON.parse(localStorage.getItem('gronthokanon_wishlist'))||[];
-let filtered=[],currentSort='default';
+let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
+let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
+let filtered = [], currentSort = 'default';
+let filterTab = 'all', filterPill = '';
 
-function updateCounts(){const c=cart.length;document.getElementById('cartCount').innerText=c;document.getElementById('floatCount').innerText=c;}
+function updateCounts() {
+    const c = cart.length;
+    document.getElementById('cartCount').innerText = c;
+    document.getElementById('floatCount').innerText = c;
+}
 updateCounts();
 
-function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
-function getImg(b){return (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';}
-function isWL(name){return wishlist.includes(name);}
-function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-function toggleWL(e,name){
+function discPct(b) { return b.original_price > b.price ? Math.round((b.original_price - b.price) / b.original_price * 100) : 0; }
+function getImg(b) { return (typeof bookImgs !== 'undefined' && bookImgs[b.name]) || b.img || ''; }
+function isWL(name) { return wishlist.includes(name); }
+function escapeHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+function toggleWL(e, name) {
     e.stopPropagation();
-    wishlist.includes(name)?wishlist=wishlist.filter(w=>w!==name):wishlist.push(name);
-    localStorage.setItem('gronthokanon_wishlist',JSON.stringify(wishlist));
+    wishlist.includes(name) ? wishlist = wishlist.filter(w => w !== name) : wishlist.push(name);
+    localStorage.setItem('gronthokanon_wishlist', JSON.stringify(wishlist));
     renderBooks(getList());
 }
 
-function makeCard(b,delay){
-    const pct=discPct(b),idx=books.indexOf(b),wl=isWL(b.name);
+function makeCard(b, delay) {
+    const pct = discPct(b), idx = books.indexOf(b), wl = isWL(b.name);
+    const inCart = cart.some(c => c.name === b.name);
     return `<div class="book-card" onclick="goToBook(${idx})" style="animation-delay:${delay*0.04}s">
-        ${pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:''}
-        <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'❤️':'🤍'}</button>
-        <img src="${getImg(b)}" alt="বই" loading="lazy">
+        <div class="book-img-wrap">
+            ${pct > 0 ? `<div class="disc-badge">${pct}% ছাড়</div>` : ''}
+            <button class="wl-btn ${wl ? 'active' : ''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl ? '❤️' : '🤍'}</button>
+            <img src="${getImg(b)}" alt="${escapeHTML(b.name)}" loading="lazy">
+            <div class="cat-label">${escapeHTML(b.cat||'')}</div>
+        </div>
         <div class="bc-info">
-            <div class="bc-pub">🏢 ${b.pub}</div>
-            <div class="bc-name">${b.name}</div>
-            <div class="bc-author">✍️ ${b.author}</div>
-            <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-            <button class="bc-btn" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">কার্টে যোগ করুন</button>
-        </div></div>`;
+            <div class="bc-pub">🏢 ${escapeHTML(b.pub)}</div>
+            <div class="bc-name">${escapeHTML(b.name)}</div>
+            <div class="bc-author">✍️ ${escapeHTML(b.author)}</div>
+            <div class="price-row">
+                <span class="price-sell">৳ ${b.price}</span>
+                ${b.original_price > b.price ? `<span class="price-orig">৳ ${b.original_price}</span>` : ''}
+            </div>
+            <button class="bc-btn ${inCart ? 'added' : ''}" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img,this)">
+                ${inCart ? '✅ যোগ হয়েছে' : 'কার্টে যোগ করুন'}
+            </button>
+        </div>
+    </div>`;
 }
 
-function renderBooks(list){
-    const grid=document.getElementById('bookGrid');
-    document.getElementById('countText').innerText=list.length+'টি বই';
-    if(!list.length){
-        grid.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">কোনো বই পাওয়া যায়নি</div><div class="empty-sub">অন্য কিছু দিয়ে খোঁজার চেষ্টা করুন</div><div class="empty-btn" onclick="clearSearch()">🔄 সব দেখুন</div></div>`;
+function renderBooks(list) {
+    const grid = document.getElementById('bookGrid');
+    document.getElementById('countText').innerText = list.length + 'টি বই';
+    if (!list.length) {
+        grid.innerHTML = `<div class="empty-state">
+            <span class="empty-icon">📭</span>
+            <div class="empty-title">কোনো বই পাওয়া যায়নি</div>
+            <div class="empty-sub">অন্য কিছু দিয়ে খোঁজার চেষ্টা করুন</div>
+            <div class="empty-btn" onclick="clearSearch()">🔄 সব দেখুন</div>
+        </div>`;
         return;
     }
-    grid.innerHTML=`<div class="grid">${list.map((b,i)=>makeCard(b,i)).join('')}</div>`;
+    grid.innerHTML = `<div class="grid">${list.map((b, i) => makeCard(b, i)).join('')}</div>`;
 }
 
-function getList(){
-    const q=document.getElementById('filterSearch').value.normalize("NFC").toLowerCase().trim();
-    let list=q?filtered.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||b.author.normalize("NFC").toLowerCase().includes(q)):[...filtered];
-    if(currentSort==='price-low')list.sort((a,b)=>a.price-b.price);
-    else if(currentSort==='price-high')list.sort((a,b)=>b.price-a.price);
-    else if(currentSort==='discount')list.sort((a,b)=>discPct(b)-discPct(a));
-    else if(currentSort==='alpha')list.sort((a,b)=>a.name.localeCompare(b.name,'bn'));
+function getList() {
+    const q = document.getElementById('filterSearch').value.normalize('NFC').toLowerCase().trim();
+    let list = q ? filtered.filter(b => b.name.normalize('NFC').toLowerCase().includes(q) || b.author.normalize('NFC').toLowerCase().includes(q)) : [...filtered];
+    if (filterPill) {
+        if (filterTab === 'cat') list = list.filter(b => b.cat === filterPill);
+        else if (filterTab === 'pub') list = list.filter(b => b.pub === filterPill);
+        else if (filterTab === 'auth') list = list.filter(b => b.author === filterPill);
+    }
+    if (currentSort === 'price-low') list.sort((a, b) => a.price - b.price);
+    else if (currentSort === 'price-high') list.sort((a, b) => b.price - a.price);
+    else if (currentSort === 'discount') list.sort((a, b) => discPct(b) - discPct(a));
+    else if (currentSort === 'alpha') list.sort((a, b) => a.name.localeCompare(b.name, 'bn'));
     return list;
 }
 
-function sortBooks(type,btn){document.querySelectorAll('.sort-chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentSort=type;renderBooks(getList());}
-function searchWithin(){document.getElementById('searchClear').classList.toggle('show',document.getElementById('filterSearch').value.length>0);renderBooks(getList());}
-function clearSearch(){document.getElementById('filterSearch').value='';document.getElementById('searchClear').classList.remove('show');renderBooks(getList());}
+function setFilterTab(el, tab) {
+    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    filterTab = tab; filterPill = '';
+    const sc = document.getElementById('subChips');
+    if (tab === 'all') { sc.classList.remove('show'); sc.innerHTML = ''; }
+    else {
+        const sets = {
+            cat: [...new Set(filtered.map(b => b.cat).filter(Boolean))],
+            pub: [...new Set(filtered.map(b => b.pub).filter(Boolean))],
+            auth: [...new Set(filtered.map(b => b.author).filter(Boolean))]
+        };
+        sc.innerHTML = sets[tab].map(v => `<div class="chip" onclick="setPill(this,'${escapeHTML(v)}')">${escapeHTML(v)}</div>`).join('');
+        sc.classList.add('show');
+    }
+    renderBooks(getList());
+}
 
-function goToBook(idx){
-    let r=JSON.parse(localStorage.getItem('gronthokanon_recent'))||[];
-    r=[idx,...r.filter(i=>i!==idx)].slice(0,8);
-    localStorage.setItem('gronthokanon_recent',JSON.stringify(r));
-    navigateTo('book.html?id='+idx);
+function setPill(el, val) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    filterPill = val;
+    renderBooks(getList());
 }
-function addToCart(name,price,img){
-    cart.push({name:name.trim(),price:Number(price),img});
-    localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
-    updateCounts();showToast('✅ কার্টে যোগ হয়েছে!');
-}
-function showToast(msg){
-    const t=document.createElement('div');t.className='toast';t.innerText=msg;
-    document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
-}
-function goToCart(){localStorage.setItem('gronthokanon_opencart','1');navigateTo('index.html');}
-function goBack(){window.history.back();}
 
-const params=new URLSearchParams(window.location.search);
-const type=params.get('type'),value=decodeURIComponent(params.get('value')||'');
-const iconMap={cat:'📚',author:'✍️',pub:'🏢'};
-if(type==='cat')filtered=books.filter(b=>b.cat===value);
-else if(type==='author')filtered=books.filter(b=>b.author===value);
-else if(type==='pub')filtered=books.filter(b=>b.pub===value);
-document.getElementById('titleText').innerText=(iconMap[type]||'📚')+' '+value;
-document.getElementById('pageTitle').innerText=value;
-setTimeout(()=>{document.getElementById('skelGrid').style.display='none';document.getElementById('bookGrid').style.display='block';renderBooks(getList());},600);
+function sortBooks(type, btn) {
+    document.querySelectorAll('.sort-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSort = type;
+    renderBooks(getList());
+}
+
+function searchWithin() {
+    document.getElementById('searchClear').classList.toggle('show', document.getElementById('filterSearch').value.length > 0);
+    renderBooks(getList());
+}
+
+function clearSearch() {
+    document.getElementById('filterSearch').value = '';
+    document.getElementById('searchClear').classList.remove('show');
+    renderBooks(getList());
+}
+
+function goToBook(idx) {
+    let r = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
+    r = [idx, ...r.filter(i => i !== idx)].slice(0, 8);
+    localStorage.setItem('gronthokanon_recent', JSON.stringify(r));
+    navigateTo('book.html?id=' + idx);
+}
+
+function addToCart(name, price, img, btn) {
+    cart.push({ name: name.trim(), price: Number(price), img });
+    localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
+    updateCounts();
+    if (btn) { btn.classList.add('added'); btn.textContent = '✅ যোগ হয়েছে'; }
+    showToast('✅ কার্টে যোগ হয়েছে!');
+}
+
+function showToast(msg) {
+    const t = document.createElement('div'); t.className = 'toast'; t.innerText = msg;
+    document.body.appendChild(t); setTimeout(() => t.remove(), 2200);
+}
+
+function goToCart() { localStorage.setItem('gronthokanon_opencart', '1'); navigateTo('index.html'); }
+function goBack() { window.history.back(); }
+
+/* scroll-top button */
+window.addEventListener('scroll', () => {
+    document.getElementById('scrollTopBtn').classList.toggle('show', window.scrollY > 200);
+});
+
+/* dark mode */
+function toggleDark() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const nxt = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nxt);
+    localStorage.setItem('gronthokanon_theme', nxt);
+    document.getElementById('darkBtn').textContent = nxt === 'dark' ? '☀️' : '🌙';
+}
+(function () {
+    const s = localStorage.getItem('gronthokanon_theme');
+    if (s === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); document.addEventListener('DOMContentLoaded', () => { const b = document.getElementById('darkBtn'); if (b) b.textContent = '☀️'; }); }
+})();
+
+/* INIT */
+const params = new URLSearchParams(window.location.search);
+const type = params.get('type'), value = decodeURIComponent(params.get('value') || '');
+const iconMap = { cat: '📚', author: '✍️', pub: '🏢' };
+
+if (type === 'cat') filtered = books.filter(b => b.cat === value);
+else if (type === 'author') filtered = books.filter(b => b.author === value);
+else if (type === 'pub') filtered = books.filter(b => b.pub === value);
+else filtered = [...books];
+
+const displayTitle = (iconMap[type] || '📚') + ' ' + value;
+document.getElementById('titleText').innerText = displayTitle;
+document.getElementById('pageTitle').innerText = value || 'সকল বই';
+document.getElementById('heroHeading').innerHTML = `<span style="color:#6ee7b7">${escapeHTML(value || 'সকল বই')}</span>`;
+
+/* show filter tabs only on full listing (no type filter) */
+if (!type || type === 'all') {
+    document.getElementById('filterTabs').style.display = 'flex';
+}
+
+setTimeout(() => {
+    document.getElementById('skelGrid').style.display = 'none';
+    document.getElementById('bookGrid').style.display = 'block';
+    renderBooks(getList());
+}, 600);
 </script>
 <script src="common.js"></script>
 </body>
