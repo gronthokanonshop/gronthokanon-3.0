@@ -70,28 +70,58 @@
             border:1px solid rgba(5,150,105,0.13);
         }
 
-        .navbar-brand { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
-        .brand-icon { width: 34px; height: 34px; background: transparent; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-        .typing-text { font-size: 15px; font-weight: 700; color: #059669; white-space: nowrap; min-width: 60px; }
-        .typing-cursor { display: inline-block; width: 2px; height: 15px; background: #059669; margin-left: 1px; vertical-align: middle; border-radius: 1px; animation: blink 0.7s infinite; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        
-        
-        
-        
-        
-        
-        
-        .nav-badge.show { display: block; }
-        .cart-wrap { position: relative; cursor: pointer; }
-        .cart-wrap.bounce { animation: cartBounce 0.4s ease; }
-        @keyframes cartBounce { 0%,100%{transform:scale(1)} 30%{transform:scale(1.35)} 60%{transform:scale(0.9)} 80%{transform:scale(1.08)} }
+        .navbar-brand { display:flex; flex-direction:column; justify-content:center; flex-shrink:0; cursor:pointer; }
+        .brand-name  { font-size:20px; font-weight:900; color:#047857; line-height:1.1; font-family:'Hind Siliguri',Arial,sans-serif; white-space:nowrap; }
+        .brand-name span { color:#059669; }
+        .brand-tagline { font-size:9.5px; color:var(--text2); font-weight:500; letter-spacing:0.3px; white-space:nowrap; margin-top:1px; }
 
-        .menu-btn { width:36px; height:36px; background:transparent; border:1.5px solid var(--border2); border-radius:10px; font-size:18px; color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:0.2s; }
-        .menu-btn:hover { background:var(--green-bg); border-color:var(--green); }
+        /* new inline search bar */
+        .navbar-search-bar {
+            flex:1; display:flex; align-items:stretch;
+            background:#fff; border:1px solid #111;
+            border-radius:0; overflow:hidden;
+            transition: border-color .2s; min-width:0;
+        }
+        [data-theme="dark"] .navbar-search-bar { background:var(--search-input-bg); border-color:#555; }
+        .navbar-search-bar:focus-within { border-color:#059669; box-shadow: none; }
+        .navbar-search-input {
+            flex:1; border:none; outline:none; padding:10px 14px;
+            font-size:14px; font-family:'Hind Siliguri',Arial,sans-serif;
+            background:transparent; color:var(--text); min-width:0;
+        }
+        .navbar-search-input::placeholder { color:#aaa; }
+        .navbar-search-btn {
+            background:#111; color:#fff; border:none;
+            border-left: 1px solid #111;
+            padding:0 18px; font-size:14px; font-weight:700;
+            cursor:pointer; display:flex; align-items:center; gap:5px;
+            font-family:'Hind Siliguri',Arial,sans-serif;
+            transition:background .2s; flex-shrink:0; white-space:nowrap;
+            border-radius:0;
+        }
+        .navbar-search-btn:hover { background:#059669; }
 
-        /* ═══════ SEARCH ROW ═══════ */
-        .navbar-search { padding: 0 14px 11px; }
+        /* icon buttons */
+        .nav-icon-btn-g {
+            width:42px; height:42px;
+            background:#fff; color:#111;
+            border: 1px solid #111;
+            border-radius:0;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; font-size:18px; position:relative;
+            transition:.2s; flex-shrink:0;
+        }
+        .nav-icon-btn-g:hover { background:#111; color:#fff; }
+        .nav-icon-btn-g .nav-badge { border-color:#fff; }
+
+        @media(max-width:600px){
+            .navbar-top { flex-wrap:wrap; padding:8px 12px; gap:8px; }
+            .navbar-brand { flex:1; }
+            .navbar-search-bar { order:3; flex-basis:100%; }
+            .navbar-icons { order:2; }
+        }
+
+        @keyframes.navbar-search { padding: 0 14px 11px; }
         .search-trigger { display: flex; align-items: center; gap: 10px; background: var(--search-input-bg); border: 1.5px solid var(--search-input-border); border-radius: 6px; padding: 10px 16px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; width: 100%; }
         .search-trigger:hover { border-color: #059669; background: var(--card); box-shadow: 0 0 0 3px rgba(5,150,105,0.10); }
         .search-trigger:active { transform: scale(0.998); }
@@ -298,39 +328,195 @@
         .cat-pill:hover:not(.active) { border-color: var(--green); color: var(--green); background: rgba(5,150,105,0.05); }
         .cat-pill.active { background: #059669; color: #fff; border-color: transparent; box-shadow: 0 3px 12px rgba(5,150,105,0.3); }
 
+        /* ═══════ DESKTOP CATEGORY MENU BAR ═══════ */
+        .desk-cat-bar {
+            width: 100%;
+            background: var(--card);
+            border-bottom: 1px solid #111;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            position: relative;
+            z-index: 90;
+        }
+        .desk-cat-bar::-webkit-scrollbar { display: none; }
+        .desk-cat-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: max-content;
+            margin: 0 auto;
+            padding: 7px 10px;
+            gap: 0;
+        }
+        .desk-cat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 13px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #111;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid #111;
+            border-radius: 0;
+            background: #fff;
+            transition: all 0.18s ease;
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            line-height: 1.4;
+            margin-left: -2px;
+        }
+        .desk-cat-inner > .desk-cat-item:first-child {
+            margin-left: 0;
+        }
+        .desk-cat-item:hover {
+            background: #111;
+            color: #fff;
+        }
+        .desk-cat-item.active {
+            background: #059669;
+            color: #fff;
+            border-color: #047857;
+        }
+        .desk-cat-item .dci-icon {
+            font-size: 14px;
+            line-height: 1;
+        }
+        /* প্যাকেজ item — same style as others */
+        .desk-cat-item.pkg-item {
+            background: #fff;
+            color: #111;
+            border-color: #111;
+        }
+        .desk-cat-item.pkg-item:hover {
+            background: #111;
+            border-color: #111;
+            color: #fff;
+        }
+        .desk-cat-item.pkg-item.active {
+            background: #059669;
+            border-color: #047857;
+            color: #fff;
+        }
+        [data-theme="dark"] .desk-cat-bar {
+            border-bottom-color: #444;
+        }
+        [data-theme="dark"] .desk-cat-item {
+            border-color: #555;
+            color: #eee;
+            background: #1a1a1a;
+        }
+        [data-theme="dark"] .desk-cat-item:hover {
+            background: #eee;
+            color: #111;
+        }
+        [data-theme="dark"] .desk-cat-item.pkg-item {
+            background: #eee;
+            color: #111;
+            border-color: #eee;
+        }
+
         /* ═══════ SECTIONS ═══════ */
         .sections { max-width: 1100px; margin: 0 auto; padding: 0 14px 30px; }
-        .cat-section { margin-bottom: 26px; }
-        .cat-section-title { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 12px; padding-left: 12px; border-left: 4px solid var(--green); display: flex; justify-content: space-between; align-items: center; }
-        [data-theme="dark"] .cat-section-title { color: #ecfdf5; }
-        .book-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: #c6f6d5 transparent; }
-        .book-row::-webkit-scrollbar { height: 4px; }
-        .book-row::-webkit-scrollbar-thumb { background: #a7f3d0; border-radius: 4px; }
+        .cat-section { margin-bottom: 28px; }
+        .cat-section-title { font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 10px; padding-left: 10px; border-left: 4px solid #111; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.3px; }
+        [data-theme="dark"] .cat-section-title { color: #ecfdf5; border-left-color: #059669; }
+        .book-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; scrollbar-color: #c6f6d5 transparent; }
+        .book-row::-webkit-scrollbar { height: 3px; }
+        .book-row::-webkit-scrollbar-thumb { background: #059669; border-radius: 0; }
 
-        /* ═══════ BOOK CARD ═══════ */
-        .book-card { flex-shrink: 0; width: 148px; background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); cursor: pointer; position: relative; border: 1px solid var(--border); }
-        .book-card:hover { transform: translateY(-5px); box-shadow: 0 12px 28px rgba(5,150,105,0.18); border-color: var(--green); }
-        .book-card img { width: 148px; height: 198px; object-fit: cover; display: block; }
-        .disc-badge { position: absolute; top: 7px; left: 7px; background: linear-gradient(135deg, #dc2626, #ef4444); color: white; font-size: 10px; font-weight: bold; padding: 2px 7px; border-radius: 20px; z-index: 2; box-shadow: 0 2px 6px rgba(220,38,38,0.35); }
-        .wl-btn { position: absolute; top: 7px; right: 7px; background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 27px; height: 27px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.12); transition: 0.2s; }
-        .wl-btn:hover { transform: scale(1.2); }
-        .wl-btn.active { background: #ffe4e4; }
-        .book-card-info { padding: 9px; }
-        .bc-pub { font-size: 10px; color: var(--text2); padding: 3px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .bc-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; line-height: 1.3; height: 31px; overflow: hidden; }
-        .bc-author { font-size: 11px; color: var(--text2); margin-bottom: 5px; }
+        /* ═══════ BOOK CARD — SHARP RECTANGULAR AESTHETIC ═══════ */
+        .book-card {
+            flex-shrink: 0;
+            width: 145px;
+            background: var(--card);
+            border-radius: 0;
+            overflow: hidden;
+            border: 1px solid #111;
+            transition: all 0.22s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        [data-theme="dark"] .book-card { border-color: #555; }
+        .book-card:hover {
+            border-color: #111;
+            box-shadow: 3px 3px 0 #111;
+            transform: translate(-2px, -2px);
+        }
+        [data-theme="dark"] .book-card:hover {
+            border-color: #059669;
+            box-shadow: 3px 3px 0 #059669;
+        }
+        .book-card img { width: 145px; height: 195px; object-fit: cover; display: block; border-bottom: 1px solid #111; }
+        [data-theme="dark"] .book-card img { border-bottom-color: #555; }
+
+        /* discount badge — sharp tag */
+        .disc-badge {
+            position: absolute; top: 0; left: 0;
+            background: #dc2626; color: white;
+            font-size: 10px; font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 0;
+            z-index: 2;
+            letter-spacing: 0.5px;
+        }
+
+        /* wishlist btn */
+        .wl-btn {
+            position: absolute; top: 6px; right: 6px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid #111;
+            border-radius: 0;
+            width: 26px; height: 26px;
+            cursor: pointer; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2;
+            transition: 0.18s;
+        }
+        .wl-btn:hover { background: #fff; border-color: #111; transform: scale(1.1); }
+        .wl-btn.active { background: #ffe4e4; border-color: #dc2626; }
+
+        /* card info */
+        .book-card-info { padding: 8px 9px 9px; }
+        .bc-pub {
+            font-size: 9.5px; color: #059669; font-weight: 700;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px;
+        }
+        .bc-name {
+            font-size: 12px; font-weight: 800; color: var(--text);
+            margin-bottom: 2px; line-height: 1.3;
+            height: 31px; overflow: hidden;
+        }
+        .bc-author { font-size: 10.5px; color: var(--text2); margin-bottom: 6px; }
         .price-row { display: flex; align-items: center; gap: 5px; margin-bottom: 7px; flex-wrap: wrap; }
-        .price-sell { color: var(--red); font-weight: bold; font-size: 13px; }
-        .price-orig { color: var(--text2); font-size: 11px; text-decoration: line-through; }
-        .bc-btn { display: block; padding: 6px; background: linear-gradient(135deg, #059669, #10b981); color: white; border-radius: 8px; cursor: pointer; width: 100%; border: none; font-weight: bold; font-size: 11px; text-align: center; font-family: 'Hind Siliguri',Arial,sans-serif; transition: all 0.2s; box-shadow: 0 2px 8px rgba(5,150,105,0.25); }
-        .bc-btn:hover { background: linear-gradient(135deg, #047857, #059669); transform: translateY(-1px); }
+        .price-sell { color: #dc2626; font-weight: 900; font-size: 14px; }
+        .price-orig { color: var(--text2); font-size: 10.5px; text-decoration: line-through; }
+
+        /* cart button — full rectangular */
+        .bc-btn {
+            display: block; padding: 7px 6px;
+            background: #111; color: #fff;
+            border-radius: 0;
+            cursor: pointer; width: 100%; border: none;
+            font-weight: 700; font-size: 11px;
+            text-align: center;
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            transition: all 0.18s;
+            letter-spacing: 0.3px;
+        }
+        .bc-btn:hover { background: #059669; }
+        [data-theme="dark"] .bc-btn { background: #059669; }
+        [data-theme="dark"] .bc-btn:hover { background: #047857; }
 
         /* ═══════ SKELETON ═══════ */
-        .skeleton-row { display: flex; gap: 12px; overflow: hidden; padding-bottom: 10px; }
-        .skeleton-card { flex-shrink: 0; width: 148px; background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
-        .skel-img { width: 148px; height: 198px; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        .skeleton-row { display: flex; gap: 6px; overflow: hidden; padding-bottom: 10px; }
+        .skeleton-card { flex-shrink: 0; width: 145px; background: var(--card); border-radius: 0; overflow: hidden; border: 1px solid #111; }
+        [data-theme="dark"] .skeleton-card { border-color: #555; }
+        .skel-img { width: 145px; height: 195px; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
         [data-theme="dark"] .skel-img { background: linear-gradient(90deg, #132d20 25%, #1a4731 50%, #132d20 75%); background-size: 200% 100%; }
-        .skel-line { height: 11px; margin: 9px; border-radius: 6px; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        .skel-line { height: 11px; margin: 9px; border-radius: 0; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
         [data-theme="dark"] .skel-line { background: linear-gradient(90deg, #132d20 25%, #1a4731 50%, #132d20 75%); background-size: 200% 100%; }
         .skel-line.short { width: 55%; }
         @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
@@ -509,359 +695,99 @@
     </div>
 </div>
 
-<!-- ═══════ EID MELA FLASH BANNER ═══════ -->
-<div id="flashBanner" style="background:linear-gradient(135deg,#b91c1c,#991b1b);color:white;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;">
-    <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:20px;">🌙</span>
-        <div>
-            <div style="font-size:12px;font-weight:800;letter-spacing:0.05em;">ঈদ মেলা অফার চলছে!</div>
-            <div style="font-size:11px;opacity:0.85;">৭ দিনের বিশেষ ছাড় — সীমিত সময়</div>
-        </div>
-    </div>
-    <div style="display:flex;gap:5px;align-items:center;">
-        <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;text-align:center;">
-            <div id="eid_d2" style="color:#fff;font-size:14px;font-weight:800;">০৭</div>
-            <div style="color:#fecaca;font-size:8px;">দিন</div>
-        </div>
-        <div style="color:#fecaca;font-weight:700;font-size:14px;">:</div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;text-align:center;">
-            <div id="eid_h2" style="color:#fff;font-size:14px;font-weight:800;">০০</div>
-            <div style="color:#fecaca;font-size:8px;">ঘণ্টা</div>
-        </div>
-        <div style="color:#fecaca;font-weight:700;font-size:14px;">:</div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;text-align:center;">
-            <div id="eid_m2" style="color:#fff;font-size:14px;font-weight:800;">০০</div>
-            <div style="color:#fecaca;font-size:8px;">মিনিট</div>
-        </div>
-        <div style="color:#fecaca;font-weight:700;font-size:14px;">:</div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 7px;text-align:center;">
-            <div id="eid_s2" style="color:#fff;font-size:14px;font-weight:800;">০০</div>
-            <div style="color:#fecaca;font-size:8px;">সেকেন্ড</div>
-        </div>
-    </div>
-    <button onclick="document.getElementById('flashBanner').style.display='none'" style="background:rgba(255,255,255,0.2);border:none;color:white;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">×</button>
-</div>
-
 <!-- ═══════ MARQUEE ═══════ -->
 
 <!-- ═══════ NAVBAR ═══════ -->
 <nav class="navbar">
-    <div class="navbar-top">
-        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-        <div class="navbar-brand">
-            <div class="brand-icon">📚</div>
-            <span class="typing-text" id="typingText"></span><span class="typing-cursor"></span>
+    <div class="navbar-top" style="display:flex;align-items:center;padding:10px 16px;gap:14px;background:#fff;">
+
+        <!-- LOGO -->
+        <div class="navbar-brand" onclick="scrollToTop()" style="flex-shrink:0;">
+            <img src="logo.png" alt="গ্রন্থকানন" style="height:52px;width:auto;object-fit:contain;display:block;">
         </div>
-        <div class="navbar-icons">
-            <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
-            <div class="nav-btn" onclick="showWishlist()" title="উইশলিস্ট">🤍<span class="nav-badge" id="navWishBadge">0</span></div>
+
+        <!-- SEARCH BAR -->
+        <div class="navbar-search-bar">
+            <input class="navbar-search-input" id="navSearchInput"
+                   placeholder="বই, লেখক বা প্রকাশনী খুঁজুন..."
+                   oninput="navSearchLive(this.value)"
+                   onfocus="openSearch()"
+                   autocomplete="off">
+            <button class="navbar-search-btn" onclick="openSearch()">🔍 সার্চ</button>
+        </div>
+
+        <!-- ICONS -->
+        <div class="navbar-icons" style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+            <button class="nav-icon-btn-g" onclick="toggleDark()" id="darkBtn" title="থিম">🌙</button>
+            <button class="nav-icon-btn-g" onclick="showWishlist()" title="উইশলিস্ট" style="position:relative;">
+                🤍<span class="nav-badge" id="navWishBadge">0</span>
+            </button>
             <div class="cart-wrap" id="cartWrap" onclick="showCart()">
-                <div class="nav-btn" title="কার্ট">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-                    <span class="nav-badge show" id="cartCount">0</span>
-                </div>
+                <button class="nav-icon-btn-g" style="position:relative;">
+                    🛒<span class="nav-badge show" id="cartCount">0</span>
+                </button>
             </div>
         </div>
-    </div>
-    <div class="navbar-search">
-        <div class="search-trigger" onclick="openSearch()">
-            <div class="search-pill-icon">🔍</div>
-            <div class="search-vline"></div>
-            <span class="search-placeholder">সম্মানিত গ্রাহক, আপনার পছন্দের বই টি সার্চ করুন...</span>
-            <span class="search-kbd">⌘K</span>
-        </div>
+
     </div>
 </nav>
 
-<!-- ═══════ BRANDING ═══════ -->
-<header class="branding">
-    <img src="logo.png" alt="গ্রন্থকানন" class="branding-logo">
-    <div class="branding-tagline"><span style="color:#059669;font-weight:700;">স্বল্প মূল্যে</span> <span style="color:#dc2626;font-weight:700;">ইসলামিক বইয়ের</span> <span style="color:#059669;font-weight:700;">নির্ভরযোগ্য প্রতিষ্ঠান</span></div>
-</header>
+<!-- ═══════ DESKTOP CATEGORY MENU BAR ═══════ -->
+<div class="desk-cat-bar">
+    <div class="desk-cat-inner" id="deskCatInner">
+        <div class="desk-cat-item active" onclick="deskCatClick('all', this)">
+            <span class="dci-icon">🏠</span> হোম
+        </div>
+        <div class="desk-cat-item pkg-item" onclick="deskCatClick('packages', this)">
+            <span class="dci-icon">📦</span> প্যাকেজসমূহ
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('Best Selling', this)">
+            <span class="dci-icon">🔥</span> Best Selling
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('Trending', this)">
+            <span class="dci-icon">📈</span> Trending
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('নতুন প্রকাশিত', this)">
+            <span class="dci-icon">✨</span> নতুন প্রকাশিত
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('Pre Order', this)">
+            <span class="dci-icon">🛒</span> Pre Order
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('ইসলামি বই', this)">
+            <span class="dci-icon">☪️</span> ইসলামি বই
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('Academic', this)">
+            <span class="dci-icon">🎓</span> Academic
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('দরসি কিতাব', this)">
+            <span class="dci-icon">🕌</span> দরসি কিতাব
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('সুন্নাহ আইটেম', this)">
+            <span class="dci-icon">📿</span> সুন্নাহ আইটেম
+        </div>
+        <div class="desk-cat-item" onclick="deskCatClick('Stationery', this)">
+            <span class="dci-icon">🖊️</span> Stationery
+        </div>
+    </div>
+</div>
 
 <!-- ═══════ BANNER ═══════ -->
 <div class="banner-wrap">
   <div class="banner-slider" id="mainSlider">
 
-    <!-- ════════ SLIDE 1: EID SALE ════════ -->
-    <div class="banner-slide s1">
-      <div class="slide-overlay"></div>
-      <img src="logo.png" class="slide-logo" alt="গ্রন্থকানন">
-      <!-- Islamic Left Panel -->
-      <div class="isleft">
-        <div class="isleft-bg"></div>
-        <div class="isleft-line"></div>
-        <svg class="istar" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#fbbf24"/></svg>
-        <div class="idot"></div><div class="idiamond"></div><div class="idot"></div>
-        <svg class="icrescent-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#fbbf24" stroke="none"/></svg>
-        <div class="idot"></div><div class="idiamond" style="width:6px;height:6px;"></div><div class="idot"></div>
-        <svg class="istar2" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#fbbf24"/></svg>
-        <svg class="istar3" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="rgba(255,255,255,0.6)"/></svg>
-      </div>
-      <div class="s1-mandala"></div>
-      <div class="crescent"></div>
-      <div class="s1-arch">
-        <div class="s1-arch-shape">
-          <div class="s1-arch-tip"></div>
-          <div class="s1-arch-inner"></div>
-        </div>
-      </div>
-      <div style="position:absolute;left:18px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,rgba(22,163,74,0.6),rgba(22,163,74,0.8));border-radius:1px;z-index:3;"></div>
-      <div class="css-rose float" style="position:absolute;left:6px;bottom:12px;width:38px;height:50px;z-index:4;transform-origin:bottom center;">
-        <div class="p p1" style="width:16px;height:20px;margin:-20px 0 0 -8px;background:rgba(220,38,38,0.95);"></div>
-        <div class="p p2" style="width:15px;height:19px;margin:-15px 0 0 2px;background:rgba(185,28,28,0.9);"></div>
-        <div class="p p3" style="width:15px;height:18px;margin:-10px 0 0 -16px;background:rgba(239,68,68,0.88);"></div>
-        <div class="p p4" style="width:14px;height:18px;margin:-4px 0 0 3px;background:rgba(220,38,38,0.92);"></div>
-        <div class="p p5" style="width:15px;height:17px;margin:-3px 0 0 -17px;background:rgba(185,28,28,0.88);"></div>
-        <div class="p" style="width:12px;height:16px;margin:-18px 0 0 -6px;background:rgba(239,68,68,0.8);transform:rotate(160deg);"></div>
-        <div class="ctr" style="width:9px;height:9px;background:#fbbf24;"></div>
-        <div class="stem"></div><div class="leaf1"></div><div class="leaf2"></div>
-      </div>
-      <div class="css-rose" style="position:absolute;left:4px;bottom:90px;width:32px;height:44px;z-index:4;animation:floatY 3.5s ease-in-out infinite 0.5s;">
-        <div class="p p1" style="width:13px;height:17px;margin:-17px 0 0 -6px;background:rgba(220,38,38,0.93);"></div>
-        <div class="p p2" style="width:12px;height:16px;margin:-12px 0 0 2px;background:rgba(185,28,28,0.88);"></div>
-        <div class="p p3" style="width:13px;height:15px;margin:-8px 0 0 -14px;background:rgba(239,68,68,0.85);"></div>
-        <div class="p p4" style="width:12px;height:15px;margin:-3px 0 0 2px;background:rgba(220,38,38,0.9);"></div>
-        <div class="p p5" style="width:13px;height:14px;margin:-2px 0 0 -15px;background:rgba(185,28,28,0.85);"></div>
-        <div class="ctr"></div><div class="stem"></div><div class="leaf1"></div>
-      </div>
-      <div class="css-rose" style="position:absolute;left:10px;bottom:160px;width:26px;height:36px;z-index:4;animation:floatY 4s ease-in-out infinite 1s;">
-        <div class="p p1" style="width:11px;height:14px;margin:-14px 0 0 -5px;background:rgba(239,68,68,0.9);"></div>
-        <div class="p p2" style="width:10px;height:13px;margin:-10px 0 0 2px;background:rgba(220,38,38,0.85);"></div>
-        <div class="p p3" style="width:11px;height:13px;margin:-6px 0 0 -12px;background:rgba(248,113,113,0.82);"></div>
-        <div class="p p4" style="width:10px;height:13px;margin:-2px 0 0 2px;background:rgba(220,38,38,0.88);"></div>
-        <div class="ctr" style="width:7px;height:7px;background:#fde68a;"></div>
-        <div class="stem" style="height:14px;"></div><div class="leaf1" style="width:10px;height:5px;"></div>
-      </div>
-      <div class="css-rose" style="position:absolute;right:8px;bottom:25px;width:24px;height:32px;z-index:6;animation:floatY 3.8s ease-in-out infinite 0.3s;">
-        <div class="p p1" style="width:10px;height:13px;margin:-13px 0 0 -5px;background:rgba(220,38,38,0.8);"></div>
-        <div class="p p2" style="width:9px;height:12px;margin:-9px 0 0 1px;background:rgba(185,28,28,0.75);"></div>
-        <div class="p p3" style="width:10px;height:12px;margin:-6px 0 0 -11px;background:rgba(239,68,68,0.75);"></div>
-        <div class="ctr" style="width:6px;height:6px;background:#fbbf24;"></div>
-        <div class="stem" style="height:12px;"></div>
-      </div>
-      <div class="slide-content">
-        <div class="slide-badge">🌙 ঈদ মেলা অফার — ৭ দিন</div>
-        <div class="slide-title">মহা ঈদ মেলা সেল<br><span style="color:#fca5a5;font-size:13px;font-weight:600;">সীমিত সময়ের বিশেষ অফার!</span></div>
-        <div class="slide-sub">কুপন কোড: <strong style="color:#fff;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:6px;letter-spacing:1px;">EID26</strong></div>
-        <button class="slide-cta" onclick="copyCoupon('EID26')" style="cursor:pointer;">📋 কুপন নিন →</button>
-      </div>
+    <!-- SLIDE 1: banner.jpg -->
+    <div class="banner-slide" style="background:#059669;">
+      <img src="banner.jpg" alt="ব্যানার ১" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
     </div>
 
-    <!-- ════════ SLIDE 2: FREE BOOK ════════ -->
-    <div class="banner-slide s2">
-      <div class="slide-overlay"></div>
-      <img src="logo.png" class="slide-logo" alt="গ্রন্থকানন">
-      <div class="isleft">
-        <div class="isleft-bg"></div>
-        <div class="isleft-line"></div>
-        <svg class="istar" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#a78bfa"/></svg>
-        <div class="idot" style="background:rgba(167,139,250,0.6);"></div><div class="idiamond" style="background:rgba(167,139,250,0.45);"></div><div class="idot" style="background:rgba(167,139,250,0.6);"></div>
-        <svg class="icrescent-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#c4b5fd" stroke="none"/></svg>
-        <div class="idot" style="background:rgba(167,139,250,0.6);"></div><div class="idiamond" style="width:6px;height:6px;background:rgba(167,139,250,0.4);"></div><div class="idot" style="background:rgba(167,139,250,0.6);"></div>
-        <svg class="istar2" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#c4b5fd"/></svg>
-        <svg class="istar3" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="rgba(196,181,253,0.5)"/></svg>
-      </div>
-      <div class="book-stack">
-        <div class="book float" style="bottom:22px;right:8px;width:88px;height:120px;background:linear-gradient(135deg,#7c3aed,#5b21b6);animation-delay:0.3s;">
-          <div class="book-spine" style="background:#5b21b6;"></div>
-          <div class="book-title-line" style="top:22px;width:60px;"></div>
-          <div class="book-title-line" style="top:30px;width:45px;"></div>
-          <div class="book-title-line" style="top:38px;width:52px;"></div>
-        </div>
-        <div class="book float" style="bottom:22px;right:24px;width:88px;height:110px;background:linear-gradient(135deg,#2563eb,#1d4ed8);animation-delay:0.6s;">
-          <div class="book-spine" style="background:#1e40af;"></div>
-          <div class="book-title-line" style="top:20px;width:55px;"></div>
-          <div class="book-title-line" style="top:28px;width:40px;"></div>
-        </div>
-        <div class="book float" style="bottom:22px;right:40px;width:88px;height:128px;background:linear-gradient(135deg,#a855f7,#7c3aed);box-shadow:0 6px 24px rgba(168,85,247,0.5),inset 1px 0 0 rgba(255,255,255,0.15);">
-          <div class="book-spine" style="background:#6d28d9;"></div>
-          <div style="position:absolute;top:10px;left:14px;right:6px;">
-            <div style="width:100%;height:40px;background:rgba(255,255,255,0.1);border-radius:4px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-            <div class="book-title-line" style="top:0;width:58px;left:0;position:relative;margin-bottom:5px;"></div>
-            <div class="book-title-line" style="top:0;width:44px;left:0;position:relative;margin-bottom:5px;"></div>
-            <div class="book-title-line" style="top:0;width:50px;left:0;position:relative;"></div>
-          </div>
-          <div style="position:absolute;top:-8px;right:-8px;width:40px;height:40px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#1a1a1a;box-shadow:0 3px 10px rgba(251,191,36,0.5);border:2px solid rgba(255,255,255,0.3);">FREE</div>
-        </div>
-        <div class="sparkle" style="position:absolute;top:15px;right:22px;">✦</div>
-        <div class="sparkle" style="position:absolute;top:35px;right:140px;animation-delay:0.7s;">✦</div>
-        <div class="sparkle" style="position:absolute;top:55px;right:8px;animation-delay:1.2s;">✦</div>
-      </div>
-      <div class="slide-content">
-        <div class="slide-badge">📚 ১২৯৯+ টাকায়</div>
-        <div class="slide-title">পান <span style="color:#c4b5fd;">বিনামূল্যে</span><br><span class="slide-big" style="color:#a78bfa;">১টি বই ফ্রি!</span></div>
-        <div class="slide-sub" style="color:rgba(196,181,253,0.9);">১২৯৯ টাকার বেশি কিনলেই<br>একটি বই সম্পূর্ণ বিনামূল্যে</div>
-        <div class="coupon-chip" style="color:#c4b5fd;border-color:rgba(196,181,253,0.4);">📋 EID26</div>
-      </div>
+    <!-- SLIDE 2: banner2.jpg -->
+    <div class="banner-slide" style="background:#047857;">
+      <img src="banner2.jpg" alt="ব্যানার ২" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
     </div>
 
-    <!-- ════════ SLIDE 3: FAST DELIVERY ════════ -->
-    <div class="banner-slide s3">
-      <div class="slide-overlay"></div>
-      <img src="logo.png" class="slide-logo" alt="গ্রন্থকানন">
-      <div class="isleft">
-        <div class="isleft-bg"></div>
-        <div class="isleft-line"></div>
-        <svg class="istar" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#93c5fd"/></svg>
-        <div class="idot" style="background:rgba(147,197,253,0.6);"></div><div class="idiamond" style="background:rgba(147,197,253,0.4);"></div><div class="idot" style="background:rgba(147,197,253,0.6);"></div>
-        <svg class="icrescent-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#93c5fd" stroke="none"/></svg>
-        <div class="idot" style="background:rgba(147,197,253,0.6);"></div><div class="idiamond" style="width:6px;height:6px;background:rgba(147,197,253,0.4);"></div><div class="idot" style="background:rgba(147,197,253,0.6);"></div>
-        <svg class="istar2" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#93c5fd"/></svg>
-        <svg class="istar3" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="rgba(147,197,253,0.5)"/></svg>
-      </div>
-      <div class="truck-art float">
-        <div class="truck-road"></div>
-        <div class="speed-lines">
-          <div class="speed-line" style="width:35px;"></div>
-          <div class="speed-line" style="width:25px;margin-left:5px;"></div>
-          <div class="speed-line" style="width:30px;margin-left:2px;"></div>
-        </div>
-        <div class="truck-body">
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:8px;font-weight:800;color:rgba(147,197,253,0.8);letter-spacing:1px;white-space:nowrap;">গ্রন্থকানন</div>
-          <div style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(147,197,253,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
-        </div>
-        <div class="truck-cabin">
-          <div class="truck-window"></div>
-          <div style="position:absolute;right:-4px;bottom:12px;width:8px;height:5px;background:#fde68a;border-radius:1px;box-shadow:0 0 6px #fbbf24;"></div>
-        </div>
-        <div class="truck-wheel" style="left:14px;bottom:2px;"></div>
-        <div class="truck-wheel" style="right:12px;bottom:2px;"></div>
-        <div style="position:absolute;top:8px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:5px;">
-          <div style="width:8px;height:8px;border-radius:50%;background:#3b82f6;border:1.5px solid rgba(147,197,253,0.6);"></div>
-          <div style="flex:1;height:1px;background:rgba(147,197,253,0.5);border-radius:1px;max-width:40px;"></div>
-          <div style="width:6px;height:6px;border-radius:50%;background:rgba(147,197,253,0.5);"></div>
-          <div style="flex:1;height:1px;background:rgba(147,197,253,0.5);border-radius:1px;max-width:40px;"></div>
-          <div style="width:10px;height:10px;border-radius:50%;background:#60a5fa;border:2px solid #93c5fd;box-shadow:0 0 8px rgba(96,165,250,0.5);"></div>
-        </div>
-      </div>
-      <div class="slide-content">
-        <div class="slide-badge">🚚 দ্রুত ডেলিভারি</div>
-        <div class="slide-title">মাত্র <span style="color:#93c5fd;">৬০ টাকায়</span><br>দরজায় পৌঁছাবে!</div>
-        <div class="slide-sub" style="color:rgba(147,197,253,0.9);">ঢাকায় ৬০৳ · বাইরে ৯০৳<br>১৪৯৯+ টাকায় মাত্র <strong style="color:#fde68a;">২৬৳!</strong></div>
-        <div class="coupon-chip" style="color:#93c5fd;border-color:rgba(147,197,253,0.4);">📋 EID26</div>
-      </div>
-    </div>
-
-    <!-- ════════ SLIDE 4: BOOKMARK GIFT ════════ -->
-    <div class="banner-slide s4">
-      <div class="slide-overlay"></div>
-      <img src="logo.png" class="slide-logo" alt="গ্রন্থকানন">
-      <div class="isleft">
-        <div class="isleft-bg"></div>
-        <div class="isleft-line"></div>
-        <svg class="istar" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#fbbf24"/></svg>
-        <div class="idot" style="background:rgba(251,191,36,0.7);"></div><div class="idiamond" style="background:rgba(251,191,36,0.5);"></div><div class="idot" style="background:rgba(251,191,36,0.7);"></div>
-        <svg class="icrescent-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#fbbf24" stroke="none"/></svg>
-        <div class="idot" style="background:rgba(251,191,36,0.7);"></div><div class="idiamond" style="width:6px;height:6px;background:rgba(251,191,36,0.4);"></div><div class="idot" style="background:rgba(251,191,36,0.7);"></div>
-        <svg class="istar2" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#fbbf24"/></svg>
-        <svg class="istar3" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="rgba(253,230,138,0.5)"/></svg>
-      </div>
-      <div class="bookmark-art">
-        <div class="bm float" style="height:145px;background:linear-gradient(135deg,#fbbf24,#f59e0b);animation-delay:0s;">
-          <div class="bm-ribbon" style="height:30px;top:10px;"></div>
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)" stroke="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
-        </div>
-        <div class="bm float" style="height:160px;background:linear-gradient(135deg,#f97316,#ea580c);animation-delay:0.4s;box-shadow:4px 4px 14px rgba(234,88,12,0.5);">
-          <div class="bm-ribbon" style="height:35px;top:12px;"></div>
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-        </div>
-        <div class="bm float" style="height:130px;background:linear-gradient(135deg,#dc2626,#b91c1c);animation-delay:0.8s;">
-          <div class="bm-ribbon" style="height:25px;top:8px;"></div>
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,0.65)" stroke="none"><polygon points="12,2 22,9 19,21 5,21 2,9"/></svg></div>
-        </div>
-        <div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:80px;height:32px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border-radius:4px;box-shadow:0 3px 10px rgba(0,0,0,0.3);">
-          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:3px;height:100%;background:rgba(255,255,255,0.4);"></div>
-          <div style="position:absolute;top:50%;left:0;right:0;height:2px;background:rgba(255,255,255,0.4);transform:translateY(-50%);"></div>
-          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:20px;height:10px;display:flex;gap:2px;justify-content:center;">
-            <div style="width:9px;height:9px;border-radius:50% 50% 0 50%;background:#fde68a;transform:rotate(-15deg);"></div>
-            <div style="width:9px;height:9px;border-radius:50% 50% 50% 0;background:#fde68a;transform:rotate(15deg);"></div>
-          </div>
-        </div>
-      </div>
-      <div class="slide-content">
-        <div class="slide-badge">🎁 বিশেষ গিফট</div>
-        <div class="slide-title"><span style="color:#fed7aa;">৪৯৯+ টাকায়</span> পাচ্ছেন<br>প্রিমিয়াম <span style="color:#fbbf24;">বুকমার্ক!</span></div>
-        <div class="slide-sub" style="color:rgba(253,186,116,0.9);">সুন্দর প্যাকেজিংয়ে গিফট করুন<br>প্রিয়জনকে বইয়ের সাথে</div>
-        <div class="coupon-chip" style="color:#fde68a;border-color:rgba(253,211,77,0.45);">📋 EID26</div>
-      </div>
-    </div>
-
-    <!-- ════════ SLIDE 5: ALL OFFERS ════════ -->
-    <div class="banner-slide s5">
-      <div class="slide-overlay"></div>
-      <img src="logo.png" class="slide-logo" alt="গ্রন্থকানন">
-      <div class="isleft">
-        <div class="isleft-bg"></div>
-        <div class="isleft-line"></div>
-        <svg class="istar" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#34d399"/></svg>
-        <div class="idot" style="background:rgba(52,211,153,0.6);"></div><div class="idiamond" style="background:rgba(52,211,153,0.45);"></div><div class="idot" style="background:rgba(52,211,153,0.6);"></div>
-        <svg class="icrescent-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#6ee7b7" stroke="none"/></svg>
-        <div class="idot" style="background:rgba(52,211,153,0.6);"></div><div class="idiamond" style="width:6px;height:6px;background:rgba(52,211,153,0.4);"></div><div class="idot" style="background:rgba(52,211,153,0.6);"></div>
-        <svg class="istar2" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#6ee7b7"/></svg>
-        <svg class="istar3" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="rgba(110,231,183,0.5)"/></svg>
-      </div>
-      <div class="offer-tiers">
-        <div style="font-size:9px;font-weight:700;color:rgba(134,239,172,0.7);letter-spacing:1.5px;text-align:right;margin-bottom:2px;padding-right:4px;">কুপন: EID26</div>
-        <div class="offer-tier">
-          <span class="tier-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span>
-          <span class="tier-text">৪৯৯+ টাকায়<br><strong style="color:#fff;">বুকমার্ক গিফট</strong></span>
-          <span class="tier-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(134,239,172,0.45)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-        </div>
-        <div class="offer-tier unlocked">
-          <span class="tier-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
-          <span class="tier-text">১২৯৯+ টাকায়<br><strong style="color:#bbf7d0;">১টি বই ফ্রি</strong></span>
-          <span class="tier-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-        </div>
-        <div class="offer-tier unlocked">
-          <span class="tier-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
-          <span class="tier-text">১৪৯৯+ টাকায়<br><strong style="color:#bbf7d0;">মাত্র ২৬৳ ডেলিভারি</strong></span>
-          <span class="tier-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-        </div>
-        <div style="text-align:center;margin-top:2px;">
-          <div style="display:inline-flex;align-items:center;gap:4px;background:rgba(5,150,105,0.3);border:1px solid rgba(52,211,153,0.35);border-radius:5px;padding:3px 8px;font-size:9px;font-weight:700;color:#6ee7b7;">যত বেশি কিনবেন — তত বেশি পাবেন!</div>
-        </div>
-      </div>
-      <div class="slide-content">
-        <div class="slide-badge">🌟 ঈদ স্পেশাল</div>
-        <div class="slide-title">এক কোডে<br><span style="color:#86efac;">সব অফার!</span></div>
-        <div class="slide-sub" style="color:rgba(134,239,172,0.85);">EID26 দিলেই পরিমাণ অনুযায়ী<br>অফার আনলক হবে</div>
-        <div class="coupon-chip" style="color:#86efac;border-color:rgba(134,239,172,0.4);">📋 EID26</div>
-        <button class="slide-cta" style="border-color:rgba(134,239,172,0.45);color:#86efac;" onclick="document.getElementById('couponCode').value='EID26';applyCoupon?.()">অফার নিন →</button>
-      </div>
-    </div>
-
-    <!-- ════════ SLIDE 6: FIRSTORDER ════════ -->
-    <div class="banner-slide s6">
-      <div class="slide-overlay"></div>
-      <img src="logo.png" class="slide-logo" alt="গ্রন্থকানন">
-      <div class="isleft">
-        <div class="isleft-bg"></div>
-        <div class="isleft-line"></div>
-        <svg class="istar" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#34d399"/></svg>
-        <div class="idot" style="background:rgba(52,211,153,0.6);"></div><div class="idiamond" style="background:rgba(52,211,153,0.45);"></div><div class="idot" style="background:rgba(52,211,153,0.6);"></div>
-        <svg class="icrescent-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#6ee7b7" stroke="none"/></svg>
-        <div class="idot" style="background:rgba(52,211,153,0.6);"></div><div class="idiamond" style="width:6px;height:6px;background:rgba(52,211,153,0.4);"></div><div class="idot" style="background:rgba(52,211,153,0.6);"></div>
-        <svg class="istar2" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="#6ee7b7"/></svg>
-        <svg class="istar3" viewBox="0 0 100 100"><polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="rgba(110,231,183,0.5)"/></svg>
-      </div>
-      <div class="pct-badge float">
-        <div class="pct-circle">
-          <div class="pct-num">৫%</div>
-          <div class="pct-label">ছাড়</div>
-        </div>
-        <div class="sparkle" style="position:absolute;top:2px;left:12px;color:#34d399;font-size:12px;animation-delay:0s;">✦</div>
-        <div class="sparkle" style="position:absolute;top:8px;right:6px;color:#6ee7b7;font-size:10px;animation-delay:0.6s;">✦</div>
-        <div class="sparkle" style="position:absolute;bottom:8px;left:6px;color:#34d399;font-size:10px;animation-delay:1.2s;">✦</div>
-        <div class="sparkle" style="position:absolute;bottom:2px;right:14px;color:#6ee7b7;font-size:12px;animation-delay:0.9s;">✦</div>
-      </div>
-      <div class="slide-content">
-        <div class="slide-badge">🎉 নতুন গ্রাহক</div>
-        <div class="slide-title"><span style="color:#6ee7b7;">প্রথম অর্ডারেই</span><br>বিশেষ ছাড়!</div>
-        <div class="slide-sub" style="color:rgba(110,231,183,0.9);">যেকোনো বইয়ে প্রযোজ্য<br>শুধুমাত্র নতুন গ্রাহকদের জন্য</div>
-        <div class="coupon-chip" style="color:#34d399;border-color:rgba(52,211,153,0.4);">📋 FIRSTORDER</div>
-        <button class="slide-cta" style="border-color:rgba(52,211,153,0.45);color:#34d399;" onclick="document.getElementById('couponCode').value='FIRSTORDER';applyCoupon?.()">এখনই নিন →</button>
-      </div>
+    <!-- SLIDE 3: banner3.jpg -->
+    <div class="banner-slide" style="background:#065f46;">
+      <img src="banner3.jpg" alt="ব্যানার ৩" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
     </div>
 
   </div>
@@ -869,13 +795,8 @@
     <button class="banner-dot active" onclick="goBannerSlide(0)"></button>
     <button class="banner-dot" onclick="goBannerSlide(1)"></button>
     <button class="banner-dot" onclick="goBannerSlide(2)"></button>
-    <button class="banner-dot" onclick="goBannerSlide(3)"></button>
-    <button class="banner-dot" onclick="goBannerSlide(4)"></button>
-    <button class="banner-dot" onclick="goBannerSlide(5)"></button>
   </div>
 </div>
-
-
 
 <!-- ═══════ SKELETON ═══════ -->
 <div id="skeletonWrapper" class="sections">
@@ -1109,17 +1030,7 @@ let discountPercent = 0;
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
 let recentlyViewed = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
 
-/* TYPING */
-const phrases = ['গ্রন্থকানন','বইয়ের রাজ্যে স্বাগতম','ইসলামিক বইয়ের ঘর','গ্রন্থকানন'];
-let pi=0,ci=0,del=false,wait=false;
-const tEl=document.getElementById('typingText');
-function typeAnim(){
-    if(wait)return;
-    const w=phrases[pi];
-    if(!del){tEl.textContent=w.slice(0,ci+1);ci++;if(ci===w.length){wait=true;setTimeout(()=>{wait=false;del=true;typeAnim();},1900);return;}setTimeout(typeAnim,85);}
-    else{tEl.textContent=w.slice(0,ci-1);ci--;if(ci===0){del=false;pi=(pi+1)%phrases.length;setTimeout(typeAnim,380);return;}setTimeout(typeAnim,42);}
-}
-typeAnim();
+/* TYPING REMOVED */
 
 /* DARK MODE */
 
@@ -1350,33 +1261,7 @@ function updateCartUI(){
     if(document.getElementById('total'))document.getElementById('total').innerText=subtotal-disc;
     // Cart offer banner
     const ob=document.getElementById('cartOfferBanner');
-    if(ob){
-        const activeCoupon=localStorage.getItem('gronthokanon_coupon');
-        if(subtotal<=0){ob.style.display='none';}
-        else if(activeCoupon==='EID26'){
-            // EID26 applied — show tier banners
-            if(subtotal>=1499){
-                ob.style.display='block';
-                ob.innerHTML=`<div style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;"><span style="font-size:20px;">🚚</span><div><div style="font-weight:800;font-size:12px;">মাত্র ২৬৳ ডেলিভারি পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">EID26 কুপন সক্রিয় আছে ✅</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
-            }else if(subtotal>=1299){
-                ob.style.display='block';
-                const need=1499-subtotal;
-                ob.innerHTML=`<div style="background:linear-gradient(135deg,#059669,#047857);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;"><span style="font-size:20px;">🎁</span><div><div style="font-weight:800;font-size:12px;">১টি বই বিনামূল্যে পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">আরও ৳${need} যোগ করলে মাত্র ২৬৳ ডেলিভারি পাবেন</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
-            }else if(subtotal>=499){
-                ob.style.display='block';
-                const need=1299-subtotal;
-                ob.innerHTML=`<div style="background:linear-gradient(135deg,#d97706,#b45309);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;"><span style="font-size:20px;">🔖</span><div><div style="font-weight:800;font-size:12px;">প্রিমিয়াম বুকমার্ক পাচ্ছেন!</div><div style="font-size:10px;opacity:0.85;">আরও ৳${need} যোগ করলে ১টি বই ফ্রি পাবেন</div></div><span style="margin-left:auto;font-size:18px;">✅</span></div>`;
-            }else{
-                ob.style.display='block';
-                const need=499-subtotal;
-                ob.innerHTML=`<div style="background:linear-gradient(135deg,#6b7280,#4b5563);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;"><span style="font-size:18px;">💡</span><div><div style="font-weight:800;font-size:12px;">আরও ৳${need} যোগ করুন</div><div style="font-size:10px;opacity:0.85;">প্রিমিয়াম বুকমার্ক পাবেন!</div></div></div>`;
-            }
-        } else {
-            // No EID26 — show promo to apply coupon
-            ob.style.display='block';
-            ob.innerHTML=`<div style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-radius:8px;cursor:pointer;" onclick="document.getElementById('couponSection').querySelector('input')&&(document.getElementById('couponSection').querySelector('input').focus())"><span style="font-size:20px;">🏷️</span><div><div style="font-weight:800;font-size:12px;">বিশেষ ঈদ অফার পেতে চান?</div><div style="font-size:10px;opacity:0.90;">কুপন কোড ব্যবহার করুন: <strong style="letter-spacing:1.5px;background:rgba(255,255,255,0.2);padding:1px 6px;border-radius:4px;">EID26</strong></div></div><span style="margin-left:auto;font-size:16px;">→</span></div>`;
-        }
-    }
+    if(ob){ ob.style.display='none'; }
 }
 function changeQty(name,delta){
     if(delta===1){const item=cart.find(i=>i.name===name);if(item)cart.push({...item});}
@@ -1388,7 +1273,7 @@ function renderCouponSection(){
     if(!sec)return;
     const applied=localStorage.getItem('gronthokanon_coupon');
     if(applied){
-        const labelMap={'EID26':'🌙 EID26 — ঈদ অফার সক্রিয়','FIRSTORDER':'🎉 FIRSTORDER — ৫% ডিসকাউন্ট'};
+        const labelMap={'FIRSTORDER':'🎉 FIRSTORDER — ৫% ডিসকাউন্ট'};
         const label=labelMap[applied]||('✅ '+applied);
         sec.innerHTML=`
         <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(5,150,105,0.08);border:1.5px dashed #059669;border-radius:8px;">
@@ -1406,13 +1291,9 @@ function renderCouponSection(){
 function removeCoupon(){
     localStorage.removeItem('gronthokanon_coupon');
     localStorage.removeItem('gronthokanon_discount');
-    localStorage.removeItem('gronthokanon_delivery_eid');
-    localStorage.removeItem('gronthokanon_eid26_used');
-    localStorage.removeItem('gronthokanon_eid26_active');
     discountPercent=0;
     showToast('🗑️ কুপন বাতিল হয়েছে','#6b7280');
     updateCartUI();
-    updateEID26Banner();
     renderCouponSection();
 }
 function applyCoupon(){
@@ -1423,22 +1304,7 @@ function applyCoupon(){
         localStorage.setItem('gronthokanon_coupon',code);
         showToast('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!','#059669');
         updateCartUI();
-        updateEID26Banner();
-        renderCouponSection();
-    } else if(code==='EID26'){
-        if(localStorage.getItem('gronthokanon_eid26_used')==='1'){
-            showToast('⚠️ এই কুপন আগেই ব্যবহার করা হয়েছে!','#dc2626');
-            return;
-        }
-        discountPercent=0;
-        localStorage.setItem('gronthokanon_discount','0');
-        localStorage.setItem('gronthokanon_coupon','EID26');
-        localStorage.setItem('gronthokanon_eid26_used','1');
-        localStorage.setItem('gronthokanon_eid26_active','1');
-        showToast('🌙 EID26 কুপন সক্রিয়! অফারগুলো নিচে দেখুন।','#059669');
-        updateCartUI();
-        updateEID26Banner();
-        renderCouponSection();
+            renderCouponSection();
     } else {
         showToast('❌ ভুল কুপন কোড!','#dc2626');
     }
@@ -1452,46 +1318,7 @@ function copyCoupon(code){
         showToast('✅ কুপন কোড সেট হয়েছে!','#059669');
     });
 }
-function updateEID26Banner(){
-    const banner = document.getElementById('cartOfferBanner');
-    if(!banner) return;
-    const coupon = localStorage.getItem('gronthokanon_coupon');
-    if(coupon !== 'EID26'){
-        banner.style.display='none';
-        banner.innerHTML='';
-        return;
-    }
-    const subtotalEl = document.getElementById('subtotal');
-    const rawText = subtotalEl ? subtotalEl.innerText : '0';
-    const englishText = rawText.replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d)).replace(/[^0-9]/g,'');
-    const subtotal = parseInt(englishText) || 0;
-    const BN_MAP = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
-    function toBN(n){ return String(n).split('').map(c=>BN_MAP[c]||c).join(''); }
-    const offers = [
-        { min:499,  icon:'🔖', text:'৳'+toBN(499)+'+  →  ফ্রি প্রিমিয়াম বুকমার্ক গিফট' },
-        { min:1299, icon:'📚', text:'৳'+toBN(1299)+'+ →  ১টি বই সম্পূর্ণ ফ্রি!' },
-        { min:1499, icon:'🚚', text:'৳'+toBN(1499)+'+ →  মাত্র ২৬৳ হোম ডেলিভারি' },
-    ];
-    // Store delivery flag for checkout
-    if(subtotal >= 1499){
-        localStorage.setItem('gronthokanon_delivery_eid','26');
-    } else {
-        localStorage.removeItem('gronthokanon_delivery_eid');
-    }
-    const rows = offers.map(o=>{
-        const unlocked = subtotal >= o.min;
-        const needMore = o.min - subtotal;
-        const hint = !unlocked ? ` <span style="font-size:10px;color:#9ca3af;">(আরও ৳${toBN(needMore)} প্রয়োজন)</span>` : '';
-        return `<div style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:7px;margin-bottom:3px;background:${unlocked?'rgba(5,150,105,0.10)':'rgba(0,0,0,0.03)'};border:1px solid ${unlocked?'rgba(5,150,105,0.3)':'rgba(0,0,0,0.06)'};">
-            <span style="font-size:15px;">${o.icon}</span>
-            <span style="font-size:11.5px;color:${unlocked?'#059669':'#6b7280'};font-weight:${unlocked?'700':'400'};flex:1;">${o.text}${hint}</span>
-            <span style="font-size:14px;">${unlocked?'✅':'🔒'}</span>
-        </div>`;
-    }).join('');
-    banner.style.display='block';
-    banner.innerHTML=`<div style="background:linear-gradient(90deg,#7f1d1d,#b91c1c);padding:7px 12px;border-radius:10px 10px 0 0;display:flex;align-items:center;gap:7px;"><span style="font-size:14px;">🌙</span><span style="color:#fca5a5;font-size:11px;font-weight:700;letter-spacing:0.04em;">EID26 সক্রিয় — প্রযোজ্য অফারসমূহ</span></div><div style="padding:8px 10px;background:var(--card);border-radius:0 0 10px 10px;">${rows}</div>`;
-}
-function showCart(){document.getElementById('cartBox').style.display='flex';setTimeout(updateEID26Banner,100);renderCouponSection();}
+function showCart(){document.getElementById('cartBox').style.display='flex';renderCouponSection();}
 function closeCart(){document.getElementById('cartBox').style.display='none';}
 function openOrderForm(){
     if(!cart.length)return showToast('⚠️ কার্ট খালি!','#dc2626');
@@ -1517,6 +1344,58 @@ function navigateToFilter(type,value){
     setTimeout(()=>{window.location.href=`filter.html?type=${type}&value=${encodeURIComponent(value)}`;},250);
 }
 
+
+/* CATEGORY NAV */
+function renderCategoryNav(){
+    const nav = document.getElementById('catNavInner');
+    if(!nav) return;
+    nav.innerHTML = `<button class="cat-pill active" onclick="filterCategory('all',this)">সব বই</button>`;
+    categoryConfig.forEach(cat=>{
+        nav.innerHTML += `<button class="cat-pill" onclick="filterCategory('${cat.key}',this)">${cat.label}</button>`;
+    });
+}
+
+/* DESKTOP CATEGORY BAR CLICK */
+function deskCatClick(key, el) {
+    document.querySelectorAll('.desk-cat-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    const sec = document.getElementById('sectionsWrapper');
+    if (key === 'all') {
+        if (sec) { sec.style.display = 'block'; }
+        renderSections(books);
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    } else if (key === 'packages') {
+        if (sec) {
+            sec.style.display = 'block';
+            sec.innerHTML = `<div class="cat-section">
+                <div class="cat-section-title">📦 প্যাকেজসমূহ</div>
+                <div style="text-align:center;padding:40px 20px;color:var(--text2);font-size:15px;">
+                    🚧 প্যাকেজ সমূহ শীঘ্রই আসছে...
+                </div>
+            </div>`;
+        }
+        window.scrollTo({top: document.querySelector('.desk-cat-bar').offsetTop - 60, behavior: 'smooth'});
+    } else {
+        const filtered = books.filter(b => b.category === key || (b.cat && b.cat === key) || (Array.isArray(b.categories) && b.categories.includes(key)));
+        if (sec) {
+            sec.style.display = 'block';
+            if (filtered.length === 0) {
+                sec.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--text2);font-size:15px;">📚 এই ক্যাটাগরিতে এখন বই নেই</div>`;
+            } else {
+                sec.innerHTML = `<div class="cat-section">
+                    <div class="cat-section-title">${el.innerText.trim()}</div>
+                    <div class="book-row">${filtered.map(b=>makeCard(b)).join('')}</div>
+                </div>`;
+            }
+        }
+        // sync the pills
+        document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+        const matchPill = [...document.querySelectorAll('.cat-pill')].find(p => p.getAttribute('onclick') && p.getAttribute('onclick').includes(key));
+        if (matchPill) matchPill.classList.add('active');
+        window.scrollTo({top: document.querySelector('.desk-cat-bar').offsetTop - 60, behavior: 'smooth'});
+    }
+}
+
 /* INIT */
 window.onload=()=>{
     setTimeout(()=>{
@@ -1525,35 +1404,18 @@ window.onload=()=>{
         renderSections(books);renderRecent();
     },800);
     buildPubList();buildAuthorList();
+    renderCategoryNav();
     updateCartUI();updateWLCount();
     if(localStorage.getItem('gronthokanon_opencart')==='1'){
         localStorage.removeItem('gronthokanon_opencart');
         setTimeout(()=>showCart(),500);
     }
-    startFlashSaleTimer();
     auth.onAuthStateChanged(user=>updateAuthUI(user));
 };
 
-/* FLASH SALE TIMER — fixed end: June 4, 2026 23:59:59 (Eid Mela 7 days from May 28) */
-function startFlashSaleTimer(){
-    const eidEndFixed = new Date('2026-06-04T23:59:59').getTime();
-    function tick(){
-        const diff=Math.max(0,eidEndFixed-Date.now());
-        if(diff<=0){const fb=document.getElementById('flashBanner');if(fb)fb.style.display='none';return;}
-        const d=Math.floor(diff/86400000);
-        const h=Math.floor((diff%86400000)/3600000);
-        const m=Math.floor((diff%3600000)/60000);
-        const s=Math.floor((diff%60000)/1000);
-        const BN=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-        function toBN(n){return String(n).padStart(2,'0').split('').map(c=>BN[c]).join('');}
-        ['eid_d2','eid_h2','eid_m2','eid_s2'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.innerText=toBN([d,h,m,s][i]);});
-    }
-    tick();setInterval(tick,1000);
-}
-
 /* BANNER SLIDE */
 let curBanner=0;
-const totalBannerSlides=6;
+const totalBannerSlides=3;
 function goBannerSlide(idx){
     curBanner=idx;
     const slider=document.getElementById('mainSlider');
