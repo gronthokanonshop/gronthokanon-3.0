@@ -1,679 +1,464 @@
 <!DOCTYPE html>
 <html lang="bn" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="logo.png" type="image/png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>চেকআউট — গ্রন্থকানন</title>
-    <meta name="theme-color" content="#ffffff">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="common.css">
-    <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
-    <style>
-        
-        
-        body{font-family:'Hind Siliguri','SolaimanLipi',Arial,sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;-webkit-tap-highlight-color:transparent;}
+<meta charset="UTF-8">
+<link rel="icon" href="logo.png" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>চেকআউট — গ্রন্থকানন</title>
+<meta name="theme-color" content="#059669">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+:root{
+  --primary:#059669;
+  --primary-dark:#065f46;
+  --primary-light:#10b981;
+  --primary-xlight:#ecfdf5;
+  --accent:#059669;
+  --accent-light:#34d399;
+  --danger:#dc2626;
+  --bg-body:#f0fdf4;
+  --bg-card:#ffffff;
+  --text-main:#111827;
+  --text-muted:#6b7280;
+  --border:#1a1a1a22;
+  --border-dark:#1a1a1a33;
+  --radius:0px;
+  --shadow:0 2px 6px rgba(0,0,0,.06);
+  --shadow-lg:0 6px 16px rgba(0,0,0,.08);
+}
+[data-theme="dark"]{
+  --bg-body:#0a1f17;
+  --bg-card:#0f2a1e;
+  --text-main:#ecfdf5;
+  --text-muted:#6ee7b7;
+  --border:#ffffff22;
+  --border-dark:#ffffff33;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hind Siliguri','Inter',sans-serif;background:var(--bg-body);color:var(--text-main);line-height:1.5;transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent;}
+.bng{font-family:'Hind Siliguri',sans-serif;}
 
-        /* NAVBAR — consistent */
-        
-        
-        
-        
-        .navbar-title{flex:1;font-size:15px;font-weight:700;color:var(--text);}
-        .navbar-title span{color:#059669;}
-        
-        
-        
-        
+/* ── NAVBAR ── */
+.navbar{background:var(--primary-dark);border-bottom:3px solid var(--primary-light);position:sticky;top:0;z-index:100;}
+.nav-container{max-width:1200px;margin:auto;padding:0 20px;}
+.nav-top{display:flex;align-items:center;height:68px;gap:16px;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;}
+.nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#10b981,#34d399);border-radius:0px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 8px rgba(0,0,0,.25);}
+.nav-brand{font-size:18px;font-weight:800;color:#d1fae5;letter-spacing:.4px;}
+.nav-brand-sub{font-size:10px;color:#6ee7b7;font-weight:500;}
+.nav-links{display:flex;gap:6px;align-items:center;}
+.nav-link{color:#a7f3d0;text-decoration:none;font-weight:600;font-size:14px;padding:7px 13px;border-radius:0px;transition:.2s;cursor:pointer;background:none;border:none;font-family:inherit;}
+.nav-link:hover,.nav-link.active{color:#fff;background:rgba(255,255,255,.12);}
+.nav-icons{display:flex;gap:8px;align-items:center;margin-left:auto;}
+.ni{width:40px;height:40px;border-radius:0px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#a7f3d0;position:relative;transition:.2s;text-decoration:none;}
+.ni:hover{background:rgba(255,255,255,.18);border-color:#34d399;color:#fff;}
+.ni .badge{position:absolute;top:-5px;right:-5px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--primary-dark);}
+.hamburger{display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer;}
 
-        /* PROGRESS */
-        .progress-wrap{background:var(--nav-bg);padding:14px 20px 16px;border-bottom:1px solid var(--nav-border);}
-        .progress-steps{display:flex;align-items:center;max-width:480px;margin:0 auto;}
-        .p-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
-        .p-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:.3s;}
-        .p-circle.done{background:#059669;color:#fff;}
-        .p-circle.active{background:#059669;color:#fff;box-shadow:0 0 0 4px rgba(5,150,105,.2);}
-        .p-circle.pending{background:var(--border);color:var(--muted);}
-        .p-label{font-size:10px;font-weight:600;color:var(--muted);}
-        .p-label.active{color:#059669;}
-        .p-line{flex:1;height:2px;background:var(--border);margin:0 4px;margin-bottom:18px;transition:.3s;}
-        .p-line.done{background:#059669;}
+/* ── PROGRESS ── */
+.progress-wrap{background:var(--primary-dark);padding:14px 20px 16px;border-bottom:2px solid rgba(52,211,153,.3);}
+.progress-steps{display:flex;align-items:center;max-width:500px;margin:0 auto;}
+.p-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.p-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:.3s;}
+.p-circle.done{background:var(--primary);color:#fff;}
+.p-circle.active{background:var(--primary);color:#fff;box-shadow:0 0 0 4px rgba(5,150,105,.35);}
+.p-circle.pending{background:rgba(255,255,255,.1);color:#6ee7b7;}
+.p-label{font-size:10px;font-weight:600;color:#6ee7b7;}
+.p-label.active{color:#34d399;}
+.p-line{flex:1;height:2px;background:rgba(255,255,255,.1);margin:0 4px;margin-bottom:18px;transition:.3s;}
+.p-line.done{background:var(--primary);}
 
-        /* CONTAINER */
-        .container{max-width:520px;margin:0 auto;padding:16px 14px 100px;}
+/* ── CONTAINER ── */
+.container{max-width:1200px;margin:auto;padding:0 20px;}
 
-        /* TRUST BAR */
-        .trust-bar{display:flex;justify-content:space-around;background:var(--card);border-radius:16px;padding:14px 8px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border);}
-        .trust-item{text-align:center;}
-        .trust-icon{font-size:20px;margin-bottom:3px;}
-        .trust-label{font-size:9.5px;font-weight:700;color:var(--text2);line-height:1.4;}
+/* ── PAGE TITLE ── */
+.page-title-wrap{margin-top:24px;margin-bottom:2px;}
+.page-title{font-size:22px;font-weight:800;color:var(--text-main);}
+.page-sub{color:var(--text-muted);font-size:13px;margin-top:4px;}
 
-        /* CARD */
-        .card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border);animation:fadeUp .35s ease both;}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-        .card-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-        .card-icon{width:36px;height:36px;border-radius:10px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-        .card-title{font-size:15px;font-weight:700;color:var(--text);}
-        .card-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+/* ── TRUST BAR ── */
+.trust-bar{display:flex;justify-content:space-around;background:var(--bg-card);border-radius:var(--radius);padding:14px 8px;margin:18px 0 0;box-shadow:var(--shadow);border:1px solid var(--border);}
+.trust-item{text-align:center;}
+.trust-icon{font-size:20px;margin-bottom:3px;}
+.trust-label{font-size:9.5px;font-weight:700;color:var(--text-muted);line-height:1.4;}
 
-        /* FORM */
-        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-        .form-group{margin-bottom:14px;position:relative;}
-        .form-group:last-child{margin-bottom:0;}
-        label{display:block;font-size:12px;font-weight:700;color:var(--label);margin-bottom:6px;letter-spacing:.3px;}
-        label .req{color:var(--red);}
-        .input-wrap{position:relative;}
-        .input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;z-index:1;}
-        /* input/textarea get left padding for icon */
-        .input-wrap input,.input-wrap textarea{padding-left:40px!important;}
-        /* select: icon shows behind, but select itself stays full-width clickable — NO padding-left override on iOS */
-        .input-wrap select{padding-left:36px;}
-        input,select,textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;background:var(--input-bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;transition:border-color .2s,box-shadow .2s;}
-        input:focus,select:focus,textarea:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.12);}
-        input::placeholder{color:var(--muted);}
-        textarea{height:76px;resize:none;}
-        select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;}
-        /* iPhone Safari: ensure select is always tappable */
-        @supports (-webkit-touch-callout: none){
-            .input-wrap select{-webkit-appearance:menulist-button;padding-left:8px;background-image:none;}
-        }
+/* ── CHECKOUT GRID ── */
+.checkout-grid{display:flex;flex-direction:column;gap:20px;margin-top:20px;margin-bottom:60px;}
+@media(min-width:900px){
+  .checkout-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:28px;}
+  .order-col{order:2;}
+  .form-col{order:1;}
+}
 
-        /* ORDER ITEMS */
-        .order-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
-        .order-item:last-child{border-bottom:none;padding-bottom:0;}
-        .order-item img{width:44px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border);flex-shrink:0;}
-        .oi-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.3;}
-        .oi-price{font-size:12px;color:var(--muted);}
-        .oi-price strong{color:#059669;font-size:14px;}
+/* ── CARD ── */
+.card{background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card-header{background:var(--primary-dark);padding:14px 20px;display:flex;align-items:center;gap:10px;}
+.ch-num{width:26px;height:26px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
+.ch-title{font-size:15px;font-weight:700;color:#ecfdf5;}
+.ch-sub{font-size:11px;color:#6ee7b7;margin-top:1px;}
+.card-body{padding:20px;}
 
-        /* TOTAL */
-        .total-box{background:var(--total-bg);border:1.5px solid var(--green-border);border-radius:12px;padding:14px 16px;margin-top:14px;}
-        .total-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);margin-bottom:8px;}
-        .total-row.red{color:var(--red);}
-        .total-final{display:flex;justify-content:space-between;font-size:17px;font-weight:800;color:#059669;margin-top:10px;padding-top:10px;border-top:1.5px dashed var(--green-border);}
+/* ── FORM ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field{margin-bottom:14px;}
+.field:last-child{margin-bottom:0;}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;letter-spacing:.3px;}
+.field label .req{color:var(--danger);}
+.input-wrap{position:relative;}
+.input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;z-index:1;}
+.input-wrap input,.input-wrap textarea,.input-wrap select{padding-left:38px!important;}
+input,select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;background:var(--bg-body);color:var(--text-main);font-family:'Hind Siliguri','Inter',sans-serif;transition:.2s;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);background:var(--bg-card);box-shadow:0 0 0 3px rgba(5,150,105,.14);}
+input::placeholder,textarea::placeholder{color:var(--text-muted);}
+textarea{height:76px;resize:none;}
+select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23059669' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;}
+@supports(-webkit-touch-callout:none){.input-wrap select{-webkit-appearance:menulist-button;padding-left:8px!important;background-image:none;}}
+@media(max-width:500px){.two-col{grid-template-columns:1fr;}}
 
-        /* PAYMENT */
-        .pay-grid{display:flex;flex-direction:column;gap:10px;}
-        .pay-opt{display:flex;align-items:center;gap:12px;padding:14px;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:.2s;position:relative;}
-        .pay-opt:hover{border-color:#059669;background:var(--green-light);}
-        .pay-opt.selected{border-color:#059669;background:var(--green-light);}
-        .pay-opt.selected::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:#059669;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
-        .pay-opt.disabled{opacity:.45;cursor:not-allowed;}
-        .pay-opt.disabled:hover{border-color:var(--border);background:transparent;}
-        .pay-opt input[type="radio"]{display:none;}
-        .pay-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;border:1px solid var(--border);background:#fff;padding:4px;flex-shrink:0;}
-        .pay-logo.cod{display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--green-light);border-color:var(--green-border);}
-        .pay-label{font-size:14px;font-weight:700;color:var(--text);}
-        .pay-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+/* ── COUPON ── */
+.coupon-row{display:flex;gap:10px;}
+.coupon-row input{flex:1;}
+.coupon-btn{padding:11px 16px;background:var(--primary-dark);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Hind Siliguri',sans-serif;transition:.2s;}
+.coupon-btn:hover{background:var(--primary);}
 
-        /* BKASH */
-        .bkash-box{background:#fff0f6;border:1.5px solid #fbcfe8;border-radius:12px;padding:16px;margin-top:12px;display:none;animation:fadeUp .3s ease;}
-        [data-theme="dark"] .bkash-box{background:#1a0a12;border-color:#4a1a30;}
-        .bsteps{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
-        .bstep{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);}
-        .bstep-num{min-width:24px;height:24px;border-radius:50%;background:#db2777;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-        .bkash-num{background:#fff;border:2px dashed #fbcfe8;border-radius:10px;padding:10px 14px;text-align:center;font-size:20px;font-weight:800;letter-spacing:3px;color:#be185d;cursor:pointer;transition:.2s;margin-bottom:12px;}
-        [data-theme="dark"] .bkash-num{background:#2d0a1e;}
-        .copy-hint{display:block;font-size:10px;color:#db2777;letter-spacing:0;font-weight:600;margin-top:3px;}
+/* ── ORDER ITEMS ── */
+.os-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+.os-item:last-child{border-bottom:none;padding-bottom:0;}
+.os-img-real{width:48px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--border);flex-shrink:0;}
+.os-img{width:48px;height:64px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.os-name{font-size:13px;font-weight:700;color:var(--text-main);}
+.os-auth{font-size:11px;color:var(--text-muted);}
+.os-price{margin-left:auto;font-size:14px;font-weight:700;color:var(--primary);white-space:nowrap;}
 
-        /* CONFIRM BTN */
-        .confirm-btn{width:100%;padding:17px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 24px rgba(5,150,105,.35);transition:.2s;letter-spacing:.3px;font-family:'Hind Siliguri',Arial,sans-serif;margin-top:4px;}
-        .confirm-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(5,150,105,.45);}
-        .confirm-btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
-        .spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
-        @keyframes spin{to{transform:rotate(360deg)}}
+/* ── TOTAL ── */
+.total-row{display:flex;justify-content:space-between;padding:10px 0;font-size:14px;color:var(--text-muted);border-bottom:1px solid var(--border);}
+.total-row:last-of-type{border-bottom:none;}
+.total-row.red{color:var(--danger);}
+.total-row.grand{background:var(--primary-dark);color:#fff;font-weight:800;padding:16px 20px;border-radius:9px;margin-top:10px;font-size:16px;border-bottom:none;}
+.total-row.grand span:last-child{color:#34d399;}
 
-        /* EMPTY CART */
-        .empty-cart{text-align:center;padding:30px 20px;color:var(--muted);}
+/* ── PAYMENT ── */
+.pay-grid{display:flex;flex-direction:column;gap:10px;}
+.pay-opt{display:flex;align-items:center;gap:12px;padding:13px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.2s;position:relative;background:var(--bg-card);}
+.pay-opt:hover{border-color:var(--primary);background:var(--primary-xlight);}
+.pay-opt.selected{border-color:var(--primary);background:var(--primary-xlight);}
+.pay-opt.selected::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.pay-opt.disabled{opacity:.45;cursor:not-allowed;}
+.pay-opt.disabled:hover{border-color:var(--border);background:var(--bg-card);}
+.pay-opt input[type="radio"]{display:none;}
+.pay-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;border:1px solid var(--border);background:#fff;padding:4px;flex-shrink:0;}
+.pay-logo.cod{display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--primary-xlight);border-color:var(--border-dark);}
+.pay-label{font-size:14px;font-weight:700;color:var(--text-main);}
+.pay-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
 
-        /* SUCCESS */
-        .success-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
-        .success-modal.show{display:flex;}
-        .success-inner{background:var(--card);border-radius:24px;padding:36px 28px;text-align:center;max-width:340px;width:92%;animation:popIn .45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 64px rgba(0,0,0,.4);}
-        @keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
-        .success-anim{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 24px rgba(5,150,105,.4);animation:bounceIn .6s ease .3s both;}
-        @keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
-        .success-inner h2{font-size:21px;font-weight:800;color:var(--text);margin-bottom:4px;}
-        .success-sub{font-size:11px;font-weight:800;color:#059669;letter-spacing:2px;margin-bottom:18px;}
-        .success-info{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:left;font-size:13px;color:var(--text2);line-height:2;margin-bottom:18px;}
-        .success-note{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
-        .home-btn{width:100%;padding:14px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:.2s;}
-        .home-btn:hover{transform:translateY(-2px);}
+/* ── BKASH ── */
+.bkash-box{background:#fff0f6;border:1.5px solid #fbcfe8;border-radius:12px;padding:16px;margin-top:12px;display:none;animation:fadeUp .3s ease;}
+[data-theme="dark"] .bkash-box{background:#1a0a12;border-color:#4a1a30;}
+.bsteps{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+.bstep{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-muted);}
+.bstep-num{min-width:24px;height:24px;border-radius:50%;background:#db2777;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.bkash-num{background:#fff;border:2px dashed #fbcfe8;border-radius:10px;padding:10px 14px;text-align:center;font-size:20px;font-weight:800;letter-spacing:3px;color:#be185d;cursor:pointer;transition:.2s;margin-bottom:12px;}
+[data-theme="dark"] .bkash-num{background:#2d0a1e;}
+.copy-hint{display:block;font-size:10px;color:#db2777;letter-spacing:0;font-weight:600;margin-top:3px;}
 
-        /* TOAST */
-        .v-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:#dc2626;color:#fff;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:700;z-index:99999;box-shadow:0 6px 20px rgba(220,38,38,.35);opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;font-family:'Hind Siliguri',Arial,sans-serif;pointer-events:none;}
-        .v-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* ── CONFIRM BTN ── */
+.confirm-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:800;cursor:pointer;margin-top:20px;font-family:'Hind Siliguri','Inter',sans-serif;box-shadow:0 6px 24px rgba(5,150,105,.35);transition:.2s;letter-spacing:.3px;}
+.confirm-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(5,150,105,.45);}
+.confirm-btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+.spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-        /* WHATSAPP */
-        .wa-float{position:fixed;bottom:24px;right:18px;width:48px;height:48px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.5);z-index:9990;text-decoration:none;transition:.2s;}
-        .wa-float:hover{transform:scale(1.1);}
+/* ── SUCCESS MODAL ── */
+.success-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99999;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+.success-modal.show{display:flex;}
+.success-inner{background:var(--bg-card);border-radius:24px;padding:36px 28px;text-align:center;max-width:360px;width:92%;animation:popIn .45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 64px rgba(0,0,0,.4);}
+@keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.success-anim{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary-dark),var(--primary));margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 24px rgba(5,150,105,.4);animation:bounceIn .6s ease .3s both;}
+@keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+.success-inner h2{font-size:21px;font-weight:800;color:var(--text-main);margin-bottom:4px;}
+.success-sub{font-size:11px;font-weight:800;color:var(--primary);letter-spacing:2px;margin-bottom:18px;}
+.success-info{background:var(--bg-body);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:left;font-size:13px;color:var(--text-muted);line-height:2;margin-bottom:18px;}
+.success-note{font-size:12px;color:var(--text-muted);margin-bottom:20px;line-height:1.6;}
+.home-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Hind Siliguri',sans-serif;transition:.2s;}
+.home-btn:hover{transform:translateY(-2px);}
 
-        @media(max-width:400px){.form-row{grid-template-columns:1fr;}}
-    </style>
+/* ── TOAST ── */
+.v-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--danger);color:#fff;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:700;z-index:99999;box-shadow:0 6px 20px rgba(220,38,38,.35);opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;font-family:'Hind Siliguri',sans-serif;pointer-events:none;}
+.v-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── EMPTY CART ── */
+.empty-cart{text-align:center;padding:30px;color:var(--text-muted);}
+
+/* ── FOOTER ── */
+.footer{background:var(--primary-dark);color:#a7f3d0;margin-top:0;border-top:3px solid var(--primary);}
+.footer-container{max-width:1200px;margin:auto;padding:40px 20px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;}
+.footer h3{color:#34d399;font-size:16px;margin-bottom:14px;}
+.footer p{font-size:13px;line-height:1.8;color:#6ee7b7;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:10px;}
+.footer-links a{color:#a7f3d0;text-decoration:none;font-size:13px;transition:.2s;}
+.footer-links a:hover{color:#34d399;padding-left:4px;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:28px;padding-top:18px;text-align:center;font-size:12px;color:#6ee7b7;}
+
+/* ── WHATSAPP ── */
+.wa-float{position:fixed;bottom:24px;right:18px;width:48px;height:48px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.5);z-index:9990;text-decoration:none;transition:.2s;}
+.wa-float:hover{transform:scale(1.1);}
+
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:block;}
+  .footer-container{gap:20px;}
+  .container{padding:0 12px;}
+  .card-body{padding:14px;}
+  .trust-bar{padding:10px 4px;}
+  .trust-icon{font-size:17px;}
+  .trust-label{font-size:9px;}
+  .nav-top{height:58px;}
+  .nav-logo-icon{width:36px;height:36px;font-size:18px;}
+  .nav-brand{font-size:15px;}
+  .confirm-btn{font-size:15px;padding:14px;}
+}
+</style>
 </head>
 <body>
 
 <!-- NAVBAR -->
-<div class="navbar">
-    <div class="navbar-top">
-        <button class="back-btn" onclick="window.history.back()">‹</button>
-        <div class="navbar-title">📦 <span>চেকআউট</span></div>
-        <button class="dark-pill" id="darkBtn" onclick="toggleDark()">🌙</button>
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-top">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">📚</div>
+        <div>
+          <div class="nav-brand bng">গ্রন্থকানন</div>
+          <div class="nav-brand-sub bng">Gronthokanon Bookshop</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link bng">হোম</a>
+        <a href="checkout.html" class="nav-link active bng">চেকআউট</a>
+      </div>
+      <div class="nav-icons">
+        <a href="index.html" class="ni" title="পেছনে যান">‹</a>
+        <button class="ni" id="darkBtn" onclick="toggleDark()" title="ডার্ক মোড">🌙</button>
+        <a href="index.html" class="ni">🛒<div class="badge" id="cartBadge">0</div></a>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
     </div>
-</div>
+  </div>
+</nav>
 
 <!-- PROGRESS -->
 <div class="progress-wrap">
-    <div class="progress-steps">
-        <div class="p-step"><div class="p-circle done">✓</div><div class="p-label">কার্ট</div></div>
-        <div class="p-line done"></div>
-        <div class="p-step"><div class="p-circle active">২</div><div class="p-label active">শিপিং</div></div>
-        <div class="p-line"></div>
-        <div class="p-step"><div class="p-circle pending">৩</div><div class="p-label">সম্পন্ন</div></div>
-    </div>
+  <div class="progress-steps">
+    <div class="p-step"><div class="p-circle done">✓</div><div class="p-label bng">কার্ট</div></div>
+    <div class="p-line done"></div>
+    <div class="p-step"><div class="p-circle active">২</div><div class="p-label active bng">শিপিং</div></div>
+    <div class="p-line"></div>
+    <div class="p-step"><div class="p-circle pending">৩</div><div class="p-label bng">সম্পন্ন</div></div>
+  </div>
 </div>
 
 <div class="container">
 
-    <!-- TRUST -->
-    <div class="trust-bar">
-        <div class="trust-item"><div class="trust-icon">🔒</div><div class="trust-label">নিরাপদ<br>পেমেন্ট</div></div>
-        <div class="trust-item"><div class="trust-icon">🚚</div><div class="trust-label">দ্রুত<br>ডেলিভারি</div></div>
-        <div class="trust-item"><div class="trust-icon">✅</div><div class="trust-label">ক্যাশ অন<br>ডেলিভারি</div></div>
-        <div class="trust-item"><div class="trust-icon">📞</div><div class="trust-label">কাস্টমার<br>সাপোর্ট</div></div>
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-item"><div class="trust-icon">🔒</div><div class="trust-label bng">নিরাপদ<br>পেমেন্ট</div></div>
+    <div class="trust-item"><div class="trust-icon">🚚</div><div class="trust-label bng">দ্রুত<br>ডেলিভারি</div></div>
+    <div class="trust-item"><div class="trust-icon">✅</div><div class="trust-label bng">ক্যাশ অন<br>ডেলিভারি</div></div>
+    <div class="trust-item"><div class="trust-icon">📞</div><div class="trust-label bng">কাস্টমার<br>সাপোর্ট</div></div>
+  </div>
+
+  <div class="page-title-wrap">
+    <h2 class="page-title bng">🛒 চেকআউট</h2>
+    <p class="page-sub bng">অর্ডার সম্পন্ন করতে নিচের তথ্য পূরণ করুন</p>
+  </div>
+
+  <div class="checkout-grid">
+
+    <!-- ══ FORM COL (left on desktop) ══ -->
+    <div class="form-col">
+
+      <!-- CUSTOMER INFO -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <span class="ch-num">১</span>
+          <div><div class="ch-title bng">ডেলিভারি তথ্য</div><div class="ch-sub bng">সঠিক তথ্য দিন, দ্রুত পৌঁছাবে</div></div>
+        </div>
+        <div class="card-body">
+          <div class="two-col">
+            <div class="field">
+              <label class="bng">নাম <span class="req">*</span></label>
+              <div class="input-wrap"><span class="input-icon">👤</span><input type="text" id="custName" class="bng" placeholder="আপনার নাম"></div>
+            </div>
+            <div class="field">
+              <label class="bng">মোবাইল নম্বর <span class="req">*</span></label>
+              <div class="input-wrap"><span class="input-icon">📱</span><input type="tel" id="custPhone" class="bng" placeholder="০১XXXXXXXXX" maxlength="11"></div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label class="bng">বিভাগ <span class="req">*</span></label>
+              <div class="input-wrap"><span class="input-icon">🗺️</span>
+                <select id="division" class="bng" onchange="updateDistricts()">
+                  <option value="">বিভাগ বেছে নিন</option>
+                  <option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option>
+                  <option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option>
+                  <option>রংপুর</option><option>ময়মনসিংহ</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label class="bng">জেলা <span class="req">*</span></label>
+              <div class="input-wrap"><span class="input-icon">📍</span>
+                <select id="district" class="bng" onchange="updateThanas()">
+                  <option value="">জেলা বেছে নিন</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="bng">থানা / উপজেলা <span class="req">*</span></label>
+            <div class="input-wrap"><span class="input-icon">🏘️</span>
+              <select id="thana" class="bng"><option value="">থানা বেছে নিন</option></select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="bng">সম্পূর্ণ ঠিকানা <span class="req">*</span></label>
+            <textarea id="custAddress" class="bng" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- COUPON -->
+      <div class="card">
+        <div class="card-header">
+          <span class="ch-num">২</span>
+          <div><div class="ch-title bng">কুপন কোড</div></div>
+        </div>
+        <div class="card-body">
+          <div class="coupon-row">
+            <input type="text" id="couponInput" class="bng" placeholder="কুপন কোড লিখুন">
+            <button class="coupon-btn bng" onclick="applyCoupon()">প্রয়োগ</button>
+          </div>
+          <div id="couponMsg" style="font-size:12px;font-weight:600;margin-top:8px;display:none;"></div>
+          <div id="checkoutCouponBadge" style="margin-top:10px;display:none;"></div>
+          <div id="checkoutOfferBanner" style="margin-top:6px;display:none;"></div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- ORDER SUMMARY -->
-    <div class="card">
-        <div class="card-header">
-            <div class="card-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
-            <div><div class="card-title">আপনার অর্ডার</div><div class="card-sub" id="itemCountSub"></div></div>
-        </div>
-        <div id="summaryItems"></div>
-        <div class="total-box">
-            <div class="total-row"><span>বইয়ের দাম</span><span id="subtotalShow">৳০</span></div>
-            <div class="total-row"><span>ডেলিভারি চার্জ</span><span id="deliveryShow">৳৬০</span></div>
-            <div class="total-row red" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>)</span><span>-৳<span id="discountShow">0</span></span></div>
-            <div class="total-final"><span>সর্বমোট</span><span id="grandTotal">৳০</span></div>
-        </div>
-        <div id="checkoutCouponBadge" style="margin-top:10px;display:none;"></div>
-        <div id="checkoutOfferBanner" style="margin-top:6px;display:none;"></div>
-    </div>
+    <!-- ══ ORDER COL (right on desktop) ══ -->
+    <div class="order-col">
 
-    <!-- SHIPPING -->
-    <div class="card">
+      <!-- ORDER SUMMARY -->
+      <div class="card" style="margin-bottom:20px;">
         <div class="card-header">
-            <div class="card-icon">📋</div>
-            <div><div class="card-title">ডেলিভারি তথ্য</div><div class="card-sub">সঠিক তথ্য দিন, দ্রুত পৌঁছাবে</div></div>
+          <span class="ch-num">৩</span>
+          <div><div class="ch-title bng">অর্ডার সারসংক্ষেপ</div><div class="ch-sub bng" id="itemCountSub"></div></div>
         </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label>নাম <span class="req">*</span></label>
-                <div class="input-wrap"><span class="input-icon">👤</span><input type="text" id="custName" placeholder="আপনার নাম"></div>
-            </div>
-            <div class="form-group">
-                <label>মোবাইল নম্বর <span class="req">*</span></label>
-                <div class="input-wrap"><span class="input-icon">📱</span><input type="tel" id="custPhone" placeholder="০১XXXXXXXXX" maxlength="11"></div>
-            </div>
+        <div style="padding:0 20px;" id="summaryItems">
+          <div class="empty-cart bng">কার্ট লোড হচ্ছে...</div>
         </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label>বিভাগ <span class="req">*</span></label>
-                <div class="input-wrap"><span class="input-icon">🗺️</span>
-                    <select id="division" onchange="updateDistricts()">
-                        <option value="">বিভাগ বেছে নিন</option>
-                        <option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option>
-                        <option>খুলনা</option><option>বরিশাল</option><option>সিলেট</option>
-                        <option>রংপুর</option><option>ময়মনসিংহ</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>জেলা <span class="req">*</span></label>
-                <div class="input-wrap"><span class="input-icon">📍</span><select id="district" onchange="updateThanas()"><option value="">জেলা বেছে নিন</option></select></div>
-            </div>
+        <div style="padding:0 20px 20px;">
+          <div class="total-row bng"><span>বইয়ের দাম</span><span id="subtotalShow">৳০</span></div>
+          <div class="total-row bng"><span>ডেলিভারি চার্জ</span><span id="deliveryShow">৳৬০</span></div>
+          <div class="total-row red bng" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>)</span><span>-৳<span id="discountShow">0</span></span></div>
+          <div class="total-row grand bng"><span>সর্বমোট</span><span id="grandTotal">৳০</span></div>
         </div>
-        <div class="form-group">
-            <label>থানা / উপজেলা <span class="req">*</span></label>
-            <div class="input-wrap"><span class="input-icon">🏘️</span><select id="thana"><option value="">থানা বেছে নিন</option></select></div>
-        </div>
-        <div class="form-group">
-            <label>সম্পূর্ণ ঠিকানা <span class="req">*</span></label>
-            <textarea id="custAddress" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
-        </div>
-    </div>
+      </div>
 
-    <!-- PAYMENT -->
-    <div class="card">
+      <!-- PAYMENT -->
+      <div class="card" style="margin-bottom:0;">
         <div class="card-header">
-            <div class="card-icon">💳</div>
-            <div><div class="card-title">পেমেন্ট পদ্ধতি</div><div class="card-sub">আপনার পছন্দের মাধ্যম বেছে নিন</div></div>
+          <span class="ch-num">৪</span>
+          <div><div class="ch-title bng">পেমেন্ট পদ্ধতি</div><div class="ch-sub bng">আপনার পছন্দের মাধ্যম বেছে নিন</div></div>
         </div>
-        <div class="pay-grid">
+        <div class="card-body">
+          <div class="pay-grid">
             <div class="pay-opt selected" onclick="selectPay(this,'cod')">
-                <input type="radio" name="payment" value="Cash on Delivery" checked>
-                <div class="pay-logo cod">💵</div>
-                <div><div class="pay-label">ক্যাশ অন ডেলিভারি</div><div class="pay-sub">বই পাওয়ার পর টাকা দিন</div></div>
+              <input type="radio" name="payment" value="Cash on Delivery" checked>
+              <div class="pay-logo cod">💵</div>
+              <div><div class="pay-label bng">ক্যাশ অন ডেলিভারি</div><div class="pay-sub bng">বই পাওয়ার পর টাকা দিন</div></div>
             </div>
             <div class="pay-opt" onclick="selectPay(this,'bkash')">
-                <input type="radio" name="payment" value="bKash">
-                <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" class="pay-logo" alt="bKash">
-                <div><div class="pay-label">বিকাশ</div><div class="pay-sub">আগে পাঠান, তারপর অর্ডার নিশ্চিত</div></div>
+              <input type="radio" name="payment" value="bKash">
+              <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" class="pay-logo" alt="bKash">
+              <div><div class="pay-label bng">বিকাশ</div><div class="pay-sub bng">আগে পাঠান, তারপর অর্ডার নিশ্চিত</div></div>
             </div>
             <div class="pay-opt disabled">
-                <input type="radio" name="payment" disabled>
-                <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" class="pay-logo" alt="Card">
-                <div><div class="pay-label">ব্যাংক কার্ড</div><div class="pay-sub">শীঘ্রই আসছে...</div></div>
+              <input type="radio" name="payment" disabled>
+              <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" class="pay-logo" alt="Card">
+              <div><div class="pay-label bng">ব্যাংক কার্ড</div><div class="pay-sub bng">শীঘ্রই আসছে...</div></div>
             </div>
-        </div>
-        <div class="bkash-box" id="bkashBox">
+          </div>
+          <!-- BKASH BOX -->
+          <div class="bkash-box" id="bkashBox">
             <div class="bsteps">
-                <div class="bstep"><div class="bstep-num">১</div><div>বিকাশ অ্যাপ থেকে <strong>Send Money</strong> করুন নিচের নম্বরে</div></div>
-                <div class="bstep"><div class="bstep-num">২</div><div>মোট <strong id="bkashAmt">৳০</strong> পাঠান</div></div>
-                <div class="bstep"><div class="bstep-num">৩</div><div>Transaction ID নিচে লিখুন</div></div>
+              <div class="bstep"><div class="bstep-num">১</div><div class="bng">বিকাশ অ্যাপ থেকে <strong>Send Money</strong> করুন নিচের নম্বরে</div></div>
+              <div class="bstep"><div class="bstep-num">২</div><div class="bng">মোট <strong id="bkashAmt">৳০</strong> পাঠান</div></div>
+              <div class="bstep"><div class="bstep-num">৩</div><div class="bng">Transaction ID নিচে লিখুন</div></div>
             </div>
             <div class="bkash-num" onclick="copyBkash()">
-                <span id="bkashNumDisplay">01408786396</span>
-                <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
+              <span id="bkashNumDisplay">01408786396</span>
+              <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
             </div>
-            <input type="text" id="transactionId" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
+            <input type="text" id="transactionId" class="bng" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
+          </div>
         </div>
+      </div>
+
+      <button class="confirm-btn bng" id="confirmBtn" onclick="confirmOrder()">✅ অর্ডার নিশ্চিত করুন</button>
     </div>
 
-    <button class="confirm-btn" id="confirmBtn" onclick="confirmOrder()">✅ অর্ডার কনফার্ম করুন</button>
+  </div>
 </div>
 
 <!-- SUCCESS MODAL -->
 <div class="success-modal" id="successModal">
-    <div class="success-inner">
-        <div class="success-anim">✓</div>
-        <h2>অর্ডার নিশ্চিত হয়েছে!</h2>
-        <p class="success-sub">ORDER CONFIRMED</p>
-        <div class="success-info" id="successInfo"></div>
-        <p class="success-note">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! 📚</p>
-        <button onclick="downloadInvoice()" style="width:100%;padding:13px;background:#1e40af;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;">📄 Invoice PDF ডাউনলোড করুন</button>
-        <button class="home-btn" onclick="window.location.href='index.html'">চমৎকার! 🎉</button>
-    </div>
+  <div class="success-inner">
+    <div class="success-anim">✓</div>
+    <h2 class="bng">অর্ডার নিশ্চিত হয়েছে!</h2>
+    <p class="success-sub">ORDER CONFIRMED</p>
+    <div class="success-info bng" id="successInfo"></div>
+    <p class="success-note bng">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! 📚</p>
+    <button onclick="downloadInvoice()" style="width:100%;padding:13px;background:#065f46;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;" class="bng">📄 Invoice PDF ডাউনলোড করুন</button>
+    <button class="home-btn bng" onclick="window.location.href='index.html'">চমৎকার! 🎉</button>
+  </div>
 </div>
 
 <div class="v-toast" id="vToast"></div>
 
 <a href="https://wa.me/8801516595762" target="_blank" class="wa-float">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:28px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:28px;">
 </a>
 
-<script>
-const BKASH_NUMBER='01408786396';
-function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-const SHEET_URL='https://script.google.com/macros/s/AKfycbz6upCtsRyDtEdJZqVUjFFuDuSmB47ZC5IInHUQAGsaNAS7XCsXtgtBNXcsXK71UbELfQ/exec';
-const SHEET_TOKEN='GK_SECRET_2026';
-let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
-let discPct=parseInt(localStorage.getItem('gronthokanon_discount')||'0');
-let coupon=localStorage.getItem('gronthokanon_coupon')||'';
-let delivCharge=60;
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-container">
+    <div>
+      <h3 class="bng">📚 গ্রন্থকানন</h3>
+      <p class="bng">বাংলাদেশের বিশ্বস্ত অনলাইন বুকশপ।<br>সেরা বই, সেরা দামে।</p>
+    </div>
+    <div>
+      <h3 class="bng">দ্রুত লিংক</h3>
+      <ul class="footer-links">
+        <li><a href="index.html" class="bng">🏠 হোম পেজে ফিরে যান</a></li>
+        <li><a href="track.html" class="bng">📦 অর্ডার ট্র্যাক করুন</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="bng">যোগাযোগ</h3>
+      <p class="bng">📞 01516595762<br>📧 gronthokanon4309@gmail.com<br>📍 Dhaka, Bangladesh</p>
+    </div>
+  </div>
+  <div class="footer-bottom bng">© ২০২৪ গ্রন্থকানন। সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
 
-/* ═══ OFFERS (EID26 coupon based) ═══ */
-const EID_OFFERS=[
-    {min:499,  icon:'🔖', label:'ফ্রি প্রিমিয়াম বুকমার্ক গিফট'},
-    {min:1299, icon:'📚', label:'১টি বই সম্পূর্ণ ফ্রি!'},
-    {min:1499, icon:'🚚', label:'মাত্র ২৬৳ হোম ডেলিভারি'},
-];
-function getUnlockedOffers(sub){
-    if(coupon!=='EID26')return[];
-    return EID_OFFERS.filter(o=>sub>=o.min);
-}
-
-/* DARK */
-
-(function(){const s=localStorage.getItem('gronthokanon_theme');if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.addEventListener('DOMContentLoaded',()=>{document.getElementById('darkBtn').textContent='☀️';});}})();
-
-/* TOAST */
-function showToast(msg,color){const t=document.getElementById('vToast');t.innerText=msg;t.style.background=color||'#dc2626';t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2800);}
-
-/* PRICING */
-function getSubtotal(){const g={};cart.forEach(i=>{g[i.name]=g[i.name]?{price:i.price,qty:g[i.name].qty+1}:{price:i.price,qty:1};});return Object.values(g).reduce((s,i)=>s+i.price*i.qty,0);}
-function updateTotal(){
-    const sub=getSubtotal();
-    /* recalculate delivery based on EID26+1499 */
-    const eid26=localStorage.getItem('gronthokanon_delivery_eid')==='26'||coupon==='EID26';
-    const dist=document.getElementById('district')?.value||'';
-    if(eid26&&sub>=1499) delivCharge=26;
-    else delivCharge=dist==='ঢাকা'?60:90;
-    const disc=Math.round(sub*discPct/100),total=sub-disc+delivCharge;
-    document.getElementById('subtotalShow').innerText='৳'+sub;
-    document.getElementById('deliveryShow').innerText='৳'+delivCharge;
-    const dr=document.getElementById('discountRow');
-    if(disc>0){document.getElementById('discountShow').innerText=disc;document.getElementById('couponCodeShow').innerText=coupon;dr.style.display='flex';}
-    else dr.style.display='none';
-    document.getElementById('grandTotal').innerText='৳'+total;
-    document.getElementById('bkashAmt').innerText='৳'+total;
-    /* coupon badge */
-    const ccb=document.getElementById('checkoutCouponBadge');
-    if(ccb){
-        if(coupon){
-            let desc='';
-            if(coupon==='FIRSTORDER') desc=discPct+'% ডিসকাউন্ট পাচ্ছেন';
-            else if(coupon==='EID26') desc='পরিমাণ অনুযায়ী অফার আনলক';
-            ccb.style.display='block';
-            ccb.innerHTML=`<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1.5px solid rgba(5,150,105,0.3);border-radius:8px;padding:8px 11px;">
-                <span style="font-size:16px;">🏷️</span>
-                <div>
-                    <div style="font-size:12px;font-weight:800;color:#059669;letter-spacing:0.5px;">${coupon} <span style="background:#059669;color:white;font-size:9px;padding:1px 7px;border-radius:10px;">সক্রিয়</span></div>
-                    <div style="font-size:10px;color:var(--muted);">${desc}</div>
-                </div>
-            </div>`;
-        } else {
-            ccb.style.display='none';ccb.innerHTML='';
-        }
-    }
-    /* offer banner */
-    const unlocked=getUnlockedOffers(sub);
-    const offerEl=document.getElementById('checkoutOfferBanner');
-    if(offerEl&&unlocked.length){
-        offerEl.style.display='block';
-        offerEl.innerHTML=`<div style="background:linear-gradient(90deg,#7f1d1d,#b91c1c);padding:7px 12px;border-radius:10px 10px 0 0;"><span style="color:#fca5a5;font-size:11px;font-weight:700;">🎁 আপনি পাচ্ছেন:</span></div><div style="padding:8px 10px;background:#fff9f9;border-radius:0 0 10px 10px;border:1px solid #fecaca;">`+
-        unlocked.map(o=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px;color:#059669;font-weight:700;">${o.icon} ${o.label} ✅</div>`).join('')+
-        `</div>`;
-    } else if(offerEl) offerEl.style.display='none';
-}
-
-function renderSummary(){
-    const box=document.getElementById('summaryItems');
-    if(!cart.length){box.innerHTML='<div class="empty-cart"><div style="margin-bottom:10px;"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><p>কার্ট খালি আছে</p></div>';document.getElementById('itemCountSub').innerText='';updateTotal();return;}
-    const g={};cart.forEach(i=>{if(g[i.name])g[i.name].qty++;else g[i.name]={price:i.price,qty:1,img:i.img||''};});
-    box.innerHTML=Object.entries(g).map(([name,item])=>`<div class="order-item">
-        <img src="${escapeHTML(item.img)}" onerror="this.src='https://placehold.co/44x60/ecfdf5/059669?text=📚'">
-        <div style="flex:1;"><div class="oi-name">${escapeHTML(name)}</div><div class="oi-price">৳${item.price} × ${item.qty} = <strong>৳${item.price*item.qty}</strong></div></div>
-    </div>`).join('');
-    document.getElementById('itemCountSub').innerText=cart.length+'টি বই';
-    updateTotal();
-}
-
-/* LOCATION */
-const locationData={"ঢাকা":{"ঢাকা":["আদাবর","বাড্ডা","বংশাল","ক্যান্টনমেন্ট","চকবাজার","দারুস সালাম","ডেমরা","ধানমন্ডি","দোহার","গেন্ডারিয়া","গুলশান","হাজারীবাগ","কদমতলী","কামরাঙ্গীরচর","কেরানীগঞ্জ","খিলগাঁও","খিলক্ষেত","কোতোয়ালি","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নবাবগঞ্জ","নিউ মার্কেট","পল্লবী","পল্টন","রমনা","সাভার","শাহজাহানপুর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","উত্তরা","উত্তর খান","দক্ষিণ খান","ওয়ারী"],"গাজীপুর":["গাজীপুর সদর","কালীগঞ্জ","কাপাসিয়া","শ্রীপুর","টঙ্গী"],"নারায়ণগঞ্জ":["নারায়ণগঞ্জ সদর","আড়াইহাজার","বন্দর","রূপগঞ্জ","সোনারগাঁও"],"মানিকগঞ্জ":["মানিকগঞ্জ সদর","দৌলতপুর","ঘিওর","হরিরামপুর","সাটুরিয়া","শিবালয়","সিংগাইর"],"মুন্সীগঞ্জ":["মুন্সীগঞ্জ সদর","গজারিয়া","লৌহজং","শ্রীনগর","সিরাজদিখান","টঙ্গীবাড়ী"],"নরসিংদী":["নরসিংদী সদর","বেলাব","মনোহরদী","পলাশ","রায়পুরা","শিবপুর"],"কিশোরগঞ্জ":["কিশোরগঞ্জ সদর","অষ্টগ্রাম","বাজিতপুর","ভৈরব","হোসেনপুর","ইটনা","করিমগঞ্জ","কটিয়াদী","কুলিয়ারচর","মিঠামইন","নিকলী","পাকুন্দিয়া","তাড়াইল"],"ফরিদপুর":["ফরিদপুর সদর","আলফাডাঙ্গা","ভাঙ্গা","বোয়ালমারী","চরভদ্রাসন","মধুখালী","নগরকান্দা","সদরপুর","সালথা"],"গোপালগঞ্জ":["গোপালগঞ্জ সদর","কাশিয়ানী","কোটালীপাড়া","মুকসুদপুর","টুঙ্গিপাড়া"],"টাঙ্গাইল":["টাঙ্গাইল সদর","বাসাইল","ভূঞাপুর","দেলদুয়ার","ধনবাড়ী","ঘাটাইল","গোপালপুর","কালিহাতী","মধুপুর","মির্জাপুর","নাগরপুর","সখিপুর"],"রাজবাড়ী":["রাজবাড়ী সদর","বালিয়াকান্দি","গোয়ালন্দ","কালুখালী","পাংশা"],"শরীয়তপুর":["শরীয়তপুর সদর","ভেদরগঞ্জ","ডামুড্যা","গোসাইরহাট","নড়িয়া","জাজিরা"],"মাদারীপুর":["মাদারীপুর সদর","কালকিনি","রাজৈর","শিবচর"]},"চট্টগ্রাম":{"চট্টগ্রাম":["আকবরশাহ","বাকলিয়া","বায়েজিদ","বন্দর","চান্দগাঁও","ডবলমুরিং","ইপিজেড","হালিশহর","হাটহাজারী","কোতোয়ালি","খুলশী","লোহাগাড়া","পাহাড়তলী","পতেঙ্গা","পাঁচলাইশ","রাউজান","রাঙ্গুনিয়া","সন্দ্বীপ","সাতকানিয়া","সীতাকুণ্ড"],"কক্সবাজার":["কক্সবাজার সদর","চকরিয়া","কুতুবদিয়া","মহেশখালী","পেকুয়া","রামু","টেকনাফ","উখিয়া"],"কুমিল্লা":["কুমিল্লা সদর","বরুড়া","ব্রাহ্মণপাড়া","বুড়িচং","চান্দিনা","চৌদ্দগ্রাম","দাউদকান্দি","দেবিদ্বার","হোমনা","লাকসাম","মেঘনা","মনোহরগঞ্জ","মুরাদনগর","নাঙ্গলকোট","তিতাস"],"ফেনী":["ফেনী সদর","ছাগলনাইয়া","দাগনভূঞা","ফুলগাজী","পরশুরাম","সোনাগাজী"],"ব্রাহ্মণবাড়িয়া":["ব্রাহ্মণবাড়িয়া সদর","আখাউড়া","বাঞ্ছারামপুর","কসবা","নাসিরনগর","নবীনগর","সরাইল"],"চাঁদপুর":["চাঁদপুর সদর","ফরিদগঞ্জ","হাজীগঞ্জ","কচুয়া","মতলব উত্তর","মতলব দক্ষিণ","শাহরাস্তি"],"লক্ষ্মীপুর":["লক্ষ্মীপুর সদর","কমলনগর","রামগঞ্জ","রামগতি","রায়পুর"],"নোয়াখালী":["নোয়াখালী সদর","বেগমগঞ্জ","চাটখিল","কোম্পানীগঞ্জ","হাতিয়া","কবিরহাট","সেনবাগ","সুবর্ণচর"]},"রাজশাহী":{"রাজশাহী":["রাজশাহী সদর","বাঘা","চারঘাট","দুর্গাপুর","গোদাগাড়ী","মোহনপুর","পবা","পুঠিয়া","তানোর"],"নাটোর":["নাটোর সদর","বড়াইগ্রাম","বাগাতিপাড়া","গুরুদাসপুর","লালপুর","সিংড়া"],"নওগাঁ":["নওগাঁ সদর","আত্রাই","বদলগাছী","ধামইরহাট","মান্দা","মহাদেবপুর","নিয়ামতপুর","পত্নীতলা","পোরশা","রাণীনগর","সাপাহার"],"চাঁপাইনবাবগঞ্জ":["চাঁপাইনবাবগঞ্জ সদর","ভোলাহাট","গোমস্তাপুর","নাচোল","শিবগঞ্জ"],"পাবনা":["পাবনা সদর","আটঘরিয়া","বেড়া","ভাঙ্গুড়া","চাটমোহর","ফরিদপুর","ঈশ্বরদী","সাঁথিয়া","সুজানগর"],"সিরাজগঞ্জ":["সিরাজগঞ্জ সদর","বেলকুচি","চৌহালি","কামারখন্দ","কাজিপুর","রায়গঞ্জ","শাহজাদপুর","তাড়াশ","উল্লাপাড়া"],"বগুড়া":["বগুড়া সদর","আদমদিঘি","ধুনট","দুপচাঁচিয়া","গাবতলী","কাহালু","নন্দীগ্রাম","সারিয়াকান্দি","শাজাহানপুর","শেরপুর","শিবগঞ্জ","সোনাতলা"],"জয়পুরহাট":["জয়পুরহাট সদর","আক্কেলপুর","কালাই","ক্ষেতলাল","পাঁচবিবি"]},"খুলনা":{"খুলনা":["খুলনা সদর","বটিয়াঘাটা","দাকোপ","ডুমুরিয়া","ফুলতলা","কয়রা","পাইকগাছা","রূপসা","তেরখাদা"],"যশোর":["যশোর সদর","অভয়নগর","বাঘারপাড়া","চৌগাছা","ঝিকরগাছা","কেশবপুর","মণিরামপুর","শার্শা"],"সাতক্ষীরা":["সাতক্ষীরা সদর","আশাশুনি","দেবহাটা","কলারোয়া","কালিগঞ্জ","শ্যামনগর","তালা"],"বাগেরহাট":["বাগেরহাট সদর","চিতলমারী","ফকিরহাট","কচুয়া","মোংলা","মোরেলগঞ্জ","রামপাল","শরণখোলা"],"নড়াইল":["নড়াইল সদর","কালিয়া","লোহাগড়া"],"মাগুরা":["মাগুরা সদর","মহম্মদপুর","শালিখা","শ্রীপুর"],"ঝিনাইদহ":["ঝিনাইদহ সদর","হরিণাকুণ্ডু","কালীগঞ্জ","কোটচাঁদপুর","মহেশপুর","শৈলকুপা"],"কুষ্টিয়া":["কুষ্টিয়া সদর","ভেড়ামারা","দৌলতপুর","খোকসা","কুমারখালী","মিরপুর"],"চুয়াডাঙ্গা":["চুয়াডাঙ্গা সদর","আলমডাঙ্গা","দামুড়হুদা","জীবননগর"],"মেহেরপুর":["মেহেরপুর সদর","গাংনী","মুজিবনগর"]},"বরিশাল":{"বরিশাল":["বরিশাল সদর","আগৈলঝাড়া","বাকেরগঞ্জ","বানারীপাড়া","গৌরনদী","হিজলা","মেহেন্দিগঞ্জ","মুলাদী","উজিরপুর"],"পটুয়াখালী":["পটুয়াখালী সদর","বাউফল","দশমিনা","গলাচিপা","কলাপাড়া","মির্জাগঞ্জ","রাঙ্গাবালী"],"ভোলা":["ভোলা সদর","বোরহানউদ্দিন","চরফ্যাশন","দৌলতখান","লালমোহন","মনপুরা","তজুমদ্দিন"],"ঝালকাঠি":["ঝালকাঠি সদর","কাঁঠালিয়া","নলছিটি","রাজাপুর"],"পিরোজপুর":["পিরোজপুর সদর","ভান্ডারিয়া","কাউখালী","মঠবাড়িয়া","নাজিরপুর","নেছারাবাদ","জিয়ানগর"],"বরগুনা":["বরগুনা সদর","আমতলী","বামনা","বেতাগী","পাথরঘাটা","তালতলী"]},"সিলেট":{"সিলেট":["সিলেট সদর","বালাগঞ্জ","বিয়ানীবাজার","বিশ্বনাথ","কোম্পানীগঞ্জ","ফেঞ্চুগঞ্জ","গোলাপগঞ্জ","গোয়াইনঘাট","জকিগঞ্জ","কানাইঘাট","ওসমানীনগর","দক্ষিণ সুরমা"],"মৌলভীবাজার":["মৌলভীবাজার সদর","বড়লেখা","জুড়ী","কমলগঞ্জ","কুলাউড়া","রাজনগর","শ্রীমঙ্গল"],"হবিগঞ্জ":["হবিগঞ্জ সদর","আজমিরীগঞ্জ","বাহুবল","বানিয়াচং","চুনারুঘাট","লাখাই","মাধবপুর","নবীগঞ্জ"],"সুনামগঞ্জ":["সুনামগঞ্জ সদর","বিশ্বম্ভরপুর","দক্ষিণ সুনামগঞ্জ","দিরাই","ধর্মপাশা","জামালগঞ্জ","জগন্নাথপুর","শাল্লা","তাহিরপুর"]},"রংপুর":{"রংপুর":["রংপুর সদর","বদরগঞ্জ","গঙ্গাচড়া","কাউনিয়া","মিঠাপুকুর","পীরগঞ্জ","পীরগাছা","তারাগঞ্জ"],"দিনাজপুর":["দিনাজপুর সদর","বিরামপুর","বিরল","বোচাগঞ্জ","চিরিরবন্দর","ফুলবাড়ী","ঘোড়াঘাট","হাকিমপুর","খানসামা","নবাবগঞ্জ","পার্বতীপুর"],"কুড়িগ্রাম":["কুড়িগ্রাম সদর","ভুরুঙ্গামারী","চর রাজিবপুর","চিলমারী","ফুলবাড়ী","নাগেশ্বরী","রাজারহাট","রৌমারী","উলিপুর"],"গাইবান্ধা":["গাইবান্ধা সদর","ফুলছড়ি","গোবিন্দগঞ্জ","পলাশবাড়ী","সাদুল্লাপুর","সাঘাটা","সুন্দরগঞ্জ"],"নীলফামারী":["নীলফামারী সদর","ডিমলা","ডোমার","জলঢাকা","কিশোরগঞ্জ","সৈয়দপুর"],"লালমনিরহাট":["লালমনিরহাট সদর","আদিতমারী","কালীগঞ্জ","হাতীবান্ধা","পাটগ্রাম"],"ঠাকুরগাঁও":["ঠাকুরগাঁও সদর","বালিয়াডাঙ্গী","হরিপুর","পীরগঞ্জ","রাণীশংকৈল"],"পঞ্চগড়":["পঞ্চগড় সদর","আটোয়ারী","বোদা","দেবীগঞ্জ","তেতুলিয়া"]},"ময়মনসিংহ":{"ময়মনসিংহ":["ময়মনসিংহ সদর","ভালুকা","ধোবাউড়া","ফুলবাড়িয়া","গফরগাঁও","গৌরীপুর","হালুয়াঘাট","ঈশ্বরগঞ্জ","মুক্তাগাছা","নান্দাইল","ফুলপুর","তারাকান্দা","ত্রিশাল"],"নেত্রকোণা":["নেত্রকোণা সদর","আটপাড়া","বারহাট্টা","দুর্গাপুর","কলমাকান্দা","কেন্দুয়া","খালিয়াজুড়ি","মদন","মোহনগঞ্জ","পূর্বধলা"],"জামালপুর":["জামালপুর সদর","বকশীগঞ্জ","দেওয়ানগঞ্জ","ইসলামপুর","মাদারগঞ্জ","মেলান্দহ","সরিষাবাড়ী"],"শেরপুর":["শেরপুর সদর","ঝিনাইগাতী","নকলা","নালিতাবাড়ী","শ্রীবরদী"]}};
-
-function updateDistricts(){
-    const div=document.getElementById('division').value;
-    const ds=document.getElementById('district');
-    const ts=document.getElementById('thana');
-    let dOpts='<option value="">জেলা বেছে নিন</option>';
-    if(div&&locationData[div])Object.keys(locationData[div]).forEach(d=>{dOpts+=`<option value="${d}">${d}</option>`;});
-    ds.innerHTML=dOpts;
-    ts.innerHTML='<option value="">থানা বেছে নিন</option>';
-    ds.dispatchEvent(new Event('change'));
-    delivCharge=60;updateTotal();
-}
-function updateThanas(){
-    const div=document.getElementById('division').value;
-    const dist=document.getElementById('district').value;
-    const ts=document.getElementById('thana');
-    let tOpts='<option value="">থানা বেছে নিন</option>';
-    if(div&&dist&&locationData[div]&&locationData[div][dist])locationData[div][dist].forEach(t=>{tOpts+=`<option value="${t}">${t}</option>`;});
-    ts.innerHTML=tOpts;
-    const sub=getSubtotal();
-    const couponActive=localStorage.getItem('gronthokanon_coupon')==='EID26';
-    const eid26Flag=localStorage.getItem('gronthokanon_delivery_eid')==='26';
-    const eid26=(couponActive||eid26Flag)&&sub>=1499;
-    if(eid26) delivCharge=26;
-    else delivCharge=dist==='ঢাকা'?60:90;
-    updateTotal();
-}
-
-/* PAYMENT */
-function selectPay(el,type){
-    document.querySelectorAll('.pay-opt:not(.disabled)').forEach(o=>o.classList.remove('selected'));
-    el.classList.add('selected');el.querySelector('input[type="radio"]').checked=true;
-    document.getElementById('bkashBox').style.display=type==='bkash'?'block':'none';
-}
-function copyBkash(){
-    if(navigator.clipboard && window.isSecureContext){
-        navigator.clipboard.writeText(BKASH_NUMBER).then(()=>showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(()=>fallbackCopy());
-    } else { fallbackCopy(); }
-}
-function fallbackCopy(){
-    const el=document.createElement('input');
-    el.value=BKASH_NUMBER;
-    el.style.cssText='position:fixed;top:0;left:0;opacity:0;';
-    document.body.appendChild(el);
-    el.focus();el.select();
-    try{document.execCommand('copy');showToast('✅ নম্বর কপি হয়েছে!','#059669');}
-    catch(e){showToast(BKASH_NUMBER,'#059669');}
-    document.body.removeChild(el);
-}
-
-/* CONFIRM */
-let isSubmitting=false;
-async function confirmOrder(){
-    if(isSubmitting)return;
-    isSubmitting=true;
-    const btn=document.getElementById('confirmBtn');
-    // ══ Price Verification ══
-    const valid = cart.every(item => {
-        const book = books.find(b => b.name === item.name);
-        return book && book.price === item.price;
-    });
-    if (!valid) {
-        isSubmitting=false;
-        showToast('❌ কার্টে সমস্যা হয়েছে। পেজ রিফ্রেশ করুন।', '#dc2626');
-        return;
-    }
-    const name=document.getElementById('custName').value.trim();
-    const phone=document.getElementById('custPhone').value.trim().replace(/[\s\-]/g,'');
-    const division=document.getElementById('division').value;
-    const district=document.getElementById('district').value;
-    const thana=document.getElementById('thana').value;
-    const address=document.getElementById('custAddress').value.trim();
-    const payMethod=document.querySelector('input[name="payment"]:checked')?.value||'Cash on Delivery';
-    if(!name){isSubmitting=false;return showToast('⚠️ নাম লিখুন!');}
-    if(!phone||!/^01[3-9]\d{8}$/.test(phone)){isSubmitting=false;return showToast('⚠️ সঠিক বাংলাদেশি নম্বর দিন! (যেমন: 01XXXXXXXXX)');}
-    if(!division){isSubmitting=false;return showToast('⚠️ বিভাগ নির্বাচন করুন!');}
-    if(!district){isSubmitting=false;return showToast('⚠️ জেলা নির্বাচন করুন!');}
-    if(!thana){isSubmitting=false;return showToast('⚠️ থানা নির্বাচন করুন!');}
-    if(!address){isSubmitting=false;return showToast('⚠️ ঠিকানা লিখুন!');}
-    if(coupon==='FIRSTORDER'){
-        try{
-            const used=await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).get();
-            if(used.exists()){
-                btn.disabled=false;btn.innerText='অর্ডার নিশ্চিত করুন';
-                return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626');
-            }
-        }catch(e){
-            btn.disabled=false;btn.innerText='অর্ডার নিশ্চিত করুন';
-            return showToast('⚠️ কুপন যাচাই করা যাচ্ছে না। কুপন ছাড়া অর্ডার করুন।','#dc2626');
-        }
-    }
-    let txId='';
-    if(payMethod==='bKash'){txId=document.getElementById('transactionId').value.trim().toUpperCase();if(!txId){isSubmitting=false;return showToast('⚠️ Transaction ID লিখুন!');}if(!/^[A-Z0-9]{8,12}$/.test(txId)){isSubmitting=false;return showToast('⚠️ সঠিক Transaction ID দিন!');}}
-    btn.disabled=true;btn.innerHTML='<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
-    const g={};cart.forEach(i=>{g[i.name]=(g[i.name]||0)+1;});
-    const bookList=Object.entries(g).map(([k,v])=>`${k} (${v}টি)`).join(', ');
-    const total=document.getElementById('grandTotal').innerText;
-    const fullAddr=`${thana}, ${district}, ${division} — ${address}`;
-
-    /* ── Firebase এ order save করো ── */
-    const orderId='GK-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase();
-    const sub=getSubtotal();
-    const discountAmt=Math.round(sub*discPct/100);
-    const unlockedOffers=getUnlockedOffers(sub);
-    const orderData={
-        orderId,name,phone,
-        address:fullAddr,
-        items:cart,
-        books:bookList,
-        payment:payMethod+(txId?` (TxID: ${txId})`:''),
-        delivery:'৳'+delivCharge,
-        total,
-        discount:discountAmt,
-        discountPct:discPct,
-        coupon:coupon,
-        offers:unlockedOffers,
-        status:'pending',
-        createdAt:Date.now(),
-        userId:firebase.auth().currentUser?.uid||'guest'
-    };
-    try{
-        await firebase.database().ref('orders/'+orderId).set(orderData);
-        await firebase.database().ref('phoneIndex/'+orderData.phone+'/'+orderId).set(true);
-        localStorage.setItem('gronthokanon_lastorder',orderId);
-        if(coupon==='FIRSTORDER'){
-    await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).set(true);
-}
-        lastOrderData=orderData;
-    }catch(e){
-        console.log('Firebase error:',e);
-        btn.disabled=false;btn.innerHTML='✅ অর্ডার কনফার্ম করুন';
-        isSubmitting=false;
-        showToast('❌ অর্ডার সেভ হয়নি! ইন্টারনেট চেক করে আবার চেষ্টা করুন।','#dc2626');
-        return;
-    }
-
-    /* ── Google Sheet (পুরনো) ── */
-    try{await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:SHEET_TOKEN,name,phone,address:fullAddr,books:bookList,payment:payMethod+(txId?` (TxID: ${txId})`:''),delivery:'৳'+delivCharge,total})});}catch(e){}
-
-    localStorage.removeItem('gronthokanon_cart');
-    localStorage.removeItem('gronthokanon_discount');
-    localStorage.removeItem('gronthokanon_coupon');
-    localStorage.removeItem('gronthokanon_delivery_eid');
-    localStorage.removeItem('gronthokanon_eid26_used');
-    localStorage.removeItem('gronthokanon_eid26_active');
-    document.getElementById('successInfo').innerHTML=`
-        <div style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:12px;text-align:left;">
-            <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">অর্ডার আইডি</div>
-            <div style="font-size:16px;font-weight:800;color:#059669;letter-spacing:1px;">${orderId}</div>
-        </div>
-        👤 <strong>${escapeHTML(name)}</strong><br>📱 ${escapeHTML(phone)}<br>📍 ${escapeHTML(fullAddr)}<br>💳 ${escapeHTML(payMethod)}${txId?` (TxID: ${escapeHTML(txId)})`:''}<br>📦 ${escapeHTML(bookList)}<br>💰 <strong style="color:var(--green);">${total}</strong>
-        <br><br><button onclick="window.location.href='track.html?id=${escapeHTML(orderId)}'" style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;">📦 অর্ডার ট্র্যাক করুন</button>
-    `;
-    btn.disabled=false;btn.innerHTML='✅ অর্ডার কনফার্ম করুন';
-    isSubmitting=false;
-    document.getElementById('successModal').classList.add('show');
-}
-
-/* ═══ PDF INVOICE (html2canvas) ═══ */
-let lastOrderData=null;
-
-function buildInvoiceHTML(o){
-    const grouped={};
-    o.items.forEach(i=>{
-        if(!grouped[i.name])grouped[i.name]={qty:0,price:i.price};
-        grouped[i.name].qty++;
-    });
-    let subtotal=0;
-    const rows=Object.entries(grouped).map(([name,e],idx)=>{
-        const lt=e.price*e.qty;subtotal+=lt;
-        return `<tr style="background:${idx%2===0?'#f9fafb':'#fff'}">
-            <td style="padding:8px 10px;font-size:13px;">${name}</td>
-            <td style="padding:8px;text-align:center;font-size:13px;">${e.qty}</td>
-            <td style="padding:8px 10px;text-align:right;font-size:13px;">Tk ${lt}</td>
-        </tr>`;
-    }).join('');
-    const delivery=parseInt((o.delivery||'').replace(/[^\d]/g,''))||0;
-    const discount=o.discount||0;
-    const totalNum=o.totalNum||(subtotal+delivery-discount);
-    const discountRow=discount>0?`
-        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#dc2626;border-bottom:1px solid #e5e7eb;">
-            <span>ছাড় (${o.coupon||''})</span><span>-Tk ${discount}</span>
-        </div>`:'';
-    return `
-    <div id="invoiceBox" style="width:700px;font-family:'Hind Siliguri',Arial,sans-serif;background:#fff;color:#1a202c;">
-        <div style="background:#059669;padding:24px 28px;display:flex;justify-content:space-between;align-items:center;">
-            <div style="display:flex;align-items:center;gap:14px;">
-                <div style="background:#fff;border-radius:10px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;padding:4px;flex-shrink:0;">
-                    <img src="https://gronthokanonshop.github.io/gronthokanon-3.0/logo.png" style="width:48px;height:48px;object-fit:contain;" crossorigin="anonymous">
-                </div>
-                <div>
-                    <div style="color:#fff;font-size:20px;font-weight:800;">Gronthokanon</div>
-                    <div style="color:#a7f3d0;font-size:11px;">www.gronthokanonshop.github.io</div>
-                    <div style="color:#a7f3d0;font-size:11px;">📧 gronthokanon4309@gmail.com</div>
-                    <div style="color:#a7f3d0;font-size:11px;">01516595762 | Dhaka, Bangladesh</div>
-                </div>
-            </div>
-            <div style="text-align:right;">
-                <div style="color:#fff;font-size:16px;font-weight:800;letter-spacing:2px;">INVOICE</div>
-                <div style="color:#a7f3d0;font-size:12px;margin-top:4px;">${o.orderId}</div>
-                <div style="color:#a7f3d0;font-size:12px;">${new Date(o.createdAt).toLocaleDateString('en-GB')}</div>
-            </div>
-        </div>
-        <div style="display:flex;gap:0;margin:20px 28px;background:#f0fdf4;border:1.5px solid #a7f3d0;border-radius:10px;overflow:hidden;">
-            <div style="flex:1;padding:16px 20px;border-right:1.5px solid #a7f3d0;">
-                <div style="font-size:10px;font-weight:800;color:#6b7280;margin-bottom:6px;letter-spacing:1px;">BILL TO</div>
-                <div style="font-size:14px;font-weight:700;">${o.name}</div>
-                <div style="font-size:13px;color:#4b5563;">${o.phone}</div>
-            </div>
-            <div style="flex:1;padding:16px 20px;">
-                <div style="font-size:10px;font-weight:800;color:#6b7280;margin-bottom:6px;letter-spacing:1px;">ডেলিভারি ঠিকানা</div>
-                <div style="font-size:13px;color:#4b5563;line-height:1.5;">${o.address}</div>
-            </div>
-        </div>
-        <table style="width:calc(100% - 56px);margin:0 28px;border-collapse:collapse;">
-            <thead>
-                <tr style="background:#059669;">
-                    <th style="padding:10px;text-align:left;color:#fff;font-size:12px;font-weight:700;">বইয়ের নাম</th>
-                    <th style="padding:10px;text-align:center;color:#fff;font-size:12px;font-weight:700;">পরিমাণ</th>
-                    <th style="padding:10px;text-align:right;color:#fff;font-size:12px;font-weight:700;">মূল্য</th>
-                </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-        </table>
-        <div style="margin:16px 28px 0;display:flex;justify-content:flex-end;">
-            <div style="width:220px;">
-                <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#6b7280;border-bottom:1px solid #e5e7eb;">
-                    <span>Subtotal</span><span>Tk ${subtotal}</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#6b7280;border-bottom:1px solid #e5e7eb;">
-                    <span>Delivery</span><span>Tk ${delivery}</span>
-                </div>
-                ${discountRow}
-                <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:16px;font-weight:800;color:#059669;">
-                    <span>TOTAL</span><span>Tk ${totalNum}</span>
-                </div>
-            </div>
-        </div>
-        <div style="margin:16px 28px;display:flex;gap:0;background:#f0fdf4;border:1.5px solid #a7f3d0;border-radius:10px;overflow:hidden;">
-            <div style="flex:1;padding:14px 18px;${o.coupon?'border-right:1.5px solid #a7f3d0;':''}">
-                <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Payment Method</div>
-                <div style="font-size:14px;font-weight:700;">${o.payment}</div>
-            </div>
-            ${o.coupon?`<div style="flex:1;padding:14px 18px;">
-                <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Coupon Applied</div>
-                <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;">🏷️ ${o.coupon}</div>
-            </div>`:''}
-        </div>
-        ${o.offers&&o.offers.length?`
-        <div style="margin:0 28px 16px;background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1.5px solid #fde68a;border-radius:10px;padding:14px 18px;">
-            <div style="font-size:12px;font-weight:800;color:#92400e;margin-bottom:8px;">🎁 আপনার অর্ডারে যে অফার পাচ্ছেন:</div>
-            ${o.offers.map(of=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;color:#065f46;font-weight:700;">${of.icon} ${of.label} ✅</div>`).join('')}
-            <div style="font-size:11px;color:#92400e;margin-top:8px;padding-top:8px;border-top:1px solid #fde68a;">📦 এই অফারগুলো বইয়ের সাথে প্যাকেজ করে পাঠানো হবে</div>
-        </div>`:''}
-        <div style="background:#059669;padding:14px 28px;text-align:center;margin-top:8px;">
-            <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! 📚</div>
-            <div style="color:#a7f3d0;font-size:11px;margin-top:4px;">Track: gronthokanonshop.github.io/track.html?id=${o.orderId}</div>
-        </div>
-    </div>`;
-}
-
-async function downloadInvoice(){
-    const o=lastOrderData;
-    if(!o){showToast('অর্ডার তথ্য পাওয়া যায়নি','#dc2626');return;}
-    showToast('📄 PDF তৈরি হচ্ছে...','#059669');
-    const wrap=document.createElement('div');
-    wrap.style.cssText='position:fixed;left:-9999px;top:0;z-index:-1;';
-    wrap.innerHTML=buildInvoiceHTML(o);
-    document.body.appendChild(wrap);
-    try{
-        const canvas=await html2canvas(wrap.querySelector('#invoiceBox'),{scale:2,useCORS:true,backgroundColor:'#ffffff'});
-        const imgData=canvas.toDataURL('image/png');
-        const {jsPDF}=window.jspdf;
-        const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-        const W=210,H=Math.min(297,(canvas.height/canvas.width)*210);
-        pdf.addImage(imgData,'PNG',0,0,W,H);
-        pdf.save('Gronthokanon-Invoice-'+o.orderId+'.pdf');
-    }catch(e){showToast('❌ PDF তৈরি হয়নি','#dc2626');console.error(e);}
-    document.body.removeChild(wrap);
-}
-window.onload=renderSummary;
-</script>
-<!-- html2canvas + jsPDF -->
+<!-- SCRIPTS -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -681,5 +466,529 @@ window.onload=renderSummary;
 <script src="book.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="common.js"></script></body>
+
+<script>
+/* ══════════════════════════════════
+   CONSTANTS
+══════════════════════════════════ */
+const BKASH_NUMBER = '01408786396';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz6upCtsRyDtEdJZqVUjFFuDuSmB47ZC5IInHUQAGsaNAS7XCsXtgtBNXcsXK71UbELfQ/exec';
+const SHEET_TOKEN = 'GK_SECRET_2026';
+
+function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+/* ══════════════════════════════════
+   CART & DISCOUNT
+══════════════════════════════════ */
+let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
+let discPct = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
+let coupon = localStorage.getItem('gronthokanon_coupon') || '';
+let delivCharge = 60;
+
+
+
+/* ══════════════════════════════════
+   DARK MODE
+══════════════════════════════════ */
+function toggleDark(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  const nxt = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', nxt);
+  localStorage.setItem('gronthokanon_theme', nxt);
+  document.getElementById('darkBtn').textContent = nxt === 'dark' ? '☀️' : '🌙';
+}
+(function(){
+  const s = localStorage.getItem('gronthokanon_theme');
+  if(s === 'dark') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('darkBtn');
+      if(btn) btn.textContent = '☀️';
+    });
+  }
+})();
+
+function toggleMenu(){
+  const nl = document.querySelector('.nav-links');
+  nl.style.display = nl.style.display === 'flex' ? 'none' : 'flex';
+}
+
+/* ══════════════════════════════════
+   TOAST
+══════════════════════════════════ */
+function showToast(msg, color='#dc2626'){
+  const t = document.getElementById('vToast');
+  t.textContent = msg;
+  t.style.background = color;
+  t.style.boxShadow = `0 6px 20px ${color}55`;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ══════════════════════════════════
+   LOCATION DATA
+   (নারায়ণগঞ্জ → সিদ্ধিরগঞ্জ যোগ করা হয়েছে)
+══════════════════════════════════ */
+const locationData = {
+  "ঢাকা":{
+    "ঢাকা":["আদাবর","বাড্ডা","বংশাল","ক্যান্টনমেন্ট","চকবাজার","দারুস সালাম","ডেমরা","ধানমন্ডি","দোহার","গেন্ডারিয়া","গুলশান","হাজারীবাগ","কদমতলী","কামরাঙ্গীরচর","কেরানীগঞ্জ","খিলগাঁও","খিলক্ষেত","কোতোয়ালি","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নবাবগঞ্জ","নিউ মার্কেট","পল্লবী","পল্টন","রমনা","সাভার","শাহজাহানপুর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","উত্তরা","উত্তর খান","দক্ষিণ খান","ওয়ারী"],
+    "গাজীপুর":["গাজীপুর সদর","কালীগঞ্জ","কাপাসিয়া","শ্রীপুর","টঙ্গী"],
+    "নারায়ণগঞ্জ":["নারায়ণগঞ্জ সদর","আড়াইহাজার","বন্দর","রূপগঞ্জ","সোনারগাঁও","সিদ্ধিরগঞ্জ"],
+    "মানিকগঞ্জ":["মানিকগঞ্জ সদর","দৌলতপুর","ঘিওর","হরিরামপুর","সাটুরিয়া","শিবালয়","সিংগাইর"],
+    "মুন্সীগঞ্জ":["মুন্সীগঞ্জ সদর","গজারিয়া","লৌহজং","শ্রীনগর","সিরাজদিখান","টঙ্গীবাড়ী"],
+    "নরসিংদী":["নরসিংদী সদর","বেলাব","মনোহরদী","পলাশ","রায়পুরা","শিবপুর"],
+    "কিশোরগঞ্জ":["কিশোরগঞ্জ সদর","অষ্টগ্রাম","বাজিতপুর","ভৈরব","হোসেনপুর","ইটনা","করিমগঞ্জ","কটিয়াদী","কুলিয়ারচর","মিঠামইন","নিকলী","পাকুন্দিয়া","তাড়াইল"],
+    "ফরিদপুর":["ফরিদপুর সদর","আলফাডাঙ্গা","ভাঙ্গা","বোয়ালমারী","চরভদ্রাসন","মধুখালী","নগরকান্দা","সদরপুর","সালথা"],
+    "গোপালগঞ্জ":["গোপালগঞ্জ সদর","কাশিয়ানী","কোটালীপাড়া","মুকসুদপুর","টুঙ্গিপাড়া"],
+    "টাঙ্গাইল":["টাঙ্গাইল সদর","বাসাইল","ভূঞাপুর","দেলদুয়ার","ধনবাড়ী","ঘাটাইল","গোপালপুর","কালিহাতী","মধুপুর","মির্জাপুর","নাগরপুর","সখিপুর"],
+    "রাজবাড়ী":["রাজবাড়ী সদর","বালিয়াকান্দি","গোয়ালন্দ","কালুখালী","পাংশা"],
+    "শরীয়তপুর":["শরীয়তপুর সদর","ভেদরগঞ্জ","ডামুড্যা","গোসাইরহাট","নড়িয়া","জাজিরা"],
+    "মাদারীপুর":["মাদারীপুর সদর","কালকিনি","রাজৈর","শিবচর"]
+  },
+  "চট্টগ্রাম":{
+    "চট্টগ্রাম":["আকবরশাহ","বাকলিয়া","বায়েজিদ","বন্দর","চান্দগাঁও","ডবলমুরিং","ইপিজেড","হালিশহর","হাটহাজারী","কোতোয়ালি","খুলশী","লোহাগাড়া","পাহাড়তলী","পতেঙ্গা","পাঁচলাইশ","রাউজান","রাঙ্গুনিয়া","সন্দ্বীপ","সাতকানিয়া","সীতাকুণ্ড"],
+    "কক্সবাজার":["কক্সবাজার সদর","চকরিয়া","কুতুবদিয়া","মহেশখালী","পেকুয়া","রামু","টেকনাফ","উখিয়া"],
+    "কুমিল্লা":["কুমিল্লা সদর","বরুড়া","ব্রাহ্মণপাড়া","বুড়িচং","চান্দিনা","চৌদ্দগ্রাম","দাউদকান্দি","দেবিদ্বার","হোমনা","লাকসাম","মেঘনা","মনোহরগঞ্জ","মুরাদনগর","নাঙ্গলকোট","তিতাস"],
+    "ফেনী":["ফেনী সদর","ছাগলনাইয়া","দাগনভূঞা","ফুলগাজী","পরশুরাম","সোনাগাজী"],
+    "ব্রাহ্মণবাড়িয়া":["ব্রাহ্মণবাড়িয়া সদর","আখাউড়া","বাঞ্ছারামপুর","কসবা","নাসিরনগর","নবীনগর","সরাইল"],
+    "চাঁদপুর":["চাঁদপুর সদর","ফরিদগঞ্জ","হাজীগঞ্জ","কচুয়া","মতলব উত্তর","মতলব দক্ষিণ","শাহরাস্তি"],
+    "লক্ষ্মীপুর":["লক্ষ্মীপুর সদর","কমলনগর","রামগঞ্জ","রামগতি","রায়পুর"],
+    "নোয়াখালী":["নোয়াখালী সদর","বেগমগঞ্জ","চাটখিল","কোম্পানীগঞ্জ","হাতিয়া","কবিরহাট","সেনবাগ","সুবর্ণচর"]
+  },
+  "রাজশাহী":{
+    "রাজশাহী":["রাজশাহী সদর","বাঘা","চারঘাট","দুর্গাপুর","গোদাগাড়ী","মোহনপুর","পবা","পুঠিয়া","তানোর"],
+    "নাটোর":["নাটোর সদর","বড়াইগ্রাম","বাগাতিপাড়া","গুরুদাসপুর","লালপুর","সিংড়া"],
+    "নওগাঁ":["নওগাঁ সদর","আত্রাই","বদলগাছী","ধামইরহাট","মান্দা","মহাদেবপুর","নিয়ামতপুর","পত্নীতলা","পোরশা","রাণীনগর","সাপাহার"],
+    "চাঁপাইনবাবগঞ্জ":["চাঁপাইনবাবগঞ্জ সদর","ভোলাহাট","গোমস্তাপুর","নাচোল","শিবগঞ্জ"],
+    "পাবনা":["পাবনা সদর","আটঘরিয়া","বেড়া","ভাঙ্গুড়া","চাটমোহর","ফরিদপুর","ঈশ্বরদী","সাঁথিয়া","সুজানগর"],
+    "সিরাজগঞ্জ":["সিরাজগঞ্জ সদর","বেলকুচি","চৌহালি","কামারখন্দ","কাজিপুর","রায়গঞ্জ","শাহজাদপুর","তাড়াশ","উল্লাপাড়া"],
+    "বগুড়া":["বগুড়া সদর","আদমদিঘি","ধুনট","দুপচাঁচিয়া","গাবতলী","কাহালু","নন্দীগ্রাম","সারিয়াকান্দি","শাজাহানপুর","শেরপুর","শিবগঞ্জ","সোনাতলা"],
+    "জয়পুরহাট":["জয়পুরহাট সদর","আক্কেলপুর","কালাই","ক্ষেতলাল","পাঁচবিবি"]
+  },
+  "খুলনা":{
+    "খুলনা":["খুলনা সদর","বটিয়াঘাটা","দাকোপ","ডুমুরিয়া","ফুলতলা","কয়রা","পাইকগাছা","রূপসা","তেরখাদা"],
+    "যশোর":["যশোর সদর","অভয়নগর","বাঘারপাড়া","চৌগাছা","ঝিকরগাছা","কেশবপুর","মণিরামপুর","শার্শা"],
+    "সাতক্ষীরা":["সাতক্ষীরা সদর","আশাশুনি","দেবহাটা","কলারোয়া","কালিগঞ্জ","শ্যামনগর","তালা"],
+    "বাগেরহাট":["বাগেরহাট সদর","চিতলমারী","ফকিরহাট","কচুয়া","মোংলা","মোরেলগঞ্জ","রামপাল","শরণখোলা"],
+    "নড়াইল":["নড়াইল সদর","কালিয়া","লোহাগড়া"],
+    "মাগুরা":["মাগুরা সদর","মহম্মদপুর","শালিখা","শ্রীপুর"],
+    "ঝিনাইদহ":["ঝিনাইদহ সদর","হরিণাকুণ্ডু","কালীগঞ্জ","কোটচাঁদপুর","মহেশপুর","শৈলকুপা"],
+    "কুষ্টিয়া":["কুষ্টিয়া সদর","ভেড়ামারা","দৌলতপুর","খোকসা","কুমারখালী","মিরপুর"],
+    "চুয়াডাঙ্গা":["চুয়াডাঙ্গা সদর","আলমডাঙ্গা","দামুড়হুদা","জীবননগর"],
+    "মেহেরপুর":["মেহেরপুর সদর","গাংনী","মুজিবনগর"]
+  },
+  "বরিশাল":{
+    "বরিশাল":["বরিশাল সদর","আগৈলঝাড়া","বাকেরগঞ্জ","বানারীপাড়া","গৌরনদী","হিজলা","মেহেন্দিগঞ্জ","মুলাদী","উজিরপুর"],
+    "পটুয়াখালী":["পটুয়াখালী সদর","বাউফল","দশমিনা","গলাচিপা","কলাপাড়া","মির্জাগঞ্জ","রাঙ্গাবালী"],
+    "ভোলা":["ভোলা সদর","বোরহানউদ্দিন","চরফ্যাশন","দৌলতখান","লালমোহন","মনপুরা","তজুমদ্দিন"],
+    "ঝালকাঠি":["ঝালকাঠি সদর","কাঁঠালিয়া","নলছিটি","রাজাপুর"],
+    "পিরোজপুর":["পিরোজপুর সদর","ভান্ডারিয়া","কাউখালী","মঠবাড়িয়া","নাজিরপুর","নেছারাবাদ","জিয়ানগর"],
+    "বরগুনা":["বরগুনা সদর","আমতলী","বামনা","বেতাগী","পাথরঘাটা","তালতলী"]
+  },
+  "সিলেট":{
+    "সিলেট":["সিলেট সদর","বালাগঞ্জ","বিয়ানীবাজার","বিশ্বনাথ","কোম্পানীগঞ্জ","ফেঞ্চুগঞ্জ","গোলাপগঞ্জ","গোয়াইনঘাট","জকিগঞ্জ","কানাইঘাট","ওসমানীনগর","দক্ষিণ সুরমা"],
+    "মৌলভীবাজার":["মৌলভীবাজার সদর","বড়লেখা","জুড়ী","কমলগঞ্জ","কুলাউড়া","রাজনগর","শ্রীমঙ্গল"],
+    "হবিগঞ্জ":["হবিগঞ্জ সদর","আজমিরীগঞ্জ","বাহুবল","বানিয়াচং","চুনারুঘাট","লাখাই","মাধবপুর","নবীগঞ্জ"],
+    "সুনামগঞ্জ":["সুনামগঞ্জ সদর","বিশ্বম্ভরপুর","দক্ষিণ সুনামগঞ্জ","দিরাই","ধর্মপাশা","জামালগঞ্জ","জগন্নাথপুর","শাল্লা","তাহিরপুর"]
+  },
+  "রংপুর":{
+    "রংপুর":["রংপুর সদর","বদরগঞ্জ","গঙ্গাচড়া","কাউনিয়া","মিঠাপুকুর","পীরগঞ্জ","পীরগাছা","তারাগঞ্জ"],
+    "দিনাজপুর":["দিনাজপুর সদর","বিরামপুর","বিরল","বোচাগঞ্জ","চিরিরবন্দর","ফুলবাড়ী","ঘোড়াঘাট","হাকিমপুর","খানসামা","নবাবগঞ্জ","পার্বতীপুর"],
+    "কুড়িগ্রাম":["কুড়িগ্রাম সদর","ভুরুঙ্গামারী","চর রাজিবপুর","চিলমারী","ফুলবাড়ী","নাগেশ্বরী","রাজারহাট","রৌমারী","উলিপুর"],
+    "গাইবান্ধা":["গাইবান্ধা সদর","ফুলছড়ি","গোবিন্দগঞ্জ","পলাশবাড়ী","সাদুল্লাপুর","সাঘাটা","সুন্দরগঞ্জ"],
+    "নীলফামারী":["নীলফামারী সদর","ডিমলা","ডোমার","জলঢাকা","কিশোরগঞ্জ","সৈয়দপুর"],
+    "লালমনিরহাট":["লালমনিরহাট সদর","আদিতমারী","কালীগঞ্জ","হাতীবান্ধা","পাটগ্রাম"],
+    "ঠাকুরগাঁও":["ঠাকুরগাঁও সদর","বালিয়াডাঙ্গী","হরিপুর","পীরগঞ্জ","রাণীশংকৈল"],
+    "পঞ্চগড়":["পঞ্চগড় সদর","আটোয়ারী","বোদা","দেবীগঞ্জ","তেতুলিয়া"]
+  },
+  "ময়মনসিংহ":{
+    "ময়মনসিংহ":["ময়মনসিংহ সদর","ভালুকা","ধোবাউড়া","ফুলবাড়িয়া","গফরগাঁও","গৌরীপুর","হালুয়াঘাট","ঈশ্বরগঞ্জ","মুক্তাগাছা","নান্দাইল","ফুলপুর","তারাকান্দা","ত্রিশাল"],
+    "নেত্রকোণা":["নেত্রকোণা সদর","আটপাড়া","বারহাট্টা","দুর্গাপুর","কলমাকান্দা","কেন্দুয়া","খালিয়াজুড়ি","মদন","মোহনগঞ্জ","পূর্বধলা"],
+    "জামালপুর":["জামালপুর সদর","বকশীগঞ্জ","দেওয়ানগঞ্জ","ইসলামপুর","মাদারগঞ্জ","মেলান্দহ","সরিষাবাড়ী"],
+    "শেরপুর":["শেরপুর সদর","ঝিনাইগাতী","নকলা","নালিতাবাড়ী","শ্রীবরদী"]
+  }
+};
+
+/* ══════════════════════════════════
+   LOCATION DROPDOWNS
+══════════════════════════════════ */
+function updateDistricts(){
+  const div = document.getElementById('division').value;
+  const ds = document.getElementById('district');
+  const ts = document.getElementById('thana');
+  let opts = '<option value="">জেলা বেছে নিন</option>';
+  if(div && locationData[div]) Object.keys(locationData[div]).forEach(d => { opts += `<option value="${d}">${d}</option>`; });
+  ds.innerHTML = opts;
+  ts.innerHTML = '<option value="">থানা বেছে নিন</option>';
+  delivCharge = 60; updateTotal();
+}
+function updateThanas(){
+  const div = document.getElementById('division').value;
+  const dist = document.getElementById('district').value;
+  const ts = document.getElementById('thana');
+  let opts = '<option value="">থানা বেছে নিন</option>';
+  if(div && dist && locationData[div] && locationData[div][dist])
+    locationData[div][dist].forEach(t => { opts += `<option value="${t}">${t}</option>`; });
+  ts.innerHTML = opts;
+  delivCharge = dist === 'ঢাকা' ? 60 : 90;
+  updateTotal();
+}
+
+/* ══════════════════════════════════
+   PAYMENT
+══════════════════════════════════ */
+function selectPay(el, type){
+  document.querySelectorAll('.pay-opt:not(.disabled)').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input[type="radio"]').checked = true;
+  document.getElementById('bkashBox').style.display = type === 'bkash' ? 'block' : 'none';
+}
+function copyBkash(){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(BKASH_NUMBER).then(() => showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(() => fallbackCopy());
+  } else { fallbackCopy(); }
+}
+function fallbackCopy(){
+  const el = document.createElement('input');
+  el.value = BKASH_NUMBER;
+  el.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+  document.body.appendChild(el);
+  el.select(); el.setSelectionRange(0,99999);
+  try{ document.execCommand('copy'); showToast('✅ নম্বর কপি হয়েছে!','#059669'); }
+  catch(e){ showToast('⚠️ কপি হয়নি, নম্বরটি লিখে নিন','#d97706'); }
+  document.body.removeChild(el);
+}
+
+/* ══════════════════════════════════
+   PRICING
+══════════════════════════════════ */
+function getSubtotal(){
+  const g = {};
+  cart.forEach(i => { g[i.name] = g[i.name] ? {price:i.price, qty:g[i.name].qty+1} : {price:i.price, qty:1}; });
+  return Object.values(g).reduce((s,i) => s + i.price * i.qty, 0);
+}
+function updateTotal(){
+  const sub = getSubtotal();
+  const dist = document.getElementById('district')?.value || '';
+  delivCharge = dist === 'ঢাকা' ? 60 : 90;
+  const disc = Math.round(sub * discPct / 100);
+  const total = sub - disc + delivCharge;
+  document.getElementById('subtotalShow').innerText = '৳' + sub;
+  document.getElementById('deliveryShow').innerText = '৳' + delivCharge;
+  const dr = document.getElementById('discountRow');
+  if(disc > 0){
+    document.getElementById('discountShow').innerText = disc;
+    document.getElementById('couponCodeShow').innerText = coupon;
+    dr.style.display = 'flex';
+  } else dr.style.display = 'none';
+  document.getElementById('grandTotal').innerText = '৳' + total;
+  document.getElementById('bkashAmt').innerText = '৳' + total;
+
+  /* coupon badge */
+  const ccb = document.getElementById('checkoutCouponBadge');
+  if(ccb){
+    if(coupon){
+      const desc = discPct + '% ডিসকাউন্ট পাচ্ছেন';
+      ccb.style.display = 'block';
+      ccb.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1px solid rgba(5,150,105,0.3);padding:8px 11px;">
+        <span style="font-size:16px;">🏷️</span>
+        <div>
+          <div style="font-size:12px;font-weight:800;color:#059669;letter-spacing:.5px;">${coupon} <span style="background:#059669;color:white;font-size:9px;padding:1px 7px;">সক্রিয়</span></div>
+          <div style="font-size:10px;color:var(--text-muted);">${desc}</div>
+        </div></div>`;
+    } else { ccb.style.display = 'none'; ccb.innerHTML = ''; }
+  }
+}
+
+/* ══════════════════════════════════
+   RENDER SUMMARY
+══════════════════════════════════ */
+function renderSummary(){
+  const box = document.getElementById('summaryItems');
+  if(!cart.length){
+    box.innerHTML = '<div class="empty-cart bng"><div style="margin-bottom:10px;font-size:40px;">📦</div><p>কার্ট খালি আছে</p></div>';
+    document.getElementById('itemCountSub').innerText = '';
+    updateTotal(); return;
+  }
+  const g = {};
+  cart.forEach(i => {
+    if(g[i.name]) g[i.name].qty++;
+    else g[i.name] = {price:i.price, qty:1, img:i.img||''};
+  });
+  box.innerHTML = Object.entries(g).map(([name,item]) => `
+    <div class="os-item">
+      <img src="${escapeHTML(item.img)}" class="os-img-real" onerror="this.style.display='none';this.nextSibling.style.display='flex';" alt="">
+      <div class="os-img" style="display:none;">📚</div>
+      <div style="flex:1;">
+        <div class="os-name bng">${escapeHTML(name)}</div>
+        <div class="os-auth bng">৳${item.price} × ${item.qty}টি</div>
+      </div>
+      <div class="os-price bng">৳${item.price * item.qty}</div>
+    </div>`).join('');
+  document.getElementById('itemCountSub').innerText = cart.length + 'টি বই';
+  updateTotal();
+  /* cart badge */
+  const cb = document.getElementById('cartBadge');
+  if(cb) cb.textContent = cart.length;
+}
+
+/* ══════════════════════════════════
+   COUPON
+══════════════════════════════════ */
+const COUPONS = { 'FIRSTORDER': 10 };
+function applyCoupon(){
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  const msgEl = document.getElementById('couponMsg');
+  if(!code){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; return; }
+  if(COUPONS[code] !== undefined){
+    coupon = code; discPct = COUPONS[code];
+    localStorage.setItem('gronthokanon_coupon', coupon);
+    localStorage.setItem('gronthokanon_discount', discPct);
+    msgEl.style.display='block'; msgEl.style.color='#059669';
+    msgEl.textContent = `✅ ${code} কোড প্রয়োগ হয়েছে! ${discPct}% ডিসকাউন্ট।`;
+    updateTotal();
+  } else {
+    msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='❌ কুপন কোডটি সঠিক নয়!';
+  }
+}
+
+/* ══════════════════════════════════
+   CONFIRM ORDER
+══════════════════════════════════ */
+let isSubmitting = false;
+async function confirmOrder(){
+  if(isSubmitting) return;
+  isSubmitting = true;
+  const btn = document.getElementById('confirmBtn');
+  const name     = document.getElementById('custName').value.trim();
+  const phone    = document.getElementById('custPhone').value.trim();
+  const division = document.getElementById('division').value;
+  const district = document.getElementById('district').value;
+  const thana    = document.getElementById('thana').value;
+  const address  = document.getElementById('custAddress').value.trim();
+  const payMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
+
+  if(!name)     { isSubmitting=false; return showToast('⚠️ নাম লিখুন!'); }
+  if(!phone || !/^01[3-9]\d{8}$/.test(phone)){ isSubmitting=false; return showToast('⚠️ সঠিক বাংলাদেশি নম্বর দিন!'); }
+  if(!division) { isSubmitting=false; return showToast('⚠️ বিভাগ নির্বাচন করুন!'); }
+  if(!district) { isSubmitting=false; return showToast('⚠️ জেলা নির্বাচন করুন!'); }
+  if(!thana)    { isSubmitting=false; return showToast('⚠️ থানা নির্বাচন করুন!'); }
+  if(!address)  { isSubmitting=false; return showToast('⚠️ ঠিকানা লিখুন!'); }
+  if(!cart.length){ isSubmitting=false; return showToast('⚠️ কার্ট খালি!'); }
+
+  if(coupon === 'FIRSTORDER'){
+    try{
+      const used = await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).get();
+      if(used.exists()){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626'); }
+    }catch(e){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ কুপন যাচাই করা যাচ্ছে না।','#dc2626'); }
+  }
+
+  let txId = '';
+  if(payMethod === 'bKash'){
+    txId = document.getElementById('transactionId').value.trim().toUpperCase();
+    if(!txId){ isSubmitting=false; return showToast('⚠️ Transaction ID লিখুন!'); }
+    if(!/^[A-Z0-9]{8,12}$/.test(txId)){ isSubmitting=false; return showToast('⚠️ সঠিক Transaction ID দিন!'); }
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
+
+  const g = {};
+  cart.forEach(i => { g[i.name] = (g[i.name]||0)+1; });
+  const bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
+  const sub = getSubtotal();
+  const discountAmt = Math.round(sub * discPct / 100);
+  const grand = sub + delivCharge - discountAmt;
+  const fullAddr = `${thana}, ${district}, ${division} — ${address}`;
+  const orderId = 'GK-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
+
+  const orderData = {
+    orderId, name, phone,
+    address: fullAddr,
+    items: cart,
+    books: bookList,
+    payment: payMethod + (txId ? ` (TxID: ${txId})` : ''),
+    delivery: '৳' + delivCharge,
+    total: '৳' + grand,
+    discount: discountAmt,
+    discountPct: discPct,
+    coupon: coupon,
+    status: 'pending',
+    createdAt: Date.now(),
+    userId: firebase.auth().currentUser?.uid || 'guest'
+  };
+
+  try{
+    await firebase.database().ref('orders/' + orderId).set(orderData);
+    await firebase.database().ref('phoneIndex/' + orderData.phone + '/' + orderId).set(true);
+    localStorage.setItem('gronthokanon_lastorder', orderId);
+    if(coupon === 'FIRSTORDER'){
+      await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).set(true);
+    }
+    lastOrderData = orderData;
+  }catch(e){
+    console.error('Firebase error:', e);
+    btn.disabled = false; btn.innerHTML = '✅ অর্ডার নিশ্চিত করুন';
+    isSubmitting = false;
+    showToast('❌ অর্ডার সেভ হয়নি! ইন্টারনেট চেক করুন।','#dc2626');
+    return;
+  }
+
+  try{
+    await fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({token:SHEET_TOKEN, name, phone, address:fullAddr, books:bookList,
+        payment:payMethod+(txId?` (TxID: ${txId})`:''), delivery:'৳'+delivCharge, total:'৳'+grand})});
+  }catch(e){}
+
+  localStorage.removeItem('gronthokanon_cart');
+  localStorage.removeItem('gronthokanon_discount');
+  localStorage.removeItem('gronthokanon_coupon');
+
+  document.getElementById('successInfo').innerHTML = `
+    <div style="background:var(--bg-body);border-radius:10px;padding:12px;margin-bottom:10px;text-align:left;">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">অর্ডার আইডি</div>
+      <div style="font-size:16px;font-weight:800;color:#059669;letter-spacing:1px;">${orderId}</div>
+    </div>
+    👤 <strong>${escapeHTML(name)}</strong><br>
+    📱 ${escapeHTML(phone)}<br>
+    📍 ${escapeHTML(fullAddr)}<br>
+    💳 ${escapeHTML(payMethod)}${txId ? ` (TxID: ${escapeHTML(txId)})` : ''}<br>
+    📦 ${escapeHTML(bookList)}<br>
+    💰 <strong style="color:#059669;">৳${grand}</strong>
+    <br><br>
+    <button onclick="window.location.href='track.html?id=${escapeHTML(orderId)}'"
+      style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;">
+      📦 অর্ডার ট্র্যাক করুন</button>`;
+
+  btn.disabled = false; btn.innerHTML = '✅ অর্ডার নিশ্চিত করুন';
+  isSubmitting = false;
+  document.getElementById('successModal').classList.add('show');
+}
+
+/* ══════════════════════════════════
+   PDF INVOICE
+══════════════════════════════════ */
+let lastOrderData = null;
+
+function buildInvoiceHTML(o){
+  const grouped = {};
+  o.items.forEach(i => {
+    if(!grouped[i.name]) grouped[i.name] = {qty:0, price:i.price};
+    grouped[i.name].qty++;
+  });
+  let subtotal = 0;
+  const rows = Object.entries(grouped).map(([name,e],idx) => {
+    const lt = e.price * e.qty; subtotal += lt;
+    return `<tr style="background:${idx%2===0?'#f0fdf4':'#fff'}">
+      <td style="padding:8px 10px;font-size:13px;">${name}</td>
+      <td style="padding:8px;text-align:center;font-size:13px;">${e.qty}</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px;">Tk ${lt}</td>
+    </tr>`;
+  }).join('');
+  const delivery = parseInt((o.delivery||'').replace(/[^\d]/g,''))||0;
+  const discount = o.discount||0;
+  const totalNum = subtotal + delivery - discount;
+  const discountRow = discount > 0 ? `
+    <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#dc2626;border-bottom:1px solid #e5e7eb;">
+      <span>ছাড় (${o.coupon||''})</span><span>-Tk ${discount}</span>
+    </div>` : '';
+  return `
+  <div id="invoiceBox" style="width:700px;font-family:'Hind Siliguri',Arial,sans-serif;background:#fff;color:#1a202c;">
+    <div style="background:#065f46;padding:24px 28px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="background:#fff;border-radius:10px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;padding:4px;">
+          <img src="https://gronthokanonshop.github.io/gronthokanon-3.0/logo.png" style="width:48px;height:48px;object-fit:contain;" crossorigin="anonymous">
+        </div>
+        <div>
+          <div style="color:#fff;font-size:20px;font-weight:800;">Gronthokanon</div>
+          <div style="color:#a7f3d0;font-size:11px;">www.gronthokanonshop.github.io</div>
+          <div style="color:#a7f3d0;font-size:11px;">📧 gronthokanon4309@gmail.com</div>
+          <div style="color:#a7f3d0;font-size:11px;">01516595762 | Dhaka, Bangladesh</div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="color:#fff;font-size:16px;font-weight:800;letter-spacing:2px;">INVOICE</div>
+        <div style="color:#a7f3d0;font-size:12px;margin-top:4px;">${o.orderId}</div>
+        <div style="color:#a7f3d0;font-size:12px;">${new Date(o.createdAt).toLocaleDateString('en-GB')}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:0;margin:20px 28px;background:#f0fdf4;border:1.5px solid #a7f3d0;border-radius:10px;overflow:hidden;">
+      <div style="flex:1;padding:16px 20px;border-right:1.5px solid #a7f3d0;">
+        <div style="font-size:10px;font-weight:800;color:#6b7280;margin-bottom:6px;letter-spacing:1px;">BILL TO</div>
+        <div style="font-size:14px;font-weight:700;">${o.name}</div>
+        <div style="font-size:13px;color:#4b5563;">${o.phone}</div>
+      </div>
+      <div style="flex:1;padding:16px 20px;">
+        <div style="font-size:10px;font-weight:800;color:#6b7280;margin-bottom:6px;letter-spacing:1px;">ডেলিভারি ঠিকানা</div>
+        <div style="font-size:13px;color:#4b5563;line-height:1.5;">${o.address}</div>
+      </div>
+    </div>
+    <table style="width:calc(100% - 56px);margin:0 28px;border-collapse:collapse;">
+      <thead>
+        <tr style="background:#059669;">
+          <th style="padding:10px;text-align:left;color:#fff;font-size:12px;font-weight:700;">বইয়ের নাম</th>
+          <th style="padding:10px;text-align:center;color:#fff;font-size:12px;font-weight:700;">পরিমাণ</th>
+          <th style="padding:10px;text-align:right;color:#fff;font-size:12px;font-weight:700;">মূল্য</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="margin:16px 28px 0;display:flex;justify-content:flex-end;">
+      <div style="width:220px;">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#6b7280;border-bottom:1px solid #e5e7eb;">
+          <span>Subtotal</span><span>Tk ${subtotal}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#6b7280;border-bottom:1px solid #e5e7eb;">
+          <span>Delivery</span><span>Tk ${delivery}</span>
+        </div>
+        ${discountRow}
+        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:16px;font-weight:800;color:#059669;">
+          <span>TOTAL</span><span>Tk ${totalNum}</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin:16px 28px;display:flex;gap:0;background:#f0fdf4;border:1.5px solid #a7f3d0;overflow:hidden;">
+      <div style="flex:1;padding:14px 18px;${o.coupon?'border-right:1.5px solid #a7f3d0;':''}">
+        <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Payment Method</div>
+        <div style="font-size:14px;font-weight:700;">${o.payment}</div>
+      </div>
+      ${o.coupon?`<div style="flex:1;padding:14px 18px;">
+        <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Coupon Applied</div>
+        <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;">🏷️ ${o.coupon}</div>
+      </div>`:''}
+    </div>    <div style="background:#065f46;padding:14px 28px;text-align:center;margin-top:8px;border-top:3px solid #059669;">
+      <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! 📚</div>
+      <div style="color:#a7f3d0;font-size:11px;margin-top:4px;">Track: gronthokanonshop.github.io/track.html?id=${o.orderId}</div>
+    </div>
+  </div>`;
+}
+
+async function downloadInvoice(){
+  const o = lastOrderData;
+  if(!o){ showToast('অর্ডার তথ্য পাওয়া যায়নি','#dc2626'); return; }
+  showToast('📄 PDF তৈরি হচ্ছে...','#059669');
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1;';
+  wrap.innerHTML = buildInvoiceHTML(o);
+  document.body.appendChild(wrap);
+  try{
+    const canvas = await html2canvas(wrap.querySelector('#invoiceBox'), {scale:2, useCORS:true, backgroundColor:'#ffffff'});
+    const imgData = canvas.toDataURL('image/png');
+    const {jsPDF} = window.jspdf;
+    const pdf = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+    const W = 210, H = Math.min(297,(canvas.height/canvas.width)*210);
+    pdf.addImage(imgData,'PNG',0,0,W,H);
+    pdf.save('Gronthokanon-Invoice-'+o.orderId+'.pdf');
+  }catch(e){ showToast('❌ PDF তৈরি হয়নি','#dc2626'); console.error(e); }
+  document.body.removeChild(wrap);
+}
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+window.onload = renderSummary;
+</script>
+
+<script src="common.js"></script>
+</body>
 </html>
