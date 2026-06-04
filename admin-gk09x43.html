@@ -82,16 +82,144 @@
         .btn-ghost:hover{background:var(--primary-light);color:var(--primary);border-color:var(--primary);}
         .btn-sm{padding:6px 12px;font-size:12px;border-radius:8px;}
 
-        /* ── NAVBAR ── */
-        .navbar{position:sticky;top:0;z-index:1000;padding:12px 16px;background:var(--surface-glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);}
-        .nav-inner{max-width:800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
-        .nav-brand{display:flex;align-items:center;gap:10px;}
-        .nav-logo{width:36px;height:36px;background:var(--primary);border-radius:10px;color:white;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(5,150,105,0.3);}
-        .nav-text h1{font-size:16px;font-weight:700;color:var(--text-main);line-height:1.1;}
-        .nav-text p{font-size:10px;color:var(--text-muted);margin-top:2px;}
-        .nav-actions{display:flex;align-items:center;gap:8px;}
+        /* ── APP LAYOUT ── */
+        body{padding-bottom:0;}
+        .app-layout{display:flex;min-height:100vh;}
 
-        /* ── PAGE WRAP ── */
+        /* ── SIDEBAR ── */
+        .sidebar{
+            width:230px;min-height:100vh;flex-shrink:0;
+            background:var(--surface);
+            border-right:1px solid var(--border);
+            display:flex;flex-direction:column;
+            position:fixed;top:0;left:0;z-index:200;
+            transition:transform .3s cubic-bezier(0.4,0,0.2,1);
+            box-shadow:var(--shadow-md);
+        }
+        .sidebar-logo{
+            padding:18px 16px 14px;
+            border-bottom:1px solid var(--border);
+            display:flex;align-items:center;gap:10px;
+        }
+        .sidebar-logo-icon{
+            width:36px;height:36px;background:var(--primary);border-radius:10px;
+            display:flex;align-items:center;justify-content:center;color:white;
+            box-shadow:0 4px 12px var(--primary-light);flex-shrink:0;
+        }
+        .sidebar-logo-text h2{font-size:14px;font-weight:700;color:var(--text-main);line-height:1.2;}
+        .sidebar-logo-text span{font-size:10px;color:var(--text-muted);}
+        .sidebar-nav{flex:1;padding:10px 8px;overflow-y:auto;}
+        .nav-section-label{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-muted);padding:8px 10px 4px;}
+        .nav-item{
+            display:flex;align-items:center;gap:10px;
+            padding:10px 12px;border-radius:12px;border:none;
+            background:transparent;color:var(--text-muted);
+            font-family:var(--font-main);font-size:13px;font-weight:600;
+            cursor:pointer;width:100%;text-align:left;
+            transition:var(--trans);position:relative;margin-bottom:2px;
+        }
+        .nav-item:hover{background:var(--primary-light);color:var(--primary);}
+        .nav-item.active{background:var(--primary-light);color:var(--primary);}
+        .nav-item.active::before{
+            content:'';position:absolute;left:0;top:25%;height:50%;
+            width:3px;background:var(--primary);border-radius:0 3px 3px 0;
+        }
+        .nav-item .icon-sm{opacity:0.7;}
+        .nav-item.active .icon-sm{opacity:1;}
+        .nav-badge{
+            margin-left:auto;background:var(--danger);color:white;
+            font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;
+        }
+        .sidebar-footer{
+            padding:12px 16px;border-top:1px solid var(--border);
+            display:flex;align-items:center;gap:10px;
+        }
+        .sidebar-avatar{
+            width:32px;height:32px;border-radius:50%;
+            background:var(--primary-light);color:var(--primary);
+            display:flex;align-items:center;justify-content:center;
+            font-size:11px;font-weight:700;flex-shrink:0;
+        }
+        .sidebar-user-info{flex:1;min-width:0;}
+        .sidebar-user-info strong{display:block;font-size:12px;color:var(--text-main);}
+        .sidebar-user-info small{display:block;font-size:10px;color:var(--text-muted);}
+        .sidebar-logout{
+            background:transparent;border:none;cursor:pointer;
+            color:var(--text-muted);padding:4px;
+            display:flex;align-items:center;
+            transition:color .2s;
+        }
+        .sidebar-logout:hover{color:var(--danger);}
+
+        /* ── MAIN AREA ── */
+        .main-area{flex:1;margin-left:230px;display:flex;flex-direction:column;min-height:100vh;}
+
+        /* ── TOP BAR ── */
+        .topbar{
+            position:sticky;top:0;z-index:100;
+            padding:12px 20px;
+            background:var(--surface-glass);
+            backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+            border-bottom:1px solid var(--border);
+            box-shadow:var(--shadow-sm);
+            display:flex;align-items:center;gap:12px;
+        }
+        .topbar-menu-btn{display:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text-muted);align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+        .topbar-title{font-size:15px;font-weight:700;color:var(--text-main);flex:1;}
+        .topbar-actions{display:flex;align-items:center;gap:8px;}
+        .topbar-icon-btn{
+            width:36px;height:36px;border-radius:10px;border:1px solid var(--border);
+            background:var(--bg);color:var(--text-muted);
+            display:flex;align-items:center;justify-content:center;cursor:pointer;
+            transition:var(--trans);
+        }
+        .topbar-icon-btn:hover{background:var(--primary-light);color:var(--primary);border-color:var(--primary);}
+        .topbar-new-btn{
+            display:flex;align-items:center;gap:6px;
+            padding:8px 14px;border:none;
+            background:var(--primary);color:white;
+            border-radius:10px;font-size:12px;font-weight:700;
+            cursor:pointer;font-family:var(--font-main);
+            transition:var(--trans);
+            box-shadow:0 4px 12px var(--primary-light);
+        }
+        .topbar-new-btn:hover{background:var(--primary-hover);transform:translateY(-1px);}
+
+        /* ── PAGE CONTENT ── */
+        .page-content{flex:1;padding:20px;background:var(--bg);}
+
+        /* ── MOBILE OVERLAY ── */
+        .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;backdrop-filter:blur(2px);}
+
+        /* ── DASHBOARD ── */
+        .dash-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+        .dash-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+        .quick-action-btn{
+            background:var(--surface);border:1px solid var(--border);border-radius:16px;
+            padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;
+            cursor:pointer;font-size:12px;color:var(--text-muted);font-family:var(--font-main);font-weight:600;
+            transition:var(--trans);
+        }
+        .quick-action-btn:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
+        .quick-action-icon{
+            width:40px;height:40px;border-radius:12px;
+            background:var(--primary-light);color:var(--primary);
+            display:flex;align-items:center;justify-content:center;font-size:18px;
+        }
+        .dash-two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+        .dash-panel{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;}
+        .dash-panel-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
+        .dash-panel-head span{font-size:13px;font-weight:700;color:var(--text-main);}
+        .dash-panel-link{font-size:11px;color:var(--primary);cursor:pointer;font-weight:600;}
+        .dash-panel-link:hover{text-decoration:underline;}
+        .bar-wrap{padding:12px 16px;}
+        .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:11px;}
+        .bar-label{width:80px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .bar-track{flex:1;height:6px;background:var(--bg);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
+        .bar-fill{height:100%;border-radius:3px;background:var(--primary);}
+        .bar-val{width:28px;text-align:right;color:var(--text-main);font-weight:700;}
+
+        /* ── PAGE WRAP (login) ── */
         .page-wrap{max-width:800px;margin:0 auto;padding:16px;}
 
         /* ── LOGIN ── */
@@ -110,7 +238,7 @@
         .tab-btn:hover{background:rgba(255,255,255,0.5);color:var(--text-main);}
         .tab-btn.active{background:var(--surface);color:var(--primary);box-shadow:var(--shadow-sm);}
 
-        /* ── STATS GRID ── */
+        /* ── STATS GRID (existing) ── */
         .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
         .stat-card{background:var(--surface);padding:16px;border-radius:18px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative;overflow:hidden;transition:var(--trans);}
         .stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
@@ -266,38 +394,30 @@
         @keyframes pulse{0%{opacity:0.6}50%{opacity:1}100%{opacity:0.6}}
 
         /* ── RESPONSIVE ── */
+        @media(max-width:768px){
+            .sidebar{transform:translateX(-100%);}
+            .sidebar.open{transform:translateX(0);}
+            .mobile-overlay.open{display:block;}
+            .main-area{margin-left:0;}
+            .topbar-menu-btn{display:flex;}
+            .dash-stat-grid{grid-template-columns:repeat(2,1fr);}
+            .dash-two-col{grid-template-columns:1fr;}
+            .dash-quick-grid{grid-template-columns:repeat(2,1fr);}
+        }
         @media(max-width:480px){
             .m-row{grid-template-columns:1fr;}
             .editor-grid{grid-template-columns:1fr;}
             .editor-full{grid-column:1;}
+            .dash-stat-grid{grid-template-columns:repeat(2,1fr);}
         }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-    <div class="nav-inner">
-        <div class="nav-brand">
-            <div class="nav-logo">
-                <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-            </div>
-            <div class="nav-text">
-                <h1>গ্রন্থকানন</h1>
-                <p>Admin Panel</p>
-            </div>
-        </div>
-        <div class="nav-actions">
-            <button class="btn btn-ghost btn-sm hidden" id="logoutBtn" onclick="adminLogout()">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                লগআউট
-            </button>
-            <button class="btn btn-ghost btn-sm" onclick="toggleDark()" id="darkBtn" title="Dark Mode">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            </button>
-        </div>
-    </div>
-</nav>
+<body>
+
+<!-- MOBILE OVERLAY -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
 
 <!-- TOAST CONTAINER -->
 <div class="toast-container" id="toastContainer"></div>
@@ -370,208 +490,323 @@
     </div>
 </div>
 
-<div class="page-wrap">
-
-    <!-- LOGIN GATE -->
-    <div id="loginGate">
-        <div class="login-card">
-            <div class="login-icon">
-                <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            </div>
-            <h2 class="font-bold" style="margin-bottom:4px;font-size:18px;">Admin লগইন</h2>
-            <p class="text-sm text-muted" style="margin-bottom:24px;">শুধুমাত্র অনুমোদিত admin এর জন্য</p>
-            <p id="loginErr" class="text-xs" style="color:var(--danger);margin-bottom:12px;min-height:16px;"></p>
-            <div class="form-group">
-                <label class="form-label">ইমেইল</label>
-                <input class="form-input" id="adminEmail" type="email" placeholder="name@example.com">
-            </div>
-            <div class="form-group">
-                <label class="form-label">পাসওয়ার্ড</label>
-                <input class="form-input" id="adminPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
-            </div>
-            <button class="btn btn-primary w-full" onclick="adminLogin()">লগইন করুন →</button>
+<!-- LOGIN GATE -->
+<div id="loginGate" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg);">
+    <div class="login-card">
+        <div class="login-icon">
+            <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="hidden">
-
-        <!-- TABS -->
-        <div class="tabs-container">
-            <button class="tab-btn active" id="tabOrders" onclick="switchTab('orders',this)">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                অর্ডার
-            </button>
-            <button class="tab-btn" id="tabDaily" onclick="switchTab('daily',this)">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                দৈনিক
-            </button>
-            <button class="tab-btn" id="tabBooks" onclick="switchTab('books',this)">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                স্টক
-            </button>
-            <button class="tab-btn" id="tabEditor" onclick="switchTab('editor',this)">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                বই এডিট
-            </button>
-            <button class="tab-btn" id="tabTools" onclick="switchTab('tools',this)">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                টুলস
-            </button>
+        <h2 class="font-bold" style="margin-bottom:4px;font-size:18px;">Admin লগইন</h2>
+        <p class="text-sm text-muted" style="margin-bottom:24px;">শুধুমাত্র অনুমোদিত admin এর জন্য</p>
+        <p id="loginErr" class="text-xs" style="color:var(--danger);margin-bottom:12px;min-height:16px;"></p>
+        <div class="form-group">
+            <label class="form-label">ইমেইল</label>
+            <input class="form-input" id="adminEmail" type="email" placeholder="name@example.com">
         </div>
-
-        <!-- ═══════════════ ORDERS TAB ═══════════════ -->
-        <div id="tabPanelOrders">
-            <div class="grid-2">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg class="icon icon-primary" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                    </div>
-                    <div class="stat-val" id="statTotal">0</div>
-                    <div class="stat-label">মোট অর্ডার</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="color:#C2410C;background:#FFF7ED;">
-                        <svg class="icon" style="stroke:#C2410C" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    </div>
-                    <div class="stat-val" id="statPending" style="color:#C2410C;">0</div>
-                    <div class="stat-label">পেন্ডিং</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="color:#1D4ED8;background:#EFF6FF;">
-                        <svg class="icon" style="stroke:#1D4ED8" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                    </div>
-                    <div class="stat-val" id="statShipped" style="color:#1D4ED8;">0</div>
-                    <div class="stat-label">শিপড</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="color:#047857;background:#ECFDF5;">
-                        <svg class="icon" style="stroke:#047857" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    </div>
-                    <div class="stat-val" id="statDelivered" style="color:#047857;">0</div>
-                    <div class="stat-label">ডেলিভারড</div>
-                </div>
-            </div>
-
-            <div class="filter-scroll">
-                <button class="chip active" onclick="filterOrders('all',this)">সব</button>
-                <button class="chip" onclick="filterOrders('pending',this)">🕐 পেন্ডিং</button>
-                <button class="chip" onclick="filterOrders('confirmed',this)">✅ কনফার্ম</button>
-                <button class="chip" onclick="filterOrders('processing',this)">📦 প্যাকেজিং</button>
-                <button class="chip" onclick="filterOrders('shipped',this)">🚚 শিপড</button>
-                <button class="chip" onclick="filterOrders('delivered',this)">🎉 ডেলিভারড</button>
-            </div>
-            <div class="sec-title" id="ordersSecTitle">সব অর্ডার</div>
-            <div id="orderList">
-                <div class="card skeleton anim-pulse" style="height:140px;"></div>
-                <div class="card skeleton anim-pulse" style="height:140px;"></div>
-            </div>
+        <div class="form-group">
+            <label class="form-label">পাসওয়ার্ড</label>
+            <input class="form-input" id="adminPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
         </div>
-
-        <!-- ═══════════════ DAILY ORDERS TAB ═══════════════ -->
-        <div id="tabPanelDaily" style="display:none;">
-            <div class="sec-title">📅 প্রতিদিনের অর্ডার</div>
-            <div id="dailyOrderList">
-                <div class="card skeleton anim-pulse" style="height:120px;"></div>
-            </div>
-        </div>
-
-        <!-- ═══════════════ BOOKS STOCK TAB ═══════════════ -->
-        <div id="tabPanelBooks" style="display:none;">
-            <div class="sec-title">বই স্টক ম্যানেজ</div>
-            <div id="bookManageWrap">
-                <div class="loading-spin">⏳ বই লোড হচ্ছে...</div>
-            </div>
-        </div>
-
-        <!-- ═══════════════ BOOK EDITOR TAB ═══════════════ -->
-        <div id="tabPanelEditor" style="display:none;">
-            <div class="sync-card">
-                <div class="sync-info">
-                    <h4>🔄 Firebase Sync</h4>
-                    <p>বই আপডেট করলে সরাসরি website-এ দেখাবে</p>
-                </div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <button class="sync-btn" id="syncAllBtn" onclick="syncAllBooksToFirebase()">
-                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    সব সেভ করুন
-                </button>
-                <button class="sync-btn" id="reloadBookJsBtn" onclick="reloadFromBookJs()" style="background:#0369a1;">
-                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white;fill:none;stroke-width:2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.5"></path></svg>
-                    book.js রিলোড
-                </button>
-                </div>
-            </div>
-
-            <!-- Stats Bar -->
-            <div class="be-stats">
-                <div class="be-stat" id="beStatTotal">📖 মোট: <span>0</span></div>
-                <div class="be-stat" id="beStatOk">✅ ছবি আছে: <span>0</span></div>
-                <div class="be-stat" id="beStatMiss">⚠️ ছবি নেই: <span>0</span></div>
-            </div>
-
-            <!-- Search + Filter -->
-            <div class="flex justify-between gap-2" style="margin-bottom:16px;flex-wrap:wrap;">
-                <input class="form-input" style="flex:1;min-width:200px;" id="beSearch" placeholder="🔍 নাম, লেখক বা প্রকাশনী..." oninput="beRenderList()">
-                <div class="flex gap-2">
-                    <button class="btn btn-sm btn-primary" id="beFAll" onclick="beSetFilter('all')">সব</button>
-                    <button class="btn btn-sm btn-ghost" id="beFLinked" onclick="beSetFilter('linked')">ছবি</button>
-                    <button class="btn btn-sm btn-ghost" id="beFMissing" onclick="beSetFilter('missing')">ছবি নেই</button>
-                </div>
-            </div>
-
-            <!-- Add New Book Toggle -->
-            <button class="btn btn-ghost w-full" style="margin-bottom:16px;border:1px dashed var(--border);" onclick="beToggleAddForm()" id="beAddToggle">
-                <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                নতুন বই যোগ করুন
-            </button>
-
-            <div id="beAddForm" style="display:none;margin-bottom:16px;background:var(--surface);border-radius:14px;border:1px solid var(--primary);padding:16px;">
-                <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;">নতুন বই যোগ করুন</div>
-                <div class="editor-grid">
-                    <div class="editor-full form-group"><label class="be-label">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="বইয়ের নাম"></div>
-                    <div class="form-group"><label class="be-label">লেখক</label><input class="form-input" id="fa_author" placeholder="লেখকের নাম"></div>
-                    <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="fa_price" type="number" placeholder="250"></div>
-                    <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
-                    <div class="form-group"><label class="be-label">প্রকাশনী</label><input class="form-input" id="fa_pub" placeholder="প্রকাশনীর নাম"></div>
-                    <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="fa_pages" placeholder="200 পৃষ্ঠা"></div>
-                    <div class="form-group"><label class="be-label">কভার</label><input class="form-input" id="fa_cover" placeholder="Paperback"></div>
-                    <div class="form-group"><label class="be-label">বিভাগ</label><input class="form-input" id="fa_cat" placeholder="ইসলামি বই"></div>
-                    <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="fa_subject" placeholder="ইসলামি বই"></div>
-                    <div class="form-group"><label class="be-label">ছবির লিংক</label><input class="form-input" id="fa_img" placeholder="https://..."></div>
-                    <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
-                </div>
-                <div class="flex gap-2">
-                    <button class="btn btn-primary" onclick="beAddBook()">✅ যোগ করুন ও Firebase-এ সেভ</button>
-                    <button class="btn btn-ghost" onclick="beToggleAddForm()">বাতিল</button>
-                </div>
-            </div>
-
-            <!-- Book List -->
-            <div id="beBookList"></div>
-        </div>
-
-        <!-- ═══════════════ TOOLS TAB ═══════════════ -->
-        <div id="tabPanelTools" style="display:none;">
-            <div class="sec-title">টুলস ও ইউটিলিটি</div>
-            <div class="tool-card">
-                <h3>🔄 Phone Index Migration</h3>
-                <p>পুরনো orders এর phoneIndex ঠিক করতে।</p>
-                <button class="migrate-btn" onclick="migratePhoneIndex()" id="migrateBtn">🔄 Phone Index ঠিক করুন</button>
-            </div>
-            <div class="tool-card">
-                <h3>📊 অর্ডার সংক্ষেপ</h3>
-                <div id="orderSummary" class="text-sm text-muted" style="line-height:2;">লোড হচ্ছে...</div>
-            </div>
-            <div class="tool-card">
-                <h3>📥 book.js ডাউনলোড</h3>
-                <p>বর্তমান বইয়ের লিস্ট book.js হিসেবে ডাউনলোড করুন।</p>
-                <button class="btn btn-primary w-full" onclick="downloadBookJs()">📥 book.js ডাউনলোড করুন</button>
-            </div>
-        </div>
-
+        <button class="btn btn-primary w-full" onclick="adminLogin()">লগইন করুন →</button>
     </div>
 </div>
+
+<!-- APP SHELL -->
+<div class="app-layout hidden" id="appShell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <div class="sidebar-logo-text">
+                <h2>গ্রন্থকানন</h2>
+                <span>Admin Panel</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main</div>
+            <button class="nav-item active" id="navDashboard" onclick="switchTab('dashboard',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Dashboard
+            </button>
+            <button class="nav-item" id="navOrders" onclick="switchTab('orders',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                অর্ডার
+                <span class="nav-badge" id="navPendingBadge" style="display:none">0</span>
+            </button>
+            <button class="nav-item" id="navDaily" onclick="switchTab('daily',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                দৈনিক
+            </button>
+            <button class="nav-item" id="navBooks" onclick="switchTab('books',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                স্টক
+            </button>
+            <button class="nav-item" id="navEditor" onclick="switchTab('editor',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                বই এডিট
+            </button>
+            <div class="nav-section-label" style="margin-top:8px;">Tools</div>
+            <button class="nav-item" id="navTools" onclick="switchTab('tools',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                টুলস
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-avatar">GA</div>
+            <div class="sidebar-user-info">
+                <strong>Admin</strong>
+                <small>গ্রন্থকানন</small>
+            </div>
+            <button class="sidebar-logout" onclick="adminLogout()" title="লগআউট">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <div class="main-area">
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+            <button class="topbar-menu-btn" id="menuBtn" onclick="toggleSidebar()">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+            <div class="topbar-title" id="topbarTitle">Dashboard</div>
+            <div class="topbar-actions">
+                <button class="topbar-icon-btn" onclick="toggleDark()" id="darkBtn" title="Dark Mode">
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+                <button class="topbar-new-btn" onclick="switchTab('editor',document.getElementById('navEditor'));beToggleAddForm()">
+                    + নতুন বই
+                </button>
+            </div>
+        </div>
+
+        <!-- PAGE CONTENT -->
+        <div class="page-content">
+
+            <!-- ═══ DASHBOARD TAB ═══ -->
+            <div id="tabPanelDashboard">
+                <div class="dash-stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg class="icon icon-primary" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                        </div>
+                        <div class="stat-val" id="statTotal">0</div>
+                        <div class="stat-label">মোট অর্ডার</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color:#C2410C;background:#FFF7ED;">
+                            <svg class="icon" style="stroke:#C2410C" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <div class="stat-val" id="statPending" style="color:#C2410C;">0</div>
+                        <div class="stat-label">পেন্ডিং</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color:#1D4ED8;background:#EFF6FF;">
+                            <svg class="icon" style="stroke:#1D4ED8" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        </div>
+                        <div class="stat-val" id="statShipped" style="color:#1D4ED8;">0</div>
+                        <div class="stat-label">শিপড</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color:#047857;background:#ECFDF5;">
+                            <svg class="icon" style="stroke:#047857" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <div class="stat-val" id="statDelivered" style="color:#047857;">0</div>
+                        <div class="stat-label">ডেলিভারড</div>
+                    </div>
+                </div>
+
+                <div class="sec-title" style="margin-bottom:12px;">দ্রুত অ্যাকশন</div>
+                <div class="dash-quick-grid" style="margin-bottom:20px;">
+                    <button class="quick-action-btn" onclick="switchTab('orders',document.getElementById('navOrders'))">
+                        <div class="quick-action-icon">📦</div>অর্ডার দেখুন
+                    </button>
+                    <button class="quick-action-btn" onclick="switchTab('daily',document.getElementById('navDaily'))">
+                        <div class="quick-action-icon">📅</div>দৈনিক রিপোর্ট
+                    </button>
+                    <button class="quick-action-btn" onclick="switchTab('books',document.getElementById('navBooks'))">
+                        <div class="quick-action-icon">📋</div>স্টক আপডেট
+                    </button>
+                    <button class="quick-action-btn" onclick="switchTab('editor',document.getElementById('navEditor'))">
+                        <div class="quick-action-icon">✏️</div>বই এডিট
+                    </button>
+                </div>
+
+                <div class="dash-two-col">
+                    <div class="dash-panel">
+                        <div class="dash-panel-head">
+                            <span>সাম্প্রতিক অর্ডার</span>
+                            <span class="dash-panel-link" onclick="switchTab('orders',document.getElementById('navOrders'))">সব দেখুন →</span>
+                        </div>
+                        <div id="dashRecentOrders" style="padding:10px 14px;">
+                            <div class="loading-spin" style="padding:20px 0;">⏳ লোড হচ্ছে...</div>
+                        </div>
+                    </div>
+                    <div class="dash-panel">
+                        <div class="dash-panel-head"><span>ক্যাটাগরি অনুযায়ী বই</span></div>
+                        <div class="bar-wrap" id="dashCatBars">
+                            <div class="loading-spin" style="padding:20px 0;">⏳ লোড হচ্ছে...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ ORDERS TAB ═══ -->
+            <div id="tabPanelOrders" style="display:none;">
+                <div class="grid-2">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg class="icon icon-primary" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                        </div>
+                        <div class="stat-val" id="statTotalOrders">0</div>
+                        <div class="stat-label">মোট অর্ডার</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color:#C2410C;background:#FFF7ED;">
+                            <svg class="icon" style="stroke:#C2410C" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <div class="stat-val" id="statPendingOrders" style="color:#C2410C;">0</div>
+                        <div class="stat-label">পেন্ডিং</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color:#1D4ED8;background:#EFF6FF;">
+                            <svg class="icon" style="stroke:#1D4ED8" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        </div>
+                        <div class="stat-val" id="statShippedOrders" style="color:#1D4ED8;">0</div>
+                        <div class="stat-label">শিপড</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color:#047857;background:#ECFDF5;">
+                            <svg class="icon" style="stroke:#047857" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <div class="stat-val" id="statDeliveredOrders" style="color:#047857;">0</div>
+                        <div class="stat-label">ডেলিভারড</div>
+                    </div>
+                </div>
+
+                <div class="filter-scroll">
+                    <button class="chip active" onclick="filterOrders('all',this)">সব</button>
+                    <button class="chip" onclick="filterOrders('pending',this)">🕐 পেন্ডিং</button>
+                    <button class="chip" onclick="filterOrders('confirmed',this)">✅ কনফার্ম</button>
+                    <button class="chip" onclick="filterOrders('processing',this)">📦 প্যাকেজিং</button>
+                    <button class="chip" onclick="filterOrders('shipped',this)">🚚 শিপড</button>
+                    <button class="chip" onclick="filterOrders('delivered',this)">🎉 ডেলিভারড</button>
+                </div>
+                <div class="sec-title" id="ordersSecTitle">সব অর্ডার</div>
+                <div id="orderList">
+                    <div class="card skeleton anim-pulse" style="height:140px;"></div>
+                    <div class="card skeleton anim-pulse" style="height:140px;"></div>
+                </div>
+            </div>
+
+            <!-- ═══ DAILY ORDERS TAB ═══ -->
+            <div id="tabPanelDaily" style="display:none;">
+                <div class="sec-title">📅 প্রতিদিনের অর্ডার</div>
+                <div id="dailyOrderList">
+                    <div class="card skeleton anim-pulse" style="height:120px;"></div>
+                </div>
+            </div>
+
+            <!-- ═══ BOOKS STOCK TAB ═══ -->
+            <div id="tabPanelBooks" style="display:none;">
+                <div class="sec-title">বই স্টক ম্যানেজ</div>
+                <div id="bookManageWrap">
+                    <div class="loading-spin">⏳ বই লোড হচ্ছে...</div>
+                </div>
+            </div>
+
+            <!-- ═══ BOOK EDITOR TAB ═══ -->
+            <div id="tabPanelEditor" style="display:none;">
+                <div class="sync-card">
+                    <div class="sync-info">
+                        <h4>🔄 Firebase Sync</h4>
+                        <p>বই আপডেট করলে সরাসরি website-এ দেখাবে</p>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="sync-btn" id="syncAllBtn" onclick="syncAllBooksToFirebase()">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        সব সেভ করুন
+                    </button>
+                    <button class="sync-btn" id="reloadBookJsBtn" onclick="reloadFromBookJs()" style="background:rgba(255,255,255,0.15);">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white;fill:none;stroke-width:2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.5"></path></svg>
+                        book.js রিলোড
+                    </button>
+                    </div>
+                </div>
+
+                <div class="be-stats">
+                    <div class="be-stat" id="beStatTotal">📖 মোট: <span>0</span></div>
+                    <div class="be-stat" id="beStatOk">✅ ছবি আছে: <span>0</span></div>
+                    <div class="be-stat" id="beStatMiss">⚠️ ছবি নেই: <span>0</span></div>
+                </div>
+
+                <div class="flex justify-between gap-2" style="margin-bottom:16px;flex-wrap:wrap;">
+                    <input class="form-input" style="flex:1;min-width:200px;" id="beSearch" placeholder="🔍 নাম, লেখক বা প্রকাশনী..." oninput="beRenderList()">
+                    <div class="flex gap-2">
+                        <button class="btn btn-sm btn-primary" id="beFAll" onclick="beSetFilter('all')">সব</button>
+                        <button class="btn btn-sm btn-ghost" id="beFLinked" onclick="beSetFilter('linked')">ছবি</button>
+                        <button class="btn btn-sm btn-ghost" id="beFMissing" onclick="beSetFilter('missing')">ছবি নেই</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-ghost w-full" style="margin-bottom:16px;border:1px dashed var(--border);" onclick="beToggleAddForm()" id="beAddToggle">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    নতুন বই যোগ করুন
+                </button>
+
+                <div id="beAddForm" style="display:none;margin-bottom:16px;background:var(--surface);border-radius:14px;border:1px solid var(--primary);padding:16px;">
+                    <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;">নতুন বই যোগ করুন</div>
+                    <div class="editor-grid">
+                        <div class="editor-full form-group"><label class="be-label">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="বইয়ের নাম"></div>
+                        <div class="form-group"><label class="be-label">লেখক</label><input class="form-input" id="fa_author" placeholder="লেখকের নাম"></div>
+                        <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="fa_price" type="number" placeholder="250"></div>
+                        <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
+                        <div class="form-group"><label class="be-label">প্রকাশনী</label><input class="form-input" id="fa_pub" placeholder="প্রকাশনীর নাম"></div>
+                        <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="fa_pages" placeholder="200 পৃষ্ঠা"></div>
+                        <div class="form-group"><label class="be-label">কভার</label><input class="form-input" id="fa_cover" placeholder="Paperback"></div>
+                        <div class="form-group"><label class="be-label">বিভাগ</label><input class="form-input" id="fa_cat" placeholder="ইসলামি বই"></div>
+                        <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="fa_subject" placeholder="ইসলামি বই"></div>
+                        <div class="form-group"><label class="be-label">ছবির লিংক</label><input class="form-input" id="fa_img" placeholder="https://..."></div>
+                        <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn btn-primary" onclick="beAddBook()">✅ যোগ করুন ও Firebase-এ সেভ</button>
+                        <button class="btn btn-ghost" onclick="beToggleAddForm()">বাতিল</button>
+                    </div>
+                </div>
+
+                <div id="beBookList"></div>
+            </div>
+
+            <!-- ═══ TOOLS TAB ═══ -->
+            <div id="tabPanelTools" style="display:none;">
+                <div class="sec-title">টুলস ও ইউটিলিটি</div>
+                <div class="tool-card">
+                    <h3>🔄 Phone Index Migration</h3>
+                    <p>পুরনো orders এর phoneIndex ঠিক করতে।</p>
+                    <button class="migrate-btn" onclick="migratePhoneIndex()" id="migrateBtn">🔄 Phone Index ঠিক করুন</button>
+                </div>
+                <div class="tool-card">
+                    <h3>📊 অর্ডার সংক্ষেপ</h3>
+                    <div id="orderSummary" class="text-sm text-muted" style="line-height:2;">লোড হচ্ছে...</div>
+                </div>
+                <div class="tool-card">
+                    <h3>📥 book.js ডাউনলোড</h3>
+                    <p>বর্তমান বইয়ের লিস্ট book.js হিসেবে ডাউনলোড করুন।</p>
+                    <button class="btn btn-primary w-full" onclick="downloadBookJs()">📥 book.js ডাউনলোড করুন</button>
+                </div>
+            </div>
+
+        </div><!-- /page-content -->
+    </div><!-- /main-area -->
+</div><!-- /appShell -->
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -635,8 +870,7 @@ async function adminLogin(){
 
 function showDashboard(){
     document.getElementById('loginGate').style.display='none';
-    document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('logoutBtn').classList.remove('hidden');
+    document.getElementById('appShell').classList.remove('hidden');
     setTimeout(()=>{
         loadOrders();
         loadBooksFromFirebase();
@@ -647,15 +881,29 @@ function showDashboard(){
    TABS
 ══════════════════════════════════════════════ */
 function switchTab(tab, btnEl){
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    btnEl.classList.add('active');
-    ['Orders','Daily','Books','Editor','Tools'].forEach(t=>{
-        document.getElementById('tabPanel'+t).style.display=tab===t.toLowerCase()?'block':'none';
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    if(btnEl) btnEl.classList.add('active');
+    const titles={dashboard:'Dashboard',orders:'অর্ডার',daily:'দৈনিক অর্ডার',books:'স্টক ম্যানেজ',editor:'বই এডিট',tools:'টুলস'};
+    document.getElementById('topbarTitle').innerText=titles[tab]||tab;
+    ['Dashboard','Orders','Daily','Books','Editor','Tools'].forEach(t=>{
+        const el=document.getElementById('tabPanel'+t);
+        if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
     if(tab==='tools') renderOrderSummary();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
+    if(tab==='dashboard') renderDashboard();
+    closeSidebar();
+}
+
+function toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('mobileOverlay').classList.toggle('open');
+}
+function closeSidebar(){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('mobileOverlay').classList.remove('open');
 }
 
 /* ══════════════════════════════════════════════
