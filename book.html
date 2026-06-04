@@ -43,7 +43,13 @@
         .share-opt{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:0;cursor:pointer;font-size:13px;font-weight:600;transition:0.15s;}
         .share-opt:hover{background:var(--bg);}
 
+        /* RIBBON CORNER DISCOUNT BADGE */
+        .disc-ribbon{position:absolute;top:0;left:0;width:90px;height:90px;overflow:hidden;pointer-events:none;z-index:10;}
+        .disc-ribbon span{position:absolute;display:block;width:130px;padding:7px 0;background:#e74c3c;color:#fff;font-size:12px;font-weight:800;text-align:center;top:20px;left:-30px;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(0,0,0,0.25);letter-spacing:0.5px;line-height:1.3;}
+        .disc-ribbon span small{display:block;font-size:9px;font-weight:600;opacity:0.9;}
+
         /* VIEW COUNTER BADGE */
+        .offer-tag{display:inline-flex;align-items:center;gap:5px;background:#e74c3c;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:0;margin-bottom:8px;}
         .view-badge{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.65);color:#fff;font-size:11px;font-weight:600;padding:3px 10px;border-radius:0;white-space:nowrap;}
 
         /* BOOK INFO CARD */
@@ -264,6 +270,7 @@
             <div class="share-opt" onclick="shareWA()">📲 <span>WhatsApp শেয়ার</span></div>
             <div class="share-opt" onclick="copyLink()">🔗 <span id="copyTxt">লিঙ্ক কপি করুন</span></div>
         </div>
+        <div id="discRibbon" class="disc-ribbon" style="display:none;"><span id="discRibbonText">30%<small>ছাড়</small></span></div>
         <div class="book-img-wrap" onclick="openImgModal()">
             <div class="img-skel" id="imgSkel"></div>
             <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
@@ -279,10 +286,14 @@
         <div class="book-author" id="bookAuthor"></div>
         <div class="badges" id="bookBadges"></div>
         <div class="price-section">
-            <div class="price-sell" id="bookPrice"></div>
+            <div>
+                <div id="offerTagWrap" style="display:none;margin-bottom:4px;"><span class="offer-tag">🔥 অফার চলছে</span></div>
+                <div class="price-sell" id="bookPrice"></div>
+            </div>
             <div class="price-orig" id="bookOrigPrice"></div>
             <div class="price-disc" id="bookDisc"></div>
         </div>
+        <div id="savingsLabel" style="display:none;font-size:12px;color:#059669;font-weight:600;margin-bottom:10px;">✅ <span id="savingsText"></span></div>
         <div class="qty-row">
             <span class="qty-label">পরিমাণ:</span>
             <div class="qty-wrap">
@@ -351,21 +362,6 @@
         <div style="font-size:12px;color:var(--text2);margin-top:8px;" id="videoCaption"></div>
     </div>
 
-    <!-- ══ AUTHOR PROFILE ══ -->
-    <div class="author-section" id="authorSection">
-        <h3>✍️ লেখক পরিচিতি</h3>
-        <div class="author-inner">
-            <div class="author-av" id="authorAv">?</div>
-            <div style="flex:1;">
-                <div class="author-name" id="authorName">—</div>
-                <div class="author-role" id="authorRole">লেখক</div>
-                <div class="author-stats" id="authorStats"></div>
-            </div>
-        </div>
-        <div class="author-bio" id="authorBio"></div>
-        <span class="author-books-btn" id="authorBooksBtn" onclick="gotoAuthorBooks()">এই লেখকের সব বই দেখুন →</span>
-    </div>
-
     <!-- ══ AI SUGGEST ══ -->
     <div class="ai-suggest-section">
         <h3>🤖 AI বই সুপারিশ</h3>
@@ -374,27 +370,7 @@
         <div id="aiResultArea"><div class="ai-loading">বিষয় বেছে নিন...</div></div>
     </div>
 
-    <!-- ══ READING LEADERBOARD ══ -->
-    <div class="lb-section">
-        <h3>🏆 এই মাসের সেরা পাঠক</h3>
-        <div class="lb-timer">
-            <span>মাস শেষ হতে বাকি</span>
-            <div class="lb-timer-nums">
-                <span class="lb-t" id="lbDays">—</span>দিন
-                <span class="lb-t" id="lbHours">—</span>ঘণ্টা
-            </div>
-        </div>
-        <div id="lbList"><div style="text-align:center;padding:14px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div></div>
-        <div class="lb-my-progress" id="myProgress" style="display:none;">
-            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;">
-                <span>আপনার অবস্থান: <span id="myRank" style="color:#059669;">—</span></span>
-                <span><span id="myBooks">০</span>টি বই</span>
-            </div>
-            <div class="prog-bar-outer"><div class="prog-bar-inner" id="myProgBar" style="width:0%"></div></div>
-            <div style="font-size:11px;color:var(--text2);" id="myProgMsg"></div>
-        </div>
-        <button class="lb-join-btn" onclick="window.location.href='leaderboard.html'">সম্পূর্ণ র‍্যাংকিং দেখুন →</button>
-    </div>
+
 
     <!-- RELATED -->
     <div class="related-card" id="relatedSection">
@@ -635,6 +611,20 @@ function loadBook(){
     const discEl=document.getElementById('bookDisc');
     if(pct>0)discEl.innerText=pct+'% ছাড়';else discEl.style.display='none';
 
+    /* Ribbon discount badge on image */
+    if(pct>0){
+        document.getElementById('discRibbonText').innerHTML=pct+'%<small>ছাড়</small>';
+        document.getElementById('discRibbon').style.display='block';
+    }
+
+    /* Offer tag + savings (no timer) */
+    if(pct>0){
+        document.getElementById('offerTagWrap').style.display='block';
+        const saved=b.original_price-b.price;
+        document.getElementById('savingsLabel').style.display='block';
+        document.getElementById('savingsText').innerText=pct+'% ডিসকাউন্টে ৳'+saved+' সাশ্রয়';
+    }
+
     const badges=document.getElementById('bookBadges');
     function doStock(){
         if(typeof db==='undefined'||!db){setTimeout(doStock,200);return;}
@@ -661,10 +651,8 @@ function loadBook(){
     loadRecent();updateCartCount();
 
     /* load new features */
-    loadAuthorProfile(b);
     loadVideoPreview(b);
     loadAISuggest(b);
-    loadLeaderboard();
 }
 function goToCart(){localStorage.setItem('gronthokanon_opencart','1');window.location.href='index.html';}
 function goBack(){window.history.back();}
@@ -677,7 +665,11 @@ function incrementView(bookId){
         if(typeof db==='undefined'||!db){setTimeout(doIt,300);return;}
         db.ref('views/'+bookId).transaction(v=>(v||0)+1).then(res=>{
             const v=res.snapshot.val()||0;
-            document.getElementById('viewBadge').innerText='👁 '+v+' বার দেখা হয়েছে';
+            if(v>1){
+                document.getElementById('viewBadge').innerText='👁 '+v+' বার দেখা হয়েছে';
+            } else {
+                document.getElementById('viewBadge').style.display='none';
+            }
         });
     }
     doIt();
@@ -911,18 +903,6 @@ function loadLeaderboard(){
     }
     doLb();
 }
-
-/* LEADERBOARD TIMER */
-function updateLbTimer(){
-    const now=new Date();
-    const end=new Date(now.getFullYear(),now.getMonth()+1,1);
-    const diff=end-now;
-    if(diff<0)return;
-    document.getElementById('lbDays').innerText=toBN(Math.floor(diff/86400000));
-    document.getElementById('lbHours').innerText=toBN(Math.floor((diff%86400000)/3600000));
-}
-updateLbTimer();
-setInterval(updateLbTimer,60000);
 
 /* INIT */
 window.onload=function(){
