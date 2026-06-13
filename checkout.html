@@ -145,7 +145,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 .pay-opt{display:flex;align-items:center;gap:12px;padding:13px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.2s;position:relative;background:var(--bg-card);}
 .pay-opt:hover{border-color:var(--primary);background:var(--primary-xlight);}
 .pay-opt.selected{border-color:var(--primary);background:var(--primary-xlight);}
-.pay-opt.selected::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.pay-opt.selected::after{content:'<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
 .pay-opt.disabled{opacity:.45;cursor:not-allowed;}
 .pay-opt.disabled:hover{border-color:var(--border);background:var(--bg-card);}
 .pay-opt input[type="radio"]{display:none;}
@@ -221,6 +221,8 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
   .nav-brand{font-size:15px;}
   .confirm-btn{font-size:15px;padding:14px;}
 }
+
+.eico { display:inline-block; width:1em; height:1em; vertical-align:-0.15em; flex-shrink:0; }
 </style>
 </head>
 <body>
@@ -230,7 +232,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
   <div class="nav-container">
     <div class="nav-top">
       <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon">📚</div>
+        <div class="nav-logo-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg></div>
         <div>
           <div class="nav-brand bng">গ্রন্থকানন</div>
           <div class="nav-brand-sub bng">Gronthokanon Bookshop</div>
@@ -242,10 +244,10 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
       </div>
       <div class="nav-icons">
         <a href="index.html" class="ni" title="পেছনে যান">‹</a>
-        <button class="ni" id="darkBtn" onclick="toggleDark()" title="ডার্ক মোড">🌙</button>
-        <a href="index.html" class="ni">🛒<div class="badge" id="cartBadge">0</div></a>
+        <button class="ni" id="darkBtn" onclick="toggleDark()" title="ডার্ক মোড"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+        <a href="index.html" class="ni"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><div class="badge" id="cartBadge">0</div></a>
       </div>
-      <button class="hamburger" onclick="toggleMenu()">☰</button>
+      <button class="hamburger" onclick="toggleMenu()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
     </div>
   </div>
 </nav>
@@ -253,7 +255,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 <!-- PROGRESS -->
 <div class="progress-wrap">
   <div class="progress-steps">
-    <div class="p-step"><div class="p-circle done">✓</div><div class="p-label bng">কার্ট</div></div>
+    <div class="p-step"><div class="p-circle done"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div><div class="p-label bng">কার্ট</div></div>
     <div class="p-line done"></div>
     <div class="p-step"><div class="p-circle active">২</div><div class="p-label active bng">শিপিং</div></div>
     <div class="p-line"></div>
@@ -265,14 +267,14 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 
   <!-- TRUST BAR -->
   <div class="trust-bar">
-    <div class="trust-item"><div class="trust-icon">🔒</div><div class="trust-label bng">নিরাপদ<br>পেমেন্ট</div></div>
-    <div class="trust-item"><div class="trust-icon">🚚</div><div class="trust-label bng">দ্রুত<br>ডেলিভারি</div></div>
-    <div class="trust-item"><div class="trust-icon">✅</div><div class="trust-label bng">ক্যাশ অন<br>ডেলিভারি</div></div>
-    <div class="trust-item"><div class="trust-icon">📞</div><div class="trust-label bng">কাস্টমার<br>সাপোর্ট</div></div>
+    <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="trust-label bng">নিরাপদ<br>পেমেন্ট</div></div>
+    <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="trust-label bng">দ্রুত<br>ডেলিভারি</div></div>
+    <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 13l3.5 3.5L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="trust-label bng">ক্যাশ অন<br>ডেলিভারি</div></div>
+    <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="trust-label bng">কাস্টমার<br>সাপোর্ট</div></div>
   </div>
 
   <div class="page-title-wrap">
-    <h2 class="page-title bng">🛒 চেকআউট</h2>
+    <h2 class="page-title bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> চেকআউট</h2>
     <p class="page-sub bng">অর্ডার সম্পন্ন করতে নিচের তথ্য পূরণ করুন</p>
   </div>
 
@@ -291,17 +293,17 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
           <div class="two-col">
             <div class="field">
               <label class="bng">নাম <span class="req">*</span></label>
-              <div class="input-wrap"><span class="input-icon">👤</span><input type="text" id="custName" class="bng" placeholder="আপনার নাম"></div>
+              <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" id="custName" class="bng" placeholder="আপনার নাম"></div>
             </div>
             <div class="field">
               <label class="bng">মোবাইল নম্বর <span class="req">*</span></label>
-              <div class="input-wrap"><span class="input-icon">📱</span><input type="tel" id="custPhone" class="bng" placeholder="০১XXXXXXXXX" maxlength="11"></div>
+              <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span><input type="tel" id="custPhone" class="bng" placeholder="০১XXXXXXXXX" maxlength="11"></div>
             </div>
           </div>
           <div class="two-col">
             <div class="field">
               <label class="bng">বিভাগ <span class="req">*</span></label>
-              <div class="input-wrap"><span class="input-icon">🗺️</span>
+              <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1,6 1,22 8,18 16,22 23,18 23,2 16,6 8,2"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>️</span>
                 <select id="division" class="bng" onchange="updateDistricts()">
                   <option value="">বিভাগ বেছে নিন</option>
                   <option>ঢাকা</option><option>চট্টগ্রাম</option><option>রাজশাহী</option>
@@ -312,7 +314,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
             </div>
             <div class="field">
               <label class="bng">জেলা <span class="req">*</span></label>
-              <div class="input-wrap"><span class="input-icon">📍</span>
+              <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></span>
                 <select id="district" class="bng" onchange="updateThanas()">
                   <option value="">জেলা বেছে নিন</option>
                 </select>
@@ -321,7 +323,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
           </div>
           <div class="field">
             <label class="bng">থানা / উপজেলা <span class="req">*</span></label>
-            <div class="input-wrap"><span class="input-icon">🏘️</span>
+            <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l4-4 4 4v10H3z"/><path d="M13 7l4-4 4 4v12h-8z"/><path d="M7 13H5v6h2z"/></svg>️</span>
               <select id="thana" class="bng"><option value="">থানা বেছে নিন</option></select>
             </div>
           </div>
@@ -381,7 +383,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
           <div class="pay-grid">
             <div class="pay-opt selected" onclick="selectPay(this,'cod')">
               <input type="radio" name="payment" value="Cash on Delivery" checked>
-              <div class="pay-logo cod">💵</div>
+              <div class="pay-logo cod"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M17 12h.01M7 12h.01"/></svg></div>
               <div><div class="pay-label bng">ক্যাশ অন ডেলিভারি</div><div class="pay-sub bng">বই পাওয়ার পর টাকা দিন</div></div>
             </div>
             <div class="pay-opt" onclick="selectPay(this,'bkash')">
@@ -404,14 +406,14 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
             </div>
             <div class="bkash-num" onclick="copyBkash()">
               <span id="bkashNumDisplay">01408786396</span>
-              <span class="copy-hint">👆 ট্যাপ করে কপি করুন</span>
+              <span class="copy-hint"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v10M8 6l4-4 4 4"/><rect x="6" y="12" width="12" height="10" rx="2"/></svg> ট্যাপ করে কপি করুন</span>
             </div>
             <input type="text" id="transactionId" class="bng" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
           </div>
         </div>
       </div>
 
-      <button class="confirm-btn bng" id="confirmBtn" onclick="confirmOrder()">✅ অর্ডার নিশ্চিত করুন</button>
+      <button class="confirm-btn bng" id="confirmBtn" onclick="confirmOrder()"><svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 13l3.5 3.5L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> অর্ডার নিশ্চিত করুন</button>
     </div>
 
   </div>
@@ -420,13 +422,13 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 <!-- SUCCESS MODAL -->
 <div class="success-modal" id="successModal">
   <div class="success-inner">
-    <div class="success-anim">✓</div>
+    <div class="success-anim"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
     <h2 class="bng">অর্ডার নিশ্চিত হয়েছে!</h2>
     <p class="success-sub">ORDER CONFIRMED</p>
     <div class="success-info bng" id="successInfo"></div>
-    <p class="success-note bng">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! 📚</p>
-    <button onclick="downloadInvoice()" style="width:100%;padding:13px;background:#065f46;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;" class="bng">📄 Invoice PDF ডাউনলোড করুন</button>
-    <button class="home-btn bng" onclick="window.location.href='index.html'">চমৎকার! 🎉</button>
+    <p class="success-note bng">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg></p>
+    <button onclick="downloadInvoice()" style="width:100%;padding:13px;background:#065f46;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;" class="bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg> Invoice PDF ডাউনলোড করুন</button>
+    <button class="home-btn bng" onclick="window.location.href='index.html'">চমৎকার! <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5.8 11.3L2 22l10.7-3.79"/><path d="M4 3h.01M22 8h.01M15 2h.01M22 20h.01"/><path d="M15.5 6.5l-3 3.5-4 .5-1.5 4 4-.5 3-3.5"/><path d="M18 3s2 2 2 4-2 4-2 4M20 12s2-2 2-4-2-4-2-4"/></svg></button>
   </div>
 </div>
 
@@ -440,19 +442,19 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 <footer class="footer">
   <div class="footer-container">
     <div>
-      <h3 class="bng">📚 গ্রন্থকানন</h3>
+      <h3 class="bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg> গ্রন্থকানন</h3>
       <p class="bng">বাংলাদেশের বিশ্বস্ত অনলাইন বুকশপ।<br>সেরা বই, সেরা দামে।</p>
     </div>
     <div>
       <h3 class="bng">দ্রুত লিংক</h3>
       <ul class="footer-links">
-        <li><a href="index.html" class="bng">🏠 হোম পেজে ফিরে যান</a></li>
-        <li><a href="track.html" class="bng">📦 অর্ডার ট্র্যাক করুন</a></li>
+        <li><a href="index.html" class="bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg> হোম পেজে ফিরে যান</a></li>
+        <li><a href="track.html" class="bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21,8 21,21 3,21 3,8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg> অর্ডার ট্র্যাক করুন</a></li>
       </ul>
     </div>
     <div>
       <h3 class="bng">যোগাযোগ</h3>
-      <p class="bng">📞 01516595762<br>📧 gronthokanon4309@gmail.com<br>📍 Dhaka, Bangladesh</p>
+      <p class="bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01516595762<br><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> gronthokanon4309@gmail.com<br><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Dhaka, Bangladesh</p>
     </div>
   </div>
   <div class="footer-bottom bng">© ২০২৪ গ্রন্থকানন। সর্বস্বত্ব সংরক্ষিত।</div>
@@ -691,7 +693,7 @@ function updateTotal(){
       const desc = discPct + '% ডিসকাউন্ট পাচ্ছেন';
       ccb.style.display = 'block';
       ccb.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1px solid rgba(5,150,105,0.3);padding:8px 11px;">
-        <span style="font-size:16px;">🏷️</span>
+        <span style="font-size:16px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️</span>
         <div>
           <div style="font-size:12px;font-weight:800;color:#059669;letter-spacing:.5px;">${coupon} <span style="background:#059669;color:white;font-size:9px;padding:1px 7px;">সক্রিয়</span></div>
           <div style="font-size:10px;color:var(--text-muted);">${desc}</div>
@@ -849,12 +851,12 @@ async function confirmOrder(){
       <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">অর্ডার আইডি</div>
       <div style="font-size:16px;font-weight:800;color:#059669;letter-spacing:1px;">${orderId}</div>
     </div>
-    👤 <strong>${escapeHTML(name)}</strong><br>
-    📱 ${escapeHTML(phone)}<br>
+    <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <strong>${escapeHTML(name)}</strong><br>
+    <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> ${escapeHTML(phone)}<br>
     📍 ${escapeHTML(fullAddr)}<br>
     💳 ${escapeHTML(payMethod)}${txId ? ` (TxID: ${escapeHTML(txId)})` : ''}<br>
     📦 ${escapeHTML(bookList)}<br>
-    💰 <strong style="color:#059669;">৳${grand}</strong>
+    <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v2M12 16v2M9 9h4a2 2 0 0 1 0 4H9"/></svg> <strong style="color:#059669;">৳${grand}</strong>
     <br><br>
     <button onclick="window.location.href='track.html?id=${escapeHTML(orderId)}'"
       style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;">
@@ -902,7 +904,7 @@ function buildInvoiceHTML(o){
         <div>
           <div style="color:#fff;font-size:20px;font-weight:800;">Gronthokanon</div>
           <div style="color:#a7f3d0;font-size:11px;">www.gronthokanonshop.github.io</div>
-          <div style="color:#a7f3d0;font-size:11px;">📧 gronthokanon4309@gmail.com</div>
+          <div style="color:#a7f3d0;font-size:11px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> gronthokanon4309@gmail.com</div>
           <div style="color:#a7f3d0;font-size:11px;">01516595762 | Dhaka, Bangladesh</div>
         </div>
       </div>
@@ -954,7 +956,7 @@ function buildInvoiceHTML(o){
       </div>
       ${o.coupon?`<div style="flex:1;padding:14px 18px;">
         <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Coupon Applied</div>
-        <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;">🏷️ ${o.coupon}</div>
+        <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️ ${o.coupon}</div>
       </div>`:''}
     </div>    <div style="background:#065f46;padding:14px 28px;text-align:center;margin-top:8px;border-top:3px solid #059669;">
       <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! 📚</div>
@@ -966,7 +968,7 @@ function buildInvoiceHTML(o){
 async function downloadInvoice(){
   const o = lastOrderData;
   if(!o){ showToast('অর্ডার তথ্য পাওয়া যায়নি','#dc2626'); return; }
-  showToast('📄 PDF তৈরি হচ্ছে...','#059669');
+  showToast('<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg> PDF তৈরি হচ্ছে...','#059669');
   const wrap = document.createElement('div');
   wrap.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1;';
   wrap.innerHTML = buildInvoiceHTML(o);
