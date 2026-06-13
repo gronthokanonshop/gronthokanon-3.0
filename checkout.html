@@ -115,7 +115,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);background:v
 input::placeholder,textarea::placeholder{color:var(--text-muted);}
 textarea{height:76px;resize:none;}
 select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23059669' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;}
-@supports(-webkit-touch-callout:none){.input-wrap select{-webkit-appearance:menulist-button;padding-left:8px!important;background-image:none;}}
+@supports(-webkit-touch-callout:none){.input-wrap select{-webkit-appearance:none;-moz-appearance:none;appearance:none;}}
 @media(max-width:500px){.two-col{grid-template-columns:1fr;}}
 
 /* ── COUPON ── */
@@ -145,7 +145,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 .pay-opt{display:flex;align-items:center;gap:12px;padding:13px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.2s;position:relative;background:var(--bg-card);}
 .pay-opt:hover{border-color:var(--primary);background:var(--primary-xlight);}
 .pay-opt.selected{border-color:var(--primary);background:var(--primary-xlight);}
-.pay-opt.selected::after{content:'<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.pay-opt.selected::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:22px;text-align:center;}
 .pay-opt.disabled{opacity:.45;cursor:not-allowed;}
 .pay-opt.disabled:hover{border-color:var(--border);background:var(--bg-card);}
 .pay-opt input[type="radio"]{display:none;}
@@ -519,7 +519,7 @@ function toggleMenu(){
 ══════════════════════════════════ */
 function showToast(msg, color='#dc2626'){
   const t = document.getElementById('vToast');
-  t.textContent = msg;
+  t.innerHTML = msg;
   t.style.background = color;
   t.style.boxShadow = `0 6px 20px ${color}55`;
   t.classList.add('show');
@@ -737,7 +737,7 @@ function renderSummary(){
 /* ══════════════════════════════════
    COUPON
 ══════════════════════════════════ */
-const COUPONS = { 'FIRSTORDER': 10 };
+const COUPONS = { 'FIRSTORDER': 5 };
 function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('couponMsg');
@@ -968,7 +968,7 @@ function buildInvoiceHTML(o){
 async function downloadInvoice(){
   const o = lastOrderData;
   if(!o){ showToast('অর্ডার তথ্য পাওয়া যায়নি','#dc2626'); return; }
-  showToast('<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg> PDF তৈরি হচ্ছে...','#059669');
+  showToast('📄 PDF তৈরি হচ্ছে...','#059669');
   const wrap = document.createElement('div');
   wrap.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1;';
   wrap.innerHTML = buildInvoiceHTML(o);
