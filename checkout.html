@@ -692,12 +692,14 @@ function updateTotal(){
     if(coupon){
       const desc = discPct + '% ডিসকাউন্ট পাচ্ছেন';
       ccb.style.display = 'block';
-      ccb.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1px solid rgba(5,150,105,0.3);padding:8px 11px;">
+      ccb.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1px solid rgba(5,150,105,0.3);padding:8px 11px;border-radius:8px;">
         <span style="font-size:16px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️</span>
-        <div>
+        <div style="flex:1;">
           <div style="font-size:12px;font-weight:800;color:#059669;letter-spacing:.5px;">${coupon} <span style="background:#059669;color:white;font-size:9px;padding:1px 7px;">সক্রিয়</span></div>
           <div style="font-size:10px;color:var(--text-muted);">${desc}</div>
-        </div></div>`;
+        </div>
+        <button onclick="removeCoupon()" style="background:none;border:none;cursor:pointer;color:#dc2626;font-size:18px;line-height:1;padding:2px 4px;border-radius:4px;font-weight:700;" title="কুপন বাতিল করুন">✕</button>
+      </div>`;
     } else { ccb.style.display = 'none'; ccb.innerHTML = ''; }
   }
 }
@@ -752,6 +754,17 @@ function applyCoupon(){
   } else {
     msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='❌ কুপন কোডটি সঠিক নয়!';
   }
+}
+function removeCoupon(){
+  coupon = ''; discPct = 0;
+  localStorage.removeItem('gronthokanon_coupon');
+  localStorage.removeItem('gronthokanon_discount');
+  document.getElementById('couponInput').value = '';
+  const msgEl = document.getElementById('couponMsg');
+  msgEl.style.display='block'; msgEl.style.color='#dc2626';
+  msgEl.textContent='🗑️ কুপন বাতিল করা হয়েছে!';
+  setTimeout(()=>{ msgEl.style.display='none'; }, 2500);
+  updateTotal();
 }
 
 /* ══════════════════════════════════
@@ -875,16 +888,20 @@ let lastOrderData = null;
 function buildInvoiceHTML(o){
   const grouped = {};
   o.items.forEach(i => {
-    if(!grouped[i.name]) grouped[i.name] = {qty:0, price:i.price};
+    if(!grouped[i.name]) grouped[i.name] = {qty:0, price:i.price, img:i.img||''};
     grouped[i.name].qty++;
   });
   let subtotal = 0;
   const rows = Object.entries(grouped).map(([name,e],idx) => {
     const lt = e.price * e.qty; subtotal += lt;
+    const imgCell = e.img
+      ? `<img src="${e.img}" style="width:38px;height:52px;object-fit:cover;border-radius:5px;border:1px solid #d1fae5;display:block;" crossorigin="anonymous">`
+      : `<div style="width:38px;height:52px;background:#f0fdf4;border-radius:5px;border:1px solid #d1fae5;display:flex;align-items:center;justify-content:center;font-size:18px;">📚</div>`;
     return `<tr style="background:${idx%2===0?'#f0fdf4':'#fff'}">
-      <td style="padding:8px 10px;font-size:13px;">${name}</td>
-      <td style="padding:8px;text-align:center;font-size:13px;">${e.qty}</td>
-      <td style="padding:8px 10px;text-align:right;font-size:13px;">Tk ${lt}</td>
+      <td style="padding:8px 10px;vertical-align:middle;">${imgCell}</td>
+      <td style="padding:8px 10px;font-size:13px;vertical-align:middle;">${name}</td>
+      <td style="padding:8px;text-align:center;font-size:13px;vertical-align:middle;">${e.qty}</td>
+      <td style="padding:8px 10px;text-align:right;font-size:13px;vertical-align:middle;">Tk ${lt}</td>
     </tr>`;
   }).join('');
   const delivery = parseInt((o.delivery||'').replace(/[^\d]/g,''))||0;
@@ -928,6 +945,7 @@ function buildInvoiceHTML(o){
     <table style="width:calc(100% - 56px);margin:0 28px;border-collapse:collapse;">
       <thead>
         <tr style="background:#059669;">
+          <th style="padding:10px;text-align:left;color:#fff;font-size:12px;font-weight:700;width:54px;">ছবি</th>
           <th style="padding:10px;text-align:left;color:#fff;font-size:12px;font-weight:700;">বইয়ের নাম</th>
           <th style="padding:10px;text-align:center;color:#fff;font-size:12px;font-weight:700;">পরিমাণ</th>
           <th style="padding:10px;text-align:right;color:#fff;font-size:12px;font-weight:700;">মূল্য</th>
