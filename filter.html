@@ -162,7 +162,17 @@
         /* TOAST */
         .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#059669; color:#fff; padding:10px 22px; border-radius:0; font-size:13px; font-weight:600; z-index:9999; box-shadow:0 4px 14px rgba(5,150,105,0.35); animation:toastIn .3s ease; white-space:nowrap; }
         @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-    </style>
+
+        /* PAGINATION */
+        .pagination { display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; padding:18px 14px 90px; }
+        .page-btn { min-width:36px; height:36px; padding:0 10px; display:flex; align-items:center; justify-content:center; border:1.5px solid var(--border); background:var(--card); color:var(--text2); font-size:13px; font-weight:700; border-radius:0; cursor:pointer; font-family:'Hind Siliguri',sans-serif; transition:.2s; }
+        .page-btn:hover:not(.disabled):not(.active) { border-color:var(--green); color:var(--green); }
+        .page-btn.active { background:var(--green); color:#fff; border-color:var(--green); box-shadow:0 2px 10px rgba(5,150,105,0.3); }
+        .page-btn.disabled { opacity:.4; cursor:not-allowed; }
+        .page-dots { width:36px; height:36px; display:flex; align-items:center; justify-content:center; color:var(--text3); font-size:13px; font-weight:700; }
+    
+.eico { display:inline-block; width:1em; height:1em; vertical-align:-0.15em; flex-shrink:0; }
+</style>
 </head>
 <body>
 
@@ -171,7 +181,7 @@
         <button class="back-btn" onclick="goBack()">‹</button>
         <div class="page-title" id="pageTitle">বই খুঁজছি...</div>
         <div class="navbar-icons">
-            <button class="dark-pill" id="darkBtn" onclick="toggleDark()">🌙</button>
+            <button class="dark-pill" id="darkBtn" onclick="toggleDark()"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
             <div class="nav-cart-btn" onclick="goToCart()">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
                 <span class="nav-badge" id="cartCount">0</span>
@@ -180,7 +190,7 @@
     </div>
     <div class="nav-search">
         <div class="search-box">
-            <div class="search-icon-box">🔍</div>
+            <div class="search-icon-box"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
             <div class="search-vline"></div>
             <input type="text" class="search-input" id="filterSearch" oninput="searchWithin()" placeholder="এই তালিকায় খুঁজুন...">
             <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
@@ -207,10 +217,10 @@
 <div class="sort-row">
     <div class="sort-chips">
         <button class="sort-chip active" onclick="sortBooks('default',this)">ডিফল্ট</button>
-        <button class="sort-chip" onclick="sortBooks('price-low',this)">💰 কম দামে</button>
-        <button class="sort-chip" onclick="sortBooks('price-high',this)">💎 বেশি দামে</button>
-        <button class="sort-chip" onclick="sortBooks('discount',this)">🔥 বেশি ছাড়ে</button>
-        <button class="sort-chip" onclick="sortBooks('alpha',this)">🔤 নাম অনুযায়ী</button>
+        <button class="sort-chip" onclick="sortBooks('price-low',this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v2M12 16v2M9 9h4a2 2 0 0 1 0 4H9"/></svg> কম দামে</button>
+        <button class="sort-chip" onclick="sortBooks('price-high',this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,3 18,3 22,9 12,22 2,9"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="6" y1="3" x2="12" y2="22"/><line x1="18" y1="3" x2="12" y2="22"/></svg> বেশি দামে</button>
+        <button class="sort-chip" onclick="sortBooks('discount',this)"><svg class="eico" viewBox="0 0 24 24" fill="#f97316"><path d="M12 2c0 0-4 4-4 9a4 4 0 0 0 8 0c0-1.5-.5-3-1.5-4.5 0 0 .5 2-1 3C12 8 12 2 12 2z"/><path d="M8 14c0 2.2 1.8 4 4 4s4-1.8 4-4c0-1-.3-2-.8-2.8 0 0-.2 1.3-1 1.8C14 11 12 8 12 8s-4 3-4 6z"/></svg> বেশি ছাড়ে</button>
+        <button class="sort-chip" onclick="sortBooks('alpha',this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 4,4 20,4 20,7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> নাম অনুযায়ী</button>
     </div>
     <div class="rcount" id="countText">...</div>
 </div>
@@ -233,6 +243,7 @@
         <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
     </div>
     <div id="bookGrid" style="display:none;"></div>
+    <div class="pagination" id="paginationBar" style="display:none;"></div>
 </div>
 
 <div class="float-cart" onclick="goToCart()">
@@ -255,6 +266,8 @@ let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
 let filtered = [], currentSort = 'default';
 let filterTab = 'all', filterPill = '';
+let currentPage = 1;
+const PAGE_SIZE = 24;
 
 function updateCounts() {
     const c = cart.length;
@@ -302,17 +315,58 @@ function makeCard(b, delay) {
 
 function renderBooks(list) {
     const grid = document.getElementById('bookGrid');
+    const pagBar = document.getElementById('paginationBar');
     document.getElementById('countText').innerText = list.length + 'টি বই';
     if (!list.length) {
         grid.innerHTML = `<div class="empty-state">
-            <span class="empty-icon">📭</span>
+            <span class="empty-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/><path d="M8 17v1a4 4 0 0 0 8 0v-1"/></svg></span>
             <div class="empty-title">কোনো বই পাওয়া যায়নি</div>
             <div class="empty-sub">অন্য কিছু দিয়ে খোঁজার চেষ্টা করুন</div>
             <div class="empty-btn" onclick="clearSearch()">🔄 সব দেখুন</div>
         </div>`;
+        pagBar.style.display = 'none';
         return;
     }
-    grid.innerHTML = `<div class="grid">${list.map((b, i) => makeCard(b, i)).join('')}</div>`;
+
+    const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageList = list.slice(start, start + PAGE_SIZE);
+
+    grid.innerHTML = `<div class="grid">${pageList.map((b, i) => makeCard(b, i)).join('')}</div>`;
+    renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+    const pagBar = document.getElementById('paginationBar');
+    if (totalPages <= 1) { pagBar.style.display = 'none'; pagBar.innerHTML = ''; return; }
+    pagBar.style.display = 'flex';
+
+    let html = '';
+    html += `<button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">‹</button>`;
+
+    const pages = [];
+    pages.push(1);
+    for (let p = currentPage - 1; p <= currentPage + 1; p++) if (p > 1 && p < totalPages) pages.push(p);
+    if (totalPages > 1) pages.push(totalPages);
+    const uniq = [...new Set(pages)].sort((a, b) => a - b);
+
+    let prev = 0;
+    for (const p of uniq) {
+        if (p - prev > 1) html += `<div class="page-dots">…</div>`;
+        html += `<button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+        prev = p;
+    }
+
+    html += `<button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">›</button>`;
+    pagBar.innerHTML = html;
+}
+
+function goToPage(p) {
+    currentPage = p;
+    renderBooks(getList());
+    document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function getList() {
@@ -334,6 +388,7 @@ function setFilterTab(el, tab) {
     document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
     filterTab = tab; filterPill = '';
+    currentPage = 1;
     const sc = document.getElementById('subChips');
     if (tab === 'all') { sc.classList.remove('show'); sc.innerHTML = ''; }
     else {
@@ -352,6 +407,7 @@ function setPill(el, val) {
     document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
     el.classList.add('active');
     filterPill = val;
+    currentPage = 1;
     renderBooks(getList());
 }
 
@@ -359,17 +415,20 @@ function sortBooks(type, btn) {
     document.querySelectorAll('.sort-chip').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentSort = type;
+    currentPage = 1;
     renderBooks(getList());
 }
 
 function searchWithin() {
     document.getElementById('searchClear').classList.toggle('show', document.getElementById('filterSearch').value.length > 0);
+    currentPage = 1;
     renderBooks(getList());
 }
 
 function clearSearch() {
     document.getElementById('filterSearch').value = '';
     document.getElementById('searchClear').classList.remove('show');
+    currentPage = 1;
     renderBooks(getList());
 }
 
