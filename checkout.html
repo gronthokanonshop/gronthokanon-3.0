@@ -10,53 +10,79 @@
 <link rel="stylesheet" href="common.css">
 <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
-/* checkout uses common.css vars */
+:root{
+  --primary:#059669;
+  --primary-dark:#065f46;
+  --primary-light:#10b981;
+  --primary-xlight:#ecfdf5;
+  --accent:#059669;
+  --accent-light:#34d399;
+  --danger:#dc2626;
+  --bg-body:#f0fdf4;
+  --bg-card:#ffffff;
+  --text-main:#111827;
+  --text-muted:#6b7280;
+  --border:#1a1a1a22;
+  --border-dark:#1a1a1a33;
+  --radius:0px;
+  --shadow:0 2px 6px rgba(0,0,0,.06);
+  --shadow-lg:0 6px 16px rgba(0,0,0,.08);
+}
+[data-theme="dark"]{
+  --bg-body:#0a1f17;
+  --bg-card:#0f2a1e;
+  --text-main:#ecfdf5;
+  --text-muted:#6ee7b7;
+  --border:#ffffff22;
+  --border-dark:#ffffff33;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Hind Siliguri','Inter',sans-serif;background:var(--bg-body);color:var(--text-main);line-height:1.5;transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent;}
 .bng{font-family:'Hind Siliguri',sans-serif;}
 
 /* ── NAVBAR ── */
-.navbar{background:var(--nav-bg);border-bottom:1px solid var(--nav-border);position:sticky;top:0;z-index:100;}
+.navbar{background:var(--primary-dark);border-bottom:3px solid var(--primary-light);position:sticky;top:0;z-index:100;}
 .nav-container{max-width:1200px;margin:auto;padding:0 20px;}
 .nav-top{display:flex;align-items:center;height:68px;gap:16px;}
 .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;}
-.nav-brand{font-size:18px;font-weight:800;color:var(--nav-text);letter-spacing:.4px;}
-.nav-brand-sub{font-size:10px;color:var(--text2);font-weight:500;}
+.nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#10b981,#34d399);border-radius:0px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 8px rgba(0,0,0,.25);}
+.nav-brand{font-size:18px;font-weight:800;color:#d1fae5;letter-spacing:.4px;}
+.nav-brand-sub{font-size:10px;color:#6ee7b7;font-weight:500;}
 .nav-links{display:flex;gap:6px;align-items:center;}
-.nav-link{color:var(--text2);text-decoration:none;font-weight:600;font-size:14px;padding:7px 13px;border-radius:var(--radius-md);transition:.2s;cursor:pointer;background:none;border:none;font-family:inherit;}
-.nav-link:hover,.nav-link.active{color:var(--green);background:var(--green-bg);}
+.nav-link{color:#a7f3d0;text-decoration:none;font-weight:600;font-size:14px;padding:7px 13px;border-radius:0px;transition:.2s;cursor:pointer;background:none;border:none;font-family:inherit;}
+.nav-link:hover,.nav-link.active{color:#fff;background:rgba(255,255,255,.12);}
 .nav-icons{display:flex;gap:8px;align-items:center;margin-left:auto;}
-.ni{width:40px;height:40px;border-radius:var(--radius-md);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--text2);position:relative;transition:.2s;text-decoration:none;}
+.ni{width:40px;height:40px;border-radius:0px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#a7f3d0;position:relative;transition:.2s;text-decoration:none;}
 .ni:hover{background:rgba(255,255,255,.18);border-color:#34d399;color:#fff;}
-.ni .badge{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--green-dark);}
-.hamburger{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
+.ni .badge{position:absolute;top:-5px;right:-5px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--primary-dark);}
+.hamburger{display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer;}
 
 /* ── PROGRESS ── */
-.progress-wrap{background:var(--bg2);padding:14px 20px 16px;border-bottom:2px solid rgba(52,211,153,.3);}
+.progress-wrap{background:var(--primary-dark);padding:14px 20px 16px;border-bottom:2px solid rgba(52,211,153,.3);}
 .progress-steps{display:flex;align-items:center;max-width:500px;margin:0 auto;}
 .p-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
 .p-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:.3s;}
-.p-circle.done{background:var(--green);color:#fff;}
-.p-circle.active{background:var(--green);color:#fff;box-shadow:0 0 0 4px rgba(5,150,105,.35);}
-.p-circle.pending{background:var(--border);color:var(--text2);}
-.p-label{font-size:10px;font-weight:600;color:var(--text2);}
-.p-label.active{color:var(--green);}
+.p-circle.done{background:var(--primary);color:#fff;}
+.p-circle.active{background:var(--primary);color:#fff;box-shadow:0 0 0 4px rgba(5,150,105,.35);}
+.p-circle.pending{background:rgba(255,255,255,.1);color:#6ee7b7;}
+.p-label{font-size:10px;font-weight:600;color:#6ee7b7;}
+.p-label.active{color:#34d399;}
 .p-line{flex:1;height:2px;background:rgba(255,255,255,.1);margin:0 4px;margin-bottom:18px;transition:.3s;}
-.p-line.done{background:var(--green);}
+.p-line.done{background:var(--primary);}
 
 /* ── CONTAINER ── */
 .container{max-width:1200px;margin:auto;padding:0 20px;}
 
 /* ── PAGE TITLE ── */
 .page-title-wrap{margin-top:24px;margin-bottom:2px;}
-.page-title{font-size:22px;font-weight:800;color:var(--text);}
-.page-sub{color:var(--text2);font-size:13px;margin-top:4px;}
+.page-title{font-size:22px;font-weight:800;color:var(--text-main);}
+.page-sub{color:var(--text-muted);font-size:13px;margin-top:4px;}
 
 /* ── TRUST BAR ── */
-.trust-bar{display:flex;justify-content:space-around;background:var(--card);border-radius:var(--radius-md);padding:14px 8px;margin:18px 0 0;box-shadow:var(--shadow-sm);border:1px solid var(--border);}
+.trust-bar{display:flex;justify-content:space-around;background:var(--bg-card);border-radius:var(--radius);padding:14px 8px;margin:18px 0 0;box-shadow:var(--shadow);border:1px solid var(--border);}
 .trust-item{text-align:center;}
 .trust-icon{font-size:20px;margin-bottom:3px;}
-.trust-label{font-size:9.5px;font-weight:700;color:var(--text2);line-height:1.4;}
+.trust-label{font-size:9.5px;font-weight:700;color:var(--text-muted);line-height:1.4;}
 
 /* ── CHECKOUT GRID ── */
 .checkout-grid{display:flex;flex-direction:column;gap:20px;margin-top:20px;margin-bottom:60px;}
@@ -67,26 +93,26 @@ body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--tex
 }
 
 /* ── CARD ── */
-.card{background:var(--card);border-radius:var(--radius-md);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-sm);animation:fadeUp .35s ease both;}
+.card{background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);animation:fadeUp .35s ease both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.card-header{background:var(--green-dark);padding:14px 20px;display:flex;align-items:center;gap:10px;}
-.ch-num{width:26px;height:26px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
-.ch-title{font-size:15px;font-weight:700;color:var(--text);}
-.ch-sub{font-size:11px;color:var(--text2);margin-top:1px;}
+.card-header{background:var(--primary-dark);padding:14px 20px;display:flex;align-items:center;gap:10px;}
+.ch-num{width:26px;height:26px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
+.ch-title{font-size:15px;font-weight:700;color:#ecfdf5;}
+.ch-sub{font-size:11px;color:#6ee7b7;margin-top:1px;}
 .card-body{padding:20px;}
 
 /* ── FORM ── */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .field{margin-bottom:14px;}
 .field:last-child{margin-bottom:0;}
-.field label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px;letter-spacing:.3px;}
-.field label .req{color:var(--red);}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;letter-spacing:.3px;}
+.field label .req{color:var(--danger);}
 .input-wrap{position:relative;}
 .input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;z-index:1;}
 .input-wrap input,.input-wrap textarea,.input-wrap select{padding-left:38px!important;}
-input,select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri','Inter',sans-serif;transition:.2s;outline:none;}
-input:focus,select:focus,textarea:focus{border-color:var(--green);background:var(--card);box-shadow:0 0 0 3px rgba(5,150,105,.14);}
-input::placeholder,textarea::placeholder{color:var(--text2);}
+input,select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;background:var(--bg-body);color:var(--text-main);font-family:'Hind Siliguri','Inter',sans-serif;transition:.2s;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);background:var(--bg-card);box-shadow:0 0 0 3px rgba(5,150,105,.14);}
+input::placeholder,textarea::placeholder{color:var(--text-muted);}
 textarea{height:76px;resize:none;}
 select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23059669' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;}
 @supports(-webkit-touch-callout:none){.input-wrap select{-webkit-appearance:none;-moz-appearance:none;appearance:none;}}
@@ -95,51 +121,51 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 /* ── COUPON ── */
 .coupon-row{display:flex;gap:10px;}
 .coupon-row input{flex:1;}
-.coupon-btn{padding:11px 16px;background:var(--green-dark);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Hind Siliguri',sans-serif;transition:.2s;}
-.coupon-btn:hover{background:var(--green);}
+.coupon-btn{padding:11px 16px;background:var(--primary-dark);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Hind Siliguri',sans-serif;transition:.2s;}
+.coupon-btn:hover{background:var(--primary);}
 
 /* ── ORDER ITEMS ── */
 .os-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
 .os-item:last-child{border-bottom:none;padding-bottom:0;}
 .os-img-real{width:48px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--border);flex-shrink:0;}
-.os-img{width:48px;height:64px;background:linear-gradient(135deg,var(--green-dark),var(--green));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.os-name{font-size:13px;font-weight:700;color:var(--text);}
-.os-auth{font-size:11px;color:var(--text2);}
-.os-price{margin-left:auto;font-size:14px;font-weight:700;color:var(--green);white-space:nowrap;}
+.os-img{width:48px;height:64px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.os-name{font-size:13px;font-weight:700;color:var(--text-main);}
+.os-auth{font-size:11px;color:var(--text-muted);}
+.os-price{margin-left:auto;font-size:14px;font-weight:700;color:var(--primary);white-space:nowrap;}
 
 /* ── TOTAL ── */
-.total-row{display:flex;justify-content:space-between;padding:10px 0;font-size:14px;color:var(--text2);border-bottom:1px solid var(--border);}
+.total-row{display:flex;justify-content:space-between;padding:10px 0;font-size:14px;color:var(--text-muted);border-bottom:1px solid var(--border);}
 .total-row:last-of-type{border-bottom:none;}
-.total-row.red{color:var(--red);}
-.total-row.grand{background:var(--green-dark);color:#fff;font-weight:800;padding:16px 20px;border-radius:9px;margin-top:10px;font-size:16px;border-bottom:none;}
-.total-row.grand span:last-child{color:var(--green);}
+.total-row.red{color:var(--danger);}
+.total-row.grand{background:var(--primary-dark);color:#fff;font-weight:800;padding:16px 20px;border-radius:9px;margin-top:10px;font-size:16px;border-bottom:none;}
+.total-row.grand span:last-child{color:#34d399;}
 
 /* ── PAYMENT ── */
 .pay-grid{display:flex;flex-direction:column;gap:10px;}
-.pay-opt{display:flex;align-items:center;gap:12px;padding:13px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.2s;position:relative;background:var(--card);}
-.pay-opt:hover{border-color:var(--green);background:var(--green-bg);}
-.pay-opt.selected{border-color:var(--green);background:var(--green-bg);}
-.pay-opt.selected::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:22px;text-align:center;}
+.pay-opt{display:flex;align-items:center;gap:12px;padding:13px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.2s;position:relative;background:var(--bg-card);}
+.pay-opt:hover{border-color:var(--primary);background:var(--primary-xlight);}
+.pay-opt.selected{border-color:var(--primary);background:var(--primary-xlight);}
+.pay-opt.selected::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:22px;text-align:center;}
 .pay-opt.disabled{opacity:.45;cursor:not-allowed;}
-.pay-opt.disabled:hover{border-color:var(--border);background:var(--card);}
+.pay-opt.disabled:hover{border-color:var(--border);background:var(--bg-card);}
 .pay-opt input[type="radio"]{display:none;}
 .pay-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;border:1px solid var(--border);background:#fff;padding:4px;flex-shrink:0;}
-.pay-logo.cod{display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--green-bg);border-color:var(--border2);}
-.pay-label{font-size:14px;font-weight:700;color:var(--text);}
-.pay-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+.pay-logo.cod{display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--primary-xlight);border-color:var(--border-dark);}
+.pay-label{font-size:14px;font-weight:700;color:var(--text-main);}
+.pay-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
 
 /* ── BKASH ── */
 .bkash-box{background:#fff0f6;border:1.5px solid #fbcfe8;border-radius:12px;padding:16px;margin-top:12px;display:none;animation:fadeUp .3s ease;}
 [data-theme="dark"] .bkash-box{background:#1a0a12;border-color:#4a1a30;}
 .bsteps{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
-.bstep{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);}
+.bstep{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-muted);}
 .bstep-num{min-width:24px;height:24px;border-radius:50%;background:#db2777;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .bkash-num{background:#fff;border:2px dashed #fbcfe8;border-radius:10px;padding:10px 14px;text-align:center;font-size:20px;font-weight:800;letter-spacing:3px;color:#be185d;cursor:pointer;transition:.2s;margin-bottom:12px;}
 [data-theme="dark"] .bkash-num{background:#2d0a1e;}
 .copy-hint{display:block;font-size:10px;color:#db2777;letter-spacing:0;font-weight:600;margin-top:3px;}
 
 /* ── CONFIRM BTN ── */
-.confirm-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--green-dark),var(--green));color:#fff;border:none;border-radius:var(--radius-md);font-size:16px;font-weight:800;cursor:pointer;margin-top:20px;font-family:'Hind Siliguri','Inter',sans-serif;box-shadow:0 6px 24px rgba(5,150,105,.35);transition:.2s;letter-spacing:.3px;}
+.confirm-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:800;cursor:pointer;margin-top:20px;font-family:'Hind Siliguri','Inter',sans-serif;box-shadow:0 6px 24px rgba(5,150,105,.35);transition:.2s;letter-spacing:.3px;}
 .confirm-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(5,150,105,.45);}
 .confirm-btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
 .spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
@@ -148,34 +174,34 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 /* ── SUCCESS MODAL ── */
 .success-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99999;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
 .success-modal.show{display:flex;}
-.success-inner{background:var(--card);border-radius:24px;padding:36px 28px;text-align:center;max-width:360px;width:92%;animation:popIn .45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 64px rgba(0,0,0,.4);}
+.success-inner{background:var(--bg-card);border-radius:24px;padding:36px 28px;text-align:center;max-width:360px;width:92%;animation:popIn .45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 64px rgba(0,0,0,.4);}
 @keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
-.success-anim{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),var(--green));margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 24px rgba(5,150,105,.4);animation:bounceIn .6s ease .3s both;}
+.success-anim{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary-dark),var(--primary));margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 24px rgba(5,150,105,.4);animation:bounceIn .6s ease .3s both;}
 @keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
-.success-inner h2{font-size:21px;font-weight:800;color:var(--text);margin-bottom:4px;}
-.success-sub{font-size:11px;font-weight:800;color:var(--green);letter-spacing:2px;margin-bottom:18px;}
-.success-info{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:left;font-size:13px;color:var(--text2);line-height:2;margin-bottom:18px;}
-.success-note{font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.6;}
-.home-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--green-dark),var(--green));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Hind Siliguri',sans-serif;transition:.2s;}
+.success-inner h2{font-size:21px;font-weight:800;color:var(--text-main);margin-bottom:4px;}
+.success-sub{font-size:11px;font-weight:800;color:var(--primary);letter-spacing:2px;margin-bottom:18px;}
+.success-info{background:var(--bg-body);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:left;font-size:13px;color:var(--text-muted);line-height:2;margin-bottom:18px;}
+.success-note{font-size:12px;color:var(--text-muted);margin-bottom:20px;line-height:1.6;}
+.home-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Hind Siliguri',sans-serif;transition:.2s;}
 .home-btn:hover{transform:translateY(-2px);}
 
 /* ── TOAST ── */
-.v-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--red);color:#fff;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:700;z-index:99999;box-shadow:0 6px 20px rgba(220,38,38,.35);opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;font-family:'Hind Siliguri',sans-serif;pointer-events:none;}
+.v-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--danger);color:#fff;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:700;z-index:99999;box-shadow:0 6px 20px rgba(220,38,38,.35);opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;font-family:'Hind Siliguri',sans-serif;pointer-events:none;}
 .v-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* ── EMPTY CART ── */
-.empty-cart{text-align:center;padding:30px;color:var(--text2);}
+.empty-cart{text-align:center;padding:30px;color:var(--text-muted);}
 
 /* ── FOOTER ── */
-.footer{background:var(--green-dark);color:var(--text2);margin-top:0;border-top:3px solid var(--green);}
+.footer{background:var(--primary-dark);color:#a7f3d0;margin-top:0;border-top:3px solid var(--primary);}
 .footer-container{max-width:1200px;margin:auto;padding:40px 20px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;}
-.footer h3{color:var(--green);font-size:16px;margin-bottom:14px;}
-.footer p{font-size:13px;line-height:1.8;color:var(--text2);}
+.footer h3{color:#34d399;font-size:16px;margin-bottom:14px;}
+.footer p{font-size:13px;line-height:1.8;color:#6ee7b7;}
 .footer-links{list-style:none;}
 .footer-links li{margin-bottom:10px;}
-.footer-links a{color:var(--text2);text-decoration:none;font-size:13px;transition:.2s;}
-.footer-links a:hover{color:var(--green);padding-left:4px;}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:28px;padding-top:18px;text-align:center;font-size:12px;color:var(--text2);}
+.footer-links a{color:#a7f3d0;text-decoration:none;font-size:13px;transition:.2s;}
+.footer-links a:hover{color:#34d399;padding-left:4px;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:28px;padding-top:18px;text-align:center;font-size:12px;color:#6ee7b7;}
 
 /* ── WHATSAPP ── */
 .wa-float{position:fixed;bottom:24px;right:18px;width:48px;height:48px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.5);z-index:9990;text-decoration:none;transition:.2s;}
@@ -191,6 +217,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
   .trust-icon{font-size:17px;}
   .trust-label{font-size:9px;}
   .nav-top{height:58px;}
+  .nav-logo-icon{width:36px;height:36px;font-size:18px;}
   .nav-brand{font-size:15px;}
   .confirm-btn{font-size:15px;padding:14px;}
 }
@@ -205,7 +232,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
   <div class="nav-container">
     <div class="nav-top">
       <a href="index.html" class="nav-logo">
-        <img src="logo.png" alt="গ্রন্থকানন" style="height:38px;width:38px;object-fit:contain;border-radius:8px;">
+        <div class="nav-logo-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg></div>
         <div>
           <div class="nav-brand bng">গ্রন্থকানন</div>
           <div class="nav-brand-sub bng">Gronthokanon Bookshop</div>
@@ -490,7 +517,7 @@ function toggleMenu(){
 /* ══════════════════════════════════
    TOAST
 ══════════════════════════════════ */
-function showToast(msg, color=''){if(!color)color=getComputedStyle(document.documentElement).getPropertyValue('--red').trim()||'#dc2626';
+function showToast(msg, color='#dc2626'){
   const t = document.getElementById('vToast');
   t.innerHTML = msg;
   t.style.background = color;
@@ -620,7 +647,7 @@ function selectPay(el, type){
 }
 function copyBkash(){
   if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(BKASH_NUMBER).then(() => showToast('✅ নম্বর কপি হয়েছে!',getComputedStyle(document.documentElement).getPropertyValue('--green').trim())).catch(() => fallbackCopy());
+    navigator.clipboard.writeText(BKASH_NUMBER).then(() => showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(() => fallbackCopy());
   } else { fallbackCopy(); }
 }
 function fallbackCopy(){
@@ -629,8 +656,8 @@ function fallbackCopy(){
   el.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
   document.body.appendChild(el);
   el.select(); el.setSelectionRange(0,99999);
-  try{ document.execCommand('copy'); showToast('✅ নম্বর কপি হয়েছে!',getComputedStyle(document.documentElement).getPropertyValue('--green').trim()); }
-  catch(e){ showToast('⚠️ কপি হয়নি, নম্বরটি লিখে নিন',getComputedStyle(document.documentElement).getPropertyValue('--gold').trim()); }
+  try{ document.execCommand('copy'); showToast('✅ নম্বর কপি হয়েছে!','#059669'); }
+  catch(e){ showToast('⚠️ কপি হয়নি, নম্বরটি লিখে নিন','#d97706'); }
   document.body.removeChild(el);
 }
 
@@ -672,13 +699,13 @@ function updateTotal(){
     if(coupon){
       const desc = discPct + '% ডিসকাউন্ট পাচ্ছেন';
       ccb.style.display = 'block';
-      ccb.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--border2);padding:8px 11px;border-radius:8px;">
+      ccb.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1px solid rgba(5,150,105,0.3);padding:8px 11px;border-radius:8px;">
         <span style="font-size:16px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️</span>
         <div style="flex:1;">
-          <div style="font-size:12px;font-weight:800;color:var(--green);letter-spacing:.5px;">${coupon} <span style="background:var(--green);color:white;font-size:9px;padding:1px 7px;">সক্রিয়</span></div>
-          <div style="font-size:10px;color:var(--text2);">${desc}</div>
+          <div style="font-size:12px;font-weight:800;color:#059669;letter-spacing:.5px;">${coupon} <span style="background:#059669;color:white;font-size:9px;padding:1px 7px;">সক্রিয়</span></div>
+          <div style="font-size:10px;color:var(--text-muted);">${desc}</div>
         </div>
-        <button onclick="removeCoupon()" style="background:none;border:none;cursor:pointer;color:var(--red);font-size:18px;line-height:1;padding:2px 4px;border-radius:4px;font-weight:700;" title="কুপন বাতিল করুন">✕</button>
+        <button onclick="removeCoupon()" style="background:none;border:none;cursor:pointer;color:#dc2626;font-size:18px;line-height:1;padding:2px 4px;border-radius:4px;font-weight:700;" title="কুপন বাতিল করুন">✕</button>
       </div>`;
     } else { ccb.style.display = 'none'; ccb.innerHTML = ''; }
   }
@@ -723,16 +750,16 @@ const COUPONS = { 'FIRSTORDER': 5 };
 function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('couponMsg');
-  if(!code){ msgEl.style.display='block'; msgEl.style.color=getComputedStyle(document.documentElement).getPropertyValue('--red').trim(); msgEl.textContent='⚠️ কুপন কোড লিখুন!'; return; }
+  if(!code){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; return; }
   if(COUPONS[code] !== undefined){
     coupon = code; discPct = COUPONS[code];
     localStorage.setItem('gronthokanon_coupon', coupon);
     localStorage.setItem('gronthokanon_discount', discPct);
-    msgEl.style.display='block'; msgEl.style.color=getComputedStyle(document.documentElement).getPropertyValue('--green').trim();
+    msgEl.style.display='block'; msgEl.style.color='#059669';
     msgEl.textContent = `✅ ${code} কোড প্রয়োগ হয়েছে! ${discPct}% ডিসকাউন্ট।`;
     updateTotal();
   } else {
-    msgEl.style.display='block'; msgEl.style.color=getComputedStyle(document.documentElement).getPropertyValue('--red').trim(); msgEl.textContent='❌ কুপন কোডটি সঠিক নয়!';
+    msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='❌ কুপন কোডটি সঠিক নয়!';
   }
 }
 function removeCoupon(){
@@ -741,7 +768,7 @@ function removeCoupon(){
   localStorage.removeItem('gronthokanon_discount');
   document.getElementById('couponInput').value = '';
   const msgEl = document.getElementById('couponMsg');
-  msgEl.style.display='block'; msgEl.style.color=getComputedStyle(document.documentElement).getPropertyValue('--red').trim();
+  msgEl.style.display='block'; msgEl.style.color='#dc2626';
   msgEl.textContent='🗑️ কুপন বাতিল করা হয়েছে!';
   setTimeout(()=>{ msgEl.style.display='none'; }, 2500);
   updateTotal();
@@ -774,8 +801,8 @@ async function confirmOrder(){
   if(coupon === 'FIRSTORDER'){
     try{
       const used = await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).get();
-      if(used.exists()){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!',getComputedStyle(document.documentElement).getPropertyValue('--red').trim()); }
-    }catch(e){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ কুপন যাচাই করা যাচ্ছে না।',getComputedStyle(document.documentElement).getPropertyValue('--red').trim()); }
+      if(used.exists()){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626'); }
+    }catch(e){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ কুপন যাচাই করা যাচ্ছে না।','#dc2626'); }
   }
 
   let txId = '';
@@ -825,7 +852,7 @@ async function confirmOrder(){
     console.error('Firebase error:', e);
     btn.disabled = false; btn.innerHTML = '✅ অর্ডার নিশ্চিত করুন';
     isSubmitting = false;
-    showToast('❌ অর্ডার সেভ হয়নি! ইন্টারনেট চেক করুন।',getComputedStyle(document.documentElement).getPropertyValue('--red').trim());
+    showToast('❌ অর্ডার সেভ হয়নি! ইন্টারনেট চেক করুন।','#dc2626');
     return;
   }
 
@@ -840,16 +867,16 @@ async function confirmOrder(){
   localStorage.removeItem('gronthokanon_coupon');
 
   document.getElementById('successInfo').innerHTML = `
-    <div style="background:var(--bg);border-radius:10px;padding:12px;margin-bottom:10px;text-align:left;">
-      <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">অর্ডার আইডি</div>
-      <div style="font-size:16px;font-weight:800;color:var(--green);letter-spacing:1px;">${orderId}</div>
+    <div style="background:var(--bg-body);border-radius:10px;padding:12px;margin-bottom:10px;text-align:left;">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">অর্ডার আইডি</div>
+      <div style="font-size:16px;font-weight:800;color:#059669;letter-spacing:1px;">${orderId}</div>
     </div>
     <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <strong>${escapeHTML(name)}</strong><br>
     <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> ${escapeHTML(phone)}<br>
     📍 ${escapeHTML(fullAddr)}<br>
     💳 ${escapeHTML(payMethod)}${txId ? ` (TxID: ${escapeHTML(txId)})` : ''}<br>
     📦 ${escapeHTML(bookList)}<br>
-    <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v2M12 16v2M9 9h4a2 2 0 0 1 0 4H9"/></svg> <strong style="color:var(--green);">৳${grand}</strong>
+    <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v2M12 16v2M9 9h4a2 2 0 0 1 0 4H9"/></svg> <strong style="color:#059669;">৳${grand}</strong>
     <br><br>
     <button onclick="window.location.href='track.html?id=${escapeHTML(orderId)}'"
       style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;">
@@ -875,9 +902,9 @@ function buildInvoiceHTML(o){
   const rows = Object.entries(grouped).map(([name,e],idx) => {
     const lt = e.price * e.qty; subtotal += lt;
     const imgCell = e.img
-      ? `<img src="${e.img}" style="width:38px;height:52px;object-fit:cover;border-radius:5px;border:1px solid var(--border2);display:block;" crossorigin="anonymous">`
-      : `<div style="width:38px;height:52px;background:var(--green-bg);border-radius:5px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px;">📚</div>`;
-    return `<tr style="background:${idx%2===0?'rgba(5,150,105,0.04)':'transparent'}">
+      ? `<img src="${e.img}" style="width:38px;height:52px;object-fit:cover;border-radius:5px;border:1px solid #d1fae5;display:block;" crossorigin="anonymous">`
+      : `<div style="width:38px;height:52px;background:#f0fdf4;border-radius:5px;border:1px solid #d1fae5;display:flex;align-items:center;justify-content:center;font-size:18px;">📚</div>`;
+    return `<tr style="background:${idx%2===0?'#f0fdf4':'#fff'}">
       <td style="padding:8px 10px;vertical-align:middle;">${imgCell}</td>
       <td style="padding:8px 10px;font-size:13px;vertical-align:middle;">${name}</td>
       <td style="padding:8px;text-align:center;font-size:13px;vertical-align:middle;">${e.qty}</td>
@@ -888,43 +915,43 @@ function buildInvoiceHTML(o){
   const discount = o.discount||0;
   const totalNum = subtotal + delivery - discount;
   const discountRow = discount > 0 ? `
-    <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--red);border-bottom:1px solid var(--border);">
+    <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#dc2626;border-bottom:1px solid #e5e7eb;">
       <span>ছাড় (${o.coupon||''})</span><span>-Tk ${discount}</span>
     </div>` : '';
   return `
   <div id="invoiceBox" style="width:700px;font-family:'Hind Siliguri',Arial,sans-serif;background:#fff;color:#1a202c;">
-    <div style="background:var(--green-dark);padding:24px 28px;display:flex;justify-content:space-between;align-items:center;">
+    <div style="background:#065f46;padding:24px 28px;display:flex;justify-content:space-between;align-items:center;">
       <div style="display:flex;align-items:center;gap:14px;">
         <div style="background:#fff;border-radius:10px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;padding:4px;">
           <img src="https://gronthokanonshop.github.io/gronthokanon-3.0/logo.png" style="width:48px;height:48px;object-fit:contain;" crossorigin="anonymous">
         </div>
         <div>
           <div style="color:#fff;font-size:20px;font-weight:800;">Gronthokanon</div>
-          <div style="color:var(--text2);font-size:11px;">www.gronthokanonshop.github.io</div>
-          <div style="color:var(--text2);font-size:11px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> gronthokanon4309@gmail.com</div>
-          <div style="color:var(--text2);font-size:11px;">01516595762 | Dhaka, Bangladesh</div>
+          <div style="color:#a7f3d0;font-size:11px;">www.gronthokanonshop.github.io</div>
+          <div style="color:#a7f3d0;font-size:11px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> gronthokanon4309@gmail.com</div>
+          <div style="color:#a7f3d0;font-size:11px;">01516595762 | Dhaka, Bangladesh</div>
         </div>
       </div>
       <div style="text-align:right;">
         <div style="color:#fff;font-size:16px;font-weight:800;letter-spacing:2px;">INVOICE</div>
-        <div style="color:var(--text2);font-size:12px;margin-top:4px;">${o.orderId}</div>
-        <div style="color:var(--text2);font-size:12px;">${new Date(o.createdAt).toLocaleDateString('en-GB')}</div>
+        <div style="color:#a7f3d0;font-size:12px;margin-top:4px;">${o.orderId}</div>
+        <div style="color:#a7f3d0;font-size:12px;">${new Date(o.createdAt).toLocaleDateString('en-GB')}</div>
       </div>
     </div>
-    <div style="display:flex;gap:0;margin:20px 28px;background:var(--green-bg);border:1.5px solid var(--border2);border-radius:10px;overflow:hidden;">
-      <div style="flex:1;padding:16px 20px;border-right:1.5px solid var(--border2);">
-        <div style="font-size:10px;font-weight:800;color:var(--text2);margin-bottom:6px;letter-spacing:1px;">BILL TO</div>
+    <div style="display:flex;gap:0;margin:20px 28px;background:#f0fdf4;border:1.5px solid #a7f3d0;border-radius:10px;overflow:hidden;">
+      <div style="flex:1;padding:16px 20px;border-right:1.5px solid #a7f3d0;">
+        <div style="font-size:10px;font-weight:800;color:#6b7280;margin-bottom:6px;letter-spacing:1px;">BILL TO</div>
         <div style="font-size:14px;font-weight:700;">${o.name}</div>
-        <div style="font-size:13px;color:var(--text2);">${o.phone}</div>
+        <div style="font-size:13px;color:#4b5563;">${o.phone}</div>
       </div>
       <div style="flex:1;padding:16px 20px;">
-        <div style="font-size:10px;font-weight:800;color:var(--text2);margin-bottom:6px;letter-spacing:1px;">ডেলিভারি ঠিকানা</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.5;">${o.address}</div>
+        <div style="font-size:10px;font-weight:800;color:#6b7280;margin-bottom:6px;letter-spacing:1px;">ডেলিভারি ঠিকানা</div>
+        <div style="font-size:13px;color:#4b5563;line-height:1.5;">${o.address}</div>
       </div>
     </div>
     <table style="width:calc(100% - 56px);margin:0 28px;border-collapse:collapse;">
       <thead>
-        <tr style="background:var(--green);">
+        <tr style="background:#059669;">
           <th style="padding:10px;text-align:left;color:#fff;font-size:12px;font-weight:700;width:54px;">ছবি</th>
           <th style="padding:10px;text-align:left;color:#fff;font-size:12px;font-weight:700;">বইয়ের নাম</th>
           <th style="padding:10px;text-align:center;color:#fff;font-size:12px;font-weight:700;">পরিমাণ</th>
@@ -935,38 +962,38 @@ function buildInvoiceHTML(o){
     </table>
     <div style="margin:16px 28px 0;display:flex;justify-content:flex-end;">
       <div style="width:220px;">
-        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#6b7280;border-bottom:1px solid #e5e7eb;">
           <span>Subtotal</span><span>Tk ${subtotal}</span>
         </div>
-        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#6b7280;border-bottom:1px solid #e5e7eb;">
           <span>Delivery</span><span>Tk ${delivery}</span>
         </div>
         ${discountRow}
-        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:16px;font-weight:800;color:var(--green);">
+        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:16px;font-weight:800;color:#059669;">
           <span>TOTAL</span><span>Tk ${totalNum}</span>
         </div>
       </div>
     </div>
-    <div style="margin:16px 28px;display:flex;gap:0;background:var(--green-bg);border:1.5px solid var(--border2);overflow:hidden;">
-      <div style="flex:1;padding:14px 18px;${o.coupon?'border-right:1.5px solid var(--border2);':''}">
-        <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">Payment Method</div>
+    <div style="margin:16px 28px;display:flex;gap:0;background:#f0fdf4;border:1.5px solid #a7f3d0;overflow:hidden;">
+      <div style="flex:1;padding:14px 18px;${o.coupon?'border-right:1.5px solid #a7f3d0;':''}">
+        <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Payment Method</div>
         <div style="font-size:14px;font-weight:700;">${o.payment}</div>
       </div>
       ${o.coupon?`<div style="flex:1;padding:14px 18px;">
-        <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">Coupon Applied</div>
+        <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Coupon Applied</div>
         <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️ ${o.coupon}</div>
       </div>`:''}
-    </div>    <div style="background:var(--green-dark);padding:14px 28px;text-align:center;margin-top:8px;border-top:3px solid var(--green);">
+    </div>    <div style="background:#065f46;padding:14px 28px;text-align:center;margin-top:8px;border-top:3px solid #059669;">
       <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! 📚</div>
-      <div style="color:var(--text2);font-size:11px;margin-top:4px;">Track: gronthokanonshop.github.io/track.html?id=${o.orderId}</div>
+      <div style="color:#a7f3d0;font-size:11px;margin-top:4px;">Track: gronthokanonshop.github.io/track.html?id=${o.orderId}</div>
     </div>
   </div>`;
 }
 
 async function downloadInvoice(){
   const o = lastOrderData;
-  if(!o){ showToast('অর্ডার তথ্য পাওয়া যায়নি',getComputedStyle(document.documentElement).getPropertyValue('--red').trim()); return; }
-  showToast('📄 PDF তৈরি হচ্ছে...',getComputedStyle(document.documentElement).getPropertyValue('--green').trim());
+  if(!o){ showToast('অর্ডার তথ্য পাওয়া যায়নি','#dc2626'); return; }
+  showToast('📄 PDF তৈরি হচ্ছে...','#059669');
   const wrap = document.createElement('div');
   wrap.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1;';
   wrap.innerHTML = buildInvoiceHTML(o);
@@ -979,7 +1006,7 @@ async function downloadInvoice(){
     const W = 210, H = Math.min(297,(canvas.height/canvas.width)*210);
     pdf.addImage(imgData,'PNG',0,0,W,H);
     pdf.save('Gronthokanon-Invoice-'+o.orderId+'.pdf');
-  }catch(e){ showToast('❌ PDF তৈরি হয়নি',getComputedStyle(document.documentElement).getPropertyValue('--red').trim()); console.error(e); }
+  }catch(e){ showToast('❌ PDF তৈরি হয়নি','#dc2626'); console.error(e); }
   document.body.removeChild(wrap);
 }
 
