@@ -687,7 +687,7 @@
         <button class="search-back" onclick="closeSearch()">‹</button>
         <div class="search-input-wrap">
             <div class="search-pill-icon" style="font-size:13px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-            <input type="text" id="searchInput" class="search-input" placeholder="সম্মানিত গ্রাহক, আপনার পছন্দের বই টি সার্চ করুন... ওয়েবসাইটে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব <svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z"/><path d="M19 14l.75 2.25L22 17l-2.25.75L19 20l-.75-2.25L16 17l2.25-.75z"/><path d="M5 17l.5 1.5L7 19l-1.5.5L5 21l-.5-1.5L3 19l1.5-.5z"/></svg>" oninput="handleSearch()" autocomplete="off">
+            <input type="text" id="searchInput" class="search-input" placeholder="বইয়ের নাম, লেখক বা প্রকাশনী লিখুন..." oninput="handleSearch()" autocomplete="off">
             <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()">×</button>
         </div>
     </div>
@@ -714,10 +714,8 @@
 
         <!-- RIGHT: ICONS -->
         <div class="navbar-icons" style="flex:1;display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-shrink:0;">
+            <button class="nav-icon-btn-g" onclick="openSearch()" title="সার্চ" style="width:38px;height:38px;font-size:18px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
             <button class="nav-icon-btn-g" onclick="toggleDark()" id="darkBtn" title="থিম" style="width:38px;height:38px;font-size:18px;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-            <button class="nav-icon-btn-g" onclick="showWishlist()" title="উইশলিস্ট" style="position:relative;width:38px;height:38px;font-size:18px;">
-                <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="nav-badge" id="navWishBadge">0</span>
-            </button>
             <div class="cart-wrap" id="cartWrap" onclick="showCart()">
                 <button class="nav-icon-btn-g" style="position:relative;width:38px;height:38px;font-size:18px;">
                     <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="nav-badge show" id="cartCount">0</span>
@@ -979,6 +977,15 @@ footer {
         <span class="bnav-label">হোম</span>
     </div>
 
+    <!-- সার্চ -->
+    <div class="bnav-item" id="bnav-search" onclick="bnavActive('bnav-search');openSearch()">
+        <svg class="bnav-svg" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span class="bnav-label">সার্চ</span>
+    </div>
+
     <!-- কার্ট -->
     <div class="bnav-item" id="bnav-cart" onclick="bnavActive('bnav-cart');showCart()">
         <div style="position:relative;">
@@ -1074,8 +1081,9 @@ function handleSearch(){
     const q=document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
     document.getElementById('searchClearBtn').classList.toggle('show',q.length>0);
     const body=document.getElementById('searchBody');
+    if(typeof books==='undefined'||!books.length){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">⏳</div><p>বই লোড হচ্ছে, একটু অপেক্ষা করুন...</p></div>`;return;}
     if(!q){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>`;return;}
-    const found=books.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||b.author.normalize("NFC").toLowerCase().includes(q));
+    const found=books.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
     if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
     body.innerHTML=`<div class="search-count show">🔍 "${document.getElementById('searchInput').value}" — ${found.length}টি বই</div>`+found.map(b=>{
         const idx=books.indexOf(b),pct=discPct(b);
@@ -1437,6 +1445,8 @@ window.onload=()=>{
         document.getElementById('sectionsWrapper').style.display='block';
         renderSections(books);
         renderRecent();
+        buildPubList();
+        buildAuthorList();
     }
 
     // book.js-এ books আছে কিনা চেক করো, না থাকলে DOMContentLoaded/load event-এর পর আবার চেক
@@ -1456,8 +1466,6 @@ window.onload=()=>{
             }
         }, 100);
     }
-
-    buildPubList();buildAuthorList();
     renderCategoryNav();
     updateCartUI();updateWLCount();
     if(localStorage.getItem('gronthokanon_opencart')==='1'){
