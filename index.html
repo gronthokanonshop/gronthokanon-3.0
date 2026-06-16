@@ -734,7 +734,9 @@
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 12px 12px 6px;
+    padding: 14px 12px 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
 }
 .cat-grid-section::-webkit-scrollbar { display: none; }
 .cat-grid-title {
@@ -750,28 +752,31 @@
 .cat-grid {
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    gap: 10px;
     width: max-content;
+    padding-right: 12px;
 }
 .cat-grid-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    padding: 10px 4px;
-    min-width: 72px;
-    width: 72px;
+    gap: 7px;
+    padding: 14px 6px 12px;
+    min-width: 88px;
+    width: 88px;
     flex-shrink: 0;
     background: var(--card);
     border: 1.5px solid var(--border);
-    border-radius: 12px;
+    border-radius: 16px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.2,0.8,0.2,1);
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
     position: relative;
     overflow: hidden;
+    scroll-snap-align: start;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .cat-grid-item::before {
     content: '';
@@ -780,26 +785,28 @@
     background: var(--cgi-color, rgba(5,150,105,0.08));
     opacity: 0;
     transition: opacity 0.2s;
-    border-radius: 10px;
+    border-radius: 14px;
 }
-.cat-grid-item:active { transform: scale(0.93); }
+.cat-grid-item:active { transform: scale(0.91); box-shadow: none; }
 .cat-grid-item:active::before { opacity: 1; }
 .cat-grid-icon {
-    font-size: 22px;
+    font-size: 26px;
     line-height: 1;
     display: block;
 }
 .cat-grid-label {
-    font-size: 10.5px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 800;
     color: var(--text);
     text-align: center;
-    line-height: 1.2;
+    line-height: 1.25;
     font-family: 'Hind Siliguri', Arial, sans-serif;
+    letter-spacing: 0.1px;
 }
 [data-theme="dark"] .cat-grid-item {
     background: rgba(17,24,39,0.7);
-    border-color: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 </style>
 
