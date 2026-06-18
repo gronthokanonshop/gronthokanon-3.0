@@ -150,6 +150,48 @@
         .float-cart { position:fixed; bottom:22px; left:16px; background:linear-gradient(135deg,#064e3b,#059669); color:#fff; padding:11px 18px; border-radius:0; cursor:pointer; font-weight:700; box-shadow:0 6px 24px rgba(5,150,105,0.45); z-index:997; font-family:'Hind Siliguri',sans-serif; display:flex; align-items:center; gap:10px; font-size:14px; transition:transform .2s,box-shadow .2s; border:1.5px solid rgba(255,255,255,0.15); }
         .float-cart:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(5,150,105,0.5); }
 
+
+        /* ── CATEGORY SIDEBAR ── */
+        .page-layout { display:flex; align-items:flex-start; }
+        .cat-sidebar {
+            width:110px;
+            flex-shrink:0;
+            position:sticky;
+            top:0;
+            height:calc(100vh - 120px);
+            overflow-y:auto;
+            background:var(--card);
+            border-right:1px solid var(--border);
+            scrollbar-width:none;
+            display:none;
+        }
+        .cat-sidebar.show { display:block; }
+        .cat-sidebar::-webkit-scrollbar { display:none; }
+        .cat-sidebar-item {
+            padding:12px 8px;
+            font-size:11.5px;
+            font-weight:600;
+            color:var(--text2);
+            cursor:pointer;
+            border-bottom:1px solid var(--border);
+            text-align:center;
+            line-height:1.3;
+            transition:.2s;
+            word-break:break-word;
+        }
+        .cat-sidebar-item:hover { background:var(--green-light); color:var(--green); }
+        .cat-sidebar-item.active {
+            background:var(--green);
+            color:#fff;
+            font-weight:700;
+        }
+        .cat-sidebar-icon { font-size:18px; display:block; margin-bottom:4px; }
+        .page-right { flex:1; min-width:0; }
+        @media(max-width:430px) {
+            .cat-sidebar { width:80px; }
+            .cat-sidebar-item { font-size:10px; padding:10px 4px; }
+            .cat-sidebar-icon { font-size:16px; }
+        }
         /* SCROLL TOP */
         .scroll-top { position:fixed; bottom:22px; right:16px; width:40px; height:40px; background:var(--green); color:#fff; border:none; border-radius:0; font-size:18px; cursor:pointer; box-shadow:0 4px 14px rgba(5,150,105,0.35); z-index:997; display:none; transition:.2s; }
         .scroll-top.show { display:flex; align-items:center; justify-content:center; }
@@ -162,6 +204,12 @@
         /* TOAST */
         .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#059669; color:#fff; padding:10px 22px; border-radius:0; font-size:13px; font-weight:600; z-index:9999; box-shadow:0 4px 14px rgba(5,150,105,0.35); animation:toastIn .3s ease; white-space:nowrap; }
         @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+
+        /* SORT DROPDOWN */
+        .sort-select-wrap { position:relative; display:inline-flex; align-items:center; }
+        .sort-select { appearance:none; -webkit-appearance:none; background:var(--bg); border:1.5px solid var(--border); border-radius:0; padding:6px 32px 6px 12px; font-size:12px; font-weight:700; font-family:'Hind Siliguri',sans-serif; color:var(--text); cursor:pointer; outline:none; transition:.2s; }
+        .sort-select:focus { border-color:var(--green); }
+        .sort-select-arrow { position:absolute; right:10px; pointer-events:none; font-size:11px; color:var(--text2); }
 
         /* PAGINATION */
         .pagination { display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; padding:18px 14px 90px; }
@@ -179,7 +227,7 @@
 <nav class="navbar">
     <div class="nav-top">
         <button class="back-btn" onclick="goBack()">‹</button>
-        <div class="page-title" id="pageTitle">বই খুঁজছি...</div>
+        <div class="page-title" id="pageTitle" style="display:flex;justify-content:center;"><img src="logo.png" alt="গ্রন্থকানন" style="height:30px;width:auto;object-fit:contain;border-radius:5px;"></div>
         <div class="navbar-icons">
             <button class="dark-pill" id="darkBtn" onclick="toggleDark()"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
             <div class="nav-cart-btn" onclick="goToCart()">
@@ -200,7 +248,7 @@
 
 <!-- HERO -->
 <div class="hero-strip">
-    <div class="hero-eyebrow">GRONTHOKANON</div>
+    
     <div class="hero-heading" id="heroHeading">বই <span>খুঁজুন</span></div>
 </div>
 
@@ -215,12 +263,15 @@
 
 <!-- SORT + COUNT -->
 <div class="sort-row">
-    <div class="sort-chips">
-        <button class="sort-chip active" onclick="sortBooks('default',this)">ডিফল্ট</button>
-        <button class="sort-chip" onclick="sortBooks('price-low',this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v2M12 16v2M9 9h4a2 2 0 0 1 0 4H9"/></svg> কম দামে</button>
-        <button class="sort-chip" onclick="sortBooks('price-high',this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,3 18,3 22,9 12,22 2,9"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="6" y1="3" x2="12" y2="22"/><line x1="18" y1="3" x2="12" y2="22"/></svg> বেশি দামে</button>
-        <button class="sort-chip" onclick="sortBooks('discount',this)"><svg class="eico" viewBox="0 0 24 24" fill="#f97316"><path d="M12 2c0 0-4 4-4 9a4 4 0 0 0 8 0c0-1.5-.5-3-1.5-4.5 0 0 .5 2-1 3C12 8 12 2 12 2z"/><path d="M8 14c0 2.2 1.8 4 4 4s4-1.8 4-4c0-1-.3-2-.8-2.8 0 0-.2 1.3-1 1.8C14 11 12 8 12 8s-4 3-4 6z"/></svg> বেশি ছাড়ে</button>
-        <button class="sort-chip" onclick="sortBooks('alpha',this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 4,4 20,4 20,7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> নাম অনুযায়ী</button>
+    <div class="sort-select-wrap">
+        <select class="sort-select" id="sortSelect" onchange="sortBooks(this.value)">
+            <option value="default">🔀 ডিফল্ট</option>
+            <option value="price-low">💰 কম দামে</option>
+            <option value="price-high">💎 বেশি দামে</option>
+            <option value="discount">🔥 বেশি ছাড়ে</option>
+            <option value="alpha">🔤 নাম অনুযায়ী</option>
+        </select>
+        <span class="sort-select-arrow">▾</span>
     </div>
     <div class="rcount" id="countText">...</div>
 </div>
@@ -231,6 +282,9 @@
 </div>
 
 <!-- CONTENT -->
+<div class="page-layout">
+<div class="cat-sidebar" id="catSidebar"></div>
+<div class="page-right">
 <div id="mainContent">
     <div class="skel-grid" id="skelGrid">
         <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
@@ -244,6 +298,8 @@
     </div>
     <div id="bookGrid" style="display:none;"></div>
     <div class="pagination" id="paginationBar" style="display:none;"></div>
+</div>
+</div>
 </div>
 
 <div class="float-cart" onclick="goToCart()">
@@ -411,10 +467,10 @@ function setPill(el, val) {
     renderBooks(getList());
 }
 
-function sortBooks(type, btn) {
-    document.querySelectorAll('.sort-chip').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+function sortBooks(type) {
     currentSort = type;
+    const sel = document.getElementById('sortSelect');
+    if (sel) sel.value = type;
     currentPage = 1;
     renderBooks(getList());
 }
@@ -478,6 +534,13 @@ const params = new URLSearchParams(window.location.search);
 const type = params.get('type'), value = decodeURIComponent(params.get('value') || '');
 const iconMap = { cat: '📚', author: '✍️', pub: '🏢' };
 
+const catIconMap = {
+    'Best Selling':'🔥','Trending':'📈','নতুন প্রকাশিত':'✨','Pre Order':'🛒',
+    'ইসলামি বই':'☪️','Academic':'🎓','দরসি কিতাব':'🕌','সুন্নাহ আইটেম':'📿','Stationery':'🖊️'
+};
+
+let activeCategory = value;
+
 if (type === 'cat') filtered = books.filter(b => b.cat === value);
 else if (type === 'author') filtered = books.filter(b => b.author === value);
 else if (type === 'pub') filtered = books.filter(b => b.pub === value);
@@ -485,7 +548,7 @@ else filtered = [...books];
 
 const displayTitle = (iconMap[type] || '📚') + ' ' + value;
 document.getElementById('titleText').innerText = displayTitle;
-document.getElementById('pageTitle').innerText = value || 'সকল বই';
+// pageTitle এ logo আছে, clear করব না
 document.getElementById('heroHeading').innerHTML = `<span style="color:#6ee7b7">${escapeHTML(value || 'সকল বই')}</span>`;
 
 /* show filter tabs only on full listing (no type filter) */
@@ -493,9 +556,49 @@ if (!type || type === 'all') {
     document.getElementById('filterTabs').style.display = 'flex';
 }
 
+/* ── CATEGORY SIDEBAR ── */
+function buildCatSidebar() {
+    if (type !== 'cat') return;
+    // categoryConfig থেকে নাও (সব category order সহ), না থাকলে books থেকে
+    let allCats = [];
+    if (typeof categoryConfig !== 'undefined' && categoryConfig.length) {
+        allCats = categoryConfig.map(c => c.key || c.label || c).filter(Boolean);
+    } else {
+        allCats = [...new Set(books.map(b => b.cat).filter(Boolean))];
+    }
+    // শুধু যে category তে বই আছে সেগুলো দেখাও
+    allCats = allCats.filter(cat => books.some(b => b.cat === cat));
+    const sidebar = document.getElementById('catSidebar');
+    sidebar.classList.add('show');
+    sidebar.innerHTML = allCats.map(cat => {
+        const label = (typeof categoryConfig !== 'undefined' && categoryConfig.find(c => c.key === cat))?.label || cat;
+        return `<div class="cat-sidebar-item ${cat === activeCategory ? 'active' : ''}" onclick="switchCategory('${escapeHTML(cat)}')">
+            <span class="cat-sidebar-icon">${catIconMap[cat] || '📚'}</span>
+            ${escapeHTML(label)}
+        </div>`;
+    }).join('');
+}
+
+function switchCategory(cat) {
+    activeCategory = cat;
+    filtered = books.filter(b => b.cat === cat);
+    currentPage = 1;
+    currentSort = 'default';
+    document.getElementById('sortSelect').value = 'default';
+    document.getElementById('heroHeading').innerHTML = `<span style="color:#6ee7b7">${escapeHTML(cat)}</span>`;
+    document.getElementById('titleText').innerText = '📚 ' + cat;
+    // sidebar active update
+    document.querySelectorAll('.cat-sidebar-item').forEach(el => {
+        el.classList.toggle('active', el.innerText.trim() === cat);
+    });
+    renderBooks(getList());
+    window.scrollTo({top:0, behavior:'smooth'});
+}
+
 setTimeout(() => {
     document.getElementById('skelGrid').style.display = 'none';
     document.getElementById('bookGrid').style.display = 'block';
+    buildCatSidebar();
     renderBooks(getList());
 }, 600);
 </script>
