@@ -41,34 +41,34 @@ body{font-family:'Hind Siliguri','Inter',sans-serif;background:var(--bg-body);co
 .bng{font-family:'Hind Siliguri',sans-serif;}
 
 /* ── NAVBAR ── */
-.navbar{background:var(--primary-dark);border-bottom:3px solid var(--primary-light);position:sticky;top:0;z-index:100;}
+.navbar{background:var(--nav-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border-bottom:1px solid var(--nav-border);box-shadow:0 1px 0 var(--glass-border),0 4px 30px rgba(5,150,105,0.08),0 2px 12px rgba(0,0,0,0.04);position:sticky;top:0;z-index:100;transition:background 0.4s,box-shadow 0.3s;}
 .nav-container{max-width:1200px;margin:auto;padding:0 20px;}
 .nav-top{display:flex;align-items:center;height:68px;gap:16px;}
 .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;}
-.nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#10b981,#34d399);border-radius:0px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 8px rgba(0,0,0,.25);}
-.nav-brand{font-size:18px;font-weight:800;color:#d1fae5;letter-spacing:.4px;}
-.nav-brand-sub{font-size:10px;color:#6ee7b7;font-weight:500;}
+.nav-logo-icon{width:42px;height:42px;background:transparent;border-radius:0px;display:flex;align-items:center;justify-content:center;}
+.nav-brand{font-size:18px;font-weight:800;color:var(--nav-text);letter-spacing:.4px;}
+.nav-brand-sub{font-size:10px;color:var(--text2);font-weight:500;}
 .nav-links{display:flex;gap:6px;align-items:center;}
-.nav-link{color:#a7f3d0;text-decoration:none;font-weight:600;font-size:14px;padding:7px 13px;border-radius:0px;transition:.2s;cursor:pointer;background:none;border:none;font-family:inherit;}
-.nav-link:hover,.nav-link.active{color:#fff;background:rgba(255,255,255,.12);}
+.nav-link{color:var(--text2);text-decoration:none;font-weight:600;font-size:14px;padding:7px 13px;border-radius:6px;transition:.2s;cursor:pointer;background:none;border:none;font-family:inherit;}
+.nav-link:hover,.nav-link.active{color:var(--green);background:var(--green-bg);}
 .nav-icons{display:flex;gap:8px;align-items:center;margin-left:auto;}
-.ni{width:40px;height:40px;border-radius:0px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#a7f3d0;position:relative;transition:.2s;text-decoration:none;}
-.ni:hover{background:rgba(255,255,255,.18);border-color:#34d399;color:#fff;}
-.ni .badge{position:absolute;top:-5px;right:-5px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--primary-dark);}
-.hamburger{display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer;}
+.ni{width:40px;height:40px;border-radius:0px;background:var(--nav-icon-bg);border:1px solid var(--nav-icon-border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--nav-text);position:relative;transition:.2s;text-decoration:none;}
+.ni:hover{background:var(--nav-icon-hover);border-color:var(--green);color:var(--green);}
+.ni .badge{position:absolute;top:-5px;right:-5px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--nav-bg);}
+.hamburger{display:none;background:none;border:none;color:var(--nav-text);font-size:24px;cursor:pointer;}
 
 /* ── PROGRESS ── */
-.progress-wrap{background:var(--primary-dark);padding:14px 20px 16px;border-bottom:2px solid rgba(52,211,153,.3);}
-.progress-steps{display:flex;align-items:center;max-width:500px;margin:0 auto;}
-.p-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
-.p-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:.3s;}
-.p-circle.done{background:var(--primary);color:#fff;}
-.p-circle.active{background:var(--primary);color:#fff;box-shadow:0 0 0 4px rgba(5,150,105,.35);}
-.p-circle.pending{background:rgba(255,255,255,.1);color:#6ee7b7;}
-.p-label{font-size:10px;font-weight:600;color:#6ee7b7;}
-.p-label.active{color:#34d399;}
-.p-line{flex:1;height:2px;background:rgba(255,255,255,.1);margin:0 4px;margin-bottom:18px;transition:.3s;}
-.p-line.done{background:var(--primary);}
+.progress-wrap{background:var(--nav-bg);backdrop-filter:var(--glass-blur);padding:18px 20px 20px;border-bottom:1px solid var(--nav-border);}
+.progress-steps{display:flex;align-items:center;max-width:480px;margin:0 auto;}
+.p-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
+.p-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;transition:.3s;}
+.p-circle.done{background:var(--green);color:#fff;box-shadow:0 4px 12px var(--green-glow);}
+.p-circle.active{background:var(--green);color:#fff;box-shadow:0 0 0 5px var(--green-glow2),0 4px 12px var(--green-glow);}
+.p-circle.pending{background:var(--border);color:var(--text3);border:2px solid var(--border2);}
+.p-label{font-size:11px;font-weight:700;color:var(--text2);}
+.p-label.active{color:var(--green);}
+.p-line{flex:1;height:2px;background:var(--border2);margin:0 6px;margin-bottom:22px;transition:.3s;border-radius:2px;}
+.p-line.done{background:var(--green);}
 
 /* ── CONTAINER ── */
 .container{max-width:1200px;margin:auto;padding:0 20px;}
@@ -193,15 +193,15 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 .empty-cart{text-align:center;padding:30px;color:var(--text-muted);}
 
 /* ── FOOTER ── */
-.footer{background:var(--primary-dark);color:#a7f3d0;margin-top:0;border-top:3px solid var(--primary);}
+.footer{background:var(--nav-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);color:var(--text2);margin-top:0;border-top:1px solid var(--nav-border);}
 .footer-container{max-width:1200px;margin:auto;padding:40px 20px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:40px;}
-.footer h3{color:#34d399;font-size:16px;margin-bottom:14px;}
-.footer p{font-size:13px;line-height:1.8;color:#6ee7b7;}
+.footer h3{color:var(--green);font-size:16px;margin-bottom:14px;}
+.footer p{font-size:13px;line-height:1.8;color:var(--text2);}
 .footer-links{list-style:none;}
 .footer-links li{margin-bottom:10px;}
-.footer-links a{color:#a7f3d0;text-decoration:none;font-size:13px;transition:.2s;}
-.footer-links a:hover{color:#34d399;padding-left:4px;}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:28px;padding-top:18px;text-align:center;font-size:12px;color:#6ee7b7;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:13px;transition:.2s;}
+.footer-links a:hover{color:var(--green);padding-left:4px;}
+.footer-bottom{border-top:1px solid var(--nav-border);margin-top:28px;padding-top:18px;text-align:center;font-size:12px;color:var(--text3);}
 
 /* ── WHATSAPP ── */
 .wa-float{position:fixed;bottom:24px;right:18px;width:48px;height:48px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.5);z-index:9990;text-decoration:none;transition:.2s;}
@@ -232,7 +232,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
   <div class="nav-container">
     <div class="nav-top">
       <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg></div>
+        <div class="nav-logo-icon"><img src="logo.png" alt="গ্রন্থকানন" style="width:32px;height:32px;object-fit:contain;"></div>
         <div>
           <div class="nav-brand bng">গ্রন্থকানন</div>
           <div class="nav-brand-sub bng">Gronthokanon Bookshop</div>
@@ -442,7 +442,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 <footer class="footer">
   <div class="footer-container">
     <div>
-      <h3 class="bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg> গ্রন্থকানন</h3>
+      <h3 class="bng" style="display:flex;align-items:center;gap:8px;"><img src="logo.png" alt="গ্রন্থকানন" style="width:28px;height:28px;object-fit:contain;"> গ্রন্থকানন</h3>
       <p class="bng">বাংলাদেশের বিশ্বস্ত অনলাইন বুকশপ।<br>সেরা বই, সেরা দামে।</p>
     </div>
     <div>
