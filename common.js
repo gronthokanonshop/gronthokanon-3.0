@@ -38,6 +38,13 @@ function navigateTo(url) {
     setTimeout(() => window.location.href = url, 240);
 }
 
+/* ═══ FIX: browser Back করলে যেন blank/সাদা না থাকে ═══ */
+/* fade-out এর পর page cache থেকে ফিরলে opacity 0 আটকে থাকত — এখানে reset করা হলো */
+window.addEventListener('pageshow', function () {
+    document.body.style.animation = 'none';
+    document.body.style.opacity = '1';
+});
+
 /* ═══ SCROLL TO TOP ═══ */
 window.addEventListener('scroll', () => {
     const btn = document.getElementById('scrollTopBtn');

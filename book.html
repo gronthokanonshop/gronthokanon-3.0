@@ -66,7 +66,20 @@
         .book-author:hover{text-decoration:underline;}
 
         /* BADGES */
-        .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+        .badges{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+        .img-card .badges{margin-top:14px;}
+        .img-card .badge.b-cat{display:none;}
+        .img-card .badge{display:flex;align-items:center;justify-content:flex-start;gap:8px;padding:11px 14px;border-radius:12px;width:100%;}
+        .stock-dot{width:8px;height:8px;border-radius:50%;background:#15803D;flex-shrink:0;display:inline-block;}
+        .b-out .stock-dot{background:#dc2626;}
+        .img-card-title-block{margin-top:14px;text-align:center;}
+        .img-card-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);line-height:1.4;}
+        .img-card-author{font-size:13px;color:#059669;font-weight:600;margin-top:3px;}
+
+        /* TRUST MINI LIST (Al Aziz style) */
+        .trust-mini{margin-top:14px;display:flex;flex-direction:column;gap:9px;}
+        .trust-mini .row{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--text2);}
+        .trust-mini svg{width:16px;height:16px;color:#059669;flex-shrink:0;}
         .badge{font-size:12px;padding:5px 14px;border-radius:20px;font-weight:600;}
         .b-cat{background:var(--green-bg);color:#059669;border:1px solid var(--green-border);}
         .b-ok{background:var(--green-bg);color:#059669;border:1px solid var(--green-border);}
@@ -90,14 +103,13 @@
         .qty-btn:hover{background:#059669;color:white;}
         .qty-num{width:40px;text-align:center;font-size:16px;font-weight:700;color:var(--text);background:var(--card-solid);border:none;outline:none;}
 
-        /* INFO TABLE -> CHIP STYLE (Al Aziz inspired) */
-        .info-table{width:100%;border-collapse:collapse;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px;}
-        .info-table tbody{display:flex;flex-wrap:wrap;gap:8px;width:100%;}
-        .info-table tr{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border2);border-radius:20px;padding:6px 14px 6px 12px;border-bottom:1px solid var(--border2);}
-        .info-table td{padding:0;font-size:12px;border:none;}
-        .info-label{color:#059669;width:auto;font-weight:700;}
-        .info-label::after{content:":";margin-right:4px;}
-        .info-val{color:var(--text);font-weight:600;}
+        /* INFO TABLE — clean row style (Al Aziz spec-table inspired) */
+        .info-table{width:100%;border-collapse:collapse;margin-bottom:0;}
+        .info-table tr{border-bottom:1px dashed var(--border2);}
+        .info-table tr:last-child{border-bottom:none;}
+        .info-table td{padding:13px 4px;font-size:14px;}
+        .info-label{color:var(--text3);width:120px;font-weight:500;}
+        .info-val{color:var(--text);font-weight:700;}
 
         /* DELIVERY CARD */
         .delivery-card{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid var(--green-border);border-radius:16px;padding:14px 18px;margin-bottom:16px;}
@@ -286,6 +298,16 @@
             <div class="img-skel" id="imgSkel"></div>
             <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
         </div>
+        <div class="img-card-title-block">
+            <div class="img-card-title" id="bookTitleImg"></div>
+            <div class="img-card-author" id="bookAuthorImg"></div>
+        </div>
+        <div class="badges" id="bookBadges"></div>
+        <div class="trust-mini">
+            <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/><path d="M9 12l2 2 4-4"/></svg> ১০০% অরিজিনাল বই</div>
+            <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="13" rx="1.5"/><path d="M16 10h3.5L22 13.5V19h-6"/><circle cx="6" cy="19.5" r="1.6"/><circle cx="17.5" cy="19.5" r="1.6"/></svg> সারাদেশে হোম ডেলিভারি</div>
+            <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg> ক্যাশ অন ডেলিভারি সুবিধা</div>
+        </div>
         <div style="margin-top:8px;font-size:11px;color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> ট্যাপ করুন বড় করে দেখতে</div>
         <div class="view-badge" id="viewBadge"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> লোড হচ্ছে...</div>
         <button class="wl-btn-lg" id="wlBtnLg" onclick="toggleWL()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
@@ -296,7 +318,6 @@
     <div class="info-card" id="mainSection">
         <div class="book-title" id="bookTitle"></div>
         <div class="book-author" id="bookAuthor"></div>
-        <div class="badges" id="bookBadges"></div>
         <div class="price-section">
             <div>
                 <div id="offerTagWrap" style="display:none;"></div>
@@ -314,12 +335,6 @@
                 <button class="qty-btn" onclick="changeQty(1)">+</button>
             </div>
         </div>
-        <table class="info-table">
-            <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
-            <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
-            <tr><td class="info-label">কভার</td><td class="info-val" id="bookCover"></td></tr>
-            <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
-        </table>
         <div class="delivery-card">
             <div class="d-row"><div class="d-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div><div class="d-text" id="deliveryText">ঢাকায় ডেলিভারি: ১-২ দিন</div><div class="d-sub">বাইরে: ৩-৫ কার্যদিবস</div></div></div>
             <div class="d-row"><div class="d-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M17 12h.01M7 12h.01"/></svg></div><div><div class="d-text">ক্যাশ অন ডেলিভারি সুবিধা</div><div class="d-sub">ডেলিভারি পেয়ে টাকা দিন</div></div></div>
@@ -332,6 +347,18 @@
             </button>
             <button class="btn-buy" id="btnBuy" onclick="buyNow()"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg> এখনই কিনুন</button>
         </div>
+    </div>
+
+    <!-- BOOK DETAILS — SEPARATE CARD -->
+    <div class="desc-card" id="bookDetailsCard">
+        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> বইয়ের তথ্য</h3>
+        <table class="info-table">
+            <tr><td class="info-label">লেখক</td><td class="info-val" id="bookAuthorRow"></td></tr>
+            <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
+            <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
+            <tr><td class="info-label">কভার</td><td class="info-val" id="bookCover"></td></tr>
+            <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
+        </table>
     </div>
 
     <!-- DESCRIPTION -->
@@ -606,7 +633,10 @@ function loadBook(){
     const bookImg=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
     document.getElementById('bookImg').src=bookImg;
     document.getElementById('bookTitle').innerText=b.name;
+    document.getElementById('bookTitleImg').innerText=b.name;
     document.getElementById('bookAuthor').innerText='✍️ '+b.author;
+    document.getElementById('bookAuthorImg').innerText=b.author;
+    document.getElementById('bookAuthorRow').innerText=b.author;
     document.getElementById('bookPrice').innerText='৳ '+b.price;
     document.getElementById('stickyPrice').innerText='৳ '+b.price;
     document.getElementById('bookPub').innerText=b.pub;
@@ -643,7 +673,7 @@ function loadBook(){
         if(typeof db==='undefined'||!db){setTimeout(doStock,200);return;}
         db.ref('stock/'+idx).once('value').then(snap=>{
             const inStock=snap.val()!==false;
-            badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span><span class="${inStock?'badge b-ok':'badge b-out'}">${inStock?'✅ স্টক আছে':'❌ স্টক শেষ'}</span>`;
+            badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span><span class="${inStock?'badge b-ok':'badge b-out'}"><span class="stock-dot"></span>${inStock?'স্টক আছে — আজই অর্ডার করুন':'স্টক শেষ'}</span>`;
             if(!inStock){
                 ['btnCart','btnBuy','stickyBuy'].forEach(id=>{
                     const el=document.getElementById(id);
