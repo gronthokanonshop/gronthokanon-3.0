@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="logo.png" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ডেলিভারি নীতি — গ্রন্থকানন</title>
+<meta name="theme-color" content="#059669">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+.page-wrap{max-width:580px;margin:0 auto;padding:24px 16px 100px;}
+.hero-banner{background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:28px 24px;text-align:center;margin-bottom:20px;}
+.hero-banner h1{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+.hero-banner p{font-size:12px;color:#bfdbfe;}
+.info-card{background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:14px;}
+.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;padding-left:10px;border-left:3px solid #059669;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);font-size:13.5px;}
+.info-row:last-child{border:none;}
+.info-row span:first-child{color:var(--text2);}
+.info-row span:last-child{font-weight:700;color:var(--text);}
+.charge-box{background:linear-gradient(135deg,rgba(5,150,105,0.08),rgba(5,150,105,0.04));border:1.5px solid rgba(5,150,105,0.2);padding:16px;text-align:center;margin-bottom:14px;}
+.charge-big{font-size:28px;font-weight:900;color:#059669;}
+.charge-label{font-size:12px;color:var(--text2);margin-top:4px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.grid-card{background:var(--card);border:1px solid var(--border);padding:16px;text-align:center;}
+.grid-card .icon{font-size:26px;margin-bottom:8px;}
+.grid-card .title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.grid-card .sub{font-size:11.5px;color:var(--text2);line-height:1.5;}
+.note{background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);padding:14px;font-size:12.5px;color:var(--text2);line-height:1.8;}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-top">
+    <button class="back-btn" onclick="history.back()">‹</button>
+    <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">ডেলিভারি নীতি</span>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero-banner">
+    <h1>🚚 ডেলিভারি তথ্য</h1>
+    <p>সারা বাংলাদেশে দ্রুত ও নির্ভরযোগ্য ডেলিভারি</p>
+  </div>
+
+  <div class="grid2">
+    <div class="charge-box" style="margin-bottom:0;">
+      <div class="charge-big">৳৬০</div>
+      <div class="charge-label">ঢাকার ভেতরে</div>
+    </div>
+    <div class="charge-box" style="margin-bottom:0;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.04));border-color:rgba(59,130,246,0.2);">
+      <div class="charge-big" style="color:#2563eb;">৳৯০</div>
+      <div class="charge-label">ঢাকার বাইরে</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3>ডেলিভারি সময়</h3>
+    <div class="info-row"><span>ঢাকার ভেতরে</span><span>১–২ কার্যদিবস</span></div>
+    <div class="info-row"><span>ঢাকার বাইরে</span><span>৩–৫ কার্যদিবস</span></div>
+    <div class="info-row"><span>প্রত্যন্ত অঞ্চল</span><span>৫–৭ কার্যদিবস</span></div>
+    <div class="info-row"><span>অর্ডার কনফার্মের পর</span><span>পরবর্তী কার্যদিবসে প্রেরণ</span></div>
+  </div>
+
+  <div class="info-card">
+    <h3>ডেলিভারি পদ্ধতি</h3>
+    <div class="grid2" style="margin-bottom:0;">
+      <div class="grid-card">
+        <div class="icon">💵</div>
+        <div class="title">ক্যাশ অন ডেলিভারি</div>
+        <div class="sub">বই পাওয়ার পর টাকা দিন</div>
+      </div>
+      <div class="grid-card">
+        <div class="icon">📦</div>
+        <div class="title">কুরিয়ার সার্ভিস</div>
+        <div class="sub">পাঠাও, রেডেক্স ও সুন্দরবন</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    ⚠️ <strong>লক্ষ্য রাখুন:</strong> শুক্রবার ও সরকারি ছুটির দিন ডেলিভারি কার্যক্রম বন্ধ থাকে। সেক্ষেত্রে পরবর্তী কার্যদিবসে ডেলিভারি হবে। যেকোনো সমস্যায় আমাদের হেল্পলাইনে যোগাযোগ করুন: <strong>01516595762</strong>
+  </div>
+</div>
+
+<script src="common.js"></script>
+</body>
+</html>

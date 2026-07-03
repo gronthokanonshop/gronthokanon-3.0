@@ -1746,7 +1746,8 @@ function downloadBookJs(){
         }).join(', ');
         return `  { ${fields} }`;
     });
-    const code=`const books = [\n${lines.join(',\n')}\n];`;
+    const fallback=`\n\n/* ═══ IMAGE FALLBACK ═══\n   যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —\n   সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */\nbooks.forEach(function(b){\n    if(!b.img || !/^https?:\\/\\//.test(b.img)) b.img = 'book-placeholder.svg';\n});`;
+    const code=`const books = [\n${lines.join(',\n')}\n];`+fallback;
     const blob=new Blob([code],{type:'text/javascript;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');

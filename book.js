@@ -53,10 +53,10 @@ const books = [
   { name: "ঈমান বিধ্বংসী সাতটি পাপ", author: "আবু সুফিয়ান বিন আব্বাস", price: 105, original_price: 140, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/JNmSfpb/download-2025-02-13-T143451-789-250x372.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "রাইটার্স টাইমলাইন", author: "জুবায়ের আহমেদ, মাহিন মাহমুদ", price: 113, original_price: 150, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/qYVmCdqZ/250x389.webp", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "নুসাইবা", author: "আবদুল্লাহ বিন মুহাম্মাদ", price: 139, original_price: 185, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/rr23rtr/Nusaiba-250x391.webp", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "অপেক্ষার শেষ প্রহর", author: "আদিব সালেহ", price: 165, original_price: 220, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/qLSBTfYj/opekkhar-shesh-prohor-01-scaled-250x412.jpgg", desc: "শীঘ্রই আপডেট করা হবে" },
+  { name: "অপেক্ষার শেষ প্রহর", author: "আদিব সালেহ", price: 165, original_price: 220, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/qLSBTfYj/opekkhar-shesh-prohor-01-scaled-250x412.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "আয়াতুল কুরসি (ফজিলত ও আমল)", author: "মাহদী আব্দুল হালিম", price: 165, original_price: 220, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/MDMY58MD/Whats-App-Image-2024-10-29-at-6-11-51-PM-2-250x395.webp", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "শহিদে কারবালার নির্মম ইতিহাস", author: "মুফতি মোহাম্মদ শফি (রহ.)", price: 135, original_price: 180, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/WNxWGWDF/Karbala-02-250x386.jpg", desc: "শীঘ্রই আপডেট করা হবে" },
-  { name: "খানিক গেলেই পথ", author: "জুবায়ের আহমেদ", price: 199, original_price: 265, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/svS4QNvB/Khanik-gelei-Cover-02-1-1-250x409.webpg", desc: "শীঘ্রই আপডেট করা হবে" },
+  { name: "খানিক গেলেই পথ", author: "জুবায়ের আহমেদ", price: 199, original_price: 265, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/svS4QNvB/Khanik-gelei-Cover-02-1-1-250x409.webp", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "মেহরিমা", author: "আবদুল্লাহ বিন মুহাম্মাদ", price: 120, original_price: 160, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/KjYpXTDt/Mehrima-Final-02-1-1-250x409.webp", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "মেঘের কোলে রোদ", author: "এনামুল হক ইবনে ইউসুফ", price: 240, original_price: 320, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/R5VwVS2/megher-kole-rod-1-250x386.webp", desc: "শীঘ্রই আপডেট করা হবে" },
   { name: "সংকেত", author: "কাশফিয়া দিশা", price: 240, original_price: 320, cat: "ইসলামি বই", subject: "ইসলামি বই", cover: "Paperback", pub: "রাইয়্যান প্রকাশন", pages: "পৃষ্ঠা", img: "https://i.ibb.co.com/PGdDTmN9/Converted-250x385.webp", desc: "শীঘ্রই আপডেট করা হবে" },
@@ -1201,3 +1201,10 @@ const books = [
 { name: "মুমিনের শ্রেষ্ঠ হাতিয়ার সবর ও সালাত", author: "মিয়া গোলাম পরওয়ার", price: 128, original_price: 170, cat: "নতুন প্রকাশিত", subject: "নতুন প্রকাশিত", cover: "Paperback", pub: "", pages: "", img: "https://wafilife-media.wafilife.com/uploads/2026/05/muminer-sreshtho-haiyar-78793-192x288.jpeg", desc: "শীঘ্রই আপডেট করা হবে" },
 { name: "দ্য ডাচেস অফ ব্লুমসবারি স্ট্রিট", author: "হেলেন হ্যানফ", price: 180, original_price: 300, cat: "নতুন প্রকাশিত", subject: "নতুন প্রকাশিত", cover: "Paperback", pub: "", pages: "", img: "https://wafilife-media.wafilife.com/uploads/2026/04/the-duchess-of-bloomsbury-street-77100-192x288.jpeg", desc: "শীঘ্রই আপডেট করা হবে" }
 ];
+
+/* ═══ IMAGE FALLBACK ═══
+   যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —
+   সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */
+books.forEach(function(b){
+    if(!b.img || !/^https?:\/\//.test(b.img)) b.img = 'book-placeholder.svg';
+});

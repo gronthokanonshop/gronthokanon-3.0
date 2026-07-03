@@ -12,6 +12,31 @@
 <meta property="og:description" content="স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান। ক্যাশ অন ডেলিভারি সুবিধা।">
 <meta property="og:image" content="https://gronthokanonshop.github.io/gronthokanon-3.0/logo.png">
 <meta property="og:url" content="https://gronthokanonshop.github.io/gronthokanon-3.0/"><meta property="og:type" content="website">
+<link rel="canonical" href="https://gronthokanonshop.github.io/gronthokanon-3.0/">
+<!-- Google-এর জন্য structured data: এটি একটি অনলাইন বইয়ের দোকান -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BookStore",
+  "name": "গ্রন্থকানন",
+  "alternateName": "Gronthokanon",
+  "url": "https://gronthokanonshop.github.io/gronthokanon-3.0/",
+  "logo": "https://gronthokanonshop.github.io/gronthokanon-3.0/logo.png",
+  "description": "সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।",
+  "telephone": "+8801516595762",
+  "email": "gronthokanon4309@gmail.com",
+  "address": {"@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD"},
+  "sameAs": ["https://facebook.com/gronthokanon0943"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "গ্রন্থকানন",
+  "url": "https://gronthokanonshop.github.io/gronthokanon-3.0/"
+}
+</script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
@@ -29,9 +54,9 @@
         /* ═══════ GLAMOROUS BACKGROUND ═══════ */
         body {
             background:
-                radial-gradient(ellipse at 15% 20%, rgba(5,150,105,0.07) 0%, transparent 55%),
-                radial-gradient(ellipse at 85% 10%, rgba(16,185,129,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(4,120,87,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 15% 20%, rgba(5,150,105,0.03) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 10%, rgba(16,185,129,0.02) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(4,120,87,0.02) 0%, transparent 60%),
                 var(--bg);
             background-attachment: fixed;
         }
@@ -45,13 +70,13 @@
         }
         body::before {
             content:'';position:fixed;top:-120px;right:-80px;width:380px;height:380px;
-            background:radial-gradient(circle,rgba(5,150,105,0.11) 0%,transparent 70%);
+            background:radial-gradient(circle,rgba(5,150,105,0.04) 0%,transparent 70%);
             border-radius:50%;pointer-events:none;z-index:0;
             animation:floatOrb 8s ease-in-out infinite;
         }
         body::after {
             content:'';position:fixed;bottom:100px;left:-100px;width:300px;height:300px;
-            background:radial-gradient(circle,rgba(16,185,129,0.08) 0%,transparent 70%);
+            background:radial-gradient(circle,rgba(16,185,129,0.03) 0%,transparent 70%);
             border-radius:50%;pointer-events:none;z-index:0;
             animation:floatOrb 10s ease-in-out infinite reverse;
         }
@@ -634,6 +659,8 @@
             .banner-sub { font-size: 10px; }
         }
     .eico { display:inline-block; width:1em; height:1em; vertical-align:-0.15em; flex-shrink:0; }
+    @keyframes cartBounce { 0%{transform:scale(1)} 40%{transform:scale(1.3)} 70%{transform:scale(0.9)} 100%{transform:scale(1)} }
+    .bounce { animation: cartBounce 0.4s ease; }
 </style>
 </head>
 <body>
@@ -703,26 +730,36 @@
 
 <!-- ═══════ NAVBAR ═══════ -->
 <nav class="navbar">
-    <div class="navbar-top" style="display:flex;align-items:center;padding:7px 12px;gap:0;background:var(--nav-bg);justify-content:space-between;">
+    <div class="navbar-top" style="display:flex;align-items:center;padding:6px 12px;gap:8px;background:var(--nav-bg);justify-content:space-between;">
 
-        <!-- LEFT: MENU BUTTON -->
-        <div style="flex:1;display:flex;align-items:center;justify-content:flex-start;">
-            <button class="nav-icon-btn-g" onclick="toggleSidebar()" title="মেনু" style="width:38px;height:38px;font-size:18px;border-radius:6px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <!-- LEFT: MENU + tagline -->
+        <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;">
+            <button class="nav-icon-btn-g" onclick="toggleSidebar()" title="মেনু" style="width:36px;height:36px;font-size:17px;border-radius:6px;flex-shrink:0;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+            <div class="nb-side-text" style="display:flex;flex-direction:column;line-height:1.15;min-width:0;overflow:hidden;">
+                <span style="font-size:8.5px;font-weight:800;color:#059669;letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;">Islamic Bookshop</span>
+                <span style="font-size:8px;font-weight:500;color:var(--text3);letter-spacing:0.3px;white-space:nowrap;">Authentic · Affordable</span>
+            </div>
         </div>
 
         <!-- CENTER: LOGO -->
-        <div class="navbar-brand" onclick="scrollToTop()" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-            <img src="logo.png" alt="গ্রন্থকানন" style="height:36px;width:auto;object-fit:contain;display:block;">
+        <div class="navbar-brand" onclick="scrollToTop()" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <img src="logo.png" alt="গ্রন্থকানন" style="height:38px;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 2px 6px rgba(5,150,105,0.18));">
         </div>
 
-        <!-- RIGHT: ICONS -->
-        <div class="navbar-icons" style="flex:1;display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-shrink:0;">
-            <button class="nav-icon-btn-g" onclick="openSearch()" title="সার্চ" style="width:38px;height:38px;font-size:18px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-            <button class="nav-icon-btn-g" onclick="toggleDark()" id="darkBtn" title="থিম" style="width:38px;height:38px;font-size:18px;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-            <div class="cart-wrap" id="cartWrap" onclick="showCart()">
-                <button class="nav-icon-btn-g" style="position:relative;width:38px;height:38px;font-size:18px;">
-                    <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="nav-badge show" id="cartCount">0</span>
-                </button>
+        <!-- RIGHT: tagline + ICONS -->
+        <div style="flex:1;display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-shrink:0;">
+            <div class="nb-side-text" style="display:flex;flex-direction:column;line-height:1.15;text-align:right;min-width:0;overflow:hidden;">
+                <span style="font-size:8.5px;font-weight:800;color:#059669;letter-spacing:1.4px;text-transform:uppercase;white-space:nowrap;">Cash on Delivery</span>
+                <span style="font-size:8px;font-weight:500;color:var(--text3);letter-spacing:0.3px;white-space:nowrap;">All over Bangladesh</span>
+            </div>
+            <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
+                <button class="nav-icon-btn-g" onclick="openSearch()" title="সার্চ" style="width:36px;height:36px;font-size:16px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+                <button class="nav-icon-btn-g" onclick="toggleDark()" id="darkBtn" title="থিম" style="width:36px;height:36px;font-size:16px;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+                <div class="cart-wrap" id="cartWrap" onclick="showCart()">
+                    <button class="nav-icon-btn-g" style="position:relative;width:36px;height:36px;font-size:16px;">
+                        <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="nav-badge show" id="cartCount">0</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -820,19 +857,19 @@
 <div class="banner-wrap">
   <div class="banner-slider" id="mainSlider">
 
-    <!-- SLIDE 1: banner.jpeg -->
-    <div class="banner-slide" style="background:#1a0a2e;">
-      <img src="banner.jpeg" alt="ব্যানার ১" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-    </div>
-
-    <!-- SLIDE 2: banner2.jpeg -->
-    <div class="banner-slide" style="background:#0c1a2e;">
-      <img src="banner2.jpeg" alt="ব্যানার ২" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
-    </div>
-
-    <!-- SLIDE 3: banner3.jpeg -->
+    <!-- SLIDE 1: banner1.jpg -->
     <div class="banner-slide" style="background:#064e3b;">
-      <img src="banner3.jpeg" alt="ব্যানার ৩" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <img src="banner1.jpg" alt="ব্যানার ১" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+    </div>
+
+    <!-- SLIDE 2: banner2.jpg -->
+    <div class="banner-slide" style="background:#064e3b;">
+      <img src="banner2.jpg" alt="ব্যানার ২" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+    </div>
+
+    <!-- SLIDE 3: banner3.jpg -->
+    <div class="banner-slide" style="background:#064e3b;">
+      <img src="banner3.jpg" alt="ব্যানার ৩" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
     </div>
 
   </div>
@@ -869,6 +906,10 @@
         <div class="cat-grid-item" style="--cgi-color:rgba(5,150,105,0.10);border-color:rgba(5,150,105,0.2);" onclick="window.location.href='filter.html?type=cat&value=ইসলামি বই'">
             <span class="cat-grid-icon">☪️</span>
             <span class="cat-grid-label">ইসলামি বই</span>
+        </div>
+        <div class="cat-grid-item" style="--cgi-color:rgba(20,184,166,0.10);border-color:rgba(20,184,166,0.2);" onclick="window.location.href='filter.html?type=cat&value=প্যাকেজসমূহ'">
+            <span class="cat-grid-icon">📦</span>
+            <span class="cat-grid-label">প্যাকেজসমূহ</span>
         </div>
         <div class="cat-grid-item" style="--cgi-color:rgba(59,130,246,0.10);border-color:rgba(59,130,246,0.2);" onclick="window.location.href='filter.html?type=cat&value=Academic'">
             <span class="cat-grid-icon">🎓</span>
@@ -1133,11 +1174,17 @@ footer {
 <div class="drawer-item" onclick="navigateToFilter('cat','নতুন প্রকাশিত');closeDrawer()"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z"/><path d="M19 14l.75 2.25L22 17l-2.25.75L19 20l-.75-2.25L16 17l2.25-.75z"/><path d="M5 17l.5 1.5L7 19l-1.5.5L5 21l-.5-1.5L3 19l1.5-.5z"/></svg> <span>নতুন প্রকাশিত</span></div>
 <div class="drawer-item" onclick="navigateToFilter('cat','Pre Order');closeDrawer()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> <span>Pre Order</span></div>
 <div class="drawer-item" onclick="navigateToFilter('cat','ইসলামি বই');closeDrawer()"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 0 18A9 9 0 0 0 12 3zm0 2a7 7 0 1 1-4.9 12A6 6 0 1 0 15 7.1 7 7 0 0 1 12 5z"/><polygon points="16,8 17,11 20,11 17.5,13 18.5,16 16,14 13.5,16 14.5,13 12,11 15,11"/></svg>️ <span>ইসলামি বই</span></div>
+<div class="drawer-item" onclick="navigateToFilter('cat','প্যাকেজসমূহ');closeDrawer()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> <span>প্যাকেজসমূহ</span></div>
 <div class="drawer-item" onclick="navigateToFilter('cat','Academic');closeDrawer()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> <span>Academic</span></div>
 <div class="drawer-item" onclick="navigateToFilter('cat','দরসি কিতাব');closeDrawer()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 10V7l3-2 3 2v3M13 10V7l3-2 3 2v3M9 10v11M15 10v11"/><path d="M12 2a3 3 0 0 1 3 3H9a3 3 0 0 1 3-3z"/></svg> <span>দরসি কিতাব</span></div>
 <div class="drawer-item" onclick="navigateToFilter('cat','সুন্নাহ আইটেম');closeDrawer()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/><line x1="12" y1="7" x2="12" y2="10"/><line x1="12" y1="14" x2="12" y2="17"/></svg> <span>সুন্নাহ আইটেম</span></div>
 <div class="drawer-item" onclick="navigateToFilter('cat','Stationery');closeDrawer()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>️ <span>Stationery</span></div>
 </div>
+
+<!-- ═══════ SCROLL TO TOP ═══════ -->
+<button id="scrollTopBtn" class="scroll-top" onclick="scrollToTop()" title="উপরে যান" style="border:none;color:#fff;cursor:pointer;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18,15 12,9 6,15"/></svg>
+</button>
 
 <script src="book.js" defer></script>
 <script>
@@ -1147,13 +1194,15 @@ const categoryConfig = [
     {key:"নতুন প্রকাশিত",  label:"✨ নতুন প্রকাশিত"},
     {key:"Pre Order",       label:"🛒 Pre Order"},
     {key:"ইসলামি বই",      label:"☪️ ইসলামি বই"},
+    {key:"প্যাকেজসমূহ",    label:"📦 প্যাকেজসমূহ"},
     {key:"Academic",        label:"🎓 Academic"},
     {key:"দরসি কিতাব",     label:"🕌 দরসি কিতাব"},
     {key:"সুন্নাহ আইটেম",  label:"📿 সুন্নাহ আইটেম"},
     {key:"Stationery",      label:"🖊️ Stationery"},
 ];
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
-let discountPercent = 0;
+/* কুপন আগে apply করা থাকলে reload-এর পরও discount বহাল থাকবে */
+let discountPercent = localStorage.getItem('gronthokanon_coupon') ? (parseInt(localStorage.getItem('gronthokanon_discount')) || 0) : 0;
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
 let recentlyViewed = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
 

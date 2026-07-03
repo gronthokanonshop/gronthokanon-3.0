@@ -18,7 +18,11 @@ function toggleDark() {
     const saved = localStorage.getItem('gronthokanon_theme');
     if (saved) {
         document.documentElement.setAttribute('data-theme', saved);
-
+        /* dark হলে বাটনের আইকনও মিলিয়ে দাও */
+        if (saved === 'dark') {
+            const btn = document.getElementById('darkBtn');
+            if (btn && btn.innerText.trim() === '🌙') btn.innerText = '☀️';
+        }
     }
 })();
 

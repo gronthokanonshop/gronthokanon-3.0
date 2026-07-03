@@ -5,6 +5,8 @@
     <link rel="icon" href="logo.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>বই বিস্তারিত — গ্রন্থকানন</title>
+    <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বই। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।" id="metaDesc">
+    <link rel="canonical" href="https://gronthokanonshop.github.io/gronthokanon-3.0/book.html" id="canonicalLink">
     <meta name="theme-color" content="#ffffff">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
@@ -696,6 +698,47 @@ function loadBook(){
     /* load new features */
     loadVideoPreview(b);
     loadAISuggest(b);
+
+    /* ══ SEO: বইভিত্তিক meta + structured data (Google-এ বইয়ের নাম সার্চে আসার জন্য) ══ */
+    updateSEO(b,idx,bookImg,desc);
+}
+
+function updateSEO(b,idx,bookImg,desc){
+    const SITE='https://gronthokanonshop.github.io/gronthokanon-3.0';
+    const pageUrl=SITE+'/book.html?id='+idx;
+    const absImg=/^https?:\/\//.test(bookImg)?bookImg:SITE+'/'+bookImg;
+    const metaDesc=document.getElementById('metaDesc');
+    if(metaDesc)metaDesc.setAttribute('content',`${b.name} — ${b.author}। মূল্য ৳${b.price}${b.original_price>b.price?` (${discPct(b)}% ছাড়)`:''}। ${b.pub||'গ্রন্থকানন'} | ক্যাশ অন ডেলিভারিতে অর্ডার করুন গ্রন্থকানন থেকে।`);
+    const canon=document.getElementById('canonicalLink');
+    if(canon)canon.setAttribute('href',pageUrl);
+    /* og ট্যাগ (শেয়ার প্রিভিউ) */
+    [['og:title',`${b.name} — ${b.author} | গ্রন্থকানন`],['og:description',`মূল্য ৳${b.price} | ক্যাশ অন ডেলিভারি | গ্রন্থকানন`],['og:image',absImg],['og:url',pageUrl],['og:type','product']].forEach(([p,c])=>{
+        let m=document.querySelector(`meta[property="${p}"]`);
+        if(!m){m=document.createElement('meta');m.setAttribute('property',p);document.head.appendChild(m);}
+        m.setAttribute('content',c);
+    });
+    /* JSON-LD Product schema */
+    const ld={
+        "@context":"https://schema.org",
+        "@type":"Product",
+        "name":b.name,
+        "image":absImg,
+        "description":desc,
+        "brand":{"@type":"Brand","name":b.pub||'গ্রন্থকানন'},
+        "offers":{
+            "@type":"Offer",
+            "url":pageUrl,
+            "priceCurrency":"BDT",
+            "price":b.price,
+            "availability":"https://schema.org/InStock",
+            "seller":{"@type":"Organization","name":"গ্রন্থকানন"}
+        }
+    };
+    if(b.author)ld.description=`${b.author} রচিত "${b.name}"। `+desc;
+    const s=document.createElement('script');
+    s.type='application/ld+json';
+    s.textContent=JSON.stringify(ld);
+    document.head.appendChild(s);
 }
 function goToCart(){localStorage.setItem('gronthokanon_opencart','1');window.location.href='index.html';}
 function goBack(){window.history.back();}
@@ -778,7 +821,7 @@ async function markHelpful(reviewKey,bookId,el){
         await ref.transaction(v=>(v||0)+1);
         const snap=await ref.get();
         el.querySelector('span').innerText=snap.val()||0;
-        showToast('<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> ধন্যবাদ!','#059669');
+        showToast('👍 ধন্যবাদ!','#059669');
     }catch(e){}
 }
 

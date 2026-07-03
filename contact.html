@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="logo.png" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>যোগাযোগ — গ্রন্থকানন</title>
+<meta name="theme-color" content="#059669">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+.page-wrap{max-width:580px;margin:0 auto;padding:24px 16px 100px;}
+.hero-banner{background:linear-gradient(135deg,#064e3b,#059669);padding:28px 24px;text-align:center;margin-bottom:20px;}
+.hero-banner h1{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+.hero-banner p{font-size:12px;color:#a7f3d0;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.contact-card{background:var(--card);border:1px solid var(--border);padding:18px 14px;text-align:center;text-decoration:none;display:block;transition:.2s;}
+.contact-card:hover{border-color:#059669;transform:translateY(-2px);}
+.contact-card .icon{font-size:28px;margin-bottom:8px;}
+.contact-card .label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.contact-card .val{font-size:12px;color:#059669;font-weight:600;}
+.info-card{background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:14px;}
+.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;padding-left:10px;border-left:3px solid #059669;}
+.hours-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.hours-row:last-child{border:none;}
+.hours-row span:first-child{color:var(--text2);}
+.hours-row .open{color:#059669;font-weight:700;}
+.hours-row .closed{color:#dc2626;font-weight:700;}
+.wa-big{display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,#128c7e,#25d366);padding:18px;margin-bottom:14px;cursor:pointer;text-decoration:none;transition:.2s;}
+.wa-big:hover{opacity:0.92;}
+.wa-big span{font-size:15px;font-weight:800;color:#fff;}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-top">
+    <button class="back-btn" onclick="history.back()">‹</button>
+    <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">যোগাযোগ</span>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero-banner">
+    <h1>📞 আমাদের সাথে কথা বলুন</h1>
+    <p>যেকোনো প্রশ্ন বা সমস্যায় আমরা সদা প্রস্তুত</p>
+  </div>
+
+  <a href="https://wa.me/8801516595762" target="_blank" class="wa-big">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:32px;" alt="WhatsApp">
+    <span>WhatsApp এ এখনই মেসেজ করুন</span>
+  </a>
+
+  <div class="contact-grid">
+    <a href="tel:+8801516595762" class="contact-card">
+      <div class="icon">📞</div>
+      <div class="label">ফোন</div>
+      <div class="val">01516595762</div>
+    </a>
+    <a href="mailto:gronthokanon4309@gmail.com" class="contact-card">
+      <div class="icon">📧</div>
+      <div class="label">ইমেইল</div>
+      <div class="val">Gmail</div>
+    </a>
+    <a href="https://facebook.com/gronthokanon0943" target="_blank" class="contact-card">
+      <div class="icon">📘</div>
+      <div class="label">Facebook</div>
+      <div class="val">আমাদের পেজ</div>
+    </a>
+    <div class="contact-card" style="cursor:default;">
+      <div class="icon">📍</div>
+      <div class="label">ঠিকানা</div>
+      <div class="val">ঢাকা, বাংলাদেশ</div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3>সাপোর্ট সময়সূচি</h3>
+    <div class="hours-row"><span>শনি — বৃহস্পতি</span><span class="open">সকাল ৯টা — রাত ১০টা</span></div>
+    <div class="hours-row"><span>শুক্রবার</span><span class="open">বিকাল ৪টা — রাত ১০টা</span></div>
+    <div class="hours-row"><span>সরকারি ছুটি</span><span class="closed">সীমিত সেবা</span></div>
+    <div class="hours-row"><span>জরুরি যোগাযোগ</span><span style="color:#059669;font-weight:700;">WhatsApp</span></div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+</body>
+</html>

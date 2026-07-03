@@ -457,7 +457,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
       <p class="bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01516595762<br><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> gronthokanon4309@gmail.com<br><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Dhaka, Bangladesh</p>
     </div>
   </div>
-  <div class="footer-bottom bng">© ২০২৪ গ্রন্থকানন। সর্বস্বত্ব সংরক্ষিত।</div>
+  <div class="footer-bottom bng">© ২০২৬ গ্রন্থকানন। সর্বস্বত্ব সংরক্ষিত।</div>
 </footer>
 
 <!-- SCRIPTS -->
@@ -865,6 +865,9 @@ async function confirmOrder(){
   localStorage.removeItem('gronthokanon_cart');
   localStorage.removeItem('gronthokanon_discount');
   localStorage.removeItem('gronthokanon_coupon');
+  /* মেমোরির কার্টও খালি করা হলো — নাহলে আবার "অর্ডার নিশ্চিত" চাপলে একই অর্ডার দ্বিতীয়বার চলে যেত */
+  cart = []; coupon = ''; discPct = 0;
+  renderSummary();
 
   document.getElementById('successInfo').innerHTML = `
     <div style="background:var(--bg-body);border-radius:10px;padding:12px;margin-bottom:10px;text-align:left;">
@@ -985,7 +988,7 @@ function buildInvoiceHTML(o){
       </div>`:''}
     </div>    <div style="background:#065f46;padding:14px 28px;text-align:center;margin-top:8px;border-top:3px solid #059669;">
       <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! 📚</div>
-      <div style="color:#a7f3d0;font-size:11px;margin-top:4px;">Track: gronthokanonshop.github.io/track.html?id=${o.orderId}</div>
+      <div style="color:#a7f3d0;font-size:11px;margin-top:4px;">Track: gronthokanonshop.github.io/gronthokanon-3.0/track.html?id=${o.orderId}</div>
     </div>
   </div>`;
 }

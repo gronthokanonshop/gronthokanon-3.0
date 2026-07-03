@@ -10,15 +10,15 @@
 /* ═══ DESIGN TOKENS ═══ */
 :root {
     /* Core palette */
-    --bg:            #f0f7f4;
-    --bg2:           #e8f5ef;
-    --card:          rgba(255, 255, 255, 0.82);
+    --bg:            #f8fdfb;
+    --bg2:           #eef8f3;
+    --card:          rgba(255, 255, 255, 0.96);
     --card-solid:    #ffffff;
     --text:          #0d1f1a;
     --text2:         #4a6660;
     --text3:         #8aada7;
-    --border:        rgba(5, 150, 105, 0.14);
-    --border2:       rgba(5, 150, 105, 0.26);
+    --border:        rgba(5, 150, 105, 0.12);
+    --border2:       rgba(5, 150, 105, 0.20);
 
     /* Brand greens */
     --green:         #059669;
@@ -42,13 +42,13 @@
     --glass-blur:    blur(18px);
 
     /* Nav — fixed for dark mode */
-    --nav-bg:        rgba(248, 252, 250, 0.96);
-    --nav-border:    rgba(5, 150, 105, 0.12);
-    --nav-icon-bg:   rgba(255, 255, 255, 0.90);
-    --nav-icon-border: rgba(5, 150, 105, 0.18);
-    --nav-icon-hover: rgba(5, 150, 105, 0.07);
+    --nav-bg:        rgba(255, 255, 255, 0.98);
+    --nav-border:    rgba(5, 150, 105, 0.10);
+    --nav-icon-bg:   rgba(255, 255, 255, 0.95);
+    --nav-icon-border: rgba(5, 150, 105, 0.15);
+    --nav-icon-hover: rgba(5, 150, 105, 0.06);
     --nav-text:      #1a3d30;
-    --nav-shadow:    0 1px 0 rgba(255,255,255,0.8), 0 4px 24px rgba(5,150,105,0.09), 0 2px 8px rgba(0,0,0,0.04);
+    --nav-shadow:    0 1px 0 rgba(255,255,255,0.9), 0 4px 24px rgba(5,150,105,0.07), 0 2px 8px rgba(0,0,0,0.03);
 
     /* Inputs */
     --search-input-bg:     rgba(255,255,255,0.85);
@@ -60,6 +60,7 @@
     --shadow:        rgba(5, 150, 105, 0.09);
     --shadow2:       rgba(0, 0, 0, 0.06);
     --sidebar-bg:    rgba(255, 255, 255, 0.97);
+    --search-bg:     rgba(5, 150, 105, 0.05);
     --radius-sm:     6px;
     --radius-md:     0px;
     --radius-lg:     0px;
@@ -130,6 +131,7 @@
     --shadow:        rgba(0, 0, 0, 0.45);
     --shadow2:       rgba(0, 0, 0, 0.32);
     --sidebar-bg:    rgba(6, 14, 11, 0.98);
+    --search-bg:     rgba(52, 211, 153, 0.06);
 
     --muted:         #527d6e;
     --label:         #88c0ae;
@@ -159,10 +161,10 @@ body {
 /* ═══ LIGHT MODE BG ═══ */
 body {
     background:
-        radial-gradient(ellipse at 8% 15%, rgba(5,150,105,0.09) 0%, transparent 52%),
-        radial-gradient(ellipse at 90% 8%,  rgba(16,185,129,0.07) 0%, transparent 48%),
-        radial-gradient(ellipse at 45% 88%, rgba(4,120,87,0.06) 0%,  transparent 55%),
-        radial-gradient(ellipse at 75% 55%, rgba(5,150,105,0.04) 0%, transparent 40%),
+        radial-gradient(ellipse at 8% 15%, rgba(5,150,105,0.04) 0%, transparent 52%),
+        radial-gradient(ellipse at 90% 8%,  rgba(16,185,129,0.03) 0%, transparent 48%),
+        radial-gradient(ellipse at 45% 88%, rgba(4,120,87,0.03) 0%,  transparent 55%),
+        radial-gradient(ellipse at 75% 55%, rgba(5,150,105,0.02) 0%, transparent 40%),
         var(--bg);
     background-attachment: fixed;
 }
@@ -184,7 +186,7 @@ body::before {
     position: fixed;
     top: -140px; right: -90px;
     width: 420px; height: 420px;
-    background: radial-gradient(circle, var(--green-glow2) 0%, transparent 68%);
+    background: radial-gradient(circle, rgba(5,150,105,0.04) 0%, transparent 68%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -195,7 +197,7 @@ body::after {
     position: fixed;
     bottom: 80px; left: -110px;
     width: 340px; height: 340px;
-    background: radial-gradient(circle, rgba(16,185,129,0.07) 0%, transparent 68%);
+    background: radial-gradient(circle, rgba(16,185,129,0.03) 0%, transparent 68%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 0;
@@ -902,6 +904,10 @@ select {
 @keyframes pageIn {
     from { opacity: 0; transform: translateY(14px); }
     to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pageOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
 }
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
