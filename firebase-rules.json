@@ -1,0 +1,86 @@
+{
+  "rules": {
+    "orders": {
+      ".read": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'",
+      "$orderId": {
+        ".read": true,
+        ".write": "!data.exists() && newData.hasChildren(['orderId','name','phone','address','books','total','status','createdAt']) && newData.child('status').val() === 'pending'",
+        ".validate": "$orderId.length < 40"
+      }
+    },
+
+    "phoneIndex": {
+      ".read": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'",
+      "$phone": {
+        ".read": true,
+        "$orderId": {
+          ".write": "!data.exists() && newData.val() === true"
+        }
+      }
+    },
+
+    "usedCoupons": {
+      ".read": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'",
+      "$coupon": {
+        "$phone": {
+          ".read": true,
+          ".write": "!data.exists() && newData.val() === true"
+        }
+      }
+    },
+
+    "reviews": {
+      ".read": true,
+      "$bookId": {
+        "$reviewId": {
+          ".write": "(!data.exists() && newData.hasChildren(['name','comment','rating','createdAt'])) || (auth != null && auth.token.email === 'gronthokanon4309@gmail.com')",
+          "helpful": {
+            ".write": "newData.isNumber() && (!data.exists() || newData.val() === data.val() + 1)"
+          },
+          "rating": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5"
+          },
+          "name": { ".validate": "newData.isString() && newData.val().length <= 60" },
+          "comment": { ".validate": "newData.isString() && newData.val().length <= 2000" }
+        }
+      }
+    },
+
+    "views": {
+      "$bookId": {
+        ".read": true,
+        ".write": "newData.isNumber() && ((!data.exists() && newData.val() === 1) || newData.val() === data.val() + 1)"
+      }
+    },
+
+    "stock": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'"
+    },
+
+    "leaderboard": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'"
+    },
+
+    "bookList": {
+      ".read": true,
+      ".write": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'"
+    },
+
+    "courierApiKeys": {
+      ".read": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'gronthokanon4309@gmail.com'"
+    },
+
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || auth.token.email === 'gronthokanon4309@gmail.com')",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
+  }
+}

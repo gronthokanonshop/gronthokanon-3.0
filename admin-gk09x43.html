@@ -1741,7 +1741,7 @@ async function syncAllBooksToFirebase(silent=false){
 
 /* ── DOWNLOAD sitemap.xml ── */
 /* সাইট যে ঠিকানায় হোস্ট করা, সেটি এখানে বসান (শেষে / ছাড়া) */
-const SITE_BASE_URL='https://gronthokanonshop.github.io/gronthokanon-3.0';
+const SITE_BASE_URL='https://gronthokanon.com';
 function downloadSitemap(){
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
     const staticPages=['','index.html','filter.html','track.html','about.html','contact.html','delivery.html','return.html'];
