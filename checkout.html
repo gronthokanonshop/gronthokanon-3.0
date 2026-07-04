@@ -888,6 +888,46 @@ async function confirmOrder(){
   btn.disabled = false; btn.innerHTML = '✅ অর্ডার নিশ্চিত করুন';
   isSubmitting = false;
   document.getElementById('successModal').classList.add('show');
+  gkConfetti();
+}
+
+/* ══════════════════════════════════
+   কনফেত্তি — অর্ডার সফল হলে সেলিব্রেশন 🎊
+══════════════════════════════════ */
+function gkConfetti(){
+  const c = document.createElement('canvas');
+  c.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:100000;';
+  document.body.appendChild(c);
+  const ctx = c.getContext('2d');
+  c.width = innerWidth; c.height = innerHeight;
+  const colors = ['#059669','#34d399','#fbbf24','#f59e0b','#ef4444','#3b82f6','#a855f7'];
+  const P = [];
+  for(let i=0;i<150;i++){
+    P.push({
+      x: Math.random()*c.width,
+      y: -20 - Math.random()*c.height*0.6,
+      w: 6+Math.random()*6, h: 8+Math.random()*8,
+      vy: 2.2+Math.random()*3.5,
+      vx: -1.5+Math.random()*3,
+      rot: Math.random()*Math.PI,
+      vr: -0.12+Math.random()*0.24,
+      col: colors[i%colors.length]
+    });
+  }
+  let frame = 0;
+  (function draw(){
+    frame++;
+    ctx.clearRect(0,0,c.width,c.height);
+    P.forEach(p=>{
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.col;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if(frame < 280) requestAnimationFrame(draw);
+    else c.remove();
+  })();
 }
 
 /* ══════════════════════════════════

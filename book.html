@@ -486,7 +486,7 @@ window.addEventListener('scroll',()=>{
     document.getElementById('stickyBar').classList.toggle('visible',r.bottom<0);
 });
 
-function updateCartCount(){document.getElementById('cartCount').innerText=cart.length;}
+function updateCartCount(){const c=(JSON.parse(localStorage.getItem('gronthokanon_cart'))||[]).length;document.getElementById('cartCount').innerText=c;}
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
 
 /* WISHLIST */
@@ -590,6 +590,7 @@ function flyToCart(x,y){
 function addToCartShow(){
     if(!curBook)return;
     const btn=document.getElementById('btnCart'),r=btn.getBoundingClientRect();
+    cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[]; // ড্রয়ার-পরিবর্তন sync
     for(let i=0;i<qty;i++)cart.push({name:curBook.name,price:curBook.price,img:curBook.img});
     localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
     updateCartCount();flyToCart(r.left+r.width/2,r.top+r.height/2);
@@ -597,6 +598,7 @@ function addToCartShow(){
 }
 function buyNow(){
     if(!curBook)return;
+    cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[]; // ড্রয়ার-পরিবর্তন sync
     for(let i=0;i<qty;i++)cart.push({name:curBook.name,price:curBook.price,img:curBook.img});
     localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
     window.location.href='checkout.html';
@@ -740,7 +742,7 @@ function updateSEO(b,idx,bookImg,desc){
     s.textContent=JSON.stringify(ld);
     document.head.appendChild(s);
 }
-function goToCart(){localStorage.setItem('gronthokanon_opencart','1');window.location.href='index.html';}
+function goToCart(){showCart();} /* শেয়ার্ড কার্ট ড্রয়ার (common.js) */
 function goBack(){window.history.back();}
 
 /* ══════════════════════════════

@@ -1148,3 +1148,24 @@ select {
     .search-kbd { display: none; }
     .navbar-top { padding: 9px 12px; gap: 8px; }
 }
+/* ═══ GIFT PROGRESS BAR (কার্ট ড্রয়ারে হাদিয়া অফার) ═══ */
+.gk-gift {
+    background: rgba(251,191,36,0.09);
+    border: 1.5px dashed #f59e0b;
+    border-radius: 10px;
+    padding: 9px 12px;
+    margin-bottom: 10px;
+}
+.gk-gift.done { background: rgba(5,150,105,0.09); border-color: #059669; }
+.gk-gift-txt { font-size: 12px; font-weight: 700; color: #b45309; margin-bottom: 6px; line-height: 1.4; }
+.gk-gift.done .gk-gift-txt { color: #059669; margin-bottom: 0; }
+[data-theme="dark"] .gk-gift-txt { color: #fbbf24; }
+[data-theme="dark"] .gk-gift.done .gk-gift-txt { color: #34d399; }
+.gk-gift-track { height: 7px; background: rgba(0,0,0,0.08); border-radius: 10px; overflow: hidden; }
+[data-theme="dark"] .gk-gift-track { background: rgba(255,255,255,0.12); }
+.gk-gift-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    transition: width 0.5s ease;
+}
+.gk-gift.done .gk-gift-fill { background: linear-gradient(90deg, #059669, #34d399); }
