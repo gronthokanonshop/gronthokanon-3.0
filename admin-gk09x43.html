@@ -1123,6 +1123,11 @@
                     <p>বর্তমান বইয়ের লিস্ট book.js হিসেবে ডাউনলোড করুন।</p>
                     <button class="btn btn-primary w-full" onclick="downloadBookJs()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> book.js ডাউনলোড করুন</button>
                 </div>
+                <div class="tool-card">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> sitemap.xml ডাউনলোড</h3>
+                    <p>Google-এর জন্য সব বইয়ের লিংকসহ sitemap বানিয়ে ডাউনলোড করুন। মাসে একবার হোস্টিংয়ে আপলোড করলেই যথেষ্ট।</p>
+                    <button class="btn btn-primary w-full" onclick="downloadSitemap()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> sitemap.xml ডাউনলোড করুন</button>
+                </div>
 
                 <div class="tool-card">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg> Courier API Settings</h3>
@@ -1732,6 +1737,24 @@ async function syncAllBooksToFirebase(silent=false){
         if(!silent)showToast('সব বই Firebase-এ সেভ হয়েছে! Website আপডেট হবে।','#0B6E4F');
     }catch(e){showToast('Firebase sync ব্যর্থ','#dc2626');}
     if(btn){btn.disabled=false;btn.innerHTML=`<svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> সব সেভ করুন`;}
+}
+
+/* ── DOWNLOAD sitemap.xml ── */
+/* সাইট যে ঠিকানায় হোস্ট করা, সেটি এখানে বসান (শেষে / ছাড়া) */
+const SITE_BASE_URL='https://gronthokanonshop.github.io/gronthokanon-3.0';
+function downloadSitemap(){
+    const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
+    const staticPages=['','index.html','filter.html','track.html','about.html','contact.html','delivery.html','return.html'];
+    let xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+    staticPages.forEach(p=>{ xml+='  <url><loc>'+SITE_BASE_URL+'/'+p+'</loc><changefreq>weekly</changefreq></url>\n'; });
+    src.forEach((b,i)=>{ xml+='  <url><loc>'+SITE_BASE_URL+'/book.html?id='+i+'</loc><changefreq>weekly</changefreq></url>\n'; });
+    xml+='</urlset>\n';
+    const blob=new Blob([xml],{type:'application/xml;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='sitemap.xml';a.click();
+    URL.revokeObjectURL(url);
+    showToast('sitemap.xml ডাউনলোড হচ্ছে ('+src.length+'টি বই)...','#059669');
 }
 
 /* ── DOWNLOAD book.js ── */

@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin-gk09x43.html
 Disallow: /checkout.html
 
-Sitemap: https://gronthokanonshop.github.io/gronthokanon-3.0/sitemap.xml
+Sitemap: https://gronthokanon.com/sitemap.xml

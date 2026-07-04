@@ -1329,6 +1329,7 @@ footer {
 </button>
 
 <script src="book.js" defer></script>
+<script src="gkbooks-live.js"></script>
 <script>
 const categoryConfig = [
     {key:"Best Selling",    label:"🔥 Best Selling"},
@@ -1797,6 +1798,11 @@ window.onload=()=>{
     }
     auth.onAuthStateChanged(user=>updateAuthUI(user));
     loadReviewSlider();
+    /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে সেকশনগুলো রিফ্রেশ */
+    if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok=>{
+        if(!ok || typeof books==='undefined') return;
+        renderSections(books); renderRecent(); buildPubList(); buildAuthorList();
+    });
 };
 
 /* ═══ রিভিউ স্লাইডার — Firebase থেকে সেরা রিভিউগুলো ═══ */

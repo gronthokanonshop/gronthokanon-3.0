@@ -470,6 +470,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="book.js"></script>
+<script src="gkbooks-live.js"></script>
 
 <script>
 function escapeHTML(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -995,6 +996,8 @@ function loadLeaderboard(){
 /* INIT */
 window.onload=function(){
     loadBook();
+    /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে রিফ্রেশ */
+    if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok=>{ if(ok) loadBook(); });
     const idx=parseInt(new URLSearchParams(window.location.search).get('id'));
     if(!isNaN(idx)){
         incrementView(idx);

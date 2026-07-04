@@ -338,6 +338,7 @@
 </a>
 
 <script src="book.js"></script>
+<script src="gkbooks-live.js"></script>
 <script>
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
@@ -624,6 +625,15 @@ setTimeout(() => {
     buildCatSidebar();
     renderBooks(getList());
 }, 600);
+/* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
+if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
+    if(!ok) return;
+    if (type === 'cat' && activeCategory) filtered = books.filter(b => b.cat === activeCategory);
+    else if (type === 'author') filtered = books.filter(b => b.author === value);
+    else if (type === 'pub') filtered = books.filter(b => b.pub === value);
+    else filtered = [...books];
+    buildCatSidebar(); renderBooks(getList());
+});
 </script>
 <script src="common.js"></script>
 </body>
