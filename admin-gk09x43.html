@@ -1129,6 +1129,24 @@
                     <button class="btn btn-primary w-full" onclick="downloadSitemap()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> sitemap.xml ডাউনলোড করুন</button>
                 </div>
 
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg> হোমপেজ ব্যানার / অফার</h3>
+                    <p style="margin-bottom:12px;">হোমপেজের স্লাইডার ব্যানার এখান থেকেই বদলান। ছবির লিংক (URL) দিন, অথবা ছবি ছাড়া শুধু অফারের লেখা দিন। সেভ করলেই সাইটে লাইভ হবে। (কিছু না থাকলে সাইটে ডিফল্ট ব্যানার দেখাবে।)</p>
+                    <div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.25);border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:var(--text-main);line-height:1.6;">
+                        📐 <div><b>সেরা ছবির সাইজ: ১২০০ × ৬০০ পিক্সেল</b> (অনুপাত ২ঃ১, অর্থাৎ চওড়া দ্বিগুণ)। JPG ফরম্যাট, ৫০০ KB-এর নিচে রাখলে সাইট দ্রুত লোড হবে। ছবি এই মাপে বানিয়ে <b>imgbb.com</b>-এ আপলোড করে লিংকটি নিচে বসান।</div>
+                    </div>
+                    <div id="bannerList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
+                    <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ব্যানার যোগ করুন</div>
+                        <input class="form-input" id="bnImg" placeholder="ছবির লিংক / URL (১২০০×৬০০px, যেমন: https://i.ibb.co/....jpg) — ঐচ্ছিক" style="margin-bottom:8px;">
+                        <input class="form-input" id="bnTitle" placeholder="বড় লেখা (যেমন: ঈদ অফার — ৩০% ছাড়)" style="margin-bottom:8px;">
+                        <input class="form-input" id="bnSub" placeholder="ছোট লেখা (যেমন: সীমিত সময়ের জন্য)" style="margin-bottom:8px;">
+                        <input class="form-input" id="bnLink" placeholder="ক্লিক করলে কোথায় যাবে (যেমন: filter.html?type=cat&value=Best Selling) — ঐচ্ছিক" style="margin-bottom:10px;">
+                        <button class="btn btn-ghost w-full" onclick="addBanner()">＋ তালিকায় যোগ করুন</button>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="saveBanners()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> সব ব্যানার সেভ করুন (সাইটে লাইভ)</button>
+                </div>
+
                 <div class="tool-card">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg> Courier API Settings</h3>
                     <p style="margin-bottom:14px;">এখানে key বসিয়ে সেভ করুন। Firebase এ encrypted হয়ে থাকবে।</p>
@@ -1291,7 +1309,7 @@ function switchTab(tab, btnEl){
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools') renderOrderSummary();
+    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -1737,6 +1755,67 @@ async function syncAllBooksToFirebase(silent=false){
         if(!silent)showToast('সব বই Firebase-এ সেভ হয়েছে! Website আপডেট হবে।','#0B6E4F');
     }catch(e){showToast('Firebase sync ব্যর্থ','#dc2626');}
     if(btn){btn.disabled=false;btn.innerHTML=`<svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> সব সেভ করুন`;}
+}
+
+/* ══════════════════════════════════════════════
+   হোমপেজ ব্যানার নিয়ন্ত্রণ (Firebase 'banners' node)
+══════════════════════════════════════════════ */
+let bannerData = [];
+function loadBannersAdmin(){
+    db.ref('banners').once('value').then(snap=>{
+        let v = snap.val();
+        if(Array.isArray(v)) bannerData = v.filter(Boolean);
+        else if(v && typeof v==='object') bannerData = Object.values(v).filter(Boolean);
+        else bannerData = [];
+        renderBannerList();
+    }).catch(()=>{ bannerData=[]; renderBannerList(); });
+}
+function renderBannerList(){
+    const box=document.getElementById('bannerList'); if(!box) return;
+    if(!bannerData.length){
+        box.innerHTML='<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px;">এখনো কোনো ব্যানার নেই — নিচে থেকে যোগ করুন। (কিছু না থাকলে সাইটে ডিফল্ট ব্যানার দেখাবে)</div>';
+        return;
+    }
+    box.innerHTML=bannerData.map((b,i)=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface);">
+            <div style="width:60px;height:38px;border-radius:6px;background:#064e3b url('${escapeHTML(b.img||'')}') center/cover no-repeat;flex-shrink:0;"></div>
+            <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:700;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(b.title||'(ছবি ব্যানার)')}</div>
+                <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(b.subtitle||b.img||'')}</div>
+            </div>
+            <div style="display:flex;gap:4px;flex-shrink:0;">
+                <button class="btn btn-sm btn-ghost" onclick="moveBanner(${i},-1)" ${i===0?'disabled':''} title="উপরে">▲</button>
+                <button class="btn btn-sm btn-ghost" onclick="moveBanner(${i},1)" ${i===bannerData.length-1?'disabled':''} title="নিচে">▼</button>
+                <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="removeBanner(${i})" title="মুছুন">✕</button>
+            </div>
+        </div>`).join('');
+}
+function addBanner(){
+    const img=(document.getElementById('bnImg').value||'').trim();
+    const title=(document.getElementById('bnTitle').value||'').trim();
+    const subtitle=(document.getElementById('bnSub').value||'').trim();
+    const link=(document.getElementById('bnLink').value||'').trim();
+    if(!img && !title){ showToast('ছবির লিংক অথবা লেখা — অন্তত একটি দিন','#dc2626'); return; }
+    bannerData.push({img,title,subtitle,link});
+    document.getElementById('bnImg').value='';
+    document.getElementById('bnTitle').value='';
+    document.getElementById('bnSub').value='';
+    document.getElementById('bnLink').value='';
+    renderBannerList();
+    showToast('তালিকায় যোগ হয়েছে — এখন "সব ব্যানার সেভ করুন" চাপুন','#059669');
+}
+function removeBanner(i){ bannerData.splice(i,1); renderBannerList(); }
+function moveBanner(i,dir){
+    const j=i+dir; if(j<0||j>=bannerData.length) return;
+    const t=bannerData[i]; bannerData[i]=bannerData[j]; bannerData[j]=t; renderBannerList();
+}
+async function saveBanners(){
+    try{
+        await db.ref('banners').set(bannerData);
+        showToast('✅ ব্যানার সেভ হয়েছে — হোমপেজে লাইভ!','#059669');
+    }catch(e){
+        showToast('❌ সেভ ব্যর্থ — আবার চেষ্টা করুন','#dc2626');
+    }
 }
 
 /* ── DOWNLOAD sitemap.xml ── */
