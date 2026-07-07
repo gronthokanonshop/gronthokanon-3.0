@@ -2281,7 +2281,7 @@ async function saveCourierApiKeys(){
         if(sfKey)    payload.sfKey    = sfKey;
         if(sfSecret) payload.sfSecret = sfSecret;
         if(rdxTok)   payload.rdxTok   = rdxTok;
-        await db.ref('adminConfig/courierKeys').update(payload);
+        await db.ref('courierApiKeys').update(payload);
 
         // Update runtime variables
         if(sfKey)    STEADFAST_API_KEY    = sfKey;
@@ -2303,7 +2303,7 @@ async function saveCourierApiKeys(){
 
 async function loadCourierApiKeys(showUI=false){
     try{
-        const snap = await db.ref('adminConfig/courierKeys').once('value');
+        const snap = await db.ref('courierApiKeys').once('value');
         if(snap.exists()){
             const d = snap.val();
             if(d.sfKey)    STEADFAST_API_KEY    = d.sfKey;
