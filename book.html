@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="logo.png" type="image/png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>বই বিস্তারিত — গ্রন্থকানন</title>
     <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বই। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।" id="metaDesc">
@@ -17,8 +19,38 @@
         /* READING PROGRESS */
         #readProg{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#059669,#10b981,#34d399);width:0%;z-index:9999;transition:width 0.1s linear;border-radius:0 3px 3px 0;}
 
-        .nav-logo{width:32px;height:32px;object-fit:contain;}
+        .nav-logo{width:34px;height:34px;object-fit:contain;flex-shrink:0;}
+        /* ══ ব্র্যান্ড (লোগো + নাম + ট্যাগলাইন) ══ */
+        .nav-brand{display:flex;align-items:center;gap:9px;flex:1;min-width:0;cursor:pointer;}
+        .nav-brand-txt{display:flex;flex-direction:column;line-height:1.12;min-width:0;}
+        .nav-brand-name{font-size:16px;font-weight:900;color:#047857;font-family:'Hind Siliguri',Arial,sans-serif;white-space:nowrap;letter-spacing:0.2px;}
+        .nav-brand-tag{font-size:8.5px;color:var(--text2);font-weight:600;letter-spacing:0.3px;white-space:nowrap;}
+        [data-theme="dark"] .nav-brand-name{color:#34d399;}
+        [data-theme="dark"] .nav-logo{background:#fff;border-radius:8px;padding:2px;box-shadow:0 0 0 1.5px rgba(52,211,153,0.35);}
         .cart-badge{position:absolute;top:-6px;right:-7px;background:linear-gradient(135deg,#ef4444,#dc2626);color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:20px;min-width:17px;text-align:center;border:2px solid var(--nav-bg);line-height:1.2;box-shadow:0 2px 6px rgba(220,38,38,0.35);}
+        @media(max-width:360px){.nav-brand-tag{display:none;}}
+
+        /* ══ নিজস্ব সার্চ স্ক্রিন ══ */
+        #bkSearchOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:99998;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+        #bkSearchOverlay.open{opacity:1;pointer-events:auto;}
+        #bkSearchScreen{position:fixed;top:0;left:0;right:0;background:var(--card);z-index:99999;transform:translateY(-105%);transition:transform 0.32s cubic-bezier(0.2,0.8,0.2,1);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,0.25);border-radius:0 0 20px 20px;overflow:hidden;}
+        #bkSearchScreen.open{transform:translateY(0);}
+        .bks-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0;}
+        .bks-inputwrap{flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;min-width:0;}
+        .bks-inputwrap:focus-within{border-color:#059669;}
+        .bks-inputwrap svg{width:18px;height:18px;color:var(--text2);flex-shrink:0;}
+        #bkSearchInput{flex:1;border:none;background:transparent;outline:none;font-size:14px;font-family:'Hind Siliguri',Arial,sans-serif;color:var(--text);min-width:0;}
+        #bkSearchClear{background:none;border:none;font-size:20px;color:var(--text2);cursor:pointer;line-height:1;padding:0 2px;}
+        .bks-close{background:none;border:none;color:#059669;font-weight:700;font-size:14px;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;white-space:nowrap;flex-shrink:0;}
+        #bkSearchBody{overflow-y:auto;padding:6px 0 20px;}
+        .bks-hint{text-align:center;padding:50px 20px;color:var(--text2);font-size:14px;line-height:1.7;}
+        .bks-count{font-size:12px;font-weight:700;color:#059669;padding:8px 16px;}
+        .bks-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s;}
+        .bks-item:hover{background:var(--bg);}
+        .bks-item img{width:40px;height:54px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#f0fdf4;border:1px solid var(--border);}
+        .bks-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .bks-auth{font-size:11.5px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .bks-price{font-size:12.5px;font-weight:800;color:#dc2626;margin-top:2px;}
 
         .container{max-width:500px;margin:0 auto;padding:16px 14px 20px;}
 
@@ -133,6 +165,9 @@
         .btn-cart:hover{background:var(--green-bg);}
         .btn-buy{flex:1;padding:14px;background:linear-gradient(135deg,#059669,#10b981,#34d399);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.18s;box-shadow:0 8px 20px var(--green-glow);}
         .btn-buy:hover{box-shadow:0 10px 26px var(--green-glow);transform:translateY(-1px);}
+        .btn-wa-order{width:100%;padding:13px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;border-radius:12px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.18s;box-shadow:0 6px 18px rgba(37,211,102,0.35);display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;}
+        .btn-wa-order:hover{box-shadow:0 9px 24px rgba(37,211,102,0.45);transform:translateY(-1px);}
+        .btn-wa-order:active{transform:scale(0.98);}
         .btn-disabled{background:#ccc!important;color:#888!important;border-color:#aaa!important;cursor:not-allowed!important;box-shadow:none!important;}
 
         /* STICKY BAR */
@@ -275,8 +310,15 @@
 <nav class="navbar">
     <div class="navbar-top">
         <button class="back-btn" onclick="goBack()">‹</button>
-        <img src="logo.png" class="nav-logo" alt="গ্রন্থকানন" style="margin-left:6px;">
+        <div class="nav-brand" onclick="navigateTo('index.html')" title="হোম">
+            <img src="logo.png" class="nav-logo" alt="গ্রন্থকানন">
+            <div class="nav-brand-txt">
+                <span class="nav-brand-name">গ্রন্থকানন</span>
+                <span class="nav-brand-tag">বইয়ের রাজ্যে স্বাগতম</span>
+            </div>
+        </div>
         <div class="navbar-icons">
+            <button class="nav-btn" onclick="openGlobalSearch()" title="সার্চ" aria-label="সার্চ"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
             <button class="dark-pill" onclick="toggleDark()" id="darkBtn"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
             <div class="nav-btn" onclick="goToCart()" title="কার্ট">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
@@ -299,10 +341,6 @@
         <div class="book-img-wrap" onclick="openImgModal()">
             <div class="img-skel" id="imgSkel"></div>
             <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
-        </div>
-        <div class="img-card-title-block">
-            <div class="img-card-title" id="bookTitleImg"></div>
-            <div class="img-card-author" id="bookAuthorImg"></div>
         </div>
         <div class="badges" id="bookBadges"></div>
         <div class="trust-mini">
@@ -349,6 +387,7 @@
             </button>
             <button class="btn-buy" id="btnBuy" onclick="buyNow()"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg> এখনই কিনুন</button>
         </div>
+        <button class="btn-wa-order" id="btnWaOrder" onclick="orderViaWA()"><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;flex-shrink:0;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.42 1.3-1.96 1.35-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36l.55.01c.18.01.41-.07.64.49.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.72 1.18 1.54 1.92 1.06.94 1.95 1.23 2.23 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.75 1.87.89.28.14.46.21.53.32.07.12.07.68-.17 1.36z"/></svg> WhatsApp-এ অর্ডার করুন</button>
     </div>
 
     <!-- BOOK DETAILS — SEPARATE CARD -->
@@ -604,6 +643,12 @@ function buyNow(){
     localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
     window.location.href='checkout.html';
 }
+/* WhatsApp-এ সরাসরি অর্ডার — বইয়ের নাম/দাম/পরিমাণ/লিংক অটো বসে */
+function orderViaWA(){
+    if(!curBook)return;
+    const msg=`আসসালামু আলাইকুম,\nআমি এই বইটি অর্ডার করতে চাই:\n\n📖 ${curBook.name}\n✍️ ${curBook.author}\n💵 মূল্য: ৳${curBook.price}\n🔢 পরিমাণ: ${toBN(qty)}টি\n\n🔗 ${window.location.href}`;
+    window.open('https://wa.me/8801516595762?text='+encodeURIComponent(msg),'_blank');
+}
 
 /* RECENTLY VIEWED */
 function loadRecent(){
@@ -638,9 +683,7 @@ function loadBook(){
     const bookImg=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
     document.getElementById('bookImg').src=bookImg;
     document.getElementById('bookTitle').innerText=b.name;
-    document.getElementById('bookTitleImg').innerText=b.name;
     document.getElementById('bookAuthor').innerText='✍️ '+b.author;
-    document.getElementById('bookAuthorImg').innerText=b.author;
     document.getElementById('bookAuthorRow').innerText=b.author;
     document.getElementById('bookPrice').innerText='৳ '+b.price;
     document.getElementById('stickyPrice').innerText='৳ '+b.price;
@@ -745,6 +788,44 @@ function updateSEO(b,idx,bookImg,desc){
 }
 function goToCart(){showCart();} /* শেয়ার্ড কার্ট ড্রয়ার (common.js) */
 function goBack(){window.history.back();}
+/* ══ book.html-এর নিজস্ব সার্চ (এই পেজেই খোলে, index-এ যায় না) ══ */
+function openGlobalSearch(){
+    document.getElementById('bkSearchOverlay').classList.add('open');
+    document.getElementById('bkSearchScreen').classList.add('open');
+    document.body.style.overflow='hidden';
+    setTimeout(()=>document.getElementById('bkSearchInput').focus(),300);
+}
+function closeBkSearch(){
+    document.getElementById('bkSearchOverlay').classList.remove('open');
+    document.getElementById('bkSearchScreen').classList.remove('open');
+    document.body.style.overflow='';
+}
+function bkClearSearch(){
+    document.getElementById('bkSearchInput').value='';
+    document.getElementById('bkSearchClear').style.display='none';
+    document.getElementById('bkSearchBody').innerHTML='<div class="bks-hint">📚 বইয়ের নাম বা লেখকের নাম লিখুন</div>';
+}
+function bkHandleSearch(){
+    const q=document.getElementById('bkSearchInput').value.normalize('NFC').trim().toLowerCase();
+    document.getElementById('bkSearchClear').style.display=q?'block':'none';
+    const body=document.getElementById('bkSearchBody');
+    if(!q){bkClearSearch();return;}
+    if(typeof books==='undefined'||!books.length){body.innerHTML='<div class="bks-hint">⏳ বই লোড হচ্ছে...</div>';return;}
+    const found=books.filter(b=>b.name.normalize('NFC').toLowerCase().includes(q)||(b.author||'').normalize('NFC').toLowerCase().includes(q)||(b.pub||'').normalize('NFC').toLowerCase().includes(q));
+    if(!found.length){body.innerHTML='<div class="bks-hint">📚 এই নামে কোনো বই পাওয়া যায়নি</div>';return;}
+    body.innerHTML=`<div class="bks-count">🔍 ${found.length}টি বই</div>`+found.slice(0,40).map(b=>{
+        const idx=books.indexOf(b);
+        const img=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
+        return `<div class="bks-item" onclick="window.location.href='book.html?id=${idx}'">
+            <img src="${escapeHTML(img)}" alt="" onerror="this.onerror=null;this.src='book-placeholder.svg'">
+            <div style="flex:1;min-width:0;">
+                <div class="bks-name">${escapeHTML(b.name)}</div>
+                <div class="bks-auth">✍️ ${escapeHTML(b.author||'')}</div>
+                <div class="bks-price">৳ ${b.price}</div>
+            </div></div>`;
+    }).join('');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBkSearch();});
 
 /* ══════════════════════════════
    FIREBASE: VIEW COUNTER
@@ -1027,6 +1108,20 @@ window.onload=function(){
         </div>
         <div id="reviewsList"><div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div></div>
     </div>
+</div>
+
+<!-- ══ book.html নিজস্ব সার্চ স্ক্রিন ══ -->
+<div id="bkSearchOverlay" onclick="closeBkSearch()"></div>
+<div id="bkSearchScreen">
+    <div class="bks-head">
+        <div class="bks-inputwrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="bkSearchInput" placeholder="বইয়ের নাম বা লেখক লিখুন..." oninput="bkHandleSearch()" autocomplete="off">
+            <button id="bkSearchClear" onclick="bkClearSearch()" style="display:none;">&times;</button>
+        </div>
+        <button class="bks-close" onclick="closeBkSearch()">বাতিল</button>
+    </div>
+    <div id="bkSearchBody"><div class="bks-hint">📚 বইয়ের নাম বা লেখকের নাম লিখুন</div></div>
 </div>
 
 <script src="common.js"></script>

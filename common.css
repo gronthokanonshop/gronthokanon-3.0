@@ -1169,3 +1169,31 @@ select {
     transition: width 0.5s ease;
 }
 .gk-gift.done .gk-gift-fill { background: linear-gradient(90deg, #059669, #34d399); }
+
+/* ═══ ভাসমান কন্টাক্ট বাটন (কল / Messenger / WhatsApp) — লুকানো, মূল বাটনে ক্লিকে খোলে ═══ */
+/* পুরনো single WhatsApp float লুকাও — নতুন shared widget এটি প্রতিস্থাপন করে */
+.wa-float, .wa-btn { display: none !important; }
+#gkContact { position: fixed; right: 14px; bottom: 92px; z-index: 9990; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.gkc-actions { display: flex; flex-direction: column; gap: 11px; align-items: center; }
+.gkc-actions a { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.22); text-decoration: none; position: relative;
+    opacity: 0; transform: translateY(14px) scale(0.5); pointer-events: none;
+    transition: opacity .25s ease, transform .28s cubic-bezier(.2,1.4,.5,1); }
+#gkContact.open .gkc-actions a { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+#gkContact.open .gkc-actions a:nth-child(1) { transition-delay: .08s; }
+#gkContact.open .gkc-actions a:nth-child(2) { transition-delay: .04s; }
+.gkc-actions a:hover { transform: scale(1.12) !important; box-shadow: 0 6px 18px rgba(0,0,0,0.28); }
+.gkc-actions a svg { width: 24px; height: 24px; }
+.gkc-call { background: #2563eb; }
+.gkc-msgr { background: radial-gradient(circle at 30% 30%, #00B2FF, #006AFF 45%, #A033FF 78%, #FF5280 100%); }
+.gkc-wa { background: #25D366; }
+.gkc-actions a::after { content: attr(data-label); position: absolute; right: 56px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.8); color: #fff; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .18s; font-family: 'Hind Siliguri', Arial, sans-serif; }
+.gkc-actions a:hover::after { opacity: 1; }
+/* মূল টগল বাটন — গোলাপি চ্যাট বাবল */
+.gkc-fab { width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer; background: linear-gradient(135deg,#ff2d78,#e60a5e); box-shadow: 0 6px 20px rgba(230,10,94,0.45); display: flex; align-items: center; justify-content: center; transition: transform .25s ease, box-shadow .25s; position: relative; }
+.gkc-fab:hover { box-shadow: 0 8px 26px rgba(230,10,94,0.55); }
+.gkc-fab svg { width: 26px; height: 26px; transition: transform .3s ease, opacity .2s; position: absolute; }
+.gkc-fab .ic-close { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+#gkContact.open .gkc-fab { transform: rotate(90deg); }
+#gkContact.open .gkc-fab .ic-chat { opacity: 0; transform: rotate(90deg) scale(0.6); }
+#gkContact.open .gkc-fab .ic-close { opacity: 1; transform: rotate(0) scale(1); }
+@media(max-width:600px){ .gkc-actions a::after { display: none; } #gkContact { bottom: 88px; } }

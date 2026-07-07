@@ -748,12 +748,19 @@ function renderSummary(){
    COUPON
 ══════════════════════════════════ */
 const COUPONS = { 'FIRSTORDER': 5 };
+/* বিল্ট-ইন + অ্যাডমিন-তৈরি (window.GK_COUPONS, common.js থেকে Firebase-লোডেড) মিলিয়ে দেখি */
+function couponDiscount(code){
+  if(window.GK_COUPONS && typeof window.GK_COUPONS[code]==='number') return window.GK_COUPONS[code];
+  if(COUPONS[code] !== undefined) return COUPONS[code];
+  return undefined;
+}
 function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('couponMsg');
   if(!code){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; return; }
-  if(COUPONS[code] !== undefined){
-    coupon = code; discPct = COUPONS[code];
+  const d = couponDiscount(code);
+  if(d !== undefined){
+    coupon = code; discPct = d;
     localStorage.setItem('gronthokanon_coupon', coupon);
     localStorage.setItem('gronthokanon_discount', discPct);
     msgEl.style.display='block'; msgEl.style.color='#059669';
@@ -861,6 +868,12 @@ async function confirmOrder(){
     await fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({token:SHEET_TOKEN, name, phone, address:fullAddr, books:bookList,
         payment:payMethod+(txId?` (TxID: ${txId})`:''), delivery:'৳'+delivCharge, total:'৳'+grand})});
+  }catch(e){}
+
+  /* পাবলিক recent-sales ticker — আসল অর্ডার থেকে শুধু এলাকা + বই (নাম/ফোন কিছুই না) */
+  try{
+    const firstBook=(cart[0]&&cart[0].name)||'একটি বই';
+    firebase.database().ref('recentSales').push({area:district||division||'বাংলাদেশ', book:firstBook, t:Date.now()});
   }catch(e){}
 
   localStorage.removeItem('gronthokanon_cart');

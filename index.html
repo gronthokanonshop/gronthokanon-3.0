@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="logo.png" type="image/png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="গ্রন্থকানন">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>গ্রন্থকানন — বইয়ের রাজ্যে স্বাগতম</title>
     <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
@@ -271,6 +275,8 @@
 
         /* ═══════ BANNER ═══════ */
         .banner-wrap{max-width:100%;margin:10px 0;overflow:hidden;border-radius:14px;box-shadow:0 6px 30px rgba(0,0,0,0.35);position:relative;}
+        /* ল্যাপটপ/ডেস্কটপে ব্যানার যেন পুরো স্ক্রিন জুড়ে বিশাল না হয় — সীমিত প্রস্থে সেন্টার করা (ফোনে full-width অক্ষত) */
+        @media(min-width:700px){ .banner-wrap{max-width:820px;margin:14px auto;} }
         .banner-slider{display:flex;transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);}
         .banner-slide{flex-shrink:0;width:100%;aspect-ratio:16/8;position:relative;overflow:hidden;display:flex;align-items:center;}
         .banner-slide img{object-fit:contain !important;object-position:center !important;width:100%;height:100%;}
@@ -1191,6 +1197,8 @@ footer {
         <div class="footer-col">
             <div class="footer-col-title">তথ্য</div>
             <a href="about.html" class="footer-link">আমাদের সম্পর্কে</a>
+            <a href="blog.html" class="footer-link">ব্লগ</a>
+            <a href="faq.html" class="footer-link">সাধারণ জিজ্ঞাসা (FAQ)</a>
             <a href="delivery.html" class="footer-link">ডেলিভারি নীতি</a>
             <a href="return.html" class="footer-link">রিটার্ন নীতি</a>
             <a href="contact.html" class="footer-link">যোগাযোগ</a>
@@ -1653,12 +1661,13 @@ function removeCoupon(){
     renderCouponSection();
 }
 function applyCoupon(){
-    const code=document.getElementById('couponCode').value.toUpperCase();
-    if(code==='FIRSTORDER'){
-        discountPercent=5;
-        localStorage.setItem('gronthokanon_discount','5');
+    const code=(document.getElementById('couponCode').value||'').trim().toUpperCase();
+    const pct=window.GK_COUPONS&&window.GK_COUPONS[code];
+    if(pct){
+        discountPercent=pct;
+        localStorage.setItem('gronthokanon_discount',String(pct));
         localStorage.setItem('gronthokanon_coupon',code);
-        showToast('🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!','#059669');
+        showToast('🎉 '+pct+'% ডিসকাউন্ট যুক্ত হয়েছে!','#059669');
         updateCartUI();
             renderCouponSection();
     } else {
@@ -1790,12 +1799,42 @@ window.onload=()=>{
     auth.onAuthStateChanged(user=>updateAuthUI(user));
     loadReviewSlider();
     loadBanners();
+    loadRecentSalesTicker();
     /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে সেকশনগুলো রিফ্রেশ */
     if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok=>{
         if(!ok || typeof books==='undefined') return;
         renderSections(books); renderRecent(); buildPubList(); buildAuthorList();
     });
 };
+
+/* ═══ আসল recent-sales ticker — Firebase-এর সত্যিকার অর্ডার থেকে (কোনো ভুয়া নয়) ═══ */
+function loadRecentSalesTicker(){
+    if(typeof db==='undefined'||!db)return;
+    db.ref('recentSales').limitToLast(15).get().then(snap=>{
+        if(!snap.exists())return;
+        const arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.book)arr.push(v);});
+        if(!arr.length)return;
+        arr.sort((a,b)=>(b.t||0)-(a.t||0));
+        const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const st=document.createElement('style');
+        st.textContent='.gk-sale-toast{position:fixed;left:14px;bottom:92px;z-index:9985;max-width:250px;background:var(--card);border:1px solid var(--border);border-left:3px solid #059669;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,0.16);padding:10px 12px;display:flex;align-items:center;gap:10px;transform:translateX(-130%);transition:transform .45s cubic-bezier(.2,.8,.2,1);font-family:\'Hind Siliguri\',Arial,sans-serif;}.gk-sale-toast.show{transform:translateX(0);}.gk-sale-ico{width:30px;height:30px;border-radius:8px;background:rgba(5,150,105,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}.gk-sale-txt{font-size:11.5px;line-height:1.45;color:var(--text);min-width:0;}.gk-sale-txt b{color:#059669;}.gk-sale-time{font-size:10px;color:var(--text2);margin-top:2px;}@media(max-width:600px){.gk-sale-toast{bottom:86px;max-width:210px;}}';
+        document.head.appendChild(st);
+        const el=document.createElement('div');el.className='gk-sale-toast';
+        el.innerHTML='<div class="gk-sale-ico">📦</div><div class="gk-sale-txt"><div id="gkSaleMsg"></div><div class="gk-sale-time" id="gkSaleTime"></div></div>';
+        document.body.appendChild(el);
+        const rel=t=>{const d=Date.now()-(t||Date.now());const m=Math.floor(d/60000);if(m<1)return'এইমাত্র';if(m<60)return m+' মিনিট আগে';const h=Math.floor(m/60);if(h<24)return h+' ঘণ্টা আগে';return Math.floor(h/24)+' দিন আগে';};
+        let i=0;
+        function showOne(){
+            const s=arr[i%arr.length];i++;
+            document.getElementById('gkSaleMsg').innerHTML='<b>'+esc(s.area||'বাংলাদেশ')+'</b> থেকে কেউ<br>"'+esc(s.book)+'" অর্ডার করেছেন';
+            document.getElementById('gkSaleTime').innerText='🕐 '+rel(s.t);
+            el.classList.add('show');
+            setTimeout(()=>el.classList.remove('show'),5000);
+        }
+        setTimeout(showOne,4500);
+        setInterval(showOne,13000);
+    }).catch(()=>{});
+}
 
 /* ═══ রিভিউ স্লাইডার — Firebase থেকে সেরা রিভিউগুলো ═══ */
 function loadReviewSlider(){

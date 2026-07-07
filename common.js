@@ -58,6 +58,63 @@ window.addEventListener('scroll', () => {
 /* ═══ হাদিয়া অফারের টার্গেট (৳) — এখানে বদলালেই সব জায়গায় বদলাবে ═══ */
 window.GK_GIFT_THRESHOLD = 1000;
 
+/* ═══ কুপন — বিল্ট-ইন FIRSTORDER + অ্যাডমিন-তৈরি কুপন (Firebase 'coupons') ═══ */
+window.GK_COUPONS = window.GK_COUPONS || { FIRSTORDER: 5 };
+(function () {
+    try {
+        if (typeof firebase !== 'undefined' && firebase.database) {
+            firebase.database().ref('coupons').get().then(function (s) {
+                if (!s.exists()) return;
+                var v = s.val() || {};
+                Object.keys(v).forEach(function (k) {
+                    var c = v[k];
+                    if (c && c.active !== false && typeof c.discount === 'number' && c.discount > 0 && c.discount <= 100) {
+                        window.GK_COUPONS[String(k).toUpperCase()] = c.discount;
+                    }
+                });
+            }).catch(function () {});
+        }
+    } catch (e) {}
+})();
+
+/* ═══ PWA — Service Worker রেজিস্টার (সব পেজে) ═══ */
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+}
+
+/* ═══ ভাসমান কন্টাক্ট বাটন — কল / Messenger / WhatsApp (সব পেজে) ═══ */
+(function () {
+    function build() {
+        if (document.getElementById('gkContact')) return;
+        var d = document.createElement('div');
+        d.id = 'gkContact';
+        d.innerHTML =
+            '<div class="gkc-actions">' +
+            '<a class="gkc-call" href="tel:+8801516595762" data-label="কল করুন" aria-label="কল করুন"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>' +
+            '<a class="gkc-msgr" href="https://m.me/gronthokanon0943" target="_blank" rel="noopener" data-label="Messenger" aria-label="Messenger"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.15.26.35.27.57l.05 1.78c.02.57.6.94 1.12.71l1.99-.88c.17-.07.36-.09.53-.04 1.06.29 2.19.45 3.4.45 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6 7.46l-2.94 4.67c-.47.74-1.47.93-2.18.4l-2.34-1.75a.6.6 0 0 0-.72 0l-3.16 2.4c-.42.32-.97-.18-.69-.63l2.94-4.67c.47-.74 1.47-.93 2.18-.4l2.34 1.75a.6.6 0 0 0 .72 0l3.16-2.4c.42-.32.97.18.69.63z"/></svg></a>' +
+            '<a class="gkc-wa" href="https://wa.me/8801516595762" target="_blank" rel="noopener" data-label="WhatsApp" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.42 1.3-1.96 1.35-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36l.55.01c.18.01.41-.07.64.49.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.72 1.18 1.54 1.92 1.06.94 1.95 1.23 2.23 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.75 1.87.89.28.14.46.21.53.32.07.12.07.68-.17 1.36z"/></svg></a>' +
+            '</div>' +
+            '<button class="gkc-fab" aria-label="যোগাযোগ" onclick="gkToggleContact()">' +
+            '<svg class="ic-chat" viewBox="0 0 24 24" fill="#fff"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><circle cx="8" cy="10" r="1.4" fill="#e60a5e"/><circle cx="12" cy="10" r="1.4" fill="#e60a5e"/><circle cx="16" cy="10" r="1.4" fill="#e60a5e"/></svg>' +
+            '<svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>' +
+            '</button>';
+        document.body.appendChild(d);
+    }
+    if (document.body) build();
+    else document.addEventListener('DOMContentLoaded', build);
+    /* বাইরে ক্লিক করলে বন্ধ */
+    document.addEventListener('click', function (e) {
+        var c = document.getElementById('gkContact');
+        if (c && c.classList.contains('open') && !c.contains(e.target)) c.classList.remove('open');
+    });
+})();
+window.gkToggleContact = function () {
+    var c = document.getElementById('gkContact');
+    if (c) c.classList.toggle('open');
+};
+
 /* কার্ট সাবটোটাল থেকে গিফট-প্রগ্রেস বারের HTML বানায় (index + shared drawer দুটোই ব্যবহার করে) */
 window.gkGiftBarHTML = function (subtotal) {
     const TH = window.GK_GIFT_THRESHOLD || 1000;
@@ -236,10 +293,11 @@ window.gkGiftBarHTML = function (subtotal) {
     /* ── কুপন ── */
     window.gkApplyCoupon = function () {
         const code = (document.getElementById('gkCouponInput')?.value || '').trim().toUpperCase();
-        if (code === 'FIRSTORDER') {
+        const pct = window.GK_COUPONS && window.GK_COUPONS[code];
+        if (pct) {
             localStorage.setItem('gronthokanon_coupon', code);
-            localStorage.setItem('gronthokanon_discount', '5');
-            showToast('🎉 ৫% ডিসকাউন্ট যুক্ত হয়েছে!', '#059669');
+            localStorage.setItem('gronthokanon_discount', String(pct));
+            showToast('🎉 ' + pct + '% ডিসকাউন্ট যুক্ত হয়েছে!', '#059669');
         } else {
             showToast('❌ ভুল কুপন কোড!', '#dc2626');
         }

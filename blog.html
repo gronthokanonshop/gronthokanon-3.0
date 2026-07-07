@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ব্লগ — গ্রন্থকানন</title>
+<meta name="description" content="বই, পাঠ ও ইসলামি জ্ঞান নিয়ে গ্রন্থকাননের ব্লগ — বই পড়ার উপকারিতা, লেখক পরিচিতি ও পাঠ-পরামর্শ।" id="metaDesc">
+<meta name="theme-color" content="#059669">
+<link rel="canonical" href="https://gronthokanon.com/blog.html" id="canonicalLink">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+.page-wrap{max-width:680px;margin:0 auto;padding:22px 16px 100px;}
+.blog-hero{background:linear-gradient(135deg,#064e3b,#059669);border-radius:16px;padding:28px 24px;text-align:center;margin-bottom:22px;}
+.blog-hero h1{font-size:24px;font-weight:900;color:#fff;margin-bottom:6px;}
+.blog-hero p{font-size:13px;color:#a7f3d0;line-height:1.7;}
+.blog-card{display:block;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;text-decoration:none;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.blog-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(5,150,105,0.12);border-color:rgba(5,150,105,0.4);}
+.blog-card .tag{display:inline-block;font-size:10px;font-weight:800;color:#059669;background:rgba(5,150,105,0.1);padding:3px 10px;border-radius:20px;margin-bottom:8px;letter-spacing:.4px;}
+.blog-card h2{font-size:16px;font-weight:800;color:var(--text);line-height:1.4;margin-bottom:6px;}
+.blog-card p{font-size:13px;color:var(--text2);line-height:1.7;}
+.blog-card .more{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:700;color:#059669;}
+/* single article */
+.article .tag{display:inline-block;font-size:10px;font-weight:800;color:#059669;background:rgba(5,150,105,0.1);padding:3px 10px;border-radius:20px;margin-bottom:12px;letter-spacing:.4px;}
+.article h1{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:16px;}
+.article p{font-size:14.5px;color:var(--text);line-height:1.95;margin-bottom:14px;}
+.article h3{font-size:16px;font-weight:800;color:var(--text);margin:20px 0 8px;padding-left:10px;border-left:3px solid #059669;}
+.article ul{padding-left:20px;margin-bottom:14px;}
+.article li{font-size:14px;color:var(--text2);line-height:1.95;}
+.article a{color:#059669;font-weight:600;text-decoration:none;}
+.article-cta{margin-top:20px;text-align:center;}
+.article-cta a{display:inline-block;background:linear-gradient(135deg,#059669,#047857);color:#fff;padding:12px 26px;border-radius:11px;font-size:14px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(5,150,105,0.3);}
+.back-to-blog{display:inline-flex;align-items:center;gap:6px;color:#059669;font-weight:700;font-size:13px;text-decoration:none;margin-bottom:16px;}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-top">
+    <button class="back-btn" onclick="history.back()">‹</button>
+    <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">ব্লগ</span>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page-wrap" id="blogWrap"></div>
+
+<script>
+/* ═══ আসল আর্টিকেল (কোনো ভুয়া তথ্য নয়) — অ্যাডমিন চাইলে এখানে নতুন যোগ করতে পারবেন ═══ */
+const POSTS = [
+  {
+    slug:'keno-boi-porbo',
+    tag:'পাঠাভ্যাস',
+    title:'কেন নিয়মিত বই পড়া জরুরি — ব্যস্ত জীবনেও',
+    excerpt:'বই কেবল জ্ঞানের উৎস নয়, এটি চিন্তা ও চরিত্র গঠনের অন্যতম মাধ্যম। কেন প্রতিদিন কিছুটা সময় বই পড়া উচিত, জানুন।',
+    body:`
+      <p>প্রযুক্তির এই যুগে আমরা অনেকেই বই পড়া থেকে দূরে সরে যাচ্ছি। অথচ একটি ভালো বই আমাদের চিন্তার জগৎকে যেভাবে প্রসারিত করে, তা আর কিছুতেই সম্ভব নয়। ইসলামের প্রথম নির্দেশই ছিল "পড়ো" (ইকরা) — যা পাঠের গুরুত্ব কতটা, তা স্পষ্ট করে দেয়।</p>
+      <h3>নিয়মিত বই পড়ার উপকারিতা</h3>
+      <ul>
+        <li>জ্ঞান ও অন্তর্দৃষ্টি বৃদ্ধি পায়, সিদ্ধান্ত নেওয়া সহজ হয়</li>
+        <li>মন প্রশান্ত হয়, দুশ্চিন্তা কমে</li>
+        <li>শব্দভাণ্ডার ও ভাষার দক্ষতা বাড়ে</li>
+        <li>ভালো বই চরিত্র ও আখলাক গঠনে সাহায্য করে</li>
+        <li>সন্তানরা বাবা-মাকে দেখে পড়ার অভ্যাস শেখে</li>
+      </ul>
+      <p>শুরুটা ছোট করে করুন — প্রতিদিন মাত্র ১০-১৫ মিনিট। একটি বিষয়ভিত্তিক বই বেছে নিন, যেটি আপনার জীবনে কাজে লাগবে। ধীরে ধীরে এটি একটি সুন্দর অভ্যাসে পরিণত হবে ইন শা আল্লাহ।</p>
+    `,
+    cta:{text:'📚 পড়ার জন্য বই বেছে নিন', link:'index.html'}
+  },
+  {
+    slug:'notun-pathok-boi',
+    tag:'পাঠ-পরামর্শ',
+    title:'নতুন পাঠকদের জন্য যেসব বই দিয়ে শুরু করা যায়',
+    excerpt:'যারা সবেমাত্র ইসলামি বই পড়া শুরু করতে চাইছেন, তাদের জন্য সহজ ভাষার ও হৃদয়স্পর্শী কিছু বইয়ের ধরন।',
+    body:`
+      <p>নতুন পাঠক হিসেবে কোন বই দিয়ে শুরু করবেন, তা নিয়ে দ্বিধায় পড়া স্বাভাবিক। খুব কঠিন বা তাত্ত্বিক বই দিয়ে শুরু করলে আগ্রহ হারিয়ে যেতে পারে। তাই সহজ ভাষার, অনুপ্রেরণামূলক বই দিয়ে যাত্রা শুরু করাই ভালো।</p>
+      <h3>যে ধরনের বই দিয়ে শুরু করবেন</h3>
+      <ul>
+        <li><b>আত্মশুদ্ধি ও অনুপ্রেরণামূলক বই</b> — অন্তরকে নাড়া দেয়, দ্বীনের পথে টানে</li>
+        <li><b>সীরাত (নবীজি ﷺ-এর জীবনী)</b> — জীবনের আদর্শ মডেল</li>
+        <li><b>সাহাবিদের জীবনী</b> — বাস্তব উদাহরণ থেকে শিক্ষা</li>
+        <li><b>ছোট গল্প ও ইসলামি উপন্যাস</b> — পড়ার আনন্দ ধরে রাখে</li>
+      </ul>
+      <p>গ্রন্থকাননে এই প্রতিটি বিষয়ের সাশ্রয়ী মূল্যের বই রয়েছে। ক্যাটাগরি থেকে সহজেই আপনার পছন্দের বিষয় বেছে নিতে পারবেন।</p>
+    `,
+    cta:{text:'☪️ ইসলামি বই দেখুন', link:'filter.html?type=cat&value=ইসলামি বই'}
+  },
+  {
+    slug:'boi-upohar',
+    tag:'উপহার',
+    title:'বই — সবচেয়ে অর্থবহ উপহার',
+    excerpt:'জন্মদিন, বিয়ে কিংবা যেকোনো উপলক্ষে একটি ভালো বই হতে পারে সবচেয়ে সুন্দর ও দীর্ঘস্থায়ী উপহার।',
+    body:`
+      <p>একটি উপহার কিছুদিন পর হারিয়ে যায় বা পুরনো হয়ে যায়। কিন্তু একটি ভালো বই সারাজীবন সঙ্গী হয়ে থাকে — বারবার পড়া যায়, অন্যকে ধার দেওয়া যায়, প্রজন্ম থেকে প্রজন্মে রেখে যাওয়া যায়।</p>
+      <h3>বই উপহার দেওয়ার কারণ</h3>
+      <ul>
+        <li>জ্ঞান ও দ্বীনি চেতনার উপহার — সদকায়ে জারিয়ার মতো</li>
+        <li>যেকোনো বাজেটে মানানসই — সাশ্রয়ী থেকে প্রিমিয়াম</li>
+        <li>প্রাপকের রুচি অনুযায়ী বেছে নেওয়া যায়</li>
+        <li>দীর্ঘস্থায়ী ও অর্থবহ — স্মৃতিতে থেকে যায়</li>
+      </ul>
+      <p>গ্রন্থকানন থেকে সহজেই উপহারের বই অর্ডার করতে পারেন — সারা বাংলাদেশে ক্যাশ অন ডেলিভারিতে পৌঁছে যাবে।</p>
+    `,
+    cta:{text:'🎁 উপহারের বই খুঁজুন', link:'index.html'}
+  }
+];
+
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const SITE='https://gronthokanon.com';
+
+function renderList(){
+  document.title='ব্লগ — গ্রন্থকানন';
+  document.getElementById('blogWrap').innerHTML=
+    '<div class="blog-hero"><h1>গ্রন্থকানন ব্লগ</h1><p>বই, পাঠ ও ইসলামি জ্ঞান নিয়ে আমাদের লেখা</p></div>'+
+    POSTS.map(p=>`<a class="blog-card" href="blog.html?post=${encodeURIComponent(p.slug)}">
+        <span class="tag">${esc(p.tag)}</span>
+        <h2>${esc(p.title)}</h2>
+        <p>${esc(p.excerpt)}</p>
+        <span class="more">পড়ুন →</span>
+    </a>`).join('');
+}
+
+function renderPost(post){
+  document.title=post.title+' — গ্রন্থকানন ব্লগ';
+  const md=document.getElementById('metaDesc'); if(md)md.setAttribute('content',post.excerpt);
+  const cn=document.getElementById('canonicalLink'); if(cn)cn.setAttribute('href',SITE+'/blog.html?post='+encodeURIComponent(post.slug));
+  /* Article JSON-LD (SEO) */
+  const ld={"@context":"https://schema.org","@type":"Article","headline":post.title,"description":post.excerpt,"author":{"@type":"Organization","name":"গ্রন্থকানন"},"publisher":{"@type":"Organization","name":"গ্রন্থকানন","logo":{"@type":"ImageObject","url":SITE+"/logo.png"}},"mainEntityOfPage":SITE+"/blog.html?post="+encodeURIComponent(post.slug)};
+  const s=document.createElement('script');s.type='application/ld+json';s.textContent=JSON.stringify(ld);document.head.appendChild(s);
+  document.getElementById('blogWrap').innerHTML=
+    '<a class="back-to-blog" href="blog.html">‹ সব লেখা</a>'+
+    `<div class="article"><span class="tag">${esc(post.tag)}</span><h1>${esc(post.title)}</h1>${post.body}
+      <div class="article-cta"><a href="${esc(post.cta.link)}">${esc(post.cta.text)}</a></div>
+    </div>`;
+}
+
+(function(){
+  const slug=new URLSearchParams(location.search).get('post');
+  const post=slug?POSTS.find(p=>p.slug===slug):null;
+  if(post)renderPost(post); else renderList();
+})();
+</script>
+<script src="common.js"></script>
+</body>
+</html>
