@@ -1076,6 +1076,46 @@
     <div class="rvs-row" id="rvsRow"></div>
 </div>
 
+<!-- ═══════ ব্লগ সেকশন (প্রতিযোগিতা + লেখা) ═══════ -->
+<style>
+.hblog-section { max-width: 1100px; margin: 0 auto; padding: 6px 14px 20px; }
+.hblog-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 12px; padding-left: 12px; border-left: 4px solid #f59e0b; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+[data-theme="dark"] .hblog-title { color: #ecfdf5; }
+.hblog-title a { font-size: 12.5px; color: #059669; font-weight: 700; text-decoration: none; }
+.hblog-row { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 10px; scroll-snap-type: x mandatory; }
+.hblog-row::-webkit-scrollbar { display: none; }
+.hblog-card {
+    flex-shrink: 0; width: 235px; scroll-snap-align: start;
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 15px; cursor: pointer; text-decoration: none; display: block;
+    box-shadow: 0 1px 5px rgba(16,24,40,0.06);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.hblog-card:hover { transform: translateY(-4px); box-shadow: 0 10px 22px rgba(5,150,105,0.14); border-color: rgba(5,150,105,0.4); }
+[data-theme="dark"] .hblog-card { border-color: rgba(255,255,255,0.09); }
+.hblog-tag { display: inline-block; font-size: 9.5px; font-weight: 800; color: #059669; background: rgba(5,150,105,0.1); padding: 3px 9px; border-radius: 20px; margin-bottom: 8px; }
+.hblog-tag.win { color: #b45309; background: rgba(251,191,36,0.18); }
+.hblog-card h3 { font-size: 13.5px; font-weight: 800; color: var(--text); line-height: 1.45; margin-bottom: 6px; height: 39px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.hblog-card p { font-size: 11.5px; color: var(--text2); line-height: 1.65; height: 57px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; margin-bottom: 8px; }
+.hblog-meta { font-size: 10.5px; color: var(--text2); }
+.hblog-cta {
+    flex-shrink: 0; width: 235px; scroll-snap-align: start;
+    background: linear-gradient(135deg, rgba(251,191,36,0.13), rgba(5,150,105,0.1));
+    border: 1.5px dashed #f59e0b; border-radius: 14px;
+    padding: 15px; cursor: pointer; text-decoration: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px;
+    transition: transform 0.2s;
+}
+.hblog-cta:hover { transform: translateY(-4px); }
+.hblog-cta .big { font-size: 30px; }
+.hblog-cta b { font-size: 13.5px; color: var(--text); line-height: 1.5; }
+.hblog-cta span { font-size: 11px; color: var(--text2); line-height: 1.6; }
+</style>
+<div class="hblog-section" id="homeBlogSection">
+    <div class="hblog-title"><span>📝 ব্লগ ও পাঠকদের লেখা</span><a href="blog.html">সবগুলো দেখুন →</a></div>
+    <div class="hblog-row" id="hblogRow"></div>
+</div>
+
 <!-- ═══════ CART MODAL ═══════ -->
 <div id="cartBox" class="modal">
     <div class="modal-content">
@@ -1799,6 +1839,7 @@ window.onload=()=>{
     auth.onAuthStateChanged(user=>updateAuthUI(user));
     loadReviewSlider();
     loadBanners();
+    loadHomeBlogs();
     loadRecentSalesTicker();
     /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে সেকশনগুলো রিফ্রেশ */
     if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok=>{
@@ -1834,6 +1875,45 @@ function loadRecentSalesTicker(){
         setTimeout(showOne,4500);
         setInterval(showOne,13000);
     }).catch(()=>{});
+}
+
+/* ═══ হোমপেজ ব্লগ সেকশন — বিল্ট-ইন লেখা + পাঠকদের প্রকাশিত লেখা ═══ */
+function loadHomeBlogs(){
+    const row=document.getElementById('hblogRow');
+    if(!row)return;
+    const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const builtin=[
+        {slug:'keno-boi-porbo',tag:'পাঠাভ্যাস',title:'কেন নিয়মিত বই পড়া জরুরি — ব্যস্ত জীবনেও',ex:'বই কেবল জ্ঞানের উৎস নয়, এটি চিন্তা ও চরিত্র গঠনের অন্যতম মাধ্যম।'},
+        {slug:'notun-pathok-boi',tag:'পাঠ-পরামর্শ',title:'নতুন পাঠকদের জন্য যেসব বই দিয়ে শুরু করা যায়',ex:'সহজ ভাষার ও হৃদয়স্পর্শী কিছু বইয়ের ধরন — যাত্রা শুরু হোক আনন্দে।'},
+        {slug:'boi-upohar',tag:'উপহার',title:'বই — সবচেয়ে অর্থবহ উপহার',ex:'যেকোনো উপলক্ষে একটি ভালো বই হতে পারে সবচেয়ে সুন্দর ও দীর্ঘস্থায়ী উপহার।'}
+    ];
+    const ctaCard=`<a class="hblog-cta" href="blog.html">
+        <span class="big">🏆</span>
+        <b>মাসিক ব্লগ প্রতিযোগিতা</b>
+        <span>আপনার লেখা জমা দিন —<br>নির্বাচিত হলে <b>🎁 হাদিয়া</b> জিতুন!</span>
+    </a>`;
+    const builtinCards=builtin.map(p=>`<a class="hblog-card" href="blog.html?post=${encodeURIComponent(p.slug)}">
+        <span class="hblog-tag">${esc(p.tag)}</span>
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.ex)}</p>
+        <div class="hblog-meta">📖 গ্রন্থকানন</div>
+    </a>`).join('');
+    row.innerHTML=ctaCard+builtinCards;
+    /* পাঠকদের প্রকাশিত লেখা থাকলে CTA-র পরেই বসাও */
+    fetch('https://gronthokanon-8573e-default-rtdb.firebaseio.com/publishedBlogs.json')
+        .then(r=>r.ok?r.json():null).then(data=>{
+            if(!data)return;
+            const list=Object.entries(data).map(([id,b])=>({id,...b})).filter(b=>b&&b.title&&b.content);
+            if(!list.length)return;
+            list.sort((a,b)=>(b.publishedAt||0)-(a.publishedAt||0));
+            const readerCards=list.slice(0,6).map(b=>`<a class="hblog-card" href="blog.html?pb=${encodeURIComponent(b.id)}">
+                <span class="hblog-tag win">🏆 পাঠকের লেখা</span>
+                <h3>${esc(b.title)}</h3>
+                <p>${esc(String(b.content).slice(0,120))}</p>
+                <div class="hblog-meta">✍️ ${esc(b.author||'পাঠক')}</div>
+            </a>`).join('');
+            row.innerHTML=ctaCard+readerCards+builtinCards;
+        }).catch(()=>{});
 }
 
 /* ═══ রিভিউ স্লাইডার — Firebase থেকে সেরা রিভিউগুলো ═══ */

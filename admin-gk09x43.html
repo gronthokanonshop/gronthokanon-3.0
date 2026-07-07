@@ -1161,6 +1161,15 @@
                     </div>
                 </div>
 
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> পাঠকদের ব্লগ (মাসিক প্রতিযোগিতা)</h3>
+                    <p style="margin-bottom:12px;">কাস্টমারদের জমা দেওয়া লেখা এখানে আসবে। পড়ে পছন্দ হলে <b>"প্রকাশ করুন"</b> চাপুন — সাইটের ব্লগ ও হোমপেজে লাইভ হবে। লেখকের ফোন নম্বরে যোগাযোগ করে 🎁 হাদিয়া পাঠাবেন।</p>
+                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">📥 জমা পড়া লেখা <span id="subCount" style="background:#fee2e2;color:#dc2626;padding:1px 8px;border-radius:12px;font-size:11px;"></span></div>
+                    <div id="blogSubList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
+                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">✅ প্রকাশিত লেখা</div>
+                    <div id="blogPubList" style="display:flex;flex-direction:column;gap:8px;"></div>
+                </div>
+
                 <div class="tool-card">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg> Courier API Settings</h3>
                     <p style="margin-bottom:14px;">এখানে key বসিয়ে সেভ করুন। Firebase এ encrypted হয়ে থাকবে।</p>
@@ -1323,7 +1332,7 @@ function switchTab(tab, btnEl){
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); }
+    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -1879,6 +1888,77 @@ async function toggleCoupon(code){
 async function deleteCoupon(code){
     if(!confirm(code+' কুপনটি মুছবেন?'))return;
     try{ await db.ref('coupons/'+code).remove(); delete couponData[code]; renderCouponList(); showToast('🗑️ কুপন মুছে ফেলা হয়েছে','#6b7280'); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
+}
+
+/* ══════════════════════════════════════════════
+   পাঠকদের ব্লগ — জমা (blogSubmissions) → প্রকাশ (publishedBlogs)
+══════════════════════════════════════════════ */
+let blogSubs={}, blogPubs={};
+function loadBlogAdmin(){
+    db.ref('blogSubmissions').once('value').then(s=>{ blogSubs=s.val()||{}; renderBlogSubs(); }).catch(()=>{ blogSubs={}; renderBlogSubs(); });
+    db.ref('publishedBlogs').once('value').then(s=>{ blogPubs=s.val()||{}; renderBlogPubs(); }).catch(()=>{ blogPubs={}; renderBlogPubs(); });
+}
+function renderBlogSubs(){
+    const box=document.getElementById('blogSubList'); if(!box)return;
+    const ids=Object.keys(blogSubs).sort((a,b)=>(blogSubs[b].createdAt||0)-(blogSubs[a].createdAt||0));
+    const cnt=document.getElementById('subCount'); if(cnt)cnt.innerText=ids.length?ids.length+'টি':'';
+    if(!ids.length){ box.innerHTML='<div style="text-align:center;padding:14px;color:var(--text-muted);font-size:12.5px;">এখনো কোনো লেখা জমা পড়েনি</div>'; return; }
+    box.innerHTML=ids.map(id=>{
+        const s=blogSubs[id]||{};
+        return `<div style="border:1px solid var(--border);border-radius:10px;background:var(--surface);overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;flex-wrap:wrap;">
+                <div style="flex:1;min-width:150px;">
+                    <div style="font-size:13px;font-weight:700;color:var(--text-main);">${escapeHTML(s.title||'(শিরোনামহীন)')}</div>
+                    <div style="font-size:11px;color:var(--text-muted);">✍️ ${escapeHTML(s.name||'')} · 📱 ${escapeHTML(s.phone||'—')} · ${s.createdAt?new Date(s.createdAt).toLocaleDateString('bn-BD'):''}</div>
+                </div>
+                <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;">
+                    <button class="btn btn-sm btn-ghost" onclick="toggleSubView('${id}')">👁️ পড়ুন</button>
+                    <button class="btn btn-sm" style="background:#d1fae5;color:#065f46;" onclick="publishBlog('${id}')">✅ প্রকাশ করুন</button>
+                    <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteSubmission('${id}')">✕</button>
+                </div>
+            </div>
+            <div id="subview-${id}" style="display:none;padding:12px 14px;border-top:1px dashed var(--border);font-size:13px;line-height:1.9;color:var(--text-main);white-space:pre-wrap;background:var(--bg-body);">${escapeHTML(s.content||'')}</div>
+        </div>`;
+    }).join('');
+}
+function toggleSubView(id){
+    const el=document.getElementById('subview-'+id);
+    if(el)el.style.display=el.style.display==='none'?'block':'none';
+}
+function renderBlogPubs(){
+    const box=document.getElementById('blogPubList'); if(!box)return;
+    const ids=Object.keys(blogPubs).sort((a,b)=>(blogPubs[b].publishedAt||0)-(blogPubs[a].publishedAt||0));
+    if(!ids.length){ box.innerHTML='<div style="text-align:center;padding:14px;color:var(--text-muted);font-size:12.5px;">এখনো কিছু প্রকাশিত হয়নি</div>'; return; }
+    box.innerHTML=ids.map(id=>{
+        const p=blogPubs[id]||{};
+        return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);flex-wrap:wrap;">
+            <div style="flex:1;min-width:150px;">
+                <div style="font-size:13px;font-weight:700;color:var(--text-main);">🏆 ${escapeHTML(p.title||'')}</div>
+                <div style="font-size:11px;color:var(--text-muted);">✍️ ${escapeHTML(p.author||'')} · ${p.publishedAt?new Date(p.publishedAt).toLocaleDateString('bn-BD'):''}</div>
+            </div>
+            <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;flex-shrink:0;" onclick="deletePublished('${id}')">✕ সরান</button>
+        </div>`;
+    }).join('');
+}
+async function publishBlog(id){
+    const s=blogSubs[id]; if(!s)return;
+    if(!confirm('"'+(s.title||'')+'" লেখাটি সাইটে প্রকাশ করবেন?\n(লেখক: '+(s.name||'')+' — হাদিয়া পাঠাতে ফোন: '+(s.phone||'—')+')'))return;
+    try{
+        await db.ref('publishedBlogs/'+id).set({title:s.title||'',content:s.content||'',author:s.name||'পাঠক',publishedAt:Date.now()});
+        await db.ref('blogSubmissions/'+id).remove();
+        delete blogSubs[id];
+        blogPubs[id]={title:s.title,content:s.content,author:s.name,publishedAt:Date.now()};
+        renderBlogSubs();renderBlogPubs();
+        showToast('✅ প্রকাশিত হয়েছে — সাইটে লাইভ! লেখকের নম্বরে হাদিয়ার জন্য যোগাযোগ করুন: '+(s.phone||''),'#059669');
+    }catch(e){ showToast('❌ প্রকাশ ব্যর্থ','#dc2626'); }
+}
+async function deleteSubmission(id){
+    if(!confirm('এই জমা লেখাটি মুছবেন?'))return;
+    try{ await db.ref('blogSubmissions/'+id).remove(); delete blogSubs[id]; renderBlogSubs(); showToast('🗑️ মুছে ফেলা হয়েছে','#6b7280'); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
+}
+async function deletePublished(id){
+    if(!confirm('প্রকাশিত লেখাটি সাইট থেকে সরাবেন?'))return;
+    try{ await db.ref('publishedBlogs/'+id).remove(); delete blogPubs[id]; renderBlogPubs(); showToast('🗑️ সরানো হয়েছে','#6b7280'); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
 }
 
 /* ── DOWNLOAD sitemap.xml ── */
