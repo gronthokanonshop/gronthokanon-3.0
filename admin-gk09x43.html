@@ -2355,7 +2355,7 @@ async function createCourierOrder(provider){
 
     try{
         // CORS proxy ব্যবহার করে courier API call
-        const PROXY = 'https://lucky-feather-fa9e.gronthokanon4309.workers.dev/?url=';
+        const PROXY = 'https://gronthokanon.gronthokanon4309.workers.dev/?url=';
 
         if(provider === 'steadfast'){
             const sfUrl = PROXY + encodeURIComponent('https://portal.packzy.com/api/v1/create_order');
