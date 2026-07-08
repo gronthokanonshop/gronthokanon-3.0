@@ -1655,7 +1655,7 @@ function updateCartUI(){
     const count=cart.length;
     const cc=document.getElementById('cartCount');if(cc)cc.innerText=count;
     const bb=document.getElementById('bnavBadge');if(bb){bb.innerText=count;bb.classList.toggle('show',count>0);}
-    const disc=Math.round(subtotal*discountPercent/100);
+    const disc=(typeof gkCouponDiscAmt==='function')?gkCouponDiscAmt(subtotal):Math.round(subtotal*discountPercent/100);
     if(document.getElementById('subtotal'))document.getElementById('subtotal').innerText=subtotal;
     if(document.getElementById('discountAmt'))document.getElementById('discountAmt').innerText=disc;
     if(document.getElementById('total'))document.getElementById('total').innerText=subtotal-disc;
@@ -1677,8 +1677,9 @@ function renderCouponSection(){
     if(!sec)return;
     const applied=localStorage.getItem('gronthokanon_coupon');
     if(applied){
-        const labelMap={'FIRSTORDER':'🎉 FIRSTORDER — ৫% ডিসকাউন্ট'};
-        const label=labelMap[applied]||('✅ '+applied);
+        const ct=localStorage.getItem('gronthokanon_ctype')||'percent';
+        const cv=parseInt(localStorage.getItem('gronthokanon_cvalue')||localStorage.getItem('gronthokanon_discount')||'0');
+        const label='🎉 '+applied+' — '+((typeof gkCouponLabel==='function')?gkCouponLabel({type:ct,value:cv}):cv+'% ডিসকাউন্ট');
         sec.innerHTML=`
         <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(5,150,105,0.08);border:1.5px dashed #059669;border-radius:8px;">
             <span style="flex:1;font-size:13px;font-weight:700;color:#059669;">${label}</span>
@@ -1695,6 +1696,8 @@ function renderCouponSection(){
 function removeCoupon(){
     localStorage.removeItem('gronthokanon_coupon');
     localStorage.removeItem('gronthokanon_discount');
+    localStorage.removeItem('gronthokanon_ctype');
+    localStorage.removeItem('gronthokanon_cvalue');
     discountPercent=0;
     showToast('🗑️ কুপন বাতিল হয়েছে','#6b7280');
     updateCartUI();
@@ -1702,12 +1705,14 @@ function removeCoupon(){
 }
 function applyCoupon(){
     const code=(document.getElementById('couponCode').value||'').trim().toUpperCase();
-    const pct=window.GK_COUPONS&&window.GK_COUPONS[code];
-    if(pct){
-        discountPercent=pct;
-        localStorage.setItem('gronthokanon_discount',String(pct));
+    const info=(typeof gkCouponInfo==='function')?gkCouponInfo(code):null;
+    if(info){
+        discountPercent=info.type==='percent'?info.value:0;
         localStorage.setItem('gronthokanon_coupon',code);
-        showToast('🎉 '+pct+'% ডিসকাউন্ট যুক্ত হয়েছে!','#059669');
+        localStorage.setItem('gronthokanon_ctype',info.type);
+        localStorage.setItem('gronthokanon_cvalue',String(info.value));
+        localStorage.setItem('gronthokanon_discount',String(discountPercent));
+        showToast('🎉 '+gkCouponLabel(info)+' যুক্ত হয়েছে!','#059669');
         updateCartUI();
             renderCouponSection();
     } else {
@@ -1888,17 +1893,30 @@ function loadHomeBlogs(){
         {slug:'boi-upohar',tag:'উপহার',title:'বই — সবচেয়ে অর্থবহ উপহার',ex:'যেকোনো উপলক্ষে একটি ভালো বই হতে পারে সবচেয়ে সুন্দর ও দীর্ঘস্থায়ী উপহার।'}
     ];
     const ctaCard=`<a class="hblog-cta" href="blog.html">
+        <span id="hblogTopic" style="display:none;font-size:10px;font-weight:800;color:#b45309;background:rgba(251,191,36,0.22);padding:3px 10px;border-radius:20px;"></span>
         <span class="big">🏆</span>
         <b>মাসিক ব্লগ প্রতিযোগিতা</b>
         <span>আপনার লেখা জমা দিন —<br>নির্বাচিত হলে <b>🎁 হাদিয়া</b> জিতুন!</span>
     </a>`;
+    /* অ্যাডমিন-সেট বিষয় (siteConfig/blogTopic) — re-render হলেও টিকে থাকে */
+    function applyHblogTopic(){
+        if(!window.__gkBlogTopic)return;
+        const el=document.getElementById('hblogTopic');
+        if(el){el.innerText='এ মাসের বিষয়: '+window.__gkBlogTopic;el.style.display='inline-block';}
+    }
+    fetch('https://gronthokanon-8573e-default-rtdb.firebaseio.com/siteConfig/blogTopic.json')
+        .then(r=>r.ok?r.json():null).then(t=>{
+            if(!t||typeof t!=='string'||!t.trim())return;
+            window.__gkBlogTopic=t.trim();
+            applyHblogTopic();
+        }).catch(()=>{});
     const builtinCards=builtin.map(p=>`<a class="hblog-card" href="blog.html?post=${encodeURIComponent(p.slug)}">
         <span class="hblog-tag">${esc(p.tag)}</span>
         <h3>${esc(p.title)}</h3>
         <p>${esc(p.ex)}</p>
         <div class="hblog-meta">📖 গ্রন্থকানন</div>
     </a>`).join('');
-    row.innerHTML=ctaCard+builtinCards;
+    row.innerHTML=ctaCard+builtinCards;applyHblogTopic();
     /* পাঠকদের প্রকাশিত লেখা থাকলে CTA-র পরেই বসাও */
     fetch('https://gronthokanon-8573e-default-rtdb.firebaseio.com/publishedBlogs.json')
         .then(r=>r.ok?r.json():null).then(data=>{
@@ -1912,7 +1930,7 @@ function loadHomeBlogs(){
                 <p>${esc(String(b.content).slice(0,120))}</p>
                 <div class="hblog-meta">✍️ ${esc(b.author||'পাঠক')}</div>
             </a>`).join('');
-            row.innerHTML=ctaCard+readerCards+builtinCards;
+            row.innerHTML=ctaCard+readerCards+builtinCards;applyHblogTopic();
         }).catch(()=>{});
 }
 
@@ -1973,7 +1991,14 @@ function loadBanners(){
     if(typeof db==='undefined'||!db)return;
     db.ref('banners').get().then(snap=>{
         if(!snap.exists())return;
-        let list=snap.val();
+        let raw=snap.val();
+        /* অ্যাডমিন সব ব্যানার মুছে সেভ করলে {none:true} — সেকশনটাই লুকাও */
+        if(raw&&raw.none===true){
+            const bw=document.querySelector('.banner-wrap');
+            if(bw)bw.style.display='none';
+            return;
+        }
+        let list=raw;
         if(!Array.isArray(list))list=Object.values(list||{});
         list=list.filter(b=>b&&(b.img||b.title));
         if(!list.length)return;

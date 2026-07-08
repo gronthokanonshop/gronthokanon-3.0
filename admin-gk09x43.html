@@ -665,10 +665,23 @@
                 <div class="courier-result" id="courierResult"></div>
             </div>
 
-            <!-- INVOICE PRINT -->
+            <!-- মোট টাকা বদলানো -->
+            <div class="m-section">
+                <div class="notes-label" style="margin-bottom:8px;">💰 মোট টাকা বদলান <span style="font-size:10px;color:var(--text-muted);font-weight:400;">(বিশেষ ছাড়/সমঝোতা হলে)</span></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <input class="form-input" id="editTotalInput" type="number" min="0" placeholder="নতুন মোট (৳)" style="flex:1;min-width:120px;">
+                    <button class="btn btn-primary" onclick="saveOrderTotal()" style="flex-shrink:0;">সেভ</button>
+                </div>
+                <div id="totalSavedMsg" style="display:none;margin-top:6px;font-size:12px;font-weight:700;color:#059669;">✓ মোট টাকা আপডেট হয়েছে!</div>
+            </div>
+
+            <!-- INVOICE PRINT / PDF -->
             <div class="m-section">
                 <button class="modal-update-btn" onclick="printInvoice()" style="background:#fdf8e8;color:#1c1c1c;border:1px solid #f3e6b8;">
                     🖨️ Invoice / Delivery Slip Print
+                </button>
+                <button class="modal-update-btn" onclick="downloadInvoicePDF()" style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;margin-top:8px;">
+                    📄 স্লিপ PDF ডাউনলোড (ফোনেও চলে)
                 </button>
             </div>
 
@@ -1155,7 +1168,12 @@
                         <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন কুপন</div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <input class="form-input" id="cpnCode" placeholder="কোড (যেমন: EID25)" style="flex:2;min-width:130px;text-transform:uppercase;">
-                            <input class="form-input" id="cpnPct" type="number" min="1" max="100" placeholder="ছাড় %" style="flex:1;min-width:80px;">
+                            <select class="form-input" id="cpnType" onchange="cpnTypeChanged()" style="flex:1.4;min-width:130px;">
+                                <option value="percent">% ছাড়</option>
+                                <option value="taka">৳ টাকা ছাড়</option>
+                                <option value="delivery">🚚 ফ্রি ডেলিভারি</option>
+                            </select>
+                            <input class="form-input" id="cpnPct" type="number" min="1" placeholder="ছাড় %" style="flex:1;min-width:80px;">
                             <button class="btn btn-primary" onclick="addCoupon()" style="flex-shrink:0;">যোগ করুন</button>
                         </div>
                     </div>
@@ -1164,6 +1182,14 @@
                 <div class="tool-card" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> পাঠকদের ব্লগ (মাসিক প্রতিযোগিতা)</h3>
                     <p style="margin-bottom:12px;">কাস্টমারদের জমা দেওয়া লেখা এখানে আসবে। পড়ে পছন্দ হলে <b>"প্রকাশ করুন"</b> চাপুন — সাইটের ব্লগ ও হোমপেজে লাইভ হবে। লেখকের ফোন নম্বরে যোগাযোগ করে 🎁 হাদিয়া পাঠাবেন।</p>
+                    <div style="border:1.5px dashed #f59e0b;border-radius:10px;padding:12px;margin-bottom:16px;background:rgba(251,191,36,0.06);">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">🏆 এ মাসের প্রতিযোগিতার বিষয়</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <input class="form-input" id="blogTopicInput" placeholder="যেমন: রমজান ও আমার প্রিয় বই" style="flex:1;min-width:180px;">
+                            <button class="btn btn-primary" onclick="saveBlogTopic()" style="flex-shrink:0;">সেভ করুন</button>
+                        </div>
+                        <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">সেভ করলেই ব্লগ পেজ ও হোমপেজে নতুন বিষয় দেখাবে। খালি রেখে সেভ করলে বিষয় ছাড়া সাধারণ আহ্বান দেখাবে।</div>
+                    </div>
                     <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">📥 জমা পড়া লেখা <span id="subCount" style="background:#fee2e2;color:#dc2626;padding:1px 8px;border-radius:12px;font-size:11px;"></span></div>
                     <div id="blogSubList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
                     <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">✅ প্রকাশিত লেখা</div>
@@ -1190,6 +1216,7 @@
                         <button class="btn btn-ghost" onclick="loadCourierApiKeys(true)"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.5"></path></svg> লোড করুন</button>
                     </div>
                     <div id="apiKeySaveMsg" style="margin-top:10px;font-size:12px;font-weight:600;display:none;"></div>
+                    <div id="courierKeyStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.25);border-radius:8px;"></div>
                 </div>
             </div>
 
@@ -1202,6 +1229,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="book.js"></script>
+<!-- স্লিপ PDF ডাউনলোডের জন্য (ফোনে window.print ভালো কাজ করে না বলে) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════
    UTILS
@@ -1784,19 +1814,26 @@ async function syncAllBooksToFirebase(silent=false){
    হোমপেজ ব্যানার নিয়ন্ত্রণ (Firebase 'banners' node)
 ══════════════════════════════════════════════ */
 let bannerData = [];
+/* সাইটের কোডে বসানো ডিফল্ট ৩টি ব্যানার — Firebase খালি থাকলে এগুলোই দেখায় */
+const DEFAULT_BANNERS=[
+    {img:'banner1.jpg', title:'', subtitle:'', link:''},
+    {img:'banner2.jpg', title:'', subtitle:'', link:''},
+    {img:'banner3.jpg', title:'', subtitle:'', link:''}
+];
 function loadBannersAdmin(){
     db.ref('banners').once('value').then(snap=>{
         let v = snap.val();
-        if(Array.isArray(v)) bannerData = v.filter(Boolean);
+        if(v && v.none===true) bannerData = []; /* অ্যাডমিন সব মুছে দিয়েছেন */
+        else if(Array.isArray(v)) bannerData = v.filter(Boolean);
         else if(v && typeof v==='object') bannerData = Object.values(v).filter(Boolean);
-        else bannerData = [];
+        else bannerData = DEFAULT_BANNERS.map(b=>({...b})); /* Firebase খালি → ডিফল্টগুলো দেখাও, চাইলে মুছে সেভ করা যাবে */
         renderBannerList();
     }).catch(()=>{ bannerData=[]; renderBannerList(); });
 }
 function renderBannerList(){
     const box=document.getElementById('bannerList'); if(!box) return;
     if(!bannerData.length){
-        box.innerHTML='<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px;">এখনো কোনো ব্যানার নেই — নিচে থেকে যোগ করুন। (কিছু না থাকলে সাইটে ডিফল্ট ব্যানার দেখাবে)</div>';
+        box.innerHTML='<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px;">কোনো ব্যানার নেই — সেভ করলে সাইটে ব্যানার সেকশন লুকানো থাকবে। নিচে থেকে নতুন যোগ করতে পারেন।</div>';
         return;
     }
     box.innerHTML=bannerData.map((b,i)=>`
@@ -1834,8 +1871,10 @@ function moveBanner(i,dir){
 }
 async function saveBanners(){
     try{
-        await db.ref('banners').set(bannerData);
-        showToast('✅ ব্যানার সেভ হয়েছে — হোমপেজে লাইভ!','#059669');
+        /* খালি array Firebase-এ থাকে না — তাই সব মুছলে {none:true} sentinel সেভ হয়,
+           সাইট তখন ব্যানার সেকশন লুকিয়ে রাখে (ডিফল্টে ফিরে যায় না) */
+        await db.ref('banners').set(bannerData.length ? bannerData : {none:true});
+        showToast(bannerData.length ? '✅ ব্যানার সেভ হয়েছে — হোমপেজে লাইভ!' : '✅ সেভ হয়েছে — সাইটে ব্যানার সেকশন লুকানো থাকবে','#059669');
     }catch(e){
         showToast('❌ সেভ ব্যর্থ — আবার চেষ্টা করুন','#dc2626');
     }
@@ -1851,16 +1890,29 @@ function loadCouponsAdmin(){
         renderCouponList();
     }).catch(()=>{ couponData={}; renderCouponList(); });
 }
+function couponAdminLabel(c){
+    /* পুরনো {discount:N} = % ছাড়; নতুন {type,value} */
+    if(typeof c.discount==='number') return c.discount+'% ছাড়';
+    if(c.type==='delivery') return '🚚 ফ্রি ডেলিভারি';
+    if(c.type==='taka') return '৳'+(c.value||0)+' ছাড়';
+    return (c.value||0)+'% ছাড়';
+}
+function cpnTypeChanged(){
+    const t=document.getElementById('cpnType').value;
+    const v=document.getElementById('cpnPct');
+    if(t==='delivery'){ v.style.display='none'; v.value=''; }
+    else{ v.style.display='block'; v.placeholder=(t==='taka'?'ছাড় ৳ (যেমন: 50)':'ছাড় %'); }
+}
 function renderCouponList(){
     const box=document.getElementById('couponList'); if(!box) return;
     const codes=Object.keys(couponData);
-    let html='<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface);opacity:.75;"><b style="flex:1;">FIRSTORDER</b><span style="font-weight:700;color:#059669;">৫%</span><span style="font-size:10px;color:var(--text-muted);">বিল্ট-ইন</span></div>';
+    let html='<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface);opacity:.75;"><b style="flex:1;">FIRSTORDER</b><span style="font-weight:700;color:#059669;">৫% ছাড়</span><span style="font-size:10px;color:var(--text-muted);">বিল্ট-ইন</span></div>';
     html+=codes.map(code=>{
         const c=couponData[code]||{};
         const active=c.active!==false;
-        return `<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface);">
-            <b style="flex:1;">${escapeHTML(code)}</b>
-            <span style="font-weight:700;color:#059669;">${c.discount||0}%</span>
+        return `<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface);flex-wrap:wrap;">
+            <b style="flex:1;min-width:90px;">${escapeHTML(code)}</b>
+            <span style="font-weight:700;color:#059669;">${couponAdminLabel(c)}</span>
             <button class="btn btn-sm btn-ghost" onclick="toggleCoupon('${escapeHTML(code)}')" title="চালু/বন্ধ">${active?'🟢 চালু':'⚪ বন্ধ'}</button>
             <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteCoupon('${escapeHTML(code)}')" title="মুছুন">✕</button>
         </div>`;
@@ -1869,13 +1921,16 @@ function renderCouponList(){
 }
 async function addCoupon(){
     const code=(document.getElementById('cpnCode').value||'').trim().toUpperCase();
-    const pct=parseInt(document.getElementById('cpnPct').value||'0');
+    const type=document.getElementById('cpnType').value||'percent';
+    const val=parseInt(document.getElementById('cpnPct').value||'0');
     if(!code||!/^[A-Z0-9]{3,20}$/.test(code)){ showToast('কোড ৩-২০ অক্ষর, শুধু A-Z ও 0-9','#dc2626'); return; }
-    if(!pct||pct<1||pct>100){ showToast('ছাড় ১-১০০% এর মধ্যে দিন','#dc2626'); return; }
     if(code==='FIRSTORDER'){ showToast('FIRSTORDER বিল্ট-ইন — অন্য নাম দিন','#dc2626'); return; }
+    if(type==='percent'&&(!val||val<1||val>100)){ showToast('ছাড় ১-১০০% এর মধ্যে দিন','#dc2626'); return; }
+    if(type==='taka'&&(!val||val<1)){ showToast('টাকার অঙ্ক দিন (যেমন: 50)','#dc2626'); return; }
+    const data={type, value:(type==='delivery'?0:val), active:true};
     try{
-        await db.ref('coupons/'+code).set({discount:pct, active:true});
-        couponData[code]={discount:pct, active:true};
+        await db.ref('coupons/'+code).set(data);
+        couponData[code]=data;
         document.getElementById('cpnCode').value='';document.getElementById('cpnPct').value='';
         renderCouponList();
         showToast('✅ কুপন যোগ হয়েছে — সাইটে লাইভ!','#059669');
@@ -1897,6 +1952,18 @@ let blogSubs={}, blogPubs={};
 function loadBlogAdmin(){
     db.ref('blogSubmissions').once('value').then(s=>{ blogSubs=s.val()||{}; renderBlogSubs(); }).catch(()=>{ blogSubs={}; renderBlogSubs(); });
     db.ref('publishedBlogs').once('value').then(s=>{ blogPubs=s.val()||{}; renderBlogPubs(); }).catch(()=>{ blogPubs={}; renderBlogPubs(); });
+    /* প্রতিযোগিতার বিষয় লোড */
+    db.ref('siteConfig/blogTopic').once('value').then(s=>{
+        const el=document.getElementById('blogTopicInput');
+        if(el)el.value=s.val()||'';
+    }).catch(()=>{});
+}
+async function saveBlogTopic(){
+    const topic=(document.getElementById('blogTopicInput').value||'').trim();
+    try{
+        await db.ref('siteConfig/blogTopic').set(topic);
+        showToast(topic?'✅ বিষয় সেভ হয়েছে — সাইটে লাইভ!':'✅ বিষয় মুছে ফেলা হয়েছে','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
 }
 function renderBlogSubs(){
     const box=document.getElementById('blogSubList'); if(!box)return;
@@ -2042,6 +2109,11 @@ function openModal(orderId){
     document.getElementById('modalBooks').innerHTML=renderBookItemsTable(o);
     document.getElementById('modalPayment').innerText=o.payment;
     document.getElementById('modalTotal').innerText=o.total;
+    /* মোট টাকা এডিট ইনপুট প্রিফিল */
+    const teIn=document.getElementById('editTotalInput');
+    if(teIn){teIn.value=parseInt(String(o.total||'').replace(/[^\d]/g,''))||'';}
+    const teMsg=document.getElementById('totalSavedMsg');
+    if(teMsg)teMsg.style.display='none';
     const offerSec=document.getElementById('modalOffersSection');
     const offerEl=document.getElementById('modalOffers');
     if(o.offers&&o.offers.length){
@@ -2367,6 +2439,7 @@ async function saveCourierApiKeys(){
         if(sfKey)    STEADFAST_API_KEY    = sfKey;
         if(sfSecret) STEADFAST_API_SECRET = sfSecret;
         if(rdxTok)   REDX_API_TOKEN       = 'Bearer ' + rdxTok;
+        updateCourierTick(!!(STEADFAST_API_KEY&&STEADFAST_API_SECRET), !!REDX_API_TOKEN);
 
         msgEl.style.display='block'; msgEl.style.color='#0B6E4F';
         msgEl.innerHTML='<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> API keys সেভ হয়েছে!';
@@ -2381,6 +2454,15 @@ async function saveCourierApiKeys(){
     }
 }
 
+function updateCourierTick(sfOk, rdxOk){
+    const el=document.getElementById('courierKeyStatus');
+    if(!el)return;
+    if(!sfOk && !rdxOk){ el.style.display='none'; return; }
+    el.style.display='block';
+    el.innerHTML=(sfOk?'<span style="color:#059669;font-weight:700;">✅ Steadfast key সেভ করা আছে</span>':'<span style="color:#b45309;">⚠️ Steadfast key নেই</span>')
+        +' &nbsp;·&nbsp; '
+        +(rdxOk?'<span style="color:#059669;font-weight:700;">✅ RedX token সেভ করা আছে</span>':'<span style="color:#b45309;">⚠️ RedX token নেই</span>');
+}
 async function loadCourierApiKeys(showUI=false){
     try{
         const snap = await db.ref('courierApiKeys').once('value');
@@ -2389,6 +2471,8 @@ async function loadCourierApiKeys(showUI=false){
             if(d.sfKey)    STEADFAST_API_KEY    = d.sfKey;
             if(d.sfSecret) STEADFAST_API_SECRET = d.sfSecret;
             if(d.rdxTok)   REDX_API_TOKEN       = 'Bearer ' + d.rdxTok;
+            /* সেভ থাকলে টিক মার্ক */
+            updateCourierTick(!!(d.sfKey&&d.sfSecret), !!d.rdxTok);
             if(showUI){
                 if(d.sfKey)    document.getElementById('sfApiKey').value    = '••••••••' + d.sfKey.slice(-4);
                 if(d.sfSecret) document.getElementById('sfApiSecret').value = '••••••••' + d.sfSecret.slice(-4);
@@ -2640,12 +2724,9 @@ async function saveAdminNote(){
 /* ══════════════════════════════════════════════
    INVOICE PRINT
 ══════════════════════════════════════════════ */
-function printInvoice(){
-    if(!modalOrderId)return;
-    const o=allOrders.find(x=>x.orderId===modalOrderId);
-    if(!o)return;
+function buildInvoiceHTML(o){
     const date=new Date(o.createdAt).toLocaleDateString('bn-BD',{year:'numeric',month:'long',day:'numeric'});
-    const html=`
+    return `
     <div class="invoice-wrap">
         <div class="invoice-yellow-strip"></div>
         <div class="invoice-header">
@@ -2687,11 +2768,57 @@ function printInvoice(){
         ${(o.steadfast&&o.steadfast.trackingCode)||(o.redx&&o.redx.parcelId)?'<div class="invoice-info-box" style="margin-top:12px;text-align:center;font-size:14px;">📦 কুরিয়ার ট্র্যাকিং ('+((o.steadfast&&o.steadfast.trackingCode)?'Steadfast CN#':'RedX Parcel#')+'): <strong>'+escapeHTML((o.steadfast&&o.steadfast.trackingCode)||(o.redx&&o.redx.parcelId))+'</strong></div>':''}<div class="invoice-footer">ধন্যবাদ আপনার ক্রয়ের জন্য · গ্রন্থকানন</div>
         </div>
     </div>`;
+}
+function printInvoice(){
+    if(!modalOrderId)return;
+    const o=allOrders.find(x=>x.orderId===modalOrderId);
+    if(!o)return;
     const printArea=document.getElementById('invoicePrintArea');
-    printArea.innerHTML=html;
+    printArea.innerHTML=buildInvoiceHTML(o);
     printArea.style.display='block';
     window.print();
     setTimeout(()=>{printArea.style.display='none';printArea.innerHTML='';},1000);
+}
+
+/* ── স্লিপ PDF ডাউনলোড — ফোনেও চলে, কোনো লিংক/হেডার ছাপা হয় না ── */
+async function downloadInvoicePDF(){
+    if(!modalOrderId)return;
+    const o=allOrders.find(x=>x.orderId===modalOrderId);
+    if(!o)return;
+    if(typeof html2canvas==='undefined'||!window.jspdf){showToast('PDF লাইব্রেরি লোড হয়নি — নেট চেক করুন','#dc2626');return;}
+    showToast('📄 PDF তৈরি হচ্ছে...','#059669');
+    const wrap=document.createElement('div');
+    wrap.style.cssText='position:fixed;left:-9999px;top:0;width:620px;background:#fff;z-index:-1;padding:10px;';
+    wrap.innerHTML=buildInvoiceHTML(o);
+    document.body.appendChild(wrap);
+    try{
+        const canvas=await html2canvas(wrap.firstElementChild||wrap,{scale:2,useCORS:true,backgroundColor:'#ffffff'});
+        const imgData=canvas.toDataURL('image/png');
+        const {jsPDF}=window.jspdf;
+        const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+        const W=210, H=Math.min(297,(canvas.height/canvas.width)*210);
+        pdf.addImage(imgData,'PNG',0,0,W,H);
+        pdf.save('GK-slip-'+o.orderId+'.pdf');
+    }catch(e){showToast('❌ PDF তৈরি হয়নি','#dc2626');}
+    document.body.removeChild(wrap);
+}
+
+/* ── অর্ডারের মোট টাকা বদলানো ── */
+async function saveOrderTotal(){
+    if(!modalOrderId)return;
+    const v=parseInt(document.getElementById('editTotalInput').value||'0');
+    if(!v||v<0){showToast('সঠিক টাকার অঙ্ক দিন','#dc2626');return;}
+    try{
+        await db.ref('orders/'+modalOrderId+'/total').set('৳'+v);
+        await db.ref('orders/'+modalOrderId+'/totalEditedAt').set(Date.now());
+        const o=allOrders.find(x=>x.orderId===modalOrderId);
+        if(o)o.total='৳'+v;
+        const mt=document.getElementById('modalTotal');
+        if(mt)mt.innerText='৳'+v;
+        const msg=document.getElementById('totalSavedMsg');
+        if(msg){msg.style.display='block';setTimeout(()=>msg.style.display='none',2500);}
+        renderOrders();
+    }catch(e){showToast('❌ আপডেট ব্যর্থ','#dc2626');}
 }
 
 /* ══════════════════════════════════════════════

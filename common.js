@@ -58,8 +58,31 @@ window.addEventListener('scroll', () => {
 /* ═══ হাদিয়া অফারের টার্গেট (৳) — এখানে বদলালেই সব জায়গায় বদলাবে ═══ */
 window.GK_GIFT_THRESHOLD = 1000;
 
-/* ═══ কুপন — বিল্ট-ইন FIRSTORDER + অ্যাডমিন-তৈরি কুপন (Firebase 'coupons') ═══ */
-window.GK_COUPONS = window.GK_COUPONS || { FIRSTORDER: 5 };
+/* ═══ কুপন — বিল্ট-ইন FIRSTORDER + অ্যাডমিন-তৈরি কুপন (Firebase 'coupons') ═══
+   টাইপ: 'percent' = % ছাড় | 'taka' = নির্দিষ্ট ৳ ছাড় | 'delivery' = ফ্রি ডেলিভারি */
+window.GK_COUPONS = window.GK_COUPONS || { FIRSTORDER: { type: 'percent', value: 5 } };
+window.gkCouponInfo = function (code) {
+    var c = window.GK_COUPONS && window.GK_COUPONS[String(code || '').toUpperCase()];
+    if (!c) return undefined;
+    if (typeof c === 'number') return { type: 'percent', value: c }; /* legacy */
+    return c;
+};
+window.gkCouponLabel = function (info) {
+    if (!info) return '';
+    if (info.type === 'delivery') return 'ফ্রি ডেলিভারি';
+    if (info.type === 'taka') return '৳' + info.value + ' ছাড়';
+    return info.value + '% ডিসকাউন্ট';
+};
+/* কার্টে কুপনের ছাড়ের হিসাব (delivery টাইপে পণ্যের দামে ছাড় নেই — ডেলিভারি ফ্রি হয় চেকআউটে) */
+window.gkCouponDiscAmt = function (sub) {
+    var code = localStorage.getItem('gronthokanon_coupon');
+    if (!code) return 0;
+    var t = localStorage.getItem('gronthokanon_ctype') || 'percent';
+    var v = parseInt(localStorage.getItem('gronthokanon_cvalue') || localStorage.getItem('gronthokanon_discount') || '0');
+    if (t === 'taka') return Math.min(v, sub);
+    if (t === 'percent') return Math.round(sub * v / 100);
+    return 0;
+};
 (function () {
     try {
         if (typeof firebase !== 'undefined' && firebase.database) {
@@ -68,8 +91,15 @@ window.GK_COUPONS = window.GK_COUPONS || { FIRSTORDER: 5 };
                 var v = s.val() || {};
                 Object.keys(v).forEach(function (k) {
                     var c = v[k];
-                    if (c && c.active !== false && typeof c.discount === 'number' && c.discount > 0 && c.discount <= 100) {
-                        window.GK_COUPONS[String(k).toUpperCase()] = c.discount;
+                    if (!c || c.active === false) return;
+                    var code = String(k).toUpperCase();
+                    if (typeof c.discount === 'number' && c.discount > 0 && c.discount <= 100) {
+                        window.GK_COUPONS[code] = { type: 'percent', value: c.discount }; /* পুরনো ফরম্যাট */
+                    } else if (c.type === 'delivery') {
+                        window.GK_COUPONS[code] = { type: 'delivery', value: 0 };
+                    } else if ((c.type === 'taka' || c.type === 'percent') && typeof c.value === 'number' && c.value > 0) {
+                        if (c.type === 'percent' && c.value > 100) return;
+                        window.GK_COUPONS[code] = { type: c.type, value: c.value };
                     }
                 });
             }).catch(function () {});
@@ -254,10 +284,12 @@ window.gkGiftBarHTML = function (subtotal) {
 
         /* কুপন UI */
         const applied = localStorage.getItem('gronthokanon_coupon');
-        const discPct = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
+        const cType = localStorage.getItem('gronthokanon_ctype') || 'percent';
+        const cValue = parseInt(localStorage.getItem('gronthokanon_cvalue') || localStorage.getItem('gronthokanon_discount') || '0');
         const cb = document.getElementById('gkCouponBox');
         if (applied) {
-            cb.innerHTML = `<div class="gk-coupon-on"><span>🎉 ${esc(applied)} — ${discPct}% ডিসকাউন্ট</span><button onclick="gkRemoveCoupon()">✕ বাতিল</button></div>`;
+            const lbl = gkCouponLabel({ type: cType, value: cValue });
+            cb.innerHTML = `<div class="gk-coupon-on"><span>🎉 ${esc(applied)} — ${esc(lbl)}</span><button onclick="gkRemoveCoupon()">✕ বাতিল</button></div>`;
         } else {
             cb.innerHTML = `<div class="gk-coupon"><input id="gkCouponInput" placeholder="কুপন কোড লিখুন"><button onclick="gkApplyCoupon()">Apply</button></div>`;
         }
@@ -266,7 +298,7 @@ window.gkGiftBarHTML = function (subtotal) {
         const grouped = {};
         cart.forEach(i => { grouped[i.name] = grouped[i.name] || { p: Number(i.price) || 0, q: 0 }; grouped[i.name].q++; });
         const sub = Object.values(grouped).reduce((s, x) => s + x.p * x.q, 0);
-        const disc = applied ? Math.round(sub * discPct / 100) : 0;
+        const disc = gkCouponDiscAmt(sub);
         document.getElementById('gkGiftBar').innerHTML = gkGiftBarHTML(sub);
         document.getElementById('gkCdSub').innerText = sub;
         document.getElementById('gkCdDisc').innerText = disc;
@@ -293,11 +325,13 @@ window.gkGiftBarHTML = function (subtotal) {
     /* ── কুপন ── */
     window.gkApplyCoupon = function () {
         const code = (document.getElementById('gkCouponInput')?.value || '').trim().toUpperCase();
-        const pct = window.GK_COUPONS && window.GK_COUPONS[code];
-        if (pct) {
+        const info = gkCouponInfo(code);
+        if (info) {
             localStorage.setItem('gronthokanon_coupon', code);
-            localStorage.setItem('gronthokanon_discount', String(pct));
-            showToast('🎉 ' + pct + '% ডিসকাউন্ট যুক্ত হয়েছে!', '#059669');
+            localStorage.setItem('gronthokanon_ctype', info.type);
+            localStorage.setItem('gronthokanon_cvalue', String(info.value));
+            localStorage.setItem('gronthokanon_discount', String(info.type === 'percent' ? info.value : 0));
+            showToast('🎉 ' + gkCouponLabel(info) + ' যুক্ত হয়েছে!', '#059669');
         } else {
             showToast('❌ ভুল কুপন কোড!', '#dc2626');
         }
@@ -306,6 +340,8 @@ window.gkGiftBarHTML = function (subtotal) {
     window.gkRemoveCoupon = function () {
         localStorage.removeItem('gronthokanon_coupon');
         localStorage.removeItem('gronthokanon_discount');
+        localStorage.removeItem('gronthokanon_ctype');
+        localStorage.removeItem('gronthokanon_cvalue');
         showToast('🗑️ কুপন বাতিল হয়েছে', '#6b7280');
         gkRenderCart();
     };

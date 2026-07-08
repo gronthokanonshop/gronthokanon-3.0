@@ -144,7 +144,8 @@ function renderList(){
     '<div class="blog-hero"><h1>গ্রন্থকানন ব্লগ</h1><p>বই, পাঠ ও ইসলামি জ্ঞান নিয়ে লেখা — আমাদের এবং আপনাদের</p></div>'+
     `<div class="comp-card">
         <h2>🏆 মাসিক ব্লগ প্রতিযোগিতা</h2>
-        <p>বই, পাঠ বা ইসলামি বিষয়ে আপনার নিজের লেখা জমা দিন।<br>প্রতি মাসে নির্বাচিত সেরা লেখাগুলো এখানে প্রকাশিত হবে এবং লেখকরা পাবেন <b>🎁 আকর্ষণীয় হাদিয়া!</b></p>
+        <p id="compTopicLine" style="margin-bottom:8px;display:none;"><span style="display:inline-block;font-size:11px;font-weight:800;color:#b45309;background:rgba(251,191,36,0.22);padding:4px 12px;border-radius:20px;">📌 এ মাসের বিষয়: <span id="compTopicText"></span></span></p>
+        <p>বই, পাঠ বা ইসলামি বিষয়ে আপনার নিজের লেখা জমা দিন।<br>নির্বাচিত সেরা লেখাগুলো এখানে প্রকাশিত হবে এবং লেখকরা পাবেন <b>🎁 আকর্ষণীয় হাদিয়া!</b></p>
         <button onclick="openSubmitForm()">✍️ আপনার লেখা জমা দিন</button>
     </div>`+
     '<div id="readerBlogs"></div>'+
@@ -156,6 +157,17 @@ function renderList(){
         <span class="more">পড়ুন →</span>
     </a>`).join('');
   loadReaderBlogs();
+  loadCompTopic();
+}
+
+/* অ্যাডমিন-সেট প্রতিযোগিতার বিষয় (siteConfig/blogTopic) */
+function loadCompTopic(){
+  fetch(DBURL+'/siteConfig/blogTopic.json').then(r=>r.ok?r.json():null).then(t=>{
+    if(!t||typeof t!=='string'||!t.trim())return;
+    const line=document.getElementById('compTopicLine');
+    const txt=document.getElementById('compTopicText');
+    if(line&&txt){txt.innerText=t.trim();line.style.display='block';}
+  }).catch(()=>{});
 }
 
 /* ══ পাঠকদের প্রকাশিত লেখা (Firebase 'publishedBlogs') ══ */

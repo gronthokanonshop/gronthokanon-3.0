@@ -486,6 +486,21 @@ function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let discPct = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
 let coupon = localStorage.getItem('gronthokanon_coupon') || '';
+/* কুপন টাইপ: percent | taka | delivery (ফ্রি ডেলিভারি) */
+let cType = localStorage.getItem('gronthokanon_ctype') || (coupon ? 'percent' : '');
+let cValue = parseInt(localStorage.getItem('gronthokanon_cvalue') || String(discPct) || '0');
+function calcCouponDisc(sub){
+  if(!coupon) return 0;
+  if(cType === 'taka') return Math.min(cValue, sub);
+  if(cType === 'percent') return Math.round(sub * cValue / 100);
+  return 0; /* delivery টাইপে পণ্যের দামে ছাড় নেই */
+}
+function couponLabelTxt(){
+  if(!coupon) return '';
+  if(cType === 'delivery') return 'ফ্রি ডেলিভারি';
+  if(cType === 'taka') return '৳' + cValue + ' ছাড়';
+  return cValue + '% ডিসকাউন্ট';
+}
 let delivCharge = 60;
 
 
@@ -681,10 +696,11 @@ function updateTotal(){
   const sub = getSubtotal();
   const dist = document.getElementById('district')?.value || '';
   delivCharge = dist === 'ঢাকা' ? 60 : 90;
-  const disc = Math.round(sub * discPct / 100);
+  if(coupon && cType === 'delivery') delivCharge = 0; /* ফ্রি ডেলিভারি কুপন */
+  const disc = calcCouponDisc(sub);
   const total = sub - disc + delivCharge;
   document.getElementById('subtotalShow').innerText = '৳' + sub;
-  document.getElementById('deliveryShow').innerText = '৳' + delivCharge;
+  document.getElementById('deliveryShow').innerText = (coupon && cType === 'delivery') ? '৳0 (ফ্রি! 🎉)' : '৳' + delivCharge;
   const dr = document.getElementById('discountRow');
   if(disc > 0){
     document.getElementById('discountShow').innerText = disc;
@@ -698,7 +714,7 @@ function updateTotal(){
   const ccb = document.getElementById('checkoutCouponBadge');
   if(ccb){
     if(coupon){
-      const desc = discPct + '% ডিসকাউন্ট পাচ্ছেন';
+      const desc = couponLabelTxt() + ' পাচ্ছেন';
       ccb.style.display = 'block';
       ccb.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1px solid rgba(5,150,105,0.3);padding:8px 11px;border-radius:8px;">
         <span style="font-size:16px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️</span>
@@ -750,30 +766,36 @@ function renderSummary(){
 const COUPONS = { 'FIRSTORDER': 5 };
 /* বিল্ট-ইন + অ্যাডমিন-তৈরি (window.GK_COUPONS, common.js থেকে Firebase-লোডেড) মিলিয়ে দেখি */
 function couponDiscount(code){
-  if(window.GK_COUPONS && typeof window.GK_COUPONS[code]==='number') return window.GK_COUPONS[code];
-  if(COUPONS[code] !== undefined) return COUPONS[code];
+  /* common.js-এর gkCouponInfo — {type,value} ফেরত দেয় (legacy সংখ্যাও হ্যান্ডেল করে) */
+  if(typeof gkCouponInfo === 'function'){ const i = gkCouponInfo(code); if(i) return i; }
+  if(COUPONS[code] !== undefined) return {type:'percent', value:COUPONS[code]};
   return undefined;
 }
 function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('couponMsg');
   if(!code){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; return; }
-  const d = couponDiscount(code);
-  if(d !== undefined){
-    coupon = code; discPct = d;
+  const info = couponDiscount(code);
+  if(info !== undefined){
+    coupon = code; cType = info.type; cValue = info.value;
+    discPct = info.type === 'percent' ? info.value : 0;
     localStorage.setItem('gronthokanon_coupon', coupon);
-    localStorage.setItem('gronthokanon_discount', discPct);
+    localStorage.setItem('gronthokanon_ctype', cType);
+    localStorage.setItem('gronthokanon_cvalue', String(cValue));
+    localStorage.setItem('gronthokanon_discount', String(discPct));
     msgEl.style.display='block'; msgEl.style.color='#059669';
-    msgEl.textContent = `✅ ${code} কোড প্রয়োগ হয়েছে! ${discPct}% ডিসকাউন্ট।`;
+    msgEl.textContent = `✅ ${code} কোড প্রয়োগ হয়েছে! ${couponLabelTxt()}।`;
     updateTotal();
   } else {
     msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='❌ কুপন কোডটি সঠিক নয়!';
   }
 }
 function removeCoupon(){
-  coupon = ''; discPct = 0;
+  coupon = ''; discPct = 0; cType = ''; cValue = 0;
   localStorage.removeItem('gronthokanon_coupon');
   localStorage.removeItem('gronthokanon_discount');
+  localStorage.removeItem('gronthokanon_ctype');
+  localStorage.removeItem('gronthokanon_cvalue');
   document.getElementById('couponInput').value = '';
   const msgEl = document.getElementById('couponMsg');
   msgEl.style.display='block'; msgEl.style.color='#dc2626';
@@ -827,7 +849,9 @@ async function confirmOrder(){
   cart.forEach(i => { g[i.name] = (g[i.name]||0)+1; });
   const bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
   const sub = getSubtotal();
-  const discountAmt = Math.round(sub * discPct / 100);
+  delivCharge = (district === 'ঢাকা' ? 60 : 90);
+  if(coupon && cType === 'delivery') delivCharge = 0; /* ফ্রি ডেলিভারি কুপন */
+  const discountAmt = calcCouponDisc(sub);
   const grand = sub + delivCharge - discountAmt;
   const fullAddr = `${thana}, ${district}, ${division} — ${address}`;
   const orderId = 'GK-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
@@ -838,11 +862,12 @@ async function confirmOrder(){
     items: cart.map(i => ({...i, price: getVerifiedPrice(i.name) || i.price})),
     books: bookList,
     payment: payMethod + (txId ? ` (TxID: ${txId})` : ''),
-    delivery: '৳' + delivCharge,
+    delivery: (coupon && cType === 'delivery') ? '৳0 (ফ্রি ডেলিভারি কুপন)' : '৳' + delivCharge,
     total: '৳' + grand,
     discount: discountAmt,
     discountPct: discPct,
     coupon: coupon,
+    couponType: cType || '',
     status: 'pending',
     createdAt: Date.now(),
     userId: firebase.auth().currentUser?.uid || 'guest'
