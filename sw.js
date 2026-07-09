@@ -3,7 +3,7 @@
    হালকা offline সাপোর্ট: অ্যাপ-শেল ক্যাশ করে, বাকি সব
    network-first (তাজা ডেটা আগে, নেট না থাকলে ক্যাশ)।
 ═══════════════════════════════════════════════ */
-const CACHE = 'gronthokanon-v1';
+const CACHE = 'gronthokanon-v2';
 const SHELL = [
   './index.html',
   './common.css',

@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /admin-gk09x43.html
 Disallow: /checkout.html
 
 Sitemap: https://gronthokanon.com/sitemap.xml
