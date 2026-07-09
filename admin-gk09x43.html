@@ -710,9 +710,13 @@
         <div class="login-icon">
             <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </div>
-        <h2>Admin লগইন</h2>
-        <p>শুধুমাত্র অনুমোদিত admin এর জন্য</p>
+        <h2 id="loginTitle">Admin লগইন</h2>
+        <p id="loginSub">শুধুমাত্র অনুমোদিত admin এর জন্য</p>
         <p id="loginErr" class="text-xs" style="color:#f87171;margin-bottom:12px;min-height:16px;"></p>
+        <div class="form-group" id="modNameGroup" style="display:none;">
+            <label class="form-label">আপনার নাম</label>
+            <input class="form-input" id="modName" placeholder="পুরো নাম">
+        </div>
         <div class="form-group">
             <label class="form-label">ইমেইল</label>
             <input class="form-input" id="adminEmail" type="email" placeholder="name@example.com">
@@ -721,7 +725,10 @@
             <label class="form-label">পাসওয়ার্ড</label>
             <input class="form-input" id="adminPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
         </div>
-        <button class="btn btn-primary w-full" onclick="adminLogin()">লগইন করুন →</button>
+        <button class="btn btn-primary w-full" id="loginBtn" onclick="adminLogin()">লগইন করুন →</button>
+        <div style="margin-top:14px;text-align:center;">
+            <a href="#" id="modSignupLink" onclick="toggleModSignup(event)" style="font-size:12px;color:#94a3b8;text-decoration:none;">মডারেটর হতে চান? অ্যাকাউন্ট খুলুন</a>
+        </div>
     </div>
 </div>
 
@@ -770,6 +777,10 @@
             <button class="nav-item" id="navReport" onclick="switchTab('report',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 বিক্রয় রিপোর্ট
+            </button>
+            <button class="nav-item" id="navReviews" onclick="switchTab('reviews',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                রিভিউ
             </button>
             <div class="nav-section-label" style="margin-top:8px;">SYSTEM</div>
             <button class="nav-item" id="navTools" onclick="switchTab('tools',this)">
@@ -1123,6 +1134,12 @@
                 </div>
             </div>
 
+            <!-- ═══ REVIEWS TAB ═══ -->
+            <div id="tabPanelReviews" style="display:none;">
+                <div class="sec-title">পাঠকদের রিভিউ</div>
+                <div id="reviewsAdminList"><div class="loading-spin">লোড হচ্ছে...</div></div>
+            </div>
+
             <!-- ═══ TOOLS TAB ═══ -->
             <div id="tabPanelTools" style="display:none;">
                 <div class="sec-title">টুলস ও ইউটিলিটি</div>
@@ -1200,7 +1217,16 @@
                     <div id="blogPubList" style="display:flex;flex-direction:column;gap:8px;"></div>
                 </div>
 
-                <div class="tool-card">
+                <div class="tool-card" id="modManageCard">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> মডারেটর ম্যানেজ</h3>
+                    <p style="margin-bottom:12px;">অনুমোদন দিলে মডারেটর নিজের ইমেইল-পাসওয়ার্ড দিয়ে এই প্যানেলে ঢুকে সব মেইনটেইন করতে পারবে। শুধু Courier API আর মডারেটর ম্যানেজ আপনার হাতে থাকবে।</p>
+                    <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">নতুন আবেদন</div>
+                    <div id="modReqList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"><div class="text-sm text-muted">লোড হচ্ছে...</div></div>
+                    <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">বর্তমান মডারেটর</div>
+                    <div id="modList" style="display:flex;flex-direction:column;gap:8px;"><div class="text-sm text-muted">লোড হচ্ছে...</div></div>
+                </div>
+
+                <div class="tool-card" id="courierCard">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg> Courier API Settings</h3>
                     <p style="margin-bottom:14px;">এখানে key বসিয়ে সেভ করুন। Firebase এ encrypted হয়ে থাকবে।</p>
 
@@ -1326,21 +1352,69 @@ function toggleDark(){
 /* ══════════════════════════════════════════════
    LOGIN
 ══════════════════════════════════════════════ */
+let IS_OWNER=false;
+let modMode=false;
+function toggleModSignup(e){
+    if(e)e.preventDefault();
+    modMode=!modMode;
+    const err=document.getElementById('loginErr');
+    err.innerText='';err.style.color='#f87171';
+    document.getElementById('modNameGroup').style.display=modMode?'block':'none';
+    document.getElementById('loginTitle').innerText=modMode?'মডারেটর অ্যাকাউন্ট':'Admin লগইন';
+    document.getElementById('loginSub').innerText=modMode?'অ্যাকাউন্ট খোলার পর মালিকের অনুমোদন লাগবে':'শুধুমাত্র অনুমোদিত admin এর জন্য';
+    document.getElementById('loginBtn').innerText=modMode?'অ্যাকাউন্ট খুলুন →':'লগইন করুন →';
+    document.getElementById('modSignupLink').innerText=modMode?'← লগইনে ফিরে যান':'মডারেটর হতে চান? অ্যাকাউন্ট খুলুন';
+}
 async function adminLogin(){
     const email=document.getElementById('adminEmail').value.trim();
     const pass=document.getElementById('adminPass').value;
     const err=document.getElementById('loginErr');
-    err.innerText='';
+    err.innerText='';err.style.color='#f87171';
+    if(modMode){
+        const name=document.getElementById('modName').value.trim();
+        if(name.length<2){err.innerText='আপনার নাম লিখুন';return;}
+        if(!email||pass.length<6){err.innerText='ইমেইল দিন এবং পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন';return;}
+        try{
+            const cred=await auth.createUserWithEmailAndPassword(email,pass);
+            await db.ref('modRequests/'+cred.user.uid).set({email:email,name:name,t:Date.now()});
+            await auth.signOut();
+            toggleModSignup();
+            err.style.color='#34d399';
+            err.innerText='আবেদন জমা হয়েছে! মালিক অনুমোদন দিলে এই ইমেইল-পাসওয়ার্ড দিয়েই লগইন করতে পারবেন।';
+        }catch(e){
+            if(e.code==='auth/email-already-in-use')err.innerText='এই ইমেইলে আগেই অ্যাকাউন্ট খোলা আছে — লগইন করে দেখুন';
+            else if(e.code==='auth/weak-password')err.innerText='পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন';
+            else if(e.code==='auth/invalid-email')err.innerText='ইমেইলটা ঠিকমতো লিখুন';
+            else err.innerText='অ্যাকাউন্ট খোলা যায়নি — আবার চেষ্টা করুন';
+        }
+        return;
+    }
     try{
         const cred=await auth.signInWithEmailAndPassword(email,pass);
-        if(cred.user.email!==ADMIN_EMAIL){await auth.signOut();err.innerHTML='<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Admin access নেই';return;}
-        showDashboard();
-    }catch(e){err.innerHTML='<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> ইমেইল বা পাসওয়ার্ড ভুল';}
+        if(cred.user.email===ADMIN_EMAIL){IS_OWNER=true;showDashboard();return;}
+        const modSnap=await db.ref('moderators/'+cred.user.uid).once('value').catch(()=>null);
+        if(modSnap&&modSnap.exists()){IS_OWNER=false;showDashboard();return;}
+        const reqSnap=await db.ref('modRequests/'+cred.user.uid).once('value').catch(()=>null);
+        await auth.signOut();
+        if(reqSnap&&reqSnap.exists())err.innerText='আপনার আবেদন এখনো অনুমোদনের অপেক্ষায় আছে — মালিককে জানান';
+        else err.innerText='Admin access নেই';
+    }catch(e){err.innerText='ইমেইল বা পাসওয়ার্ড ভুল';}
 }
 
 function showDashboard(){
     document.getElementById('loginGate').style.display='none';
     document.getElementById('appShell').classList.remove('hidden');
+    const courierCard=document.getElementById('courierCard');
+    const modCard=document.getElementById('modManageCard');
+    if(!IS_OWNER){
+        if(courierCard)courierCard.style.display='none';
+        if(modCard)modCard.style.display='none';
+        const av=document.querySelector('.sidebar-avatar');if(av)av.innerText='MD';
+        const ui=document.querySelector('.sidebar-user-info strong');if(ui)ui.innerText='Moderator';
+    }else{
+        if(courierCard)courierCard.style.display='';
+        if(modCard)modCard.style.display='';
+    }
     const days=['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
     const months=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
     const now=new Date();
@@ -1359,19 +1433,20 @@ function showDashboard(){
 function switchTab(tab, btnEl){
     document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
     if(btnEl) btnEl.classList.add('active');
-    const titles={dashboard:'Dashboard',orders:'অর্ডার',daily:'দৈনিক অর্ডার',books:'স্টক ম্যানেজ',editor:'বই এডিট',tools:'টুলস',report:'বিক্রয় রিপোর্ট',analytics:'Analytics'};
+    const titles={dashboard:'Dashboard',orders:'অর্ডার',daily:'দৈনিক অর্ডার',books:'স্টক ম্যানেজ',editor:'বই এডিট',tools:'টুলস',report:'বিক্রয় রিপোর্ট',analytics:'Analytics',reviews:'রিভিউ'};
     document.getElementById('topbarTitle').innerText=titles[tab]||tab;
-    ['Dashboard','Orders','Daily','Books','Editor','Tools','Report','Analytics'].forEach(t=>{
+    ['Dashboard','Orders','Daily','Books','Editor','Tools','Report','Analytics','Reviews'].forEach(t=>{
         const el=document.getElementById('tabPanel'+t);
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); }
+    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
     if(tab==='dashboard') renderDashboard();
     if(tab==='analytics') renderAnalytics();
+    if(tab==='reviews') loadReviewsAdmin();
     closeSidebar();
 }
 
@@ -1382,6 +1457,119 @@ function toggleSidebar(){
 function closeSidebar(){
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('mobileOverlay').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════════
+   MODERATOR MANAGE (owner only)
+══════════════════════════════════════════════ */
+let __modReqs={};
+async function loadModAdmin(){
+    if(!IS_OWNER)return;
+    const rq=document.getElementById('modReqList'),ml=document.getElementById('modList');
+    if(!rq||!ml)return;
+    try{
+        const [reqSnap,modSnap]=await Promise.all([
+            db.ref('modRequests').once('value'),
+            db.ref('moderators').once('value')
+        ]);
+        __modReqs={};
+        const reqs=[];reqSnap.forEach(c=>{const v=c.val()||{};__modReqs[c.key]=v;reqs.push({uid:c.key,email:v.email||'',name:v.name||''});});
+        const mods=[];modSnap.forEach(c=>{const v=c.val()||{};mods.push({uid:c.key,email:v.email||'',name:v.name||''});});
+        rq.innerHTML=reqs.length?reqs.map(r=>
+            '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--border);border-radius:8px;">'
+            +'<div style="min-width:0;"><div style="font-weight:700;">'+escapeHTML(r.name)+'</div><div class="text-sm text-muted" style="word-break:break-all;">'+escapeHTML(r.email)+'</div></div>'
+            +'<div style="display:flex;gap:6px;flex-shrink:0;">'
+            +'<button class="btn btn-primary" style="padding:6px 12px;" onclick="approveMod(\''+r.uid+'\')">অনুমোদন</button>'
+            +'<button class="btn" style="padding:6px 12px;background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="rejectMod(\''+r.uid+'\')">বাতিল</button>'
+            +'</div></div>'
+        ).join(''):'<div class="text-sm text-muted">কোনো নতুন আবেদন নেই</div>';
+        ml.innerHTML=mods.length?mods.map(m=>
+            '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--border);border-radius:8px;">'
+            +'<div style="min-width:0;"><div style="font-weight:700;">'+escapeHTML(m.name)+'</div><div class="text-sm text-muted" style="word-break:break-all;">'+escapeHTML(m.email)+'</div></div>'
+            +'<button class="btn" style="padding:6px 12px;background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="removeMod(\''+m.uid+'\')">সরান</button>'
+            +'</div>'
+        ).join(''):'<div class="text-sm text-muted">এখনো কোনো মডারেটর নেই</div>';
+    }catch(e){
+        rq.innerHTML='<div class="text-sm text-muted">লোড করা যায়নি — Firebase Rules Publish করা আছে কিনা দেখুন</div>';
+        ml.innerHTML='';
+    }
+}
+async function approveMod(uid){
+    const r=__modReqs[uid];if(!r)return;
+    try{
+        await db.ref('moderators/'+uid).set({email:r.email||'',name:r.name||'',t:Date.now()});
+        await db.ref('modRequests/'+uid).remove();
+        showToast('মডারেটর অনুমোদন হলো','#0B6E4F');
+        loadModAdmin();
+    }catch(e){showToast('অনুমোদন ব্যর্থ হলো','#dc2626');}
+}
+async function rejectMod(uid){
+    if(!confirm('আবেদনটি বাতিল করবেন?'))return;
+    try{
+        await db.ref('modRequests/'+uid).remove();
+        showToast('আবেদন বাতিল হলো','#0B6E4F');
+        loadModAdmin();
+    }catch(e){showToast('ব্যর্থ হলো','#dc2626');}
+}
+async function removeMod(uid){
+    if(!confirm('এই মডারেটরকে সরাবেন? সে আর প্যানেলে ঢুকতে পারবে না।'))return;
+    try{
+        await db.ref('moderators/'+uid).remove();
+        showToast('মডারেটর সরানো হলো','#0B6E4F');
+        loadModAdmin();
+    }catch(e){showToast('ব্যর্থ হলো','#dc2626');}
+}
+
+/* ══════════════════════════════════════════════
+   REVIEWS TAB
+══════════════════════════════════════════════ */
+function bookNameById(id){
+    if(typeof books!=='undefined'&&books.length){
+        const b=books[parseInt(id)];
+        if(b&&b.name)return b.name;
+    }
+    return 'বই #'+id;
+}
+async function loadReviewsAdmin(){
+    const el=document.getElementById('reviewsAdminList');
+    el.innerHTML='<div class="loading-spin">লোড হচ্ছে...</div>';
+    try{
+        const snap=await db.ref('reviews').once('value');
+        const rows=[];
+        snap.forEach(bk=>{
+            bk.forEach(rv=>{
+                const v=rv.val()||{};
+                if(v&&v.comment!==undefined)rows.push({bid:bk.key,rid:rv.key,name:v.name||'',comment:v.comment||'',rating:Number(v.rating)||0,createdAt:v.createdAt||0});
+            });
+        });
+        rows.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        if(!rows.length){el.innerHTML='<div class="empty-state">এখনো কোনো রিভিউ আসেনি</div>';return;}
+        el.innerHTML='<p class="text-sm text-muted" style="margin-bottom:12px;">মোট রিভিউ: '+rows.length+'টি</p>'+rows.map(r=>{
+            const rt=Math.max(0,Math.min(5,Math.round(r.rating)));
+            const stars='★'.repeat(rt)+'☆'.repeat(5-rt);
+            const d=r.createdAt?new Date(r.createdAt).toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'}):'';
+            return '<div class="tool-card" style="margin-bottom:10px;">'
+                +'<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;">'
+                +'<div style="min-width:0;flex:1;">'
+                +'<div style="font-weight:700;">'+escapeHTML(r.name)+' <span style="color:#f59e0b;letter-spacing:2px;">'+stars+'</span></div>'
+                +'<a href="book.html?id='+encodeURIComponent(r.bid)+'" target="_blank" class="text-sm" style="color:#0369a1;text-decoration:none;">📖 '+escapeHTML(bookNameById(r.bid))+'</a>'
+                +'<div class="text-sm" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;">'+escapeHTML(r.comment)+'</div>'
+                +(d?'<div class="text-sm text-muted" style="margin-top:4px;">🕒 '+d+'</div>':'')
+                +'</div>'
+                +'<button class="btn" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="deleteReviewAdmin(\''+r.bid+'\',\''+r.rid+'\')">মুছুন</button>'
+                +'</div></div>';
+        }).join('');
+    }catch(e){
+        el.innerHTML='<div class="empty-state">রিভিউ লোড করা যায়নি — ইন্টারনেট বা Firebase Rules দেখুন</div>';
+    }
+}
+async function deleteReviewAdmin(bid,rid){
+    if(!confirm('রিভিউটি মুছে ফেলবেন?'))return;
+    try{
+        await db.ref('reviews/'+bid+'/'+rid).remove();
+        showToast('রিভিউ মুছে ফেলা হয়েছে','#0B6E4F');
+        loadReviewsAdmin();
+    }catch(e){showToast('মুছতে ব্যর্থ হলো','#dc2626');}
 }
 
 /* ══════════════════════════════════════════════
@@ -2253,6 +2441,8 @@ async function adminLogout(){
     document.getElementById('appShell').classList.add('hidden');
     document.getElementById('loginGate').style.display='flex';
     allOrders=[];stockData={};localBooks=[];
+    IS_OWNER=false;
+    if(modMode)toggleModSignup();
 }
 
 /* ══════════════════════════════════════════════
@@ -2590,8 +2780,13 @@ async function createCourierOrder(provider){
 /* ══════════════════════════════════════════════
    AUTH STATE
 ══════════════════════════════════════════════ */
-auth.onAuthStateChanged(user=>{
-    if(user&&user.email===ADMIN_EMAIL)showDashboard();
+auth.onAuthStateChanged(async user=>{
+    if(!user)return;
+    if(user.email===ADMIN_EMAIL){IS_OWNER=true;showDashboard();return;}
+    try{
+        const snap=await db.ref('moderators/'+user.uid).once('value');
+        if(snap.exists()){IS_OWNER=false;showDashboard();}
+    }catch(e){}
 });
 
 
