@@ -224,7 +224,7 @@
         @media (max-width: 400px) { .search-kbd { display: none; } }
 
         /* ═══════ FULL SEARCH SCREEN ═══════ */
-        .search-screen { position: fixed; top: 0; left: 0; right: 0; height: 88vh; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(-105%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); visibility: hidden; border-radius: 0 0 20px 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.18); }
+        .search-screen { position: fixed; top: 0; left: 0; right: 0; max-height: 88vh; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transform: translateY(-105%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); visibility: hidden; border-radius: 0 0 20px 20px; box-shadow: 0 6px 30px rgba(0,0,0,0.18); }
         .search-screen::after { content:""; display:block; width:36px; height:4px; background:var(--border); border-radius:4px; margin:6px auto 10px; flex-shrink:0; }
         .search-screen.open { transform: translateY(0); visibility: visible; }
         .search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:4999; }
@@ -237,7 +237,7 @@
         .search-input::placeholder { color: #9ca3af; }
         .search-clear-btn { background: #e5e7eb; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; }
         .search-clear-btn.show { display: flex; }
-        .search-body { flex: 1; overflow-y: auto; }
+        .search-body { overflow-y: auto; min-height: 0; }
         .search-hint { padding: 50px 20px; text-align: center; }
         .search-hint-icon { font-size: 52px; margin-bottom: 14px; }
         .search-hint p { font-size: 15px; color: var(--text2); }
@@ -828,7 +828,7 @@
         </div>
     </div>
     <div class="search-body" id="searchBody">
-        <div class="search-hint"><div class="search-hint-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg></div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>
+
     </div>
 </div>
 
@@ -1421,13 +1421,13 @@ let recentlyViewed = JSON.parse(localStorage.getItem('gronthokanon_recent')) || 
 /* SEARCH */
 function openSearch(){document.getElementById('searchScreen').classList.add('open');document.getElementById('searchOverlay').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('searchInput').focus(),300);}
 function closeSearch(){document.getElementById('searchScreen').classList.remove('open');document.getElementById('searchOverlay').classList.remove('open');document.body.style.overflow='';clearSearch();bnavActive('bnav-home');}
-function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClearBtn').classList.remove('show');document.getElementById('searchBody').innerHTML=`<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>`;}
+function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClearBtn').classList.remove('show');document.getElementById('searchBody').innerHTML='';}
 function handleSearch(){
     const q=document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
     document.getElementById('searchClearBtn').classList.toggle('show',q.length>0);
     const body=document.getElementById('searchBody');
     if(typeof books==='undefined'||!books.length){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">⏳</div><p>বই লোড হচ্ছে, একটু অপেক্ষা করুন...</p></div>`;return;}
-    if(!q){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">📚</div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>`;return;}
+    if(!q){body.innerHTML='';return;}
     const found=books.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
     if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
     body.innerHTML=`<div class="search-count show">🔍 "${document.getElementById('searchInput').value}" — ${found.length}টি বই</div>`+found.map(b=>{

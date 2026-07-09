@@ -332,6 +332,15 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
             <label class="bng">সম্পূর্ণ ঠিকানা <span class="req">*</span></label>
             <textarea id="custAddress" class="bng" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
           </div>
+          <div class="field">
+            <label class="bng">বিশেষ নির্দেশনা (ঐচ্ছিক)</label>
+            <textarea id="custNote" class="bng" placeholder="যেমন: বিকালের পর ফোন দিবেন..." style="min-height:56px;"></textarea>
+          </div>
+          <label class="bng" style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:2px;">
+            <input type="checkbox" id="saveInfo" checked style="width:16px;height:16px;accent-color:#059669;flex-shrink:0;">
+            পরের বার দ্রুত অর্ডারের জন্য আমার তথ্য এই ডিভাইসে সেভ থাকুক
+          </label>
+          <div id="prefillNotice" style="display:none;margin-top:8px;font-size:12px;color:#059669;font-weight:600;">✓ আগের অর্ডারের তথ্য বসানো হয়েছে — চাইলে বদলাতে পারবেন</div>
         </div>
       </div>
 
@@ -819,6 +828,7 @@ async function confirmOrder(){
   const district = document.getElementById('district').value;
   const thana    = document.getElementById('thana').value;
   const address  = document.getElementById('custAddress').value.trim();
+  const custNote = (document.getElementById('custNote')?.value || '').trim().slice(0,500);
   const payMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
 
   if(!name)     { isSubmitting=false; return showToast('⚠️ নাম লিখুন!'); }
@@ -869,6 +879,7 @@ async function confirmOrder(){
     discountPct: discPct,
     coupon: coupon,
     couponType: cType || '',
+    customerNote: custNote,
     status: 'pending',
     createdAt: Date.now(),
     userId: firebase.auth().currentUser?.uid || 'guest'
@@ -878,6 +889,13 @@ async function confirmOrder(){
     await firebase.database().ref('orders/' + orderId).set(orderData);
     await firebase.database().ref('phoneIndex/' + orderData.phone + '/' + orderId).set(true);
     localStorage.setItem('gronthokanon_lastorder', orderId);
+    try{
+      if(document.getElementById('saveInfo')?.checked){
+        localStorage.setItem('gk_custinfo', JSON.stringify({name, phone, division, district, thana, address}));
+      }else{
+        localStorage.removeItem('gk_custinfo');
+      }
+    }catch(e){}
     if(coupon === 'FIRSTORDER'){
       await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).set(true);
     }
@@ -1096,7 +1114,27 @@ async function downloadInvoice(){
 /* ══════════════════════════════════
    INIT
 ══════════════════════════════════ */
-window.onload = renderSummary;
+function prefillSavedInfo(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('gk_custinfo') || 'null');
+    if(!saved || !saved.phone) return;
+    document.getElementById('custName').value = saved.name || '';
+    document.getElementById('custPhone').value = saved.phone || '';
+    document.getElementById('custAddress').value = saved.address || '';
+    if(saved.division){
+      document.getElementById('division').value = saved.division;
+      updateDistricts();
+      if(saved.district){
+        document.getElementById('district').value = saved.district;
+        updateThanas();
+        if(saved.thana) document.getElementById('thana').value = saved.thana;
+      }
+    }
+    const n = document.getElementById('prefillNotice');
+    if(n) n.style.display = 'block';
+  }catch(e){}
+}
+window.onload = function(){ renderSummary(); prefillSavedInfo(); };
 </script>
 
 <script src="common.js"></script>

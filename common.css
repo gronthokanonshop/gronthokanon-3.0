@@ -552,7 +552,7 @@ body::after {
 .search-screen {
     position: fixed;
     top: 0; left: 0; right: 0;
-    height: 88vh;
+    max-height: 88vh;
     background: var(--bg);
     z-index: 5000;
     display: flex;

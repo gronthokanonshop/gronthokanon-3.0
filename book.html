@@ -803,7 +803,7 @@ function closeBkSearch(){
 function bkClearSearch(){
     document.getElementById('bkSearchInput').value='';
     document.getElementById('bkSearchClear').style.display='none';
-    document.getElementById('bkSearchBody').innerHTML='<div class="bks-hint">📚 বইয়ের নাম বা লেখকের নাম লিখুন</div>';
+    document.getElementById('bkSearchBody').innerHTML='';
 }
 function bkHandleSearch(){
     const q=document.getElementById('bkSearchInput').value.normalize('NFC').trim().toLowerCase();
@@ -1121,7 +1121,7 @@ window.onload=function(){
         </div>
         <button class="bks-close" onclick="closeBkSearch()">বাতিল</button>
     </div>
-    <div id="bkSearchBody"><div class="bks-hint">📚 বইয়ের নাম বা লেখকের নাম লিখুন</div></div>
+    <div id="bkSearchBody"></div>
 </div>
 
 <script src="common.js"></script>
