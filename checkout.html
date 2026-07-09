@@ -291,6 +291,10 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
           <div><div class="ch-title bng">ডেলিভারি তথ্য</div><div class="ch-sub bng">সঠিক তথ্য দিন, দ্রুত পৌঁছাবে</div></div>
         </div>
         <div class="card-body">
+          <div id="useSavedInfoBtn" style="display:none;margin-bottom:14px;padding:11px 14px;background:#ecfdf5;border:1.5px dashed #059669;border-radius:10px;cursor:pointer;" onclick="applySavedInfo()">
+            <div style="font-size:13px;font-weight:800;color:#047857;">👤 <span id="savedInfoLabel"></span></div>
+            <div style="font-size:11.5px;color:#059669;margin-top:2px;">এখানে ক্লিক করলে আগের অর্ডারের সব তথ্য এক ক্লিকে বসে যাবে</div>
+          </div>
           <div class="two-col">
             <div class="field">
               <label class="bng">নাম <span class="req">*</span></label>
@@ -1115,6 +1119,17 @@ async function downloadInvoice(){
    INIT
 ══════════════════════════════════ */
 function prefillSavedInfo(){
+  /* ফর্ম খালি থাকে — শুধু "আগের তথ্য" বাটনটা দেখাই */
+  try{
+    const saved = JSON.parse(localStorage.getItem('gk_custinfo') || 'null');
+    if(!saved || !saved.phone) return;
+    const btn = document.getElementById('useSavedInfoBtn');
+    if(!btn) return;
+    document.getElementById('savedInfoLabel').innerText = (saved.name ? saved.name + ' · ' : '') + saved.phone;
+    btn.style.display = 'block';
+  }catch(e){}
+}
+function applySavedInfo(){
   try{
     const saved = JSON.parse(localStorage.getItem('gk_custinfo') || 'null');
     if(!saved || !saved.phone) return;
@@ -1130,6 +1145,7 @@ function prefillSavedInfo(){
         if(saved.thana) document.getElementById('thana').value = saved.thana;
       }
     }
+    document.getElementById('useSavedInfoBtn').style.display = 'none';
     const n = document.getElementById('prefillNotice');
     if(n) n.style.display = 'block';
   }catch(e){}
