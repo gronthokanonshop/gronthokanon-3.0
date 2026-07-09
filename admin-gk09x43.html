@@ -397,6 +397,10 @@
         .modal-update-btn{width:100%;padding:13px;background:#1c1c1c;color:#F5B700;border:none;border-radius:10px;font-family:var(--font-main);font-size:14px;font-weight:700;cursor:pointer;transition:var(--trans);}
         .modal-update-btn:hover{background:#333;}
         .modal-offers-box{background:#e8f3ee;border:1px solid #0B6E4F;border-radius:10px;padding:11px 13px;font-size:13px;line-height:2;color:#000;}
+        /* মোট টাকা এডিট ইনপুট — মোডাল সবসময় সাদা ব্যাকগ্রাউন্ড, তাই টেক্সট রঙ ফিক্সড রাখা হলো (ডার্ক মোডেও যেন লেখা দেখা যায়) */
+        #orderModal .form-input{background:#fdf8e8;color:#1c1c1c;border:1px solid #f3e6b8;}
+        #orderModal .form-input:focus{border-color:#F5B700;background:#fffef7;box-shadow:0 0 0 3px rgba(245,183,0,0.18);}
+        #orderModal .form-input::placeholder{color:#8a7a4a;}
 
         /* ── TOAST ── */
         .toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
