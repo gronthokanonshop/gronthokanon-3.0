@@ -904,6 +904,7 @@ async function confirmOrder(){
       await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).set(true);
     }
     lastOrderData = orderData;
+    if(window.fbq){try{fbq('track','Purchase',{value:grand,currency:'BDT',num_items:cart.length});}catch(e){}}
   }catch(e){
     console.error('Firebase error:', e);
     btn.disabled = false; btn.innerHTML = '✅ অর্ডার নিশ্চিত করুন';

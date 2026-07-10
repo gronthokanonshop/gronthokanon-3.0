@@ -368,3 +368,17 @@ window.gkGiftBarHTML = function (subtotal) {
         if (e.key === 'Escape') closeCart();
     });
 })();
+/* ══ Meta Pixel — অ্যাডমিন প্যানেল থেকে ID সেট করা যায় (siteConfig/metaPixelId) ══ */
+(function () {
+    try {
+        fetch('https://gronthokanon-8573e-default-rtdb.firebaseio.com/siteConfig/metaPixelId.json')
+            .then(function (r) { return r.json(); })
+            .then(function (id) {
+                if (!id || !/^\d{5,20}$/.test(String(id))) return;
+                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', String(id));
+                fbq('track', 'PageView');
+            })
+            .catch(function () {});
+    } catch (e) {}
+})();

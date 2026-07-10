@@ -1248,6 +1248,15 @@
                     <div id="imgbbKeyStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.25);border-radius:8px;"></div>
                 </div>
 
+                <div class="tool-card" id="pixelCard">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Meta Pixel (Facebook অ্যাড)</h3>
+                    <p style="margin-bottom:12px;">Facebook-এ অ্যাড চালালে Pixel লাগে — এতে Facebook শিখে যায় কারা বই কেনে, অ্যাডের টাকা কম নষ্ট হয়। <strong>business.facebook.com → Events Manager → Data Sources</strong> থেকে Pixel বানিয়ে ID-টা (শুধু সংখ্যা) এখানে বসান — সাথে সাথে পুরো সাইটে চালু হবে, কোনো ফাইল আপলোড লাগবে না।</p>
+                    <input class="form-input" id="pixelIdInput" placeholder="Pixel ID (যেমন: 1234567890123456)" style="margin-bottom:10px;">
+                    <button class="btn btn-primary" onclick="savePixelId()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> সেভ করুন</button>
+                    <div id="pixelStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.25);border-radius:8px;"></div>
+                    <p class="text-xs text-muted" style="margin-top:8px;">Pixel বন্ধ করতে ঘরটা খালি রেখে সেভ চাপুন।</p>
+                </div>
+
                 <div class="tool-card" id="courierCard">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg> Courier API Settings</h3>
                     <p style="margin-bottom:14px;">এখানে key বসিয়ে সেভ করুন। Firebase এ encrypted হয়ে থাকবে।</p>
@@ -1450,6 +1459,7 @@ function showDashboard(){
         loadBooksFromFirebase();
         loadCourierApiKeys(); // auto-load API keys
         loadImgbbKey(); // imgbb key (ছবি আপলোডের জন্য)
+        loadPixelId(); // Meta Pixel
     },300);
 }
 
@@ -1566,6 +1576,32 @@ function faUploadImg(inp){
 function bnUploadImg(inp){
     const f=inp.files[0];inp.value='';
     uploadToImgbb(f,url=>{document.getElementById('bnImg').value=url;},1280);
+}
+
+/* ══════════════════════════════════════════════
+   META PIXEL (Facebook ad)
+══════════════════════════════════════════════ */
+async function loadPixelId(){
+    try{
+        const snap=await db.ref('siteConfig/metaPixelId').once('value');
+        const v=snap.val()||'';
+        const st=document.getElementById('pixelStatus');
+        if(st){
+            st.style.display='block';
+            st.innerHTML=v?'✅ Pixel চালু আছে — ID: '+escapeHTML(String(v)):'⚠️ Pixel ID সেট করা নেই';
+        }
+    }catch(e){}
+}
+async function savePixelId(){
+    const inp=document.getElementById('pixelIdInput');
+    const v=inp.value.trim();
+    if(v&&!/^\d{5,20}$/.test(v)){showToast('Pixel ID শুধু সংখ্যা হয় — Events Manager থেকে কপি করুন','#dc2626');return;}
+    try{
+        await db.ref('siteConfig/metaPixelId').set(v||null);
+        inp.value='';
+        loadPixelId();
+        showToast(v?'Pixel ID সেভ হলো — সাইটে চালু ✅':'Pixel বন্ধ করা হলো','#0B6E4F');
+    }catch(e){showToast('সেভ ব্যর্থ হলো','#dc2626');}
 }
 
 /* ══════════════════════════════════════════════
