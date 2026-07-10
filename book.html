@@ -805,9 +805,15 @@ function bkClearSearch(){
     document.getElementById('bkSearchClear').style.display='none';
     document.getElementById('bkSearchBody').innerHTML='';
 }
+let __bkSearchTimer=null;
 function bkHandleSearch(){
+    const qi=document.getElementById('bkSearchInput').value;
+    document.getElementById('bkSearchClear').style.display=qi.trim()?'block':'none';
+    clearTimeout(__bkSearchTimer);
+    __bkSearchTimer=setTimeout(bkRunSearch,200);
+}
+function bkRunSearch(){
     const q=document.getElementById('bkSearchInput').value.normalize('NFC').trim().toLowerCase();
-    document.getElementById('bkSearchClear').style.display=q?'block':'none';
     const body=document.getElementById('bkSearchBody');
     if(!q){bkClearSearch();return;}
     if(typeof books==='undefined'||!books.length){body.innerHTML='<div class="bks-hint">⏳ বই লোড হচ্ছে...</div>';return;}
@@ -817,7 +823,7 @@ function bkHandleSearch(){
         const idx=books.indexOf(b);
         const img=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
         return `<div class="bks-item" onclick="window.location.href='book.html?id=${idx}'">
-            <img src="${escapeHTML(img)}" alt="" onerror="this.onerror=null;this.src='book-placeholder.svg'">
+            <img src="${escapeHTML(img)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='book-placeholder.svg'">
             <div style="flex:1;min-width:0;">
                 <div class="bks-name">${escapeHTML(b.name)}</div>
                 <div class="bks-auth">✍️ ${escapeHTML(b.author||'')}</div>

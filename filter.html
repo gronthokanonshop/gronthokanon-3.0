@@ -501,10 +501,11 @@ function sortBooks(type) {
     renderBooks(getList());
 }
 
+let __fsTimer = null;
 function searchWithin() {
     document.getElementById('searchClear').classList.toggle('show', document.getElementById('filterSearch').value.length > 0);
-    currentPage = 1;
-    renderBooks(getList());
+    clearTimeout(__fsTimer);
+    __fsTimer = setTimeout(function(){ currentPage = 1; renderBooks(getList()); }, 200);
 }
 
 function clearSearch() {

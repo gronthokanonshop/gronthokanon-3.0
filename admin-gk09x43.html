@@ -1060,7 +1060,13 @@
                         <div class="form-group"><label class="be-label">কভার</label><input class="form-input" id="fa_cover" placeholder="Paperback"></div>
                         <div class="form-group"><label class="be-label">বিভাগ</label><input class="form-input" id="fa_cat" placeholder="ইসলামি বই"></div>
                         <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="fa_subject" placeholder="ইসলামি বই"></div>
-                        <div class="form-group"><label class="be-label">ছবির লিংক</label><input class="form-input" id="fa_img" placeholder="https://..."></div>
+                        <div class="form-group"><label class="be-label">ছবির লিংক</label>
+                            <div style="display:flex;gap:8px;">
+                                <input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;min-width:0;">
+                                <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('fa_imgfile').click()">📤 আপলোড</button>
+                                <input type="file" id="fa_imgfile" accept="image/*" style="display:none;" onchange="faUploadImg(this)">
+                            </div>
+                        </div>
                         <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
                     </div>
                     <div class="flex gap-2">
@@ -1176,7 +1182,11 @@
                     <div id="bannerList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
                         <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ব্যানার যোগ করুন</div>
-                        <input class="form-input" id="bnImg" placeholder="ছবির লিংক / URL (১২০০×৬০০px, যেমন: https://i.ibb.co/....jpg) — ঐচ্ছিক" style="margin-bottom:8px;">
+                        <div style="display:flex;gap:8px;margin-bottom:8px;">
+                            <input class="form-input" id="bnImg" placeholder="ছবির লিংক / URL (১২০০×৬০০px) — ঐচ্ছিক" style="flex:1;min-width:0;">
+                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('bn_imgfile').click()">📤 আপলোড</button>
+                            <input type="file" id="bn_imgfile" accept="image/*" style="display:none;" onchange="bnUploadImg(this)">
+                        </div>
                         <input class="form-input" id="bnTitle" placeholder="বড় লেখা (যেমন: ঈদ অফার — ৩০% ছাড়)" style="margin-bottom:8px;">
                         <input class="form-input" id="bnSub" placeholder="ছোট লেখা (যেমন: সীমিত সময়ের জন্য)" style="margin-bottom:8px;">
                         <input class="form-input" id="bnLink" placeholder="ক্লিক করলে কোথায় যাবে (যেমন: filter.html?type=cat&value=Best Selling) — ঐচ্ছিক" style="margin-bottom:10px;">
@@ -1228,6 +1238,14 @@
                     <div id="modReqList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"><div class="text-sm text-muted">লোড হচ্ছে...</div></div>
                     <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">বর্তমান মডারেটর</div>
                     <div id="modList" style="display:flex;flex-direction:column;gap:8px;"><div class="text-sm text-muted">লোড হচ্ছে...</div></div>
+                </div>
+
+                <div class="tool-card" id="imgbbCard">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> ছবি আপলোড সেটিংস (imgbb)</h3>
+                    <p style="margin-bottom:12px;">imgbb.com-এ ফ্রি অ্যাকাউন্ট খুলে <strong>api.imgbb.com</strong> থেকে API key নিয়ে এখানে সেভ করুন। তারপর বই এডিট আর ব্যানারে সরাসরি ছবি আপলোড করা যাবে — লিংক কপি-পেস্ট লাগবে না।</p>
+                    <input class="form-input" id="imgbbKeyInput" placeholder="imgbb API Key" style="margin-bottom:10px;">
+                    <button class="btn btn-primary" onclick="saveImgbbKey()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> সেভ করুন</button>
+                    <div id="imgbbKeyStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.25);border-radius:8px;"></div>
                 </div>
 
                 <div class="tool-card" id="courierCard">
@@ -1410,14 +1428,17 @@ function showDashboard(){
     document.getElementById('appShell').classList.remove('hidden');
     const courierCard=document.getElementById('courierCard');
     const modCard=document.getElementById('modManageCard');
+    const imgbbCard=document.getElementById('imgbbCard');
     if(!IS_OWNER){
         if(courierCard)courierCard.style.display='none';
         if(modCard)modCard.style.display='none';
+        if(imgbbCard)imgbbCard.style.display='none';
         const av=document.querySelector('.sidebar-avatar');if(av)av.innerText='MD';
         const ui=document.querySelector('.sidebar-user-info strong');if(ui)ui.innerText='Moderator';
     }else{
         if(courierCard)courierCard.style.display='';
         if(modCard)modCard.style.display='';
+        if(imgbbCard)imgbbCard.style.display='';
     }
     const days=['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
     const months=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
@@ -1428,6 +1449,7 @@ function showDashboard(){
         loadOrders();
         loadBooksFromFirebase();
         loadCourierApiKeys(); // auto-load API keys
+        loadImgbbKey(); // imgbb key (ছবি আপলোডের জন্য)
     },300);
 }
 
@@ -1461,6 +1483,89 @@ function toggleSidebar(){
 function closeSidebar(){
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('mobileOverlay').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════════
+   IMGBB IMAGE UPLOAD
+══════════════════════════════════════════════ */
+let IMGBB_KEY='';
+async function loadImgbbKey(){
+    try{
+        const snap=await db.ref('imgbbKey').once('value');
+        IMGBB_KEY=snap.val()||'';
+        const st=document.getElementById('imgbbKeyStatus');
+        if(st){
+            st.style.display='block';
+            st.innerHTML=IMGBB_KEY?'✅ imgbb key সেভ করা আছে — ছবি আপলোড চালু':'⚠️ key সেভ করা নেই — imgbb.com থেকে key নিয়ে সেভ করুন';
+        }
+    }catch(e){}
+}
+async function saveImgbbKey(){
+    const inp=document.getElementById('imgbbKeyInput');
+    const v=inp.value.trim();
+    if(!v){showToast('আগে API key লিখুন','#dc2626');return;}
+    try{
+        await db.ref('imgbbKey').set(v);
+        IMGBB_KEY=v;
+        inp.value='';
+        loadImgbbKey();
+        showToast('imgbb key সেভ হলো','#0B6E4F');
+    }catch(e){showToast('সেভ ব্যর্থ — Rules Publish আছে কিনা দেখুন','#dc2626');}
+}
+function gkCompressImg(file,maxW,cb){
+    /* বড় ছবি আপলোডের আগে ব্রাউজারেই ছোট করা — আপলোড ও সাইট দুটোই দ্রুত হয় */
+    if(file.type==='image/gif'||file.size<150*1024){cb(file);return;}
+    const img=new Image();
+    const url=URL.createObjectURL(file);
+    img.onload=function(){
+        URL.revokeObjectURL(url);
+        let w=img.width,h=img.height;
+        if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+        try{
+            const c=document.createElement('canvas');
+            c.width=w;c.height=h;
+            const ctx=c.getContext('2d');
+            ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h);
+            ctx.drawImage(img,0,0,w,h);
+            c.toBlob(function(b){cb(b&&b.size<file.size?b:file);},'image/jpeg',0.82);
+        }catch(e){cb(file);}
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);cb(file);};
+    img.src=url;
+}
+async function uploadToImgbb(file,cb,maxW){
+    if(!file)return;
+    if(!IMGBB_KEY){showToast('আগে টুলস ট্যাবে imgbb API key সেভ করুন','#dc2626');return;}
+    if(!file.type||!file.type.startsWith('image/')){showToast('ছবির ফাইল বাছুন','#dc2626');return;}
+    showToast('ছবি আপলোড হচ্ছে... ⏳','#0369a1');
+    try{
+        const small=await new Promise(res=>gkCompressImg(file,maxW||900,res));
+        const fd=new FormData();
+        fd.append('image',small,'photo.jpg');
+        const res=await fetch('https://api.imgbb.com/1/upload?key='+encodeURIComponent(IMGBB_KEY),{method:'POST',body:fd});
+        const j=await res.json();
+        if(j&&j.success&&j.data&&j.data.url){
+            cb(j.data.url);
+            showToast('ছবি আপলোড হয়েছে ✅','#0B6E4F');
+        }else{
+            showToast('আপলোড ব্যর্থ — API key ঠিক আছে কিনা দেখুন','#dc2626');
+        }
+    }catch(e){showToast('আপলোড ব্যর্থ — ইন্টারনেট দেখুন','#dc2626');}
+}
+function beUploadImg(i,inp){
+    const f=inp.files[0];inp.value='';
+    uploadToImgbb(f,url=>{
+        document.getElementById('be_img_'+i).value=url;
+        if(typeof beUpdateImgPreview==='function')beUpdateImgPreview(i);
+    },800);
+}
+function faUploadImg(inp){
+    const f=inp.files[0];inp.value='';
+    uploadToImgbb(f,url=>{document.getElementById('fa_img').value=url;},800);
+}
+function bnUploadImg(inp){
+    const f=inp.files[0];inp.value='';
+    uploadToImgbb(f,url=>{document.getElementById('bnImg').value=url;},1280);
 }
 
 /* ══════════════════════════════════════════════
@@ -1961,7 +2066,11 @@ function beRenderList(){
                     <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="be_subject_${i}" value="${escapeHTML(b.subject||'')}"></div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
-                        <input class="form-input" id="be_img_${i}" value="${escapeHTML(b.img||'')}" oninput="beUpdateImgPreview(${i})">
+                        <div style="display:flex;gap:8px;">
+                            <input class="form-input" id="be_img_${i}" value="${escapeHTML(b.img||'')}" oninput="beUpdateImgPreview(${i})" style="flex:1;min-width:0;">
+                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('be_imgfile_${i}').click()">📤 আপলোড</button>
+                            <input type="file" id="be_imgfile_${i}" accept="image/*" style="display:none;" onchange="beUploadImg(${i},this)">
+                        </div>
                         <div class="be-img-preview" id="beImgPrev_${i}">${imgPrevHtml}</div>
                     </div>
                     <div class="form-group editor-full">

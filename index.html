@@ -1422,18 +1422,26 @@ let recentlyViewed = JSON.parse(localStorage.getItem('gronthokanon_recent')) || 
 function openSearch(){document.getElementById('searchScreen').classList.add('open');document.getElementById('searchOverlay').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('searchInput').focus(),300);}
 function closeSearch(){document.getElementById('searchScreen').classList.remove('open');document.getElementById('searchOverlay').classList.remove('open');document.body.style.overflow='';clearSearch();bnavActive('bnav-home');}
 function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClearBtn').classList.remove('show');document.getElementById('searchBody').innerHTML='';}
+let __searchTimer=null;
 function handleSearch(){
+    /* টাইপ থামার 200ms পরে খোঁজা শুরু — প্রতি অক্ষরে না, তাই ফোন হ্যাং করে না */
+    const qi=document.getElementById('searchInput').value;
+    document.getElementById('searchClearBtn').classList.toggle('show',qi.trim().length>0);
+    clearTimeout(__searchTimer);
+    __searchTimer=setTimeout(runSearch,200);
+}
+function runSearch(){
     const q=document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
-    document.getElementById('searchClearBtn').classList.toggle('show',q.length>0);
     const body=document.getElementById('searchBody');
     if(typeof books==='undefined'||!books.length){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">⏳</div><p>বই লোড হচ্ছে, একটু অপেক্ষা করুন...</p></div>`;return;}
     if(!q){body.innerHTML='';return;}
     const found=books.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
     if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
-    body.innerHTML=`<div class="search-count show">🔍 "${document.getElementById('searchInput').value}" — ${found.length}টি বই</div>`+found.map(b=>{
+    const shown=found.slice(0,40);
+    body.innerHTML=`<div class="search-count show">🔍 "${document.getElementById('searchInput').value}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
         const idx=books.indexOf(b),pct=discPct(b);
         return `<div class="search-item" onclick="closeSearch();goToBook(${idx})">
-            <img src="${getImg(b)}" class="search-item-img" alt="">
+            <img src="${getImg(b)}" class="search-item-img" alt="" loading="lazy" decoding="async">
             <div style="flex:1;min-width:0;">
                 <div class="si-name">${b.name}</div>
                 <div class="si-author">✍️ ${b.author}</div>
