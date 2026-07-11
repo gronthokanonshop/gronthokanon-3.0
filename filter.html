@@ -346,6 +346,8 @@
 <script>
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
+/* একটি বই একাধিক বিভাগে থাকতে পারে — cats অ্যারে, নাহলে পুরনো একক cat */
+function bookCats(b){ return (b && Array.isArray(b.cats) && b.cats.length) ? b.cats : (b && b.cat ? [b.cat] : []); }
 let filtered = [], currentSort = 'default';
 let filterTab = 'all', filterPill = '';
 let currentPage = 1;
@@ -455,7 +457,7 @@ function getList() {
     const q = document.getElementById('filterSearch').value.normalize('NFC').toLowerCase().trim();
     let list = q ? filtered.filter(b => b.name.normalize('NFC').toLowerCase().includes(q) || b.author.normalize('NFC').toLowerCase().includes(q)) : [...filtered];
     if (filterPill) {
-        if (filterTab === 'cat') list = list.filter(b => b.cat === filterPill);
+        if (filterTab === 'cat') list = list.filter(b => bookCats(b).includes(filterPill));
         else if (filterTab === 'pub') list = list.filter(b => b.pub === filterPill);
         else if (filterTab === 'auth') list = list.filter(b => b.author === filterPill);
     }
@@ -475,7 +477,7 @@ function setFilterTab(el, tab) {
     if (tab === 'all') { sc.classList.remove('show'); sc.innerHTML = ''; }
     else {
         const sets = {
-            cat: [...new Set(filtered.map(b => b.cat).filter(Boolean))],
+            cat: [...new Set(filtered.flatMap(bookCats).filter(Boolean))],
             pub: [...new Set(filtered.map(b => b.pub).filter(Boolean))],
             auth: [...new Set(filtered.map(b => b.author).filter(Boolean))]
         };
@@ -570,7 +572,7 @@ const catIconMap = {
 
 let activeCategory = value;
 
-if (type === 'cat') filtered = books.filter(b => b.cat === value);
+if (type === 'cat') filtered = books.filter(b => bookCats(b).includes(value));
 else if (type === 'author') filtered = books.filter(b => b.author === value);
 else if (type === 'pub') filtered = books.filter(b => b.pub === value);
 else filtered = [...books];
@@ -593,10 +595,10 @@ function buildCatSidebar() {
     if (typeof categoryConfig !== 'undefined' && categoryConfig.length) {
         allCats = categoryConfig.map(c => c.key || c.label || c).filter(Boolean);
     } else {
-        allCats = [...new Set(books.map(b => b.cat).filter(Boolean))];
+        allCats = [...new Set(books.flatMap(bookCats).filter(Boolean))];
     }
     // শুধু যে category তে বই আছে সেগুলো দেখাও
-    allCats = allCats.filter(cat => books.some(b => b.cat === cat));
+    allCats = allCats.filter(cat => books.some(b => bookCats(b).includes(cat)));
     const sidebar = document.getElementById('catSidebar');
     sidebar.classList.add('show');
     /* প্রতিটি ক্যাটাগরির নিজস্ব রঙ (রাউন্ড চিপের সাথে মিলিয়ে) — আইকন ছাড়া শুধু টেক্সট */
@@ -616,7 +618,7 @@ function buildCatSidebar() {
 
 function switchCategory(cat) {
     activeCategory = cat;
-    filtered = books.filter(b => b.cat === cat);
+    filtered = books.filter(b => bookCats(b).includes(cat));
     currentPage = 1;
     currentSort = 'default';
     document.getElementById('sortSelect').value = 'default';
@@ -639,7 +641,7 @@ setTimeout(() => {
 /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
 if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
     if(!ok) return;
-    if (type === 'cat' && activeCategory) filtered = books.filter(b => b.cat === activeCategory);
+    if (type === 'cat' && activeCategory) filtered = books.filter(b => bookCats(b).includes(activeCategory));
     else if (type === 'author') filtered = books.filter(b => b.author === value);
     else if (type === 'pub') filtered = books.filter(b => b.pub === value);
     else filtered = [...books];

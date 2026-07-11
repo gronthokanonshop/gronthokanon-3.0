@@ -312,6 +312,17 @@
         .stock-on:hover{background:rgba(11,110,79,0.2);box-shadow:0 4px 12px rgba(11,110,79,0.3);}
         .stock-off{color:var(--danger);background:var(--danger-bg);box-shadow:0 2px 8px rgba(239,68,68,0.15);}
         .stock-off:hover{background:rgba(239,68,68,0.2);box-shadow:0 4px 12px rgba(239,68,68,0.25);}
+        /* ── এডিটরে বিভাগ চিপ + স্টক ── */
+        .be-cat-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:20px;}
+        .be-cat-chip{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);border:1px solid rgba(11,110,79,0.3);border-radius:20px;padding:4px 6px 4px 11px;font-size:12px;font-weight:700;}
+        .be-cat-chip button{background:rgba(11,110,79,0.18);color:var(--primary);border:none;border-radius:50%;width:17px;height:17px;line-height:1;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .be-cat-chip button:hover{background:var(--danger);color:#fff;}
+        .be-cat-empty{font-size:11.5px;color:var(--text-muted);font-style:italic;}
+        .be-stock-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 12px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;}
+        .be-stock-row .lbl{font-size:12.5px;font-weight:700;color:var(--text-main);}
+        .stock-in-btn{background:var(--primary-light);color:var(--primary);border:1px solid rgba(11,110,79,0.35);font-weight:700;}
+        .stock-out-btn{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(239,68,68,0.35);font-weight:700;}
+        .be-stock-hint{font-size:11px;color:var(--text-muted);}
 
         /* ══════════════════════════════════════════
            BOOK EDITOR — style from file 1
@@ -1057,9 +1068,20 @@
                         <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
                         <div class="form-group"><label class="be-label">প্রকাশনী</label><input class="form-input" id="fa_pub" placeholder="প্রকাশনীর নাম"></div>
                         <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="fa_pages" placeholder="200 পৃষ্ঠা"></div>
-                        <div class="form-group"><label class="be-label">কভার</label><input class="form-input" id="fa_cover" placeholder="Paperback"></div>
-                        <div class="form-group"><label class="be-label">বিভাগ</label><input class="form-input" id="fa_cat" placeholder="ইসলামি বই"></div>
-                        <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="fa_subject" placeholder="ইসলামি বই"></div>
+                        <div class="form-group"><label class="be-label">কভার</label><select class="form-input" id="fa_cover"></select></div>
+                        <div class="form-group"><label class="be-label">বিষয়</label>
+                            <select class="form-input" id="fa_subject" onchange="if(this.value)document.getElementById('fa_subjectnew').value='';"></select>
+                            <input class="form-input" id="fa_subjectnew" placeholder="বা নতুন বিষয়" style="margin-top:5px;">
+                        </div>
+                        <div class="form-group editor-full">
+                            <label class="be-label">বিভাগ (একাধিক দেওয়া যাবে)</label>
+                            <div class="be-cat-chips" id="beCatChips_add"></div>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;">
+                                <select class="form-input" id="beCatSelect_add" onchange="beCatAddFromSelect('add')" style="flex:2;min-width:130px;"><option value="">＋ তালিকা থেকে বিভাগ যোগ করুন</option></select>
+                                <input class="form-input" id="beCatNew_add" placeholder="নতুন বিভাগের নাম" style="flex:1;min-width:110px;" onkeydown="if(event.key==='Enter'){event.preventDefault();beCatAddNew('add');}">
+                                <button class="btn btn-ghost btn-sm" type="button" onclick="beCatAddNew('add')" style="flex-shrink:0;">যোগ</button>
+                            </div>
+                        </div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label>
                             <div style="display:flex;gap:8px;">
                                 <input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;min-width:0;">
@@ -1960,7 +1982,7 @@ function beInit(){
         localBooks=JSON.parse(JSON.stringify(books));
     }
     beUpdateStats();
-    beRenderList();
+    loadStockData(()=>beRenderList());
 }
 
 function beUpdateStats(){
@@ -1978,36 +2000,47 @@ function beSetFilter(f){
     beRenderList();
 }
 
+function beFillAddForm(){
+    beCatSel['add']=[];
+    const cs=document.getElementById('beCatSelect_add'); if(cs)cs.innerHTML='<option value="">＋ তালিকা থেকে বিভাগ যোগ করুন</option>'+beCatSelectOptions();
+    const cov=document.getElementById('fa_cover'); if(cov)cov.innerHTML=beCoverOptionsHtml('Paperback');
+    const subj=document.getElementById('fa_subject'); if(subj)subj.innerHTML=beSubjectOptionsHtml('');
+    beRenderCatChips('add');
+}
 function beToggleAddForm(){
     beAddFormOpen=!beAddFormOpen;
     const form=document.getElementById('beAddForm');
     const btn=document.getElementById('beAddToggle');
     form.style.display=beAddFormOpen?'block':'none';
+    if(beAddFormOpen)beFillAddForm();
     btn.innerHTML=beAddFormOpen
         ?`<svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> বন্ধ করুন`
         :`<svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> নতুন বই যোগ করুন`;
 }
 
 function beAddBook(){
-    const name=document.getElementById('fa_name').value.trim();
+    const g=id=>document.getElementById(id);
+    const name=g('fa_name').value.trim();
     if(!name){showToast('বইয়ের নাম দিন','#dc2626');return;}
+    const cats=(beCatSel['add']||[]).filter(Boolean);
+    const subjNew=(g('fa_subjectnew')?.value||'').trim();
     const newBook={
         name,
-        author:document.getElementById('fa_author').value.trim(),
-        price:Number(document.getElementById('fa_price').value)||0,
-        original_price:Number(document.getElementById('fa_oprice').value)||0,
-        cat:document.getElementById('fa_cat').value||'ইসলামি বই',
-        subject:document.getElementById('fa_subject').value||'ইসলামি বই',
-        cover:document.getElementById('fa_cover').value||'Paperback',
-        pub:document.getElementById('fa_pub').value.trim(),
-        pages:document.getElementById('fa_pages').value||'পৃষ্ঠা',
-        img:document.getElementById('fa_img').value.trim(),
-        desc:document.getElementById('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
+        author:g('fa_author').value.trim(),
+        price:Number(g('fa_price').value)||0,
+        original_price:Number(g('fa_oprice').value)||0,
+        cat:cats[0]||'ইসলামি বই',
+        cats:cats.length?cats:['ইসলামি বই'],
+        subject:subjNew||g('fa_subject').value||'ইসলামি বই',
+        cover:g('fa_cover').value||'Paperback',
+        pub:g('fa_pub').value.trim(),
+        pages:g('fa_pages').value||'পৃষ্ঠা',
+        img:g('fa_img').value.trim(),
+        desc:g('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
     };
     localBooks.push(newBook);
-    ['fa_name','fa_author','fa_price','fa_oprice','fa_pub','fa_pages','fa_cover','fa_cat','fa_subject','fa_img','fa_desc'].forEach(id=>{
-        document.getElementById(id).value='';
-    });
+    ['fa_name','fa_author','fa_price','fa_oprice','fa_pub','fa_pages','fa_img','fa_desc','fa_subjectnew'].forEach(id=>{const el=g(id);if(el)el.value='';});
+    beCatSel['add']=[];
     beToggleAddForm();
     beOpenIdx=localBooks.length-1;
     beUpdateStats();
@@ -2021,16 +2054,22 @@ function beToggleBook(idx){
 }
 
 function beSaveBook(idx){
-    const fields=['name','author','price','original_price','pub','pages','cover','cat','subject','img','desc'];
-    fields.forEach(f=>{
-        const el=document.getElementById(`be_${f}_${idx}`);
-        if(!el)return;
-        localBooks[idx][f]=(f==='price'||f==='original_price')?(Number(el.value)||0):el.value;
-    });
+    const g=id=>document.getElementById(id);
+    const b=localBooks[idx];
+    ['name','author','pub','pages','cover','img','desc'].forEach(f=>{const el=g(`be_${f}_${idx}`);if(el)b[f]=el.value;});
+    b.price=Number(g('be_price_'+idx).value)||0;
+    b.original_price=Number(g('be_original_price_'+idx).value)||0;
+    /* বিষয়: নতুন লেখা থাকলে সেটা, নাহলে ড্রপডাউন */
+    const subjNew=(g('be_subjectnew_'+idx)?.value||'').trim();
+    b.subject=subjNew||g('be_subject_'+idx).value||'';
+    /* বিভাগ (multi): cats array + প্রথমটা cat-এ (পুরনো কোডের সাথে মিল রাখতে) */
+    const cats=(beCatSel[idx]||[]).filter(Boolean);
+    b.cats=cats;
+    b.cat=cats[0]||'';
     beUpdateStats();
     beRenderList();
     beOpenIdx=idx;
-    syncBookToFirebase(idx, localBooks[idx], 'সেভ ও Firebase-এ আপলোড হয়েছে');
+    syncBookToFirebase(idx, b, 'সেভ ও Firebase-এ আপলোড হয়েছে');
 }
 
 function beDeleteBook(idx){
@@ -2054,6 +2093,65 @@ function beUpdateImgPreview(idx){
         :`<span class="be-empty-img">ছবি নেই</span>`;
 }
 
+/* ─── বিভাগ (multi) / বিষয় / কভার ড্রপডাউন হেল্পার ─── */
+const BE_COVER_OPTIONS=['Paperback','Hardcover','Hardback','Board Book','Spiral','ই-বুক'];
+const BE_SEED_CATS=['ইসলামি বই','Best Selling','Trending','নতুন প্রকাশিত','Pre Order','প্যাকেজসমূহ','Academic','দরসি কিতাব','সুন্নাহ আইটেম','Stationery'];
+let beCatSel={};   // idx বা 'add' → নির্বাচিত বিভাগের array
+
+function beBookCats(b){ return (b&&Array.isArray(b.cats)&&b.cats.length)?b.cats.slice():(b&&b.cat?[b.cat]:[]); }
+function beAllCatsList(){
+    const s=new Set();
+    (localBooks||[]).forEach(b=>beBookCats(b).forEach(c=>{if(c)s.add(c);}));
+    BE_SEED_CATS.forEach(c=>s.add(c));
+    return [...s].sort((a,b)=>String(a).localeCompare(String(b),'bn'));
+}
+function beCatSelectOptions(){ return beAllCatsList().map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join(''); }
+function beCoverOptionsHtml(cur){
+    cur=cur||''; const opts=BE_COVER_OPTIONS.slice();
+    if(cur&&!opts.includes(cur))opts.unshift(cur);
+    return '<option value="">— বাছুন —</option>'+opts.map(o=>`<option value="${escapeHTML(o)}"${o===cur?' selected':''}>${escapeHTML(o)}</option>`).join('');
+}
+function beAllSubjectsList(){
+    const s=new Set();
+    (localBooks||[]).forEach(b=>{if(b.subject)s.add(b.subject);});
+    return [...s].sort((a,b)=>String(a).localeCompare(String(b),'bn'));
+}
+function beSubjectOptionsHtml(cur){
+    cur=cur||'';
+    return '<option value="">— বাছুন —</option>'+beAllSubjectsList().map(o=>`<option value="${escapeHTML(o)}"${o===cur?' selected':''}>${escapeHTML(o)}</option>`).join('');
+}
+function beCatChipsMarkup(key){
+    const cats=beCatSel[key]||[];
+    return cats.length
+        ? cats.map((c,ci)=>`<span class="be-cat-chip">${escapeHTML(c)}<button type="button" onclick="beCatRemoveAt('${key}',${ci})">×</button></span>`).join('')
+        : '<span class="be-cat-empty">কোনো বিভাগ বাছাই করা হয়নি — নিচ থেকে যোগ করুন</span>';
+}
+function beRenderCatChips(key){ const el=document.getElementById('beCatChips_'+key); if(el)el.innerHTML=beCatChipsMarkup(key); }
+function beCatAddFromSelect(key){
+    const sel=document.getElementById('beCatSelect_'+key); const v=sel.value; sel.value='';
+    if(!v)return; beCatSel[key]=beCatSel[key]||[];
+    if(!beCatSel[key].includes(v))beCatSel[key].push(v);
+    beRenderCatChips(key);
+}
+function beCatAddNew(key){
+    const inp=document.getElementById('beCatNew_'+key); const v=(inp.value||'').trim(); inp.value='';
+    if(!v)return; beCatSel[key]=beCatSel[key]||[];
+    if(!beCatSel[key].includes(v))beCatSel[key].push(v);
+    beRenderCatChips(key);
+}
+function beCatRemoveAt(key,ci){ if(!beCatSel[key])return; beCatSel[key].splice(ci,1); beRenderCatChips(key); }
+
+async function beToggleStock(idx){
+    const cur=stockData[idx]!==false; const next=!cur;
+    const btn=document.getElementById('beStockBtn_'+idx);
+    try{
+        await db.ref('stock/'+idx).set(next);
+        stockData[idx]=next;
+        if(btn){ btn.className='btn btn-sm '+(next?'stock-in-btn':'stock-out-btn'); btn.innerHTML=next?'✅ স্টকে আছে':'❌ স্টক শেষ'; }
+        showToast(next?'স্টকে ফেরানো হলো ✅':'স্টক শেষ চিহ্নিত হলো','#0B6E4F');
+    }catch(e){showToast('স্টক আপডেট ব্যর্থ','#dc2626');}
+}
+
 function beRenderList(){
     const search=document.getElementById('beSearch')?.value.toLowerCase()||'';
     const list=document.getElementById('beBookList');
@@ -2074,6 +2172,7 @@ function beRenderList(){
 
     list.innerHTML=filtered.map(b=>{
         const i=b._i;
+        beCatSel[i]=beBookCats(b);
         const hasImg=isRealUrl(b.img);
         const isOpen=beOpenIdx===i;
         const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
@@ -2090,6 +2189,11 @@ function beRenderList(){
                 <div class="be-arrow ${isOpen?'open':''}">▼</div>
             </div>
             <div class="be-body ${isOpen?'open':''}">
+                <div class="be-stock-row">
+                    <span class="lbl">📦 স্টক অবস্থা:</span>
+                    <button type="button" id="beStockBtn_${i}" class="btn btn-sm ${(stockData[i]!==false)?'stock-in-btn':'stock-out-btn'}" onclick="beToggleStock(${i})">${(stockData[i]!==false)?'✅ স্টকে আছে':'❌ স্টক শেষ'}</button>
+                    <span class="be-stock-hint">ক্লিক করে বদলান — সাথে সাথে সাইটে লাইভ</span>
+                </div>
                 <div class="editor-grid">
                     <div class="form-group"><label class="be-label">বইয়ের নাম</label><input class="form-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
                     <div class="form-group"><label class="be-label">লেখক</label><input class="form-input" id="be_author_${i}" value="${escapeHTML(b.author||'')}"></div>
@@ -2097,9 +2201,22 @@ function beRenderList(){
                     <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
                     <div class="form-group"><label class="be-label">প্রকাশনী</label><input class="form-input" id="be_pub_${i}" value="${escapeHTML(b.pub||'')}"></div>
                     <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="be_pages_${i}" value="${escapeHTML(b.pages||'')}"></div>
-                    <div class="form-group"><label class="be-label">কভার</label><input class="form-input" id="be_cover_${i}" value="${escapeHTML(b.cover||'')}"></div>
-                    <div class="form-group"><label class="be-label">বিভাগ</label><input class="form-input" id="be_cat_${i}" value="${escapeHTML(b.cat||'')}"></div>
-                    <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="be_subject_${i}" value="${escapeHTML(b.subject||'')}"></div>
+                    <div class="form-group"><label class="be-label">কভার</label>
+                        <select class="form-input" id="be_cover_${i}">${beCoverOptionsHtml(b.cover)}</select>
+                    </div>
+                    <div class="form-group"><label class="be-label">বিষয়</label>
+                        <select class="form-input" id="be_subject_${i}" onchange="if(this.value)document.getElementById('be_subjectnew_${i}').value='';">${beSubjectOptionsHtml(b.subject)}</select>
+                        <input class="form-input" id="be_subjectnew_${i}" placeholder="বা নতুন বিষয় লিখুন" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group editor-full">
+                        <label class="be-label">বিভাগ (একাধিক দেওয়া যাবে)</label>
+                        <div class="be-cat-chips" id="beCatChips_${i}">${beCatChipsMarkup(i)}</div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;">
+                            <select class="form-input" id="beCatSelect_${i}" onchange="beCatAddFromSelect('${i}')" style="flex:2;min-width:130px;"><option value="">＋ তালিকা থেকে বিভাগ যোগ করুন</option>${beCatSelectOptions()}</select>
+                            <input class="form-input" id="beCatNew_${i}" placeholder="নতুন বিভাগের নাম" style="flex:1;min-width:110px;" onkeydown="if(event.key==='Enter'){event.preventDefault();beCatAddNew('${i}');}">
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="beCatAddNew('${i}')" style="flex-shrink:0;">যোগ</button>
+                        </div>
+                    </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
                         <div style="display:flex;gap:8px;">
@@ -2391,13 +2508,17 @@ function downloadSitemap(){
 function downloadBookJs(){
     const FIELDS=['name','author','price','original_price','cat','subject','cover','pub','pages','img','desc'];
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
+    const esc=s=>String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"');
     const lines=src.map(b=>{
         const fields=FIELDS.map(f=>{
             const v=b[f]??'';
             if(f==='price'||f==='original_price')return `${f}: ${Number(v)||0}`;
-            return `${f}: "${String(v).replace(/\\/g,'\\\\').replace(/"/g,'\\"')}"`;
-        }).join(', ');
-        return `  { ${fields} }`;
+            return `${f}: "${esc(v)}"`;
+        });
+        /* multi-category: cats array রাখা হয় যেন ব্যাকআপেও একাধিক বিভাগ থাকে */
+        const cats=Array.isArray(b.cats)?b.cats:(b.cat?[b.cat]:[]);
+        fields.push(`cats: [${cats.map(c=>`"${esc(c)}"`).join(', ')}]`);
+        return `  { ${fields.join(', ')} }`;
     });
     const fallback=`\n\n/* ═══ IMAGE FALLBACK ═══\n   যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —\n   সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */\nbooks.forEach(function(b){\n    if(!b.img || !/^https?:\\/\\//.test(b.img)) b.img = 'book-placeholder.svg';\n});`;
     const code=`const books = [\n${lines.join(',\n')}\n];`+fallback;

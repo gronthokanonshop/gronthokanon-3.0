@@ -73,12 +73,12 @@
         .book-img-wrap img:hover{transform:scale(1.04);}
         .img-skel{width:180px;height:260px;border-radius:14px;background:linear-gradient(90deg,var(--border) 25%,var(--bg) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;display:none;}
         @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-        .share-btn{position:absolute;top:14px;left:14px;background:var(--card-solid);border:1.5px solid var(--border2);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--shadow);transition:0.2s;}
+        .share-btn{position:absolute;top:62px;right:14px;background:var(--card-solid);border:1.5px solid var(--border2);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--shadow);transition:0.2s;z-index:11;}
         .share-btn:hover{transform:scale(1.12);border-color:#059669;}
         .wl-btn-lg{position:absolute;top:14px;right:14px;background:var(--card-solid);border:1.5px solid var(--border2);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:19px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--shadow);transition:0.2s;}
         .wl-btn-lg:hover{transform:scale(1.12);}
         .wl-btn-lg.active{background:#ffe4e4;border-color:#dc2626;}
-        #sharePanel{position:absolute;top:62px;left:10px;background:var(--card-solid);border:1px solid var(--border2);border-radius:14px;padding:10px;box-shadow:0 10px 30px var(--shadow);z-index:50;display:none;min-width:190px;}
+        #sharePanel{position:absolute;top:108px;right:10px;background:var(--card-solid);border:1px solid var(--border2);border-radius:14px;padding:10px;box-shadow:0 10px 30px var(--shadow);z-index:50;display:none;min-width:190px;}
         #sharePanel.open{display:block;animation:fadeDown 0.2s ease;}
         @keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
         .share-opt{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:0.15s;}
@@ -528,6 +528,8 @@ window.addEventListener('scroll',()=>{
 
 function updateCartCount(){const c=(JSON.parse(localStorage.getItem('gronthokanon_cart'))||[]).length;document.getElementById('cartCount').innerText=c;}
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
+/* একটি বই একাধিক বিভাগে থাকতে পারে */
+function bookCats(b){ return (b && Array.isArray(b.cats) && b.cats.length) ? b.cats : (b && b.cat ? [b.cat] : []); }
 
 /* WISHLIST */
 function updateWLUI(){
@@ -721,7 +723,7 @@ function loadBook(){
         if(typeof db==='undefined'||!db){setTimeout(doStock,200);return;}
         db.ref('stock/'+idx).once('value').then(snap=>{
             const inStock=snap.val()!==false;
-            badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span><span class="${inStock?'badge b-ok':'badge b-out'}"><span class="stock-dot"></span>${inStock?'স্টক আছে — আজই অর্ডার করুন':'স্টক শেষ'}</span>`;
+            badges.innerHTML=`<span class="badge b-cat">📚 ${bookCats(b).join(' · ')||b.cat||''}</span><span class="${inStock?'badge b-ok':'badge b-out'}"><span class="stock-dot"></span>${inStock?'স্টক আছে — আজই অর্ডার করুন':'স্টক শেষ'}</span>`;
             if(!inStock){
                 ['btnCart','btnBuy','stickyBuy'].forEach(id=>{
                     const el=document.getElementById(id);
@@ -735,7 +737,8 @@ function loadBook(){
     document.getElementById('deliveryText').innerText=`ঢাকায় ডেলিভারি: ১-২ কার্যদিবস`;
     updateWLUI();
 
-    const related=books.filter((rb,i)=>i!==idx&&rb.author!==b.author&&(rb.subject===b.subject||rb.cat===b.cat)).slice(0,8);
+    const bCats=bookCats(b);
+    const related=books.filter((rb,i)=>i!==idx&&rb.author!==b.author&&(rb.subject===b.subject||bookCats(rb).some(c=>bCats.includes(c)))).slice(0,8);
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
     else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'"><img src="${rImg}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
 
@@ -990,13 +993,14 @@ function playVideo(){
 let selectedTags=[];
 function loadAISuggest(b){
     if(!b||!books)return;
-    const tags=[b.cat];
-    if(b.subject&&b.subject!==b.cat)tags.push(b.subject);
-    const cats=[...new Set(books.map(bk=>bk.cat).filter(Boolean))].slice(0,5);
+    const bCats=bookCats(b);
+    const tags=bCats.slice();
+    if(b.subject&&!tags.includes(b.subject))tags.push(b.subject);
+    const cats=[...new Set(books.flatMap(bookCats).filter(Boolean))].slice(0,5);
     cats.forEach(c=>{if(!tags.includes(c))tags.push(c);});
     const uniqueTags=[...new Set(tags)].slice(0,5);
-    document.getElementById('aiTagRow').innerHTML=uniqueTags.map(t=>`<div class="ai-tag${t===b.cat?' sel':''}" onclick="toggleAiTag(this,'${escapeHTML(t)}')">${escapeHTML(t)}</div>`).join('');
-    selectedTags=[b.cat];
+    document.getElementById('aiTagRow').innerHTML=uniqueTags.map(t=>`<div class="ai-tag${bCats.includes(t)?' sel':''}" onclick="toggleAiTag(this,'${escapeHTML(t)}')">${escapeHTML(t)}</div>`).join('');
+    selectedTags=bCats.length?bCats.slice():[b.cat];
     renderAISuggest();
 }
 function toggleAiTag(el,tag){
@@ -1007,7 +1011,7 @@ function toggleAiTag(el,tag){
 function renderAISuggest(){
     const pool=books.filter((b,i)=>{
         if(i===curIdx)return false;
-        return selectedTags.some(t=>b.cat===t||b.subject===t);
+        return selectedTags.some(t=>bookCats(b).includes(t)||b.subject===t);
     });
     pool.sort(()=>Math.random()-0.5);
     const picks=pool.slice(0,8);
