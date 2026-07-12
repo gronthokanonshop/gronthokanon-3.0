@@ -551,7 +551,7 @@
         /* ═══════ BOOK CARD — SHARP RECTANGULAR AESTHETIC ═══════ */
         .book-card {
             flex-shrink: 0;
-            width: 145px;
+            width: 172px;
             background: var(--card);
             border-radius: 4px;
             overflow: hidden;
@@ -571,7 +571,7 @@
             box-shadow: 0 14px 30px rgba(5,150,105,0.28);
             border-color: rgba(52,211,153,0.45);
         }
-        .book-card .bc-img-box { width: 145px; height: 195px; overflow: hidden; position: relative; background: linear-gradient(135deg,#f0fdf4,#ecfdf5); }
+        .book-card .bc-img-box { width: 172px; height: 228px; overflow: hidden; position: relative; background: linear-gradient(135deg,#f0fdf4,#ecfdf5); }
         [data-theme="dark"] .book-card .bc-img-box { background: linear-gradient(135deg,#0f2a1e,#132d20); }
         .book-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.45s ease; }
         .book-card:hover img { transform: scale(1.07); }
@@ -614,38 +614,47 @@
             height: 31px; overflow: hidden;
         }
         .bc-author { font-size: 10.5px; color: var(--text2); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .price-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-        .price-texts { display: flex; align-items: baseline; gap: 5px; flex-wrap: wrap; min-width: 0; }
+        .price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
         .price-sell { color: #dc2626; font-weight: 900; font-size: 14.5px; }
         [data-theme="dark"] .price-sell { color: #f87171; }
         .price-orig { color: var(--text3, var(--text2)); font-size: 10.5px; text-decoration: line-through; }
 
-        /* cart icon button — compact, right-aligned */
+        /* cart button — SVG icon, hidden until hover/touch */
         .bc-btn {
-            display: flex; align-items: center; justify-content: center;
-            width: 30px; height: 30px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 8px 6px;
             background: linear-gradient(135deg, #059669, #047857);
             color: #fff;
-            border-radius: 8px;
-            cursor: pointer; border: none;
-            font-size: 14px;
-            transition: all 0.2s;
+            border-radius: 9px;
+            cursor: pointer; width: 100%; border: none;
+            font-weight: 700; font-size: 11px;
+            text-align: center;
+            font-family: 'Hind Siliguri', Arial, sans-serif;
+            transition: opacity 0.25s ease, background 0.2s, box-shadow 0.2s, transform 0.15s;
+            letter-spacing: 0.3px;
             box-shadow: 0 2px 8px rgba(5,150,105,0.28);
+            opacity: 0;
+            pointer-events: none;
         }
-        .bc-btn:hover { background: linear-gradient(135deg, #047857, #065f46); box-shadow: 0 4px 12px rgba(5,150,105,0.38); transform: scale(1.06); }
+        .bc-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+        .book-card:hover .bc-btn:not(.bc-out) { opacity: 1; pointer-events: auto; }
+        @media (hover: none) {
+            .bc-btn:not(.bc-out) { opacity: 1; pointer-events: auto; }
+        }
+        .bc-btn:hover { background: linear-gradient(135deg, #047857, #065f46); box-shadow: 0 4px 12px rgba(5,150,105,0.38); }
         /* ── স্টক শেষ (রঙিন ছবি + সুন্দর পিল ব্যাজ) ── */
         .book-card.gk-out .bc-img-box img { filter: none; }
         .gk-out-badge { position:absolute; top:10px; left:10px; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:10px; font-weight:800; padding:4px 11px; border-radius:20px; box-shadow:0 3px 10px rgba(220,38,38,0.45); border:1.5px solid rgba(255,255,255,0.85); letter-spacing:.3px; z-index:4; }
-        .bc-btn.bc-out { background:#fff !important; color:#dc2626 !important; border:1.5px solid #fecaca !important; box-shadow:none !important; cursor:not-allowed; }
-        .bc-btn.bc-out:hover { background:#fff !important; box-shadow:none !important; transform:none; }
+        .bc-btn.bc-out { opacity: 1; pointer-events: auto; background:#fff !important; color:#dc2626 !important; border:1.5px solid #fecaca !important; box-shadow:none !important; cursor:not-allowed; }
+        .bc-btn.bc-out:hover { background:#fff !important; box-shadow:none !important; }
         [data-theme="dark"] .bc-btn.bc-out { background:rgba(239,68,68,0.14) !important; color:#fca5a5 !important; border-color:rgba(239,68,68,0.4) !important; }
-        .bc-btn:active { transform: scale(0.94); }
+        .bc-btn:active { transform: scale(0.97); }
 
         /* ═══════ SKELETON ═══════ */
         .skeleton-row { display: flex; gap: 6px; overflow: hidden; padding-bottom: 10px; }
-        .skeleton-card { flex-shrink: 0; width: 145px; background: var(--card); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+        .skeleton-card { flex-shrink: 0; width: 172px; background: var(--card); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
         [data-theme="dark"] .skeleton-card { border-color: rgba(255,255,255,0.09); }
-        .skel-img { width: 145px; height: 195px; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        .skel-img { width: 172px; height: 228px; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
         [data-theme="dark"] .skel-img { background: linear-gradient(90deg, #132d20 25%, #1a4731 50%, #132d20 75%); background-size: 200% 100%; }
         .skel-line { height: 11px; margin: 9px; border-radius: 0; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
         [data-theme="dark"] .skel-line { background: linear-gradient(90deg, #132d20 25%, #1a4731 50%, #132d20 75%); background-size: 200% 100%; }
@@ -748,10 +757,10 @@
         .drawer-item:hover { background: rgba(5,150,105,0.07); color: #059669; padding-left: 30px; }
 
         @media (max-width: 480px) {
-            .book-card { width: 128px; }
-            .book-card .bc-img-box { width: 128px; height: 172px; }
-            .skeleton-card { width: 128px; }
-            .skel-img { width: 128px; height: 172px; }
+            .book-card { width: 155px; }
+            .book-card .bc-img-box { width: 155px; height: 205px; }
+            .skeleton-card { width: 155px; }
+            .skel-img { width: 155px; height: 205px; }
             .cat-pill { padding: 6px 10px; font-size: 12px; }
             .navbar-search { padding: 0 10px 10px; }
 
@@ -1509,6 +1518,8 @@ function updateWLCount(){
     const nb=document.getElementById('navWishBadge');if(nb){nb.innerText=c;nb.classList.toggle('show',c>0);}
     const wb=document.getElementById('bnavWishBadge');if(wb){wb.innerText=c;wb.classList.toggle('show',c>0);}
 }
+const GK_CART_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
+const GK_NOSTOCK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>';
 function makeCard(b){
     const pct=discPct(b),idx=books.indexOf(b),wl=isWL(b.name);
     const out=window.gkIsOut&&window.gkIsOut(idx);
@@ -1521,12 +1532,10 @@ function makeCard(b){
         <div class="book-card-info">
             <div class="bc-name">${b.name}</div>
             <div class="bc-author">${b.author}</div>
-            <div class="price-row">
-                <div class="price-texts"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-                ${out
-                    ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই বইটি এখন স্টকে নেই');" title="স্টক শেষ">🚫</button>`
-                    : `<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')" title="কার্টে যোগ করুন">🛒</button>`}
-            </div>
+            <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
+            ${out
+                ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই বইটি এখন স্টকে নেই');">${GK_NOSTOCK_SVG}<span>স্টক শেষ</span></button>`
+                : `<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">${GK_CART_SVG}<span>কার্টে যোগ করুন</span></button>`}
         </div></div>`;
 }
 function goToBook(idx){
@@ -1548,7 +1557,7 @@ function gkSweepStock(){
         }
         const btn=card.querySelector('.bc-btn');
         if(btn&&!btn.classList.contains('bc-out')){
-            btn.classList.add('bc-out');btn.textContent='🚫';btn.title='স্টক শেষ';
+            btn.classList.add('bc-out');btn.innerHTML=GK_NOSTOCK_SVG+'<span>স্টক শেষ</span>';
             btn.onclick=function(e){e.stopPropagation();if(window.showToast)showToast('❌ এই বইটি এখন স্টকে নেই');};
         }
     });
