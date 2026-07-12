@@ -3,6 +3,20 @@
    সব page এ shared হয় এই JS
 ═══════════════════════════════════════ */
 
+/* ═══ স্টক অবস্থা — সব পেজে (হোম, ফিল্টার, সার্চ, বই) ═══
+   Firebase-এর stock নোড: stock/{বইয়ের নম্বর} === false মানে স্টক শেষ।
+   পেজ লোডের সাথে সাথে একবার আনা হয়, এলে gkOnStockReady() ডাকে যেন কার্ড রিফ্রেশ হয়। */
+window.gkStock = window.gkStock || {};
+window.gkIsOut = function (idx) { return window.gkStock && window.gkStock[idx] === false; };
+window.GK_STOCK_READY = fetch('https://gronthokanon-8573e-default-rtdb.firebaseio.com/stock.json')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+        window.gkStock = d || {};
+        if (typeof window.gkOnStockReady === 'function') { try { window.gkOnStockReady(); } catch (e) {} }
+        return true;
+    })
+    .catch(function () { return false; });
+
 /* ═══ DARK MODE ═══ */
 function toggleDark() {
     const h = document.documentElement;

@@ -640,6 +640,12 @@
             box-shadow: 0 2px 8px rgba(5,150,105,0.28);
         }
         .bc-btn:hover { background: linear-gradient(135deg, #047857, #065f46); box-shadow: 0 4px 12px rgba(5,150,105,0.38); }
+        /* ── স্টক শেষ (রঙিন ছবি + সুন্দর পিল ব্যাজ) ── */
+        .book-card.gk-out .bc-img-box img { filter: none; }
+        .gk-out-badge { position:absolute; top:10px; left:10px; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:10px; font-weight:800; padding:4px 11px; border-radius:20px; box-shadow:0 3px 10px rgba(220,38,38,0.45); border:1.5px solid rgba(255,255,255,0.85); letter-spacing:.3px; z-index:4; }
+        .bc-btn.bc-out { background:#fff !important; color:#dc2626 !important; border:1.5px solid #fecaca !important; box-shadow:none !important; cursor:not-allowed; }
+        .bc-btn.bc-out:hover { background:#fff !important; box-shadow:none !important; }
+        [data-theme="dark"] .bc-btn.bc-out { background:rgba(239,68,68,0.14) !important; color:#fca5a5 !important; border-color:rgba(239,68,68,0.4) !important; }
         .bc-btn:active { transform: scale(0.97); }
 
         /* ═══════ SKELETON ═══════ */
@@ -996,56 +1002,43 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         ক্যাটাগরি
     </div>
-    <div class="cat-grid" id="catTrack">
-    <div class="cat-set">
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#f97316,#ea580c);" onclick="window.location.href='filter.html?type=cat&value=Best Selling'">
-            <span class="cat-grid-label">Best Selling</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#10b981,#059669);" onclick="window.location.href='filter.html?type=cat&value=Trending'">
-            <span class="cat-grid-label">Trending</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#eab308,#ca8a04);" onclick="window.location.href='filter.html?type=cat&value=নতুন প্রকাশিত'">
-            <span class="cat-grid-label">নতুন প্রকাশিত</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#6366f1,#4f46e5);" onclick="window.location.href='filter.html?type=cat&value=Pre Order'">
-            <span class="cat-grid-label">Pre Order</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#059669,#047857);" onclick="window.location.href='filter.html?type=cat&value=ইসলামি বই'">
-            <span class="cat-grid-label">ইসলামি বই</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#14b8a6,#0d9488);" onclick="window.location.href='filter.html?type=cat&value=প্যাকেজসমূহ'">
-            <span class="cat-grid-label">প্যাকেজসমূহ</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#3b82f6,#2563eb);" onclick="window.location.href='filter.html?type=cat&value=Academic'">
-            <span class="cat-grid-label">Academic</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#8b5cf6,#7c3aed);" onclick="window.location.href='filter.html?type=cat&value=দরসি কিতাব'">
-            <span class="cat-grid-label">দরসি কিতাব</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#f59e0b,#d97706);" onclick="window.location.href='filter.html?type=cat&value=সুন্নাহ আইটেম'">
-            <span class="cat-grid-label">সুন্নাহ আইটেম</span>
-        </div>
-        <div class="cat-grid-item" style="--cgi-color:linear-gradient(135deg,#ec4899,#db2777);" onclick="window.location.href='filter.html?type=cat&value=Stationery'">
-            <span class="cat-grid-label">Stationery</span>
-        </div>
-    </div>
+    <div class="cat-grid" id="catTrack"><div class="cat-set" id="catSet"></div></div>
     </div>
 </div>
 <script>
+/* হোমপেজ ক্যাটাগরি চিপ — ডিফল্ট তালিকা (অ্যাডমিন থেকে siteConfig/homeCats দিলে সেটাই চলে) */
+window.GK_HOME_CATS_DEFAULT = [
+    {name:'Best Selling',emoji:'🔥'},{name:'Trending',emoji:'📈'},{name:'নতুন প্রকাশিত',emoji:'✨'},
+    {name:'Pre Order',emoji:'🛒'},{name:'ইসলামি বই',emoji:'☪️'},{name:'প্যাকেজসমূহ',emoji:'📦'},
+    {name:'Academic',emoji:'🎓'},{name:'দরসি কিতাব',emoji:'🕌'},{name:'সুন্নাহ আইটেম',emoji:'📿'},{name:'Stationery',emoji:'🖊️'}
+];
+window.GK_HOME_CATS = window.GK_HOME_CATS_DEFAULT.slice();
+window.GK_CHIP_PALETTE = [
+    'linear-gradient(135deg,#f97316,#ea580c)','linear-gradient(135deg,#10b981,#059669)','linear-gradient(135deg,#eab308,#ca8a04)',
+    'linear-gradient(135deg,#6366f1,#4f46e5)','linear-gradient(135deg,#059669,#047857)','linear-gradient(135deg,#14b8a6,#0d9488)',
+    'linear-gradient(135deg,#3b82f6,#2563eb)','linear-gradient(135deg,#8b5cf6,#7c3aed)','linear-gradient(135deg,#f59e0b,#d97706)','linear-gradient(135deg,#ec4899,#db2777)'
+];
+function renderHomeCatChips(){
+    var track=document.getElementById('catTrack'), set=document.getElementById('catSet');
+    if(!track||!set) return;
+    var list=window.GK_HOME_CATS||[];
+    set.innerHTML=list.map(function(c,i){
+        var color=window.GK_CHIP_PALETTE[i%window.GK_CHIP_PALETTE.length];
+        var val=(c.name||'').toString();
+        return '<div class="cat-grid-item" style="--cgi-color:'+color+';" onclick="window.location.href=\'filter.html?type=cat&value='+encodeURIComponent(val)+'\'"><span class="cat-grid-label">'+val.replace(/</g,'&lt;')+'</span></div>';
+    }).join('');
+    /* পুরনো ক্লোন সরিয়ে নতুন ক্লোন — চলমান লুপ ঠিক থাকে (ক্লোনে id রাখি না) */
+    var sets=track.querySelectorAll('.cat-set');
+    for(var j=1;j<sets.length;j++) sets[j].remove();
+    var clone=set.cloneNode(true); clone.removeAttribute('id'); track.appendChild(clone);
+}
 (function(){
     var track = document.getElementById('catTrack');
     if(!track) return;
-    // দ্বিতীয় কপি — লুপটা যেন কোথাও না ভাঙে
-    track.appendChild(track.querySelector('.cat-set').cloneNode(true));
+    renderHomeCatChips();
     var resumeTimer;
-    track.addEventListener('touchstart', function(){
-        clearTimeout(resumeTimer);
-        track.classList.add('cat-paused');
-    }, {passive:true});
-    track.addEventListener('touchend', function(){
-        clearTimeout(resumeTimer);
-        resumeTimer = setTimeout(function(){ track.classList.remove('cat-paused'); }, 1500);
-    }, {passive:true});
+    track.addEventListener('touchstart', function(){ clearTimeout(resumeTimer); track.classList.add('cat-paused'); }, {passive:true});
+    track.addEventListener('touchend', function(){ clearTimeout(resumeTimer); resumeTimer = setTimeout(function(){ track.classList.remove('cat-paused'); }, 1500); }, {passive:true});
 })();
 </script>
 
@@ -1396,18 +1389,27 @@ footer {
 <script src="book.js" defer></script>
 <script src="gkbooks-live.js"></script>
 <script>
-const categoryConfig = [
-    {key:"Best Selling",    label:"🔥 Best Selling"},
-    {key:"Trending",        label:"📈 Trending"},
-    {key:"নতুন প্রকাশিত",  label:"✨ নতুন প্রকাশিত"},
-    {key:"Pre Order",       label:"🛒 Pre Order"},
-    {key:"ইসলামি বই",      label:"☪️ ইসলামি বই"},
-    {key:"প্যাকেজসমূহ",    label:"📦 প্যাকেজসমূহ"},
-    {key:"Academic",        label:"🎓 Academic"},
-    {key:"দরসি কিতাব",     label:"🕌 দরসি কিতাব"},
-    {key:"সুন্নাহ আইটেম",  label:"📿 সুন্নাহ আইটেম"},
-    {key:"Stationery",      label:"🖊️ Stationery"},
-];
+/* categoryConfig — হোমপেজের সেকশন ও সাইডবার মেনু; window.GK_HOME_CATS থেকে তৈরি (অ্যাডমিন-নিয়ন্ত্রিত) */
+function buildCategoryConfig(){
+    return (window.GK_HOME_CATS||[]).map(c=>({key:c.name, label:(c.emoji?c.emoji+' ':'')+c.name}));
+}
+let categoryConfig = buildCategoryConfig();
+/* Firebase থেকে হোমপেজ ক্যাটাগরি এলে চিপ + সেকশন + মেনু রিফ্রেশ */
+function applyHomeCats(list){
+    if(!Array.isArray(list)||!list.length) return;
+    window.GK_HOME_CATS = list.filter(c=>c&&c.name);
+    categoryConfig = buildCategoryConfig();
+    if(typeof renderHomeCatChips==='function') renderHomeCatChips();
+    if(typeof books!=='undefined'&&books.length){ try{ renderSections(books); }catch(e){} }
+    if(typeof renderCategoryNav==='function') renderCategoryNav();
+}
+function loadHomeCats(){
+    if(typeof db==='undefined'||!db) return;
+    db.ref('siteConfig/homeCats').once('value').then(function(snap){
+        var v=snap.val();
+        if(Array.isArray(v)&&v.length) applyHomeCats(v);
+    }).catch(function(){});
+}
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 /* কুপন আগে apply করা থাকলে reload-এর পরও discount বহাল থাকবে */
 let discountPercent = localStorage.getItem('gronthokanon_coupon') ? (parseInt(localStorage.getItem('gronthokanon_discount')) || 0) : 0;
@@ -1439,14 +1441,14 @@ function runSearch(){
     if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
     const shown=found.slice(0,40);
     body.innerHTML=`<div class="search-count show">🔍 "${document.getElementById('searchInput').value}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
-        const idx=books.indexOf(b),pct=discPct(b);
+        const idx=books.indexOf(b),pct=discPct(b),out=window.gkIsOut&&window.gkIsOut(idx);
         return `<div class="search-item" onclick="closeSearch();goToBook(${idx})">
             <img src="${getImg(b)}" class="search-item-img" alt="" loading="lazy" decoding="async">
             <div style="flex:1;min-width:0;">
                 <div class="si-name">${b.name}</div>
                 <div class="si-author">✍️ ${b.author}</div>
                 <div class="si-pub">🏢 ${b.pub}</div>
-                <div><span class="si-price">৳${b.price}</span>${b.original_price>b.price?`<span class="si-orig">৳${b.original_price}</span>`:''} ${pct>0?`<span class="si-badge">${pct}% ছাড়</span>`:''}</div>
+                <div><span class="si-price">৳${b.price}</span>${b.original_price>b.price?`<span class="si-orig">৳${b.original_price}</span>`:''} ${out?`<span class="si-badge" style="background:#dc2626;">স্টক শেষ</span>`:(pct>0?`<span class="si-badge">${pct}% ছাড়</span>`:'')}</div>
             </div></div>`;
     }).join('');
 }
@@ -1454,6 +1456,8 @@ window.addEventListener('popstate',()=>{if(document.getElementById('searchScreen
 
 /* HELPERS */
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
+/* একটি বই একাধিক বিভাগে থাকতে পারে */
+function bookCats(b){return (b&&Array.isArray(b.cats)&&b.cats.length)?b.cats:(b&&b.cat?[b.cat]:[]);}
 function getImg(b){return (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';}
 function isWL(name){return wishlist.includes(name);}
 function toggleWL(e,name){
@@ -1514,9 +1518,10 @@ function updateWLCount(){
 }
 function makeCard(b){
     const pct=discPct(b),idx=books.indexOf(b),wl=isWL(b.name);
-    return `<div class="book-card" onclick="goToBook(${idx})">
+    const out=window.gkIsOut&&window.gkIsOut(idx);
+    return `<div class="book-card${out?' gk-out':''}" data-bookidx="${idx}" onclick="goToBook(${idx})">
         <div class="bc-img-box">
-        ${pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:''}
+        ${out?`<div class="gk-out-badge">স্টক শেষ</div>`:(pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:'')}
         <button class="wl-btn ${wl?'active':''}" onclick="toggleWL(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'❤️':'🤍'}</button>
         <img src="${getImg(b)}" alt="বই" loading="lazy">
         </div>
@@ -1525,7 +1530,9 @@ function makeCard(b){
             <div class="bc-name">${b.name}</div>
             <div class="bc-author">${b.author}</div>
             <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-            <button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>
+            ${out
+                ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই বইটি এখন স্টকে নেই');">স্টক শেষ</button>`
+                : `<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>`}
         </div></div>`;
 }
 function goToBook(idx){
@@ -1533,6 +1540,26 @@ function goToBook(idx){
     localStorage.setItem('gronthokanon_recent',JSON.stringify(recentlyViewed));
     window.location.href='book.html?id='+idx;
 }
+/* স্টক তথ্য দেরিতে এলে ইতিমধ্যে আঁকা কার্ডগুলো আপডেট করে (পুরো রি-রেন্ডার ছাড়াই) */
+function gkSweepStock(){
+    document.querySelectorAll('.book-card[data-bookidx]').forEach(function(card){
+        const idx=card.getAttribute('data-bookidx');
+        if(!(window.gkIsOut&&window.gkIsOut(idx)))return;
+        card.classList.add('gk-out');
+        const box=card.querySelector('.bc-img-box');
+        if(box&&!box.querySelector('.gk-out-badge')){
+            const d=document.createElement('div');d.className='gk-out-badge';d.textContent='স্টক শেষ';
+            box.insertBefore(d,box.firstChild);
+            const disc=box.querySelector('.disc-badge');if(disc)disc.style.display='none';
+        }
+        const btn=card.querySelector('.bc-btn');
+        if(btn&&!btn.classList.contains('bc-out')){
+            btn.classList.add('bc-out');btn.textContent='স্টক শেষ';
+            btn.onclick=function(e){e.stopPropagation();if(window.showToast)showToast('❌ এই বইটি এখন স্টকে নেই');};
+        }
+    });
+}
+window.gkOnStockReady=gkSweepStock;
 function renderRecent(){
     const sec=document.getElementById('recentlySection'),row=document.getElementById('recentlyRow');
     if(!recentlyViewed.length){sec.style.display='none';return;}
@@ -1543,7 +1570,7 @@ function renderSections(list){
     const w=document.getElementById('sectionsWrapper');
     w.style.display='block';w.innerHTML='';
     categoryConfig.forEach(cat=>{
-        const catBooks=list.filter(b=>b.cat===cat.key);
+        const catBooks=list.filter(b=>bookCats(b).includes(cat.key));
         if(!catBooks.length)return;
         w.innerHTML+=`<div class="cat-section fade-in" id="section-${cat.key}">
             <div class="cat-section-title">${cat.label}
@@ -1659,6 +1686,11 @@ function closeWishlist(){document.getElementById('wishlistBox').style.display='n
 
 /* CART */
 function addToCart(name,price,img){
+    /* স্টক শেষ বইয়ে বাধা (নাম দিয়ে বইয়ের নম্বর বের করে স্টক চেক) */
+    if(typeof books!=='undefined'&&window.gkIsOut){
+        const bi=books.findIndex(x=>x&&x.name===name.trim());
+        if(bi>-1&&window.gkIsOut(bi)){if(window.showToast)showToast('❌ এই বইটি এখন স্টকে নেই');return;}
+    }
     cart.push({name:name.trim(),price:Number(price),img});
     saveCart();updateCartUI();
     const w=document.getElementById('cartWrap');
@@ -1884,6 +1916,7 @@ window.onload=()=>{
     auth.onAuthStateChanged(user=>updateAuthUI(user));
     loadReviewSlider();
     loadBanners();
+    loadHomeCats();
     loadHomeBlogs();
     loadRecentSalesTicker();
     /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে সেকশনগুলো রিফ্রেশ */

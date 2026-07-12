@@ -150,6 +150,12 @@
         .bc-btn:hover { background:linear-gradient(135deg,#047857,#065f46); box-shadow:0 4px 12px rgba(5,150,105,0.38); }
         .bc-btn:active { transform:scale(0.97); }
         .bc-btn.added { background:var(--green-light); color:var(--green-dark); border:1.5px solid var(--border-g); box-shadow:none; }
+        /* ── স্টক শেষ (রঙিন ছবি + সুন্দর পিল ব্যাজ) ── */
+        .book-card.gk-out .book-img-wrap img { filter:none; }
+        .gk-out-badge { position:absolute; top:10px; left:10px; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:10px; font-weight:800; padding:4px 11px; border-radius:20px; box-shadow:0 3px 10px rgba(220,38,38,0.45); border:1.5px solid rgba(255,255,255,0.85); letter-spacing:.3px; z-index:4; }
+        .bc-btn.bc-out { background:#fff !important; color:#dc2626 !important; border:1.5px solid #fecaca !important; box-shadow:none !important; cursor:not-allowed; }
+        .bc-btn.bc-out:hover { background:#fff !important; box-shadow:none !important; }
+        [data-theme="dark"] .bc-btn.bc-out { background:rgba(239,68,68,0.14) !important; color:#fca5a5 !important; border-color:rgba(239,68,68,0.4) !important; }
         [data-theme="dark"] .bc-btn.added { color:#6ee7b7; }
 
         /* SKELETON */
@@ -375,12 +381,13 @@ function toggleWL(e, name) {
 function makeCard(b, delay) {
     const pct = discPct(b), idx = books.indexOf(b), wl = isWL(b.name);
     const inCart = cart.some(c => c.name === b.name);
-    return `<div class="book-card" onclick="goToBook(${idx})" style="animation-delay:${delay*0.04}s">
+    const out = window.gkIsOut && window.gkIsOut(idx);
+    return `<div class="book-card${out?' gk-out':''}" data-bookidx="${idx}" onclick="goToBook(${idx})" style="animation-delay:${delay*0.04}s">
         <div class="book-img-wrap">
-            ${pct > 0 ? `<div class="disc-badge">${pct}% ছাড়</div>` : ''}
+            ${out ? `<div class="gk-out-badge">স্টক শেষ</div>` : (pct > 0 ? `<div class="disc-badge">${pct}% ছাড়</div>` : '')}
             <button class="wl-btn ${wl ? 'active' : ''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl ? '❤️' : '🤍'}</button>
             <img src="${getImg(b)}" alt="${escapeHTML(b.name)}" loading="lazy">
-            <div class="cat-label">${escapeHTML(b.cat||'')}</div>
+            <div class="cat-label">${escapeHTML(bookCats(b).join(' · ')||b.cat||'')}</div>
         </div>
         <div class="bc-info">
             <div class="bc-pub">🏢 ${escapeHTML(b.pub)}</div>
@@ -390,9 +397,11 @@ function makeCard(b, delay) {
                 <span class="price-sell">৳ ${b.price}</span>
                 ${b.original_price > b.price ? `<span class="price-orig">৳ ${b.original_price}</span>` : ''}
             </div>
-            <button class="bc-btn ${inCart ? 'added' : ''}" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img,this)">
+            ${out
+                ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই বইটি এখন স্টকে নেই');">স্টক শেষ</button>`
+                : `<button class="bc-btn ${inCart ? 'added' : ''}" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img,this)">
                 ${inCart ? '✅ যোগ হয়েছে' : 'কার্টে যোগ করুন'}
-            </button>
+            </button>`}
         </div>
     </div>`;
 }
@@ -524,7 +533,33 @@ function goToBook(idx) {
     navigateTo('book.html?id=' + idx);
 }
 
+/* স্টক তথ্য দেরিতে এলে আঁকা কার্ডগুলো আপডেট (পুরো রি-রেন্ডার ছাড়াই) */
+function gkSweepStock() {
+    document.querySelectorAll('.book-card[data-bookidx]').forEach(function (card) {
+        const idx = card.getAttribute('data-bookidx');
+        if (!(window.gkIsOut && window.gkIsOut(idx))) return;
+        card.classList.add('gk-out');
+        const box = card.querySelector('.book-img-wrap');
+        if (box && !box.querySelector('.gk-out-badge')) {
+            const d = document.createElement('div'); d.className = 'gk-out-badge'; d.textContent = 'স্টক শেষ';
+            box.insertBefore(d, box.firstChild);
+            const disc = box.querySelector('.disc-badge'); if (disc) disc.style.display = 'none';
+        }
+        const btn = card.querySelector('.bc-btn');
+        if (btn && !btn.classList.contains('bc-out')) {
+            btn.classList.add('bc-out'); btn.textContent = 'স্টক শেষ';
+            btn.onclick = function (e) { e.stopPropagation(); if (window.showToast) showToast('❌ এই বইটি এখন স্টকে নেই'); };
+        }
+    });
+}
+window.gkOnStockReady = gkSweepStock;
+
 function addToCart(name, price, img, btn) {
+    /* স্টক শেষ বইয়ে বাধা */
+    if (typeof books !== 'undefined' && window.gkIsOut) {
+        const bi = books.findIndex(x => x && x.name === name.trim());
+        if (bi > -1 && window.gkIsOut(bi)) { showToast('❌ এই বইটি এখন স্টকে নেই'); return; }
+    }
     // ড্রয়ার থেকে কার্ট বদলাতে পারে — তাই আগে localStorage থেকে টাটকা কপি নাও
     cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
     cart.push({ name: name.trim(), price: Number(price), img });
