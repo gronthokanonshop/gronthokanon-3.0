@@ -553,7 +553,7 @@
             flex-shrink: 0;
             width: 145px;
             background: var(--card);
-            border-radius: 14px;
+            border-radius: 4px;
             overflow: hidden;
             border: 1px solid var(--border);
             transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -608,45 +608,38 @@
 
         /* card info */
         .book-card-info { padding: 9px 10px 10px; }
-        .bc-pub {
-            font-size: 9px; color: #059669; font-weight: 700;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;
-        }
-        [data-theme="dark"] .bc-pub { color: #34d399; }
         .bc-name {
             font-size: 12px; font-weight: 800; color: var(--text);
             margin-bottom: 2px; line-height: 1.3;
             height: 31px; overflow: hidden;
         }
         .bc-author { font-size: 10.5px; color: var(--text2); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
+        .price-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+        .price-texts { display: flex; align-items: baseline; gap: 5px; flex-wrap: wrap; min-width: 0; }
         .price-sell { color: #dc2626; font-weight: 900; font-size: 14.5px; }
         [data-theme="dark"] .price-sell { color: #f87171; }
         .price-orig { color: var(--text3, var(--text2)); font-size: 10.5px; text-decoration: line-through; }
 
-        /* cart button — rounded gradient */
+        /* cart icon button — compact, right-aligned */
         .bc-btn {
-            display: block; padding: 8px 6px;
+            display: flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; flex-shrink: 0;
             background: linear-gradient(135deg, #059669, #047857);
             color: #fff;
-            border-radius: 9px;
-            cursor: pointer; width: 100%; border: none;
-            font-weight: 700; font-size: 11px;
-            text-align: center;
-            font-family: 'Hind Siliguri', Arial, sans-serif;
+            border-radius: 8px;
+            cursor: pointer; border: none;
+            font-size: 14px;
             transition: all 0.2s;
-            letter-spacing: 0.3px;
             box-shadow: 0 2px 8px rgba(5,150,105,0.28);
         }
-        .bc-btn:hover { background: linear-gradient(135deg, #047857, #065f46); box-shadow: 0 4px 12px rgba(5,150,105,0.38); }
+        .bc-btn:hover { background: linear-gradient(135deg, #047857, #065f46); box-shadow: 0 4px 12px rgba(5,150,105,0.38); transform: scale(1.06); }
         /* ── স্টক শেষ (রঙিন ছবি + সুন্দর পিল ব্যাজ) ── */
         .book-card.gk-out .bc-img-box img { filter: none; }
         .gk-out-badge { position:absolute; top:10px; left:10px; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:10px; font-weight:800; padding:4px 11px; border-radius:20px; box-shadow:0 3px 10px rgba(220,38,38,0.45); border:1.5px solid rgba(255,255,255,0.85); letter-spacing:.3px; z-index:4; }
         .bc-btn.bc-out { background:#fff !important; color:#dc2626 !important; border:1.5px solid #fecaca !important; box-shadow:none !important; cursor:not-allowed; }
-        .bc-btn.bc-out:hover { background:#fff !important; box-shadow:none !important; }
+        .bc-btn.bc-out:hover { background:#fff !important; box-shadow:none !important; transform:none; }
         [data-theme="dark"] .bc-btn.bc-out { background:rgba(239,68,68,0.14) !important; color:#fca5a5 !important; border-color:rgba(239,68,68,0.4) !important; }
-        .bc-btn:active { transform: scale(0.97); }
+        .bc-btn:active { transform: scale(0.94); }
 
         /* ═══════ SKELETON ═══════ */
         .skeleton-row { display: flex; gap: 6px; overflow: hidden; padding-bottom: 10px; }
@@ -1526,13 +1519,14 @@ function makeCard(b){
         <img src="${getImg(b)}" alt="বই" loading="lazy">
         </div>
         <div class="book-card-info">
-            <div class="bc-pub">🏢 ${b.pub}</div>
             <div class="bc-name">${b.name}</div>
             <div class="bc-author">${b.author}</div>
-            <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-            ${out
-                ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই বইটি এখন স্টকে নেই');">স্টক শেষ</button>`
-                : `<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>`}
+            <div class="price-row">
+                <div class="price-texts"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
+                ${out
+                    ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই বইটি এখন স্টকে নেই');" title="স্টক শেষ">🚫</button>`
+                    : `<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')" title="কার্টে যোগ করুন">🛒</button>`}
+            </div>
         </div></div>`;
 }
 function goToBook(idx){
@@ -1554,7 +1548,7 @@ function gkSweepStock(){
         }
         const btn=card.querySelector('.bc-btn');
         if(btn&&!btn.classList.contains('bc-out')){
-            btn.classList.add('bc-out');btn.textContent='স্টক শেষ';
+            btn.classList.add('bc-out');btn.textContent='🚫';btn.title='স্টক শেষ';
             btn.onclick=function(e){e.stopPropagation();if(window.showToast)showToast('❌ এই বইটি এখন স্টকে নেই');};
         }
     });
