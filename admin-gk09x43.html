@@ -195,7 +195,7 @@
         .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;}
 
         /* ── DASHBOARD ── */
-        .dash-stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:16px;}
+        .dash-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:16px;}
         .dash-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
         .quick-action-btn{
             background:var(--surface);border:1px solid var(--border);border-radius:12px;
@@ -883,14 +883,6 @@
                         <div class="stat-label">ডেলিভারড</div>
                         <div class="stat-trend trend-up" id="statDeliveredTrend" style="color:#0B6E4F;"></div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon" style="color:#fff;background:linear-gradient(135deg,#0B6E4F,#075A40);">
-                            <svg class="icon" style="stroke:#fff" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                        </div>
-                        <div class="stat-val" id="statRevenue" style="color:#0B6E4F;">৳0</div>
-                        <div class="stat-label">মোট বিক্রয়</div>
-                        <div class="stat-trend" id="statRevenueTrend" style="color:#0B6E4F;"></div>
-                    </div>
                 </div>
 
                 <div class="sec-title" style="margin-bottom:12px;">দ্রুত অ্যাকশন</div>
@@ -907,16 +899,6 @@
                     <button class="quick-action-btn" onclick="switchTab('editor',document.getElementById('navEditor'))">
                         <div class="quick-action-icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></div>বই এডিট
                     </button>
-                </div>
-
-                <div class="chart-bar-wrap" style="margin-bottom:14px;">
-                    <div class="dash-panel-head" style="margin-bottom:2px;">
-                        <span><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> অর্ডার ট্রেন্ড (শেষ ৭ দিন)</span>
-                        <span class="dash-panel-link" onclick="switchTab('report',document.getElementById('navReport'))">বিস্তারিত রিপোর্ট →</span>
-                    </div>
-                    <div class="chart-bars" id="dashOrderTrend">
-                        <div class="loading-spin" style="padding:20px 0;width:100%;text-align:center;">লোড হচ্ছে...</div>
-                    </div>
                 </div>
 
                 <div class="dash-two-col">
@@ -1064,7 +1046,7 @@
                 </div>
 
                 <div class="flex justify-between gap-2" style="margin-bottom:16px;flex-wrap:wrap;">
-                    <div class="search-wrap" style="flex:1;min-width:200px;"><span class="search-ic"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><input class="form-input" id="beSearch" placeholder="নাম, লেখক বা প্রকাশনী..." oninput="beSearchInput()"></div>
+                    <div class="search-wrap" style="flex:1;min-width:200px;"><span class="search-ic"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><input class="form-input" id="beSearch" placeholder="নাম, লেখক বা প্রকাশনী..." oninput="beRenderList()"></div>
                     <div class="flex gap-2">
                         <button class="btn btn-sm btn-primary" id="beFAll" onclick="beSetFilter('all')">সব</button>
                         <button class="btn btn-sm btn-ghost" id="beFLinked" onclick="beSetFilter('linked')">ছবি</button>
@@ -1968,8 +1950,6 @@ async function toggleStock(idx,currentState){
 ══════════════════════════════════════════════ */
 let beFilter='all';
 let beOpenIdx=null;
-let bePage=1;
-const BE_PAGE_SIZE=25;
 let beAddFormOpen=false;
 let localBooks=[];
 
@@ -2036,7 +2016,6 @@ function beUpdateStats(){
 
 function beSetFilter(f){
     beFilter=f;
-    bePage=1;
     ['beFAll','beFLinked','beFMissing'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
     document.getElementById(f==='all'?'beFAll':f==='linked'?'beFLinked':'beFMissing')?.classList.add('active');
     beRenderList();
@@ -2089,7 +2068,6 @@ function beAddBook(){
     beCatSel['add']=[];
     beToggleAddForm();
     beOpenIdx=localBooks.length-1;
-    const beSearchEl=g('beSearch'); if(beSearchEl)beSearchEl.value='';
     beUpdateStats();
     beRenderList();
     syncBookToFirebase(localBooks.length-1, newBook, 'নতুন বই যোগ ও Firebase-এ সেভ হয়েছে');
@@ -2292,27 +2270,15 @@ function beRenderList(){
         return true;
     });
 
-    if(!filtered.length){list.innerHTML='<div class="empty-state">কোনো বই পাওয়া যায়নি</div>';beRenderPagination(0);return;}
+    if(!filtered.length){list.innerHTML='<div class="empty-state">কোনো বই পাওয়া যায়নি</div>';return;}
 
-    /* ── পেজিনেশন: একসাথে হাজারো বই DOM-এ বসালে মোবাইলে হ্যাং করে, তাই একবারে ২৫টা ── */
-    const totalPages=Math.max(1,Math.ceil(filtered.length/BE_PAGE_SIZE));
-    if(bePage>totalPages)bePage=totalPages;
-    if(bePage<1)bePage=1;
-    /* ওপেন থাকা বইটা যেই পেজে আছে সেই পেজেই থাকা নিশ্চিত করো (নাহলে এডিট করার সময় হারিয়ে যায়) */
-    if(beOpenIdx!==null){
-        const openPos=filtered.findIndex(b=>b._i===beOpenIdx);
-        if(openPos>-1)bePage=Math.floor(openPos/BE_PAGE_SIZE)+1;
-    }
-    const start=(bePage-1)*BE_PAGE_SIZE;
-    const pageItems=filtered.slice(start,start+BE_PAGE_SIZE);
-
-    list.innerHTML=pageItems.map(b=>{
+    list.innerHTML=filtered.map(b=>{
         const i=b._i;
         beCatSel[i]=beBookCats(b);
         const hasImg=isRealUrl(b.img);
         const isOpen=beOpenIdx===i;
-        const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" loading="lazy" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
-        const imgPrevHtml=hasImg?`<img src="${escapeHTML(b.img)}" loading="lazy" onerror="this.style.display='none'">`:`<span class="be-empty-img">ছবি নেই</span>`;
+        const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+        const imgPrevHtml=hasImg?`<img src="${escapeHTML(b.img)}" onerror="this.style.display='none'">`:`<span class="be-empty-img">ছবি নেই</span>`;
 
         return `<div class="be-list-item ${hasImg?'hasimg':'missing'}">
             <div class="be-head" onclick="beToggleBook(${i})">
@@ -2327,37 +2293,6 @@ function beRenderList(){
             <div class="be-body ${isOpen?'open':''}">${isOpen?beEditorBody(b,i,imgPrevHtml):''}</div>
         </div>`;
     }).join('');
-
-    beRenderPagination(totalPages,filtered.length);
-}
-
-function beRenderPagination(totalPages,totalCount){
-    let bar=document.getElementById('bePagination');
-    if(!bar){
-        bar=document.createElement('div');
-        bar.id='bePagination';
-        bar.style.cssText='display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:16px 0;';
-        document.getElementById('beBookList')?.insertAdjacentElement('afterend',bar);
-    }
-    if(totalPages<=1){bar.innerHTML='';return;}
-    bar.innerHTML=`
-        <button class="btn btn-sm btn-ghost" ${bePage===1?'disabled':''} onclick="beGoToPage(${bePage-1})">‹ আগের</button>
-        <span style="font-size:12px;color:var(--text-muted);white-space:nowrap;">পেজ ${bePage} / ${totalPages} (মোট ${totalCount}টি)</span>
-        <button class="btn btn-sm btn-ghost" ${bePage===totalPages?'disabled':''} onclick="beGoToPage(${bePage+1})">পরের ›</button>
-    `;
-}
-
-function beGoToPage(p){
-    bePage=p;
-    beRenderList();
-    document.getElementById('tabPanelEditor')?.scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-/* ── সার্চ ডিবাউন্স: প্রতি কি-স্ট্রোকে পুরো লিস্ট রি-রেন্ডার করলে মোবাইলে সার্চ বক্স আটকে যায় ── */
-let __beSearchTimer=null;
-function beSearchInput(){
-    clearTimeout(__beSearchTimer);
-    __beSearchTimer=setTimeout(()=>{bePage=1;beRenderList();},300);
 }
 
 /* ── FIREBASE SYNC ── */
@@ -2668,7 +2603,7 @@ function downloadSitemap(){
 function downloadBookJs(){
     const FIELDS=['name','author','price','original_price','cat','subject','cover','pub','pages','img','desc'];
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
-    const esc=s=>String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+    const esc=s=>String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r\n/g,'\\n').replace(/\r/g,'\\n').replace(/\n/g,'\\n');
     const lines=src.map(b=>{
         const fields=FIELDS.map(f=>{
             const v=b[f]??'';
@@ -2827,48 +2762,6 @@ function renderDashboard(){
 
     const deliveredTrendEl = document.getElementById('statDeliveredTrend');
     if(deliveredTrendEl) deliveredTrendEl.innerHTML = `${successRate}% সফল`;
-
-    // ── Total Revenue card ──
-    const revenueEl = document.getElementById('statRevenue');
-    if(revenueEl) revenueEl.innerText = '৳' + totalRevenue.toLocaleString('bn-BD');
-    const revenueTrendEl = document.getElementById('statRevenueTrend');
-    if(revenueTrendEl){
-        const todayRevenue = allOrders.filter(o => (now - (o.createdAt||0)) < ONE_DAY)
-            .reduce((s,o)=> s + (parseInt(String(o.total||'').replace(/[^\d]/g,''))||0), 0);
-        revenueTrendEl.innerHTML = todayRevenue>0
-            ? `<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> আজ +৳${todayRevenue.toLocaleString('bn-BD')}`
-            : `${allOrders.length} অর্ডার থেকে`;
-    }
-
-    // ── Order Trend chart (শেষ ৭ দিন) ──
-    const trendEl = document.getElementById('dashOrderTrend');
-    if(trendEl){
-        const days = [];
-        for(let i=6;i>=0;i--){
-            const d = new Date(now - i*ONE_DAY);
-            days.push({key: d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}), start: new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()});
-        }
-        const dayOrderCount = {}, dayRevenue = {};
-        days.forEach(d=>{dayOrderCount[d.key]=0;dayRevenue[d.key]=0;});
-        allOrders.forEach(o=>{
-            const d = new Date(o.createdAt||0);
-            const key = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-            if(key in dayOrderCount){
-                dayOrderCount[key]++;
-                dayRevenue[key]+=parseInt(String(o.total||'').replace(/[^\d]/g,''))||0;
-            }
-        });
-        const maxCount = Math.max(...days.map(d=>dayOrderCount[d.key]), 1);
-        trendEl.innerHTML = days.map(d=>{
-            const cnt = dayOrderCount[d.key];
-            const h = Math.max(Math.round((cnt/maxCount)*110), 4);
-            return `<div class="chart-bar-col">
-                <div class="chart-bar-val">${cnt}</div>
-                <div class="chart-bar" style="height:${h}px;" title="${cnt}টি অর্ডার · ৳${dayRevenue[d.key]}"></div>
-                <div class="chart-bar-lbl">${d.key}</div>
-            </div>`;
-        }).join('');
-    }
 
     // Recent orders (last 5)
     const recentEl=document.getElementById('dashRecentOrders');
