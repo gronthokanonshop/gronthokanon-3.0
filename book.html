@@ -392,13 +392,15 @@
 
     <!-- BOOK DETAILS — SEPARATE CARD -->
     <div class="desc-card" id="bookDetailsCard">
-        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> বইয়ের তথ্য</h3>
+        <h3 id="bookDetailsTitle"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> বইয়ের তথ্য</h3>
         <table class="info-table">
-            <tr><td class="info-label">লেখক</td><td class="info-val" id="bookAuthorRow"></td></tr>
-            <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
-            <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
-            <tr><td class="info-label">কভার</td><td class="info-val" id="bookCover"></td></tr>
-            <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
+            <tbody id="bookInfoRows">
+                <tr><td class="info-label">লেখক</td><td class="info-val" id="bookAuthorRow"></td></tr>
+                <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
+                <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
+                <tr><td class="info-label">কভার</td><td class="info-val" id="bookCover"></td></tr>
+                <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
+            </tbody>
         </table>
     </div>
 
@@ -530,6 +532,12 @@ function updateCartCount(){const c=(JSON.parse(localStorage.getItem('gronthokano
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
 /* একটি বই একাধিক বিভাগে থাকতে পারে */
 function bookCats(b){ return (b && Array.isArray(b.cats) && b.cats.length) ? b.cats : (b && b.cat ? [b.cat] : []); }
+/* নতুন সিস্টেম: বিভাগ + উপ-বিভাগ + ট্যাগ (পুরনো ডেটা gracefully) */
+const GK_OLD_TAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
+const GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+function bookTags(b){ if(b&&Array.isArray(b.tags))return b.tags; const out=[]; const src=(b&&Array.isArray(b.cats))?b.cats:(b&&b.cat?[b.cat]:[]); src.forEach(c=>{const t=GK_OLD_TAGMAP[c]; if(t&&!out.includes(t))out.push(t);}); return out; }
+function bookMainCat(b){ let c=(b&&b.cat)||(b&&Array.isArray(b.cats)&&b.cats.find(x=>!GK_TAG_NAMES.has(x)))||''; return GK_TAG_NAMES.has(c)?'':c; }
+function bookSubcat(b){ return (b&&b.subcat)||''; }
 
 /* WISHLIST */
 function updateWLUI(){
@@ -556,7 +564,7 @@ function openWLModal(added){
             <img src="${bImg}" style="width:64px;height:86px;object-fit:cover;border-radius:0;border:1px solid #111;flex-shrink:0;">
             <div>
                 <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${b.name}</div>
-                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${b.author}</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${(b.type||'বই')==='বই'?(b.author||''):(b.brand||'')}</div>
                 <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#ecfdf5':'#fff5f5'};border:1.5px solid ${added?'#6ee7b7':'#fca5a5'};border-radius:0;padding:5px 12px;">
                     <span style="font-size:15px;">${added?'❤️':'<svg class="eico" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#ef4444"/><line x1="12" y1="8" x2="12" y2="18" stroke="white" stroke-width="2"/></svg>'}</span>
                     <span style="font-size:12px;font-weight:700;color:${added?'#059669':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>
@@ -596,7 +604,7 @@ function closeImgModal(){document.getElementById('imgModal').classList.remove('o
 /* SHARE */
 function toggleShare(e){e.stopPropagation();document.getElementById('sharePanel').classList.toggle('open');}
 document.addEventListener('click',()=>document.getElementById('sharePanel').classList.remove('open'));
-function shareWA(){if(!curBook)return;const t=encodeURIComponent(`📚 "${curBook.name}" — ${curBook.author}\n৳ ${curBook.price} | গ্রন্থকানন\n${window.location.href}`);window.open('https://wa.me/?text='+t,'_blank');document.getElementById('sharePanel').classList.remove('open');}
+function shareWA(){if(!curBook)return;const isBook=(curBook.type||'বই')==='বই';const byLine=isBook&&curBook.author?' — '+curBook.author:curBook.brand?' — '+curBook.brand:'';const t=encodeURIComponent(`📚 "${curBook.name}"${byLine}\n৳ ${curBook.price} | গ্রন্থকানন\n${window.location.href}`);window.open('https://wa.me/?text='+t,'_blank');document.getElementById('sharePanel').classList.remove('open');}
 function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copyTxt').innerText='✅ কপি হয়েছে!';setTimeout(()=>document.getElementById('copyTxt').innerText='লিঙ্ক কপি করুন',2000);});}
 
 /* DESC */
@@ -648,7 +656,10 @@ function buyNow(){
 /* WhatsApp-এ সরাসরি অর্ডার — বইয়ের নাম/দাম/পরিমাণ/লিংক অটো বসে */
 function orderViaWA(){
     if(!curBook)return;
-    const msg=`আসসালামু আলাইকুম,\nআমি এই বইটি অর্ডার করতে চাই:\n\n📖 ${curBook.name}\n✍️ ${curBook.author}\n💵 মূল্য: ৳${curBook.price}\n🔢 পরিমাণ: ${toBN(qty)}টি\n\n🔗 ${window.location.href}`;
+    const isBook=(curBook.type||'বই')==='বই';
+    const authorLine=isBook&&curBook.author?`\n✍️ ${curBook.author}`:curBook.brand?`\n🏷️ ${curBook.brand}`:'';
+    const itemWord=isBook?'বইটি':'পণ্যটি';
+    const msg=`আসসালামু আলাইকুম,\nআমি এই ${itemWord} অর্ডার করতে চাই:\n\n📖 ${curBook.name}${authorLine}\n💵 মূল্য: ৳${curBook.price}\n🔢 পরিমাণ: ${toBN(qty)}টি\n\n🔗 ${window.location.href}`;
     window.open('https://wa.me/8801516595762?text='+encodeURIComponent(msg),'_blank');
 }
 
@@ -685,15 +696,43 @@ function loadBook(){
     const bookImg=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
     document.getElementById('bookImg').src=bookImg;
     document.getElementById('bookTitle').innerText=b.name;
-    document.getElementById('bookAuthor').innerText='✍️ '+b.author;
-    document.getElementById('bookAuthorRow').innerText=b.author;
+    const isBook=(b.type||'বই')==='বই';
+    const authorEl=document.getElementById('bookAuthor');
+    if(isBook&&b.author){
+        authorEl.innerText='✍️ '+b.author;
+        authorEl.style.display='inline-flex';
+        authorEl.onclick=()=>window.location.href=`filter.html?type=author&value=${encodeURIComponent(b.author)}`;
+    } else if(!isBook&&b.brand){
+        authorEl.innerText='🏷️ '+b.brand;
+        authorEl.style.display='inline-flex';
+        authorEl.style.cursor='default';
+        authorEl.onclick=null;
+    } else {
+        authorEl.style.display='none';
+    }
     document.getElementById('bookPrice').innerText='৳ '+b.price;
     document.getElementById('stickyPrice').innerText='৳ '+b.price;
-    document.getElementById('bookPub').innerText=b.pub;
-    document.getElementById('bookPages').innerText=b.pages;
-    document.getElementById('bookCover').innerText=b.cover||'Paperback';
-    document.getElementById('bookSubject').innerText=b.subject||b.cat;
-    document.getElementById('bookAuthor').onclick=()=>window.location.href=`filter.html?type=author&value=${encodeURIComponent(b.author)}`;
+    /* info-table: বই হলে আগের rows, প্রোডাক্ট হলে brand + custom attributes */
+    document.getElementById('bookDetailsTitle').innerHTML=`<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> ${isBook?'বইয়ের তথ্য':'প্রোডাক্টের তথ্য'}`;
+    const infoRows=document.getElementById('bookInfoRows');
+    const mc=bookMainCat(b), sc=bookSubcat(b), tg=bookTags(b);
+    let rows='';
+    if(isBook){
+        if(b.author)rows+=`<tr><td class="info-label">লেখক</td><td class="info-val">${escapeHTML(b.author)}</td></tr>`;
+        if(b.pub)rows+=`<tr><td class="info-label">প্রকাশনী</td><td class="info-val">${escapeHTML(b.pub)}</td></tr>`;
+        if(b.pages)rows+=`<tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val">${escapeHTML(b.pages)}</td></tr>`;
+        if(b.cover)rows+=`<tr><td class="info-label">কভার</td><td class="info-val">${escapeHTML(b.cover)}</td></tr>`;
+        if(b.subject)rows+=`<tr><td class="info-label">বিষয়</td><td class="info-val">${escapeHTML(b.subject)}</td></tr>`;
+    } else {
+        if(b.brand)rows+=`<tr><td class="info-label">ব্র্যান্ড</td><td class="info-val">${escapeHTML(b.brand)}</td></tr>`;
+        if(Array.isArray(b.attributes)){
+            b.attributes.forEach(attr=>{ const lbl=attr.label||attr.name; if(lbl&&attr.value)rows+=`<tr><td class="info-label">${escapeHTML(lbl)}</td><td class="info-val">${escapeHTML(attr.value)}</td></tr>`; });
+        }
+    }
+    if(mc)rows+=`<tr><td class="info-label">বিভাগ</td><td class="info-val">${escapeHTML(mc)}</td></tr>`;
+    if(sc)rows+=`<tr><td class="info-label">উপ-বিভাগ</td><td class="info-val">${escapeHTML(sc)}</td></tr>`;
+    if(tg.length)rows+=`<tr><td class="info-label">ট্যাগ</td><td class="info-val">${tg.map(escapeHTML).join(', ')}</td></tr>`;
+    infoRows.innerHTML=rows||`<tr><td class="info-label">তথ্য</td><td class="info-val">শীঘ্রই যোগ হবে</td></tr>`;
 
     const desc=(typeof bookDescs!=='undefined'&&bookDescs[b.name]&&bookDescs[b.name]!=='শীঘ্রই আপডেট করা হবে'?bookDescs[b.name]:null)||b.desc||'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
     const descEl=document.getElementById('bookDesc');descEl.innerText=desc;
@@ -723,7 +762,8 @@ function loadBook(){
         if(typeof db==='undefined'||!db){setTimeout(doStock,200);return;}
         db.ref('stock/'+idx).once('value').then(snap=>{
             const inStock=snap.val()!==false;
-            badges.innerHTML=`<span class="badge b-cat">📚 ${bookCats(b).join(' · ')||b.cat||''}</span><span class="${inStock?'badge b-ok':'badge b-out'}"><span class="stock-dot"></span>${inStock?'স্টক আছে — আজই অর্ডার করুন':'স্টক শেষ'}</span>`;
+            const catTxt=bookMainCat(b); const catBadge=catTxt?`<span class="badge b-cat">${escapeHTML(catTxt)}</span>`:'';
+            badges.innerHTML=catBadge+`<span class="${inStock?'badge b-ok':'badge b-out'}"><span class="stock-dot"></span>${inStock?'স্টক আছে — আজই অর্ডার করুন':'স্টক শেষ'}</span>`;
             if(!inStock){
                 ['btnCart','btnBuy','stickyBuy'].forEach(id=>{
                     const el=document.getElementById(id);
@@ -737,8 +777,8 @@ function loadBook(){
     document.getElementById('deliveryText').innerText=`ঢাকায় ডেলিভারি: ১-২ কার্যদিবস`;
     updateWLUI();
 
-    const bCats=bookCats(b);
-    const related=books.filter((rb,i)=>i!==idx&&rb.author!==b.author&&(rb.subject===b.subject||bookCats(rb).some(c=>bCats.includes(c)))).slice(0,8);
+    const _mc=bookMainCat(b), _tg=bookTags(b);
+    const related=books.filter((rb,i)=>i!==idx&&(isBook?rb.author!==b.author:true)&&((_mc&&bookMainCat(rb)===_mc)||(rb.subject&&rb.subject===b.subject)||bookTags(rb).some(t=>_tg.includes(t)))).slice(0,8);
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
     else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'"><img src="${rImg}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
 
@@ -756,12 +796,15 @@ function updateSEO(b,idx,bookImg,desc){
     const SITE='https://gronthokanon.com';
     const pageUrl=SITE+'/book.html?id='+idx;
     const absImg=/^https?:\/\//.test(bookImg)?bookImg:SITE+'/'+bookImg;
+    const isBook=(b.type||'বই')==='বই';
+    const byLine=isBook&&b.author?` — ${b.author}`:b.brand?` — ${b.brand}`:'';
+    const brandName=isBook?(b.pub||'গ্রন্থকানন'):(b.brand||'গ্রন্থকানন');
     const metaDesc=document.getElementById('metaDesc');
-    if(metaDesc)metaDesc.setAttribute('content',`${b.name} — ${b.author}। মূল্য ৳${b.price}${b.original_price>b.price?` (${discPct(b)}% ছাড়)`:''}। ${b.pub||'গ্রন্থকানন'} | ক্যাশ অন ডেলিভারিতে অর্ডার করুন গ্রন্থকানন থেকে।`);
+    if(metaDesc)metaDesc.setAttribute('content',`${b.name}${byLine}। মূল্য ৳${b.price}${b.original_price>b.price?` (${discPct(b)}% ছাড়)`:''}। ${brandName} | ক্যাশ অন ডেলিভারিতে অর্ডার করুন গ্রন্থকানন থেকে।`);
     const canon=document.getElementById('canonicalLink');
     if(canon)canon.setAttribute('href',pageUrl);
     /* og ট্যাগ (শেয়ার প্রিভিউ) */
-    [['og:title',`${b.name} — ${b.author} | গ্রন্থকানন`],['og:description',`মূল্য ৳${b.price} | ক্যাশ অন ডেলিভারি | গ্রন্থকানন`],['og:image',absImg],['og:url',pageUrl],['og:type','product']].forEach(([p,c])=>{
+    [[`og:title`,`${b.name}${byLine} | গ্রন্থকানন`],['og:description',`মূল্য ৳${b.price} | ক্যাশ অন ডেলিভারি | গ্রন্থকানন`],['og:image',absImg],['og:url',pageUrl],['og:type','product']].forEach(([p,c])=>{
         let m=document.querySelector(`meta[property="${p}"]`);
         if(!m){m=document.createElement('meta');m.setAttribute('property',p);document.head.appendChild(m);}
         m.setAttribute('content',c);
@@ -773,7 +816,7 @@ function updateSEO(b,idx,bookImg,desc){
         "name":b.name,
         "image":absImg,
         "description":desc,
-        "brand":{"@type":"Brand","name":b.pub||'গ্রন্থকানন'},
+        "brand":{"@type":"Brand","name":brandName},
         "offers":{
             "@type":"Offer",
             "url":pageUrl,
@@ -783,7 +826,7 @@ function updateSEO(b,idx,bookImg,desc){
             "seller":{"@type":"Organization","name":"গ্রন্থকানন"}
         }
     };
-    if(b.author)ld.description=`${b.author} রচিত "${b.name}"। `+desc;
+    if(isBook&&b.author)ld.description=`${b.author} রচিত "${b.name}"। `+desc;
     const s=document.createElement('script');
     s.type='application/ld+json';
     s.textContent=JSON.stringify(ld);
@@ -829,7 +872,7 @@ function bkRunSearch(){
             <img src="${escapeHTML(img)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='book-placeholder.svg'">
             <div style="flex:1;min-width:0;">
                 <div class="bks-name">${escapeHTML(b.name)}</div>
-                <div class="bks-auth">✍️ ${escapeHTML(b.author||'')}</div>
+                ${(b.type||'বই')==='বই' ? `<div class="bks-auth">✍️ ${escapeHTML(b.author||'')}</div>` : (b.brand ? `<div class="bks-auth">🏷️ ${escapeHTML(b.brand)}</div>` : '')}
                 <div class="bks-price">৳ ${b.price}</div>
             </div></div>`;
     }).join('');
@@ -993,14 +1036,14 @@ function playVideo(){
 let selectedTags=[];
 function loadAISuggest(b){
     if(!b||!books)return;
-    const bCats=bookCats(b);
-    const tags=bCats.slice();
+    const own=[]; const mc=bookMainCat(b); if(mc)own.push(mc); bookTags(b).forEach(t=>{if(!own.includes(t))own.push(t);});
+    const tags=own.slice();
     if(b.subject&&!tags.includes(b.subject))tags.push(b.subject);
-    const cats=[...new Set(books.flatMap(bookCats).filter(Boolean))].slice(0,5);
-    cats.forEach(c=>{if(!tags.includes(c))tags.push(c);});
+    const more=[...new Set(books.map(bookMainCat).filter(Boolean))].slice(0,5);
+    more.forEach(c=>{if(!tags.includes(c))tags.push(c);});
     const uniqueTags=[...new Set(tags)].slice(0,5);
-    document.getElementById('aiTagRow').innerHTML=uniqueTags.map(t=>`<div class="ai-tag${bCats.includes(t)?' sel':''}" onclick="toggleAiTag(this,'${escapeHTML(t)}')">${escapeHTML(t)}</div>`).join('');
-    selectedTags=bCats.length?bCats.slice():[b.cat];
+    document.getElementById('aiTagRow').innerHTML=uniqueTags.map(t=>`<div class="ai-tag${own.includes(t)?' sel':''}" onclick="toggleAiTag(this,'${escapeHTML(t)}')">${escapeHTML(t)}</div>`).join('');
+    selectedTags=own.length?own.slice():(mc?[mc]:[]);
     renderAISuggest();
 }
 function toggleAiTag(el,tag){
@@ -1011,7 +1054,7 @@ function toggleAiTag(el,tag){
 function renderAISuggest(){
     const pool=books.filter((b,i)=>{
         if(i===curIdx)return false;
-        return selectedTags.some(t=>bookCats(b).includes(t)||b.subject===t);
+        return selectedTags.some(t=>bookMainCat(b)===t||bookTags(b).includes(t)||b.subject===t);
     });
     pool.sort(()=>Math.random()-0.5);
     const picks=pool.slice(0,8);

@@ -1105,9 +1105,11 @@
                         <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
                         <div class="form-group"><label class="be-label">বিভাগ (Category) *</label>
                             <select class="form-input" id="gk_cat_add" onchange="gkOnCatChange('add')"></select>
+                            <input class="form-input" id="gk_catnew_add" placeholder="বা নতুন বিভাগ লিখুন" style="margin-top:5px;">
                         </div>
                         <div class="form-group"><label class="be-label">উপ-বিভাগ (Sub-category)</label>
                             <select class="form-input" id="gk_subcat_add"></select>
+                            <input class="form-input" id="gk_subcatnew_add" placeholder="বা নতুন উপ-বিভাগ লিখুন" style="margin-top:5px;">
                         </div>
                         <div class="form-group editor-full"><label class="be-label">ট্যাগ (একাধিক বাছাই করা যাবে)</label>
                             <div id="gk_tagbox_add"></div>
@@ -2067,6 +2069,8 @@ function beFillAddForm(){
     const ty=document.getElementById('fa_type'); if(ty)ty.value='বই';
     const mc=document.getElementById('gk_cat_add'); if(mc)mc.innerHTML=gkMainCatOptions('');
     const sc=document.getElementById('gk_subcat_add'); if(sc)sc.innerHTML=gkSubcatOptions('','');
+    const cn=document.getElementById('gk_catnew_add'); if(cn)cn.value='';
+    const scn=document.getElementById('gk_subcatnew_add'); if(scn)scn.value='';
     const tb=document.getElementById('gk_tagbox_add'); if(tb)tb.innerHTML=gkTagChecksHtml('add',[]);
     const cov=document.getElementById('fa_cover'); if(cov)cov.innerHTML=beCoverOptionsHtml('Paperback');
     const subj=document.getElementById('fa_subject'); if(subj)subj.innerHTML=beSubjectOptionsHtml('');
@@ -2123,8 +2127,8 @@ function beAddBook(){
     if(!name){showToast('নাম দিন','#dc2626');return;}
     const type=g('fa_type').value||'বই';
     const isBook=type==='বই';
-    const mainCat=g('gk_cat_add').value||(isBook?'ইসলামি বই':'Sunnah Item');
-    const subcat=g('gk_subcat_add').value||'';
+    const mainCat=(g('gk_catnew_add')?.value||'').trim()||g('gk_cat_add').value||(isBook?'ইসলামি বই':'Sunnah Item');
+    const subcat=(g('gk_subcatnew_add')?.value||'').trim()||g('gk_subcat_add').value||'';
     const tags=gkReadTags('add');
     const newBook={
         type,
@@ -2191,8 +2195,8 @@ function beSaveBook(idx){
         delete b.author; delete b.subject; delete b.cover; delete b.pub; delete b.pages;
     }
     /* বিভাগ + উপ-বিভাগ + ট্যাগ */
-    b.cat=g('gk_cat_'+idx).value||'';
-    b.subcat=g('gk_subcat_'+idx).value||'';
+    b.cat=(g('gk_catnew_'+idx)?.value||'').trim()||g('gk_cat_'+idx).value||'';
+    b.subcat=(g('gk_subcatnew_'+idx)?.value||'').trim()||g('gk_subcat_'+idx).value||'';
     b.tags=gkReadTags(idx);
     delete b.cats; /* পুরনো multi-cat field সরানো */
     beUpdateStats();
@@ -2338,9 +2342,11 @@ function beEditorBody(b,i,imgPrevHtml){
                     <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
                     <div class="form-group"><label class="be-label">বিভাগ (Category) *</label>
                         <select class="form-input" id="gk_cat_${i}" onchange="gkOnCatChange('${i}')">${gkMainCatOptions(bookMainCat(b))}</select>
+                        <input class="form-input" id="gk_catnew_${i}" placeholder="বা নতুন বিভাগ লিখুন" style="margin-top:5px;">
                     </div>
                     <div class="form-group"><label class="be-label">উপ-বিভাগ (Sub-category)</label>
                         <select class="form-input" id="gk_subcat_${i}">${gkSubcatOptions(bookMainCat(b), bookSubcat(b))}</select>
+                        <input class="form-input" id="gk_subcatnew_${i}" placeholder="বা নতুন উপ-বিভাগ লিখুন" style="margin-top:5px;">
                     </div>
                     <div class="form-group editor-full"><label class="be-label">ট্যাগ (একাধিক বাছাই করা যাবে)</label>
                         ${gkTagChecksHtml(i, bookTags(b))}
@@ -2406,16 +2412,28 @@ function bookTags(b){
     src.forEach(c=>{ const t=GK_OLD_TAGMAP[c]; if(t&&!out.includes(t))out.push(t); });
     return out;
 }
+/* ট্যাগ-নাম কখনো ক্যাটাগরি হিসেবে দেখাবে না (পুরনো বইয়ে ট্যাগ-মান cat-এ বসানো ছিল) */
+const GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+/* বিভাগ তালিকা = taxonomy + যেসব বিভাগ ইতিমধ্যে প্রোডাক্টে ব্যবহৃত (নিজে লেখা নতুনও এতে যোগ হয়) — ট্যাগ-নাম বাদ */
+function gkAllMainCats(){
+    const s=new Set(GK_CAT_TREE.map(c=>c.name));
+    (localBooks||[]).forEach(b=>{ const c=(b&&b.cat)||''; if(c&&!GK_TAG_NAMES.has(c))s.add(c); });
+    return [...s];
+}
+function gkAllSubcats(catName){
+    const cat=gkFindCat(catName); const s=new Set(cat?cat.subs:[]);
+    (localBooks||[]).forEach(b=>{ if(b&&b.cat===catName&&b.subcat)s.add(b.subcat); });
+    return [...s];
+}
 function gkMainCatOptions(sel){
-    sel=sel||'';
+    sel=sel||''; const cats=gkAllMainCats();
+    if(sel&&!cats.includes(sel))cats.push(sel);
     let h='<option value="">— বিভাগ বাছুন —</option>';
-    h+=GK_CAT_TREE.map(c=>`<option value="${escapeHTML(c.name)}"${c.name===sel?' selected':''}>${c.emoji} ${escapeHTML(c.name)}</option>`).join('');
-    if(sel&&!GK_CAT_TREE.some(c=>c.name===sel))h+=`<option value="${escapeHTML(sel)}" selected>${escapeHTML(sel)} (পুরনো)</option>`;
+    h+=cats.map(c=>`<option value="${escapeHTML(c)}"${c===sel?' selected':''}>${escapeHTML(c)}</option>`).join('');
     return h;
 }
 function gkSubcatOptions(catName, selSub){
-    selSub=selSub||'';
-    const cat=gkFindCat(catName); const subs=cat?cat.subs.slice():[];
+    selSub=selSub||''; const subs=gkAllSubcats(catName);
     if(selSub&&!subs.includes(selSub))subs.unshift(selSub);
     return '<option value="">— উপ-বিভাগ (ঐচ্ছিক) —</option>'+subs.map(s=>`<option value="${escapeHTML(s)}"${s===selSub?' selected':''}>${escapeHTML(s)}</option>`).join('');
 }
@@ -2428,7 +2446,7 @@ function gkTagChecksHtml(prefix, tags){
     tags=tags||[];
     return '<div class="gk-tag-checks">'+GK_TAGS.map(t=>{
         const on=tags.includes(t.name);
-        return `<label class="gk-tag-check${on?' on':''}"><input type="checkbox" class="gk_tag_${prefix}" value="${escapeHTML(t.name)}"${on?' checked':''} onchange="this.parentNode.classList.toggle('on',this.checked)"> ${t.emoji} ${escapeHTML(t.name)}</label>`;
+        return `<label class="gk-tag-check${on?' on':''}"><input type="checkbox" class="gk_tag_${prefix}" value="${escapeHTML(t.name)}"${on?' checked':''} onchange="this.parentNode.classList.toggle('on',this.checked)"> ${escapeHTML(t.name)}</label>`;
     }).join('')+'</div>';
 }
 function gkReadTags(prefix){
