@@ -313,6 +313,11 @@
         .stock-off{color:var(--danger);background:var(--danger-bg);box-shadow:0 2px 8px rgba(239,68,68,0.15);}
         .stock-off:hover{background:rgba(239,68,68,0.2);box-shadow:0 4px 12px rgba(239,68,68,0.25);}
         /* ── এডিটরে বিভাগ চিপ + স্টক ── */
+        /* ট্যাগ চেকবক্স (Best Selling/New Arrived/Trending ইত্যাদি) */
+        .gk-tag-checks{display:flex;flex-wrap:wrap;gap:7px;}
+        .gk-tag-check{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;user-select:none;background:var(--bg);transition:var(--trans);}
+        .gk-tag-check input{margin:0;cursor:pointer;width:15px;height:15px;accent-color:var(--primary);}
+        .gk-tag-check.on{background:var(--primary-light);border-color:var(--primary);color:var(--primary);}
         .be-cat-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:20px;}
         .be-cat-chip{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);border:1px solid rgba(11,110,79,0.3);border-radius:20px;padding:4px 6px 4px 11px;font-size:12px;font-weight:700;}
         .be-cat-chip button{background:rgba(11,110,79,0.18);color:var(--primary);border:none;border-radius:50%;width:17px;height:17px;line-height:1;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -741,7 +746,10 @@
             <input class="form-input" id="adminPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
         </div>
         <button class="btn btn-primary w-full" id="loginBtn" onclick="adminLogin()">লগইন করুন →</button>
-        <div style="margin-top:14px;text-align:center;">
+        <div style="margin-top:12px;text-align:center;">
+            <a href="#" id="forgotPassLink" onclick="adminForgotPass(event)" style="font-size:12px;color:#60a5fa;text-decoration:none;">পাসওয়ার্ড ভুলে গেছেন?</a>
+        </div>
+        <div style="margin-top:8px;text-align:center;">
             <a href="#" id="modSignupLink" onclick="toggleModSignup(event)" style="font-size:12px;color:#94a3b8;text-decoration:none;">মডারেটর হতে চান? অ্যাকাউন্ট খুলুন</a>
         </div>
     </div>
@@ -1095,14 +1103,14 @@
                         </div>
                         <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="fa_price" type="number" placeholder="250"></div>
                         <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
-                        <div class="form-group editor-full">
-                            <label class="be-label">বিভাগ (একাধিক দেওয়া যাবে)</label>
-                            <div class="be-cat-chips" id="beCatChips_add"></div>
-                            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;">
-                                <select class="form-input" id="beCatSelect_add" onchange="beCatAddFromSelect('add')" style="flex:2;min-width:130px;"><option value="">＋ তালিকা থেকে বিভাগ যোগ করুন</option></select>
-                                <input class="form-input" id="beCatNew_add" placeholder="নতুন বিভাগের নাম" style="flex:1;min-width:110px;" onkeydown="if(event.key==='Enter'){event.preventDefault();beCatAddNew('add');}">
-                                <button class="btn btn-ghost btn-sm" type="button" onclick="beCatAddNew('add')" style="flex-shrink:0;">যোগ</button>
-                            </div>
+                        <div class="form-group"><label class="be-label">বিভাগ (Category) *</label>
+                            <select class="form-input" id="gk_cat_add" onchange="gkOnCatChange('add')"></select>
+                        </div>
+                        <div class="form-group"><label class="be-label">উপ-বিভাগ (Sub-category)</label>
+                            <select class="form-input" id="gk_subcat_add"></select>
+                        </div>
+                        <div class="form-group editor-full"><label class="be-label">ট্যাগ (একাধিক বাছাই করা যাবে)</label>
+                            <div id="gk_tagbox_add"></div>
                         </div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label>
                             <div style="display:flex;gap:8px;">
@@ -1454,6 +1462,23 @@ function toggleModSignup(e){
     document.getElementById('loginSub').innerText=modMode?'অ্যাকাউন্ট খোলার পর মালিকের অনুমোদন লাগবে':'শুধুমাত্র অনুমোদিত admin এর জন্য';
     document.getElementById('loginBtn').innerText=modMode?'অ্যাকাউন্ট খুলুন →':'লগইন করুন →';
     document.getElementById('modSignupLink').innerText=modMode?'← লগইনে ফিরে যান':'মডারেটর হতে চান? অ্যাকাউন্ট খুলুন';
+}
+async function adminForgotPass(e){
+    if(e)e.preventDefault();
+    const email=document.getElementById('adminEmail').value.trim();
+    const err=document.getElementById('loginErr');
+    err.innerText='';err.style.color='#f87171';
+    if(!email){err.innerText='আগে উপরের ঘরে আপনার ইমেইল লিখুন, তারপর এখানে চাপুন';return;}
+    try{
+        await auth.sendPasswordResetEmail(email);
+        err.style.color='#34d399';
+        err.innerText='✅ '+email+'-এ রিসেট লিংক পাঠানো হয়েছে। Gmail খুলে (Spam-ও দেখুন) ১ ঘণ্টার মধ্যে নতুন লিংকে ক্লিক করে পাসওয়ার্ড দিন।';
+    }catch(ex){
+        if(ex.code==='auth/user-not-found')err.innerText='এই ইমেইলে কোনো অ্যাকাউন্ট নেই — বানান ঠিক আছে কিনা দেখুন';
+        else if(ex.code==='auth/invalid-email')err.innerText='ইমেইলটা ঠিকমতো লিখুন';
+        else if(ex.code==='auth/too-many-requests')err.innerText='একটু পরে আবার চেষ্টা করুন';
+        else err.innerText='রিসেট ইমেইল পাঠানো যায়নি — ইন্টারনেট দেখুন';
+    }
 }
 async function adminLogin(){
     const email=document.getElementById('adminEmail').value.trim();
@@ -2038,15 +2063,15 @@ function beSetFilter(f){
 }
 
 function beFillAddForm(){
-    beCatSel['add']=[];
     beAttrSel['add']=[];
     const ty=document.getElementById('fa_type'); if(ty)ty.value='বই';
-    const cs=document.getElementById('beCatSelect_add'); if(cs)cs.innerHTML='<option value="">＋ তালিকা থেকে বিভাগ যোগ করুন</option>'+beCatSelectOptions();
+    const mc=document.getElementById('gk_cat_add'); if(mc)mc.innerHTML=gkMainCatOptions('');
+    const sc=document.getElementById('gk_subcat_add'); if(sc)sc.innerHTML=gkSubcatOptions('','');
+    const tb=document.getElementById('gk_tagbox_add'); if(tb)tb.innerHTML=gkTagChecksHtml('add',[]);
     const cov=document.getElementById('fa_cover'); if(cov)cov.innerHTML=beCoverOptionsHtml('Paperback');
     const subj=document.getElementById('fa_subject'); if(subj)subj.innerHTML=beSubjectOptionsHtml('');
     const au=document.getElementById('fa_author'); if(au)au.innerHTML=beOptionsHtml(beListFrom('author'),'');
     const pb=document.getElementById('fa_pub'); if(pb)pb.innerHTML=beOptionsHtml(beListFrom('pub'),'');
-    beRenderCatChips('add');
     beRenderAttrRows('add');
     faOnTypeChange();
 }
@@ -2098,14 +2123,17 @@ function beAddBook(){
     if(!name){showToast('নাম দিন','#dc2626');return;}
     const type=g('fa_type').value||'বই';
     const isBook=type==='বই';
-    const cats=(beCatSel['add']||[]).filter(Boolean);
+    const mainCat=g('gk_cat_add').value||(isBook?'ইসলামি বই':'Sunnah Item');
+    const subcat=g('gk_subcat_add').value||'';
+    const tags=gkReadTags('add');
     const newBook={
         type,
         name,
         price:Number(g('fa_price').value)||0,
         original_price:Number(g('fa_oprice').value)||0,
-        cat:cats[0]||(isBook?'ইসলামি বই':'Stationery'),
-        cats:cats.length?cats:[isBook?'ইসলামি বই':'Stationery'],
+        cat:mainCat,
+        subcat:subcat,
+        tags:tags,
         img:g('fa_img').value.trim(),
         desc:g('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
     };
@@ -2124,7 +2152,6 @@ function beAddBook(){
     }
     localBooks.push(newBook);
     ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand'].forEach(id=>{const el=g(id);if(el)el.value='';});
-    beCatSel['add']=[];
     beAttrSel['add']=[];
     beToggleAddForm();
     beOpenIdx=localBooks.length-1;
@@ -2163,10 +2190,11 @@ function beSaveBook(idx){
         b.attributes=(beAttrSel[idx]||[]).filter(a=>a.label&&a.label.trim());
         delete b.author; delete b.subject; delete b.cover; delete b.pub; delete b.pages;
     }
-    /* বিভাগ (multi): cats array + প্রথমটা cat-এ (পুরনো কোডের সাথে মিল রাখতে) */
-    const cats=(beCatSel[idx]||[]).filter(Boolean);
-    b.cats=cats;
-    b.cat=cats[0]||'';
+    /* বিভাগ + উপ-বিভাগ + ট্যাগ */
+    b.cat=g('gk_cat_'+idx).value||'';
+    b.subcat=g('gk_subcat_'+idx).value||'';
+    b.tags=gkReadTags(idx);
+    delete b.cats; /* পুরনো multi-cat field সরানো */
     beUpdateStats();
     beRenderList();
     beOpenIdx=idx;
@@ -2308,14 +2336,14 @@ function beEditorBody(b,i,imgPrevHtml){
                     </div>
                     <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="be_price_${i}" type="number" value="${b.price}"></div>
                     <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
-                    <div class="form-group editor-full">
-                        <label class="be-label">বিভাগ (একাধিক দেওয়া যাবে)</label>
-                        <div class="be-cat-chips" id="beCatChips_${i}">${beCatChipsMarkup(i)}</div>
-                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;">
-                            <select class="form-input" id="beCatSelect_${i}" onchange="beCatAddFromSelect('${i}')" style="flex:2;min-width:130px;"><option value="">＋ তালিকা থেকে বিভাগ যোগ করুন</option>${beCatSelectOptions()}</select>
-                            <input class="form-input" id="beCatNew_${i}" placeholder="নতুন বিভাগের নাম" style="flex:1;min-width:110px;" onkeydown="if(event.key==='Enter'){event.preventDefault();beCatAddNew('${i}');}">
-                            <button class="btn btn-ghost btn-sm" type="button" onclick="beCatAddNew('${i}')" style="flex-shrink:0;">যোগ</button>
-                        </div>
+                    <div class="form-group"><label class="be-label">বিভাগ (Category) *</label>
+                        <select class="form-input" id="gk_cat_${i}" onchange="gkOnCatChange('${i}')">${gkMainCatOptions(bookMainCat(b))}</select>
+                    </div>
+                    <div class="form-group"><label class="be-label">উপ-বিভাগ (Sub-category)</label>
+                        <select class="form-input" id="gk_subcat_${i}">${gkSubcatOptions(bookMainCat(b), bookSubcat(b))}</select>
+                    </div>
+                    <div class="form-group editor-full"><label class="be-label">ট্যাগ (একাধিক বাছাই করা যাবে)</label>
+                        ${gkTagChecksHtml(i, bookTags(b))}
                     </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
@@ -2342,6 +2370,69 @@ function beEditorBody(b,i,imgPrevHtml){
                         মুছুন
                     </button>
                 </div>`;
+}
+
+/* ═══════════════════════════════════════════════
+   ক্যাটাগরি + সাব-ক্যাটাগরি + ট্যাগ সিস্টেম
+   (পুরনো cat/cats field gracefully handle করা হয়)
+═══════════════════════════════════════════════ */
+const GK_CAT_TREE=[
+    {name:'ইসলামি বই', emoji:'📚', subs:['আকিদা','ফিকহ','হাদিস','তাফসির','সিরাত']},
+    {name:'একাডেমিক বই', emoji:'📖', subs:['ক্লাস ১-৫','ক্লাস ৬-১০','HSC']},
+    {name:'মাদ্রাসার বই', emoji:'🕌', subs:['নাহু-সরফ','কিতাব']},
+    {name:'আত্মউন্নয়ন বই', emoji:'🌱', subs:['মোটিভেশন','লিডারশিপ']},
+    {name:'English বই', emoji:'🇬🇧', subs:[]},
+    {name:'Sunnah Item', emoji:'🧴', subs:['আতর','মিসওয়াক','কালোজিরা']},
+    {name:'পোশাক', emoji:'👕', subs:['পাঞ্জাবি','টুপি','হিজাব']},
+    {name:'খাবার', emoji:'🍯', subs:['মধু','খেজুর']}
+];
+const GK_TAGS=[
+    {name:'Best Selling', emoji:'⭐'},
+    {name:'New Arrived', emoji:'🆕'},
+    {name:'Trending', emoji:'🔥'},
+    {name:'Pre Order', emoji:'📦'},
+    {name:'Best Writer', emoji:'✍️'}
+];
+/* পুরনো cat/cats-এ ট্যাগ-জাতীয় মান → নতুন ট্যাগে ম্যাপ */
+const GK_OLD_TAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
+
+function gkFindCat(name){ return GK_CAT_TREE.find(c=>c.name===name); }
+function bookMainCat(b){ return (b&&b.cat)||(b&&Array.isArray(b.cats)&&b.cats[0])||''; }
+function bookSubcat(b){ return (b&&b.subcat)||''; }
+function bookTags(b){
+    if(b&&Array.isArray(b.tags))return b.tags;
+    /* পুরনো বই: cats থেকে ট্যাগ derive (না ভেঙে) */
+    const out=[]; const src=(b&&Array.isArray(b.cats))?b.cats:(b&&b.cat?[b.cat]:[]);
+    src.forEach(c=>{ const t=GK_OLD_TAGMAP[c]; if(t&&!out.includes(t))out.push(t); });
+    return out;
+}
+function gkMainCatOptions(sel){
+    sel=sel||'';
+    let h='<option value="">— বিভাগ বাছুন —</option>';
+    h+=GK_CAT_TREE.map(c=>`<option value="${escapeHTML(c.name)}"${c.name===sel?' selected':''}>${c.emoji} ${escapeHTML(c.name)}</option>`).join('');
+    if(sel&&!GK_CAT_TREE.some(c=>c.name===sel))h+=`<option value="${escapeHTML(sel)}" selected>${escapeHTML(sel)} (পুরনো)</option>`;
+    return h;
+}
+function gkSubcatOptions(catName, selSub){
+    selSub=selSub||'';
+    const cat=gkFindCat(catName); const subs=cat?cat.subs.slice():[];
+    if(selSub&&!subs.includes(selSub))subs.unshift(selSub);
+    return '<option value="">— উপ-বিভাগ (ঐচ্ছিক) —</option>'+subs.map(s=>`<option value="${escapeHTML(s)}"${s===selSub?' selected':''}>${escapeHTML(s)}</option>`).join('');
+}
+function gkOnCatChange(prefix){
+    const catEl=document.getElementById('gk_cat_'+prefix); if(!catEl)return;
+    const subSel=document.getElementById('gk_subcat_'+prefix);
+    if(subSel)subSel.innerHTML=gkSubcatOptions(catEl.value,'');
+}
+function gkTagChecksHtml(prefix, tags){
+    tags=tags||[];
+    return '<div class="gk-tag-checks">'+GK_TAGS.map(t=>{
+        const on=tags.includes(t.name);
+        return `<label class="gk-tag-check${on?' on':''}"><input type="checkbox" class="gk_tag_${prefix}" value="${escapeHTML(t.name)}"${on?' checked':''} onchange="this.parentNode.classList.toggle('on',this.checked)"> ${t.emoji} ${escapeHTML(t.name)}</label>`;
+    }).join('')+'</div>';
+}
+function gkReadTags(prefix){
+    return [...document.querySelectorAll('.gk_tag_'+prefix)].filter(c=>c.checked).map(c=>c.value);
 }
 
 function beRenderList(){
@@ -2692,7 +2783,7 @@ function downloadSitemap(){
 
 /* ── DOWNLOAD book.js ── */
 function downloadBookJs(){
-    const FIELDS=['type','name','author','price','original_price','cat','subject','cover','pub','pages','brand','img','desc'];
+    const FIELDS=['type','name','author','price','original_price','cat','subcat','subject','cover','pub','pages','brand','img','desc'];
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
     const esc=s=>String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r\n/g,'\\n').replace(/\r/g,'\\n').replace(/\n/g,'\\n');
     const lines=src.map(b=>{
@@ -2702,9 +2793,9 @@ function downloadBookJs(){
             if(f==='price'||f==='original_price')return `${f}: ${Number(v)||0}`;
             return `${f}: "${esc(v)}"`;
         });
-        /* multi-category: cats array রাখা হয় যেন ব্যাকআপেও একাধিক বিভাগ থাকে */
-        const cats=Array.isArray(b.cats)?b.cats:(b.cat?[b.cat]:[]);
-        fields.push(`cats: [${cats.map(c=>`"${esc(c)}"`).join(', ')}]`);
+        /* ট্যাগ array (Best Selling/New Arrived/Trending ইত্যাদি) — পুরনো cats থেকেও derive হয় */
+        const tags=Array.isArray(b.tags)?b.tags:bookTags(b);
+        fields.push(`tags: [${tags.map(c=>`"${esc(c)}"`).join(', ')}]`);
         /* সাধারণ প্রোডাক্টের কাস্টম বৈশিষ্ট্য (Size/Color/মেয়াদ ইত্যাদি) */
         const attrs=Array.isArray(b.attributes)?b.attributes.filter(a=>a&&a.label):[];
         fields.push(`attributes: [${attrs.map(a=>`{label: "${esc(a.label)}", value: "${esc(a.value||'')}"}`).join(', ')}]`);
