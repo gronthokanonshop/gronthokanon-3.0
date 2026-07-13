@@ -195,7 +195,7 @@
         .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;}
 
         /* ── DASHBOARD ── */
-        .dash-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:16px;}
+        .dash-stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:16px;}
         .dash-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
         .quick-action-btn{
             background:var(--surface);border:1px solid var(--border);border-radius:12px;
@@ -883,6 +883,14 @@
                         <div class="stat-label">ডেলিভারড</div>
                         <div class="stat-trend trend-up" id="statDeliveredTrend" style="color:#0B6E4F;"></div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color:#fff;background:linear-gradient(135deg,#0B6E4F,#075A40);">
+                            <svg class="icon" style="stroke:#fff" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                        <div class="stat-val" id="statRevenue" style="color:#0B6E4F;">৳0</div>
+                        <div class="stat-label">মোট বিক্রয়</div>
+                        <div class="stat-trend" id="statRevenueTrend" style="color:#0B6E4F;"></div>
+                    </div>
                 </div>
 
                 <div class="sec-title" style="margin-bottom:12px;">দ্রুত অ্যাকশন</div>
@@ -899,6 +907,16 @@
                     <button class="quick-action-btn" onclick="switchTab('editor',document.getElementById('navEditor'))">
                         <div class="quick-action-icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></div>বই এডিট
                     </button>
+                </div>
+
+                <div class="chart-bar-wrap" style="margin-bottom:14px;">
+                    <div class="dash-panel-head" style="margin-bottom:2px;">
+                        <span><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> অর্ডার ট্রেন্ড (শেষ ৭ দিন)</span>
+                        <span class="dash-panel-link" onclick="switchTab('report',document.getElementById('navReport'))">বিস্তারিত রিপোর্ট →</span>
+                    </div>
+                    <div class="chart-bars" id="dashOrderTrend">
+                        <div class="loading-spin" style="padding:20px 0;width:100%;text-align:center;">লোড হচ্ছে...</div>
+                    </div>
                 </div>
 
                 <div class="dash-two-col">
@@ -2809,6 +2827,48 @@ function renderDashboard(){
 
     const deliveredTrendEl = document.getElementById('statDeliveredTrend');
     if(deliveredTrendEl) deliveredTrendEl.innerHTML = `${successRate}% সফল`;
+
+    // ── Total Revenue card ──
+    const revenueEl = document.getElementById('statRevenue');
+    if(revenueEl) revenueEl.innerText = '৳' + totalRevenue.toLocaleString('bn-BD');
+    const revenueTrendEl = document.getElementById('statRevenueTrend');
+    if(revenueTrendEl){
+        const todayRevenue = allOrders.filter(o => (now - (o.createdAt||0)) < ONE_DAY)
+            .reduce((s,o)=> s + (parseInt(String(o.total||'').replace(/[^\d]/g,''))||0), 0);
+        revenueTrendEl.innerHTML = todayRevenue>0
+            ? `<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> আজ +৳${todayRevenue.toLocaleString('bn-BD')}`
+            : `${allOrders.length} অর্ডার থেকে`;
+    }
+
+    // ── Order Trend chart (শেষ ৭ দিন) ──
+    const trendEl = document.getElementById('dashOrderTrend');
+    if(trendEl){
+        const days = [];
+        for(let i=6;i>=0;i--){
+            const d = new Date(now - i*ONE_DAY);
+            days.push({key: d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}), start: new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()});
+        }
+        const dayOrderCount = {}, dayRevenue = {};
+        days.forEach(d=>{dayOrderCount[d.key]=0;dayRevenue[d.key]=0;});
+        allOrders.forEach(o=>{
+            const d = new Date(o.createdAt||0);
+            const key = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+            if(key in dayOrderCount){
+                dayOrderCount[key]++;
+                dayRevenue[key]+=parseInt(String(o.total||'').replace(/[^\d]/g,''))||0;
+            }
+        });
+        const maxCount = Math.max(...days.map(d=>dayOrderCount[d.key]), 1);
+        trendEl.innerHTML = days.map(d=>{
+            const cnt = dayOrderCount[d.key];
+            const h = Math.max(Math.round((cnt/maxCount)*110), 4);
+            return `<div class="chart-bar-col">
+                <div class="chart-bar-val">${cnt}</div>
+                <div class="chart-bar" style="height:${h}px;" title="${cnt}টি অর্ডার · ৳${dayRevenue[d.key]}"></div>
+                <div class="chart-bar-lbl">${d.key}</div>
+            </div>`;
+        }).join('');
+    }
 
     // Recent orders (last 5)
     const recentEl=document.getElementById('dashRecentOrders');
