@@ -181,48 +181,46 @@
         .float-cart:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(5,150,105,0.5); }
 
 
-        /* ── CATEGORY SIDEBAR ── */
+        /* ── PAGE LAYOUT ── */
         .page-layout { display:flex; align-items:flex-start; }
-        .cat-sidebar {
-            width:110px;
-            flex-shrink:0;
-            position:sticky;
-            top:0;
-            height:calc(100vh - 120px);
-            overflow-y:auto;
-            background:var(--card);
-            border-right:1px solid var(--border);
-            scrollbar-width:none;
-            display:none;
-        }
-        .cat-sidebar.show { display:block; }
-        .cat-sidebar::-webkit-scrollbar { display:none; }
-        .cat-sidebar-item {
-            padding:14px 8px;
-            font-size:12px;
-            font-weight:700;
-            color:var(--text);
-            cursor:pointer;
-            border-radius:11px;
-            margin:7px 6px;
-            text-align:center;
-            line-height:1.35;
-            transition:transform .18s ease, box-shadow .18s ease;
-            word-break:break-word;
-            border-left:3px solid transparent;
-        }
-        .cat-sidebar-item:hover { transform:translateX(2px); box-shadow:0 3px 10px rgba(0,0,0,0.08); }
-        .cat-sidebar-item.active {
-            background:var(--green)!important;
-            color:#fff!important;
-            border-left-color:#064e3b!important;
-            box-shadow:0 3px 12px rgba(5,150,105,0.3);
-        }
         .page-right { flex:1; min-width:0; }
-        @media(max-width:430px) {
-            .cat-sidebar { width:82px; }
-            .cat-sidebar-item { font-size:10.5px; padding:11px 4px; margin:5px 4px; }
-        }
+        /* ── FILTER BUTTON (sort-row) ── */
+        .filter-open-btn { display:flex; align-items:center; gap:5px; padding:5px 12px; border-radius:0; font-size:11.5px; font-weight:700; cursor:pointer; border:1.5px solid var(--green); background:var(--green-light); color:var(--green-dark); white-space:nowrap; font-family:'Hind Siliguri',sans-serif; transition:.2s; flex-shrink:0; }
+        .filter-open-btn:hover { background:var(--green); color:#fff; }
+        .filter-open-btn .fcount { background:var(--green); color:#fff; border-radius:50%; min-width:16px; height:16px; font-size:9.5px; display:none; align-items:center; justify-content:center; padding:0 3px; }
+        [data-theme="dark"] .filter-open-btn { background:rgba(52,211,153,0.1); }
+        .filter-open-btn .fcount.show { display:inline-flex; }
+
+        /* ── FILTER DRAWER (নূরুল ইলম শপ স্টাইলে: ক্যাটাগরি রেডিও + দাম রেঞ্জ + বিশেষ চেকবক্স) ── */
+        .filter-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1998; display:none; opacity:0; transition:opacity .25s ease; }
+        .filter-overlay.show { display:block; opacity:1; }
+        .filter-drawer { position:fixed; top:0; left:0; bottom:0; width:290px; max-width:86vw; background:var(--card); z-index:1999; box-shadow:6px 0 30px rgba(0,0,0,0.25); transform:translateX(-100%); transition:transform .28s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; overflow:hidden; }
+        .filter-drawer.show { transform:translateX(0); }
+        .filter-drawer-head { display:flex; align-items:center; justify-content:space-between; padding:16px 18px; background:linear-gradient(135deg,#064e3b,#059669); color:#fff; flex-shrink:0; }
+        .filter-drawer-head b { font-size:15px; font-weight:800; }
+        .filter-drawer-close { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.16); border:none; color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .filter-drawer-close:hover { background:rgba(255,255,255,0.28); }
+        .filter-drawer-body { flex:1; overflow-y:auto; padding:16px 18px 10px; }
+        .filter-block { margin-bottom:22px; }
+        .filter-heading { font-size:13px; font-weight:800; color:var(--text); margin-bottom:10px; padding-bottom:6px; border-bottom:1.5px solid var(--border-g); }
+        .radio-item { display:flex; align-items:center; gap:10px; padding:7px 2px; cursor:pointer; font-size:13px; color:var(--text); }
+        .radio-item:hover { color:var(--green); }
+        .radio-dot { width:17px; height:17px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; position:relative; transition:.2s; }
+        .radio-item.active .radio-dot { border-color:var(--green); }
+        .radio-item.active .radio-dot::after { content:''; position:absolute; inset:3px; border-radius:50%; background:var(--green); }
+        .radio-item.active { color:var(--green); font-weight:700; }
+        .price-range-row { display:flex; align-items:center; gap:8px; }
+        .price-range-row input { flex:1; min-width:0; border:1.5px solid var(--border); background:var(--bg); border-radius:8px; padding:8px 10px; font-size:12.5px; color:var(--text); font-family:'Hind Siliguri',sans-serif; outline:none; transition:.2s; }
+        .price-range-row input:focus { border-color:var(--green); }
+        .price-range-row span { color:var(--text3); font-size:13px; flex-shrink:0; }
+        .filter-check { display:flex; align-items:center; gap:10px; padding:7px 2px; cursor:pointer; font-size:13px; color:var(--text); }
+        .filter-check input[type=checkbox] { width:17px; height:17px; accent-color:var(--green); cursor:pointer; flex-shrink:0; }
+        .filter-drawer-foot { padding:14px 18px; border-top:1px solid var(--border); flex-shrink:0; display:flex; gap:8px; }
+        .filter-apply-btn { flex:1; padding:11px; background:linear-gradient(135deg,#059669,#047857); color:#fff; border:none; border-radius:9px; font-weight:700; font-size:13.5px; cursor:pointer; font-family:'Hind Siliguri',sans-serif; box-shadow:0 3px 10px rgba(5,150,105,0.3); transition:.2s; }
+        .filter-apply-btn:hover { box-shadow:0 5px 16px rgba(5,150,105,0.4); }
+        .filter-reset-btn { padding:11px 14px; background:var(--bg); color:var(--text2); border:1.5px solid var(--border); border-radius:9px; font-weight:700; font-size:12.5px; cursor:pointer; font-family:'Hind Siliguri',sans-serif; }
+        .filter-reset-btn:hover { border-color:var(--green); color:var(--green); }
+
         /* SCROLL TOP */
         .scroll-top { position:fixed; bottom:22px; right:16px; width:40px; height:40px; background:var(--green); color:#fff; border:none; border-radius:0; font-size:18px; cursor:pointer; box-shadow:0 4px 14px rgba(5,150,105,0.35); z-index:997; display:none; transition:.2s; }
         .scroll-top.show { display:flex; align-items:center; justify-content:center; }
@@ -294,15 +292,22 @@
 
 <!-- SORT + COUNT -->
 <div class="sort-row">
-    <div class="sort-select-wrap">
-        <select class="sort-select" id="sortSelect" onchange="sortBooks(this.value)">
-            <option value="default">🔀 ডিফল্ট</option>
-            <option value="price-low">💰 কম দামে</option>
-            <option value="price-high">💎 বেশি দামে</option>
-            <option value="discount">🔥 বেশি ছাড়ে</option>
-            <option value="alpha">🔤 নাম অনুযায়ী</option>
-        </select>
-        <span class="sort-select-arrow">▾</span>
+    <div style="display:flex;align-items:center;gap:8px;">
+        <div class="filter-open-btn" onclick="openFilterDrawer()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            ফিল্টার
+            <span class="fcount" id="filterCount">0</span>
+        </div>
+        <div class="sort-select-wrap">
+            <select class="sort-select" id="sortSelect" onchange="sortBooks(this.value)">
+                <option value="default">🔀 ডিফল্ট</option>
+                <option value="price-low">💰 কম দামে</option>
+                <option value="price-high">💎 বেশি দামে</option>
+                <option value="discount">🔥 বেশি ছাড়ে</option>
+                <option value="alpha">🔤 নাম অনুযায়ী</option>
+            </select>
+            <span class="sort-select-arrow">▾</span>
+        </div>
     </div>
     <div class="rcount" id="countText">...</div>
 </div>
@@ -314,7 +319,6 @@
 
 <!-- CONTENT -->
 <div class="page-layout">
-<div class="cat-sidebar" id="catSidebar"></div>
 <div class="page-right">
 <div id="mainContent">
     <div class="skel-grid" id="skelGrid">
@@ -331,6 +335,39 @@
     <div class="pagination" id="paginationBar" style="display:none;"></div>
 </div>
 </div>
+</div>
+
+<!-- FILTER DRAWER (ক্যাটাগরি রেডিও + দাম রেঞ্জ + বিশেষ চেকবক্স) -->
+<div class="filter-overlay" id="filterOverlay" onclick="closeFilterDrawer()"></div>
+<div class="filter-drawer" id="filterDrawer">
+    <div class="filter-drawer-head">
+        <b>🔍 ফিল্টার করুন</b>
+        <button class="filter-drawer-close" onclick="closeFilterDrawer()">×</button>
+    </div>
+    <div class="filter-drawer-body">
+        <div class="filter-block">
+            <div class="filter-heading">ক্যাটাগরি</div>
+            <div id="catRadioList"></div>
+        </div>
+        <div class="filter-block">
+            <div class="filter-heading">মূল্য পরিসীমা</div>
+            <div class="price-range-row">
+                <input type="number" id="priceMinInput" placeholder="সর্বনিম্ন" inputmode="numeric">
+                <span>–</span>
+                <input type="number" id="priceMaxInput" placeholder="সর্বোচ্চ" inputmode="numeric">
+            </div>
+        </div>
+        <div class="filter-block">
+            <div class="filter-heading">বিশেষ</div>
+            <label class="filter-check"><input type="checkbox" id="fltBestseller"> বেস্টসেলার</label>
+            <label class="filter-check"><input type="checkbox" id="fltSunnah"> সুন্নাহ আইটেম</label>
+            <label class="filter-check"><input type="checkbox" id="fltDiscount"> ছাড়যুক্ত পণ্য</label>
+        </div>
+    </div>
+    <div class="filter-drawer-foot">
+        <button class="filter-reset-btn" onclick="resetDrawerFilters()">রিসেট</button>
+        <button class="filter-apply-btn" onclick="applyDrawerFilters()">ফিল্টার প্রয়োগ করুন</button>
+    </div>
 </div>
 
 <div class="float-cart" onclick="goToCart()">
@@ -358,6 +395,8 @@ let filtered = [], currentSort = 'default';
 let filterTab = 'all', filterPill = '';
 let currentPage = 1;
 const PAGE_SIZE = 24;
+let drawerFilters = { min: null, max: null, bestseller: false, sunnah: false, discount: false };
+let drawerCategory = null; /* null = সব ক্যাটাগরি */
 
 function updateCounts() {
     const c = (JSON.parse(localStorage.getItem('gronthokanon_cart')) || []).length;
@@ -470,6 +509,11 @@ function getList() {
         else if (filterTab === 'pub') list = list.filter(b => b.pub === filterPill);
         else if (filterTab === 'auth') list = list.filter(b => b.author === filterPill);
     }
+    if (drawerFilters.min !== null) list = list.filter(b => b.price >= drawerFilters.min);
+    if (drawerFilters.max !== null) list = list.filter(b => b.price <= drawerFilters.max);
+    if (drawerFilters.bestseller) list = list.filter(b => bookCats(b).includes('Best Selling'));
+    if (drawerFilters.sunnah) list = list.filter(b => bookCats(b).includes('সুন্নাহ আইটেম'));
+    if (drawerFilters.discount) list = list.filter(b => discPct(b) > 0);
     if (currentSort === 'price-low') list.sort((a, b) => a.price - b.price);
     else if (currentSort === 'price-high') list.sort((a, b) => b.price - a.price);
     else if (currentSort === 'discount') list.sort((a, b) => discPct(b) - discPct(a));
@@ -606,6 +650,7 @@ const catIconMap = {
 };
 
 let activeCategory = value;
+if (type === 'cat') drawerCategory = value;
 
 if (type === 'cat') filtered = books.filter(b => bookCats(b).includes(value));
 else if (type === 'author') filtered = books.filter(b => b.author === value);
@@ -622,55 +667,95 @@ if (!type || type === 'all') {
     document.getElementById('filterTabs').style.display = 'flex';
 }
 
-/* ── CATEGORY SIDEBAR ── */
-function buildCatSidebar() {
-    if (type !== 'cat') return;
-    // categoryConfig থেকে নাও (সব category order সহ), না থাকলে books থেকে
+/* ── FILTER DRAWER ── */
+function allAvailableCats() {
     let allCats = [];
     if (typeof categoryConfig !== 'undefined' && categoryConfig.length) {
         allCats = categoryConfig.map(c => c.key || c.label || c).filter(Boolean);
     } else {
         allCats = [...new Set(books.flatMap(bookCats).filter(Boolean))];
     }
-    // শুধু যে category তে বই আছে সেগুলো দেখাও
-    allCats = allCats.filter(cat => books.some(b => bookCats(b).includes(cat)));
-    const sidebar = document.getElementById('catSidebar');
-    sidebar.classList.add('show');
-    /* প্রতিটি ক্যাটাগরির নিজস্ব রঙ (রাউন্ড চিপের সাথে মিলিয়ে) — আইকন ছাড়া শুধু টেক্সট */
-    const catColorMap = {
-        'Best Selling':'249,115,22','Trending':'16,185,129','নতুন প্রকাশিত':'234,179,8','Pre Order':'99,102,241',
-        'ইসলামি বই':'5,150,105','প্যাকেজসমূহ':'20,184,166','Academic':'59,130,246','দরসি কিতাব':'139,92,246',
-        'সুন্নাহ আইটেম':'245,158,11','Stationery':'236,72,153'
-    };
-    const palette = ['5,150,105','249,115,22','59,130,246','139,92,246','20,184,166','234,179,8','236,72,153','99,102,241'];
-    sidebar.innerHTML = allCats.map((cat, i) => {
-        const rgb = catColorMap[cat] || palette[i % palette.length];
-        const active = cat === activeCategory;
-        const style = active ? '' : `style="background:rgba(${rgb},0.14);border-left-color:rgb(${rgb});"`;
-        return `<div class="cat-sidebar-item ${active ? 'active' : ''}" ${style} onclick="switchCategory('${escapeHTML(cat)}')">${escapeHTML(cat)}</div>`;
-    }).join('');
+    return allCats.filter(cat => books.some(b => bookCats(b).includes(cat)));
 }
 
-function switchCategory(cat) {
-    activeCategory = cat;
-    filtered = books.filter(b => bookCats(b).includes(cat));
+function buildFilterDrawer() {
+    const allCats = allAvailableCats();
+    const list = document.getElementById('catRadioList');
+    let html = `<div class="radio-item ${!drawerCategory ? 'active' : ''}" onclick="selectDrawerCategory(null,this)"><span class="radio-dot"></span>সব ক্যাটাগরি</div>`;
+    html += allCats.map(cat =>
+        `<div class="radio-item ${drawerCategory === cat ? 'active' : ''}" onclick="selectDrawerCategory('${escapeHTML(cat)}',this)"><span class="radio-dot"></span>${escapeHTML(cat)}</div>`
+    ).join('');
+    list.innerHTML = html;
+    document.getElementById('priceMinInput').value = drawerFilters.min ?? '';
+    document.getElementById('priceMaxInput').value = drawerFilters.max ?? '';
+    document.getElementById('fltBestseller').checked = drawerFilters.bestseller;
+    document.getElementById('fltSunnah').checked = drawerFilters.sunnah;
+    document.getElementById('fltDiscount').checked = drawerFilters.discount;
+    updateFilterCount();
+}
+
+function selectDrawerCategory(cat, el) {
+    drawerCategory = cat;
+    document.querySelectorAll('#catRadioList .radio-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+}
+
+function openFilterDrawer() {
+    buildFilterDrawer();
+    document.getElementById('filterOverlay').classList.add('show');
+    document.getElementById('filterDrawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeFilterDrawer() {
+    document.getElementById('filterOverlay').classList.remove('show');
+    document.getElementById('filterDrawer').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+function updateFilterCount() {
+    let n = 0;
+    if (drawerCategory) n++;
+    if (drawerFilters.min !== null) n++;
+    if (drawerFilters.max !== null) n++;
+    if (drawerFilters.bestseller) n++;
+    if (drawerFilters.sunnah) n++;
+    if (drawerFilters.discount) n++;
+    const badge = document.getElementById('filterCount');
+    badge.innerText = n;
+    badge.classList.toggle('show', n > 0);
+}
+
+function applyDrawerFilters() {
+    const min = document.getElementById('priceMinInput').value;
+    const max = document.getElementById('priceMaxInput').value;
+    drawerFilters.min = min !== '' ? Number(min) : null;
+    drawerFilters.max = max !== '' ? Number(max) : null;
+    drawerFilters.bestseller = document.getElementById('fltBestseller').checked;
+    drawerFilters.sunnah = document.getElementById('fltSunnah').checked;
+    drawerFilters.discount = document.getElementById('fltDiscount').checked;
+
+    activeCategory = drawerCategory;
+    filtered = drawerCategory ? books.filter(b => bookCats(b).includes(drawerCategory)) : [...books];
     currentPage = 1;
-    currentSort = 'default';
-    document.getElementById('sortSelect').value = 'default';
-    document.getElementById('heroHeading').innerHTML = `<span>${escapeHTML(cat)}</span>`;
-    document.getElementById('titleText').innerText = '📚 ' + cat;
-    // sidebar active update
-    document.querySelectorAll('.cat-sidebar-item').forEach(el => {
-        el.classList.toggle('active', el.innerText.trim() === cat);
-    });
+    document.getElementById('heroHeading').innerHTML = `<span>${escapeHTML(drawerCategory || 'সকল বই')}</span>`;
+    document.getElementById('titleText').innerText = '📚 ' + (drawerCategory || 'সকল বই');
+
+    updateFilterCount();
+    closeFilterDrawer();
     renderBooks(getList());
     window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function resetDrawerFilters() {
+    drawerCategory = null;
+    drawerFilters = { min: null, max: null, bestseller: false, sunnah: false, discount: false };
+    buildFilterDrawer();
 }
 
 setTimeout(() => {
     document.getElementById('skelGrid').style.display = 'none';
     document.getElementById('bookGrid').style.display = 'block';
-    buildCatSidebar();
     renderBooks(getList());
 }, 600);
 /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
@@ -680,7 +765,7 @@ if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
     else if (type === 'author') filtered = books.filter(b => b.author === value);
     else if (type === 'pub') filtered = books.filter(b => b.pub === value);
     else filtered = [...books];
-    buildCatSidebar(); renderBooks(getList());
+    renderBooks(getList());
 });
 </script>
 <script src="common.js"></script>
