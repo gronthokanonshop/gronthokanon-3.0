@@ -1062,13 +1062,18 @@
                 <div id="beAddForm" style="display:none;margin-bottom:16px;background:var(--surface);border-radius:14px;border:1px solid var(--primary);padding:16px;">
                     <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;">নতুন বই যোগ করুন</div>
                     <div class="editor-grid">
-                        <div class="editor-full form-group"><label class="be-label">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="বইয়ের নাম"></div>
+                        <div class="form-group editor-full"><label class="be-label">প্রোডাক্ট টাইপ *</label>
+                            <select class="form-input" id="fa_type" onchange="faOnTypeChange()">
+                                <option value="বই">📚 বই</option>
+                                <option value="প্রোডাক্ট">🛍️ সাধারণ প্রোডাক্ট (স্টেশনারি/খাবার/পোশাক/সুন্নাহ আইটেম ইত্যাদি)</option>
+                            </select>
+                        </div>
+                        <div class="editor-full form-group"><label class="be-label" id="fa_nameLabel">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="বইয়ের নাম"></div>
+                        <div id="faBookFields" class="editor-grid editor-full" style="padding:0;">
                         <div class="form-group"><label class="be-label">লেখক</label>
                             <select class="form-input" id="fa_author" onchange="if(this.value)document.getElementById('fa_authornew').value='';"></select>
                             <input class="form-input" id="fa_authornew" placeholder="বা নতুন লেখক" style="margin-top:5px;">
                         </div>
-                        <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="fa_price" type="number" placeholder="250"></div>
-                        <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
                         <div class="form-group"><label class="be-label">প্রকাশনী</label>
                             <select class="form-input" id="fa_pub" onchange="if(this.value)document.getElementById('fa_pubnew').value='';"></select>
                             <input class="form-input" id="fa_pubnew" placeholder="বা নতুন প্রকাশনী" style="margin-top:5px;">
@@ -1079,6 +1084,17 @@
                             <select class="form-input" id="fa_subject" onchange="if(this.value)document.getElementById('fa_subjectnew').value='';"></select>
                             <input class="form-input" id="fa_subjectnew" placeholder="বা নতুন বিষয়" style="margin-top:5px;">
                         </div>
+                        </div>
+                        <div id="faProductFields" class="editor-grid editor-full" style="padding:0;display:none;">
+                        <div class="form-group"><label class="be-label">ব্র্যান্ড</label><input class="form-input" id="fa_brand" placeholder="যেমন: Muslim Corner"></div>
+                        <div class="form-group editor-full">
+                            <label class="be-label">অতিরিক্ত বৈশিষ্ট্য (Size, Color, মেয়াদ ইত্যাদি — যা প্রয়োজন যোগ করুন)</label>
+                            <div id="beAttrRows_add"></div>
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="beAttrAdd('add')" style="margin-top:4px;">＋ বৈশিষ্ট্য যোগ করুন</button>
+                        </div>
+                        </div>
+                        <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="fa_price" type="number" placeholder="250"></div>
+                        <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
                         <div class="form-group editor-full">
                             <label class="be-label">বিভাগ (একাধিক দেওয়া যাবে)</label>
                             <div class="be-cat-chips" id="beCatChips_add"></div>
@@ -1095,7 +1111,7 @@
                                 <input type="file" id="fa_imgfile" accept="image/*" style="display:none;" onchange="faUploadImg(this)">
                             </div>
                         </div>
-                        <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
+                        <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বিবরণ..."></textarea></div>
                     </div>
                     <div class="flex gap-2">
                         <button class="btn btn-primary" onclick="beAddBook()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> যোগ করুন ও Firebase-এ সেভ</button>
@@ -2023,13 +2039,48 @@ function beSetFilter(f){
 
 function beFillAddForm(){
     beCatSel['add']=[];
+    beAttrSel['add']=[];
+    const ty=document.getElementById('fa_type'); if(ty)ty.value='বই';
     const cs=document.getElementById('beCatSelect_add'); if(cs)cs.innerHTML='<option value="">＋ তালিকা থেকে বিভাগ যোগ করুন</option>'+beCatSelectOptions();
     const cov=document.getElementById('fa_cover'); if(cov)cov.innerHTML=beCoverOptionsHtml('Paperback');
     const subj=document.getElementById('fa_subject'); if(subj)subj.innerHTML=beSubjectOptionsHtml('');
     const au=document.getElementById('fa_author'); if(au)au.innerHTML=beOptionsHtml(beListFrom('author'),'');
     const pb=document.getElementById('fa_pub'); if(pb)pb.innerHTML=beOptionsHtml(beListFrom('pub'),'');
     beRenderCatChips('add');
+    beRenderAttrRows('add');
+    faOnTypeChange();
 }
+
+/* ─── প্রোডাক্ট টাইপ অনুযায়ী ফিল্ড টগল ─── */
+function faOnTypeChange(){
+    const t=document.getElementById('fa_type').value;
+    const isBook=t==='বই';
+    document.getElementById('faBookFields').style.display=isBook?'':'none';
+    document.getElementById('faProductFields').style.display=isBook?'none':'';
+    document.getElementById('fa_nameLabel').textContent=isBook?'বইয়ের নাম *':'প্রোডাক্টের নাম *';
+}
+function beOnTypeChange(idx){
+    const t=document.getElementById('be_type_'+idx).value;
+    const isBook=t==='বই';
+    document.getElementById('beBookFields_'+idx).style.display=isBook?'':'none';
+    document.getElementById('beProductFields_'+idx).style.display=isBook?'none':'';
+}
+
+/* ─── কাস্টম বৈশিষ্ট্য (Size/Color/মেয়াদ ইত্যাদি) — শুধু সাধারণ প্রোডাক্টের জন্য ─── */
+let beAttrSel={};   // 'add' বা idx → [{label,value}, ...]
+function beAttrRowsMarkup(key){
+    const rows=beAttrSel[key]||[];
+    if(!rows.length)return '<span class="be-cat-empty">কোনো বৈশিষ্ট্য যোগ করা হয়নি — নিচ থেকে যোগ করুন</span>';
+    return rows.map((a,ai)=>`<div style="display:flex;gap:6px;margin-bottom:6px;">
+        <input class="form-input" placeholder="নাম (যেমন: Size)" value="${escapeHTML(a.label||'')}" oninput="beAttrUpdate('${key}',${ai},'label',this.value)" style="flex:1;">
+        <input class="form-input" placeholder="মান (যেমন: Large)" value="${escapeHTML(a.value||'')}" oninput="beAttrUpdate('${key}',${ai},'value',this.value)" style="flex:1;">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="beAttrRemove('${key}',${ai})" style="flex-shrink:0;">×</button>
+    </div>`).join('');
+}
+function beRenderAttrRows(key){ const el=document.getElementById('beAttrRows_'+key); if(el)el.innerHTML=beAttrRowsMarkup(key); }
+function beAttrAdd(key){ beAttrSel[key]=beAttrSel[key]||[]; beAttrSel[key].push({label:'',value:''}); beRenderAttrRows(key); }
+function beAttrRemove(key,ai){ if(!beAttrSel[key])return; beAttrSel[key].splice(ai,1); beRenderAttrRows(key); }
+function beAttrUpdate(key,ai,field,val){ if(!beAttrSel[key]||!beAttrSel[key][ai])return; beAttrSel[key][ai][field]=val; }
 function beToggleAddForm(){
     beAddFormOpen=!beAddFormOpen;
     const form=document.getElementById('beAddForm');
@@ -2044,33 +2095,42 @@ function beToggleAddForm(){
 function beAddBook(){
     const g=id=>document.getElementById(id);
     const name=g('fa_name').value.trim();
-    if(!name){showToast('বইয়ের নাম দিন','#dc2626');return;}
+    if(!name){showToast('নাম দিন','#dc2626');return;}
+    const type=g('fa_type').value||'বই';
+    const isBook=type==='বই';
     const cats=(beCatSel['add']||[]).filter(Boolean);
-    const subjNew=(g('fa_subjectnew')?.value||'').trim();
-    const authNew=(g('fa_authornew')?.value||'').trim();
-    const pubNew=(g('fa_pubnew')?.value||'').trim();
     const newBook={
+        type,
         name,
-        author:authNew||g('fa_author').value||'',
         price:Number(g('fa_price').value)||0,
         original_price:Number(g('fa_oprice').value)||0,
-        cat:cats[0]||'ইসলামি বই',
-        cats:cats.length?cats:['ইসলামি বই'],
-        subject:subjNew||g('fa_subject').value||'ইসলামি বই',
-        cover:g('fa_cover').value||'Paperback',
-        pub:pubNew||g('fa_pub').value||'',
-        pages:g('fa_pages').value||'পৃষ্ঠা',
+        cat:cats[0]||(isBook?'ইসলামি বই':'Stationery'),
+        cats:cats.length?cats:[isBook?'ইসলামি বই':'Stationery'],
         img:g('fa_img').value.trim(),
         desc:g('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
     };
+    if(isBook){
+        const subjNew=(g('fa_subjectnew')?.value||'').trim();
+        const authNew=(g('fa_authornew')?.value||'').trim();
+        const pubNew=(g('fa_pubnew')?.value||'').trim();
+        newBook.author=authNew||g('fa_author').value||'';
+        newBook.subject=subjNew||g('fa_subject').value||'ইসলামি বই';
+        newBook.cover=g('fa_cover').value||'Paperback';
+        newBook.pub=pubNew||g('fa_pub').value||'';
+        newBook.pages=g('fa_pages').value||'পৃষ্ঠা';
+    } else {
+        newBook.brand=(g('fa_brand')?.value||'').trim();
+        newBook.attributes=(beAttrSel['add']||[]).filter(a=>a.label&&a.label.trim());
+    }
     localBooks.push(newBook);
-    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew'].forEach(id=>{const el=g(id);if(el)el.value='';});
+    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand'].forEach(id=>{const el=g(id);if(el)el.value='';});
     beCatSel['add']=[];
+    beAttrSel['add']=[];
     beToggleAddForm();
     beOpenIdx=localBooks.length-1;
     beUpdateStats();
     beRenderList();
-    syncBookToFirebase(localBooks.length-1, newBook, 'নতুন বই যোগ ও Firebase-এ সেভ হয়েছে');
+    syncBookToFirebase(localBooks.length-1, newBook, 'নতুন আইটেম যোগ ও Firebase-এ সেভ হয়েছে');
 }
 
 function beToggleBook(idx){
@@ -2081,16 +2141,28 @@ function beToggleBook(idx){
 function beSaveBook(idx){
     const g=id=>document.getElementById(id);
     const b=localBooks[idx];
-    ['name','pages','cover','img','desc'].forEach(f=>{const el=g(`be_${f}_${idx}`);if(el)b[f]=el.value;});
+    const type=g('be_type_'+idx)?.value||b.type||'বই';
+    b.type=type;
+    const isBook=type==='বই';
+    ['name','img','desc'].forEach(f=>{const el=g(`be_${f}_${idx}`);if(el)b[f]=el.value;});
     b.price=Number(g('be_price_'+idx).value)||0;
     b.original_price=Number(g('be_original_price_'+idx).value)||0;
-    /* বিষয় / লেখক / প্রকাশনী: নতুন লেখা থাকলে সেটা, নাহলে ড্রপডাউন */
-    const subjNew=(g('be_subjectnew_'+idx)?.value||'').trim();
-    b.subject=subjNew||g('be_subject_'+idx).value||'';
-    const authNew=(g('be_authornew_'+idx)?.value||'').trim();
-    b.author=authNew||g('be_author_'+idx).value||'';
-    const pubNew=(g('be_pubnew_'+idx)?.value||'').trim();
-    b.pub=pubNew||g('be_pub_'+idx).value||'';
+    if(isBook){
+        const el=g('be_pages_'+idx); if(el)b.pages=el.value;
+        const cov=g('be_cover_'+idx); if(cov)b.cover=cov.value;
+        /* বিষয় / লেখক / প্রকাশনী: নতুন লেখা থাকলে সেটা, নাহলে ড্রপডাউন */
+        const subjNew=(g('be_subjectnew_'+idx)?.value||'').trim();
+        b.subject=subjNew||g('be_subject_'+idx).value||'';
+        const authNew=(g('be_authornew_'+idx)?.value||'').trim();
+        b.author=authNew||g('be_author_'+idx).value||'';
+        const pubNew=(g('be_pubnew_'+idx)?.value||'').trim();
+        b.pub=pubNew||g('be_pub_'+idx).value||'';
+        delete b.brand; delete b.attributes;
+    } else {
+        const br=g('be_brand_'+idx); if(br)b.brand=br.value.trim();
+        b.attributes=(beAttrSel[idx]||[]).filter(a=>a.label&&a.label.trim());
+        delete b.author; delete b.subject; delete b.cover; delete b.pub; delete b.pages;
+    }
     /* বিভাগ (multi): cats array + প্রথমটা cat-এ (পুরনো কোডের সাথে মিল রাখতে) */
     const cats=(beCatSel[idx]||[]).filter(Boolean);
     b.cats=cats;
@@ -2193,19 +2265,26 @@ async function beToggleStock(idx){
 
 /* এডিটর বডি — শুধু খোলা বইয়ের জন্য তৈরি হয় (১০৯৪টা বইয়ে ভারী ড্রপডাউন এড়াতে) */
 function beEditorBody(b,i,imgPrevHtml){
+    const type=b.type||'বই';
+    const isBook=type==='বই';
     return `<div class="be-stock-row">
                     <span class="lbl">📦 স্টক অবস্থা:</span>
                     <button type="button" id="beStockBtn_${i}" class="btn btn-sm ${(stockData[i]!==false)?'stock-in-btn':'stock-out-btn'}" onclick="beToggleStock(${i})">${(stockData[i]!==false)?'✅ স্টকে আছে':'❌ স্টক শেষ'}</button>
                     <span class="be-stock-hint">ক্লিক করে বদলান — সাথে সাথে সাইটে লাইভ</span>
                 </div>
                 <div class="editor-grid">
-                    <div class="form-group"><label class="be-label">বইয়ের নাম</label><input class="form-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
+                    <div class="form-group editor-full"><label class="be-label">প্রোডাক্ট টাইপ</label>
+                        <select class="form-input" id="be_type_${i}" onchange="beOnTypeChange(${i})">
+                            <option value="বই"${isBook?' selected':''}>📚 বই</option>
+                            <option value="প্রোডাক্ট"${!isBook?' selected':''}>🛍️ সাধারণ প্রোডাক্ট</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label class="be-label">নাম</label><input class="form-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
+                    <div id="beBookFields_${i}" class="editor-grid editor-full" style="padding:0;display:${isBook?'':'none'};">
                     <div class="form-group"><label class="be-label">লেখক</label>
                         <select class="form-input" id="be_author_${i}" onchange="if(this.value)document.getElementById('be_authornew_${i}').value='';">${beOptionsHtml(beListFrom('author'),b.author)}</select>
                         <input class="form-input" id="be_authornew_${i}" placeholder="বা নতুন লেখক লিখুন" style="margin-top:5px;">
                     </div>
-                    <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="be_price_${i}" type="number" value="${b.price}"></div>
-                    <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
                     <div class="form-group"><label class="be-label">প্রকাশনী</label>
                         <select class="form-input" id="be_pub_${i}" onchange="if(this.value)document.getElementById('be_pubnew_${i}').value='';">${beOptionsHtml(beListFrom('pub'),b.pub)}</select>
                         <input class="form-input" id="be_pubnew_${i}" placeholder="বা নতুন প্রকাশনী লিখুন" style="margin-top:5px;">
@@ -2218,6 +2297,17 @@ function beEditorBody(b,i,imgPrevHtml){
                         <select class="form-input" id="be_subject_${i}" onchange="if(this.value)document.getElementById('be_subjectnew_${i}').value='';">${beSubjectOptionsHtml(b.subject)}</select>
                         <input class="form-input" id="be_subjectnew_${i}" placeholder="বা নতুন বিষয় লিখুন" style="margin-top:5px;">
                     </div>
+                    </div>
+                    <div id="beProductFields_${i}" class="editor-grid editor-full" style="padding:0;display:${isBook?'none':''};">
+                    <div class="form-group"><label class="be-label">ব্র্যান্ড</label><input class="form-input" id="be_brand_${i}" value="${escapeHTML(b.brand||'')}" placeholder="যেমন: Muslim Corner"></div>
+                    <div class="form-group editor-full">
+                        <label class="be-label">অতিরিক্ত বৈশিষ্ট্য (Size, Color, মেয়াদ ইত্যাদি)</label>
+                        <div id="beAttrRows_${i}">${beAttrRowsMarkup(i)}</div>
+                        <button class="btn btn-ghost btn-sm" type="button" onclick="beAttrAdd(${i})" style="margin-top:4px;">＋ বৈশিষ্ট্য যোগ করুন</button>
+                    </div>
+                    </div>
+                    <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="be_price_${i}" type="number" value="${b.price}"></div>
+                    <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
                     <div class="form-group editor-full">
                         <label class="be-label">বিভাগ (একাধিক দেওয়া যাবে)</label>
                         <div class="be-cat-chips" id="beCatChips_${i}">${beCatChipsMarkup(i)}</div>
@@ -2275,6 +2365,7 @@ function beRenderList(){
     list.innerHTML=filtered.map(b=>{
         const i=b._i;
         beCatSel[i]=beBookCats(b);
+        beAttrSel[i]=Array.isArray(b.attributes)?b.attributes.map(a=>({...a})):[];
         const hasImg=isRealUrl(b.img);
         const isOpen=beOpenIdx===i;
         const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
@@ -2601,11 +2692,12 @@ function downloadSitemap(){
 
 /* ── DOWNLOAD book.js ── */
 function downloadBookJs(){
-    const FIELDS=['name','author','price','original_price','cat','subject','cover','pub','pages','img','desc'];
+    const FIELDS=['type','name','author','price','original_price','cat','subject','cover','pub','pages','brand','img','desc'];
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
     const esc=s=>String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r\n/g,'\\n').replace(/\r/g,'\\n').replace(/\n/g,'\\n');
     const lines=src.map(b=>{
         const fields=FIELDS.map(f=>{
+            if(f==='type')return `type: "${esc(b.type||'বই')}"`;
             const v=b[f]??'';
             if(f==='price'||f==='original_price')return `${f}: ${Number(v)||0}`;
             return `${f}: "${esc(v)}"`;
@@ -2613,6 +2705,9 @@ function downloadBookJs(){
         /* multi-category: cats array রাখা হয় যেন ব্যাকআপেও একাধিক বিভাগ থাকে */
         const cats=Array.isArray(b.cats)?b.cats:(b.cat?[b.cat]:[]);
         fields.push(`cats: [${cats.map(c=>`"${esc(c)}"`).join(', ')}]`);
+        /* সাধারণ প্রোডাক্টের কাস্টম বৈশিষ্ট্য (Size/Color/মেয়াদ ইত্যাদি) */
+        const attrs=Array.isArray(b.attributes)?b.attributes.filter(a=>a&&a.label):[];
+        fields.push(`attributes: [${attrs.map(a=>`{label: "${esc(a.label)}", value: "${esc(a.value||'')}"}`).join(', ')}]`);
         return `  { ${fields.join(', ')} }`;
     });
     const fallback=`\n\n/* ═══ IMAGE FALLBACK ═══\n   যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —\n   সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */\nbooks.forEach(function(b){\n    if(!b.img || !/^https?:\\/\\//.test(b.img)) b.img = 'book-placeholder.svg';\n});`;
