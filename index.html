@@ -130,8 +130,7 @@
             background: linear-gradient(135deg, #fde68a, #f59e0b 55%, #b45309);
             transform: rotate(45deg);
             border-radius:2px;
-            box-shadow: 0 0 8px rgba(251,191,36,0.6);
-            animation: gemGlow 2.6s ease-in-out infinite;
+            box-shadow: 0 0 6px rgba(251,191,36,0.45);
             position:relative;
         }
         .nb-orn-gem::after {
@@ -143,9 +142,9 @@
             flex-shrink:0; width:11px; height:11px;
             background: linear-gradient(135deg, #34d399, #059669);
             clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
-            animation: starTwinkle 2.2s ease-in-out infinite;
+            opacity: 0.85;
         }
-        .nb-orn-right .nb-orn-star { animation-delay: 1.1s; }
+        .nb-orn-right .nb-orn-star { opacity: 0.85; }
         .nb-orn-dot { width:4px; height:4px; border-radius:50%; background:#d97706; opacity:0.8; flex-shrink:0; }
         @keyframes gemGlow {
             0%,100% { box-shadow: 0 0 4px rgba(251,191,36,0.4); }
@@ -556,7 +555,7 @@
         /* ═══════ SECTIONS ═══════ */
         .sections { max-width: 1100px; margin: 0 auto; padding: 0 14px 30px; }
         .cat-section { margin-bottom: 28px; }
-        .cat-section-title { font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 10px; padding-left: 10px; border-left: 4px solid #111; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.3px; }
+        .cat-section-title { font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 10px; padding-left: 10px; border-left: 4px solid #059669; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.3px; }
         [data-theme="dark"] .cat-section-title { color: #ecfdf5; border-left-color: #059669; }
         .book-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; scrollbar-color: #c6f6d5 transparent; }
         .book-row::-webkit-scrollbar { height: 3px; }
@@ -1840,32 +1839,80 @@ function showWishlist(){
 }
 function showLoginModal(){
     document.getElementById('authModal').style.display='flex';
-    document.getElementById('authModal').style.animation='fadeInUp 0.3s ease';
 }
 function closeAuthModal(){
     document.getElementById('authModal').style.display='none';
-    document.getElementById('authError').innerText='';
+    setAuthErr('');
 }
 function switchTab(tab){
     document.getElementById('loginTab').classList.toggle('auth-tab-active', tab==='login');
     document.getElementById('registerTab').classList.toggle('auth-tab-active', tab==='register');
     document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
     document.getElementById('registerForm').style.display=tab==='register'?'block':'none';
-    document.getElementById('authError').innerText='';
+    const slider=document.getElementById('authTabSlider');
+    if(slider) slider.style.transform=tab==='register'?'translateX(100%)':'translateX(0)';
+    const sub=document.getElementById('authHeaderSub');
+    if(sub) sub.innerText=tab==='register'?'নতুন একাউন্ট খুলে কেনাকাটা শুরু করুন':'কেনাকাটা চালিয়ে যেতে লগইন করুন';
+    setAuthErr('');
+}
+function setAuthBtnLoading(btn,loading,defaultTxt){
+    if(!btn) return;
+    btn.disabled=loading;
+    btn.classList.toggle('loading',loading);
+    const txtEl=btn.querySelector('.auth-btn-txt');
+    if(loading){
+        if(!btn.querySelector('.auth-spinner')){
+            const sp=document.createElement('span'); sp.className='auth-spinner'; btn.insertBefore(sp,btn.firstChild);
+        }
+        if(txtEl) txtEl.innerText='একটু অপেক্ষা করুন...';
+    } else {
+        if(txtEl) txtEl.innerText=defaultTxt;
+    }
+}
+function togglePassVis(id,btn){
+    const inp=document.getElementById(id); if(!inp) return;
+    const showing=inp.type==='text';
+    inp.type=showing?'password':'text';
+    btn.innerHTML=showing
+        ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>'
+        :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.62 21.62 0 0 1 5.06-6.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 }
 async function doLogin(){
     const email=document.getElementById('loginEmail').value.trim();
     const pass=document.getElementById('loginPass').value;
     const btn=document.getElementById('loginBtn');
     if(!email||!pass){setAuthErr('ইমেইল ও পাসওয়ার্ড দিন');return;}
-    btn.innerText='লোড হচ্ছে...';btn.disabled=true;
+    if(email.indexOf('@')===-1){setAuthErr('এখন শুধু ইমেইল দিয়ে লগইন করা যাচ্ছে — মোবাইল নাম্বার দিয়ে লগইন শীঘ্রই আসছে');return;}
+    setAuthBtnLoading(btn,true);
     try{
         await auth.signInWithEmailAndPassword(email,pass);
         closeAuthModal();showToast('✅ স্বাগতম!','#059669');
     }catch(e){
-        setAuthErr(e.code==='auth/wrong-password'?'পাসওয়ার্ড ভুল':e.code==='auth/user-not-found'?'একাউন্ট নেই':'লগইন ব্যর্থ হয়েছে');
+        setAuthErr(e.code==='auth/wrong-password'?'পাসওয়ার্ড ভুল':e.code==='auth/user-not-found'?'একাউন্ট নেই':e.code==='auth/invalid-email'?'সঠিক ইমেইল দিন':'লগইন ব্যর্থ হয়েছে');
     }
-    btn.innerText='লগইন করুন';btn.disabled=false;
+    setAuthBtnLoading(btn,false,'লগইন করুন');
+}
+async function doGoogleLogin(){
+    const btn=document.getElementById('googleBtn');
+    if(typeof firebase==='undefined'||!auth){setAuthErr('Google লগইন এখন লোড হয়নি, আবার চেষ্টা করুন');return;}
+    btn.disabled=true;
+    try{
+        const provider=new firebase.auth.GoogleAuthProvider();
+        const result=await auth.signInWithPopup(provider);
+        const user=result.user;
+        if(user){
+            const snap=await db.ref('users/'+user.uid).once('value');
+            if(!snap.exists()){
+                await db.ref('users/'+user.uid).set({name:user.displayName||'',email:user.email||'',createdAt:Date.now()});
+            }
+        }
+        closeAuthModal();showToast('✅ স্বাগতম!','#059669');
+    }catch(e){
+        if(e.code!=='auth/popup-closed-by-user' && e.code!=='auth/cancelled-popup-request'){
+            setAuthErr('Google লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন');
+        }
+    }
+    btn.disabled=false;
 }
 async function doRegister(){
     const name=document.getElementById('regName').value.trim();
@@ -1874,21 +1921,38 @@ async function doRegister(){
     const btn=document.getElementById('registerBtn');
     if(!name||!email||!pass){setAuthErr('সব তথ্য পূরণ করুন');return;}
     if(pass.length<6){setAuthErr('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে');return;}
-    btn.innerText='লোড হচ্ছে...';btn.disabled=true;
+    setAuthBtnLoading(btn,true);
     try{
         const cred=await auth.createUserWithEmailAndPassword(email,pass);
         await cred.user.updateProfile({displayName:name});
         await db.ref('users/'+cred.user.uid).set({name,email,createdAt:Date.now()});
         closeAuthModal();showToast('✅ রেজিস্ট্রেশন সফল!','#059669');
     }catch(e){
-        setAuthErr(e.code==='auth/email-already-in-use'?'এই ইমেইলে আগেই একাউন্ট আছে':'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
+        setAuthErr(e.code==='auth/email-already-in-use'?'এই ইমেইলে আগেই একাউন্ট আছে':e.code==='auth/invalid-email'?'সঠিক ইমেইল দিন':'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
     }
-    btn.innerText='রেজিস্টার করুন';btn.disabled=false;
+    setAuthBtnLoading(btn,false,'রেজিস্টার করুন');
+}
+async function doForgotPassword(){
+    const email=document.getElementById('loginEmail').value.trim();
+    if(!email){setAuthErr('আগে ইমেইলের ঘরে আপনার ইমেইল লিখুন');return;}
+    try{
+        await auth.sendPasswordResetEmail(email);
+        setAuthErr('✅ পাসওয়ার্ড রিসেট লিংক '+email+'-এ পাঠানো হয়েছে','ok');
+    }catch(e){
+        setAuthErr(e.code==='auth/user-not-found'?'এই ইমেইলে কোনো একাউন্ট নেই':'রিসেট লিংক পাঠানো যায়নি, আবার চেষ্টা করুন');
+    }
 }
 async function doLogout(){
     await auth.signOut();showToast('লগআউট হয়েছে','#6b7280');updateAuthUI(null);
 }
-function setAuthErr(msg){document.getElementById('authError').innerText=msg;}
+function setAuthErr(msg,type){
+    const el=document.getElementById('authError'); if(!el) return;
+    el.classList.remove('ok');
+    if(!msg){ el.classList.remove('show'); el.innerHTML=''; return; }
+    if(type==='ok') el.classList.add('ok');
+    el.innerHTML='<svg style="width:14px;height:14px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>'+msg+'</span>';
+    el.classList.add('show');
+}
 function updateAuthUI(user){
     const pill=document.querySelector('.bnav-login-pill .bnav-login-inner');
     const txt=document.querySelector('.bnav-login-pill .bnav-login-text');
@@ -2344,42 +2408,197 @@ function loadBanners(){
 </div>
 
 <!-- ═══════ AUTH MODAL ═══════ -->
-<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closeAuthModal()">
-    <div style="background:var(--card);width:100%;border-radius:24px 24px 0 0;padding:0 0 40px;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()">
-        <div style="width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 0;"></div>
-        <!-- Tabs -->
-        <div style="display:flex;border-bottom:1.5px solid var(--border);margin:16px 20px 0;">
+<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(6,20,15,0.55);backdrop-filter:blur(2px);z-index:9999;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closeAuthModal()">
+    <div class="auth-card" onclick="event.stopPropagation()">
+        <div class="auth-drag-handle"></div>
+        <button class="auth-close-btn" onclick="closeAuthModal()" aria-label="বন্ধ করুন">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <div class="auth-header">
+            <div class="auth-header-logo"><img src="logo.png" alt="গ্রন্থকানন"></div>
+            <div class="auth-header-title">গ্রন্থকানন-এ স্বাগতম</div>
+            <div class="auth-header-sub" id="authHeaderSub">কেনাকাটা চালিয়ে যেতে লগইন করুন</div>
+        </div>
+
+        <div class="auth-tabs">
             <button id="loginTab" class="auth-tab auth-tab-active" onclick="switchTab('login')">লগইন</button>
             <button id="registerTab" class="auth-tab" onclick="switchTab('register')">রেজিস্টার</button>
+            <div class="auth-tab-slider" id="authTabSlider"></div>
         </div>
-        <div style="padding:20px;">
-            <p id="authError" style="color:#dc2626;font-size:12px;margin-bottom:10px;min-height:16px;"></p>
+
+        <div class="auth-body">
+            <div id="authError" class="auth-error"></div>
+
             <!-- Login Form -->
             <div id="loginForm">
-                <input id="loginEmail" type="email" placeholder="ইমেইল" class="auth-input">
-                <input id="loginPass" type="password" placeholder="পাসওয়ার্ড" class="auth-input">
-                <button id="loginBtn" onclick="doLogin()" class="auth-btn">লগইন করুন</button>
+                <div class="auth-input-wrap">
+                    <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <input id="loginEmail" type="text" inputmode="email" placeholder="ইমেইল বা মোবাইল নাম্বার" class="auth-input" autocomplete="email">
+                </div>
+                <div class="auth-input-wrap">
+                    <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <input id="loginPass" type="password" placeholder="পাসওয়ার্ড" class="auth-input auth-input-pass" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+                    <button type="button" class="auth-pass-toggle" onclick="togglePassVis('loginPass',this)" aria-label="পাসওয়ার্ড দেখুন">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <div class="auth-forgot" onclick="doForgotPassword()">পাসওয়ার্ড ভুলে গেছেন?</div>
+                <button id="loginBtn" onclick="doLogin()" class="auth-btn"><span class="auth-btn-txt">লগইন করুন</span></button>
             </div>
+
             <!-- Register Form -->
             <div id="registerForm" style="display:none;">
-                <input id="regName" type="text" placeholder="আপনার নাম" class="auth-input">
-                <input id="regEmail" type="email" placeholder="ইমেইল" class="auth-input">
-                <input id="regPass" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" class="auth-input">
-                <button id="registerBtn" onclick="doRegister()" class="auth-btn">রেজিস্টার করুন</button>
+                <div class="auth-input-wrap">
+                    <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <input id="regName" type="text" placeholder="আপনার নাম" class="auth-input" autocomplete="name">
+                </div>
+                <div class="auth-input-wrap">
+                    <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    <input id="regEmail" type="email" placeholder="ইমেইল" class="auth-input" autocomplete="email">
+                </div>
+                <div class="auth-input-wrap">
+                    <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <input id="regPass" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" class="auth-input auth-input-pass" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+                    <button type="button" class="auth-pass-toggle" onclick="togglePassVis('regPass',this)" aria-label="পাসওয়ার্ড দেখুন">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <button id="registerBtn" onclick="doRegister()" class="auth-btn"><span class="auth-btn-txt">রেজিস্টার করুন</span></button>
             </div>
-            <button onclick="closeAuthModal()" style="width:100%;margin-top:10px;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;cursor:pointer;">বাতিল</button>
+
+            <div class="auth-divider"><span>অথবা</span></div>
+            <button type="button" id="googleBtn" onclick="doGoogleLogin()" class="auth-btn-google">
+                <svg viewBox="0 0 48 48" style="width:18px;height:18px;flex-shrink:0;">
+                    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                </svg>
+                <span>Google দিয়ে চালিয়ে যান</span>
+            </button>
+
+            <p class="auth-terms">চালিয়ে গেলে আপনি আমাদের <a href="terms.html">শর্তাবলী</a> ও <a href="privacy.html">প্রাইভেসি পলিসি</a>-তে সম্মত হচ্ছেন।</p>
         </div>
     </div>
 </div>
 
 <style>
-.auth-tab{flex:1;padding:10px;background:transparent;border:none;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;}
-.auth-tab-active{color:#059669;border-bottom-color:#059669;}
-.auth-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;}
-.auth-input:focus{border-color:#059669;}
-.auth-btn{width:100%;padding:13px;background:#059669;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
-@keyframes fadeInUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.auth-card{
+    background:var(--card); width:100%; max-width:440px;
+    border-radius:24px 24px 0 0; padding:0 0 max(24px,env(safe-area-inset-bottom));
+    max-height:92vh; overflow-y:auto; position:relative;
+    box-shadow:0 -10px 40px rgba(0,0,0,0.25);
+    animation:authSlideUp .32s cubic-bezier(.4,0,.2,1);
+}
+@keyframes authSlideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.auth-drag-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 0;}
+.auth-close-btn{
+    position:absolute; top:14px; right:14px; width:32px;height:32px;
+    border-radius:50%; border:none; background:var(--bg); color:var(--text2);
+    display:flex;align-items:center;justify-content:center; cursor:pointer;
+    transition:background .15s,color .15s;
+}
+.auth-close-btn:hover{ background:#fee2e2; color:#dc2626; }
+.auth-close-btn svg{ width:16px; height:16px; }
+.auth-header{ text-align:center; padding:22px 24px 4px; }
+.auth-header-logo{
+    width:52px;height:52px; margin:0 auto 10px; border-radius:14px;
+    background:#fff; box-shadow:0 4px 16px rgba(5,150,105,0.18), 0 0 0 1px rgba(5,150,105,0.1);
+    display:flex; align-items:center; justify-content:center; padding:7px; box-sizing:border-box;
+}
+.auth-header-logo img{ width:100%; height:100%; object-fit:contain; }
+.auth-header-title{ font-family:'Playfair Display',Georgia,serif; font-size:19px; font-weight:700; color:var(--text); }
+.auth-header-sub{ font-size:12.5px; color:var(--text2); margin-top:3px; }
+.auth-tabs{
+    display:flex; position:relative; gap:0; margin:18px 24px 0;
+    background:var(--bg); border-radius:14px; padding:4px;
+}
+.auth-tab{
+    flex:1; padding:10px 0; background:transparent; border:none; border-radius:11px;
+    font-family:'Hind Siliguri',Arial,sans-serif; font-size:13.5px; font-weight:700;
+    color:var(--text2); cursor:pointer; position:relative; z-index:1; transition:color .2s;
+}
+.auth-tab-active{ color:#fff; }
+.auth-tab-slider{
+    position:absolute; top:4px; left:4px; width:calc(50% - 4px); height:calc(100% - 8px);
+    background:linear-gradient(135deg,#059669,#10b981); border-radius:11px;
+    box-shadow:0 3px 10px rgba(5,150,105,0.35); transition:transform .28s cubic-bezier(.4,0,.2,1);
+}
+.auth-body{ padding:18px 24px 4px; }
+.auth-error{
+    display:none; align-items:center; gap:8px; font-size:12.5px; color:#dc2626;
+    background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:9px 12px; margin-bottom:12px;
+}
+.auth-error.show{ display:flex; }
+.auth-error.ok{ color:#059669; background:#ecfdf5; border-color:#a7f3d0; }
+[data-theme="dark"] .auth-error{ background:rgba(220,38,38,0.12); border-color:rgba(220,38,38,0.3); }
+[data-theme="dark"] .auth-error.ok{ background:rgba(5,150,105,0.14); border-color:rgba(52,211,153,0.3); }
+.auth-input-wrap{ position:relative; margin-bottom:11px; }
+.auth-input-icon{
+    position:absolute; left:13px; top:50%; transform:translateY(-50%);
+    width:17px; height:17px; color:var(--text2); pointer-events:none;
+}
+.auth-input{
+    width:100%; padding:12.5px 14px 12.5px 40px; border:1.5px solid var(--border); border-radius:12px;
+    background:var(--bg); color:var(--text); font-family:'Hind Siliguri',Arial,sans-serif; font-size:14px;
+    outline:none; box-sizing:border-box; transition:border-color .15s, box-shadow .15s;
+}
+.auth-input::placeholder{ color:var(--text2); opacity:.75; }
+.auth-input:focus{ border-color:#059669; box-shadow:0 0 0 3px rgba(5,150,105,0.14); }
+.auth-input-pass{ padding-right:42px; }
+.auth-pass-toggle{
+    position:absolute; right:6px; top:50%; transform:translateY(-50%);
+    width:30px; height:30px; border:none; background:transparent; color:var(--text2);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; border-radius:8px;
+}
+.auth-pass-toggle:hover{ color:#059669; background:rgba(5,150,105,0.08); }
+.auth-pass-toggle svg{ width:17px; height:17px; }
+.auth-forgot{ text-align:right; font-size:12px; color:#059669; font-weight:600; cursor:pointer; margin:-2px 0 14px; }
+.auth-forgot:hover{ text-decoration:underline; }
+.auth-btn{
+    width:100%; padding:13.5px; background:linear-gradient(135deg,#059669,#10b981); color:white; border:none;
+    border-radius:12px; font-family:'Hind Siliguri',Arial,sans-serif; font-size:15px; font-weight:700; cursor:pointer;
+    box-shadow:0 6px 18px rgba(5,150,105,0.3); transition:transform .15s, box-shadow .15s; position:relative;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.auth-btn:active{ transform:scale(.98); }
+.auth-btn:disabled{ opacity:.75; cursor:default; }
+.auth-btn .auth-spinner{
+    width:16px;height:16px; border-radius:50%; border:2px solid rgba(255,255,255,.4); border-top-color:#fff;
+    animation:authSpin .7s linear infinite; display:none;
+}
+.auth-btn.loading .auth-spinner{ display:inline-block; }
+@keyframes authSpin{ to{ transform:rotate(360deg); } }
+.auth-terms{ font-size:10.5px; color:var(--text2); text-align:center; line-height:1.6; margin:16px 0 20px; }
+.auth-terms a{ color:#059669; text-decoration:none; font-weight:600; }
+.auth-terms a:hover{ text-decoration:underline; }
+.auth-divider{ display:flex; align-items:center; gap:12px; margin:16px 0 14px; color:var(--text2); font-size:11.5px; }
+.auth-divider::before, .auth-divider::after{ content:''; flex:1; height:1px; background:var(--border); }
+.auth-btn-google{
+    width:100%; padding:12px; background:var(--bg); color:var(--text); border:1.5px solid var(--border);
+    border-radius:12px; font-family:'Hind Siliguri',Arial,sans-serif; font-size:13.5px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:10px; transition:border-color .15s, background .15s;
+}
+.auth-btn-google:hover{ border-color:#059669; background:rgba(5,150,105,0.05); }
+.auth-btn-google:disabled{ opacity:.6; cursor:default; }
+
+@media (min-width:768px){
+    #authModal{ align-items:center; }
+    .auth-card{ border-radius:22px; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
+    .auth-drag-handle{ display:none; }
+}
 </style>
+
+<!-- ✅ FIX: Ctrl+K Search Shortcut -->
+<script>
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        if (typeof openSearch === 'function') openSearch();
+    }
+});
+</script>
 
 <!-- Firebase CDN -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
