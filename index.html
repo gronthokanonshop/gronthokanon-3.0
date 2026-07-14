@@ -428,29 +428,35 @@
             .s1-arch-shape{width:90px;height:155px;}
         }
 
-        /* ═══════ INFO CARDS ═══════ */
-        /* info cards — এক লাইনে ৪টা, থিম-অ্যাওয়্যার */
-        .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 2px 12px 14px; max-width: 700px; margin: 0 auto; }
-        .info-card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 12px 6px 10px;
-            display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 1px 5px rgba(16,24,40,0.05);
-            border: 1px solid var(--border);
+        /* ═══════ TRUST STRIP (আগে ছিল INFO CARDS — এখন compact এক-লাইন strip, footer-এর ঠিক আগে বসে) ═══════ */
+        .trust-strip {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            max-width: 1100px; margin: 0 auto; padding: 14px 16px;
+            border-top: 1px solid var(--border);
         }
-        .info-card:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(5,150,105,0.15); }
-        [data-theme="dark"] .info-card { background: linear-gradient(135deg, #0d1a15, #132d20); border-color: rgba(52,211,153,0.14); box-shadow: 0 3px 10px rgba(0,0,0,0.18); }
+        .trust-item {
+            display: flex; align-items: center; gap: 8px;
+            flex: 1 1 240px; min-width: 150px; justify-content: center;
+            padding: 8px 12px;
+        }
         .ic-icon {
-            width: 36px; height: 36px; border-radius: 11px;
-            background: rgba(5,150,105,0.1); color: #059669;
-            display: flex; align-items: center; justify-content: center; font-size: 17px;
+            width: 26px; height: 26px; flex-shrink: 0;
+            color: #059669;
+            display: flex; align-items: center; justify-content: center;
         }
-        [data-theme="dark"] .ic-icon { background: rgba(52,211,153,0.13); color: #34d399; }
-        .ic-title { font-weight: 800; font-size: 12px; color: var(--text); line-height: 1.2; }
-        .ic-sub { font-size: 9.5px; color: var(--text2); line-height: 1.45; }
-        @media (max-width: 380px) { .ic-sub { font-size: 8.5px; } .ic-title { font-size: 11px; } }
+        .ic-icon .eico { width: 22px; height: 22px; }
+        [data-theme="dark"] .ic-icon { color: #34d399; }
+        .ti-text { display: flex; flex-direction: column; line-height: 1.25; text-align: left; }
+        .ic-title { font-weight: 700; font-size: 12.5px; color: var(--text); line-height: 1.25; letter-spacing: .2px; }
+        .ic-sub { font-size: 10.5px; color: var(--text2); line-height: 1.3; }
+        @media (max-width: 640px) {
+            .trust-strip { padding: 10px 8px; }
+            .trust-item { flex: 1 1 45%; padding: 6px 4px; }
+            .ic-icon { width: 22px; height: 22px; }
+            .ic-icon .eico { width: 18px; height: 18px; }
+            .ic-title { font-size: 11px; }
+            .ic-sub { font-size: 9px; }
+        }
 
         /* ═══════ CATEGORY PILLS ═══════ */
         .cat-pills { display: flex; justify-content: center; gap: 8px; padding: 14px 14px 10px; flex-wrap: wrap; }
@@ -1041,13 +1047,157 @@ function catStripScroll(){
 renderHomeCatChips();
 </script>
 
-<!-- ═══════ INFO GRID (শিপিং/পেমেন্ট/রিটার্ন/সাপোর্ট) ═══════ -->
-<div class="info-grid">
-    <div class="info-card"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="ic-title">শিপিং</div><div class="ic-sub">সারা বাংলাদেশে ক্যাশ অন ডেলিভারি</div></div>
-    <div class="info-card"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span><div class="ic-title">পেমেন্ট</div><div class="ic-sub">সহজ ও নিরাপদ পেমেন্ট</div></div>
-    <div class="info-card"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><polyline points="23,20 23,14 17,14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></span><div class="ic-title">রিটার্ন</div><div class="ic-sub">সহজ রিটার্ন পলিসি</div></div>
-    <div class="info-card"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span><div class="ic-title">সাপোর্ট</div><div class="ic-sub">সকাল ৯টা — রাত ১০টা</div></div>
+<!-- ═══════ প্রকাশনী চিপ সেকশন (Firebase siteConfig/homePubs) ═══════ -->
+<style>
+.pub-strip-section, .author-strip-section { padding: 6px 0 12px; max-width: 1100px; margin: 0 auto; }
+.pub-strip-title, .author-strip-title {
+    font-size: 13px; font-weight: 700; color: var(--text2);
+    letter-spacing: .5px; margin: 0 0 10px 16px;
+    display: flex; align-items: center; gap: 6px;
+}
+.pub-strip-wrap, .author-strip-wrap { position: relative; }
+.pub-strip, .author-strip {
+    display: flex; gap: 10px;
+    overflow-x: auto; scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 14px 8px;
+    scrollbar-width: none;
+}
+.pub-strip::-webkit-scrollbar, .author-strip::-webkit-scrollbar { display: none; }
+.pub-card, .author-card {
+    flex: 0 0 auto; width: 92px;
+    scroll-snap-align: start;
+    cursor: pointer;
+    display: flex; flex-direction: column; align-items: center;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform .18s ease;
+}
+.pub-card:active, .author-card:active { transform: scale(.95); }
+.pub-card-img, .author-card-img {
+    width: 92px; height: 92px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    border: 1px solid rgba(0,0,0,.06);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.author-card-img { border-radius: 50%; }
+.pub-card-img img, .author-card-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.author-card-img img { object-fit: cover; }
+.pub-card:hover .pub-card-img, .author-card:hover .author-card-img { box-shadow: 0 6px 16px rgba(0,0,0,.14); }
+.pub-card-label, .author-card-label {
+    margin-top: 7px; font-size: 11.5px; font-weight: 700;
+    color: var(--text); text-align: center; line-height: 1.25;
+    font-family: 'Hind Siliguri', Arial, sans-serif;
+    max-width: 92px; word-break: break-word;
+}
+.pub-strip-next, .author-strip-next {
+    position: absolute; top: 46px; right: 6px; transform: translateY(-50%);
+    width: 38px; height: 38px; border-radius: 50%;
+    background: #fff; color: #111;
+    border: 1px solid var(--border); box-shadow: 0 3px 12px rgba(0,0,0,.18);
+    font-size: 22px; line-height: 1; cursor: pointer;
+    display: none; align-items: center; justify-content: center; padding: 0;
+    z-index: 4;
+}
+@media (min-width: 768px) { .pub-strip-next, .author-strip-next { display: flex; } }
+[data-theme="dark"] .pub-card-img, [data-theme="dark"] .author-card-img {
+    background: linear-gradient(135deg,#132d20,#0f2a1e);
+    border-color: rgba(255,255,255,.06);
+    box-shadow: 0 2px 10px rgba(0,0,0,.35);
+}
+[data-theme="dark"] .pub-strip-next, [data-theme="dark"] .author-strip-next { background: #1f2937; color: #e5e7eb; border-color: rgba(255,255,255,.12); }
+</style>
+<div class="pub-strip-section" id="pubStripSection" style="display:none;">
+    <div class="pub-strip-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        প্রকাশনী
+    </div>
+    <div class="pub-strip-wrap">
+        <div class="pub-strip" id="pubStrip"></div>
+        <button class="pub-strip-next" id="pubStripNext" onclick="pubStripScroll()" aria-label="আরো প্রকাশনী">›</button>
+    </div>
 </div>
+
+<!-- ═══════ প্রিয় লেখক চিপ সেকশন (Firebase siteConfig/homeAuthors) ═══════ -->
+<div class="author-strip-section" id="authorStripSection" style="display:none;">
+    <div class="author-strip-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        প্রিয় লেখক
+    </div>
+    <div class="author-strip-wrap">
+        <div class="author-strip" id="authorStrip"></div>
+        <button class="author-strip-next" id="authorStripNext" onclick="authorStripScroll()" aria-label="আরো লেখক">›</button>
+    </div>
+</div>
+<script>
+window.GK_HOME_PUBS = [];
+window.GK_HOME_AUTHORS = [];
+function renderHomePubChips(){
+    var section=document.getElementById('pubStripSection');
+    var strip=document.getElementById('pubStrip');
+    if(!strip||!section) return;
+    var list=(window.GK_HOME_PUBS||[]).filter(function(p){return p&&p.name;});
+    if(!list.length){ section.style.display='none'; strip.innerHTML=''; return; }
+    section.style.display='';
+    strip.innerHTML=list.map(function(p){
+        var val=(p.name||'').toString();
+        var img=(p.img||'').toString().trim();
+        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
+        return '<div class="pub-card" onclick="window.location.href=\'filter.html?type=pub&value='+encodeURIComponent(val)+'\'">'
+            +'<div class="pub-card-img">'+imgTag+'</div>'
+            +'<div class="pub-card-label">'+val.replace(/</g,'&lt;')+'</div>'
+            +'</div>';
+    }).join('');
+}
+function renderHomeAuthorChips(){
+    var section=document.getElementById('authorStripSection');
+    var strip=document.getElementById('authorStrip');
+    if(!strip||!section) return;
+    var list=(window.GK_HOME_AUTHORS||[]).filter(function(a){return a&&a.name;});
+    if(!list.length){ section.style.display='none'; strip.innerHTML=''; return; }
+    section.style.display='';
+    strip.innerHTML=list.map(function(a){
+        var val=(a.name||'').toString();
+        var img=(a.img||'').toString().trim();
+        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
+        return '<div class="author-card" onclick="window.location.href=\'filter.html?type=author&value='+encodeURIComponent(val)+'\'">'
+            +'<div class="author-card-img">'+imgTag+'</div>'
+            +'<div class="author-card-label">'+val.replace(/</g,'&lt;')+'</div>'
+            +'</div>';
+    }).join('');
+}
+function pubStripScroll(){
+    var s=document.getElementById('pubStrip'); if(!s) return;
+    var max=s.scrollWidth-s.clientWidth;
+    if(s.scrollLeft>=max-5) s.scrollTo({left:0,behavior:'smooth'});
+    else s.scrollBy({left:Math.min(260,max-s.scrollLeft),behavior:'smooth'});
+}
+function authorStripScroll(){
+    var s=document.getElementById('authorStrip'); if(!s) return;
+    var max=s.scrollWidth-s.clientWidth;
+    if(s.scrollLeft>=max-5) s.scrollTo({left:0,behavior:'smooth'});
+    else s.scrollBy({left:Math.min(260,max-s.scrollLeft),behavior:'smooth'});
+}
+function loadHomePubs(){
+    if(typeof db==='undefined'||!db) return;
+    db.ref('siteConfig/homePubs').once('value').then(function(snap){
+        var v=snap.val();
+        if(Array.isArray(v)&&v.length){ window.GK_HOME_PUBS=v.filter(function(p){return p&&p.name;}); renderHomePubChips(); }
+    }).catch(function(){});
+}
+function loadHomeAuthors(){
+    if(typeof db==='undefined'||!db) return;
+    db.ref('siteConfig/homeAuthors').once('value').then(function(snap){
+        var v=snap.val();
+        if(Array.isArray(v)&&v.length){ window.GK_HOME_AUTHORS=v.filter(function(a){return a&&a.name;}); renderHomeAuthorChips(); }
+    }).catch(function(){});
+}
+</script>
 
 <!-- ═══════ SKELETON ═══════ -->
 <div id="skeletonWrapper" class="sections">
@@ -1247,6 +1397,13 @@ footer {
 [data-theme="dark"] .footer-copy { color: #4b5563; }
 [data-theme="dark"] .footer-copy strong { color: #6ee7b7; }
 </style>
+<!-- ═══════ TRUST STRIP (শিপিং/পেমেন্ট/রিটার্ন/সাপোর্ট) — compact, ফুটারের ঠিক আগে ═══════ -->
+<div class="trust-strip">
+    <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="ti-text"><div class="ic-title">শিপিং</div><div class="ic-sub">সারা বাংলাদেশে ক্যাশ অন ডেলিভারি</div></div></div>
+    <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span><div class="ti-text"><div class="ic-title">পেমেন্ট</div><div class="ic-sub">সহজ ও নিরাপদ পেমেন্ট</div></div></div>
+    <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><polyline points="23,20 23,14 17,14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></span><div class="ti-text"><div class="ic-title">রিটার্ন</div><div class="ic-sub">সহজ রিটার্ন পলিসি</div></div></div>
+    <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span><div class="ti-text"><div class="ic-title">সাপোর্ট</div><div class="ic-sub">সকাল ৯টা — রাত ১০টা</div></div></div>
+</div>
 <footer>
   <div class="footer-inner">
     <!-- Brand -->
@@ -1983,6 +2140,8 @@ window.onload=()=>{
     loadReviewSlider();
     loadBanners();
     loadHomeCats();
+    loadHomePubs();
+    loadHomeAuthors();
     loadHomeBlogs();
     loadRecentSalesTicker();
     /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে সেকশনগুলো রিফ্রেশ */
