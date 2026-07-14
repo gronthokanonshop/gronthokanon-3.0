@@ -842,6 +842,11 @@ async function confirmOrder(){
   if(!thana)    { isSubmitting=false; return showToast('⚠️ থানা নির্বাচন করুন!'); }
   if(!address)  { isSubmitting=false; return showToast('⚠️ ঠিকানা লিখুন!'); }
   if(!cart.length){ isSubmitting=false; return showToast('⚠️ কার্ট খালি!'); }
+  /* কার্টে থাকা কোনো বই এর মধ্যে স্টক শেষ হয়ে গেলে অর্ডার আটকাও */
+  if(window.gkIsOut && typeof books!=='undefined'){
+    const outItem = cart.find(it=>{ const bi=books.findIndex(x=>x&&x.name===it.name); return bi>-1 && window.gkIsOut(bi); });
+    if(outItem){ isSubmitting=false; return showToast('⚠️ "'+outItem.name+'" এখন স্টকে নেই — কার্ট থেকে সরিয়ে আবার চেষ্টা করুন','#dc2626'); }
+  }
 
   if(coupon === 'FIRSTORDER'){
     try{

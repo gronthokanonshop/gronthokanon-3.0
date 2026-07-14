@@ -1073,7 +1073,7 @@
                         <div class="form-group editor-full"><label class="be-label">প্রোডাক্ট টাইপ *</label>
                             <select class="form-input" id="fa_type" onchange="faOnTypeChange()">
                                 <option value="বই">📚 বই</option>
-                                <option value="প্রোডাক্ট">🛍️ সাধারণ প্রোডাক্ট (স্টেশনারি/খাবার/পোশাক/সুন্নাহ আইটেম ইত্যাদি)</option>
+                                <option value="প্রোডাক্ট">🛍️ সাধারণ প্রোডাক্ট (Stationery/খাবার/Sunnah Item ইত্যাদি)</option>
                             </select>
                         </div>
                         <div class="editor-full form-group"><label class="be-label" id="fa_nameLabel">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="বইয়ের নাম"></div>
@@ -1233,11 +1233,17 @@
                     <div id="homeCatList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
                         <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ক্যাটাগরি চিপ</div>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                            <input class="form-input" id="hcEmoji" placeholder="ইমোজি (যেমন 🔥) — ঐচ্ছিক" style="flex:1;min-width:90px;max-width:150px;">
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
                             <input class="form-input" id="hcName" placeholder="ক্যাটাগরির নাম (বইয়ের বিভাগের সাথে মিলতে হবে)" style="flex:3;min-width:150px;">
                             <button class="btn btn-ghost" type="button" onclick="addHomeCat()" style="flex-shrink:0;">＋ যোগ</button>
                         </div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <input class="form-input" id="hcImg" placeholder="ছবির লিংক (URL) — ঐচ্ছিক, পরে ছবিসহ দেখাবে" style="flex:1;min-width:150px;">
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('hcImgFile').click()" style="flex-shrink:0;white-space:nowrap;">📤 ছবি আপলোড</button>
+                            <input type="file" id="hcImgFile" accept="image/*" style="display:none;" onchange="hcUploadAddImg(this)">
+                        </div>
+                        <input type="hidden" id="hcEmoji" value="">
+                        <div class="be-img-preview" id="hcImgPrev" style="margin-top:8px;"></div>
                     </div>
                     <button class="btn btn-primary w-full" onclick="saveHomeCats()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> ক্যাটাগরি সেভ করুন (হোমপেজে লাইভ)</button>
                 </div>
@@ -2228,7 +2234,7 @@ function beUpdateImgPreview(idx){
 
 /* ─── বিভাগ (multi) / বিষয় / কভার ড্রপডাউন হেল্পার ─── */
 const BE_COVER_OPTIONS=['Paperback','Hardcover','Hardback','Board Book','Spiral','ই-বুক'];
-const BE_SEED_CATS=['ইসলামি বই','Best Selling','Trending','নতুন প্রকাশিত','Pre Order','প্যাকেজসমূহ','Academic','দরসি কিতাব','সুন্নাহ আইটেম','Stationery'];
+const BE_SEED_CATS=['ইসলামি বই','একাডেমিক বই','মাদ্রাসার বই','আত্মউন্নয়ন বই','English বই','Sunnah Item','প্যাকেজসমূহ','Stationery','খাবার','Best Selling','Trending','নতুন প্রকাশিত','Pre Order'];
 let beCatSel={};   // idx বা 'add' → নির্বাচিত বিভাগের array
 
 function beBookCats(b){ return (b&&Array.isArray(b.cats)&&b.cats.length)?b.cats.slice():(b&&b.cat?[b.cat]:[]); }
@@ -2383,14 +2389,16 @@ function beEditorBody(b,i,imgPrevHtml){
    (পুরনো cat/cats field gracefully handle করা হয়)
 ═══════════════════════════════════════════════ */
 const GK_CAT_TREE=[
-    {name:'ইসলামি বই', emoji:'📚', subs:['আকিদা','ফিকহ','হাদিস','তাফসির','সিরাত']},
-    {name:'একাডেমিক বই', emoji:'📖', subs:['ক্লাস ১-৫','ক্লাস ৬-১০','HSC']},
-    {name:'মাদ্রাসার বই', emoji:'🕌', subs:['নাহু-সরফ','কিতাব']},
-    {name:'আত্মউন্নয়ন বই', emoji:'🌱', subs:['মোটিভেশন','লিডারশিপ']},
-    {name:'English বই', emoji:'🇬🇧', subs:[]},
-    {name:'Sunnah Item', emoji:'🧴', subs:['আতর','মিসওয়াক','কালোজিরা']},
-    {name:'পোশাক', emoji:'👕', subs:['পাঞ্জাবি','টুপি','হিজাব']},
-    {name:'খাবার', emoji:'🍯', subs:['মধু','খেজুর']}
+    {name:'ইসলামি বই', subs:['আকিদা','ফিকহ','হাদিস','তাফসির','সিরাত']},
+    {name:'একাডেমিক বই', subs:['ক্লাস ১-৫','ক্লাস ৬-১০','HSC']},
+    {name:'মাদ্রাসার বই', subs:['নাহু-সরফ','কিতাব']},
+    {name:'Pre Order', subs:[]},
+    {name:'আত্মউন্নয়ন বই', subs:['মোটিভেশন','লিডারশিপ']},
+    {name:'English বই', subs:[]},
+    {name:'প্যাকেজসমূহ', subs:[]},
+    {name:'Sunnah Item', subs:['আতর','মিসওয়াক','পাঞ্জাবি','টুপি','হিজাব']},
+    {name:'Stationery', subs:[]},
+    {name:'খাবার', subs:['মধু','খেজুর','কালোজিরা']}
 ];
 const GK_TAGS=[
     {name:'Best Selling', emoji:'⭐'},
@@ -2520,9 +2528,9 @@ async function syncAllBooksToFirebase(silent=false){
    হোমপেজ ক্যাটাগরি চিপ (Firebase siteConfig/homeCats)
 ══════════════════════════════════════════════ */
 const HOME_CATS_DEFAULT=[
-    {name:'Best Selling',emoji:'🔥'},{name:'Trending',emoji:'📈'},{name:'নতুন প্রকাশিত',emoji:'✨'},
-    {name:'Pre Order',emoji:'🛒'},{name:'ইসলামি বই',emoji:'☪️'},{name:'প্যাকেজসমূহ',emoji:'📦'},
-    {name:'Academic',emoji:'🎓'},{name:'দরসি কিতাব',emoji:'🕌'},{name:'সুন্নাহ আইটেম',emoji:'📿'},{name:'Stationery',emoji:'🖊️'}
+    {name:'ইসলামি বই',img:''},{name:'একাডেমিক বই',img:''},{name:'মাদ্রাসার বই',img:''},
+    {name:'আত্মউন্নয়ন বই',img:''},{name:'English বই',img:''},{name:'প্যাকেজসমূহ',img:''},
+    {name:'Sunnah Item',img:''},{name:'Stationery',img:''},{name:'খাবার',img:''}
 ];
 let homeCatsData=[];
 function loadHomeCatsAdmin(){
@@ -2536,22 +2544,34 @@ function renderHomeCatList(){
     const box=document.getElementById('homeCatList'); if(!box) return;
     if(!homeCatsData.length){ box.innerHTML='<div class="text-sm text-muted">কোনো ক্যাটাগরি নেই — নিচে যোগ করুন</div>'; return; }
     box.innerHTML=homeCatsData.map(function(c,i){
-        return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;">'
-            +'<span style="font-size:16px;">'+(c.emoji||'📚')+'</span>'
-            +'<span style="flex:1;font-weight:700;min-width:0;word-break:break-word;">'+escapeHTML(c.name)+'</span>'
+        const thumb=(c.img||'').trim()
+            ? '<div style="width:40px;height:40px;border-radius:9px;overflow:hidden;flex-shrink:0;background:#ecfdf5;"><img src="'+escapeHTML(c.img)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'"></div>'
+            : '<div style="width:40px;height:40px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;">🖼️</div>';
+        return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;">'
+            +thumb
+            +'<span style="flex:1;font-weight:700;min-width:80px;word-break:break-word;">'+escapeHTML(c.name)+'</span>'
             +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeCat('+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'
             +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeCat('+i+',1)" '+(i===homeCatsData.length-1?'disabled':'')+'>▼</button>'
             +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomeCat('+i+')">✕</button>'
+            +'<div style="display:flex;gap:6px;width:100%;margin-top:2px;">'
+            +'<input class="form-input" placeholder="ছবির লিংক (URL)" value="'+escapeHTML(c.img||'')+'" oninput="setHomeCatImg('+i+',this.value)" style="flex:1;min-width:0;font-size:12px;">'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'hcRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;">📤</button>'
+            +'<input type="file" id="hcRowFile_'+i+'" accept="image/*" style="display:none;" onchange="hcUploadRowImg('+i+',this)">'
+            +'</div>'
             +'</div>';
     }).join('');
 }
+function setHomeCatImg(i,val){ if(homeCatsData[i]) homeCatsData[i].img=(val||'').trim(); }
+function hcUploadRowImg(i,inp){ const f=inp.files[0]; inp.value=''; if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → ছবি আপলোড সেটিংসে imgbb key দিন','#dc2626');return;} uploadToImgbb(f,function(url){ if(homeCatsData[i]){homeCatsData[i].img=url; renderHomeCatList();} },400); }
+function hcUploadAddImg(inp){ const f=inp.files[0]; inp.value=''; if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → ছবি আপলোড সেটিংসে imgbb key দিন','#dc2626');return;} uploadToImgbb(f,function(url){ const el=document.getElementById('hcImg'); if(el)el.value=url; const p=document.getElementById('hcImgPrev'); if(p)p.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:60px;border-radius:8px;">'; },400); }
 function addHomeCat(){
     const name=(document.getElementById('hcName').value||'').trim();
-    const emoji=(document.getElementById('hcEmoji').value||'').trim();
+    const img=(document.getElementById('hcImg').value||'').trim();
     if(!name){ showToast('ক্যাটাগরির নাম দিন','#dc2626'); return; }
     if(homeCatsData.some(c=>c.name===name)){ showToast('এই ক্যাটাগরি আগেই আছে','#dc2626'); return; }
-    homeCatsData.push({name:name, emoji:emoji});
-    document.getElementById('hcName').value=''; document.getElementById('hcEmoji').value='';
+    homeCatsData.push({name:name, img:img});
+    document.getElementById('hcName').value=''; document.getElementById('hcImg').value='';
+    const p=document.getElementById('hcImgPrev'); if(p)p.innerHTML='';
     renderHomeCatList();
 }
 function removeHomeCat(i){ homeCatsData.splice(i,1); renderHomeCatList(); }
