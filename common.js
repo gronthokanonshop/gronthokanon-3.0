@@ -151,7 +151,9 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     /* বাইরে ক্লিক করলে বন্ধ */
     document.addEventListener('click', function (e) {
         var c = document.getElementById('gkContact');
-        if (c && c.classList.contains('open') && !c.contains(e.target)) c.classList.remove('open');
+        if (c && !c.contains(e.target)) {
+            c.classList.remove('open');
+        }
     });
 })();
 window.gkToggleContact = function () {
@@ -159,208 +161,99 @@ window.gkToggleContact = function () {
     if (c) c.classList.toggle('open');
 };
 
-/* কার্ট সাবটোটাল থেকে গিফট-প্রগ্রেস বারের HTML বানায় (index + shared drawer দুটোই ব্যবহার করে) */
-window.gkGiftBarHTML = function (subtotal) {
-    const TH = window.GK_GIFT_THRESHOLD || 1000;
-    if (subtotal <= 0) return '';
-    const remain = TH - subtotal;
-    if (remain > 0) {
-        const pct = Math.min(100, Math.round(subtotal / TH * 100));
-        return `<div class="gk-gift">
-            <div class="gk-gift-txt">🎁 আর মাত্র <b>৳${remain}</b>-এর বই কিনলেই <b>ফ্রি হাদিয়া সামগ্রী!</b></div>
-            <div class="gk-gift-track"><div class="gk-gift-fill" style="width:${pct}%"></div></div>
-        </div>`;
-    }
-    return `<div class="gk-gift done">
-        <div class="gk-gift-txt">🎉 অভিনন্দন! আপনার অর্ডারে <b>ফ্রি হাদিয়া সামগ্রী</b> যুক্ত হবে ইন শা আল্লাহ</div>
-    </div>`;
-};
-
-/* ═══════════════════════════════════════
-   GLOBAL CART DRAWER
-   index.html-এর নিজস্ব ড্রয়ার আছে — বাকি সব পেজে
-   (filter, book ইত্যাদি) এই শেয়ার্ড ড্রয়ারটি বসে।
-═══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   কার্ট — localStorage এ রক্ষা হয়
+   শপিং কার্ট: ['{ প্রোডাক্ট }', ...]
+   কুপন: গ্রন্থকানন_coupon = কোড, গ্রন্থকানন_ctype/cvalue = টাইপ ও মূল্য
+═══════════════════════════════════════════════════════════════ */
 (function () {
-    if (document.getElementById('cartBox')) return; // index-এর নিজস্ব ড্রয়ার
-
-    const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    const readCart = () => { try { return JSON.parse(localStorage.getItem('gronthokanon_cart')) || []; } catch (e) { return []; } };
-    const saveCart = c => localStorage.setItem('gronthokanon_cart', JSON.stringify(c));
-
-    /* ── CSS ── */
-    const css = document.createElement('style');
-    css.textContent = `
-    #gkCartOverlay{position:fixed;inset:0;background:rgba(0,0,0,.48);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99998;opacity:0;pointer-events:none;transition:opacity .3s;}
-    #gkCartOverlay.open{opacity:1;pointer-events:auto;}
-    #gkCartDrawer{position:fixed;top:0;right:0;height:100%;width:340px;max-width:92vw;background:var(--card,#fff);color:var(--text,#111827);z-index:99999;transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.18);border-radius:20px 0 0 20px;overflow:hidden;font-family:'Hind Siliguri',Arial,sans-serif;}
-    #gkCartDrawer.open{transform:translateX(0);}
-    .gk-cd-head{padding:15px 18px;background:linear-gradient(135deg,#059669,#047857);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-    .gk-cd-head h3{margin:0;font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;}
-    .gk-cd-count{background:rgba(255,255,255,.22);font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
-    .gk-cd-close{cursor:pointer;font-size:24px;line-height:1;opacity:.9;background:none;border:none;color:#fff;padding:0 2px;}
-    .gk-cd-items{flex:1;overflow-y:auto;padding:14px 16px;}
-    .gk-cd-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border,#e5e7eb);}
-    .gk-cd-item img{width:44px;height:58px;object-fit:cover;border-radius:8px;border:1px solid var(--border,#e5e7eb);flex-shrink:0;background:#f0fdf4;}
-    .gk-cd-name{font-size:12.5px;font-weight:700;color:var(--text,#111827);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-    .gk-cd-price{font-size:12.5px;font-weight:800;color:#dc2626;margin-top:2px;}
-    .gk-qty{display:flex;align-items:center;gap:7px;flex-shrink:0;}
-    .gk-qty button{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--border,#d1d5db);background:var(--bg,#f9fafb);color:var(--text,#111827);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:.15s;}
-    .gk-qty button:hover{border-color:#059669;color:#059669;}
-    .gk-qty span{font-size:13px;font-weight:800;min-width:14px;text-align:center;color:var(--text,#111827);}
-    .gk-cd-empty{text-align:center;padding:60px 20px;color:var(--text2,#6b7280);}
-    .gk-cd-empty svg{opacity:.4;margin-bottom:10px;}
-    .gk-cd-empty p{font-size:14px;font-weight:600;margin:0 0 16px;}
-    .gk-cd-empty button{padding:9px 22px;background:#059669;color:#fff;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
-    .gk-cd-foot{padding:14px 16px 16px;border-top:1px solid var(--border,#e5e7eb);background:var(--bg,#f9fafb);flex-shrink:0;}
-    .gk-cd-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text2,#6b7280);padding:2.5px 0;}
-    .gk-cd-row.total{font-size:15.5px;font-weight:800;color:var(--text,#111827);padding-top:6px;}
-    .gk-cd-row.total span:last-child{color:#059669;}
-    .gk-cd-row.disc span:last-child{color:#dc2626;font-weight:700;}
-    .gk-coupon{display:flex;gap:6px;margin-bottom:10px;}
-    .gk-coupon input{flex:1;padding:8px 10px;border:1.5px solid var(--border,#d1d5db);border-radius:9px;background:var(--card,#fff);color:var(--text,#111827);font-family:'Hind Siliguri',Arial,sans-serif;font-size:12.5px;outline:none;min-width:0;}
-    .gk-coupon input:focus{border-color:#059669;}
-    .gk-coupon button{background:#059669;color:#fff;border:none;padding:0 14px;border-radius:9px;cursor:pointer;font-weight:700;font-size:12.5px;font-family:'Hind Siliguri',Arial,sans-serif;}
-    .gk-coupon-on{display:flex;align-items:center;gap:8px;padding:7px 11px;background:rgba(5,150,105,.08);border:1.5px dashed #059669;border-radius:9px;margin-bottom:10px;}
-    .gk-coupon-on span{flex:1;font-size:12px;font-weight:700;color:#059669;}
-    .gk-coupon-on button{background:#fee2e2;color:#dc2626;border:none;border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
-    .gk-checkout-btn{width:100%;margin-top:10px;padding:13px;background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;border-radius:11px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(5,150,105,.3);transition:.2s;letter-spacing:.3px;}
-    .gk-checkout-btn:hover{box-shadow:0 5px 16px rgba(5,150,105,.4);}
-    .gk-checkout-btn:active{transform:scale(.98);}
-    .gk-cd-note{text-align:center;font-size:10.5px;color:var(--text3,#9ca3af);margin-top:8px;}`;
-    document.head.appendChild(css);
-
-    /* ── HTML ── */
-    function buildDrawer() {
-        const wrap = document.createElement('div');
-        wrap.innerHTML = `
-        <div id="gkCartOverlay" onclick="closeCart()"></div>
-        <div id="gkCartDrawer">
-            <div class="gk-cd-head">
-                <h3><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> আপনার ব্যাগ <span class="gk-cd-count" id="gkCdCount">0</span></h3>
-                <button class="gk-cd-close" onclick="closeCart()">&times;</button>
-            </div>
-            <div class="gk-cd-items" id="gkCdItems"></div>
-            <div class="gk-cd-foot">
-                <div id="gkGiftBar"></div>
-                <div id="gkCouponBox"></div>
-                <div class="gk-cd-row"><span>সাবটোটাল</span><span>৳<span id="gkCdSub">0</span></span></div>
-                <div class="gk-cd-row disc" id="gkCdDiscRow" style="display:none;"><span>ডিসকাউন্ট (<span id="gkCdCoupon"></span>)</span><span>-৳<span id="gkCdDisc">0</span></span></div>
-                <div class="gk-cd-row total"><span>মোট</span><span>৳<span id="gkCdTotal">0</span></span></div>
-                <button class="gk-checkout-btn" onclick="gkGoCheckout()">✅ অর্ডার করুন</button>
-                <div class="gk-cd-note">🚚 ঢাকায় ডেলিভারি ৳৬০ — ঢাকার বাইরে ৳৯০ (চেকআউটে যোগ হবে)</div>
-            </div>
-        </div>`;
-        document.body.appendChild(wrap);
-    }
-    if (document.body) buildDrawer();
-    else document.addEventListener('DOMContentLoaded', buildDrawer);
-
-    /* ── ব্যাজ আপডেট (পেজভেদে ভিন্ন id) ── */
-    function gkBadges(n) {
-        ['cartCount', 'floatCount', 'bnavBadge'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.innerText = n;
-        });
-    }
-
-    /* ── রেন্ডার ── */
+    window.readCart = function () {
+        try {
+            var c = localStorage.getItem('gronthokanon_cart');
+            return (c ? JSON.parse(c) : []).filter(function (item) { return item && item.id; });
+        } catch (e) {
+            return [];
+        }
+    };
+    window.writeCart = function (items) {
+        try { localStorage.setItem('gronthokanon_cart', JSON.stringify(items || [])); } catch (e) {}
+    };
+    window.addToCart = function (p) {
+        if (!p || !p.id) return;
+        var cart = readCart();
+        var found = cart.find(function (c) { return c.id === p.id; });
+        if (found) {
+            found.qty = (found.qty || 1) + 1;
+        } else {
+            p.qty = 1;
+            cart.push(p);
+        }
+        writeCart(cart);
+        showToast('✅ যোগ হয়েছে ব্যাগে', '#059669');
+    };
+    window.removeCartItem = function (id) {
+        var cart = readCart();
+        writeCart(cart.filter(function (c) { return c.id !== id; }));
+        gkRenderCart();
+    };
+    window.updateCartQty = function (id, qty) {
+        var cart = readCart();
+        var item = cart.find(function (c) { return c.id === id; });
+        if (item) {
+            item.qty = Math.max(1, qty);
+            writeCart(cart);
+            gkRenderCart();
+        }
+    };
     window.gkRenderCart = function () {
-        const cart = readCart();
-        const box = document.getElementById('gkCdItems');
-        if (!box) return;
-        document.getElementById('gkCdCount').innerText = cart.length;
-        gkBadges(cart.length);
-
+        var cart = readCart();
+        var cartItems = document.getElementById('gkCartItems');
+        if (!cartItems) return;
         if (!cart.length) {
-            box.innerHTML = `<div class="gk-cd-empty">
-                <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-                <p>ব্যাগ এখনও খালি</p>
-                <button onclick="closeCart()">📚 বই দেখুন</button>
-            </div>`;
-        } else {
-            const g = {};
-            cart.forEach(i => { if (g[i.name]) g[i.name].qty++; else g[i.name] = { price: Number(i.price) || 0, qty: 1, img: i.img || '' }; });
-            box.innerHTML = Object.entries(g).map(([name, it]) => `
-                <div class="gk-cd-item">
-                    <img src="${esc(it.img)}" alt="" onerror="this.style.visibility='hidden'">
-                    <div style="flex:1;min-width:0;">
-                        <div class="gk-cd-name">${esc(name)}</div>
-                        <div class="gk-cd-price">৳${it.price}</div>
-                    </div>
-                    <div class="gk-qty">
-                        <button data-name="${esc(name)}" onclick="gkQty(this.dataset.name,-1)">−</button>
-                        <span>${it.qty}</span>
-                        <button data-name="${esc(name)}" onclick="gkQty(this.dataset.name,1)">+</button>
-                    </div>
-                </div>`).join('');
+            cartItems.innerHTML = '<div style="padding: 40px 20px; text-align: center; color: var(--text-muted);"><p>⛹️ ব্যাগ খালি</p></div>';
+            return;
         }
+        var itemsHtml = cart.map(function (item) {
+            var subHtml = (item.qty || 1) + ' × ৳' + (item.price || 0) + ' = ৳' + ((item.qty || 1) * (item.price || 0));
+            return '<div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid var(--border);">' +
+                '<img src="' + (item.cover || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 300%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2216%22 fill=%22%23666%22%3ENo Cover%3C/text%3E%3C/svg%3E') + '" alt="' + item.title + '" style="width: 50px; height: 75px; object-fit: cover; border-radius: 3px; flex-shrink: 0;">' +
+                '<div style="flex: 1; min-width: 0;">' +
+                '<div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">' + item.title + '</div>' +
+                '<div style="font-size: 11px; color: var(--text-muted);">' + subHtml + '</div>' +
+                '<div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">' +
+                '<button onclick="updateCartQty(' + item.id + ', ' + ((item.qty || 1) - 1) + ')" style="width: 20px; height: 20px; padding: 0; border: 1px solid var(--border); background: var(--bg); border-radius: 2px; cursor: pointer;">−</button>' +
+                '<span style="width: 24px; text-align: center; font-size: 12px; font-weight: 600;">' + (item.qty || 1) + '</span>' +
+                '<button onclick="updateCartQty(' + item.id + ', ' + ((item.qty || 1) + 1) + ')" style="width: 20px; height: 20px; padding: 0; border: 1px solid var(--border); background: var(--bg); border-radius: 2px; cursor: pointer;">+</button>' +
+                '</div></div>' +
+                '<button onclick="removeCartItem(' + item.id + ')" style="flex-shrink: 0; width: 32px; height: 32px; border: none; background: none; color: var(--danger); font-size: 16px; cursor: pointer;">✕</button>' +
+                '</div>';
+        }).join('');
 
-        /* কুপন UI */
-        const applied = localStorage.getItem('gronthokanon_coupon');
-        const cType = localStorage.getItem('gronthokanon_ctype') || 'percent';
-        const cValue = parseInt(localStorage.getItem('gronthokanon_cvalue') || localStorage.getItem('gronthokanon_discount') || '0');
-        const cb = document.getElementById('gkCouponBox');
-        if (applied) {
-            const lbl = gkCouponLabel({ type: cType, value: cValue });
-            cb.innerHTML = `<div class="gk-coupon-on"><span>🎉 ${esc(applied)} — ${esc(lbl)}</span><button onclick="gkRemoveCoupon()">✕ বাতিল</button></div>`;
-        } else {
-            cb.innerHTML = `<div class="gk-coupon"><input id="gkCouponInput" placeholder="কুপন কোড লিখুন"><button onclick="gkApplyCoupon()">Apply</button></div>`;
-        }
+        var total = cart.reduce(function (s, item) { return s + ((item.qty || 1) * (item.price || 0)); }, 0);
+        var coupon = localStorage.getItem('gronthokanon_coupon');
+        var discount = window.gkCouponDiscAmt(total) || 0;
+        var cType = localStorage.getItem('gronthokanon_ctype') || 'percent';
+        var cDeliveryFree = cType === 'delivery';
+        var deliveryCharge = total < 500 ? (cDeliveryFree ? 0 : 100) : 0;
+        var finalTotal = total - discount + deliveryCharge;
 
-        /* টোটাল */
-        const grouped = {};
-        cart.forEach(i => { grouped[i.name] = grouped[i.name] || { p: Number(i.price) || 0, q: 0 }; grouped[i.name].q++; });
-        const sub = Object.values(grouped).reduce((s, x) => s + x.p * x.q, 0);
-        const disc = gkCouponDiscAmt(sub);
-        document.getElementById('gkGiftBar').innerHTML = gkGiftBarHTML(sub);
-        document.getElementById('gkCdSub').innerText = sub;
-        document.getElementById('gkCdDisc').innerText = disc;
-        document.getElementById('gkCdCoupon').innerText = applied || '';
-        document.getElementById('gkCdDiscRow').style.display = disc > 0 ? 'flex' : 'none';
-        document.getElementById('gkCdTotal').innerText = sub - disc;
+        var cartFooter = '<div style="padding: 16px; border-top: 1px solid var(--border);">' +
+            '<div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">' +
+            '<span>মোট:</span><span>৳' + total + '</span></div>' +
+            (discount ? '<div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: var(--accent);">' +
+                '<span>ছাড় (' + (coupon || 'কোড') + '):</span><span>−৳' + discount + '</span></div>' : '') +
+            (deliveryCharge ? '<div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">' +
+                '<span>ডেলিভারি:</span><span>৳' + deliveryCharge + '</span></div>' : '') +
+            '<div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid var(--border); font-weight: 700; font-size: 14px;">' +
+            '<span>পরিশোধ:</span><span>৳' + finalTotal + '</span></div>' +
+            '</div>' +
+            '<div style="padding: 0 16px 16px;">' +
+            '<button onclick="gkGoCheckout()" style="width: 100%; padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">চেকআউট করুন</button>' +
+            '</div>';
+
+        cartItems.innerHTML = itemsHtml + cartFooter;
     };
 
-    /* ── qty বদলানো ── */
-    window.gkQty = function (name, delta) {
-        let cart = readCart();
-        if (delta === 1) {
-            const item = cart.find(i => i.name === name);
-            if (item) cart.push({ ...item });
-        } else {
-            for (let j = cart.length - 1; j >= 0; j--) {
-                if (cart[j].name === name) { cart.splice(j, 1); break; }
-            }
-        }
-        saveCart(cart);
-        gkRenderCart();
-    };
-
-    /* ── কুপন ── */
-    window.gkApplyCoupon = function () {
-        const code = (document.getElementById('gkCouponInput')?.value || '').trim().toUpperCase();
-        const info = gkCouponInfo(code);
-        if (info) {
-            localStorage.setItem('gronthokanon_coupon', code);
-            localStorage.setItem('gronthokanon_ctype', info.type);
-            localStorage.setItem('gronthokanon_cvalue', String(info.value));
-            localStorage.setItem('gronthokanon_discount', String(info.type === 'percent' ? info.value : 0));
-            showToast('🎉 ' + gkCouponLabel(info) + ' যুক্ত হয়েছে!', '#059669');
-        } else {
-            showToast('❌ ভুল কুপন কোড!', '#dc2626');
-        }
-        gkRenderCart();
-    };
-    window.gkRemoveCoupon = function () {
-        localStorage.removeItem('gronthokanon_coupon');
-        localStorage.removeItem('gronthokanon_discount');
-        localStorage.removeItem('gronthokanon_ctype');
-        localStorage.removeItem('gronthokanon_cvalue');
-        showToast('🗑️ কুপন বাতিল হয়েছে', '#6b7280');
-        gkRenderCart();
-    };
-
-    /* ── চেকআউট ── */
     window.gkGoCheckout = function () {
         if (!readCart().length) { showToast('⚠️ ব্যাগ খালি!', '#dc2626'); return; }
         window.location.href = 'checkout.html';
@@ -402,9 +295,14 @@ window.gkGiftBarHTML = function (subtotal) {
    কুপন/অফার একটা পপআপে দেখাবে। ক্রস (✕) বা বাইরে ক্লিক করলে বন্ধ হবে।
    একবার বন্ধ করলে একই অফার আর ~২০ ঘণ্টা দেখাবে না — নতুন/ভিন্ন অফার
    চালু হলে (বা সময় পার হলে) আবার দেখাবে।
+   
+   ফিচার:
+   1. সাধারণ কুপন পপআপ (সেই কুপনগুলো যেখানে showInPopup=true)
+   2. ছবিওয়ালা অফার পোস্টার (siteConfig/offerPopup থেকে, enabled=true হলে)
 ═══════════════════════════════════════════════════════════ */
 (function () {
     var DISMISS_KEY = 'gronthokanon_offer_dismiss';
+    var DISMISS_KEY_POSTER = 'gronthokanon_offer_poster_dismiss';
     var DISMISS_HOURS = 20;
 
     function getDismissed() {
@@ -417,6 +315,17 @@ window.gkGiftBarHTML = function (subtotal) {
         var d = getDismissed();
         if (!d || d.sig !== sig) return false;
         return (Date.now() - (d.t || 0)) < DISMISS_HOURS * 3600000;
+    }
+    function getDismissedPoster() {
+        try { return JSON.parse(localStorage.getItem(DISMISS_KEY_POSTER) || '{}'); } catch (e) { return {}; }
+    }
+    function setDismissedPoster() {
+        try { localStorage.setItem(DISMISS_KEY_POSTER, JSON.stringify({ t: Date.now() })); } catch (e) {}
+    }
+    function isPosterDismissed() {
+        var d = getDismissedPoster();
+        if (!d || !d.t) return false;
+        return (Date.now() - d.t) < DISMISS_HOURS * 3600000;
     }
     function offerLabel(c) {
         if (typeof c.discount === 'number') return c.discount + '% ছাড়';
@@ -480,6 +389,37 @@ window.gkGiftBarHTML = function (subtotal) {
             });
         });
     }
+
+    function buildPosterPopup(config) {
+        if (document.getElementById('gkOfferPosterOverlay')) return;
+        var overlay = document.createElement('div');
+        overlay.className = 'gk-offer-overlay';
+        overlay.id = 'gkOfferPosterOverlay';
+        overlay.innerHTML =
+            '<div class="gk-offer-poster-box">' +
+                '<button type="button" class="gk-offer-poster-close" aria-label="বন্ধ করুন">✕</button>' +
+                (config.img ? '<img src="' + escapeHTML(config.img) + '" alt="অফার" class="gk-offer-poster-img" style="cursor:pointer;" />' : '') +
+                (config.title ? '<div class="gk-offer-poster-title">' + escapeHTML(config.title) + '</div>' : '') +
+                (config.sub ? '<div class="gk-offer-poster-sub">' + escapeHTML(config.sub) + '</div>' : '') +
+            '</div>';
+        document.body.appendChild(overlay);
+
+        function dismiss() {
+            setDismissedPoster();
+            overlay.style.opacity = '0';
+            setTimeout(function () { overlay.remove(); }, 200);
+        }
+
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) dismiss(); });
+        overlay.querySelector('.gk-offer-poster-close').addEventListener('click', dismiss);
+
+        if (config.img && config.link) {
+            overlay.querySelector('.gk-offer-poster-img').addEventListener('click', function () {
+                window.location.href = config.link;
+            });
+        }
+    }
+
     function fallbackCopy(text) {
         var ta = document.createElement('textarea');
         ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
@@ -490,19 +430,41 @@ window.gkGiftBarHTML = function (subtotal) {
 
     function tryShow() {
         try {
+            /* ──── GUARD: চেকআউট পেজে পপআপ দেখাবে না ──── */
+            if (location.pathname.indexOf('checkout.html') !== -1 || location.pathname.endsWith('checkout.html')) {
+                return;
+            }
+
             if (typeof firebase === 'undefined' || !firebase.database) return;
+
+            /* ──── প্রথমে সাধারণ কুপন পপআপ চেষ্টা করুন ──── */
             firebase.database().ref('coupons').once('value').then(function (s) {
                 var v = (s.exists() ? s.val() : {}) || {};
                 var offers = [];
                 Object.keys(v).forEach(function (k) {
                     var c = v[k];
                     if (!c || c.active === false) return;
+                    /* ──── শুধু সেই কুপনগুলো যেখানে showInPopup === true ──── */
+                    if (c.showInPopup !== true) return;
                     offers.push({ code: String(k).toUpperCase(), label: offerLabel(c) });
                 });
-                if (!offers.length) return;
-                var sig = offers.map(function (o) { return o.code; }).sort().join(',');
-                if (isDismissed(sig)) return;
-                buildPopup(offers);
+                if (offers.length) {
+                    var sig = offers.map(function (o) { return o.code; }).sort().join(',');
+                    if (!isDismissed(sig)) {
+                        buildPopup(offers);
+                        return; /* কুপন পপআপ দেখানো হয়েছে, পোস্টার দেখাবেন না */
+                    }
+                }
+
+                /* ──── কুপন পপআপ না দেখানো হলে, ছবিওয়ালা পোস্টার দেখান ──── */
+                firebase.database().ref('siteConfig/offerPopup').once('value').then(function (posterSnap) {
+                    var posterConfig = posterSnap.val();
+                    if (posterConfig && posterConfig.enabled === true && posterConfig.img) {
+                        if (!isPosterDismissed()) {
+                            buildPosterPopup(posterConfig);
+                        }
+                    }
+                }).catch(function () {});
             }).catch(function () {});
         } catch (e) {}
     }

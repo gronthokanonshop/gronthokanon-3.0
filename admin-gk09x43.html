@@ -1407,6 +1407,42 @@
                 </div>
 
                 <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> অফার পোস্টার পপআপ</h3>
+                    <p style="margin-bottom:12px;">সাইটে ঢুকলেই ছবিওয়ালা অফার পোস্টার দেখাবে। <b>চালু</b> রাখলে এই পোস্টার দেখাবে; বন্ধ থাকলে সাধারণ কুপন পপআপ চলবে।</p>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;">
+                            <input type="checkbox" id="ofPopEnabled" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
+                            পোস্টার পপআপ চালু রাখুন
+                        </label>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">পোস্টার ছবির URL</label>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <input class="form-input" id="ofPopImg" placeholder="https://i.ibb.co/..." style="flex:1;min-width:200px;">
+                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('ofPopImgFile').click()">📤 imgbb আপলোড</button>
+                            <input type="file" id="ofPopImgFile" accept="image/*" style="display:none;" onchange="ofPopUploadImg(this)">
+                        </div>
+                        <div id="ofPopImgPrev" style="margin-top:8px;"></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">শিরোনাম (ঐচ্ছিক)</label>
+                        <input class="form-input" id="ofPopTitle" placeholder="যেমন: ঈদ স্পেশাল অফার!">
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">সাবটাইটেল (ঐচ্ছিক)</label>
+                        <input class="form-input" id="ofPopSub" placeholder="যেমন: সব বইয়ে ২০% ছাড়, আজই অর্ডার করুন!">
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">ছবিতে ক্লিক করলে কোথায় যাবে (ঐচ্ছিক)</label>
+                        <input class="form-input" id="ofPopLink" placeholder="যেমন: filter.html?type=cat&value=Best Selling">
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="saveOfferPopup()">
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        সেভ করুন (সাইটে লাইভ)
+                    </button>
+                </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> কুপন কোড ম্যানেজমেন্ট</h3>
                     <p style="margin-bottom:12px;">নতুন কুপন কোড ও ছাড়ের হার (%) যোগ করুন — সেভ করলেই সাইটে কাজ করবে। (বিল্ট-ইন <b>FIRSTORDER</b> — ৫% সবসময় চালু থাকে।)</p>
                     <div id="couponList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
@@ -1707,7 +1743,7 @@ function switchTab(tab, btnEl){
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools'){ renderOrderSummary(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); }
+    if(tab==='tools'){ renderOrderSummary(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -2937,9 +2973,14 @@ function renderCouponList(){
     html+=codes.map(code=>{
         const c=couponData[code]||{};
         const active=c.active!==false;
+        const inPopup=c.showInPopup===true;
         return `<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface);flex-wrap:wrap;">
             <b style="flex:1;min-width:90px;">${escapeHTML(code)}</b>
             <span style="font-weight:700;color:#059669;">${couponAdminLabel(c)}</span>
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;user-select:none;" title="পপআপে দেখাবে কিনা">
+                <input type="checkbox" ${inPopup?'checked':''} onchange="toggleShowInPopup('${escapeHTML(code)}',this.checked)" style="cursor:pointer;accent-color:var(--primary);">
+                পপআপে দেখাব
+            </label>
             <button class="btn btn-sm btn-ghost" onclick="toggleCoupon('${escapeHTML(code)}')" title="চালু/বন্ধ">${active?'🟢 চালু':'⚪ বন্ধ'}</button>
             <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteCoupon('${escapeHTML(code)}')" title="মুছুন">✕</button>
         </div>`;
@@ -2967,9 +3008,61 @@ async function toggleCoupon(code){
     const c=couponData[code]||{}; const na=!(c.active!==false);
     try{ await db.ref('coupons/'+code+'/active').set(na); couponData[code].active=na; renderCouponList(); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
 }
+async function toggleShowInPopup(code,val){
+    try{
+        await db.ref('coupons/'+code+'/showInPopup').set(!!val);
+        if(!couponData[code])couponData[code]={};
+        couponData[code].showInPopup=!!val;
+        showToast(val?'✅ পপআপে দেখাবে':'🙈 পপআপ থেকে সরানো হয়েছে','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); renderCouponList(); }
+}
 async function deleteCoupon(code){
     if(!confirm(code+' কুপনটি মুছবেন?'))return;
     try{ await db.ref('coupons/'+code).remove(); delete couponData[code]; renderCouponList(); showToast('🗑️ কুপন মুছে ফেলা হয়েছে','#6b7280'); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
+}
+
+/* ══════════════════════════════════════════════
+   অফার পোস্টার পপআপ (siteConfig/offerPopup)
+══════════════════════════════════════════════ */
+function loadOfferPopupAdmin(){
+    db.ref('siteConfig/offerPopup').once('value').then(snap=>{
+        const v=snap.val()||{};
+        const cb=document.getElementById('ofPopEnabled');
+        if(cb)cb.checked=!!v.enabled;
+        const imgEl=document.getElementById('ofPopImg');
+        if(imgEl)imgEl.value=v.img||'';
+        const titleEl=document.getElementById('ofPopTitle');
+        if(titleEl)titleEl.value=v.title||'';
+        const subEl=document.getElementById('ofPopSub');
+        if(subEl)subEl.value=v.sub||'';
+        const linkEl=document.getElementById('ofPopLink');
+        if(linkEl)linkEl.value=v.link||'';
+        const prev=document.getElementById('ofPopImgPrev');
+        if(prev&&v.img)prev.innerHTML='<img src="'+escapeHTML(v.img)+'" style="max-width:180px;max-height:120px;border-radius:8px;margin-top:4px;">';
+    }).catch(()=>{});
+}
+async function saveOfferPopup(){
+    const enabled=!!(document.getElementById('ofPopEnabled')||{}).checked;
+    const img=(document.getElementById('ofPopImg')||{}).value||'';
+    const title=(document.getElementById('ofPopTitle')||{}).value||'';
+    const sub=(document.getElementById('ofPopSub')||{}).value||'';
+    const link=(document.getElementById('ofPopLink')||{}).value||'';
+    if(enabled&&!img){showToast('ছবির URL দিন অথবা পোস্টার বন্ধ রাখুন','#dc2626');return;}
+    const data={enabled,img,title,sub,link};
+    try{
+        await db.ref('siteConfig/offerPopup').set(data);
+        showToast('✅ অফার পোস্টার সেভ হয়েছে — সাইটে লাইভ!','#059669');
+    }catch(e){showToast('❌ সেভ ব্যর্থ','#dc2626');}
+}
+function ofPopUploadImg(inp){
+    const f=inp.files[0]; inp.value='';
+    if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;}
+    uploadToImgbb(f,function(url){
+        const el=document.getElementById('ofPopImg');
+        if(el)el.value=url;
+        const prev=document.getElementById('ofPopImgPrev');
+        if(prev)prev.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:180px;max-height:120px;border-radius:8px;margin-top:4px;">';
+    },1000);
 }
 
 /* ══════════════════════════════════════════════
@@ -4227,20 +4320,36 @@ async function requestBrowserNotifPermission(){
     }catch(e){}
 }
 
+/* ── Global AudioContext — ব্রাউজার autoplay restriction এড়াতে ──
+   প্রথম click/keydown-এ একবার resume() করা হয়; তারপর সব সময় বাজবে। */
+const _gkAudioCtx=(function(){
+    try{return new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
+})();
+(function(){
+    function _resumeCtx(){if(_gkAudioCtx&&_gkAudioCtx.state==='suspended'){_gkAudioCtx.resume().catch(()=>{});}}
+    document.addEventListener('click',_resumeCtx,{once:true});
+    document.addEventListener('keydown',_resumeCtx,{once:true});
+})();
+
 function playBeep(){
     try{
-        const ctx=new AudioContext();
-        [880,1175].forEach((freq,i)=>{
-            const osc=ctx.createOscillator();
-            const gain=ctx.createGain();
-            osc.connect(gain);gain.connect(ctx.destination);
-            osc.type='sine';osc.frequency.value=freq;
-            const start=ctx.currentTime+i*0.16;
-            gain.gain.setValueAtTime(0.001,start);
-            gain.gain.exponentialRampToValueAtTime(0.35,start+0.02);
-            gain.gain.exponentialRampToValueAtTime(0.001,start+0.2);
-            osc.start(start);osc.stop(start+0.22);
-        });
+        if(!_gkAudioCtx)return;
+        const ctx=_gkAudioCtx;
+        const doPlay=function(){
+            [880,1175].forEach((freq,i)=>{
+                const osc=ctx.createOscillator();
+                const gain=ctx.createGain();
+                osc.connect(gain);gain.connect(ctx.destination);
+                osc.type='sine';osc.frequency.value=freq;
+                const start=ctx.currentTime+i*0.16;
+                gain.gain.setValueAtTime(0.001,start);
+                gain.gain.exponentialRampToValueAtTime(0.35,start+0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001,start+0.2);
+                osc.start(start);osc.stop(start+0.22);
+            });
+        };
+        if(ctx.state==='suspended'){ctx.resume().then(doPlay).catch(()=>{});}
+        else{doPlay();}
     }catch(e){}
 }
 
