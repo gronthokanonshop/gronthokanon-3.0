@@ -376,6 +376,14 @@
            TOOLS — original style (unchanged)
         ══════════════════════════════════════════ */
         .tool-card{background:var(--surface);border-radius:14px;padding:16px;border:1px solid var(--border);margin-bottom:12px;}
+        .fraud-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:14px;}
+        .fraud-stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;}
+        .fraud-stat-val{font-size:20px;font-weight:800;color:var(--text-main);}
+        .fraud-stat-lbl{font-size:11px;color:var(--text-muted);margin-top:2px;}
+        .fraud-flag{display:flex;align-items:flex-start;gap:8px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;margin-bottom:8px;}
+        .fraud-ok{display:flex;align-items:center;gap:8px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;margin-bottom:8px;}
+        .fraud-order-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid var(--border);font-size:12.5px;}
+        .fraud-order-row:last-child{border-bottom:none;}
         .tool-card h3{font-size:13px;font-weight:700;color:var(--text-main);margin-bottom:6px;}
         .tool-card p{font-size:12px;color:var(--text-muted);margin-bottom:12px;}
         .migrate-btn{padding:7px 14px;border-radius:20px;border:1px solid #7c3aed;background:rgba(124,58,237,.12);color:#7c3aed;font-family:var(--font-main);font-size:12px;font-weight:600;cursor:pointer;transition:.15s;width:100%;padding:10px;border-radius:10px;font-size:13px;}
@@ -437,6 +445,31 @@
         @keyframes slideInRight{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
         @keyframes fadeIn{from{opacity:0}to{opacity:1}}
         @keyframes pulse{0%{opacity:0.6}50%{opacity:1}100%{opacity:0.6}}
+
+        /* ── NEW ORDER POPUP ── */
+        .new-order-popup-container{position:fixed;top:86px;right:20px;z-index:3000;display:flex;flex-direction:column;gap:12px;max-width:380px;width:calc(100% - 40px);pointer-events:none;}
+        .new-order-popup{pointer-events:auto;background:#fffdf7;border:1px solid #f3e6b8;border-top:5px solid #0B6E4F;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,0.22);overflow:hidden;position:relative;animation:popIn .35s cubic-bezier(0.16,1,0.3,1);}
+        .new-order-popup.closing{animation:popOut .25s ease forwards;}
+        @keyframes popIn{from{opacity:0;transform:translateX(60px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
+        @keyframes popOut{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(60px) scale(.9)}}
+        .nop-head{background:linear-gradient(135deg,#0B6E4F,#0e8a63);padding:12px 14px;display:flex;align-items:center;gap:8px;position:relative;}
+        .nop-bell{width:30px;height:30px;background:#F5B700;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:pulse 1.4s infinite;}
+        .nop-title{color:#fff;font-weight:800;font-size:13px;flex:1;line-height:1.3;}
+        .nop-sub{color:#d6f2e6;font-size:10px;}
+        .nop-close{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.18);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+        .nop-close:hover{background:rgba(255,255,255,0.32);}
+        .nop-body{padding:14px;}
+        .nop-name{font-size:15px;font-weight:800;color:#1c1c1c;margin-bottom:7px;}
+        .nop-row{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#4b5563;margin-bottom:5px;}
+        .nop-row svg{flex-shrink:0;color:#0B6E4F;}
+        .nop-books{background:#e8f3ee;border-radius:8px;padding:7px 9px;font-size:12px;color:#1c1c1c;margin:8px 0;line-height:1.5;}
+        .nop-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+        .nop-total{font-size:16px;font-weight:800;color:#0B6E4F;}
+        .nop-btn{background:#1c1c1c;color:#F5B700;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;}
+        .nop-btn:hover{background:#333;}
+        .nop-progress{position:absolute;bottom:0;left:0;height:3px;background:#F5B700;animation:nopShrink 8s linear forwards;}
+        @keyframes nopShrink{from{width:100%}to{width:0%}}
+        @media(max-width:600px){.new-order-popup-container{top:70px;right:10px;left:10px;max-width:none;}}
 
         /* ── RESPONSIVE ── */
         @media(max-width:768px){
@@ -607,6 +640,8 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- ORDER DETAIL MODAL -->
+<div class="new-order-popup-container" id="newOrderPopupContainer"></div>
+
 <div class="modal-overlay" id="orderModal" onclick="closeModalOnBg(event)">
     <div class="modal-box" onclick="event.stopPropagation()">
         <div class="modal-h">
@@ -926,6 +961,21 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="dash-two-col" style="margin-top:20px;">
+                    <div class="dash-panel">
+                        <div class="dash-panel-head"><span>৭ দিনের অর্ডার ট্রেন্ড</span></div>
+                        <div style="padding:14px;height:240px;">
+                            <canvas id="orderTrendChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="dash-panel">
+                        <div class="dash-panel-head"><span>অর্ডার স্ট্যাটাস বিভাজন</span></div>
+                        <div style="padding:14px;height:240px;">
+                            <canvas id="orderStatusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- ═══ ORDERS TAB ═══ -->
@@ -1216,6 +1266,16 @@
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> অর্ডার সংক্ষেপ</h3>
                     <div id="orderSummary" class="text-sm text-muted" style="line-height:2;">লোড হচ্ছে...</div>
                 </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Manual Fraud Check</h3>
+                    <p>ফোন নম্বর দিয়ে সেই কাস্টমারের সম্পূর্ণ অর্ডার হিস্ট্রি ও সন্দেহজনক প্যাটার্ন চেক করুন।</p>
+                    <div style="display:flex;gap:8px;margin:12px 0;flex-wrap:wrap;">
+                        <input type="tel" id="fraudPhoneInput" placeholder="যেমন: 01712345678" style="flex:1;min-width:200px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;font-family:var(--font-main);font-size:13px;background:var(--surface);color:var(--text-main);" onkeydown="if(event.key==='Enter')checkFraudPhone()">
+                        <button class="btn btn-primary" onclick="checkFraudPhone()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> চেক করুন</button>
+                    </div>
+                    <div id="fraudCheckResult"></div>
+                </div>
                 <div class="tool-card">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> book.js ডাউনলোড</h3>
                     <p>বর্তমান বইয়ের লিস্ট book.js হিসেবে ডাউনলোড করুন।</p>
@@ -1410,6 +1470,7 @@
 <!-- স্লিপ PDF ডাউনলোডের জন্য (ফোনে window.print ভালো কাজ করে না বলে) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════
    UTILS
@@ -1471,6 +1532,8 @@ let allOrders=[];
 let curFilter='all';
 let stockData={};
 let ordersRef=null;
+let orderTrendChartInst=null;
+let orderStatusChartInst=null;
 
 const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
 const STATUS_CLASS={pending:'status-pending',confirmed:'status-confirmed',processing:'status-processing',shipped:'status-shipped',delivered:'status-delivered'};
@@ -3115,6 +3178,89 @@ async function migratePhoneIndex(){
 
 
 /* ══════════════════════════════════════════════
+   MANUAL FRAUD CHECK
+══════════════════════════════════════════════ */
+function normalizePhoneDigits(p){
+    let d=String(p||'').replace(/[^\d]/g,'');
+    if(d.length>11) d=d.slice(-11); // strip country code (+880 etc), keep last 11 digits
+    return d;
+}
+
+function checkFraudPhone(){
+    const inputEl=document.getElementById('fraudPhoneInput');
+    const resultEl=document.getElementById('fraudCheckResult');
+    const raw=inputEl.value.trim();
+    if(!raw){showToast('একটা ফোন নম্বর লিখুন','#dc2626');return;}
+    const target=normalizePhoneDigits(raw);
+    if(target.length<7){resultEl.innerHTML='<div class="fraud-flag">⚠️ সঠিক ফোন নম্বর দিন</div>';return;}
+
+    const matches=allOrders.filter(o=>normalizePhoneDigits(o.phone)===target);
+
+    if(!matches.length){
+        resultEl.innerHTML=`<div class="fraud-ok"><svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> এই নম্বরে কোনো অর্ডার হিস্ট্রি পাওয়া যায়নি — নতুন কাস্টমার।</div>`;
+        return;
+    }
+
+    matches.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+    const total=matches.length;
+    const statusCnt={pending:0,confirmed:0,processing:0,shipped:0,delivered:0};
+    matches.forEach(o=>{const s=o.status||'pending';if(statusCnt[s]!==undefined)statusCnt[s]++;else statusCnt[s]=1;});
+    const delivered=statusCnt.delivered||0;
+    const pending=statusCnt.pending||0;
+    const completionRate=total?Math.round((delivered/total)*100):0;
+
+    // একই দিনে একাধিক অর্ডার (flooding) চেক
+    const dayMap={};
+    matches.forEach(o=>{const day=new Date(o.createdAt||0).toDateString();dayMap[day]=(dayMap[day]||0)+1;});
+    const maxSameDay=Math.max(...Object.values(dayMap),0);
+
+    // ── রেড ফ্ল্যাগ যাচাই ──
+    const flags=[];
+    if(total>=5 && delivered===0){
+        flags.push('এই নম্বরে '+total+'টি অর্ডার হয়েছে কিন্তু একটিও ডেলিভারি সম্পন্ন হয়নি।');
+    }
+    if(total>=3 && completionRate<30 && total<5){
+        flags.push('ডেলিভারি সম্পন্নের হার মাত্র '+completionRate+'%, গড়ের চেয়ে অনেক কম।');
+    }
+    if(pending>=4){
+        flags.push('এখনো '+pending+'টি অর্ডার পেন্ডিং অবস্থায় আছে — যাচাই না করে কনফার্ম করবেন না।');
+    }
+    if(maxSameDay>=3){
+        flags.push('একই দিনে '+maxSameDay+'টি অর্ডার করা হয়েছে — সম্ভবত ভুয়া/টেস্ট অর্ডার।');
+    }
+
+    const uniqueBooks=[...new Set(matches.map(o=>o.books).filter(Boolean))];
+
+    resultEl.innerHTML=`
+        <div class="fraud-stat-grid">
+            <div class="fraud-stat"><div class="fraud-stat-val">${total}</div><div class="fraud-stat-lbl">মোট অর্ডার</div></div>
+            <div class="fraud-stat"><div class="fraud-stat-val" style="color:#0B6E4F;">${delivered}</div><div class="fraud-stat-lbl">ডেলিভারড</div></div>
+            <div class="fraud-stat"><div class="fraud-stat-val" style="color:#d97706;">${pending}</div><div class="fraud-stat-lbl">পেন্ডিং</div></div>
+            <div class="fraud-stat"><div class="fraud-stat-val">${completionRate}%</div><div class="fraud-stat-lbl">সম্পন্নের হার</div></div>
+        </div>
+        ${flags.length?flags.map(f=>`<div class="fraud-flag">🚩 ${escapeHTML(f)}</div>`).join(''):'<div class="fraud-ok"><svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> কোনো সন্দেহজনক প্যাটার্ন পাওয়া যায়নি।</div>'}
+        <div style="margin-top:12px;">
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">অর্ডার করা বইসমূহ (${uniqueBooks.length} ধরনের):</div>
+            <div class="nop-books" style="margin:0 0 12px 0;">${escapeHTML(uniqueBooks.join(' · ')||'—')}</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">সম্পূর্ণ অর্ডার হিস্ট্রি:</div>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+            ${matches.map(o=>`
+                <div class="fraud-order-row" style="cursor:pointer;" onclick="switchTab('orders',document.getElementById('navOrders'));setTimeout(()=>openModal('${escapeHTML(o.orderId)}'),200);">
+                    <div>
+                        <div style="font-weight:700;color:var(--text-main);">${escapeHTML(o.orderId)}</div>
+                        <div style="color:var(--text-muted);font-size:11px;">${new Date(o.createdAt||0).toLocaleString('bn-BD')}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <span class="status-badge ${STATUS_CLASS[o.status]||'status-pending'}" style="font-size:9px;">${STATUS_LABELS[o.status]||escapeHTML(o.status)}</span>
+                        <div style="font-weight:700;color:var(--primary);margin-top:3px;">${escapeHTML(o.total||'')}</div>
+                    </div>
+                </div>`).join('')}
+        </div>`;
+}
+
+/* ══════════════════════════════════════════════
    DASHBOARD RENDER
 ══════════════════════════════════════════════ */
 function renderDashboard(){
@@ -3180,6 +3326,122 @@ function renderDashboard(){
         } else {
             catEl.innerHTML='<div class="text-muted text-sm" style="padding:10px 0;">বই লোড হয়নি</div>';
         }
+    }
+
+    renderDashboardCharts();
+}
+
+/* ══════════════════════════════════════════════
+   DASHBOARD CHARTS (Chart.js)
+══════════════════════════════════════════════ */
+function renderDashboardCharts(){
+    if(typeof Chart==='undefined')return;
+
+    // ── ৭ দিনের অর্ডার ট্রেন্ড (Line) ──
+    const trendCanvas=document.getElementById('orderTrendChart');
+    if(trendCanvas){
+        const days=[];
+        const counts=[];
+        const revenue=[];
+        const now=new Date();
+        for(let i=6;i>=0;i--){
+            const d=new Date(now);
+            d.setDate(now.getDate()-i);
+            d.setHours(0,0,0,0);
+            const dayStart=d.getTime();
+            const dayEnd=dayStart+86400000;
+            const dayOrders=allOrders.filter(o=>(o.createdAt||0)>=dayStart&&(o.createdAt||0)<dayEnd);
+            days.push(d.toLocaleDateString('bn-BD',{weekday:'short',day:'numeric',month:'short'}));
+            counts.push(dayOrders.length);
+            revenue.push(dayOrders.reduce((s,o)=>s+(parseInt(String(o.total||'').replace(/[^\d]/g,''))||0),0));
+        }
+        if(orderTrendChartInst)orderTrendChartInst.destroy();
+        orderTrendChartInst=new Chart(trendCanvas,{
+            type:'line',
+            data:{
+                labels:days,
+                datasets:[{
+                    label:'অর্ডার সংখ্যা',
+                    data:counts,
+                    borderColor:'#0B6E4F',
+                    backgroundColor:'rgba(11,110,79,0.12)',
+                    borderWidth:2.5,
+                    tension:0.35,
+                    fill:true,
+                    pointBackgroundColor:'#0B6E4F',
+                    pointRadius:4,
+                    pointHoverRadius:6
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false,
+                plugins:{
+                    legend:{display:false},
+                    tooltip:{
+                        backgroundColor:'#062E22',
+                        padding:10,
+                        titleFont:{family:'Hind Siliguri'},
+                        bodyFont:{family:'Hind Siliguri'},
+                        callbacks:{
+                            afterLabel:function(ctx){
+                                return 'বিক্রি: ৳'+revenue[ctx.dataIndex].toLocaleString('bn-BD');
+                            }
+                        }
+                    }
+                },
+                scales:{
+                    y:{beginAtZero:true,ticks:{stepSize:1,font:{family:'Hind Siliguri'}},grid:{color:'rgba(0,0,0,0.05)'}},
+                    x:{ticks:{font:{family:'Hind Siliguri',size:10}},grid:{display:false}}
+                }
+            }
+        });
+    }
+
+    // ── অর্ডার স্ট্যাটাস (Donut) ──
+    const statusCanvas=document.getElementById('orderStatusChart');
+    if(statusCanvas){
+        const statusColors={pending:'#A7F3D0',confirmed:'#6EE7B7',processing:'#34D399',shipped:'#10B981',delivered:'#0B6E4F'};
+        const statusCount={};
+        allOrders.forEach(o=>{const s=o.status||'pending';statusCount[s]=(statusCount[s]||0)+1;});
+        const labels=Object.keys(statusCount);
+        const data=labels.map(s=>statusCount[s]);
+        const colors=labels.map(s=>statusColors[s]||'#888');
+        if(orderStatusChartInst)orderStatusChartInst.destroy();
+        orderStatusChartInst=new Chart(statusCanvas,{
+            type:'doughnut',
+            data:{
+                labels:labels.map(s=>STATUS_LABELS[s]||s),
+                datasets:[{
+                    data:data,
+                    backgroundColor:colors,
+                    borderColor:'#ffffff',
+                    borderWidth:2,
+                    hoverOffset:6
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false,
+                cutout:'62%',
+                plugins:{
+                    legend:{
+                        position:'bottom',
+                        labels:{
+                            boxWidth:10,
+                            padding:10,
+                            font:{family:'Hind Siliguri',size:11}
+                        }
+                    },
+                    tooltip:{
+                        backgroundColor:'#062E22',
+                        padding:10,
+                        titleFont:{family:'Hind Siliguri'},
+                        bodyFont:{family:'Hind Siliguri'}
+                    }
+                }
+            }
+        });
     }
 }
 
@@ -3804,23 +4066,77 @@ function checkNewOrders(newTotal){
         const newCount=newTotal-lastOrderCount;
         notifCount+=newCount;
         updateNotifBadge();
+        // allOrders সবসময় নতুন→পুরনো sorted, তাই নতুন orders array-র শুরুতে থাকে
+        const newOrders=allOrders.slice(0,newCount).reverse();
+        newOrders.forEach(o=>showNewOrderPopup(o));
         if(Notification.permission==='granted'){
             new Notification('গ্রন্থকানন — নতুন অর্ডার!',{
                 body:`${newCount}টি নতুন অর্ডার এসেছে`,
                 icon:'https://cdn.jsdelivr.net/npm/twemoji@14/assets/72x72/1f4da.png'
             });
         }
-        // Play beep sound
-        try{
-            const ctx=new AudioContext();
+        playBeep();
+        lastOrderCount=newTotal;
+    }
+}
+
+function playBeep(){
+    try{
+        const ctx=new AudioContext();
+        [880,1175].forEach((freq,i)=>{
             const osc=ctx.createOscillator();
             const gain=ctx.createGain();
             osc.connect(gain);gain.connect(ctx.destination);
-            osc.frequency.value=880;gain.gain.value=0.3;
-            osc.start();setTimeout(()=>osc.stop(),200);
-        }catch(e){}
-        lastOrderCount=newTotal;
-    }
+            osc.type='sine';osc.frequency.value=freq;
+            const start=ctx.currentTime+i*0.16;
+            gain.gain.setValueAtTime(0.001,start);
+            gain.gain.exponentialRampToValueAtTime(0.35,start+0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001,start+0.2);
+            osc.start(start);osc.stop(start+0.22);
+        });
+    }catch(e){}
+}
+
+function showNewOrderPopup(o){
+    const container=document.getElementById('newOrderPopupContainer');
+    if(!container||!o)return;
+    const id='nop_'+Math.random().toString(36).slice(2,9);
+    const div=document.createElement('div');
+    div.className='new-order-popup';
+    div.id=id;
+    div.innerHTML=`
+        <div class="nop-head">
+            <div class="nop-bell">
+                <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+            <div style="flex:1;">
+                <div class="nop-title">🎉 নতুন অর্ডার এসেছে!</div>
+                <div class="nop-sub">${escapeHTML(o.orderId||'')}</div>
+            </div>
+            <button class="nop-close" onclick="closeOrderPopup('${id}')">✕</button>
+        </div>
+        <div class="nop-body">
+            <div class="nop-name">${escapeHTML(o.name||'')}</div>
+            <div class="nop-row">
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                <span>${escapeHTML(o.phone||'')}</span>
+            </div>
+            <div class="nop-books">${escapeHTML(o.books||'')}</div>
+            <div class="nop-foot">
+                <span class="nop-total">${escapeHTML(o.total||'')}</span>
+                <button class="nop-btn" onclick="openModal('${escapeHTML(o.orderId)}');closeOrderPopup('${id}')">দেখুন →</button>
+            </div>
+        </div>
+        <div class="nop-progress"></div>`;
+    container.appendChild(div);
+    setTimeout(()=>closeOrderPopup(id),8000);
+}
+
+function closeOrderPopup(id){
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.classList.add('closing');
+    setTimeout(()=>el.remove(),260);
 }
 
 function updateNotifBadge(){
