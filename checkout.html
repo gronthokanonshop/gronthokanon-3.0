@@ -1156,7 +1156,11 @@ function applySavedInfo(){
     if(n) n.style.display = 'block';
   }catch(e){}
 }
-window.onload = function(){ renderSummary(); prefillSavedInfo(); };
+/* window.onload আগে ব্যবহার হতো — bKash/card/WhatsApp আইকন ডাউনলোড শেষ না
+   হওয়া পর্যন্ত অর্ডার সামারি দেখাত না। DOMContentLoaded ব্যবহার করলে
+   কার্টের তথ্য রেডি হওয়া মাত্র দেখাবে — চেকআউট পেজে এটা বিশেষভাবে জরুরি। */
+document.addEventListener('DOMContentLoaded', function(){ renderSummary(); prefillSavedInfo(); });
+
 </script>
 
 <script src="common.js"></script>

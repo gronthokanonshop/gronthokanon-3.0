@@ -460,7 +460,6 @@ function makeCard(b, delay) {
             <div class="cat-label">${escapeHTML(bookCats(b).join(' · ')||b.cat||'')}</div>
         </div>
         <div class="bc-info">
-            ${(b.type||'বই')==='বই' ? `<div class="bc-pub">🏢 ${escapeHTML(b.pub||'')}</div>` : (b.brand ? `<div class="bc-pub">🏷️ ${escapeHTML(b.brand)}</div>` : '')}
             <div class="bc-name">${escapeHTML(b.name)}</div>
             ${(b.type||'বই')==='বই' ? `<div class="bc-author">✍️ ${escapeHTML(b.author||'')}</div>` : ''}
             <div class="price-row">

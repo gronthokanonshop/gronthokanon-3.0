@@ -1085,6 +1085,9 @@ renderHomeCatChips();
     box-sizing: border-box;
 }
 .author-card-img { border-radius: 50%; }
+.author-card-img-default { background:#9ca3af; color:#fff; padding:0; }
+.author-card-img-default svg { width:56%; height:56%; }
+[data-theme="dark"] .author-card-img-default { background:#4b5563; }
 .pub-card-img img, .author-card-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .author-card-img img { object-fit: cover; }
 .pub-card:hover .pub-card-img, .author-card:hover .author-card-img { box-shadow: 0 6px 16px rgba(0,0,0,.14); }
@@ -1153,6 +1156,7 @@ function renderHomePubChips(){
             +'</div>';
     }).join('');
 }
+const GK_AUTHOR_DEFAULT_SVG='<svg viewBox="0 0 48 48" width="52" height="52" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34c6-1 12-5 16-11l6-9-5-4-8 6c-6 4-10 10-11 16z"/><path d="M14 34l-3 6 6-3"/><circle cx="24" cy="24" r="1.4" fill="currentColor" stroke="none"/></svg>';
 function renderHomeAuthorChips(){
     var section=document.getElementById('authorStripSection');
     var strip=document.getElementById('authorStrip');
@@ -1163,9 +1167,11 @@ function renderHomeAuthorChips(){
     strip.innerHTML=list.map(function(a){
         var val=(a.name||'').toString();
         var img=(a.img||'').toString().trim();
-        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
+        /* ব্যক্তিগত ছবি আপলোড করা থাকলে সেটাই দেখাবে, নাহলে ফিক্সড ডিফল্ট আইকন */
+        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove();this.parentElement.classList.add(\'author-card-img-default\');this.parentElement.innerHTML=GK_AUTHOR_DEFAULT_SVG;">':GK_AUTHOR_DEFAULT_SVG;
+        var imgCls=img?'':' author-card-img-default';
         return '<div class="author-card" onclick="window.location.href=\'filter.html?type=author&value='+encodeURIComponent(val)+'\'">'
-            +'<div class="author-card-img">'+imgTag+'</div>'
+            +'<div class="author-card-img'+imgCls+'">'+imgTag+'</div>'
             +'<div class="author-card-label">'+val.replace(/</g,'&lt;')+'</div>'
             +'</div>';
     }).join('');
@@ -1681,7 +1687,7 @@ function updateWLCount(){
 const GK_CART_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
 const GK_NOSTOCK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>';
 function makeCard(b){
-    const pct=discPct(b),idx=books.indexOf(b),wl=isWL(b.name);
+    const pct=discPct(b),idx=(b._idx!==undefined?b._idx:books.indexOf(b)),wl=isWL(b.name);
     const out=window.gkIsOut&&window.gkIsOut(idx);
     return `<div class="book-card${out?' gk-out':''}" data-bookidx="${idx}" onclick="goToBook(${idx})">
         <div class="bc-img-box">
@@ -2163,10 +2169,21 @@ function deskCatClick(key, el) {
 }
 
 /* INIT */
-window.onload=()=>{
+/* আগে window.onload ব্যবহার হতো — যেটা ফুটারের bKash/Nagad/Facebook আইকন,
+   ব্যানার ইমেজ ইত্যাদি সব রিসোর্স ডাউনলোড শেষ না হওয়া পর্যন্ত ফায়ার হতো না।
+   ফলে বইয়ের ডেটা (book.js) আগেই রেডি থাকলেও, কোনো একটা external image
+   (i.ibb.co ইত্যাদি) স্লো হলে পুরো বইয়ের গ্রিড অহেতুক আটকে থাকতো।
+   DOMContentLoaded শুধু DOM parse + সব <script> (book.js সহ, যেহেতু defer)
+   এক্সিকিউট হওয়া পর্যন্ত অপেক্ষা করে — ছবি/ব্যানার লোড হওয়ার জন্য না। */
+document.addEventListener('DOMContentLoaded', () => {
     // Firebase data load হলে skeleton hide করো
     // books array book.js থেকে আসে — load হলে render করো, না হলে timeout fallback
     function initAfterBooks() {
+        /* প্রতিটা কার্ডে books.indexOf(b) বারবার O(n) কল না করে, একবারই
+           প্রতিটা বইয়ের অবজেক্টে তার নিজের ইনডেক্স বসিয়ে রাখি (O(1) lookup) */
+        if(books.length && books[0]._idx===undefined){
+            books.forEach((bk,i)=>{ bk._idx=i; });
+        }
         document.getElementById('skeletonWrapper').style.display='none';
         document.getElementById('sectionsWrapper').style.display='block';
         renderSections(books);
@@ -2175,7 +2192,7 @@ window.onload=()=>{
         buildAuthorList();
     }
 
-    // book.js-এ books আছে কিনা চেক করো, না থাকলে DOMContentLoaded/load event-এর পর আবার চেক
+    // book.js-এ books আছে কিনা চেক করো, না থাকলে আবার চেক
     if(typeof books !== 'undefined' && books.length > 0) {
         initAfterBooks();
     } else {
@@ -2213,7 +2230,8 @@ window.onload=()=>{
         if(!ok || typeof books==='undefined') return;
         renderSections(books); renderRecent(); buildPubList(); buildAuthorList();
     });
-};
+});
+
 
 /* ═══ আসল recent-sales ticker — Firebase-এর সত্যিকার অর্ডার থেকে (কোনো ভুয়া নয়) ═══ */
 function loadRecentSalesTicker(){

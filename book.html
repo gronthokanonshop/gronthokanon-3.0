@@ -1144,10 +1144,14 @@ function loadLeaderboard(){
 }
 
 /* INIT */
-window.onload=function(){
+/* window.onload আগে ব্যবহার হতো — যেটা WhatsApp আইকন (wikimedia থেকে) সহ পেজের
+   সব external ছবি ডাউনলোড শেষ না হওয়া পর্যন্ত ফায়ার হতো না, ফলে বইয়ের তথ্য
+   (নাম/দাম/বিবরণ) থাকা সত্ত্বেও দেরিতে দেখাত। DOMContentLoaded ব্যবহার করলে
+   book.js (এখানে defer ছাড়াই, তাই আগেই লোড হয়) রেডি হওয়া মাত্র দেখাবে। */
+document.addEventListener('DOMContentLoaded', function(){
     loadBook();
     /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট (নতুন প্রোডাক্টসহ) এলে আবার রেন্ডার */
-    if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(()=>{ loadBook(); });
+    if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(function(){ loadBook(); });
     /* fallback: কিছুক্ষণেও বই না পেলে হোমে ফেরত */
     setTimeout(function(){
         const _i=parseInt(new URLSearchParams(window.location.search).get('id'));
@@ -1158,7 +1162,8 @@ window.onload=function(){
         incrementView(idx);
         setTimeout(()=>loadReviews(idx),1500);
     }
-};
+});
+
 </script>
 
 <!-- REVIEW SECTION -->

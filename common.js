@@ -291,31 +291,23 @@ window.gkToggleContact = function () {
 })();
 
 /* ═══════════════════════════════════════════════════════════
-   অফার পপআপ — যেকোনো পেজে ঢুকলে অ্যাডমিন-প্যানেলে সক্রিয় থাকা
-   কুপন/অফার একটা পপআপে দেখাবে। ক্রস (✕) বা বাইরে ক্লিক করলে বন্ধ হবে।
-   একবার বন্ধ করলে একই অফার আর ~২০ ঘণ্টা দেখাবে না — নতুন/ভিন্ন অফার
-   চালু হলে (বা সময় পার হলে) আবার দেখাবে।
-   
-   ফিচার:
-   1. সাধারণ কুপন পপআপ (সেই কুপনগুলো যেখানে showInPopup=true)
-   2. ছবিওয়ালা অফার পোস্টার (siteConfig/offerPopup থেকে, enabled=true হলে)
+   অফার পোস্টার পপআপ — শুধুমাত্র siteConfig/offerPopup থেকে চালিত।
+   অ্যাডমিন প্যানেল থেকে enabled=true করে ছবি দিলেই যেকোনো পেজে
+   (checkout.html বাদে) পপআপ হয়ে দেখাবে। ক্রস (✕) বা বাইরে ক্লিক
+   করলে বন্ধ হবে — বন্ধ করলে ২৪ ঘণ্টা আর দেখাবে না।
+
+   নোট: কুপন-ভিত্তিক পপআপ ফিচারটা সরিয়ে ফেলা হয়েছে (আর দরকার নেই) —
+   এখন শুধু অ্যাডমিন-নিয়ন্ত্রিত ছবিওয়ালা পোস্টারই একমাত্র পপআপ।
+
+   CSS নিজেই ইনজেক্ট করা হয় (নিচে ensureCSS) — তাই এই পপআপ কোন পেজের
+   নিজস্ব CSS-এর উপর নির্ভর করে না। এতে আগের বাগটা ঠিক হয়েছে যেখানে
+   .gk-offer-poster-* ক্লাসের কোনো স্টাইল না থাকায় পোস্টারের ছবি
+   পুরো সাইট ঢেকে ফেলছিল।
 ═══════════════════════════════════════════════════════════ */
 (function () {
-    var DISMISS_KEY = 'gronthokanon_offer_dismiss';
     var DISMISS_KEY_POSTER = 'gronthokanon_offer_poster_dismiss';
-    var DISMISS_HOURS = 20;
+    var DISMISS_HOURS = 24;
 
-    function getDismissed() {
-        try { return JSON.parse(localStorage.getItem(DISMISS_KEY) || '{}'); } catch (e) { return {}; }
-    }
-    function setDismissed(sig) {
-        try { localStorage.setItem(DISMISS_KEY, JSON.stringify({ sig: sig, t: Date.now() })); } catch (e) {}
-    }
-    function isDismissed(sig) {
-        var d = getDismissed();
-        if (!d || d.sig !== sig) return false;
-        return (Date.now() - (d.t || 0)) < DISMISS_HOURS * 3600000;
-    }
     function getDismissedPoster() {
         try { return JSON.parse(localStorage.getItem(DISMISS_KEY_POSTER) || '{}'); } catch (e) { return {}; }
     }
@@ -327,86 +319,54 @@ window.gkToggleContact = function () {
         if (!d || !d.t) return false;
         return (Date.now() - d.t) < DISMISS_HOURS * 3600000;
     }
-    function offerLabel(c) {
-        if (typeof c.discount === 'number') return c.discount + '% ছাড়';
-        if (c.type === 'delivery') return '🚚 ফ্রি ডেলিভারি';
-        if (c.type === 'taka') return '৳' + (c.value || 0) + ' ছাড়';
-        return (c.value || 0) + '% ডিসকাউন্ট';
-    }
     function escapeHTML(s) {
         return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
             return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
         });
     }
 
-    function buildPopup(offers) {
-        if (document.getElementById('gkOfferOverlay')) return;
-        var overlay = document.createElement('div');
-        overlay.className = 'gk-offer-overlay';
-        overlay.id = 'gkOfferOverlay';
-        overlay.innerHTML =
-            '<div class="gk-offer-box">' +
-                '<button type="button" class="gk-offer-close" aria-label="বন্ধ করুন">✕</button>' +
-                '<div class="gk-offer-badge">🎁</div>' +
-                '<div class="gk-offer-title">বিশেষ অফার আপনার জন্য!</div>' +
-                '<div class="gk-offer-sub">কোড কপি করে চেকআউটে ব্যবহার করুন</div>' +
-                '<div class="gk-offer-list">' +
-                offers.map(function (o) {
-                    return '<div class="gk-offer-item">' +
-                        '<div><div class="gk-offer-code">' + escapeHTML(o.code) + '</div>' +
-                        '<div class="gk-offer-label">' + escapeHTML(o.label) + '</div></div>' +
-                        '<button type="button" class="gk-offer-copy" data-code="' + escapeHTML(o.code) + '">কপি</button>' +
-                    '</div>';
-                }).join('') +
-                '</div>' +
-            '</div>';
-        document.body.appendChild(overlay);
-
-        var sig = offers.map(function (o) { return o.code; }).sort().join(',');
-        function dismiss() {
-            setDismissed(sig);
-            overlay.style.opacity = '0';
-            setTimeout(function () { overlay.remove(); }, 200);
-        }
-        overlay.addEventListener('click', function (e) { if (e.target === overlay) dismiss(); });
-        overlay.querySelector('.gk-offer-close').addEventListener('click', dismiss);
-        Array.prototype.forEach.call(overlay.querySelectorAll('.gk-offer-copy'), function (btn) {
-            btn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                var code = btn.getAttribute('data-code');
-                var done = function () {
-                    btn.textContent = '✓ হয়েছে';
-                    btn.classList.add('copied');
-                    setTimeout(function () { btn.textContent = 'কপি'; btn.classList.remove('copied'); }, 1500);
-                };
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(code).then(done).catch(function () {
-                        fallbackCopy(code); done();
-                    });
-                } else {
-                    fallbackCopy(code); done();
-                }
-            });
-        });
+    function ensureCSS() {
+        if (document.getElementById('gkOfferPosterCSS')) return;
+        var style = document.createElement('style');
+        style.id = 'gkOfferPosterCSS';
+        style.textContent =
+            '.gk-offer-poster-overlay{position:fixed;inset:0;z-index:99999;background:rgba(15,15,20,.72);' +
+            'display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;' +
+            'transition:opacity .2s ease;box-sizing:border-box;}' +
+            '.gk-offer-poster-overlay.gk-show{opacity:1;}' +
+            '.gk-offer-poster-box{position:relative;max-width:420px;width:100%;max-height:88vh;' +
+            'overflow:auto;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.35);' +
+            'box-sizing:border-box;text-align:center;}' +
+            '.gk-offer-poster-close{position:absolute;top:8px;right:8px;width:32px;height:32px;' +
+            'border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:16px;' +
+            'line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}' +
+            '.gk-offer-poster-close:hover{background:rgba(0,0,0,.8);}' +
+            '.gk-offer-poster-img{display:block;width:100%;max-height:70vh;object-fit:contain;' +
+            'border-radius:14px 14px 0 0;box-sizing:border-box;}' +
+            '.gk-offer-poster-title{font-size:17px;font-weight:800;padding:14px 16px 2px;color:#111;}' +
+            '.gk-offer-poster-sub{font-size:13px;padding:2px 16px 16px;color:#555;}';
+        document.head.appendChild(style);
     }
 
     function buildPosterPopup(config) {
         if (document.getElementById('gkOfferPosterOverlay')) return;
+        ensureCSS();
         var overlay = document.createElement('div');
-        overlay.className = 'gk-offer-overlay';
+        overlay.className = 'gk-offer-poster-overlay';
         overlay.id = 'gkOfferPosterOverlay';
         overlay.innerHTML =
             '<div class="gk-offer-poster-box">' +
                 '<button type="button" class="gk-offer-poster-close" aria-label="বন্ধ করুন">✕</button>' +
-                (config.img ? '<img src="' + escapeHTML(config.img) + '" alt="অফার" class="gk-offer-poster-img" style="cursor:pointer;" />' : '') +
+                (config.img ? '<img src="' + escapeHTML(config.img) + '" alt="অফার" class="gk-offer-poster-img" style="' + (config.link ? 'cursor:pointer;' : '') + '" />' : '') +
                 (config.title ? '<div class="gk-offer-poster-title">' + escapeHTML(config.title) + '</div>' : '') +
                 (config.sub ? '<div class="gk-offer-poster-sub">' + escapeHTML(config.sub) + '</div>' : '') +
             '</div>';
         document.body.appendChild(overlay);
+        requestAnimationFrame(function () { overlay.classList.add('gk-show'); });
 
         function dismiss() {
             setDismissedPoster();
-            overlay.style.opacity = '0';
+            overlay.classList.remove('gk-show');
             setTimeout(function () { overlay.remove(); }, 200);
         }
 
@@ -420,51 +380,20 @@ window.gkToggleContact = function () {
         }
     }
 
-    function fallbackCopy(text) {
-        var ta = document.createElement('textarea');
-        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select();
-        try { document.execCommand('copy'); } catch (e) {}
-        ta.remove();
-    }
-
     function tryShow() {
         try {
             /* ──── GUARD: চেকআউট পেজে পপআপ দেখাবে না ──── */
             if (location.pathname.indexOf('checkout.html') !== -1 || location.pathname.endsWith('checkout.html')) {
                 return;
             }
-
             if (typeof firebase === 'undefined' || !firebase.database) return;
+            if (isPosterDismissed()) return;
 
-            /* ──── প্রথমে সাধারণ কুপন পপআপ চেষ্টা করুন ──── */
-            firebase.database().ref('coupons').once('value').then(function (s) {
-                var v = (s.exists() ? s.val() : {}) || {};
-                var offers = [];
-                Object.keys(v).forEach(function (k) {
-                    var c = v[k];
-                    if (!c || c.active === false) return;
-                    /* ──── শুধু সেই কুপনগুলো যেখানে showInPopup === true ──── */
-                    if (c.showInPopup !== true) return;
-                    offers.push({ code: String(k).toUpperCase(), label: offerLabel(c) });
-                });
-                if (offers.length) {
-                    var sig = offers.map(function (o) { return o.code; }).sort().join(',');
-                    if (!isDismissed(sig)) {
-                        buildPopup(offers);
-                        return; /* কুপন পপআপ দেখানো হয়েছে, পোস্টার দেখাবেন না */
-                    }
+            firebase.database().ref('siteConfig/offerPopup').once('value').then(function (posterSnap) {
+                var config = posterSnap.val();
+                if (config && config.enabled === true && config.img) {
+                    buildPosterPopup(config);
                 }
-
-                /* ──── কুপন পপআপ না দেখানো হলে, ছবিওয়ালা পোস্টার দেখান ──── */
-                firebase.database().ref('siteConfig/offerPopup').once('value').then(function (posterSnap) {
-                    var posterConfig = posterSnap.val();
-                    if (posterConfig && posterConfig.enabled === true && posterConfig.img) {
-                        if (!isPosterDismissed()) {
-                            buildPosterPopup(posterConfig);
-                        }
-                    }
-                }).catch(function () {});
             }).catch(function () {});
         } catch (e) {}
     }
