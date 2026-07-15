@@ -396,3 +396,118 @@ window.gkGiftBarHTML = function (subtotal) {
             .catch(function () {});
     } catch (e) {}
 })();
+
+/* ═══════════════════════════════════════════════════════════
+   অফার পপআপ — যেকোনো পেজে ঢুকলে অ্যাডমিন-প্যানেলে সক্রিয় থাকা
+   কুপন/অফার একটা পপআপে দেখাবে। ক্রস (✕) বা বাইরে ক্লিক করলে বন্ধ হবে।
+   একবার বন্ধ করলে একই অফার আর ~২০ ঘণ্টা দেখাবে না — নতুন/ভিন্ন অফার
+   চালু হলে (বা সময় পার হলে) আবার দেখাবে।
+═══════════════════════════════════════════════════════════ */
+(function () {
+    var DISMISS_KEY = 'gronthokanon_offer_dismiss';
+    var DISMISS_HOURS = 20;
+
+    function getDismissed() {
+        try { return JSON.parse(localStorage.getItem(DISMISS_KEY) || '{}'); } catch (e) { return {}; }
+    }
+    function setDismissed(sig) {
+        try { localStorage.setItem(DISMISS_KEY, JSON.stringify({ sig: sig, t: Date.now() })); } catch (e) {}
+    }
+    function isDismissed(sig) {
+        var d = getDismissed();
+        if (!d || d.sig !== sig) return false;
+        return (Date.now() - (d.t || 0)) < DISMISS_HOURS * 3600000;
+    }
+    function offerLabel(c) {
+        if (typeof c.discount === 'number') return c.discount + '% ছাড়';
+        if (c.type === 'delivery') return '🚚 ফ্রি ডেলিভারি';
+        if (c.type === 'taka') return '৳' + (c.value || 0) + ' ছাড়';
+        return (c.value || 0) + '% ডিসকাউন্ট';
+    }
+    function escapeHTML(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
+    function buildPopup(offers) {
+        if (document.getElementById('gkOfferOverlay')) return;
+        var overlay = document.createElement('div');
+        overlay.className = 'gk-offer-overlay';
+        overlay.id = 'gkOfferOverlay';
+        overlay.innerHTML =
+            '<div class="gk-offer-box">' +
+                '<button type="button" class="gk-offer-close" aria-label="বন্ধ করুন">✕</button>' +
+                '<div class="gk-offer-badge">🎁</div>' +
+                '<div class="gk-offer-title">বিশেষ অফার আপনার জন্য!</div>' +
+                '<div class="gk-offer-sub">কোড কপি করে চেকআউটে ব্যবহার করুন</div>' +
+                '<div class="gk-offer-list">' +
+                offers.map(function (o) {
+                    return '<div class="gk-offer-item">' +
+                        '<div><div class="gk-offer-code">' + escapeHTML(o.code) + '</div>' +
+                        '<div class="gk-offer-label">' + escapeHTML(o.label) + '</div></div>' +
+                        '<button type="button" class="gk-offer-copy" data-code="' + escapeHTML(o.code) + '">কপি</button>' +
+                    '</div>';
+                }).join('') +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(overlay);
+
+        var sig = offers.map(function (o) { return o.code; }).sort().join(',');
+        function dismiss() {
+            setDismissed(sig);
+            overlay.style.opacity = '0';
+            setTimeout(function () { overlay.remove(); }, 200);
+        }
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) dismiss(); });
+        overlay.querySelector('.gk-offer-close').addEventListener('click', dismiss);
+        Array.prototype.forEach.call(overlay.querySelectorAll('.gk-offer-copy'), function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var code = btn.getAttribute('data-code');
+                var done = function () {
+                    btn.textContent = '✓ হয়েছে';
+                    btn.classList.add('copied');
+                    setTimeout(function () { btn.textContent = 'কপি'; btn.classList.remove('copied'); }, 1500);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(code).then(done).catch(function () {
+                        fallbackCopy(code); done();
+                    });
+                } else {
+                    fallbackCopy(code); done();
+                }
+            });
+        });
+    }
+    function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        ta.remove();
+    }
+
+    function tryShow() {
+        try {
+            if (typeof firebase === 'undefined' || !firebase.database) return;
+            firebase.database().ref('coupons').once('value').then(function (s) {
+                var v = (s.exists() ? s.val() : {}) || {};
+                var offers = [];
+                Object.keys(v).forEach(function (k) {
+                    var c = v[k];
+                    if (!c || c.active === false) return;
+                    offers.push({ code: String(k).toUpperCase(), label: offerLabel(c) });
+                });
+                if (!offers.length) return;
+                var sig = offers.map(function (o) { return o.code; }).sort().join(',');
+                if (isDismissed(sig)) return;
+                buildPopup(offers);
+            }).catch(function () {});
+        } catch (e) {}
+    }
+
+    function init() { setTimeout(tryShow, 1400); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+})();

@@ -1197,3 +1197,89 @@ select {
 #gkContact.open .gkc-fab .ic-chat { opacity: 0; transform: rotate(90deg) scale(0.6); }
 #gkContact.open .gkc-fab .ic-close { opacity: 1; transform: rotate(0) scale(1); }
 @media(max-width:600px){ .gkc-actions a::after { display: none; } #gkContact { bottom: 88px; } }
+
+/* ═══════════════════════════════════════════════════════════
+   অফার পপআপ — যেকোনো পেজে ঢুকলে সক্রিয় কুপন/অফার দেখাবে
+   (ক্রস দিয়ে বন্ধ করা যাবে) — common.js এর gk-offer-popup অংশ
+═══════════════════════════════════════════════════════════ */
+.gk-offer-overlay {
+    position: fixed; inset: 0;
+    background: rgba(1, 61, 43, 0.45);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    animation: gkOfferFadeIn 0.25s ease forwards;
+    cursor: pointer;
+}
+@keyframes gkOfferFadeIn { to { opacity: 1; } }
+
+.gk-offer-box {
+    position: relative;
+    width: 100%; max-width: 380px;
+    background: var(--card-solid);
+    border: 1px solid var(--border2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 4px 16px var(--shadow);
+    padding: 30px 24px 24px;
+    text-align: center;
+    transform: translateY(16px) scale(0.96);
+    animation: gkOfferPopIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    cursor: default;
+}
+@keyframes gkOfferPopIn { to { transform: translateY(0) scale(1); } }
+
+.gk-offer-close {
+    position: absolute; top: 10px; right: 10px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    background: var(--bg2);
+    color: var(--text2);
+    font-size: 15px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.gk-offer-close:hover { background: var(--red-bg); color: var(--red); transform: rotate(90deg); }
+
+.gk-offer-badge {
+    display: flex; align-items: center; justify-content: center;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: #fff; font-size: 24px;
+    margin: 0 auto 14px;
+    box-shadow: 0 6px 20px var(--green-glow);
+}
+.gk-offer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px; font-weight: 700; color: var(--text);
+    margin-bottom: 6px;
+}
+.gk-offer-sub { font-size: 12px; color: var(--text2); margin-bottom: 18px; }
+.gk-offer-list { display: flex; flex-direction: column; gap: 10px; }
+.gk-offer-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    border: 1.5px dashed var(--green-border);
+    background: var(--green-bg);
+    padding: 10px 14px;
+    text-align: left;
+}
+.gk-offer-code { font-weight: 800; letter-spacing: 0.5px; color: var(--dark); font-size: 14px; }
+.gk-offer-label { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px; }
+.gk-offer-copy {
+    border: none; background: var(--green); color: #fff;
+    font-size: 11px; font-weight: 700; padding: 7px 13px; cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+.gk-offer-copy:hover { background: var(--dark); }
+.gk-offer-copy.copied { background: var(--gold); }
+
+@media (max-width: 480px) {
+    .gk-offer-box { max-width: 92vw; padding: 26px 18px 20px; }
+}
+[data-theme="dark"] .gk-offer-badge { box-shadow: 0 6px 20px var(--green-glow); }
