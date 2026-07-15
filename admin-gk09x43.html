@@ -585,6 +585,28 @@
         /* ══ NOTIFICATION BELL ══ */
         .notif-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:#EF4444;color:white;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;display:none;}
         .topbar-icon-btn{position:relative;}
+        /* ══ NOTIFICATION PANEL (dropdown) ══ */
+        .notif-panel-wrap{position:relative;}
+        .notif-panel{position:absolute;top:calc(100% + 10px);right:-8px;width:340px;max-width:calc(100vw - 24px);max-height:440px;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-lg);z-index:2500;display:none;flex-direction:column;overflow:hidden;}
+        .notif-panel.open{display:flex;}
+        .notif-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+        .notif-panel-title{font-weight:800;font-size:14px;color:var(--text-main);}
+        .notif-panel-markall{background:none;border:none;color:var(--primary);font-size:11.5px;font-weight:700;cursor:pointer;padding:4px 6px;}
+        .notif-panel-markall:hover{text-decoration:underline;}
+        .notif-panel-list{overflow-y:auto;flex:1;}
+        .notif-item{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:var(--trans);position:relative;}
+        .notif-item:hover{background:var(--primary-light);}
+        .notif-item.unread{background:rgba(245,183,0,0.08);}
+        .notif-item.unread::before{content:'';position:absolute;left:5px;top:18px;width:7px;height:7px;border-radius:50%;background:#F5B700;}
+        .notif-item-body{flex:1;min-width:0;padding-left:8px;}
+        .notif-item-name{font-weight:700;font-size:12.5px;color:var(--text-main);}
+        .notif-item-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
+        .notif-item-time{font-size:10px;color:var(--text-muted);margin-top:3px;}
+        .notif-panel-empty{padding:34px 16px;text-align:center;color:var(--text-muted);font-size:12.5px;}
+        .notif-panel-foot{padding:8px 14px;border-top:1px solid var(--border);flex-shrink:0;}
+        .notif-browser-btn{width:100%;background:var(--primary-light);color:var(--primary);border:1px dashed var(--primary);border-radius:9px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;}
+        .notif-browser-btn:hover{background:var(--primary);color:#fff;}
+        @media(max-width:600px){.notif-panel{position:fixed;top:64px;right:8px;left:8px;width:auto;max-width:none;}}
         /* ── SALES REPORT ── */
         .report-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
         .report-controls input[type="date"]{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text-main);font-family:var(--font-main);font-size:13px;}
@@ -875,10 +897,22 @@
                 <button class="topbar-icon-btn" onclick="openGlobalSearch()" title="সার্চ">
                     <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </button>
-                <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotif()" title="Notification">
-                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    <span class="notif-badge" id="notifBadge">0</span>
-                </button>
+                <div class="notif-panel-wrap">
+                    <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotifPanel()" title="Notification">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span class="notif-badge" id="notifBadge">0</span>
+                    </button>
+                    <div class="notif-panel" id="notifPanel">
+                        <div class="notif-panel-head">
+                            <span class="notif-panel-title">🔔 নোটিফিকেশন</span>
+                            <button class="notif-panel-markall" onclick="markAllNotifsSeen()">সব পঠিত করুন</button>
+                        </div>
+                        <div class="notif-panel-list" id="notifPanelList"></div>
+                        <div class="notif-panel-foot" id="notifBrowserFoot" style="display:none;">
+                            <button class="notif-browser-btn" onclick="requestBrowserNotifPermission()">🔔 ব্রাউজার Notification চালু করুন (ঐচ্ছিক)</button>
+                        </div>
+                    </div>
+                </div>
                                 <button class="topbar-icon-btn" onclick="toggleDark()" id="darkBtn" title="Dark Mode">
                     <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
@@ -1927,7 +1961,7 @@ function loadOrders(){
         snap.forEach(child=>{const val=child.val();if(val&&val.orderId)allOrders.push(val);});
         allOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         updateStats();
-        checkNewOrders(allOrders.length);
+        processOrderNotifications(allOrders);
         // Also update Orders tab duplicate stat cards
         const tv=document.getElementById('statTotalOrders');
         const pv=document.getElementById('statPendingOrders');
@@ -4035,49 +4069,162 @@ async function saveOrderTotal(){
 }
 
 /* ══════════════════════════════════════════════
-   NEW ORDER NOTIFICATION
+   ORDER NOTIFICATION SYSTEM (persistent, DB-backed)
+   প্রতিটি অর্ডারে দুটো ফ্ল্যাগ থাকে (orders/{orderId} এর নিচে):
+     - notificationShown : popup একবার দেখানো হয়েছে কিনা (আর কখনো popup হবে না)
+     - seen               : admin প্যানেলে notification হিসেবে "পড়া" হয়েছে কিনা
+   দুটোর কোনোটাই না থাকলে (undefined) সেটাকে "unread/অদেখা" হিসেবে ধরা হয় —
+   তাই পুরনো অর্ডারও migration ছাড়াই সঠিকভাবে ধরা পড়ে।
+   Browser Notification পুরোপুরি ঐচ্ছিক — permission না থাকলেও/বন্ধ থাকলেও
+   এই সিস্টেম স্বাধীনভাবে কাজ করে, কারণ এটা DB state-এর উপর ভিত্তি করে চলে,
+   কোনো session/tab-lifetime ভ্যারিয়েবলের উপর না।
 ══════════════════════════════════════════════ */
-let notifEnabled=false;
-let lastOrderCount=0;
-let notifCount=0;
+let notifShownLocally=new Set();   // এই session-এ ইতিমধ্যে popup queue-তে ঢোকানো হয়েছে এমন orderId (duplicate popup আটকাতে)
+let notifPopupQueue=[];
+let notifPopupPlaying=false;
 
-async function toggleNotif(){
-    if(!notifEnabled){
-        if(Notification.permission==='default'){
-            const perm=await Notification.requestPermission();
-            if(perm!=='granted'){showToast('Notification অনুমতি দিন','#dc2626');return;}
+// প্রতিবার orders/ ref-এর 'value' snapshot এলে (initial load + যেকোনো change) এটা চলে।
+function processOrderNotifications(orders){
+    if(!Array.isArray(orders))return;
+
+    // ১) popup: notificationShown!==true এমন সব অর্ডার (পুরনো মিস হওয়া + নতুন — দুটোই একইভাবে ধরা হয়)
+    const toPopup=orders.filter(o=>o&&o.orderId&&o.notificationShown!==true&&!notifShownLocally.has(o.orderId));
+    if(toPopup.length){
+        // পুরনো → নতুন ক্রমে সাজানো, যাতে popup গুলো সময়ের সঠিক ধারায় দেখা যায়
+        toPopup.sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+        toPopup.forEach(o=>{
+            notifShownLocally.add(o.orderId);
+            notifPopupQueue.push(o);
+        });
+        runNotifPopupQueue();
+    }
+
+    updateNotifBadge(orders);
+    renderNotifPanel(orders);
+}
+
+function runNotifPopupQueue(){
+    if(notifPopupPlaying)return;
+    notifPopupPlaying=true;
+    const step=()=>{
+        const o=notifPopupQueue.shift();
+        if(!o){notifPopupPlaying=false;return;}
+        showNewOrderPopup(o);
+        playBeep();
+        if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
+            try{
+                new Notification('গ্রন্থকানন — নতুন অর্ডার!',{
+                    body:`${o.name||''} — ${o.total||''}`,
+                    icon:'https://cdn.jsdelivr.net/npm/twemoji@14/assets/72x72/1f4da.png'
+                });
+            }catch(e){}
         }
-        notifEnabled=true;
-        lastOrderCount=allOrders.length;
-        showToast('🔔 নতুন অর্ডার Notification চালু!','#0B6E4F');
-        document.getElementById('notifBtn').style.color='var(--primary)';
-    } else {
-        notifEnabled=false;
-        showToast('🔕 Notification বন্ধ','#dc2626');
-        document.getElementById('notifBtn').style.color='';
-        notifCount=0;
-        updateNotifBadge();
+        // popup একবার দেখানো হয়ে গেছে — DB-তে চিরস্থায়ীভাবে মার্ক করে দিচ্ছি, আর কখনো popup হবে না
+        db.ref('orders/'+o.orderId+'/notificationShown').set(true).catch(()=>{});
+        setTimeout(step,900); // পরপর popup না এসে একটু ফাঁক দিয়ে আসবে
+    };
+    step();
+}
+
+function updateNotifBadge(orders){
+    const badge=document.getElementById('notifBadge');
+    if(!badge)return;
+    const src=orders||allOrders;
+    const unread=src.filter(o=>o&&o.seen!==true).length;
+    if(unread>0){badge.style.display='flex';badge.textContent=unread>9?'9+':unread;}
+    else{badge.style.display='none';}
+}
+
+function toggleNotifPanel(){
+    const panel=document.getElementById('notifPanel');
+    if(!panel)return;
+    const opening=!panel.classList.contains('open');
+    panel.classList.toggle('open',opening);
+    if(opening){
+        renderNotifPanel(allOrders);
+        const foot=document.getElementById('notifBrowserFoot');
+        if(foot)foot.style.display=(typeof Notification!=='undefined'&&Notification.permission==='default')?'block':'none';
     }
 }
 
-function checkNewOrders(newTotal){
-    if(!notifEnabled)return;
-    if(newTotal>lastOrderCount){
-        const newCount=newTotal-lastOrderCount;
-        notifCount+=newCount;
-        updateNotifBadge();
-        // allOrders সবসময় নতুন→পুরনো sorted, তাই নতুন orders array-র শুরুতে থাকে
-        const newOrders=allOrders.slice(0,newCount).reverse();
-        newOrders.forEach(o=>showNewOrderPopup(o));
-        if(Notification.permission==='granted'){
-            new Notification('গ্রন্থকানন — নতুন অর্ডার!',{
-                body:`${newCount}টি নতুন অর্ডার এসেছে`,
-                icon:'https://cdn.jsdelivr.net/npm/twemoji@14/assets/72x72/1f4da.png'
-            });
-        }
-        playBeep();
-        lastOrderCount=newTotal;
+// প্যানেলের বাইরে ক্লিক করলে বন্ধ হয়ে যাবে
+document.addEventListener('click',function(e){
+    const wrap=document.querySelector('.notif-panel-wrap');
+    if(!wrap)return;
+    if(!wrap.contains(e.target)){
+        const panel=document.getElementById('notifPanel');
+        if(panel)panel.classList.remove('open');
     }
+});
+
+function renderNotifPanel(orders){
+    const list=document.getElementById('notifPanelList');
+    if(!list)return;
+    const src=(orders||allOrders).slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,40);
+    if(!src.length){
+        list.innerHTML='<div class="notif-panel-empty">এখনো কোনো অর্ডার আসেনি</div>';
+        return;
+    }
+    list.innerHTML=src.map(o=>{
+        const unread=o.seen!==true;
+        const t=o.createdAt?timeAgoNotif(o.createdAt):'';
+        return `<div class="notif-item ${unread?'unread':''}" onclick="openModal('${escapeHTML(o.orderId)}');markOrderSeen('${escapeHTML(o.orderId)}')">
+            <div class="notif-item-body">
+                <div class="notif-item-name">${escapeHTML(o.name||'অর্ডার')} — ${escapeHTML(o.total||'')}</div>
+                <div class="notif-item-sub">${escapeHTML(o.orderId||'')}</div>
+                <div class="notif-item-time">${t}</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function timeAgoNotif(ts){
+    const diff=Date.now()-ts;
+    const m=Math.floor(diff/60000);
+    if(m<1)return 'এইমাত্র';
+    if(m<60)return m+' মিনিট আগে';
+    const h=Math.floor(m/60);
+    if(h<24)return h+' ঘণ্টা আগে';
+    const d=Math.floor(h/24);
+    return d+' দিন আগে';
+}
+
+async function markOrderSeen(orderId){
+    if(!orderId)return;
+    try{
+        await db.ref('orders/'+orderId+'/seen').set(true);
+        const o=allOrders.find(x=>x.orderId===orderId);
+        if(o)o.seen=true;
+        updateNotifBadge(allOrders);
+        renderNotifPanel(allOrders);
+    }catch(e){}
+}
+
+async function markAllNotifsSeen(){
+    const unread=allOrders.filter(o=>o&&o.seen!==true);
+    if(!unread.length)return;
+    try{
+        const updates={};
+        unread.forEach(o=>{updates['orders/'+o.orderId+'/seen']=true;o.seen=true;});
+        await db.ref().update(updates);
+        updateNotifBadge(allOrders);
+        renderNotifPanel(allOrders);
+        showToast('✅ সব নোটিফিকেশন পঠিত হলো','#0B6E4F');
+    }catch(e){showToast('❌ ব্যর্থ হলো','#dc2626');}
+}
+
+async function requestBrowserNotifPermission(){
+    if(typeof Notification==='undefined'){showToast('এই ব্রাউজার Notification সাপোর্ট করে না','#dc2626');return;}
+    try{
+        const perm=await Notification.requestPermission();
+        if(perm==='granted'){
+            showToast('🔔 ব্রাউজার Notification চালু হলো','#0B6E4F');
+            const foot=document.getElementById('notifBrowserFoot');
+            if(foot)foot.style.display='none';
+        }else{
+            showToast('Notification অনুমতি দেওয়া হয়নি — তবে প্যানেলে সব অর্ডার দেখতে পাবেন','#dc2626');
+        }
+    }catch(e){}
 }
 
 function playBeep(){
@@ -4137,13 +4284,6 @@ function closeOrderPopup(id){
     if(!el)return;
     el.classList.add('closing');
     setTimeout(()=>el.remove(),260);
-}
-
-function updateNotifBadge(){
-    const badge=document.getElementById('notifBadge');
-    if(!badge)return;
-    if(notifCount>0){badge.style.display='flex';badge.textContent=notifCount>9?'9+':notifCount;}
-    else{badge.style.display='none';}
 }
 
 /* ══════════════════════════════════════════════
