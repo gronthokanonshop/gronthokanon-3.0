@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="nafah-logo.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>অর্ডার ট্র্যাক — NafahLife</title>
+<link rel="canonical" href="https://nafahlife.com/Aatrack.html">
+    <meta name="theme-color" content="#2a562b">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://i.ibb.co"><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="AAcommon.css">
+    <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+    <style>
+        :root {
+            --primary:#2a562b; --primary-dark:#1a2e1b; --primary-light:#3a7c3c;
+            --accent:#437f45; --accent-light:#4d8a4f;
+            --bg:var(--bg-body,#ffffff); --bg2:#f7f5f5; --card:rgba(255,255,255,0.9);
+            --text:#1c2e1d; --text2:#6B7280; --border:rgba(42,86,43,0.14);
+            --green:#2a562b; --green-light:#3a7c3c; --dark:#1a2e1b;
+            --red:#DC2626; --shadow:rgba(42,86,43,0.12);
+        }
+        [data-theme="dark"]{
+            --bg:#0d160d; --bg2:#111d11; --card:rgba(17,34,18,0.9);
+            --text:#eaeeec; --text2:#9bb69c; --border:rgba(67,127,69,0.22);
+            --shadow:rgba(0,0,0,0.3);
+        }
+        body{-webkit-tap-highlight-color:#204521;font-family:'Noto Serif Bengali',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        .navbar{background:#fff;color:#204521;padding:0;border-bottom:2px solid rgba(67,127,69,0.35);position:sticky;top:0;z-index:100;}
+        .navbar-top{display:flex;align-items:center;padding:12px 16px;gap:12px;height:56px;}
+        .back-btn{background:rgba(42,86,43,0.06);border:1px solid rgba(67,127,69,0.35);color:#204521;border-radius:8px;width:36px;height:36px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
+        .back-btn:hover{background:rgba(67,127,69,0.25);border-color:#204521;}
+        .navbar-title{flex:1;font-size:15px;font-weight:700;color:#204521;}
+        .dark-pill{background:rgba(42,86,43,0.06);border:1px solid rgba(67,127,69,0.35);color:#204521;border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.2s;}
+        [data-theme="dark"] .navbar{background:#0d1b0e;border-bottom-color:rgba(121,176,123,0.3);}
+        [data-theme="dark"] .navbar-title{color:#dde6df;}
+        [data-theme="dark"] .back-btn,[data-theme="dark"] .dark-pill{color:#cfe3d0;border-color:rgba(121,176,123,0.35);background:rgba(121,176,123,0.10);}
+        [data-theme="dark"] .track-input{color:#dde6df;}
+        [data-theme="dark"] .track-input:focus{border-color:#79b07b;}
+        [data-theme="dark"] .my-oid{color:#a8cca9;}
+        [data-theme="dark"] .order-id-badge{color:#a8cca9!important;border-color:rgba(121,176,123,0.4)!important;}
+        [data-theme="dark"] .order-total-val{color:#79b07b!important;}
+        [data-theme="dark"] .ttab{color:#9bb69c;}
+        [data-theme="dark"] .ttab.active{color:#fff;}
+        [data-theme="dark"] #lastOrderHint strong{color:#79b07b!important;}
+        .dark-pill:hover{background:rgba(67,127,69,0.25);}
+        .page-wrap{padding:16px;max-width:500px;margin:0 auto;padding-bottom:60px;}
+        .track-tabs{display:flex;gap:8px;margin-bottom:16px;}
+        .ttab{flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;}
+        .ttab.active{background:var(--primary-dark);color:#fff;border-color:rgba(67,127,69,0.5);}
+        .track-search{background:var(--card);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 14px var(--shadow);border:1px solid var(--border);}
+        .track-search h3{font-size:16px;margin-bottom:4px;color:var(--text);font-weight:700;}
+        .track-search p{font-size:12px;color:var(--text2);margin-bottom:14px;}
+        .track-input-row{display:flex;gap:8px;}
+        .track-input{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:#204521;font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:14px;outline:none;transition:.2s;}
+        .track-input:focus{border-color:#204521;box-shadow:0 0 0 3px rgba(42,86,43,0.12);}
+        .track-btn{padding:11px 18px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:1.5px solid rgba(67,127,69,0.4);border-radius:10px;font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.2s;}
+        .track-btn:hover{background:var(--primary);color:#fff;}
+        .my-order-item{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 10px var(--shadow);cursor:pointer;border:1.5px solid var(--border);transition:.2s;}
+        .my-order-item:hover{border-color:#204521;}
+        .my-order-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+        .my-oid{font-size:13px;font-weight:800;color:#204521;}
+        .my-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+        .my-info{font-size:12px;color:var(--text2);line-height:1.7;}
+        .order-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 12px var(--shadow);margin-bottom:14px;display:none;border:1px solid var(--border);}
+        .order-id-badge{display:inline-block;background:rgba(42,86,43,0.08);color:#204521;border:1.5px solid rgba(42,86,43,0.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:14px;}
+        [data-theme="dark"] .order-id-badge{background:rgba(67,127,69,0.10);color:#204521;border-color:rgba(67,127,69,0.35);}
+        .order-info-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);}
+        .order-info-row:last-child{border:none;}
+        .order-info-row span:first-child{color:var(--text2);}
+        .order-info-row span:last-child{font-weight:600;color:var(--text);}
+        .order-total-val{color:#204521!important;font-size:15px;}
+        .timeline{margin-top:20px;}
+        .timeline-title{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em;}
+        .tl-step{display:flex;gap:14px;margin-bottom:0;position:relative;}
+        .tl-left{display:flex;flex-direction:column;align-items:center;width:28px;flex-shrink:0;}
+        .tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;z-index:1;}
+        .tl-dot.done{background:var(--primary-dark);color:#fff;}
+        .tl-dot.active{background:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(42,86,43,0.22);}
+        .tl-dot.pending{background:var(--bg);border:2px solid var(--border);color:#204521;}
+        .tl-line{width:2px;flex:1;background:var(--border);margin:2px 0;}
+        .tl-line.done{background:var(--primary-dark);}
+        .tl-right{padding:4px 0 20px;}
+        .tl-label{font-size:14px;font-weight:700;color:var(--text);}
+        .tl-label.pending-txt{color:var(--text2);}
+        .tl-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+        .track-error{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:14px;color:#204521;font-size:13px;text-align:center;display:none;margin-bottom:14px;}
+        [data-theme="dark"] .track-error{background:rgba(220,38,38,0.10);border-color:rgba(220,38,38,0.3);}
+        .loading-spinner{text-align:center;padding:20px;color:var(--text2);font-size:13px;}
+    </style>
+</head>
+<body>
+<h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">NafahLife — অর্ডার ট্র্যাক করুন</h1>
+<nav class="navbar">
+    <div class="navbar-top">
+        <button class="back-btn" onclick="navigateTo('index.html')">‹</button>
+        <span class="navbar-title"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> অর্ডার ট্র্যাক করুন</span>
+        <button class="dark-pill" onclick="toggleDark()" id="darkBtn"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    </div>
+</nav>
+<div class="page-wrap">
+    <div class="track-tabs">
+        <button class="ttab active" id="tab1" onclick="switchTab('id')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg> ID দিয়ে খুঁজুন</button>
+        <button class="ttab" id="tab2" onclick="switchTab('phone')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg> আমার অর্ডারসমূহ</button>
+    </div>
+    <div id="panelId">
+        <div class="track-search">
+            <h3><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> অর্ডার খুঁজুন</h3>
+            <p>অর্ডার কনফার্মের পর আপনি যে ID পেয়েছেন সেটি লিখুন</p>
+            <div class="track-input-row">
+                <input class="track-input" id="trackInput" placeholder="যেমন: AA-ABC123" oninput="this.value=this.value.toUpperCase()">
+                <button class="track-btn" onclick="searchOrder()">খুঁজুন</button>
+            </div>
+        </div>
+        <div class="track-error" id="trackError"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg> এই ID দিয়ে কোনো অর্ডার পাওয়া যায়নি</div>
+        <div class="order-card" id="orderCard">
+            <div id="orderIdBadge" class="order-id-badge"></div>
+            <div id="orderInfoRows"></div>
+            <div class="timeline">
+                <div class="timeline-title">অর্ডার অবস্থান</div>
+                <div id="timelineSteps"></div>
+            </div>
+        </div>
+        <div id="lastOrderHint" style="text-align:center;padding:10px;font-size:12px;color:var(--text2);"></div>
+    </div>
+    <div id="panelPhone" style="display:none;">
+        <div class="track-search">
+            <h3><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg> আমার সব অর্ডার</h3>
+            <p>আপনার মোবাইল নম্বর দিয়ে সকল অর্ডার দেখুন</p>
+            <div class="track-input-row">
+                <input class="track-input" id="phoneInput" placeholder="01XXXXXXXXX" type="tel" maxlength="11">
+                <button class="track-btn" onclick="searchByPhone()">দেখুন</button>
+            </div>
+        </div>
+        <div class="track-error" id="phoneError"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg> এই নম্বরে কোনো অর্ডার পাওয়া যায়নি</div>
+        <div id="myOrdersList"></div>
+    </div>
+</div>
+<script>
+const DB = 'https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app';
+function escapeHTML(str){
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+async function fbGet(path){
+    const res = await fetch(DB + path + '.json', {method:'GET', headers:{'Accept':'application/json'}});
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+}
+const STATUSES=[
+    {key:'pending',   icon:'🕐', label:'অর্ডার গৃহীত',     sub:'আপনার অর্ডারটি আমরা পেয়েছি'},
+    {key:'confirmed', icon:'✅', label:'অর্ডার কনফার্ম',    sub:'অর্ডার নিশ্চিত করা হয়েছে'},
+    {key:'processing',icon:'📦', label:'প্যাকেজিং',         sub:'বই প্যাক করা হচ্ছে'},
+    {key:'shipped',   icon:'🚚', label:'ডেলিভারিতে',        sub:'বই রওনা দিয়েছে'},
+    {key:'delivered', icon:'🎉', label:'ডেলিভারি সম্পন্ন', sub:'আপনার কাছে পৌঁছে গেছে'},
+];
+const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
+const STATUS_COLORS={
+    pending:'background:#e6dfe0;color:#204521;',
+    confirmed:'background:#efeaeb;color:#923b48;',
+    processing:'background:#f5f2f2;color:#993e4c;',
+    shipped:'background:#fff7ed;color:#9a3412;',
+    delivered:'background:rgba(42,86,43,0.10);color:#2a562b;'
+};
+function switchTab(tab){
+    const isId=tab==='id';
+    document.getElementById('panelId').style.display=isId?'block':'none';
+    document.getElementById('panelPhone').style.display=isId?'none':'block';
+    document.getElementById('tab1').classList.toggle('active',isId);
+    document.getElementById('tab2').classList.toggle('active',!isId);
+}
+async function searchOrder(){
+    const id=document.getElementById('trackInput').value.trim();
+    if(!id){showToast('অর্ডার ID লিখুন','#DC2626');return;}
+    document.getElementById('trackError').style.display='none';
+    document.getElementById('orderCard').style.display='none';
+    try{
+        const data = await fbGet('/orders/' + encodeURIComponent(id));
+        if(!data){document.getElementById('trackError').style.display='block';return;}
+        renderOrder(data);
+    }catch(e){
+        showToast('সংযোগ সমস্যা হয়েছে, আবার চেষ্টা করুন','#DC2626');
+    }
+}
+async function searchByPhone(){
+    const phone=document.getElementById('phoneInput').value.trim();
+    if(!phone||!/^01[3-9]\d{8}$/.test(phone)){
+        showToast('⚠️ সঠিক মোবাইল নম্বর দিন!','#DC2626');return;
+    }
+    document.getElementById('phoneError').style.display='none';
+    document.getElementById('myOrdersList').innerHTML='<div class="loading-spinner">🔍 খোঁজা হচ্ছে...</div>';
+    try{
+        const idx = await fbGet('/phoneIndex/' + phone);
+        if(!idx){
+            document.getElementById('myOrdersList').innerHTML='';
+            document.getElementById('phoneError').style.display='block';
+            return;
+        }
+        const orderIds = Object.keys(idx);
+        const results = await Promise.allSettled(
+            orderIds.map(oid => fbGet('/orders/' + encodeURIComponent(oid)))
+        );
+        let orders = results
+            .filter(r => r.status === 'fulfilled' && r.value !== null)
+            .map(r => r.value);
+        orders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        if(!orders.length){
+            document.getElementById('myOrdersList').innerHTML='';
+            document.getElementById('phoneError').style.display='block';
+            return;
+        }
+        renderMyOrders(orders);
+    }catch(e){
+        showToast('সংযোগ সমস্যা হয়েছে, আবার চেষ্টা করুন','#DC2626');
+        document.getElementById('myOrdersList').innerHTML='';
+    }
+}
+function renderMyOrders(orders){
+    const el=document.getElementById('myOrdersList');
+    el.innerHTML=orders.map(o=>`
+        <div class="my-order-item" data-orderid="${escapeHTML(o.orderId)}" onclick="viewOrder(this.dataset.orderid)">
+            <div class="my-order-top">
+                <div class="my-oid">${escapeHTML(o.orderId)}</div>
+                <span class="my-status" style="${STATUS_COLORS[o.status]||STATUS_COLORS.pending}">${STATUS_LABELS[o.status]||escapeHTML(o.status)}</span>
+            </div>
+            <div class="my-info">
+                <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v16H4zM10 4h6v16h-6z"/><path d="M16 5l4 .8-2.5 15.4-4-.8"/></svg> ${escapeHTML(o.books)}<br>
+                <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9a2.5 2 0 0 0-2.5-1.5c-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2A2.5 2 0 0 1 9.5 16M12 6v1.5M12 16.5V18"/></svg> <strong>${escapeHTML(o.total)}</strong> · <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> ${escapeHTML(o.payment)}<br>
+                <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg> ${new Date(o.createdAt).toLocaleDateString('bn-BD')}
+            </div>
+        </div>
+    `).join('');
+}
+function viewOrder(id){
+    switchTab('id');
+    document.getElementById('trackInput').value=id;
+    searchOrder();
+}
+function fillLastOrder(id){document.getElementById('trackInput').value=id;}
+function renderOrder(o){
+    document.getElementById('orderIdBadge').innerText=o.orderId;
+    const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${escapeHTML(o.coupon||'')})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
+    document.getElementById('orderInfoRows').innerHTML=`
+        <div class="order-info-row"><span>নাম</span><span>${(()=>{const n=o.name||'';return n.length>2?escapeHTML(n[0]+'*'.repeat(n.length-2)+n[n.length-1]):escapeHTML(n);})()}</span></div>
+        <div class="order-info-row"><span>ফোন</span><span>${(()=>{const p=o.phone||'';return escapeHTML(p.length>5?p.slice(0,3)+'*'.repeat(p.length-5)+p.slice(-2):p);})()}</span></div>
+        <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address)}</span></div>
+        <div class="order-info-row"><span>পেমেন্ট</span><span>${escapeHTML(o.payment)}</span></div>
+        <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.books)}</span></div>
+        ${discRow}
+        <div class="order-info-row"><span>মোট</span><span class="order-total-val">${escapeHTML(o.total)}</span></div>
+    `;
+    const curIdx=STATUSES.findIndex(s=>s.key===o.status);
+    let html='';
+    STATUSES.forEach((s,i)=>{
+        const isDone=i<curIdx, isActive=i===curIdx;
+        const dotClass=isDone?'done':isActive?'active':'pending';
+        const labelClass=isDone||isActive?'':'pending-txt';
+        const showLine=i<STATUSES.length-1;
+        html+=`<div class="tl-step">
+            <div class="tl-left">
+                <div class="tl-dot ${dotClass}">${isDone?'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>':s.icon}</div>
+                ${showLine?`<div class="tl-line ${isDone?'done':''}"></div>`:''}
+            </div>
+            <div class="tl-right">
+                <div class="tl-label ${labelClass}">${s.label}</div>
+                <div class="tl-sub">${s.sub}</div>
+            </div>
+        </div>`;
+    });
+    document.getElementById('timelineSteps').innerHTML=html;
+    document.getElementById('orderCard').style.display='block';
+}
+window.onload=function(){
+    const urlId=new URLSearchParams(window.location.search).get('id');
+    const lastId=localStorage.getItem('alaziz_lastorder');
+    if(urlId){
+        document.getElementById('trackInput').value=urlId;
+        searchOrder();
+    } else if(lastId){
+        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#204521;cursor:pointer;" data-id="${escapeHTML(lastId)}" onclick="fillLastOrder(this.dataset.id)">${escapeHTML(lastId)}</strong>`;
+    }
+};
+</script>
+<script src="AAcommon.js"></script>
+</body>
+</html>
