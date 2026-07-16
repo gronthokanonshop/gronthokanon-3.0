@@ -790,7 +790,7 @@ function loadRecent(){
     document.getElementById('recentBooks').innerHTML=r.map(ri=>{
         const rb=books[ri];if(!rb)return '';
         const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';
-        return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'">
+        return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'">
             <img src="${rImg}" alt="${rb.name}" loading="lazy">
             <div class="rel-name">${rb.name}</div>
             <div class="rel-price">৳ ${rb.price}</div></div>`;
@@ -799,9 +799,16 @@ function loadRecent(){
 
 /* LOAD BOOK */
 function loadBook(){
-    const idx=parseInt(new URLSearchParams(window.location.search).get('id'));
-    if(isNaN(idx)){window.location.href='index.html';return;}
-    if(!books[idx]){return;} /* এখনো লোড হয়নি (নতুন প্রোডাক্ট Firebase থেকে আসছে) — redirect করব না */
+    const idParam=new URLSearchParams(window.location.search).get('id');
+    if(idParam===null){window.location.href='index.html';return;}
+    /* প্রথমে স্থায়ী bid দিয়ে বই খোঁজা হচ্ছে (নতুন লিংক) — না পেলে পুরনো/লেগেসি
+       position-ভিত্তিক ?id=সংখ্যা লিংক হিসেবে fallback (আগের মতোই কাজ করবে) */
+    let idx=books.findIndex(bk=>bk&&bk.bid&&bk.bid===idParam);
+    if(idx===-1){
+        const n=parseInt(idParam);
+        if(!isNaN(n)&&books[n]) idx=n;
+    }
+    if(idx===-1){return;} /* এখনো লোড হয়নি (নতুন প্রোডাক্ট Firebase থেকে আসছে) — redirect করব না */
     curIdx=idx;curBook=books[idx];
     const b=curBook,pct=discPct(b);
 
@@ -905,7 +912,7 @@ function loadBook(){
     const _mc=bookMainCat(b), _tg=bookTags(b);
     const related=books.filter((rb,i)=>i!==idx&&(isBook?rb.author!==b.author:true)&&((_mc&&bookMainCat(rb)===_mc)||(rb.subject&&rb.subject===b.subject)||bookTags(rb).some(t=>_tg.includes(t)))).slice(0,8);
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
-    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'"><img src="${rImg}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
+    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${rImg}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
 
     loadRecent();updateCartCount();
 
@@ -919,7 +926,7 @@ function loadBook(){
 
 function updateSEO(b,idx,bookImg,desc){
     const SITE='https://gronthokanon.com';
-    const pageUrl=SITE+'/book.html?id='+idx;
+    const pageUrl=SITE+'/book.html?id='+encodeURIComponent(b.bid||idx);
     const absImg=/^https?:\/\//.test(bookImg)?bookImg:SITE+'/'+bookImg;
     const isBook=(b.type||'বই')==='বই';
     const byLine=isBook&&b.author?` — ${b.author}`:b.brand?` — ${b.brand}`:'';
@@ -993,7 +1000,7 @@ function bkRunSearch(){
     body.innerHTML=`<div class="bks-count">🔍 ${found.length}টি বই</div>`+found.slice(0,40).map(b=>{
         const idx=books.indexOf(b);
         const img=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
-        return `<div class="bks-item" onclick="window.location.href='book.html?id=${idx}'">
+        return `<div class="bks-item" onclick="window.location.href='book.html?id=${encodeURIComponent(b.bid||idx)}'">
             <img src="${escapeHTML(img)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='book-placeholder.svg'">
             <div style="flex:1;min-width:0;">
                 <div class="bks-name">${escapeHTML(b.name)}</div>
@@ -1188,7 +1195,7 @@ function renderAISuggest(){
         const ri=books.indexOf(b);
         const img=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
         const match=Math.max(70,100-i*4-(Math.floor(Math.random()*6)));
-        return `<div class="ai-book" onclick="window.location.href='book.html?id=${ri}'">
+        return `<div class="ai-book" onclick="window.location.href='book.html?id=${encodeURIComponent(b.bid||ri)}'">
             <img src="${escapeHTML(img)}" alt="${escapeHTML(b.name)}" loading="lazy">
             <div class="ai-book-name">${escapeHTML(b.name)}</div>
             <div class="ai-book-price">৳ ${b.price}</div>
@@ -1263,13 +1270,14 @@ document.addEventListener('DOMContentLoaded', function(){
     if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(function(){ loadBook(); });
     /* fallback: কিছুক্ষণেও বই না পেলে হোমে ফেরত */
     setTimeout(function(){
-        const _i=parseInt(new URLSearchParams(window.location.search).get('id'));
-        if(!curBook && (isNaN(_i)||!books[_i])) window.location.href='index.html';
+        if(!curBook) window.location.href='index.html';
     }, 4000);
-    const idx=parseInt(new URLSearchParams(window.location.search).get('id'));
-    if(!isNaN(idx)){
-        incrementView(idx);
-        setTimeout(()=>loadReviews(idx),1500);
+    /* views/reviews-এর জন্য key হিসেবে URL-এর id-টাই সরাসরি ব্যবহার হচ্ছে —
+       এটা bid (নতুন স্থায়ী লিংক) বা পুরনো সংখ্যা (লেগেসি লিংক) দুটোই হতে পারে */
+    const bookKey=new URLSearchParams(window.location.search).get('id');
+    if(bookKey){
+        incrementView(bookKey);
+        setTimeout(()=>loadReviews(bookKey),1500);
     }
 });
 

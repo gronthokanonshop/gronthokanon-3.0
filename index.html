@@ -1713,7 +1713,8 @@ function makeCard(b){
 function goToBook(idx){
     recentlyViewed=[idx,...recentlyViewed.filter(i=>i!==idx)].slice(0,8);
     localStorage.setItem('gronthokanon_recent',JSON.stringify(recentlyViewed));
-    window.location.href='book.html?id='+idx;
+    const b=books[idx];
+    window.location.href='book.html?id='+encodeURIComponent((b&&b.bid)||idx);
 }
 /* স্টক তথ্য দেরিতে এলে ইতিমধ্যে আঁকা কার্ডগুলো আপডেট করে (পুরো রি-রেন্ডার ছাড়াই) */
 function gkSweepStock(){

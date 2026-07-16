@@ -721,7 +721,8 @@ function goToBook(idx) {
     let r = JSON.parse(localStorage.getItem('gronthokanon_recent')) || [];
     r = [idx, ...r.filter(i => i !== idx)].slice(0, 8);
     localStorage.setItem('gronthokanon_recent', JSON.stringify(r));
-    navigateTo('book.html?id=' + idx);
+    const b = books[idx];
+    navigateTo('book.html?id=' + encodeURIComponent((b && b.bid) || idx));
 }
 
 /* স্টক তথ্য দেরিতে এলে আঁকা কার্ডগুলো আপডেট (পুরো রি-রেন্ডার ছাড়াই) */
