@@ -2201,16 +2201,20 @@ async function ensureBookIdsAndMigrate(arr){
         let bid=base,n=2;
         while(used[bid]){ bid=base+'-'+n; n++; }
         used[bid]=true;
-        /* এই বইয়ের পুরনো views/reviews (এখনকার position i দিয়ে রাখা ছিল)
-           নতুন bid-তে কপি করে দিচ্ছি, যাতে ডেটা হারিয়ে না যায় */
+        /* এই বইয়ের পুরনো reviews (এখনকার position i দিয়ে রাখা ছিল) নতুন bid-তে
+           প্রতিটা আলাদাভাবে কপি করা হচ্ছে — rules অনুযায়ী প্রতি-রিভিউ লেভেলে
+           admin/moderator লিখতে পারে, কিন্তু বাল্ক-রাইট অনুমোদিত না।
+           views count bulk-migrate করা সম্ভব না (rule শুধু +1 করে বাড়াতে দেয়,
+           পুরনো সংখ্যা সরাসরি বসানো যায় না) — তাই সেটা স্কিপ করা হচ্ছে,
+           নতুন bid-তে view গোনা ০ থেকেই আবার শুরু হবে */
         try{
-            const [vSnap,rSnap]=await Promise.all([
-                db.ref('views/'+i).once('value'),
-                db.ref('reviews/'+i).once('value')
-            ]);
-            if(vSnap.exists()) await db.ref('views/'+bid).set(vSnap.val());
-            if(rSnap.exists()) await db.ref('reviews/'+bid).set(rSnap.val());
-        }catch(e){ console.warn('view/review migrate skip for index',i,e); }
+            const rSnap=await db.ref('reviews/'+i).once('value');
+            if(rSnap.exists()){
+                const reviews=rSnap.val();
+                const writes=Object.keys(reviews).map(rid=>db.ref('reviews/'+bid+'/'+rid).set(reviews[rid]));
+                await Promise.all(writes);
+            }
+        }catch(e){ console.warn('review migrate skip for index',i,e); }
         b.bid=bid;
     }
     return arr;
