@@ -2194,29 +2194,30 @@ function slugifyBn(str){
 async function ensureBookIdsAndMigrate(arr){
     const used={};
     arr.forEach(b=>{ if(b&&b.bid) used[b.bid]=true; });
+    const toMigrate=[];
+    /* প্রথমে সব বইয়ের bid সিঙ্ক্রোনাসভাবে বসিয়ে দিচ্ছি (নেটওয়ার্ক কল লাগে না, তাই দ্রুত) */
     for(let i=0;i<arr.length;i++){
         const b=arr[i];
-        if(!b||b.bid) continue; /* আগে থেকে bid থাকলে কখনোই পাল্টানো হয় না */
+        if(!b||b.bid) continue;
         const base=slugifyBn(b.name);
         let bid=base,n=2;
         while(used[bid]){ bid=base+'-'+n; n++; }
         used[bid]=true;
-        /* এই বইয়ের পুরনো reviews (এখনকার position i দিয়ে রাখা ছিল) নতুন bid-তে
-           প্রতিটা আলাদাভাবে কপি করা হচ্ছে — rules অনুযায়ী প্রতি-রিভিউ লেভেলে
-           admin/moderator লিখতে পারে, কিন্তু বাল্ক-রাইট অনুমোদিত না।
-           views count bulk-migrate করা সম্ভব না (rule শুধু +1 করে বাড়াতে দেয়,
-           পুরনো সংখ্যা সরাসরি বসানো যায় না) — তাই সেটা স্কিপ করা হচ্ছে,
-           নতুন bid-তে view গোনা ০ থেকেই আবার শুরু হবে */
+        b.bid=bid;
+        toMigrate.push({oldIndex:i,bid});
+    }
+    /* এই বইগুলোর পুরনো reviews (এখনকার position দিয়ে রাখা ছিল) নতুন bid-তে
+       কপি করা হচ্ছে — সব বইয়ের জন্য একসাথে/সমান্তরালে (একটার পর একটা না, তাই
+       হাজারখানেক বই থাকলেও দ্রুত শেষ হয়) */
+    await Promise.all(toMigrate.map(async ({oldIndex,bid})=>{
         try{
-            const rSnap=await db.ref('reviews/'+i).once('value');
+            const rSnap=await db.ref('reviews/'+oldIndex).once('value');
             if(rSnap.exists()){
                 const reviews=rSnap.val();
-                const writes=Object.keys(reviews).map(rid=>db.ref('reviews/'+bid+'/'+rid).set(reviews[rid]));
-                await Promise.all(writes);
+                await Promise.all(Object.keys(reviews).map(rid=>db.ref('reviews/'+bid+'/'+rid).set(reviews[rid])));
             }
-        }catch(e){ console.warn('review migrate skip for index',i,e); }
-        b.bid=bid;
-    }
+        }catch(e){ console.warn('review migrate skip for index',oldIndex,e); }
+    }));
     return arr;
 }
 
