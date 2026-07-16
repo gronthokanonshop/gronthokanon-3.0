@@ -914,3 +914,21 @@ window.gkToggleContact = function () {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
 })();
+
+/* ═══════════════════════════════════════════════════════════════
+   bfcache (Back-Forward Cache) সাপোর্ট — Firebase WebSocket এরর বন্ধ
+
+   পেজ hide/freeze হওয়ার ঠিক আগে Firebase Realtime DB-কে ইচ্ছাকৃতভাবে
+   অফলাইনে পাঠিয়ে দেই, আর পেজ আবার visible হলে অনলাইনে ফিরিয়ে আনি।
+   এতে ব্রাউজার কনসোলে "WebSocket ... Page entered Back-Forward Cache"
+   এরর আসে না, আর পেজ back/forward-এ আরও দ্রুত লোড হয় (true bfcache)।
+═══════════════════════════════════════════════════════════════ */
+(function () {
+    if (typeof firebase === 'undefined' || typeof firebase.database !== 'function') return;
+    window.addEventListener('pagehide', function () {
+        try { firebase.database().goOffline(); } catch (e) {}
+    });
+    window.addEventListener('pageshow', function (e) {
+        try { firebase.database().goOnline(); } catch (e) {}
+    });
+})();
