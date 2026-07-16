@@ -162,118 +162,212 @@ window.gkToggleContact = function () {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   কার্ট — localStorage এ রক্ষা হয়
-   শপিং কার্ট: ['{ প্রোডাক্ট }', ...]
-   কুপন: গ্রন্থকানন_coupon = কোড, গ্রন্থকানন_ctype/cvalue = টাইপ ও মূল্য
+   কার্ট — localStorage এ রক্ষা হয় (key: gronthokanon_cart)
+   ডেটা মডেল: [{name, price, img}, ...] — প্রতিটা কপি আলাদা এন্ট্রি
+   কুপন: gronthokanon_coupon = কোড, gronthokanon_ctype/cvalue = টাইপ ও মূল্য
+
+   এই ব্লকটা সব পেজে (index/book/filter/checkout — common.js থাকলেই)
+   একই কার্ট ড্রয়ার সরবরাহ করে। যে পেজ নিজের showCart()/openOrderForm()
+   ইত্যাদি আগে থেকেই ডিফাইন করে রেখেছে (এখন শুধু index.html),
+   সেখানে এই ফাংশনগুলো ওভাররাইট করে না — শুধু যেসব পেজে এগুলো
+   নেই (book/filter/checkout) সেখানে fallback হিসেবে কাজ করে।
 ═══════════════════════════════════════════════════════════════ */
 (function () {
-    window.readCart = function () {
-        try {
-            var c = localStorage.getItem('gronthokanon_cart');
-            return (c ? JSON.parse(c) : []).filter(function (item) { return item && item.id; });
-        } catch (e) {
-            return [];
-        }
-    };
-    window.writeCart = function (items) {
-        try { localStorage.setItem('gronthokanon_cart', JSON.stringify(items || [])); } catch (e) {}
-    };
-    window.addToCart = function (p) {
-        if (!p || !p.id) return;
-        var cart = readCart();
-        var found = cart.find(function (c) { return c.id === p.id; });
-        if (found) {
-            found.qty = (found.qty || 1) + 1;
-        } else {
-            p.qty = 1;
-            cart.push(p);
-        }
-        writeCart(cart);
-        showToast('✅ যোগ হয়েছে ব্যাগে', '#059669');
-    };
-    window.removeCartItem = function (id) {
-        var cart = readCart();
-        writeCart(cart.filter(function (c) { return c.id !== id; }));
-        gkRenderCart();
-    };
-    window.updateCartQty = function (id, qty) {
-        var cart = readCart();
-        var item = cart.find(function (c) { return c.id === id; });
-        if (item) {
-            item.qty = Math.max(1, qty);
-            writeCart(cart);
-            gkRenderCart();
-        }
-    };
-    window.gkRenderCart = function () {
-        var cart = readCart();
-        var cartItems = document.getElementById('gkCartItems');
-        if (!cartItems) return;
-        if (!cart.length) {
-            cartItems.innerHTML = '<div style="padding: 40px 20px; text-align: center; color: var(--text-muted);"><p>⛹️ ব্যাগ খালি</p></div>';
-            return;
-        }
-        var itemsHtml = cart.map(function (item) {
-            var subHtml = (item.qty || 1) + ' × ৳' + (item.price || 0) + ' = ৳' + ((item.qty || 1) * (item.price || 0));
-            return '<div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid var(--border);">' +
-                '<img src="' + (item.cover || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 300%22%3E%3Crect fill=%22%23ddd%22 width=%22200%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2216%22 fill=%22%23666%22%3ENo Cover%3C/text%3E%3C/svg%3E') + '" alt="' + item.title + '" style="width: 50px; height: 75px; object-fit: cover; border-radius: 3px; flex-shrink: 0;">' +
-                '<div style="flex: 1; min-width: 0;">' +
-                '<div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">' + item.title + '</div>' +
-                '<div style="font-size: 11px; color: var(--text-muted);">' + subHtml + '</div>' +
-                '<div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">' +
-                '<button onclick="updateCartQty(' + item.id + ', ' + ((item.qty || 1) - 1) + ')" style="width: 20px; height: 20px; padding: 0; border: 1px solid var(--border); background: var(--bg); border-radius: 2px; cursor: pointer;">−</button>' +
-                '<span style="width: 24px; text-align: center; font-size: 12px; font-weight: 600;">' + (item.qty || 1) + '</span>' +
-                '<button onclick="updateCartQty(' + item.id + ', ' + ((item.qty || 1) + 1) + ')" style="width: 20px; height: 20px; padding: 0; border: 1px solid var(--border); background: var(--bg); border-radius: 2px; cursor: pointer;">+</button>' +
-                '</div></div>' +
-                '<button onclick="removeCartItem(' + item.id + ')" style="flex-shrink: 0; width: 32px; height: 32px; border: none; background: none; color: var(--danger); font-size: 16px; cursor: pointer;">✕</button>' +
-                '</div>';
-        }).join('');
+    var LS_CART = 'gronthokanon_cart';
+    function readCart() {
+        try { return JSON.parse(localStorage.getItem(LS_CART)) || []; } catch (e) { return []; }
+    }
+    function writeCart(c) {
+        try { localStorage.setItem(LS_CART, JSON.stringify(c || [])); } catch (e) {}
+        /* পেজের নিজস্ব cartCount/topbar badge থাকলে সেটাও রিফ্রেশ করি */
+        try { if (typeof updateCartCount === 'function') updateCartCount(); } catch (e) {}
+        try { if (typeof cart !== 'undefined') cart = readCart(); } catch (e) {}
+    }
 
-        var total = cart.reduce(function (s, item) { return s + ((item.qty || 1) * (item.price || 0)); }, 0);
-        var coupon = localStorage.getItem('gronthokanon_coupon');
-        var discount = window.gkCouponDiscAmt(total) || 0;
-        var cType = localStorage.getItem('gronthokanon_ctype') || 'percent';
-        var cDeliveryFree = cType === 'delivery';
-        var deliveryCharge = total < 500 ? (cDeliveryFree ? 0 : 100) : 0;
-        var finalTotal = total - discount + deliveryCharge;
+    function ensureCartCSS() {
+        if (document.getElementById('gkCartBoxCSS')) return;
+        var style = document.createElement('style');
+        style.id = 'gkCartBoxCSS';
+        style.textContent =
+            '.gkcb-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.48);' +
+            'backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:10000;justify-content:flex-end;}' +
+            '.gkcb-content{background:rgba(255,255,255,0.92);backdrop-filter:blur(24px);' +
+            '-webkit-backdrop-filter:blur(24px);border-left:1px solid rgba(255,255,255,0.5);' +
+            'box-shadow:-8px 0 40px rgba(0,0,0,0.12);width:330px;max-width:92%;height:100%;' +
+            'display:flex;flex-direction:column;animation:gkcbSlideIn 0.35s cubic-bezier(0.2,0.8,0.2,1);' +
+            'overflow-y:auto;border-radius:24px 0 0 24px;}' +
+            '[data-theme="dark"] .gkcb-content{background:rgba(17,24,39,0.92);border-left-color:rgba(255,255,255,0.08);}' +
+            '@keyframes gkcbSlideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}' +
+            '.gkcb-qty-btn{background:var(--green,#059669);color:#fff;border:none;border-radius:50%;' +
+            'cursor:pointer;width:26px;height:26px;font-weight:bold;font-size:15px;display:flex;' +
+            'align-items:center;justify-content:center;transition:0.15s;box-shadow:0 2px 6px rgba(5,150,105,0.25);}' +
+            '.gkcb-qty-btn:active{transform:scale(0.9);}';
+        document.head.appendChild(style);
+    }
 
-        var cartFooter = '<div style="padding: 16px; border-top: 1px solid var(--border);">' +
-            '<div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">' +
-            '<span>মোট:</span><span>৳' + total + '</span></div>' +
-            (discount ? '<div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: var(--accent);">' +
-                '<span>ছাড় (' + (coupon || 'কোড') + '):</span><span>−৳' + discount + '</span></div>' : '') +
-            (deliveryCharge ? '<div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">' +
-                '<span>ডেলিভারি:</span><span>৳' + deliveryCharge + '</span></div>' : '') +
-            '<div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid var(--border); font-weight: 700; font-size: 14px;">' +
-            '<span>পরিশোধ:</span><span>৳' + finalTotal + '</span></div>' +
+    function cartBoxHTML() {
+        return '<div id="cartBox" class="gkcb-modal">' +
+            '<div class="gkcb-content">' +
+                '<div style="padding:18px 20px;background:#059669;color:#fff;display:flex;justify-content:space-between;align-items:center;border-radius:24px 0 0 0;">' +
+                    '<h3 style="margin:0;font-size:18px;font-weight:800;display:flex;align-items:center;gap:9px;">' +
+                        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' +
+                        'আপনার ব্যাগ</h3>' +
+                    '<span onclick="closeCart()" style="cursor:pointer;font-size:24px;opacity:0.9;line-height:1;">&times;</span>' +
+                '</div>' +
+                '<div id="cartItems" style="flex:1;overflow-y:auto;padding:16px;"></div>' +
+                '<div id="cartOfferBanner" style="display:none;margin:0 16px 8px;border-radius:10px;overflow:hidden;"></div>' +
+                '<div style="padding:16px;background:var(--search-bg,var(--bg));border-top:1px solid var(--border);">' +
+                    '<div id="couponSection" style="margin-bottom:12px;"></div>' +
+                    '<div style="font-size:14px;line-height:2;color:var(--text);">' +
+                        '<p style="display:flex;justify-content:space-between;margin:0;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>' +
+                        '<p style="display:flex;justify-content:space-between;margin:0;color:#dc2626;">ডিসকাউন্ট: <span>-৳<span id="discountAmt">0</span></span></p>' +
+                        '<hr style="margin:10px 0;border:none;border-top:1px solid var(--border);">' +
+                        '<h4 style="display:flex;justify-content:space-between;color:#059669;font-size:18px;margin:0;">মোট: <span>৳<span id="total">0</span></span></h4>' +
+                    '</div>' +
+                    '<div style="display:flex;gap:8px;margin-top:14px;">' +
+                        '<button onclick="closeCart()" style="flex:1;padding:11px;background:transparent;color:#059669;border:1.5px solid #059669;border-radius:10px;cursor:pointer;font-weight:700;font-family:\'Hind Siliguri\',Arial,sans-serif;font-size:13px;">আরও কিনুন</button>' +
+                        '<button onclick="openOrderForm()" style="flex:2;padding:11px;background:#059669;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:800;font-family:\'Hind Siliguri\',Arial,sans-serif;font-size:14px;box-shadow:0 4px 14px rgba(5,150,105,0.35);">অর্ডার করুন →</button>' +
+                    '</div>' +
+                '</div>' +
             '</div>' +
-            '<div style="padding: 0 16px 16px;">' +
-            '<button onclick="gkGoCheckout()" style="width: 100%; padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">চেকআউট করুন</button>' +
-            '</div>';
+        '</div>';
+    }
 
-        cartItems.innerHTML = itemsHtml + cartFooter;
+    function ensureCartBox() {
+        ensureCartCSS();
+        if (!document.getElementById('cartBox')) {
+            document.body.insertAdjacentHTML('beforeend', cartBoxHTML());
+        }
+    }
+
+    /* কার্ট পেজেই (checkout.html) কার্ট ড্রয়ার দরকার নেই — ওখানে বাটন চাপলে শুধু ওপরে স্ক্রল করে দেবে */
+    function onCheckoutPage() {
+        return location.pathname.indexOf('checkout.html') !== -1;
+    }
+
+    window.gkCartUpdateUI = function () {
+        ensureCartBox();
+        var box = document.getElementById('cartItems');
+        if (!box) return;
+        var c = readCart();
+        var subtotal = 0;
+        if (!c.length) {
+            box.innerHTML = '<div style="text-align:center;padding:50px 20px;color:var(--text2);"><div style="margin-bottom:10px;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><p>কার্ট এখনও খালি</p></div>';
+        } else {
+            var grouped = {};
+            c.forEach(function (item) {
+                if (grouped[item.name]) grouped[item.name].qty++;
+                else grouped[item.name] = { price: item.price, qty: 1, img: item.img || '' };
+            });
+            var html = '';
+            for (var name in grouped) {
+                var item = grouped[name];
+                subtotal += item.price * item.qty;
+                var en = name.replace(/'/g, "\\'");
+                html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px;">' +
+                    '<img src="' + item.img + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">' +
+                    '<div style="flex:1;"><h4 style="font-size:13px;margin:0;color:var(--text);">' + name + '</h4><span style="color:#dc2626;font-size:13px;font-weight:bold;">৳' + item.price + '</span></div>' +
+                    '<div style="display:flex;align-items:center;gap:8px;">' +
+                    '<button class="gkcb-qty-btn" onclick="changeQty(\'' + en + '\',-1)">-</button>' +
+                    '<span style="font-weight:bold;color:var(--text);">' + item.qty + '</span>' +
+                    '<button class="gkcb-qty-btn" onclick="changeQty(\'' + en + '\',1)">+</button>' +
+                    '</div></div>';
+            }
+            box.innerHTML = html;
+        }
+        var count = c.length;
+        var bb = document.getElementById('bnavBadge'); if (bb) { bb.innerText = count; bb.classList.toggle('show', count > 0); }
+        var disc = (typeof window.gkCouponDiscAmt === 'function') ? window.gkCouponDiscAmt(subtotal) : 0;
+        var elSub = document.getElementById('subtotal'); if (elSub) elSub.innerText = subtotal;
+        var elDisc = document.getElementById('discountAmt'); if (elDisc) elDisc.innerText = disc;
+        var elTot = document.getElementById('total'); if (elTot) elTot.innerText = subtotal - disc;
+        var ob = document.getElementById('cartOfferBanner');
+        if (ob) {
+            var giftHtml = (typeof window.gkGiftBarHTML === 'function') ? window.gkGiftBarHTML(subtotal) : '';
+            ob.innerHTML = giftHtml;
+            ob.style.display = giftHtml ? 'block' : 'none';
+        }
     };
 
-    window.gkGoCheckout = function () {
-        if (!readCart().length) { showToast('⚠️ ব্যাগ খালি!', '#dc2626'); return; }
+    window.renderCouponSection = window.renderCouponSection || function () {
+        var sec = document.getElementById('couponSection');
+        if (!sec) return;
+        var applied = localStorage.getItem('gronthokanon_coupon');
+        if (applied) {
+            var ct = localStorage.getItem('gronthokanon_ctype') || 'percent';
+            var cv = parseInt(localStorage.getItem('gronthokanon_cvalue') || localStorage.getItem('gronthokanon_discount') || '0');
+            var label = '🎉 ' + applied + ' — ' + ((typeof window.gkCouponLabel === 'function') ? window.gkCouponLabel({ type: ct, value: cv }) : cv + '% ডিসকাউন্ট');
+            sec.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(5,150,105,0.08);border:1.5px dashed #059669;border-radius:8px;">' +
+                '<span style="flex:1;font-size:13px;font-weight:700;color:#059669;">' + label + '</span>' +
+                '<button onclick="removeCoupon()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">✕ বাতিল</button></div>';
+        } else {
+            sec.innerHTML = '<div style="display:flex;gap:6px;">' +
+                '<input type="text" id="couponCode" placeholder="কুপন কোড লিখুন" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:\'Hind Siliguri\',Arial,sans-serif;font-size:13px;outline:none;">' +
+                '<button onclick="applyCoupon()" style="background:#059669;color:white;border:none;padding:0 14px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;">Apply</button></div>';
+        }
+    };
+    window.removeCoupon = window.removeCoupon || function () {
+        localStorage.removeItem('gronthokanon_coupon');
+        localStorage.removeItem('gronthokanon_discount');
+        localStorage.removeItem('gronthokanon_ctype');
+        localStorage.removeItem('gronthokanon_cvalue');
+        showToast('🗑️ কুপন বাতিল হয়েছে', '#6b7280');
+        window.gkCartUpdateUI();
+        window.renderCouponSection();
+    };
+    window.applyCoupon = window.applyCoupon || function () {
+        var el = document.getElementById('couponCode');
+        var code = (el ? el.value : '').trim().toUpperCase();
+        var info = (typeof window.gkCouponInfo === 'function') ? window.gkCouponInfo(code) : null;
+        if (info) {
+            localStorage.setItem('gronthokanon_coupon', code);
+            localStorage.setItem('gronthokanon_ctype', info.type);
+            localStorage.setItem('gronthokanon_cvalue', String(info.value));
+            localStorage.setItem('gronthokanon_discount', String(info.type === 'percent' ? info.value : 0));
+            showToast('🎉 ' + window.gkCouponLabel(info) + ' যুক্ত হয়েছে!', '#059669');
+            window.gkCartUpdateUI();
+            window.renderCouponSection();
+        } else {
+            showToast('❌ ভুল কুপন কোড!', '#dc2626');
+        }
+    };
+    window.changeQty = window.changeQty || function (name, delta) {
+        var c = readCart();
+        if (delta === 1) {
+            var item = c.find(function (i) { return i.name === name; });
+            if (item) c.push({ name: item.name, price: item.price, img: item.img });
+        } else {
+            var idx = -1;
+            for (var j = c.length - 1; j >= 0; j--) { if (c[j].name === name) { idx = j; break; } }
+            if (idx !== -1) c.splice(idx, 1);
+        }
+        writeCart(c);
+        window.gkCartUpdateUI();
+    };
+    window.showCart = window.showCart || function () {
+        if (onCheckoutPage()) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+        ensureCartBox();
+        document.getElementById('cartBox').style.display = 'flex';
+        window.gkCartUpdateUI();
+        window.renderCouponSection();
+    };
+    window.closeCart = window.closeCart || function () {
+        var b = document.getElementById('cartBox');
+        if (b) b.style.display = 'none';
+    };
+    window.openOrderForm = window.openOrderForm || function () {
+        var c = readCart();
+        if (!c.length) return showToast('⚠️ কার্ট খালি!', '#dc2626');
+        var inp = document.getElementById('couponCode');
+        var code = inp ? inp.value.trim() : '';
+        var appliedCoupon = localStorage.getItem('gronthokanon_coupon');
+        if (!code && !appliedCoupon) {
+            localStorage.removeItem('gronthokanon_discount');
+            localStorage.removeItem('gronthokanon_coupon');
+        }
         window.location.href = 'checkout.html';
     };
-
-    /* ── খোলা/বন্ধ ── */
-    window.showCart = function () {
-        gkRenderCart();
-        document.getElementById('gkCartOverlay').classList.add('open');
-        document.getElementById('gkCartDrawer').classList.add('open');
-        document.body.style.overflow = 'hidden';
-    };
-    window.closeCart = function () {
-        document.getElementById('gkCartOverlay').classList.remove('open');
-        document.getElementById('gkCartDrawer').classList.remove('open');
-        document.body.style.overflow = '';
-    };
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeCart();
-    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && typeof closeCart === 'function') closeCart(); });
 })();
 /* ══ Meta Pixel — অ্যাডমিন প্যানেল থেকে ID সেট করা যায় (siteConfig/metaPixelId) ══ */
 (function () {
@@ -399,6 +493,424 @@ window.gkToggleContact = function () {
     }
 
     function init() { setTimeout(tryShow, 1400); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+})();
+/* ═══════════════════════════════════════════════════════════════
+   বটম-নেভ + উইশলিস্ট ড্রয়ার + লগইন/রেজিস্টার মোডাল — সব পেজে শেয়ার্ড
+
+   common.js ইনক্লুড করা প্রতিটা পেজেই এখন বটম-নেভ (হোম/কার্ট/উইশলিস্ট/
+   ট্র্যাক/লগইন), উইশলিস্ট ড্রয়ার আর অথ মোডাল নিজে থেকেই ইনজেক্ট হয়ে যায় —
+   নতুন পেজেও শুধু common.js ইনক্লুড করলেই এগুলো কাজ করবে।
+
+   যে পেজে (এখন শুধু index.html) এই HTML/ফাংশনগুলো আগে থেকেই আছে,
+   সেখানে ডুপ্লিকেট বসে না (ID চেক করে) আর ফাংশনও ওভাররাইট হয় না
+   (window.X = window.X || function... প্যাটার্নে) — তাই index.html-এর
+   বিদ্যমান আচরণ অপরিবর্তিত থাকে।
+═══════════════════════════════════════════════════════════════ */
+(function () {
+    function ensureNavAuthCSS() {
+        if (document.getElementById('gkNavAuthCSS')) return;
+        var style = document.createElement('style');
+        style.id = 'gkNavAuthCSS';
+        style.textContent =
+            /* ── বটম নেভ ── */
+            '.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.97);' +
+            'backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(0,0,0,0.08);' +
+            'border-radius:0;box-shadow:0 -2px 16px rgba(0,0,0,0.08);display:flex;justify-content:space-around;' +
+            'align-items:center;padding:6px 4px 10px;z-index:998;}' +
+            '[data-theme="dark"] .bottom-nav{background:rgba(17,24,39,0.97);border-top-color:rgba(255,255,255,0.07);}' +
+            '@media (min-width:768px){.bottom-nav{left:50%;transform:translateX(-50%);width:580px;right:auto;border-radius:0;}}' +
+            '.bnav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 14px;' +
+            'border-radius:40px;transition:all 0.25s cubic-bezier(0.2,0.8,0.2,1);position:relative;-webkit-tap-highlight-color:transparent;}' +
+            '.bnav-item:active{transform:scale(0.86);}' +
+            '.bnav-item.active{background:rgba(5,150,105,0.10);}' +
+            '.bnav-svg{width:23px;height:23px;stroke:#9ca3af;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;' +
+            'transition:stroke 0.22s,fill 0.22s,filter 0.22s;}' +
+            '.bnav-item.active .bnav-svg{stroke:#059669;filter:drop-shadow(0 3px 7px rgba(5,150,105,0.38));}' +
+            '#bnav-wish.active .bnav-svg{stroke:#ec4899;filter:drop-shadow(0 3px 7px rgba(236,72,153,0.38));}' +
+            '#bnav-wish.active .bnav-label{color:#ec4899;}' +
+            '.bnav-label{font-size:10px;color:#9ca3af;font-weight:600;transition:color 0.2s;letter-spacing:0.01em;}' +
+            '.bnav-item.active .bnav-label{color:#059669;font-weight:700;}' +
+            '.bnav-badge{position:absolute;top:0px;right:8px;background:#dc2626;color:white;font-size:9px;font-weight:bold;' +
+            'padding:1px 5px;border-radius:20px;display:none;min-width:16px;text-align:center;border:2px solid rgba(255,255,255,0.9);' +
+            'box-shadow:0 1px 4px rgba(220,38,38,0.35);}' +
+            '.bnav-badge.show{display:block;}' +
+            '.bnav-login-pill{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 10px;' +
+            'border-radius:40px;transition:all 0.25s;position:relative;-webkit-tap-highlight-color:transparent;}' +
+            '.bnav-login-pill:active{transform:scale(0.86);}' +
+            '.bnav-login-inner{display:flex;align-items:center;gap:5px;background:linear-gradient(135deg,#059669,#10b981);' +
+            'border-radius:22px;padding:7px 14px;box-shadow:0 3px 14px rgba(5,150,105,0.32);transition:all 0.22s;}' +
+            '.bnav-login-pill:active .bnav-login-inner{box-shadow:none;transform:scale(0.93);}' +
+            '.bnav-login-svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}' +
+            '.bnav-login-text{font-size:11px;font-weight:700;color:white;white-space:nowrap;}' +
+            'body{padding-bottom:0;}' +
+            /* ── উইশলিস্ট ড্রয়ার ── */
+            '.wl-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.48);backdrop-filter:blur(4px);' +
+            '-webkit-backdrop-filter:blur(4px);z-index:10000;justify-content:flex-end;}' +
+            '.wl-content{background:rgba(255,255,255,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);' +
+            'border-left:1px solid rgba(255,255,255,0.5);box-shadow:-8px 0 40px rgba(0,0,0,0.12);width:330px;max-width:92%;' +
+            'height:100%;display:flex;flex-direction:column;animation:gkWlSlideIn 0.35s cubic-bezier(0.2,0.8,0.2,1);' +
+            'overflow-y:auto;border-radius:24px 0 0 24px;}' +
+            '[data-theme="dark"] .wl-content{background:rgba(17,24,39,0.92);border-left-color:rgba(255,255,255,0.08);}' +
+            '@keyframes gkWlSlideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}' +
+            /* ── অথ মোডাল ── */
+            '.auth-card{background:var(--card);width:100%;max-width:440px;border-radius:24px 24px 0 0;' +
+            'padding:0 0 max(24px,env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto;position:relative;' +
+            'box-shadow:0 -10px 40px rgba(0,0,0,0.25);animation:gkAuthSlideUp .32s cubic-bezier(.4,0,.2,1);}' +
+            '@keyframes gkAuthSlideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}' +
+            '.auth-drag-handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 0;}' +
+            '.auth-close-btn{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;' +
+            'background:var(--bg);color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;' +
+            'transition:background .15s,color .15s;}' +
+            '.auth-close-btn:hover{background:#fee2e2;color:#dc2626;}' +
+            '.auth-close-btn svg{width:16px;height:16px;}' +
+            '.auth-header{text-align:center;padding:22px 24px 4px;}' +
+            '.auth-header-logo{width:52px;height:52px;margin:0 auto 10px;border-radius:14px;background:#fff;' +
+            'box-shadow:0 4px 16px rgba(5,150,105,0.18),0 0 0 1px rgba(5,150,105,0.1);display:flex;align-items:center;' +
+            'justify-content:center;padding:7px;box-sizing:border-box;}' +
+            '.auth-header-logo img{width:100%;height:100%;object-fit:contain;}' +
+            '.auth-header-title{font-family:"Playfair Display",Georgia,serif;font-size:19px;font-weight:700;color:var(--text);}' +
+            '.auth-header-sub{font-size:12.5px;color:var(--text2);margin-top:3px;}' +
+            '.auth-tabs{display:flex;position:relative;gap:0;margin:18px 24px 0;background:var(--bg);border-radius:14px;padding:4px;}' +
+            '.auth-tab{flex:1;padding:10px 0;background:transparent;border:none;border-radius:11px;' +
+            'font-family:"Hind Siliguri",Arial,sans-serif;font-size:13.5px;font-weight:700;color:var(--text2);' +
+            'cursor:pointer;position:relative;z-index:1;transition:color .2s;}' +
+            '.auth-tab-active{color:#fff;}' +
+            '.auth-tab-slider{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);' +
+            'background:linear-gradient(135deg,#059669,#10b981);border-radius:11px;box-shadow:0 3px 10px rgba(5,150,105,0.35);' +
+            'transition:transform .28s cubic-bezier(.4,0,.2,1);}' +
+            '.auth-body{padding:18px 24px 4px;}' +
+            '.auth-error{display:none;align-items:center;gap:8px;font-size:12.5px;color:#dc2626;background:#fef2f2;' +
+            'border:1px solid #fecaca;border-radius:10px;padding:9px 12px;margin-bottom:12px;}' +
+            '.auth-error.show{display:flex;}' +
+            '.auth-error.ok{color:#059669;background:#ecfdf5;border-color:#a7f3d0;}' +
+            '[data-theme="dark"] .auth-error{background:rgba(220,38,38,0.12);border-color:rgba(220,38,38,0.3);}' +
+            '[data-theme="dark"] .auth-error.ok{background:rgba(5,150,105,0.14);border-color:rgba(52,211,153,0.3);}' +
+            '.auth-input-wrap{position:relative;margin-bottom:11px;}' +
+            '.auth-input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;' +
+            'color:var(--text2);pointer-events:none;}' +
+            '.auth-input{width:100%;padding:12.5px 14px 12.5px 40px;border:1.5px solid var(--border);border-radius:12px;' +
+            'background:var(--bg);color:var(--text);font-family:"Hind Siliguri",Arial,sans-serif;font-size:14px;' +
+            'outline:none;box-sizing:border-box;transition:border-color .15s,box-shadow .15s;}' +
+            '.auth-input::placeholder{color:var(--text2);opacity:.75;}' +
+            '.auth-input:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.14);}' +
+            '.auth-input-pass{padding-right:42px;}' +
+            '.auth-pass-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;' +
+            'border:none;background:transparent;color:var(--text2);display:flex;align-items:center;justify-content:center;' +
+            'cursor:pointer;border-radius:8px;}' +
+            '.auth-pass-toggle:hover{color:#059669;background:rgba(5,150,105,0.08);}' +
+            '.auth-pass-toggle svg{width:17px;height:17px;}' +
+            '.auth-forgot{text-align:right;font-size:12px;color:#059669;font-weight:600;cursor:pointer;margin:-2px 0 14px;}' +
+            '.auth-forgot:hover{text-decoration:underline;}' +
+            '.auth-btn{width:100%;padding:13.5px;background:linear-gradient(135deg,#059669,#10b981);color:white;' +
+            'border:none;border-radius:12px;font-family:"Hind Siliguri",Arial,sans-serif;font-size:15px;font-weight:700;' +
+            'cursor:pointer;box-shadow:0 6px 18px rgba(5,150,105,0.3);transition:transform .15s,box-shadow .15s;' +
+            'position:relative;display:flex;align-items:center;justify-content:center;gap:8px;}' +
+            '.auth-btn:active{transform:scale(.98);}' +
+            '.auth-btn:disabled{opacity:.75;cursor:default;}' +
+            '.auth-btn .auth-spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);' +
+            'border-top-color:#fff;animation:gkAuthSpin .7s linear infinite;display:none;}' +
+            '.auth-btn.loading .auth-spinner{display:inline-block;}' +
+            '@keyframes gkAuthSpin{to{transform:rotate(360deg);}}' +
+            '.auth-terms{font-size:10.5px;color:var(--text2);text-align:center;line-height:1.6;margin:16px 0 20px;}' +
+            '.auth-terms a{color:#059669;text-decoration:none;font-weight:600;}' +
+            '.auth-terms a:hover{text-decoration:underline;}' +
+            '.auth-divider{display:flex;align-items:center;gap:12px;margin:16px 0 14px;color:var(--text2);font-size:11.5px;}' +
+            '.auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:var(--border);}' +
+            '.auth-btn-google{width:100%;padding:12px;background:var(--bg);color:var(--text);border:1.5px solid var(--border);' +
+            'border-radius:12px;font-family:"Hind Siliguri",Arial,sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;' +
+            'display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .15s,background .15s;}' +
+            '.auth-btn-google:hover{border-color:#059669;background:rgba(5,150,105,0.05);}' +
+            '.auth-btn-google:disabled{opacity:.6;cursor:default;}' +
+            '@media (min-width:768px){#authModal{align-items:center;}.auth-card{border-radius:22px;max-width:400px;' +
+            'box-shadow:0 20px 60px rgba(0,0,0,0.3);}.auth-drag-handle{display:none;}}';
+        document.head.appendChild(style);
+    }
+
+    function bottomNavHTML() {
+        return '<div class="bottom-nav" id="gkBottomNav">' +
+            '<div class="bnav-item active" id="bnav-home" onclick="bnavActive(\'bnav-home\');gkGoHome()">' +
+                '<svg class="bnav-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>' +
+                '<span class="bnav-label">হোম</span></div>' +
+            '<div class="bnav-item" id="bnav-cart" onclick="bnavActive(\'bnav-cart\');showCart()">' +
+                '<div style="position:relative;"><svg class="bnav-svg" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>' +
+                '<span class="bnav-badge" id="bnavBadge">0</span></div><span class="bnav-label">ব্যাগ</span></div>' +
+            '<div class="bnav-item" id="bnav-wish" onclick="bnavActive(\'bnav-wish\');showWishlist()">' +
+                '<div style="position:relative;"><svg class="bnav-svg" viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' +
+                '<span class="bnav-badge" id="bnavWishBadge">0</span></div><span class="bnav-label">উইশলিস্ট</span></div>' +
+            '<div class="bnav-item" id="bnav-track" onclick="navigateTo(\'track.html\')">' +
+                '<svg class="bnav-svg" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>' +
+                '<span class="bnav-label">ট্র্যাক</span></div>' +
+            '<div class="bnav-login-pill" id="bnav-login" onclick="showLoginModal()">' +
+                '<div class="bnav-login-inner"><svg class="bnav-login-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+                '<span class="bnav-login-text">লগইন</span></div><span class="bnav-label" style="color:#059669;margin-top:2px;">একাউন্ট</span></div>' +
+            '</div>';
+    }
+
+    function wishlistBoxHTML() {
+        return '<div id="wishlistBox" class="wl-modal"><div class="wl-content">' +
+            '<div style="padding:14px 16px;background:#dc2626;color:#fff;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;">' +
+            '<h3 style="margin:0;font-size:17px;"><svg class="eico" viewBox="0 0 24 24" fill="#ec4899"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> উইশলিস্ট</h3>' +
+            '<span onclick="closeWishlist()" style="cursor:pointer;font-size:26px;">&times;</span></div>' +
+            '<div id="wishlistItems" style="padding:10px;"></div></div></div>';
+    }
+
+    function authModalHTML() {
+        return '<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(6,20,15,0.55);' +
+            'backdrop-filter:blur(2px);z-index:9999;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closeAuthModal()">' +
+            '<div class="auth-card" onclick="event.stopPropagation()">' +
+                '<div class="auth-drag-handle"></div>' +
+                '<button class="auth-close-btn" onclick="closeAuthModal()" aria-label="বন্ধ করুন"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
+                '<div class="auth-header"><div class="auth-header-logo"><img src="logo.png" alt="গ্রন্থকানন"></div>' +
+                    '<div class="auth-header-title">গ্রন্থকানন-এ স্বাগতম</div>' +
+                    '<div class="auth-header-sub" id="authHeaderSub">কেনাকাটা চালিয়ে যেতে লগইন করুন</div></div>' +
+                '<div class="auth-tabs"><button id="loginTab" class="auth-tab auth-tab-active" onclick="switchTab(\'login\')">লগইন</button>' +
+                    '<button id="registerTab" class="auth-tab" onclick="switchTab(\'register\')">রেজিস্টার</button>' +
+                    '<div class="auth-tab-slider" id="authTabSlider"></div></div>' +
+                '<div class="auth-body"><div id="authError" class="auth-error"></div>' +
+                    '<div id="loginForm">' +
+                        '<div class="auth-input-wrap"><svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' +
+                        '<input id="loginEmail" type="text" inputmode="email" placeholder="ইমেইল বা মোবাইল নাম্বার" class="auth-input" autocomplete="email"></div>' +
+                        '<div class="auth-input-wrap"><svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' +
+                        '<input id="loginPass" type="password" placeholder="পাসওয়ার্ড" class="auth-input auth-input-pass" autocomplete="current-password" onkeydown="if(event.key===\'Enter\')doLogin()">' +
+                        '<button type="button" class="auth-pass-toggle" onclick="togglePassVis(\'loginPass\',this)" aria-label="পাসওয়ার্ড দেখুন"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>' +
+                        '<div class="auth-forgot" onclick="doForgotPassword()">পাসওয়ার্ড ভুলে গেছেন?</div>' +
+                        '<button id="loginBtn" onclick="doLogin()" class="auth-btn"><span class="auth-btn-txt">লগইন করুন</span></button></div>' +
+                    '<div id="registerForm" style="display:none;">' +
+                        '<div class="auth-input-wrap"><svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+                        '<input id="regName" type="text" placeholder="আপনার নাম" class="auth-input" autocomplete="name"></div>' +
+                        '<div class="auth-input-wrap"><svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' +
+                        '<input id="regEmail" type="email" placeholder="ইমেইল" class="auth-input" autocomplete="email"></div>' +
+                        '<div class="auth-input-wrap"><svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' +
+                        '<input id="regPass" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" class="auth-input auth-input-pass" autocomplete="new-password" onkeydown="if(event.key===\'Enter\')doRegister()">' +
+                        '<button type="button" class="auth-pass-toggle" onclick="togglePassVis(\'regPass\',this)" aria-label="পাসওয়ার্ড দেখুন"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>' +
+                        '<button id="registerBtn" onclick="doRegister()" class="auth-btn"><span class="auth-btn-txt">রেজিস্টার করুন</span></button></div>' +
+                    '<div class="auth-divider"><span>অথবা</span></div>' +
+                    '<button type="button" id="googleBtn" onclick="doGoogleLogin()" class="auth-btn-google">' +
+                        '<svg viewBox="0 0 48 48" style="width:18px;height:18px;flex-shrink:0;"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>' +
+                        '<span>Google দিয়ে চালিয়ে যান</span></button>' +
+                    '<p class="auth-terms">চালিয়ে গেলে আপনি আমাদের <a href="terms.html">শর্তাবলী</a> ও <a href="privacy.html">প্রাইভেসি পলিসি</a>-তে সম্মত হচ্ছেন।</p>' +
+                '</div></div></div>';
+    }
+
+    function injectNavAuth() {
+        var needsNav = !document.getElementById('gkBottomNav') && !document.getElementById('bnav-home');
+        var needsWL = !document.getElementById('wishlistBox');
+        var needsAuth = !document.getElementById('authModal');
+        if (needsNav || needsWL || needsAuth) ensureNavAuthCSS();
+        if (needsNav) document.body.insertAdjacentHTML('beforeend', bottomNavHTML());
+        if (needsWL) document.body.insertAdjacentHTML('beforeend', wishlistBoxHTML());
+        if (needsAuth) document.body.insertAdjacentHTML('beforeend', authModalHTML());
+        window.gkRefreshBadges();
+        try {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                firebase.auth().onAuthStateChanged(function (user) { window.updateAuthUI(user); });
+            }
+        } catch (e) {}
+    }
+
+    /* ── হোমে ফেরা: index.html-এই হলে স্ক্রল-টপ, নাহলে রিডাইরেক্ট ── */
+    window.gkGoHome = window.gkGoHome || function () {
+        var onHome = /(^|\/)index\.html$/.test(location.pathname) || /\/$/.test(location.pathname);
+        if (onHome && typeof scrollToTop === 'function') { scrollToTop(); }
+        else { window.location.href = 'index.html'; }
+    };
+
+    window.bnavActive = window.bnavActive || function (id) {
+        document.querySelectorAll('.bnav-item').forEach(function (el) { el.classList.remove('active'); });
+        var el = document.getElementById(id);
+        if (el) el.classList.add('active');
+    };
+
+    /* ── ব্যাজ (কার্ট/উইশলিস্ট সংখ্যা) — সরাসরি localStorage থেকে, তাই সব পেজে নির্ভুল ── */
+    window.gkRefreshBadges = window.gkRefreshBadges || function () {
+        try {
+            var c = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
+            var bb = document.getElementById('bnavBadge');
+            if (bb) { bb.innerText = c.length; bb.classList.toggle('show', c.length > 0); }
+        } catch (e) {}
+        try {
+            var w = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || [];
+            var wb = document.getElementById('bnavWishBadge');
+            if (wb) { wb.innerText = w.length; wb.classList.toggle('show', w.length > 0); }
+            var wc = document.getElementById('wishCount');
+            if (wc) wc.innerText = w.length;
+        } catch (e) {}
+    };
+    setInterval(function () { window.gkRefreshBadges(); }, 900);
+
+    /* ── উইশলিস্ট ড্রয়ার (books/getImg/goToBook যে পেজে সংজ্ঞায়িত আছে, সেখানে পূর্ণ তথ্য দেখাবে) ── */
+    window.showWishlist = window.showWishlist || function () {
+        injectNavAuth();
+        var sidebar = document.getElementById('sidebar');
+        if (sidebar && sidebar.classList.contains('active') && typeof toggleSidebar === 'function') toggleSidebar();
+        var wl = [];
+        try { wl = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || []; } catch (e) {}
+        var box = document.getElementById('wishlistItems');
+        if (!box) return;
+        if (!wl.length) {
+            box.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';
+        } else if (typeof books !== 'undefined' && typeof getImg === 'function') {
+            box.innerHTML = wl.map(function (name) {
+                var b = books.find(function (bk) { return bk.name === name; });
+                if (!b) return '';
+                var idx = books.indexOf(b);
+                var en = name.replace(/'/g, "\\'");
+                return '<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="goToBook(' + idx + ')">' +
+                    '<img src="' + getImg(b) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
+                    '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">' + b.name + '</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳' + b.price + '</div></div>' +
+                    '<button onclick="event.stopPropagation();toggleWL(event,\'' + en + '\')" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button></div>';
+            }).join('');
+        } else {
+            /* এই পেজে বইয়ের ডেটা লোড করা নেই (যেমন checkout.html) — শুধু নাম দেখাও, হোম পেজে বিস্তারিত */
+            box.innerHTML = '<div style="padding:16px;">' + wl.map(function (name) {
+                return '<div style="padding:10px 4px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);">' + name + '</div>';
+            }).join('') + '<button onclick="window.location.href=\'index.html\'" style="width:100%;margin-top:12px;padding:11px;background:#059669;color:#fff;border:none;border-radius:8px;font-family:\'Hind Siliguri\',Arial,sans-serif;font-weight:700;cursor:pointer;">হোম পেজে বিস্তারিত দেখুন</button></div>';
+        }
+        document.getElementById('wishlistBox').style.display = 'flex';
+    };
+    window.closeWishlist = window.closeWishlist || function () {
+        var b = document.getElementById('wishlistBox');
+        if (b) b.style.display = 'none';
+    };
+
+    /* ── অথ মোডাল ── */
+    window.showLoginModal = window.showLoginModal || function () {
+        injectNavAuth();
+        document.getElementById('authModal').style.display = 'flex';
+    };
+    window.closeAuthModal = window.closeAuthModal || function () {
+        var m = document.getElementById('authModal');
+        if (m) m.style.display = 'none';
+        window.setAuthErr('');
+    };
+    window.switchTab = window.switchTab || function (tab) {
+        document.getElementById('loginTab').classList.toggle('auth-tab-active', tab === 'login');
+        document.getElementById('registerTab').classList.toggle('auth-tab-active', tab === 'register');
+        document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+        document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+        var slider = document.getElementById('authTabSlider');
+        if (slider) slider.style.transform = tab === 'register' ? 'translateX(100%)' : 'translateX(0)';
+        var sub = document.getElementById('authHeaderSub');
+        if (sub) sub.innerText = tab === 'register' ? 'নতুন একাউন্ট খুলে কেনাকাটা শুরু করুন' : 'কেনাকাটা চালিয়ে যেতে লগইন করুন';
+        window.setAuthErr('');
+    };
+    window.setAuthBtnLoading = window.setAuthBtnLoading || function (btn, loading, defaultTxt) {
+        if (!btn) return;
+        btn.disabled = loading;
+        btn.classList.toggle('loading', loading);
+        var txtEl = btn.querySelector('.auth-btn-txt');
+        if (loading) {
+            if (!btn.querySelector('.auth-spinner')) {
+                var sp = document.createElement('span'); sp.className = 'auth-spinner'; btn.insertBefore(sp, btn.firstChild);
+            }
+            if (txtEl) txtEl.innerText = 'একটু অপেক্ষা করুন...';
+        } else {
+            if (txtEl) txtEl.innerText = defaultTxt;
+        }
+    };
+    window.togglePassVis = window.togglePassVis || function (id, btn) {
+        var inp = document.getElementById(id); if (!inp) return;
+        var showing = inp.type === 'text';
+        inp.type = showing ? 'password' : 'text';
+        btn.innerHTML = showing
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.62 21.62 0 0 1 5.06-6.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    };
+    window.setAuthErr = window.setAuthErr || function (msg, type) {
+        var el = document.getElementById('authError'); if (!el) return;
+        el.classList.remove('ok');
+        if (!msg) { el.classList.remove('show'); el.innerHTML = ''; return; }
+        if (type === 'ok') el.classList.add('ok');
+        el.innerHTML = '<svg style="width:14px;height:14px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>' + msg + '</span>';
+        el.classList.add('show');
+    };
+    window.updateAuthUI = window.updateAuthUI || function (user) {
+        var pill = document.querySelector('.bnav-login-pill .bnav-login-inner');
+        var txt = document.querySelector('.bnav-login-pill .bnav-login-text');
+        var lbl = document.querySelector('.bnav-login-pill .bnav-label');
+        if (!pill) return;
+        if (user) {
+            txt.innerText = user.displayName ? user.displayName.split(' ')[0] : 'একাউন্ট';
+            lbl.innerText = 'লগআউট';
+            document.querySelector('.bnav-login-pill').onclick = window.doLogout;
+        } else {
+            txt.innerText = 'লগইন'; lbl.innerText = 'একাউন্ট';
+            document.querySelector('.bnav-login-pill').onclick = window.showLoginModal;
+        }
+    };
+    window.doLogin = window.doLogin || function () {
+        var email = document.getElementById('loginEmail').value.trim();
+        var pass = document.getElementById('loginPass').value;
+        var btn = document.getElementById('loginBtn');
+        if (!email || !pass) { window.setAuthErr('ইমেইল ও পাসওয়ার্ড দিন'); return; }
+        if (email.indexOf('@') === -1) { window.setAuthErr('এখন শুধু ইমেইল দিয়ে লগইন করা যাচ্ছে — মোবাইল নাম্বার দিয়ে লগইন শীঘ্রই আসছে'); return; }
+        window.setAuthBtnLoading(btn, true);
+        auth.signInWithEmailAndPassword(email, pass).then(function () {
+            window.closeAuthModal(); showToast('✅ স্বাগতম!', '#059669');
+            window.setAuthBtnLoading(btn, false, 'লগইন করুন');
+        }).catch(function (e) {
+            window.setAuthErr(e.code === 'auth/wrong-password' ? 'পাসওয়ার্ড ভুল' : e.code === 'auth/user-not-found' ? 'একাউন্ট নেই' : e.code === 'auth/invalid-email' ? 'সঠিক ইমেইল দিন' : 'লগইন ব্যর্থ হয়েছে');
+            window.setAuthBtnLoading(btn, false, 'লগইন করুন');
+        });
+    };
+    window.doGoogleLogin = window.doGoogleLogin || function () {
+        var btn = document.getElementById('googleBtn');
+        if (typeof firebase === 'undefined' || !auth) { window.setAuthErr('Google লগইন এখন লোড হয়নি, আবার চেষ্টা করুন'); return; }
+        btn.disabled = true;
+        var provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).then(function (result) {
+            var user = result.user;
+            if (user) {
+                return db.ref('users/' + user.uid).once('value').then(function (snap) {
+                    if (!snap.exists()) return db.ref('users/' + user.uid).set({ name: user.displayName || '', email: user.email || '', createdAt: Date.now() });
+                });
+            }
+        }).then(function () {
+            window.closeAuthModal(); showToast('✅ স্বাগতম!', '#059669');
+        }).catch(function (e) {
+            if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+                window.setAuthErr('Google লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন');
+            }
+        }).then(function () { btn.disabled = false; });
+    };
+    window.doRegister = window.doRegister || function () {
+        var name = document.getElementById('regName').value.trim();
+        var email = document.getElementById('regEmail').value.trim();
+        var pass = document.getElementById('regPass').value;
+        var btn = document.getElementById('registerBtn');
+        if (!name || !email || !pass) { window.setAuthErr('সব তথ্য পূরণ করুন'); return; }
+        if (pass.length < 6) { window.setAuthErr('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে'); return; }
+        window.setAuthBtnLoading(btn, true);
+        auth.createUserWithEmailAndPassword(email, pass).then(function (cred) {
+            return cred.user.updateProfile({ displayName: name }).then(function () {
+                return db.ref('users/' + cred.user.uid).set({ name: name, email: email, createdAt: Date.now() });
+            });
+        }).then(function () {
+            window.closeAuthModal(); showToast('✅ রেজিস্ট্রেশন সফল!', '#059669');
+            window.setAuthBtnLoading(btn, false, 'রেজিস্টার করুন');
+        }).catch(function (e) {
+            window.setAuthErr(e.code === 'auth/email-already-in-use' ? 'এই ইমেইলে আগেই একাউন্ট আছে' : e.code === 'auth/invalid-email' ? 'সঠিক ইমেইল দিন' : 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
+            window.setAuthBtnLoading(btn, false, 'রেজিস্টার করুন');
+        });
+    };
+    window.doForgotPassword = window.doForgotPassword || function () {
+        var email = document.getElementById('loginEmail').value.trim();
+        if (!email) { window.setAuthErr('আগে ইমেইলের ঘরে আপনার ইমেইল লিখুন'); return; }
+        auth.sendPasswordResetEmail(email).then(function () {
+            window.setAuthErr('✅ পাসওয়ার্ড রিসেট লিংক ' + email + '-এ পাঠানো হয়েছে', 'ok');
+        }).catch(function (e) {
+            window.setAuthErr(e.code === 'auth/user-not-found' ? 'এই ইমেইলে কোনো একাউন্ট নেই' : 'রিসেট লিংক পাঠানো যায়নি, আবার চেষ্টা করুন');
+        });
+    };
+    window.doLogout = window.doLogout || function () {
+        auth.signOut().then(function () { showToast('লগআউট হয়েছে', '#6b7280'); window.updateAuthUI(null); });
+    };
+
+    function init() {
+        injectNavAuth();
+    }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
 })();

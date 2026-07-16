@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
-        body{-webkit-tap-highlight-color:transparent;font-family:'Hind Siliguri','SolaimanLipi',Arial,sans-serif;background:var(--bg);color:var(--text);transition:background 0.3s,color 0.3s;padding-bottom:90px;}
+        body{-webkit-tap-highlight-color:transparent;font-family:'Hind Siliguri','SolaimanLipi',Arial,sans-serif;background:var(--bg);color:var(--text);transition:background 0.3s,color 0.3s;padding-bottom:150px;}
 
         /* READING PROGRESS */
         #readProg{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#059669,#10b981,#34d399);width:0%;z-index:9999;transition:width 0.1s linear;border-radius:0 3px 3px 0;}
@@ -176,7 +176,7 @@
         .btn-disabled{background:#ccc!important;color:#888!important;border-color:#aaa!important;cursor:not-allowed!important;box-shadow:none!important;}
 
         /* STICKY BAR */
-        #stickyBar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--card-solid);border-top:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 -6px 24px var(--shadow);transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
+        #stickyBar{position:fixed;bottom:62px;left:0;right:0;z-index:200;background:var(--card-solid);border-top:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 -6px 24px var(--shadow);transform:translateY(150%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
         #stickyBar.visible{transform:translateY(0);}
         .sticky-price{font-size:20px;font-weight:800;color:var(--red);white-space:nowrap;}
         .sticky-qty-wrap{display:flex;align-items:center;border:1.5px solid var(--border2);border-radius:10px;overflow:hidden;}
@@ -484,11 +484,120 @@
     <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><polyline points="23,20 23,14 17,14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></div><div class="trust-text">রিটার্ন পলিসি</div></div>
 </div>
 
-<footer style="background:#064e3b;color:#a7f3d0;text-align:center;padding:28px 20px;">
-    <p style="font-weight:700;font-size:16px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;"><img src="logo.png" alt="গ্রন্থকানন" style="width:28px;height:28px;object-fit:contain;border-radius:6px;"> গ্রন্থকানন</p>
-    <p style="font-size:13px;margin-bottom:6px;color:#6ee7b7;">স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
-    <p style="font-size:13px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> <a href="tel:01516595762" style="color:#a7f3d0;text-decoration:none;">01516595762</a></p>
-    <p style="font-size:12px;color:#6ee7b7;margin-top:10px;">&copy; 2025 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত</p>
+<style>
+<style>
+footer {
+    background: #ffffff;
+    color: #4b5563;
+    padding: 32px 16px 24px;
+    margin-bottom: 70px; /* bottom nav height */
+    border-top: 1px solid rgba(5,150,105,0.15);
+}
+[data-theme="dark"] footer {
+    background: linear-gradient(135deg, #011f16 0%, #013d2b 60%, #025939 100%);
+    color: #c8e8de;
+    border-top: none;
+}
+.footer-inner {
+    max-width: 480px;
+    margin: 0 auto;
+}
+/* Brand top */
+.footer-brand-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
+.footer-logo-icon { width: 32px; height: 32px; background: var(--green, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.footer-brand-name { font-family: 'Playfair Display', Georgia, serif; font-size: 18px; font-weight: 700; color: #064e3b; }
+.footer-brand-name span { color: #059669; }
+[data-theme="dark"] .footer-brand-name { color: #ffffff; }
+[data-theme="dark"] .footer-brand-name span { color: #34d399; }
+.footer-tagline { text-align: center; font-size: 11.5px; color: #6b7280; margin-bottom: 20px; letter-spacing: 0.3px; }
+[data-theme="dark"] .footer-tagline { color: #6fada0; }
+
+/* 3-column grid */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px 10px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+@media (max-width: 380px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-col:last-child { grid-column: 1 / -1; }
+}
+.footer-col-title { font-size: 10px; font-weight: 700; color: #059669; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 10px; }
+[data-theme="dark"] .footer-col-title { color: #34d399; }
+.footer-link { display: block; font-size: 12.5px; color: #6b7280; text-decoration: none; line-height: 2.1; transition: color 0.2s; font-weight: 400; }
+.footer-link:hover { color: #059669; }
+[data-theme="dark"] .footer-link { color: #9ca3af; }
+[data-theme="dark"] .footer-link:hover { color: #34d399; }
+
+/* Social & payment */
+.footer-divider { border: 0; border-top: 1px solid rgba(5,150,105,0.15); margin: 16px 0; }
+[data-theme="dark"] .footer-divider { border-top-color: rgba(52,211,153,0.12); }
+.footer-social { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 14px; }
+.footer-social a img { width: 34px; height: 34px; object-fit: contain; border-radius: 8px; }
+.footer-payment { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; }
+.footer-payment img { width: 40px; border-radius: 6px; border: 1px solid rgba(5,150,105,0.25); }
+[data-theme="dark"] .footer-payment img { border-color: rgba(52,211,153,0.2); }
+.footer-copy { font-size: 11px; color: #9ca3af; text-align: center; }
+.footer-copy strong { color: #059669; font-weight: 600; }
+[data-theme="dark"] .footer-copy { color: #4b5563; }
+[data-theme="dark"] .footer-copy strong { color: #6ee7b7; }
+</style>
+</style>
+<footer>
+  <div class="footer-inner">
+    <!-- Brand -->
+    <div class="footer-brand-row">
+        <div class="footer-logo-icon" style="background:#ffffff;width:44px;height:44px;border-radius:10px;padding:4px;box-shadow:0 2px 12px rgba(0,0,0,0.3), 0 0 0 1.5px rgba(52,211,153,0.35);"><img src="logo.png" alt="গ্রন্থকানন" style="width:100%;height:100%;object-fit:contain;"></div>
+        <div class="footer-brand-name"><span>গ্রন্থ</span>কানন</div>
+    </div>
+    <p class="footer-tagline">সাশ্রয়ী মূল্যে মানসম্পন্ন বই — সারা বাংলাদেশে ডেলিভারি</p>
+
+    <!-- 3-Column Links Grid -->
+    <div class="footer-grid">
+        <div class="footer-col">
+            <div class="footer-col-title">তথ্য</div>
+            <a href="about.html" class="footer-link">আমাদের সম্পর্কে</a>
+            <a href="blog.html" class="footer-link">ব্লগ</a>
+            <a href="faq.html" class="footer-link">সাধারণ জিজ্ঞাসা (FAQ)</a>
+            <a href="delivery.html" class="footer-link">ডেলিভারি নীতি</a>
+            <a href="return.html" class="footer-link">রিটার্ন নীতি</a>
+            <a href="contact.html" class="footer-link">যোগাযোগ</a>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-title">ক্যাটাগরি</div>
+            <a href="filter.html?type=cat&value=ইসলামি বই" class="footer-link">ইসলামি বই</a>
+            <a href="filter.html?type=cat&value=একাডেমিক বই" class="footer-link">একাডেমিক বই</a>
+            <a href="filter.html?type=cat&value=মাদ্রাসার বই" class="footer-link">মাদ্রাসার বই</a>
+            <a href="filter.html?type=cat&value=Sunnah Item" class="footer-link">Sunnah Item</a>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-title">যোগাযোগ</div>
+            <a href="tel:+8801516595762" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01516595762</a>
+            <a href="https://wa.me/8801516595762" target="_blank" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> WhatsApp</a>
+            <a href="https://facebook.com/gronthokanon0943" target="_blank" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Facebook</a>
+            <span class="footer-link" style="cursor:default;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ঢাকা, বাংলাদেশ</span>
+        </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <!-- Social -->
+    <div class="footer-social">
+        <a href="https://facebook.com/gronthokanon0943" target="_blank"><img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook"></a>
+        <a href="https://wa.me/8801516595762" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"></a>
+    </div>
+
+    <!-- Payment -->
+    <div class="footer-payment">
+        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash">
+        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" alt="Nagad">
+    </div>
+
+    <hr class="footer-divider">
+    <p class="footer-copy">&copy; ২০২৬ <strong>গ্রন্থকানন</strong> — সর্বস্বত্ব সংরক্ষিত</p>
+  </div>
 </footer>
 
 <a href="https://wa.me/8801516595762" target="_blank" class="wa-btn">

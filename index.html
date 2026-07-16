@@ -1085,9 +1085,7 @@ renderHomeCatChips();
     box-sizing: border-box;
 }
 .author-card-img { border-radius: 50%; }
-.author-card-img-default { background:#9ca3af; color:#fff; padding:0; }
-.author-card-img-default svg { width:56%; height:56%; }
-[data-theme="dark"] .author-card-img-default { background:#4b5563; }
+.author-card-img-default { background:transparent; color:#fff; padding:0; }
 .pub-card-img img, .author-card-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .author-card-img img { object-fit: cover; }
 .pub-card:hover .pub-card-img, .author-card:hover .author-card-img { box-shadow: 0 6px 16px rgba(0,0,0,.14); }
@@ -1156,7 +1154,13 @@ function renderHomePubChips(){
             +'</div>';
     }).join('');
 }
-const GK_AUTHOR_DEFAULT_SVG='<svg viewBox="0 0 48 48" width="52" height="52" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34c6-1 12-5 16-11l6-9-5-4-8 6c-6 4-10 10-11 16z"/><path d="M14 34l-3 6 6-3"/><circle cx="24" cy="24" r="1.4" fill="currentColor" stroke="none"/></svg>';
+function gkAuthorInitialHTML(name){
+    var ch=(name||'').toString().trim().charAt(0)||'?';
+    var palette=['#059669','#0891b2','#7c3aed','#db2777','#d97706','#4f46e5'];
+    var sum=0; for(var i=0;i<name.length;i++) sum+=name.charCodeAt(i);
+    var color=palette[sum%palette.length];
+    return '<span style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:'+color+';color:#fff;font-family:\'Hind Siliguri\',Arial,sans-serif;font-weight:700;font-size:22px;">'+ch.replace(/</g,'&lt;')+'</span>';
+}
 function renderHomeAuthorChips(){
     var section=document.getElementById('authorStripSection');
     var strip=document.getElementById('authorStrip');
@@ -1167,8 +1171,9 @@ function renderHomeAuthorChips(){
     strip.innerHTML=list.map(function(a){
         var val=(a.name||'').toString();
         var img=(a.img||'').toString().trim();
-        /* ব্যক্তিগত ছবি আপলোড করা থাকলে সেটাই দেখাবে, নাহলে ফিক্সড ডিফল্ট আইকন */
-        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove();this.parentElement.classList.add(\'author-card-img-default\');this.parentElement.innerHTML=GK_AUTHOR_DEFAULT_SVG;">':GK_AUTHOR_DEFAULT_SVG;
+        var en=val.replace(/'/g,"\\'");
+        /* ব্যক্তিগত ছবি আপলোড করা থাকলে সেটাই ফুল-কভার হয়ে দেখাবে, নাহলে নামের প্রথম অক্ষরের সুন্দর অ্যাভাটার */
+        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove();this.parentElement.classList.add(\'author-card-img-default\');this.parentElement.innerHTML=gkAuthorInitialHTML(\''+en+'\');">':gkAuthorInitialHTML(val);
         var imgCls=img?'':' author-card-img-default';
         return '<div class="author-card" onclick="window.location.href=\'filter.html?type=author&value='+encodeURIComponent(val)+'\'">'
             +'<div class="author-card-img'+imgCls+'">'+imgTag+'</div>'
@@ -1765,11 +1770,13 @@ function renderSections(list){
     w.innerHTML=html||'<div style="text-align:center;padding:60px;color:var(--text2);">কোনো আইটেম পাওয়া যায়নি</div>';
 }
 function buildPubList(){
-    const pubs=[...new Set(books.map(b=>b.pub))].sort();
+    /* খালি/undefined পাবলিশার বাদ দিয়ে (কোন বইয়ের pub ফিল্ড খালি থাকলেও যেন ক্রাশ না করে) */
+    const pubs=[...new Set(books.map(b=>b.pub).filter(p=>p&&String(p).trim()))].sort();
     document.getElementById('pubSub').innerHTML=pubs.map(p=>`<div class="sidebar-sub-item" onclick="navigateToFilter('pub','${p.replace(/'/g,"\\'")}')">${p}</div>`).join('');
 }
 function buildAuthorList(){
-    const authors=[...new Set(books.map(b=>b.author))].sort();
+    /* খালি/undefined লেখক বাদ দিয়ে */
+    const authors=[...new Set(books.map(b=>b.author).filter(a=>a&&String(a).trim()))].sort();
     document.getElementById('authorSub').innerHTML=authors.map(a=>`<div class="sidebar-sub-item" onclick="navigateToFilter('author','${a.replace(/'/g,"\\'")}')">${a}</div>`).join('');
 }
 /* সাইডবার — মূল ক্যাটাগরি + সাব-ক্যাটাগরি ড্রপডাউন (GK_CAT_TREE থেকে) */
