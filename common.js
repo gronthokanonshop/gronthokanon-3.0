@@ -3,6 +3,16 @@
    সব page এ shared হয় এই JS
 ═══════════════════════════════════════ */
 
+/* ═══ HTML ESCAPE — সব শেয়ার্ড রেন্ডারিং (কার্ট/উইশলিস্ট ড্রয়ার) এখান
+   থেকেই escape করে, যেন বইয়ের নাম/ছবির URL-এ থাকা < > " ' & কখনো
+   HTML/attribute ভেঙে না দেয়। top-level এ রাখা হলো যেন নিচের সব IIFE
+   (closure এর মাধ্যমে) এটা ব্যবহার করতে পারে। ═══ */
+function escapeHTML(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+}
+
 /* ═══ স্টক অবস্থা — সব পেজে (হোম, ফিল্টার, সার্চ, বই) ═══
    Firebase-এর stock নোড: stock/{বইয়ের নম্বর} === false মানে স্টক শেষ।
    পেজ লোডের সাথে সাথে একবার আনা হয়, এলে gkOnStockReady() ডাকে যেন কার্ড রিফ্রেশ হয়। */
@@ -263,14 +273,14 @@ window.gkToggleContact = function () {
             for (var name in grouped) {
                 var item = grouped[name];
                 subtotal += item.price * item.qty;
-                var en = name.replace(/'/g, "\\'");
+                var safeName = escapeHTML(name);
                 html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px;">' +
-                    '<img src="' + item.img + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">' +
-                    '<div style="flex:1;"><h4 style="font-size:13px;margin:0;color:var(--text);">' + name + '</h4><span style="color:#dc2626;font-size:13px;font-weight:bold;">৳' + item.price + '</span></div>' +
+                    '<img src="' + escapeHTML(item.img) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">' +
+                    '<div style="flex:1;"><h4 style="font-size:13px;margin:0;color:var(--text);">' + safeName + '</h4><span style="color:#dc2626;font-size:13px;font-weight:bold;">৳' + (Number(item.price) || 0) + '</span></div>' +
                     '<div style="display:flex;align-items:center;gap:8px;">' +
-                    '<button class="gkcb-qty-btn" onclick="changeQty(\'' + en + '\',-1)">-</button>' +
+                    '<button class="gkcb-qty-btn" data-name="' + safeName + '" onclick="changeQty(this.dataset.name,-1)">-</button>' +
                     '<span style="font-weight:bold;color:var(--text);">' + item.qty + '</span>' +
-                    '<button class="gkcb-qty-btn" onclick="changeQty(\'' + en + '\',1)">+</button>' +
+                    '<button class="gkcb-qty-btn" data-name="' + safeName + '" onclick="changeQty(this.dataset.name,1)">+</button>' +
                     '</div></div>';
             }
             box.innerHTML = html;
@@ -385,21 +395,19 @@ window.gkToggleContact = function () {
 })();
 
 /* ═══════════════════════════════════════════════════════════
-   অফার পোস্টার পপআপ — শুধুমাত্র siteConfig/offerPopup থেকে চালিত।
-   অ্যাডমিন প্যানেল থেকে enabled=true করে ছবি দিলেই যেকোনো পেজে
-   (checkout.html বাদে) পপআপ হয়ে দেখাবে। ক্রস (✕) বা বাইরে ক্লিক
-   করলে বন্ধ হবে — বন্ধ করলে ২৪ ঘণ্টা আর দেখাবে না।
+   অফার পোস্টার পপআপ — siteConfig/offerPopups থেকে চালিত (একাধিক পোস্টার, সর্বোচ্চ ৩টা)।
+   ডেটা গঠন (admin-gk09x43.html সেভ করে): { enabled: bool, posters: [ {img,title,sub,link}, ... ] }
 
-   নোট: কুপন-ভিত্তিক পপআপ ফিচারটা সরিয়ে ফেলা হয়েছে (আর দরকার নেই) —
-   এখন শুধু অ্যাডমিন-নিয়ন্ত্রিত ছবিওয়ালা পোস্টারই একমাত্র পপআপ।
+   আচরণ (admin-এর বর্ণনা অনুযায়ী): হোমপেজে ঢুকলে ১ম পোস্টার দেখাবে, কাস্টমার অন্য
+   পেজে গেলে (book/filter ইত্যাদি) পরের পোস্টারটা দেখাবে — এভাবে পেজ-ভ্রমণ অনুযায়ী
+   ঘুরিয়ে ঘুরিয়ে দেখায়। সবগুলো একবার করে দেখানো শেষ হলে ২৪ ঘণ্টা আর দেখাবে না।
+   checkout.html-এ কখনো দেখাবে না।
 
-   CSS নিজেই ইনজেক্ট করা হয় (নিচে ensureCSS) — তাই এই পপআপ কোন পেজের
-   নিজস্ব CSS-এর উপর নির্ভর করে না। এতে আগের বাগটা ঠিক হয়েছে যেখানে
-   .gk-offer-poster-* ক্লাসের কোনো স্টাইল না থাকায় পোস্টারের ছবি
-   পুরো সাইট ঢেকে ফেলছিল।
+   CSS নিজেই ইনজেক্ট করা হয় (ensureCSS) — কোনো পেজের নিজস্ব CSS-এর উপর নির্ভর করে না।
 ═══════════════════════════════════════════════════════════ */
 (function () {
     var DISMISS_KEY_POSTER = 'gronthokanon_offer_poster_dismiss';
+    var IDX_KEY_POSTER = 'gronthokanon_offer_poster_idx';
     var DISMISS_HOURS = 24;
 
     function getDismissedPoster() {
@@ -412,6 +420,12 @@ window.gkToggleContact = function () {
         var d = getDismissedPoster();
         if (!d || !d.t) return false;
         return (Date.now() - d.t) < DISMISS_HOURS * 3600000;
+    }
+    function getNextIdx() {
+        try { return parseInt(localStorage.getItem(IDX_KEY_POSTER) || '0', 10) || 0; } catch (e) { return 0; }
+    }
+    function setNextIdx(i) {
+        try { localStorage.setItem(IDX_KEY_POSTER, String(i)); } catch (e) {}
     }
     function escapeHTML(s) {
         return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -459,7 +473,6 @@ window.gkToggleContact = function () {
         requestAnimationFrame(function () { overlay.classList.add('gk-show'); });
 
         function dismiss() {
-            setDismissedPoster();
             overlay.classList.remove('gk-show');
             setTimeout(function () { overlay.remove(); }, 200);
         }
@@ -483,11 +496,24 @@ window.gkToggleContact = function () {
             if (typeof firebase === 'undefined' || !firebase.database) return;
             if (isPosterDismissed()) return;
 
-            firebase.database().ref('siteConfig/offerPopup').once('value').then(function (posterSnap) {
-                var config = posterSnap.val();
-                if (config && config.enabled === true && config.img) {
-                    buildPosterPopup(config);
+            firebase.database().ref('siteConfig/offerPopups').once('value').then(function (snap) {
+                var v = snap.val();
+                if (!v || v.enabled !== true) return;
+                var posters = Array.isArray(v.posters) ? v.posters.filter(Boolean)
+                    : (v.posters && typeof v.posters === 'object') ? Object.values(v.posters).filter(Boolean)
+                    : [];
+                if (!posters.length) return;
+
+                var idx = getNextIdx();
+                if (idx >= posters.length) {
+                    /* সবগুলো একবার করে দেখানো শেষ — ২৪ ঘণ্টার জন্য বন্ধ, চক্র রিসেট */
+                    setDismissedPoster();
+                    setNextIdx(0);
+                    return;
                 }
+                var config = posters[idx];
+                if (config && config.img) buildPosterPopup(config);
+                setNextIdx(idx + 1); /* পরের পেজ-ভ্রমণে পরের পোস্টার */
             }).catch(function () {});
         } catch (e) {}
     }
@@ -756,16 +782,16 @@ window.gkToggleContact = function () {
                 var b = books.find(function (bk) { return bk.name === name; });
                 if (!b) return '';
                 var idx = books.indexOf(b);
-                var en = name.replace(/'/g, "\\'");
+                var safeName = escapeHTML(name);
                 return '<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="goToBook(' + idx + ')">' +
-                    '<img src="' + getImg(b) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
-                    '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">' + b.name + '</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳' + b.price + '</div></div>' +
-                    '<button onclick="event.stopPropagation();toggleWL(event,\'' + en + '\')" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button></div>';
+                    '<img src="' + escapeHTML(getImg(b)) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
+                    '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">' + safeName + '</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳' + (Number(b.price) || 0) + '</div></div>' +
+                    '<button data-name="' + safeName + '" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button></div>';
             }).join('');
         } else {
             /* এই পেজে বইয়ের ডেটা লোড করা নেই (যেমন checkout.html) — শুধু নাম দেখাও, হোম পেজে বিস্তারিত */
             box.innerHTML = '<div style="padding:16px;">' + wl.map(function (name) {
-                return '<div style="padding:10px 4px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);">' + name + '</div>';
+                return '<div style="padding:10px 4px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);">' + escapeHTML(name) + '</div>';
             }).join('') + '<button onclick="window.location.href=\'index.html\'" style="width:100%;margin-top:12px;padding:11px;background:#059669;color:#fff;border:none;border-radius:8px;font-family:\'Hind Siliguri\',Arial,sans-serif;font-weight:700;cursor:pointer;">হোম পেজে বিস্তারিত দেখুন</button></div>';
         }
         document.getElementById('wishlistBox').style.display = 'flex';

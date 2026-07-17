@@ -2,6 +2,9 @@
 <html lang="bn" data-theme="light">
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://gronthokanon-8573e-default-rtdb.firebaseio.com">
     <link rel="icon" href="logo.png" type="image/png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -575,8 +578,8 @@ footer {
         <div class="footer-col">
             <div class="footer-col-title">যোগাযোগ</div>
             <a href="tel:+8801516595762" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01516595762</a>
-            <a href="https://wa.me/8801516595762" target="_blank" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> WhatsApp</a>
-            <a href="https://facebook.com/gronthokanon0943" target="_blank" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Facebook</a>
+            <a href="https://wa.me/8801516595762" target="_blank" rel="noopener" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> WhatsApp</a>
+            <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Facebook</a>
             <span class="footer-link" style="cursor:default;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ঢাকা, বাংলাদেশ</span>
         </div>
     </div>
@@ -585,8 +588,8 @@ footer {
 
     <!-- Social -->
     <div class="footer-social">
-        <a href="https://facebook.com/gronthokanon0943" target="_blank"><img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook"></a>
-        <a href="https://wa.me/8801516595762" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"></a>
+        <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener"><img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook"></a>
+        <a href="https://wa.me/8801516595762" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"></a>
     </div>
 
     <!-- Payment -->
@@ -600,7 +603,7 @@ footer {
   </div>
 </footer>
 
-<a href="https://wa.me/8801516595762" target="_blank" class="wa-btn">
+<a href="https://wa.me/8801516595762" target="_blank" rel="noopener" class="wa-btn">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:28px;">
 </a>
 
@@ -1354,67 +1357,5 @@ document.addEventListener('DOMContentLoaded', function(){
 </div>
 
 <script src="common.js"></script>
-<style>
-.gkOfferPopOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:none;align-items:center;justify-content:center;padding:20px;}
-.gkOfferPopOverlay.show{display:flex;}
-.gkOfferPopBox{position:relative;max-width:380px;width:100%;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35);animation:gkOfferPopIn .3s cubic-bezier(.4,0,.2,1);}
-@keyframes gkOfferPopIn{from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
-.gkOfferPopClose{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;border:none;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
-.gkOfferPopImgWrap{cursor:pointer;display:block;}
-.gkOfferPopImgWrap img{width:100%;display:block;max-height:70vh;object-fit:cover;}
-.gkOfferPopText{padding:14px 16px;}
-.gkOfferPopText .t{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;}
-.gkOfferPopText .s{font-size:12.5px;color:var(--text2);}
-</style>
-<div class="gkOfferPopOverlay" id="gkOfferPopOverlay">
-    <div class="gkOfferPopBox" id="gkOfferPopBox">
-        <button class="gkOfferPopClose" onclick="gkCloseOfferPopup()" aria-label="বন্ধ করুন">✕</button>
-        <div id="gkOfferPopInner"></div>
-    </div>
-</div>
-<script>
-(function(){
-    function esc(s){return typeof escapeHTML==='function'?escapeHTML(s):String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-    function showOfferPopup(p){
-        const inner=document.getElementById('gkOfferPopInner');
-        const overlay=document.getElementById('gkOfferPopOverlay');
-        if(!inner||!overlay) return;
-        const imgHtml=`<img src="${esc(p.img)}" alt="${esc(p.title||'অফার')}" loading="lazy">`;
-        const clickable=!!(p.link);
-        inner.innerHTML=(clickable
-            ? `<a class="gkOfferPopImgWrap" href="${esc(p.link)}">${imgHtml}</a>`
-            : `<div class="gkOfferPopImgWrap">${imgHtml}</div>`)
-            + ((p.title||p.sub)?`<div class="gkOfferPopText">${p.title?`<div class="t">${esc(p.title)}</div>`:''}${p.sub?`<div class="s">${esc(p.sub)}</div>`:''}</div>`:'');
-        overlay.classList.add('show');
-    }
-    window.gkCloseOfferPopup=function(){
-        const ov=document.getElementById('gkOfferPopOverlay');
-        if(ov) ov.classList.remove('show');
-    };
-    /* এই ব্রাউজার সেশনে এই পেজে (index/book/filter) একবার দেখানোর পর আর দেখাবে না —
-       কিন্তু অন্য পেজে গেলে (নতুন পেজ = নতুন key) আবার দেখাবে */
-    function gkOfferPopPageKey(){
-        return 'gkOfferPopShown_'+(location.pathname.split('/').pop()||'index.html');
-    }
-    document.addEventListener('DOMContentLoaded', function(){
-        const ov=document.getElementById('gkOfferPopOverlay');
-        if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) gkCloseOfferPopup(); });
-        let alreadyShown=false;
-        try{ alreadyShown = sessionStorage.getItem(gkOfferPopPageKey())==='1'; }catch(e){}
-        if(alreadyShown) return;
-        if(typeof db==='undefined') return;
-        db.ref('siteConfig/offerPopups').once('value').then(function(snap){
-            const v=snap.val()||{};
-            const list=Object.keys(v).map(function(k){return v[k];}).filter(function(p){return p&&p.enabled&&p.img;});
-            if(!list.length) return;
-            const pick=list[Math.floor(Math.random()*list.length)];
-            setTimeout(function(){
-                try{ sessionStorage.setItem(gkOfferPopPageKey(),'1'); }catch(e){}
-                showOfferPopup(pick);
-            }, 5000);
-        }).catch(function(){});
-    });
-})();
-</script>
 </body>
 </html>

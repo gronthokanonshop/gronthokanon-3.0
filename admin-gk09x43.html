@@ -112,8 +112,18 @@
         .sidebar-logo-icon img{width:100%;height:100%;object-fit:contain;display:block;}
         .sidebar-logo-text h2{font-size:14px;font-weight:700;color:#fff;line-height:1.2;}
         .sidebar-logo-text span{font-size:10px;color:rgba(255,255,255,0.3);}
-        .sidebar-nav{flex:1;padding:10px 8px;overflow-y:auto;scrollbar-width:none;}
+        .sidebar-nav-wrap{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;}
+        .sidebar-nav{flex:1;min-height:0;padding:10px 8px;overflow-y:auto;scrollbar-width:none;}
         .sidebar-nav::-webkit-scrollbar{display:none;}
+        .sidebar-scroll-hint{
+            position:absolute;left:0;right:0;bottom:0;height:34px;
+            background:linear-gradient(to bottom, rgba(6,46,34,0) 0%, var(--sidebar-bg) 78%);
+            display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;
+            pointer-events:none;opacity:0;transition:opacity .25s ease;z-index:5;
+        }
+        .sidebar-scroll-hint.visible{opacity:1;}
+        .sidebar-scroll-hint svg{width:15px;height:15px;stroke:rgba(255,255,255,0.55);animation:sidebarScrollBounce 1.3s ease-in-out infinite;}
+        @keyframes sidebarScrollBounce{0%,100%{transform:translateY(-2px);}50%{transform:translateY(2px);}}
         .nav-section-label{font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:10px 10px 5px;}
         .nav-item{
             display:flex;align-items:center;gap:9px;
@@ -139,8 +149,7 @@
         .nav-group-toggle{display:flex;}
         .nav-group-toggle .chevron{margin-left:auto;transition:transform .25s;opacity:.6;flex-shrink:0;}
         .nav-group-toggle.expanded .chevron{transform:rotate(90deg);}
-        .nav-subgroup{max-height:0;overflow:hidden;transition:max-height .3s ease;}
-        .nav-subgroup.open{max-height:800px;}
+        .nav-subgroup{max-height:none;overflow:visible;}
         .nav-sub-item{
             display:flex;align-items:center;gap:8px;
             width:100%;text-align:left;background:transparent;border:none;
@@ -847,7 +856,8 @@
             </div>
         </div>
 
-        <nav class="sidebar-nav">
+        <div class="sidebar-nav-wrap">
+        <nav class="sidebar-nav" id="sidebarNav">
             <div class="nav-section-label">OVERVIEW</div>
             <button class="nav-item active" id="navDashboard" onclick="switchTab('dashboard',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -886,12 +896,11 @@
             </button>
             <div class="nav-section-label" style="margin-top:8px;">SYSTEM</div>
             <div class="nav-group">
-                <button class="nav-item nav-group-toggle" id="navTools" onclick="toggleToolsGroup()">
+                <button class="nav-item nav-group-toggle" id="navTools" style="cursor:default;">
                     <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     টুলস
-                    <svg class="icon-sm chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
-                <div class="nav-subgroup" id="toolsSubgroup">
+                <div class="nav-subgroup open" id="toolsSubgroup">
                     <button class="nav-sub-item" data-tool="toolCard_phoneIndex" onclick="openToolCard('toolCard_phoneIndex',this)">Phone Index Migration</button>
                     <button class="nav-sub-item" data-tool="toolCard_orderSummary" onclick="openToolCard('toolCard_orderSummary',this)">অর্ডার সংক্ষেপ</button>
                     <button class="nav-sub-item" data-tool="toolCard_fraudCheck" onclick="openToolCard('toolCard_fraudCheck',this)"><span class="heavy-dot"></span>Manual Fraud Check</button>
@@ -911,6 +920,10 @@
                 </div>
             </div>
         </nav>
+            <div class="sidebar-scroll-hint" id="sidebarScrollHint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+        </div>
 
         <div class="sidebar-footer">
             <div class="sidebar-avatar">GA</div>
@@ -1451,37 +1464,36 @@
 
                 <div class="tool-card" id="toolCard_offerPopup" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> অফার পোস্টার পপআপ</h3>
-                    <p style="margin-bottom:12px;">সাইটে ঢুকলেই ছবিওয়ালা অফার পোস্টার দেখাবে (চেকআউট পেজ বাদে)। <b>চালু</b> রাখলে ও ছবির URL দিলে তবেই পপআপ দেখাবে, নাহলে দেখাবে না।</p>
+                    <p style="margin-bottom:12px;">সাইটে ঢুকলেই ছবিওয়ালা অফার পোস্টার দেখাবে (চেকআউট পেজ বাদে)। ২-৩ টা পোস্টার যোগ করতে পারবেন — কাস্টমার হোমপেজে ঢুকলে ১ম পোস্টার দেখবে, তারপর পেজ পাল্টালে (যেমন বুক/ফিল্টার পেজে গেলে) পরের পোস্টারটা দেখবে। সবগুলো একবার করে দেখানো হয়ে গেলে ২৪ ঘণ্টা আর দেখাবে না। <b>চালু</b> রাখলে ও অন্তত একটা পোস্টার থাকলে তবেই দেখাবে।</p>
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
                         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;">
                             <input type="checkbox" id="ofPopEnabled" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
                             পোস্টার পপআপ চালু রাখুন
                         </label>
                     </div>
-                    <div style="margin-bottom:10px;">
-                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">পোস্টার ছবির URL</label>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                            <input class="form-input" id="ofPopImg" placeholder="https://i.ibb.co/..." style="flex:1;min-width:200px;">
-                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('ofPopImgFile').click()">📤 imgbb আপলোড</button>
-                            <input type="file" id="ofPopImgFile" accept="image/*" style="display:none;" onchange="ofPopUploadImg(this)">
+
+                    <div id="ofPopList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
+
+                    <div id="ofPopAddBox" style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;background:rgba(0,0,0,0.02);margin-bottom:14px;">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন পোস্টার যোগ করুন (সর্বোচ্চ ৩ টা)</div>
+                        <div style="margin-bottom:10px;">
+                            <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">পোস্টার ছবির URL</label>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                <input class="form-input" id="ofPopImg" placeholder="https://i.ibb.co/..." style="flex:1;min-width:200px;">
+                                <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('ofPopImgFile').click()">📤 imgbb আপলোড</button>
+                                <input type="file" id="ofPopImgFile" accept="image/*" style="display:none;" onchange="ofPopUploadImg(this)">
+                            </div>
+                            <div id="ofPopImgPrev" style="margin-top:8px;"></div>
                         </div>
-                        <div id="ofPopImgPrev" style="margin-top:8px;"></div>
+                        <input class="form-input" id="ofPopTitle" placeholder="শিরোনাম (ঐচ্ছিক) — যেমন: ঈদ স্পেশাল অফার!" style="margin-bottom:8px;">
+                        <input class="form-input" id="ofPopSub" placeholder="সাবটাইটেল (ঐচ্ছিক) — যেমন: সব বইয়ে ২০% ছাড়" style="margin-bottom:8px;">
+                        <input class="form-input" id="ofPopLink" placeholder="ক্লিক করলে কোথায় যাবে (ঐচ্ছিক) — যেমন: filter.html?type=cat&value=Best Selling" style="margin-bottom:10px;">
+                        <button class="btn btn-ghost w-full" onclick="addOfferPopup()">＋ তালিকায় যোগ করুন</button>
                     </div>
-                    <div style="margin-bottom:10px;">
-                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">শিরোনাম (ঐচ্ছিক)</label>
-                        <input class="form-input" id="ofPopTitle" placeholder="যেমন: ঈদ স্পেশাল অফার!">
-                    </div>
-                    <div style="margin-bottom:10px;">
-                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">সাবটাইটেল (ঐচ্ছিক)</label>
-                        <input class="form-input" id="ofPopSub" placeholder="যেমন: সব বইয়ে ২০% ছাড়, আজই অর্ডার করুন!">
-                    </div>
-                    <div style="margin-bottom:14px;">
-                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">ছবিতে ক্লিক করলে কোথায় যাবে (ঐচ্ছিক)</label>
-                        <input class="form-input" id="ofPopLink" placeholder="যেমন: filter.html?type=cat&value=Best Selling">
-                    </div>
+
                     <button class="btn btn-primary w-full" onclick="saveOfferPopup()">
                         <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                        সেভ করুন (সাইটে লাইভ)
+                        সব পোস্টার সেভ করুন (সাইটে লাইভ)
                     </button>
                 </div>
 
@@ -1799,19 +1811,39 @@ function switchTab(tab, btnEl){
 function toggleSidebar(){
     document.getElementById('sidebar').classList.toggle('open');
     document.getElementById('mobileOverlay').classList.toggle('open');
+    setTimeout(updateSidebarScrollHint,320);
 }
-function toggleToolsGroup(){
-    const sub=document.getElementById('toolsSubgroup');
-    const btn=document.getElementById('navTools');
-    sub.classList.toggle('open');
-    btn.classList.toggle('expanded');
+
+/* ══════════════════════════════════════════════
+   SIDEBAR SCROLL HINT — sidebar-nav স্ক্রল করা যায় কিন্তু
+   scrollbar লুকানো থাকে বলে ইউজার বুঝতে পারে না নিচে আরও
+   আইটেম আছে। নিচে আরও কন্টেন্ট থাকলে একটা ফেইড + বাউন্সিং
+   শেভরন দেখানো হয়, একদম নিচে স্ক্রল করলে সেটা মিলিয়ে যায়।
+══════════════════════════════════════════════ */
+function updateSidebarScrollHint(){
+    const nav=document.getElementById('sidebarNav');
+    const hint=document.getElementById('sidebarScrollHint');
+    if(!nav||!hint) return;
+    const scrollable=nav.scrollHeight>nav.clientHeight+2;
+    const atBottom=(nav.scrollTop+nav.clientHeight)>=(nav.scrollHeight-4);
+    hint.classList.toggle('visible', scrollable && !atBottom);
 }
+(function initSidebarScrollHint(){
+    function bind(){
+        const nav=document.getElementById('sidebarNav');
+        if(!nav) return;
+        nav.addEventListener('scroll', updateSidebarScrollHint);
+        window.addEventListener('resize', updateSidebarScrollHint);
+        updateSidebarScrollHint();
+        setTimeout(updateSidebarScrollHint,400); // ফন্ট/লেআউট সেটল হওয়ার পর আবার চেক
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bind);
+    else bind();
+})();
 function openToolCard(cardId, btnEl){
     // টুলস ট্যাবে যাই (নিজস্ব প্যানেল-সুইচিং লজিক অক্ষত রেখে)
     switchTab('tools', document.getElementById('navTools'));
-    // সাবমেনু খোলা রাখি এবং ক্লিক করা আইটেমটি অ্যাকটিভ দেখাই
-    document.getElementById('toolsSubgroup').classList.add('open');
-    document.getElementById('navTools').classList.add('expanded');
+    // সাবমেনু (এখন সবসময় খোলা/ফ্ল্যাট) — ক্লিক করা আইটেমটি অ্যাকটিভ দেখাই
     document.querySelectorAll('.nav-sub-item').forEach(b=>b.classList.remove('active'));
     if(btnEl) btnEl.classList.add('active');
     setTimeout(()=>{
@@ -2031,7 +2063,7 @@ async function loadReviewsAdmin(){
                 +'<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;">'
                 +'<div style="min-width:0;flex:1;">'
                 +'<div style="font-weight:700;">'+escapeHTML(r.name)+' <span style="color:#f59e0b;letter-spacing:2px;">'+stars+'</span></div>'
-                +'<a href="book.html?id='+encodeURIComponent(r.bid)+'" target="_blank" class="text-sm" style="color:#0369a1;text-decoration:none;">📖 '+escapeHTML(bookNameById(r.bid))+'</a>'
+                +'<a href="book.html?id='+encodeURIComponent(r.bid)+'" target="_blank" rel="noopener" class="text-sm" style="color:#0369a1;text-decoration:none;">📖 '+escapeHTML(bookNameById(r.bid))+'</a>'
                 +'<div class="text-sm" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;">'+escapeHTML(r.comment)+'</div>'
                 +(d?'<div class="text-sm text-muted" style="margin-top:4px;">🕒 '+d+'</div>':'')
                 +'</div>'
@@ -3144,35 +3176,84 @@ async function deleteCoupon(code){
 }
 
 /* ══════════════════════════════════════════════
-   অফার পোস্টার পপআপ (siteConfig/offerPopup)
+   অফার পোস্টার পপআপ (siteConfig/offerPopups — একাধিক পোস্টার, সর্বোচ্চ ৩ টা)
+   ডেটা গঠন: { enabled: bool, posters: [ {img,title,sub,link}, ... ] }
 ══════════════════════════════════════════════ */
+const OFFER_POPUP_MAX = 3;
+let offerPopupData = { enabled:false, posters:[] };
 function loadOfferPopupAdmin(){
-    db.ref('siteConfig/offerPopup').once('value').then(snap=>{
-        const v=snap.val()||{};
+    db.ref('siteConfig/offerPopups').once('value').then(snap=>{
+        const v = snap.val();
+        if(v && typeof v==='object'){
+            offerPopupData.enabled = !!v.enabled;
+            offerPopupData.posters = Array.isArray(v.posters) ? v.posters.filter(Boolean)
+                : (v.posters && typeof v.posters==='object') ? Object.values(v.posters).filter(Boolean)
+                : [];
+        } else {
+            offerPopupData = { enabled:false, posters:[] };
+        }
         const cb=document.getElementById('ofPopEnabled');
-        if(cb)cb.checked=!!v.enabled;
-        const imgEl=document.getElementById('ofPopImg');
-        if(imgEl)imgEl.value=v.img||'';
-        const titleEl=document.getElementById('ofPopTitle');
-        if(titleEl)titleEl.value=v.title||'';
-        const subEl=document.getElementById('ofPopSub');
-        if(subEl)subEl.value=v.sub||'';
-        const linkEl=document.getElementById('ofPopLink');
-        if(linkEl)linkEl.value=v.link||'';
-        const prev=document.getElementById('ofPopImgPrev');
-        if(prev&&v.img)prev.innerHTML='<img src="'+escapeHTML(v.img)+'" style="max-width:180px;max-height:120px;border-radius:8px;margin-top:4px;">';
-    }).catch(()=>{});
+        if(cb) cb.checked = offerPopupData.enabled;
+        renderOfferPopupList();
+    }).catch(()=>{ offerPopupData={enabled:false,posters:[]}; renderOfferPopupList(); });
+}
+function renderOfferPopupList(){
+    const box=document.getElementById('ofPopList'); if(!box) return;
+    const list = offerPopupData.posters;
+    if(!list.length){
+        box.innerHTML='<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px;">এখনো কোনো পোস্টার যোগ করা হয়নি — নিচে থেকে যোগ করুন।</div>';
+    } else {
+        box.innerHTML = list.map((p,i)=>`
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface);">
+                <div style="width:48px;height:64px;border-radius:6px;background:#064e3b url('${escapeHTML(p.img||'')}') center/cover no-repeat;flex-shrink:0;"></div>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-size:11px;font-weight:800;color:var(--primary);letter-spacing:.5px;margin-bottom:2px;">পোস্টার #${i+1}</div>
+                    <div style="font-size:13px;font-weight:700;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(p.title||'(শুধু ছবি)')}</div>
+                    <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(p.sub||p.img||'')}</div>
+                </div>
+                <div style="display:flex;gap:4px;flex-shrink:0;">
+                    <button class="btn btn-sm btn-ghost" onclick="moveOfferPopup(${i},-1)" ${i===0?'disabled':''} title="উপরে">▲</button>
+                    <button class="btn btn-sm btn-ghost" onclick="moveOfferPopup(${i},1)" ${i===list.length-1?'disabled':''} title="নিচে">▼</button>
+                    <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="removeOfferPopup(${i})" title="মুছুন">✕</button>
+                </div>
+            </div>`).join('');
+    }
+    const addBox=document.getElementById('ofPopAddBox');
+    if(addBox) addBox.style.display = list.length >= OFFER_POPUP_MAX ? 'none' : '';
+}
+function addOfferPopup(){
+    if(offerPopupData.posters.length >= OFFER_POPUP_MAX){
+        showToast('সর্বোচ্চ '+OFFER_POPUP_MAX+' টা পোস্টার যোগ করা যাবে','#dc2626'); return;
+    }
+    const img=(document.getElementById('ofPopImg').value||'').trim();
+    const title=(document.getElementById('ofPopTitle').value||'').trim();
+    const sub=(document.getElementById('ofPopSub').value||'').trim();
+    const link=(document.getElementById('ofPopLink').value||'').trim();
+    if(!img){ showToast('পোস্টার ছবির URL দিন','#dc2626'); return; }
+    offerPopupData.posters.push({img,title,sub,link});
+    document.getElementById('ofPopImg').value='';
+    document.getElementById('ofPopTitle').value='';
+    document.getElementById('ofPopSub').value='';
+    document.getElementById('ofPopLink').value='';
+    const prev=document.getElementById('ofPopImgPrev'); if(prev) prev.innerHTML='';
+    renderOfferPopupList();
+    showToast('তালিকায় যোগ হয়েছে — এখন "সব পোস্টার সেভ করুন" চাপুন','#059669');
+}
+function removeOfferPopup(i){ offerPopupData.posters.splice(i,1); renderOfferPopupList(); }
+function moveOfferPopup(i,dir){
+    const list=offerPopupData.posters;
+    const j=i+dir; if(j<0||j>=list.length) return;
+    const t=list[i]; list[i]=list[j]; list[j]=t; renderOfferPopupList();
 }
 async function saveOfferPopup(){
     const enabled=!!(document.getElementById('ofPopEnabled')||{}).checked;
-    const img=(document.getElementById('ofPopImg')||{}).value||'';
-    const title=(document.getElementById('ofPopTitle')||{}).value||'';
-    const sub=(document.getElementById('ofPopSub')||{}).value||'';
-    const link=(document.getElementById('ofPopLink')||{}).value||'';
-    if(enabled&&!img){showToast('ছবির URL দিন অথবা পোস্টার বন্ধ রাখুন','#dc2626');return;}
-    const data={enabled,img,title,sub,link};
+    offerPopupData.enabled = enabled;
+    if(enabled && !offerPopupData.posters.length){
+        showToast('অন্তত একটা পোস্টার যোগ করুন অথবা পপআপ বন্ধ রাখুন','#dc2626'); return;
+    }
+    const data={ enabled, posters: offerPopupData.posters };
     try{
-        await db.ref('siteConfig/offerPopup').set(data);
+        await db.ref('siteConfig/offerPopups').set(data);
         showToast('✅ অফার পোস্টার সেভ হয়েছে — সাইটে লাইভ!','#059669');
     }catch(e){showToast('❌ সেভ ব্যর্থ','#dc2626');}
 }
