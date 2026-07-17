@@ -377,6 +377,9 @@
             <div class="price-disc" id="bookDisc"></div>
         </div>
         <div id="savingsLabel" style="display:none;font-size:12px;color:#059669;font-weight:600;margin-bottom:10px;"><svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 13l3.5 3.5L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="savingsText"></span></div>
+        <div id="hadiyaBanner" style="display:none;align-items:center;gap:8px;background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fbbf24;border-radius:0;padding:9px 12px;margin-bottom:12px;font-size:12.5px;font-weight:700;color:#92400e;">
+            <span style="font-size:18px;line-height:1;">🎁</span> <span id="hadiyaText"></span>
+        </div>
         <div class="qty-row">
             <span class="qty-label">পরিমাণ:</span>
             <div class="qty-wrap">
@@ -675,7 +678,19 @@ function discPct(b){return b.original_price>b.price?Math.round((b.original_price
 function bookCats(b){ return (b && Array.isArray(b.cats) && b.cats.length) ? b.cats : (b && b.cat ? [b.cat] : []); }
 /* নতুন সিস্টেম: বিভাগ + উপ-বিভাগ + ট্যাগ (পুরনো ডেটা gracefully) */
 const GK_OLD_TAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
-const GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+const GK_TAG_LEGACY_EXTRA=['নতুন প্রকাশিত'];
+let GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+/* অ্যাডমিন siteConfig/tags-এ ট্যাগ তালিকা বদলালে এখানেও লাইভ আপডেট হয় */
+function loadTagsBook(){
+    if(typeof db==='undefined'||!db)return;
+    db.ref('siteConfig/tags').get().then(function(snap){
+        const v=snap.val();
+        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
+        if(!list||!list.length)return;
+        GK_TAG_NAMES=new Set([...list.map(function(n){return String(n);}), ...GK_TAG_LEGACY_EXTRA]);
+        if(typeof loadBook==='function' && curBook) loadBook();
+    }).catch(function(){});
+}
 /* filter/taxonomy-র নির্ধারিত বিভাগ — শুধু এগুলোই ক্যাটাগরি হিসেবে দেখাবে (পুরনো ফ্রি-টেক্সট নয়) */
 const GK_TAXO_CATS=new Set(['ইসলামি বই','একাডেমিক বই','মাদ্রাসার বই','Pre Order','আত্মউন্নয়ন বই','English বই','প্যাকেজসমূহ','Sunnah Item','Stationery','খাবার']);
 function bookTags(b){ if(b&&Array.isArray(b.tags))return b.tags; const out=[]; const src=(b&&Array.isArray(b.cats))?b.cats:(b&&b.cat?[b.cat]:[]); src.forEach(c=>{const t=GK_OLD_TAGMAP[c]; if(t&&!out.includes(t))out.push(t);}); return out; }
@@ -896,6 +911,13 @@ function loadBook(){
     }
     document.getElementById('bookPrice').innerText='৳ '+b.price;
     document.getElementById('stickyPrice').innerText='৳ '+b.price;
+    const hadiyaBanner=document.getElementById('hadiyaBanner');
+    if(b.hadiya&&b.hadiya.trim()){
+        document.getElementById('hadiyaText').innerText='এই '+(isBook?'বইয়ের':'প্যাকেজের')+' সাথে ফ্রি: '+b.hadiya;
+        hadiyaBanner.style.display='flex';
+    } else {
+        hadiyaBanner.style.display='none';
+    }
     /* info-table: বই হলে আগের rows, প্রোডাক্ট হলে brand + custom attributes */
     document.getElementById('bookDetailsTitle').innerHTML=`<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> ${isBook?'বইয়ের তথ্য':'প্রোডাক্টের তথ্য'}`;
     const infoRows=document.getElementById('bookInfoRows');
@@ -1324,6 +1346,7 @@ function loadLeaderboard(){
    book.js (এখানে defer ছাড়াই, তাই আগেই লোড হয়) রেডি হওয়া মাত্র দেখাবে। */
 document.addEventListener('DOMContentLoaded', function(){
     loadBook();
+    loadTagsBook();
     /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট (নতুন প্রোডাক্টসহ) এলে আবার রেন্ডার */
     if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(function(){ loadBook(); });
     /* fallback: কিছুক্ষণেও বই না পেলে হোমে ফেরত */

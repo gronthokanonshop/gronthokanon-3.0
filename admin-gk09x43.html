@@ -908,6 +908,7 @@
                 </button>
                 <div class="nav-subgroup open" id="toolsSubgroup">
                     <div class="nav-subgroup-label">হোমপেজ কাস্টমাইজেশন</div>
+                    <button class="nav-sub-item" data-tool="toolCard_tags" onclick="openToolCard('toolCard_tags',this)"><span class="heavy-dot"></span>ট্যাগ তালিকা</button>
                     <button class="nav-sub-item" data-tool="toolCard_catChips" onclick="openToolCard('toolCard_catChips',this)"><span class="heavy-dot"></span>ক্যাটাগরি চিপ</button>
                     <button class="nav-sub-item" data-tool="toolCard_pubChips" onclick="openToolCard('toolCard_pubChips',this)"><span class="heavy-dot"></span>প্রকাশনী চিপ</button>
                     <button class="nav-sub-item" data-tool="toolCard_authorChips" onclick="openToolCard('toolCard_authorChips',this)"><span class="heavy-dot"></span>প্রিয় লেখক চিপ</button>
@@ -924,6 +925,7 @@
                     <button class="nav-sub-item" data-tool="toolCard_phoneIndex" onclick="openToolCard('toolCard_phoneIndex',this)">Phone Index Migration</button>
 
                     <div class="nav-subgroup-label">সেটিংস ও এক্সপোর্ট</div>
+                    <button class="nav-sub-item" data-tool="toolCard_cleanup" onclick="openToolCard('toolCard_cleanup',this)"><span class="heavy-dot"></span>ভুল এন্ট্রি মুছুন</button>
                     <button class="nav-sub-item" data-tool="modManageCard" onclick="openToolCard('modManageCard',this)">মডারেটর ম্যানেজ</button>
                     <button class="nav-sub-item" data-tool="imgbbCard" onclick="openToolCard('imgbbCard',this)">ছবি আপলোড সেটিংস</button>
                     <button class="nav-sub-item" data-tool="pixelCard" onclick="openToolCard('pixelCard',this)">Meta Pixel</button>
@@ -1267,6 +1269,10 @@
                         <div class="form-group editor-full"><label class="be-label">ট্যাগ (একাধিক বাছাই করা যাবে)</label>
                             <div id="gk_tagbox_add"></div>
                         </div>
+                        <div class="form-group editor-full" style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:10px;padding:10px 12px;">
+                            <label class="be-label" style="color:#92400e;">🎁 হাদিয়া (ঐচ্ছিক) — এই বই/প্যাকেজের সাথে ফ্রি কিছু থাকলে লিখুন</label>
+                            <input class="form-input" id="fa_hadiya" placeholder="যেমন: সাথে ফ্রি বুকমার্ক ও টুপি">
+                        </div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label>
                             <div style="display:flex;gap:8px;">
                                 <input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;min-width:0;">
@@ -1388,6 +1394,45 @@
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> sitemap.xml ডাউনলোড</h3>
                     <p>Google-এর জন্য সব বইয়ের লিংকসহ sitemap বানিয়ে ডাউনলোড করুন। মাসে একবার হোস্টিংয়ে আপলোড করলেই যথেষ্ট।</p>
                     <button class="btn btn-primary w-full" onclick="downloadSitemap()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> sitemap.xml ডাউনলোড করুন</button>
+                </div>
+
+                <div class="tool-card" id="toolCard_tags" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> ট্যাগ তালিকা</h3>
+                    <p style="margin-bottom:12px;">এখান থেকে ট্যাগ (Best Selling, Trending ইত্যাদি) যোগ/মুছুন। বই এডিট করার সময় এই তালিকা থেকেই ট্যাগ বাছা যাবে, আর হোমপেজে প্রতিটা ট্যাগের জন্য আলাদা সেকশন (শেলফ) দেখাবে — যেসব বইয়ে সেই ট্যাগ আছে সেগুলো নিয়ে। নতুন ট্যাগ সেভ করলে হোমপেজে নতুন সেকশন এমনিতেই তৈরি হয়ে যাবে (অন্তত ১টা বইয়ে সেই ট্যাগ দিলে)।</p>
+                    <div id="tagListBox" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+                    <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ট্যাগ</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <input class="form-input" id="tagNameInput" placeholder="ট্যাগের নাম (যেমন: ঈদ স্পেশাল)" style="flex:1;min-width:150px;">
+                            <button class="btn btn-ghost" type="button" onclick="addTag()" style="flex-shrink:0;">＋ যোগ</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="saveTags()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> ট্যাগ তালিকা সেভ করুন (লাইভ)</button>
+                </div>
+
+                <div class="tool-card" id="toolCard_cleanup" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg> ভুল এন্ট্রি মুছুন</h3>
+                    <p style="margin-bottom:12px;">বই এডিট করার সময় বানান ভুল করে নতুন বিভাগ/উপ-বিভাগ/লেখক/প্রকাশনী/বিষয় লিখে ফেললে সেটা সব বইয়ের ড্রপডাউনে চলে আসে। এখান থেকে ভুল এন্ট্রিগুলো মুছে ফেলুন — যেসব বইয়ে সেটা ব্যবহার হয়েছিল, সেগুলোর ওই ফিল্ড খালি হয়ে যাবে (বইটা মুছে যাবে না, শুধু ভুল মানটা সরে যাবে)।</p>
+                    <div style="margin-bottom:14px;">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">বিভাগ (কাস্টম)</div>
+                        <div id="cleanupCatList"></div>
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">উপ-বিভাগ (কাস্টম)</div>
+                        <div id="cleanupSubcatList"></div>
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">লেখক</div>
+                        <div id="cleanupAuthorList"></div>
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">প্রকাশনী</div>
+                        <div id="cleanupPubList"></div>
+                    </div>
+                    <div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">বিষয়</div>
+                        <div id="cleanupSubjectList"></div>
+                    </div>
                 </div>
 
                 <div class="tool-card" id="toolCard_catChips" style="grid-column:1/-1;">
@@ -1792,6 +1837,7 @@ function showDashboard(){
     setTimeout(()=>{
         loadOrders();
         loadBooksFromFirebase();
+        loadTagsAdmin(); // বই এডিটরে সঠিক ট্যাগ তালিকা দেখানোর জন্য শুরুতেই লোড করা হয়
         loadCourierApiKeys(); // auto-load API keys
         loadImgbbKey(); // imgbb key (ছবি আপলোডের জন্য)
         loadPixelId(); // Meta Pixel
@@ -1811,7 +1857,7 @@ function switchTab(tab, btnEl){
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools'){ renderOrderSummary(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); }
+    if(tab==='tools'){ renderOrderSummary(); loadTagsAdmin(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); renderCleanupLists(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -2509,6 +2555,7 @@ function beAddBook(){
         cat:mainCat,
         subcat:subcat,
         tags:tags,
+        hadiya:(g('fa_hadiya')?.value||'').trim(),
         img:g('fa_img').value.trim(),
         desc:g('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
     };
@@ -2526,7 +2573,7 @@ function beAddBook(){
         newBook.attributes=(beAttrSel['add']||[]).filter(a=>a.label&&a.label.trim());
     }
     localBooks.push(newBook);
-    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand'].forEach(id=>{const el=g(id);if(el)el.value='';});
+    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand','fa_hadiya'].forEach(id=>{const el=g(id);if(el)el.value='';});
     beAttrSel['add']=[];
     beToggleAddForm();
     beOpenIdx=localBooks.length-1;
@@ -2569,6 +2616,7 @@ function beSaveBook(idx){
     b.cat=(g('gk_catnew_'+idx)?.value||'').trim()||g('gk_cat_'+idx).value||'';
     b.subcat=(g('gk_subcatnew_'+idx)?.value||'').trim()||g('gk_subcat_'+idx).value||'';
     b.tags=gkReadTags(idx);
+    b.hadiya=(g('be_hadiya_'+idx)?.value||'').trim();
     delete b.cats; /* পুরনো multi-cat field সরানো */
     beUpdateStats();
     beRenderList();
@@ -2722,6 +2770,10 @@ function beEditorBody(b,i,imgPrevHtml){
                     <div class="form-group editor-full"><label class="be-label">ট্যাগ (একাধিক বাছাই করা যাবে)</label>
                         ${gkTagChecksHtml(i, bookTags(b))}
                     </div>
+                    <div class="form-group editor-full" style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:10px;padding:10px 12px;">
+                        <label class="be-label" style="color:#92400e;">🎁 হাদিয়া (ঐচ্ছিক) — এই বই/প্যাকেজের সাথে ফ্রি কিছু থাকলে লিখুন</label>
+                        <input class="form-input" id="be_hadiya_${i}" value="${escapeHTML(b.hadiya||'')}" placeholder="যেমন: সাথে ফ্রি বুকমার্ক ও টুপি">
+                    </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
                         <div style="display:flex;gap:8px;">
@@ -2765,12 +2817,12 @@ const GK_CAT_TREE=[
     {name:'Stationery', subs:[]},
     {name:'খাবার', subs:['মধু','খেজুর','কালোজিরা']}
 ];
-const GK_TAGS=[
-    {name:'Best Selling', emoji:'⭐'},
-    {name:'New Arrived', emoji:'🆕'},
-    {name:'Trending', emoji:'🔥'},
-    {name:'Pre Order', emoji:'📦'},
-    {name:'Best Writer', emoji:'✍️'}
+let GK_TAGS=[
+    {name:'Best Selling'},
+    {name:'New Arrived'},
+    {name:'Trending'},
+    {name:'Pre Order'},
+    {name:'Best Writer'}
 ];
 /* পুরনো cat/cats-এ ট্যাগ-জাতীয় মান → নতুন ট্যাগে ম্যাপ */
 const GK_OLD_TAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
@@ -2785,8 +2837,11 @@ function bookTags(b){
     src.forEach(c=>{ const t=GK_OLD_TAGMAP[c]; if(t&&!out.includes(t))out.push(t); });
     return out;
 }
+/* পুরনো ডেটায় থাকা বানান — ক্যাটাগরি হিসেবে কখনো দেখানো হবে না, ট্যাগ তালিকা বদলালেও এটা সবসময় বাদ থাকবে */
+const GK_TAG_LEGACY_EXTRA=['নতুন প্রকাশিত'];
 /* ট্যাগ-নাম কখনো ক্যাটাগরি হিসেবে দেখাবে না (পুরনো বইয়ে ট্যাগ-মান cat-এ বসানো ছিল) */
-const GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+let GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+function gkRebuildTagNames(){ GK_TAG_NAMES=new Set([...GK_TAGS.map(t=>t.name), ...GK_TAG_LEGACY_EXTRA]); }
 /* বিভাগ তালিকা = taxonomy + যেসব বিভাগ ইতিমধ্যে প্রোডাক্টে ব্যবহৃত (নিজে লেখা নতুনও এতে যোগ হয়) — ট্যাগ-নাম বাদ */
 function gkAllMainCats(){
     const s=new Set(GK_CAT_TREE.map(c=>c.name));
@@ -2826,6 +2881,138 @@ function gkReadTags(prefix){
     return [...document.querySelectorAll('.gk_tag_'+prefix)].filter(c=>c.checked).map(c=>c.value);
 }
 
+/* ══════════════════════════════════════════════
+   ভুল এন্ট্রি মুছুন — বানান ভুলে তৈরি হওয়া কাস্টম বিভাগ/উপবিভাগ/
+   লেখক/প্রকাশনী/বিষয় মুছে ফেলার টুল। যেসব বইয়ে সেই মান আছে,
+   সেগুলোর শুধু ওই ফিল্ডটা খালি করে দেওয়া হয় (বই মুছে যায় না)।
+══════════════════════════════════════════════ */
+function gkCustomCats(){
+    const fixed=new Set(GK_CAT_TREE.map(c=>c.name));
+    return gkAllMainCats().filter(c=>c&&!fixed.has(c));
+}
+function gkCustomSubcatsFlat(){
+    const out=[]; const seen=new Set();
+    (localBooks||[]).forEach(b=>{
+        if(!b||!b.cat||!b.subcat) return;
+        const cat=gkFindCat(b.cat); const fixedSubs=cat?cat.subs:[];
+        if(fixedSubs.includes(b.subcat)) return;
+        const key=b.cat+'|||'+b.subcat;
+        if(seen.has(key)) return;
+        seen.add(key); out.push({cat:b.cat, sub:b.subcat});
+    });
+    return out;
+}
+function gkFieldUsageCount(field, value, catCtx){
+    return (localBooks||[]).filter(b=>{
+        if(!b) return false;
+        if(field==='subcat') return b.cat===catCtx && b.subcat===value;
+        return b[field]===value;
+    }).length;
+}
+let gkCleanupLists={cat:[],subcat:[],author:[],pub:[],subject:[]};
+function renderCleanupLists(){
+    gkCleanupLists.cat=gkCustomCats();
+    gkCleanupLists.subcat=gkCustomSubcatsFlat();
+    gkCleanupLists.author=beListFrom('author');
+    gkCleanupLists.pub=beListFrom('pub');
+    gkCleanupLists.subject=beListFrom('subject');
+
+    function row(field,i,label,cnt){
+        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;flex-wrap:wrap;">
+            <span style="flex:1;font-size:12.5px;min-width:120px;">${label} <span style="color:var(--text-muted);">(${cnt}টা বইয়ে)</span></span>
+            <button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="gkDeleteFieldValue('${field}',${i})">✕ মুছুন</button>
+        </div>`;
+    }
+    function renderBox(id,field){
+        const box=document.getElementById(id); if(!box) return;
+        const list=gkCleanupLists[field];
+        if(!list.length){ box.innerHTML='<div class="text-sm text-muted">কিছু নেই</div>'; return; }
+        box.innerHTML=list.map((v,i)=>{
+            if(field==='subcat') return row(field,i,escapeHTML(v.cat)+' → '+escapeHTML(v.sub),gkFieldUsageCount('subcat',v.sub,v.cat));
+            return row(field,i,escapeHTML(v),gkFieldUsageCount(field,v,null));
+        }).join('');
+    }
+    renderBox('cleanupCatList','cat');
+    renderBox('cleanupSubcatList','subcat');
+    renderBox('cleanupAuthorList','author');
+    renderBox('cleanupPubList','pub');
+    renderBox('cleanupSubjectList','subject');
+}
+async function gkDeleteFieldValue(field, i){
+    const entry=gkCleanupLists[field] && gkCleanupLists[field][i];
+    if(entry===undefined) return;
+    const value = field==='subcat' ? entry.sub : entry;
+    const catCtx = field==='subcat' ? entry.cat : null;
+    const label = field==='subcat' ? (catCtx+' → '+value) : value;
+    if(!confirm('"'+label+'" মুছে ফেলতে চান? যেসব বইয়ে এটা ব্যবহার হয়েছে সেগুলোর এই ফিল্ড খালি হয়ে যাবে। বই মুছে যাবে না। এই কাজ পূর্বাবস্থায় ফেরানো যাবে না।')) return;
+    const affected=[];
+    localBooks.forEach((b,idx)=>{
+        if(!b) return;
+        if(field==='subcat'){
+            if(b.cat===catCtx && b.subcat===value){ b.subcat=''; affected.push(idx); }
+        } else {
+            if(b[field]===value){ b[field]=''; affected.push(idx); }
+        }
+    });
+    if(!affected.length){ showToast('কোনো বই পাওয়া যায়নি','#dc2626'); return; }
+    showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
+    try{
+        for(const idx of affected){ await db.ref('bookList/'+idx).set(localBooks[idx]); }
+        showToast('✅ মুছে ফেলা হয়েছে ('+affected.length+'টা বই আপডেট হলো)','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); }
+    beUpdateStats(); beRenderList(); renderCleanupLists();
+}
+
+/* ══════════════════════════════════════════════
+   ট্যাগ তালিকা ম্যানেজমেন্ট (Firebase siteConfig/tags)
+   এই তালিকা বদলালে বই এডিটরের ট্যাগ চেকবক্স ও হোমপেজের
+   ট্যাগ-ভিত্তিক সেকশন (Best Selling, Trending ইত্যাদি) দুটোই বদলে যায়।
+══════════════════════════════════════════════ */
+let siteTagsData=[];
+function loadTagsAdmin(){
+    db.ref('siteConfig/tags').once('value').then(function(s){
+        const v=s.val();
+        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
+        siteTagsData = (list&&list.length) ? list.map(String) : GK_TAGS.map(t=>t.name);
+        GK_TAGS = siteTagsData.map(name=>({name}));
+        gkRebuildTagNames();
+        renderTagList();
+    }).catch(function(){ siteTagsData=GK_TAGS.map(t=>t.name); renderTagList(); });
+}
+function renderTagList(){
+    const box=document.getElementById('tagListBox'); if(!box) return;
+    if(!siteTagsData.length){ box.innerHTML='<div class="text-sm text-muted">কোনো ট্যাগ নেই — নিচে যোগ করুন</div>'; return; }
+    box.innerHTML=siteTagsData.map(function(name,i){
+        return `<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
+            <span style="flex:1;font-weight:700;">${escapeHTML(name)}</span>
+            <button class="btn btn-ghost btn-sm" type="button" onclick="moveTag(${i},-1)" ${i===0?'disabled':''}>▲</button>
+            <button class="btn btn-ghost btn-sm" type="button" onclick="moveTag(${i},1)" ${i===siteTagsData.length-1?'disabled':''}>▼</button>
+            <button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" type="button" onclick="removeTag(${i})">✕</button>
+        </div>`;
+    }).join('');
+}
+function addTag(){
+    const inp=document.getElementById('tagNameInput');
+    const name=(inp.value||'').trim();
+    if(!name){ showToast('ট্যাগের নাম দিন','#dc2626'); return; }
+    if(siteTagsData.includes(name)){ showToast('এই ট্যাগ আগেই আছে','#dc2626'); return; }
+    siteTagsData.push(name);
+    inp.value='';
+    renderTagList();
+}
+function removeTag(i){ siteTagsData.splice(i,1); renderTagList(); }
+function moveTag(i,dir){ const j=i+dir; if(j<0||j>=siteTagsData.length)return; const t=siteTagsData[i]; siteTagsData[i]=siteTagsData[j]; siteTagsData[j]=t; renderTagList(); }
+async function saveTags(){
+    if(!siteTagsData.length){ showToast('অন্তত ১টা ট্যাগ রাখতে হবে','#dc2626'); return; }
+    try{
+        await db.ref('siteConfig/tags').set(siteTagsData);
+        GK_TAGS = siteTagsData.map(name=>({name}));
+        gkRebuildTagNames();
+        renderCleanupLists();
+        showToast('✅ ট্যাগ তালিকা সেভ হয়েছে — সাইটে লাইভ!','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+}
+
 function beRenderList(){
     const search=document.getElementById('beSearch')?.value.toLowerCase()||'';
     const list=document.getElementById('beBookList');
@@ -2857,7 +3044,7 @@ function beRenderList(){
             <div class="be-head" onclick="beToggleBook(${i})">
                 <div class="be-thumb">${coverHtml}</div>
                 <div class="be-details">
-                    <div class="be-title">${escapeHTML(b.name)}</div>
+                    <div class="be-title">${escapeHTML(b.name)}${b.hadiya?` <span style="background:#fef3c7;color:#92400e;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;white-space:nowrap;">🎁 হাদিয়া</span>`:''}</div>
                     <div class="be-meta">${escapeHTML(b.author||'')} · ${escapeHTML(b.pub||'')} · ৳${b.price}</div>
                     <div class="be-status ${hasImg?'ok':'miss'}">${hasImg?'ছবি আছে':'ছবি নেই'}</div>
                 </div>
@@ -2964,13 +3151,16 @@ function loadHomePubsAdmin(){
         renderHomePubList();
     }).catch(function(){ homePubsData=[]; renderHomePubList(); });
 }
+/* যেসব লেখক/প্রকাশনী ইতিমধ্যে হোমপেজ চিপ হিসেবে যোগ করা হয়ে গেছে, তাদের নাম
+   ড্রপডাউন থেকে বাদ দেওয়া হয় — নাহলে বারবার একই নাম দেখা যেত */
 function fillPubAuthorDatalists(){
     const pubDl=document.getElementById('pubNameDatalist');
-    if(pubDl) pubDl.innerHTML=beListFrom('pub').map(p=>'<option value="'+escapeHTML(p)+'">').join('');
+    if(pubDl) pubDl.innerHTML=beListFrom('pub').filter(p=>!homePubsData.some(hp=>hp.name===p)).map(p=>'<option value="'+escapeHTML(p)+'">').join('');
     const authDl=document.getElementById('authorNameDatalist');
-    if(authDl) authDl.innerHTML=beListFrom('author').map(a=>'<option value="'+escapeHTML(a)+'">').join('');
+    if(authDl) authDl.innerHTML=beListFrom('author').filter(a=>!homeAuthorsData.some(ha=>ha.name===a)).map(a=>'<option value="'+escapeHTML(a)+'">').join('');
 }
 function renderHomePubList(){
+    fillPubAuthorDatalists();
     const box=document.getElementById('homePubList'); if(!box) return;
     if(!homePubsData.length){ box.innerHTML='<div class="text-sm text-muted">কোনো প্রকাশনী চিপ নেই — নিচে যোগ করুন</div>'; return; }
     box.innerHTML=homePubsData.map(function(p,i){
@@ -3025,6 +3215,7 @@ function loadHomeAuthorsAdmin(){
     }).catch(function(){ homeAuthorsData=[]; renderHomeAuthorList(); });
 }
 function renderHomeAuthorList(){
+    fillPubAuthorDatalists();
     const box=document.getElementById('homeAuthorList'); if(!box) return;
     if(!homeAuthorsData.length){ box.innerHTML='<div class="text-sm text-muted">কোনো লেখক চিপ নেই — নিচে যোগ করুন</div>'; return; }
     box.innerHTML=homeAuthorsData.map(function(a,i){

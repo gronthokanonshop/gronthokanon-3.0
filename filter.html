@@ -533,7 +533,7 @@ const GK_CAT_TREE=[
     {name:'Stationery', subs:[]},
     {name:'খাবার', subs:['মধু','খেজুর','কালোজিরা']}
 ];
-const GK_TAGS=[{name:'Best Selling',emoji:'⭐'},{name:'New Arrived',emoji:'🆕'},{name:'Trending',emoji:'🔥'},{name:'Pre Order',emoji:'📦'},{name:'Best Writer',emoji:'✍️'}];
+let GK_TAGS=[{name:'Best Selling'},{name:'New Arrived'},{name:'Trending'},{name:'Pre Order'},{name:'Best Writer'}];
 const GK_OLD_TAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
 function bookTags(b){ if(b&&Array.isArray(b.tags))return b.tags; const out=[]; const src=(b&&Array.isArray(b.cats))?b.cats:(b&&b.cat?[b.cat]:[]); src.forEach(c=>{const t=GK_OLD_TAGMAP[c]; if(t&&!out.includes(t))out.push(t);}); return out; }
 function bookMainCat(b){ return (b&&b.cat)||(b&&Array.isArray(b.cats)&&b.cats[0])||''; }
@@ -859,7 +859,19 @@ function allAvailableCats() {
 }
 
 /* ট্যাগ-নাম কখনো ক্যাটাগরি হিসেবে দেখাবে না (পুরনো বইয়ে ট্যাগ-মান cat-এ বসানো ছিল) */
-const GK_TAG_NAMES = new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+const GK_TAG_LEGACY_EXTRA=['নতুন প্রকাশিত'];
+let GK_TAG_NAMES = new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+/* অ্যাডমিন siteConfig/tags-এ ট্যাগ তালিকা বদলালে এখানেও লাইভ আপডেট হয় */
+function loadTagsFilter(){
+    if(typeof db==='undefined'||!db)return;
+    db.ref('siteConfig/tags').get().then(function(snap){
+        const v=snap.val();
+        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
+        if(!list||!list.length)return;
+        GK_TAGS=list.map(function(n){return {name:String(n)};});
+        GK_TAG_NAMES=new Set([...GK_TAGS.map(function(t){return t.name;}), ...GK_TAG_LEGACY_EXTRA]);
+    }).catch(function(){});
+}
 function buildFilterDrawer() {
     /* বিভাগ = taxonomy-র বিভাগ (যেগুলোতে আইটেম আছে) + নতুন সিস্টেমে যোগ করা প্রোডাক্টের বিভাগ।
        পুরনো book.js-এর ফ্রি-টেক্সট বিভাগ বাদ (যেসব বইয়ে tags/type/subcat নেই) */
@@ -971,6 +983,7 @@ function resetDrawerFilters() {
 }
 
 updateFilterCount();
+loadTagsFilter();
 setTimeout(() => {
     document.getElementById('skelGrid').style.display = 'none';
     document.getElementById('bookGrid').style.display = 'block';

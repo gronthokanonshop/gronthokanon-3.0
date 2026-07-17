@@ -1026,6 +1026,9 @@ window.GK_CHIP_PALETTE = [
     'linear-gradient(135deg,#6366f1,#4f46e5)','linear-gradient(135deg,#059669,#047857)','linear-gradient(135deg,#14b8a6,#0d9488)',
     'linear-gradient(135deg,#3b82f6,#2563eb)','linear-gradient(135deg,#8b5cf6,#7c3aed)','linear-gradient(135deg,#f59e0b,#d97706)','linear-gradient(135deg,#ec4899,#db2777)'
 ];
+/* পুরনো ডেটায় থাকা বানান — ক্যাটাগরি হিসেবে কখনো দেখানো হবে না, অ্যাডমিন ট্যাগ তালিকা বদলালেও এটা সবসময় বাদ থাকবে */
+const GK_TAG_LEGACY_EXTRA=['নতুন প্রকাশিত'];
+function gkRebuildTagNames(){ window.GK_TAG_NAMES=new Set([...GK_TAG_SECTIONS.map(function(t){return t.name;}), ...GK_TAG_LEGACY_EXTRA]); }
 window.GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
 function renderHomeCatChips(){
     var strip=document.getElementById('catStrip');
@@ -1070,7 +1073,7 @@ renderHomeCatChips();
 }
 .pub-strip::-webkit-scrollbar, .author-strip::-webkit-scrollbar { display: none; }
 .pub-card, .author-card {
-    flex: 0 0 auto; width: 92px;
+    flex: 0 0 auto; width: 124px;
     scroll-snap-align: start;
     cursor: pointer;
     display: flex; flex-direction: column; align-items: center;
@@ -1079,8 +1082,8 @@ renderHomeCatChips();
 }
 .pub-card:active, .author-card:active { transform: scale(.95); }
 .pub-card-img, .author-card-img {
-    width: 92px; height: 92px;
-    border-radius: 16px;
+    width: 124px; height: 124px;
+    border-radius: 18px;
     background: #ffffff;
     box-shadow: 0 2px 8px rgba(0,0,0,.08);
     border: 1px solid rgba(0,0,0,.06);
@@ -1096,13 +1099,13 @@ renderHomeCatChips();
 .author-card-img img { object-fit: cover; }
 .pub-card:hover .pub-card-img, .author-card:hover .author-card-img { box-shadow: 0 6px 16px rgba(0,0,0,.14); }
 .pub-card-label, .author-card-label {
-    margin-top: 7px; font-size: 11.5px; font-weight: 700;
+    margin-top: 8px; font-size: 12.5px; font-weight: 700;
     color: var(--text); text-align: center; line-height: 1.25;
     font-family: 'Hind Siliguri', Arial, sans-serif;
-    max-width: 92px; word-break: break-word;
+    max-width: 124px; word-break: break-word;
 }
 .pub-strip-next, .author-strip-next {
-    position: absolute; top: 46px; right: 6px; transform: translateY(-50%);
+    position: absolute; top: 62px; right: 6px; transform: translateY(-50%);
     width: 38px; height: 38px; border-radius: 50%;
     background: #fff; color: #111;
     border: 1px solid var(--border); box-shadow: 0 3px 12px rgba(0,0,0,.18);
@@ -1118,39 +1121,17 @@ renderHomeCatChips();
 }
 [data-theme="dark"] .pub-strip-next, [data-theme="dark"] .author-strip-next { background: #1f2937; color: #e5e7eb; border-color: rgba(255,255,255,.12); }
 </style>
-<div class="pub-strip-section" id="pubStripSection" style="display:none;">
-    <div class="pub-strip-title">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        প্রকাশনী
-    </div>
-    <div class="pub-strip-wrap">
-        <div class="pub-strip" id="pubStrip"></div>
-        <button class="pub-strip-next" id="pubStripNext" onclick="pubStripScroll()" aria-label="আরো প্রকাশনী">›</button>
-    </div>
-</div>
-
-<!-- ═══════ প্রিয় লেখক চিপ সেকশন (Firebase siteConfig/homeAuthors) ═══════ -->
-<div class="author-strip-section" id="authorStripSection" style="display:none;">
-    <div class="author-strip-title">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        প্রিয় লেখক
-    </div>
-    <div class="author-strip-wrap">
-        <div class="author-strip" id="authorStrip"></div>
-        <button class="author-strip-next" id="authorStripNext" onclick="authorStripScroll()" aria-label="আরো লেখক">›</button>
-    </div>
-</div>
 <script>
 window.GK_HOME_PUBS = [];
 window.GK_HOME_AUTHORS = [];
-function renderHomePubChips(){
-    var section=document.getElementById('pubStripSection');
-    var strip=document.getElementById('pubStrip');
-    if(!strip||!section) return;
+/* এই দুটো ফাংশন এখন HTML স্ট্রিং রিটার্ন করে (DOM-এ সরাসরি বসায় না) —
+   renderSections()-এর ভেতরেই ঠিক জায়গায় (Best Writer শেলফের উপরে /
+   ট্যাগ-শেলফ ও ক্যাটাগরি-শেলফের মাঝে) বসানো হয়, যাতে sectionsWrapper
+   রিফ্রেশ হলে এই সেকশনগুলো হারিয়ে না যায় */
+function gkPubStripHtml(){
     var list=(window.GK_HOME_PUBS||[]).filter(function(p){return p&&p.name;});
-    if(!list.length){ section.style.display='none'; strip.innerHTML=''; return; }
-    section.style.display='';
-    strip.innerHTML=list.map(function(p){
+    if(!list.length) return '';
+    var chips=list.map(function(p){
         var val=(p.name||'').toString();
         var img=(p.img||'').toString().trim();
         var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
@@ -1159,6 +1140,10 @@ function renderHomePubChips(){
             +'<div class="pub-card-label">'+val.replace(/</g,'&lt;')+'</div>'
             +'</div>';
     }).join('');
+    return '<div class="pub-strip-section" id="pubStripSection">'
+        +'<div class="pub-strip-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> প্রকাশনী</div>'
+        +'<div class="pub-strip-wrap"><div class="pub-strip" id="pubStrip">'+chips+'</div>'
+        +'<button class="pub-strip-next" id="pubStripNext" onclick="pubStripScroll()" aria-label="আরো প্রকাশনী">›</button></div></div>';
 }
 function gkAuthorInitialHTML(name){
     var ch=(name||'').toString().trim().charAt(0)||'?';
@@ -1167,14 +1152,10 @@ function gkAuthorInitialHTML(name){
     var color=palette[sum%palette.length];
     return '<span style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:'+color+';color:#fff;font-family:\'Hind Siliguri\',Arial,sans-serif;font-weight:700;font-size:22px;">'+ch.replace(/</g,'&lt;')+'</span>';
 }
-function renderHomeAuthorChips(){
-    var section=document.getElementById('authorStripSection');
-    var strip=document.getElementById('authorStrip');
-    if(!strip||!section) return;
+function gkAuthorStripHtml(){
     var list=(window.GK_HOME_AUTHORS||[]).filter(function(a){return a&&a.name;});
-    if(!list.length){ section.style.display='none'; strip.innerHTML=''; return; }
-    section.style.display='';
-    strip.innerHTML=list.map(function(a){
+    if(!list.length) return '';
+    var chips=list.map(function(a){
         var val=(a.name||'').toString();
         var img=(a.img||'').toString().trim();
         var en=val.replace(/'/g,"\\'");
@@ -1186,6 +1167,10 @@ function renderHomeAuthorChips(){
             +'<div class="author-card-label">'+val.replace(/</g,'&lt;')+'</div>'
             +'</div>';
     }).join('');
+    return '<div class="author-strip-section" id="authorStripSection">'
+        +'<div class="author-strip-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> প্রিয় লেখক</div>'
+        +'<div class="author-strip-wrap"><div class="author-strip" id="authorStrip">'+chips+'</div>'
+        +'<button class="author-strip-next" id="authorStripNext" onclick="authorStripScroll()" aria-label="আরো লেখক">›</button></div></div>';
 }
 function pubStripScroll(){
     var s=document.getElementById('pubStrip'); if(!s) return;
@@ -1203,14 +1188,14 @@ function loadHomePubs(){
     if(typeof db==='undefined'||!db) return;
     db.ref('siteConfig/homePubs').once('value').then(function(snap){
         var v=snap.val();
-        if(Array.isArray(v)&&v.length){ window.GK_HOME_PUBS=v.filter(function(p){return p&&p.name;}); renderHomePubChips(); }
+        if(Array.isArray(v)&&v.length){ window.GK_HOME_PUBS=v.filter(function(p){return p&&p.name;}); if(typeof books!=='undefined'&&books.length) renderSections(books); }
     }).catch(function(){});
 }
 function loadHomeAuthors(){
     if(typeof db==='undefined'||!db) return;
     db.ref('siteConfig/homeAuthors').once('value').then(function(snap){
         var v=snap.val();
-        if(Array.isArray(v)&&v.length){ window.GK_HOME_AUTHORS=v.filter(function(a){return a&&a.name;}); renderHomeAuthorChips(); }
+        if(Array.isArray(v)&&v.length){ window.GK_HOME_AUTHORS=v.filter(function(a){return a&&a.name;}); if(typeof books!=='undefined'&&books.length) renderSections(books); }
     }).catch(function(){});
 }
 </script>
@@ -1630,13 +1615,26 @@ function bookTags(b){
     return out;
 }
 function bookType(b){return (b&&b.type)||'বই';}
-const GK_TAG_SECTIONS=[
-    {name:'Best Selling', emoji:'⭐'},
-    {name:'New Arrived', emoji:'🆕'},
-    {name:'Trending', emoji:'🔥'},
-    {name:'Pre Order', emoji:'📦'},
-    {name:'Best Writer', emoji:'✍️'}
+let GK_TAG_SECTIONS=[
+    {name:'Best Selling'},
+    {name:'New Arrived'},
+    {name:'Trending'},
+    {name:'Pre Order'},
+    {name:'Best Writer'}
 ];
+/* অ্যাডমিন siteConfig/tags-এ ট্যাগ তালিকা বদলালে হোমপেজে লাইভ আপডেট হয় */
+function loadTagsHome(){
+    if(typeof db==='undefined'||!db)return;
+    db.ref('siteConfig/tags').get().then(function(snap){
+        const v=snap.val();
+        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
+        if(!list||!list.length)return;
+        GK_TAG_SECTIONS=list.map(function(n){return {name:String(n)};});
+        gkRebuildTagNames();
+        if(typeof books!=='undefined'&&books.length) renderSections(books);
+        if(typeof renderHomeCatChips==='function') renderHomeCatChips();
+    }).catch(function(){});
+}
 function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function getImg(b){return (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';}
 function isWL(name){return wishlist.includes(name);}
@@ -1763,11 +1761,17 @@ function renderSections(list){
     const w=document.getElementById('sectionsWrapper');
     w.style.display='block';
     let html='';
-    /* ১. বই — ট্যাগ অনুযায়ী সেকশন */
+    let authorStripPlaced=false;
+    /* ১. বই — ট্যাগ অনুযায়ী সেকশন। "প্রিয় লেখক" চিপ সবসময় "Best Writer"
+       শেলফের ঠিক উপরে বসে (ট্যাগ তালিকায় Best Writer না থাকলে শেষে বসে) */
     GK_TAG_SECTIONS.forEach(tag=>{
+        if(tag.name==='Best Writer'){ html+=gkAuthorStripHtml(); authorStripPlaced=true; }
         const bks=list.filter(b=>bookType(b)!=='প্রোডাক্ট' && bookTags(b).includes(tag.name));
         if(bks.length) html+=gkSectionHtml(tag.name, 'tagbook-'+tag.name, {type:'tag',value:tag.name}, bks);
     });
+    if(!authorStripPlaced) html+=gkAuthorStripHtml();
+    /* ট্যাগ-শেলফ ও ক্যাটাগরি-শেলফের মাঝামাঝি জায়গা — প্রকাশনী চিপ */
+    html+=gkPubStripHtml();
     /* ২. প্রোডাক্ট — ধরন (category) অনুযায়ী সেকশন */
     const products=list.filter(b=>bookType(b)==='প্রোডাক্ট');
     const prodCats=[...new Set(products.map(p=>p.cat).filter(c=>c && !(window.GK_TAG_NAMES&&window.GK_TAG_NAMES.has(c))))];
@@ -2235,6 +2239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     auth.onAuthStateChanged(user=>updateAuthUI(user));
     loadReviewSlider();
     loadBanners();
+    loadTagsHome();
     loadHomeCats();
     loadHomePubs();
     loadHomeAuthors();

@@ -721,7 +721,10 @@ window.gkToggleContact = function () {
     }
 
     function injectNavAuth() {
-        var needsNav = !document.getElementById('gkBottomNav') && !document.getElementById('bnav-home');
+        /* checkout.html-এ বটম নেভিগেশন বার দরকার নেই — কেনাকাটা শেষ করার
+           ফোকাস নষ্ট করে, তাই এই পেজে এটা বসানো হয় না */
+        var isCheckout = location.pathname.indexOf('checkout.html') !== -1 || location.pathname.endsWith('checkout.html');
+        var needsNav = !isCheckout && !document.getElementById('gkBottomNav') && !document.getElementById('bnav-home');
         var needsWL = !document.getElementById('wishlistBox');
         var needsAuth = !document.getElementById('authModal');
         if (needsNav || needsWL || needsAuth) ensureNavAuthCSS();
@@ -764,7 +767,35 @@ window.gkToggleContact = function () {
             if (wc) wc.innerText = w.length;
         } catch (e) {}
     };
-    setInterval(function () { window.gkRefreshBadges(); }, 900);
+    /* আগে এখানে setInterval(fn, 900) দিয়ে প্রতি ৯০০ms অন্তর forever poll করা
+       হতো — পেজ যতক্ষণ খোলা থাকত ততক্ষণ অকারণে ব্যাটারি/CPU খরচ হতো, এমনকি
+       কার্ট/উইশলিস্ট কিছুই না বদলালেও। এখন localStorage.setItem/removeItem-কে
+       ছোট করে wrap করে event-driven করা হলো — শুধু কার্ট/উইশলিস্ট key বদলালেই
+       ব্যাজ রিফ্রেশ হয়, অন্য কোনো localStorage write-এ কিছুই হয় না। অন্য ট্যাবে
+       বদল হলে (browser-এর native 'storage' event) সেটাও ধরা হয়। কোনো কারণে
+       override ব্যর্থ হলে (পুরনো/রেস্ট্রিক্টেড ব্রাউজার) নিরাপদে আগের polling-এ
+       ফিরে যায়, যাতে ব্যাজ কখনো বাসি না থেকে যায়। */
+    (function () {
+        try {
+            var WATCHED = { gronthokanon_cart: 1, gronthokanon_wishlist: 1 };
+            var origSet = localStorage.setItem.bind(localStorage);
+            var origRemove = localStorage.removeItem.bind(localStorage);
+            localStorage.setItem = function (key, value) {
+                origSet(key, value);
+                if (WATCHED[key]) window.gkRefreshBadges();
+            };
+            localStorage.removeItem = function (key) {
+                origRemove(key);
+                if (WATCHED[key]) window.gkRefreshBadges();
+            };
+            window.addEventListener('storage', function (e) {
+                if (WATCHED[e.key]) window.gkRefreshBadges();
+            });
+            window.gkRefreshBadges(); /* প্রাথমিক পেইন্ট */
+        } catch (e) {
+            setInterval(function () { window.gkRefreshBadges(); }, 900);
+        }
+    })();
 
     /* ── উইশলিস্ট ড্রয়ার (books/getImg/goToBook যে পেজে সংজ্ঞায়িত আছে, সেখানে পূর্ণ তথ্য দেখাবে) ── */
     window.showWishlist = window.showWishlist || function () {
