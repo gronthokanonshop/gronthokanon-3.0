@@ -745,6 +745,7 @@
                         <div style="font-size:20px;font-weight:800" id="modalTotal"></div>
                     </div>
                 </div>
+                <div id="modalPriceWarning" style="display:none;margin-top:10px;padding:9px 12px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:8px;color:#b91c1c;font-size:12px;line-height:1.6;"></div>
             </div>
             <div class="m-section hidden" id="modalOffersSection">
                 <span class="m-label"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg> গিফট — প্যাকেজ করুন</span>
@@ -2177,6 +2178,18 @@ function checkOrderPriceMismatch(o){
         if(!real){ problems.push(`"${it.name}" — ক্যাটালগে বইটাই খুঁজে পাওয়া যায়নি`); return; }
         if(Number(it.price)!==Number(real.price)){ problems.push(`"${it.name}" — অর্ডারে ৳${it.price}, বর্তমান দাম ৳${real.price}`); }
     });
+    /* মোট টাকার অভ্যন্তরীণ হিসাব যাচাই: বইয়ের যোগফল + ডেলিভারি - ছাড় = total?
+       এটা ধরবে যদি কেউ items ঠিক রেখে শুধু total/discount সরাসরি বদলে দেয়
+       (যেমন Firebase-এ সরাসরি লিখে checkout.html পুরোপুরি এড়িয়ে গিয়ে) */
+    const itemsSum=o.items.reduce((s,it)=>s+(Number(it.price)||0),0);
+    const deliveryTxt=String(o.delivery||'');
+    const deliveryAmt=/ফ্রি/.test(deliveryTxt)?0:(parseInt(deliveryTxt.replace(/[^\d]/g,''))||0);
+    const discountAmt=Number(o.discount)||0;
+    const expectedTotal=itemsSum+deliveryAmt-discountAmt;
+    const storedTotal=parseInt(String(o.total||'').replace(/[^\d]/g,''))||0;
+    if(Math.abs(expectedTotal-storedTotal)>2){
+        problems.push(`মোট টাকার হিসাব মিলছে না — বই(৳${itemsSum}) + ডেলিভারি(৳${deliveryAmt}) − ছাড়(৳${discountAmt}) = ৳${expectedTotal} হওয়ার কথা, কিন্তু অর্ডারে লেখা ৳${storedTotal}`);
+    }
     return problems;
 }
 async function quickConfirm(orderId){
@@ -3445,6 +3458,17 @@ function openModal(orderId){
     document.getElementById('modalBooks').innerHTML=renderBookItemsTable(o);
     document.getElementById('modalPayment').innerText=o.payment;
     document.getElementById('modalTotal').innerText=o.total;
+    /* টাকার হিসাব/দামের গরমিল থাকলে সাথে সাথেই লাল সতর্কতা — কনফার্ম করার আগেই দেখা যাবে */
+    const pwEl=document.getElementById('modalPriceWarning');
+    if(pwEl){
+        const problems=checkOrderPriceMismatch(o);
+        if(problems.length){
+            pwEl.style.display='block';
+            pwEl.innerHTML='⚠️ <strong>টাকার হিসাবে গরমিল পাওয়া গেছে:</strong><br>'+problems.map(p=>'• '+escapeHTML(p)).join('<br>');
+        }else{
+            pwEl.style.display='none';pwEl.innerHTML='';
+        }
+    }
     /* মোট টাকা এডিট ইনপুট প্রিফিল */
     const teIn=document.getElementById('editTotalInput');
     if(teIn){teIn.value=parseInt(String(o.total||'').replace(/[^\d]/g,''))||'';}
