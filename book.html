@@ -679,10 +679,10 @@ function openWLModal(added){
     const inner=document.getElementById('wlModalInner');
     inner.innerHTML=`
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
-            <img src="${bImg}" style="width:64px;height:86px;object-fit:cover;border-radius:0;border:1px solid #111;flex-shrink:0;">
+            <img src="${escapeHTML(bImg)}" style="width:64px;height:86px;object-fit:cover;border-radius:0;border:1px solid #111;flex-shrink:0;">
             <div>
-                <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${b.name}</div>
-                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${(b.type||'বই')==='বই'?(b.author||''):(b.brand||'')}</div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${escapeHTML(b.name)}</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${(b.type||'বই')==='বই'?escapeHTML(b.author||''):escapeHTML(b.brand||'')}</div>
                 <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#ecfdf5':'#fff5f5'};border:1.5px solid ${added?'#6ee7b7':'#fca5a5'};border-radius:0;padding:5px 12px;">
                     <span style="font-size:15px;">${added?'❤️':'<svg class="eico" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#ef4444"/><line x1="12" y1="8" x2="12" y2="18" stroke="white" stroke-width="2"/></svg>'}</span>
                     <span style="font-size:12px;font-weight:700;color:${added?'#059669':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>
@@ -691,7 +691,7 @@ function openWLModal(added){
         </div>
         ${added?`<div style="display:flex;gap:10px;">
             <button onclick="closeWLModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--text);border:1px solid #111;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">কেনাকাটা চালিয়ে যান</button>
-            <button onclick="closeWLModal();localStorage.setItem('gronthokanon_opencart','wl');window.location.href='index.html';" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
+            <button onclick="closeWLModal();showWishlist();" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
         </div>`:`<button onclick="closeWLModal()" style="width:100%;padding:12px;background:#059669;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">ঠিক আছে</button>`}`;
     document.getElementById('wlOverlay').style.display='block';
     const modal=document.getElementById('wlModal');
@@ -791,13 +791,39 @@ function loadRecent(){
         const rb=books[ri];if(!rb)return '';
         const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';
         return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'">
-            <img src="${rImg}" alt="${rb.name}" loading="lazy">
-            <div class="rel-name">${rb.name}</div>
-            <div class="rel-price">৳ ${rb.price}</div></div>`;
+            <img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy">
+            <div class="rel-name">${escapeHTML(rb.name)}</div>
+            <div class="rel-price">৳ ${Number(rb.price)||0}</div></div>`;
     }).join('');
 }
 
 /* LOAD BOOK */
+/* admin panel-এর slugifyBn()-এর সাথে হুবহু মিলিয়ে রাখা — bid এখনো না থাকা বইয়ের
+   জন্য নাম থেকে একই স্লাগ পুনরায় বানিয়ে sitemap-এর id-র সাথে মেলানো যায়। */
+function slugifyBn(str){
+    return (str||'').toString().trim()
+        .replace(/[।,.!?;:'"()\[\]{}\/\\]/g,'')
+        .replace(/\s+/g,'-')
+        .toLowerCase()
+        .slice(0,60) || 'boi';
+}
+/* যেসব বইয়ের bid নেই (যেমন static book.js প্রথমে লোড হওয়ার সময়), তাদের জন্য
+   admin panel-এর ensureBookIdsAndMigrate()-এর মতোই ক্রমানুসারে স্লাগ বানিয়ে
+   idParam-এর সাথে মিলিয়ে দেখা হচ্ছে। */
+function findIdxBySlug(idParam){
+    const used={};
+    books.forEach(b=>{ if(b&&b.bid) used[b.bid]=true; });
+    for(let i=0;i<books.length;i++){
+        const b=books[i];
+        if(!b||b.bid) continue;
+        const base=slugifyBn(b.name);
+        let slug=base,n=2;
+        while(used[slug]){ slug=base+'-'+n; n++; }
+        used[slug]=true;
+        if(slug===idParam) return i;
+    }
+    return -1;
+}
 function loadBook(){
     const idParam=new URLSearchParams(window.location.search).get('id');
     if(idParam===null){window.location.href='index.html';return;}
@@ -807,6 +833,13 @@ function loadBook(){
     if(idx===-1){
         const n=parseInt(idParam);
         if(!isNaN(n)&&books[n]) idx=n;
+    }
+    /* নতুন fallback: static book.js-এ এখনো bid ফিল্ড না থাকলেও (Firebase live
+       data আসার আগেই) নাম থেকে বানানো স্লাগ দিয়ে মিলিয়ে সাথে সাথেই বই দেখানো —
+       আগে এই ধাপ না থাকায় প্রথমবার সবসময় idx=-1 থাকত এবং ৪ সেকেন্ডের timeout-এর
+       মধ্যে live data না এলে ভুলবশত হোমপেজে রিডাইরেক্ট হয়ে যেত। */
+    if(idx===-1){
+        idx=findIdxBySlug(idParam);
     }
     if(idx===-1){return;} /* এখনো লোড হয়নি (নতুন প্রোডাক্ট Firebase থেকে আসছে) — redirect করব না */
     curIdx=idx;curBook=books[idx];
@@ -912,7 +945,7 @@ function loadBook(){
     const _mc=bookMainCat(b), _tg=bookTags(b);
     const related=books.filter((rb,i)=>i!==idx&&(isBook?rb.author!==b.author:true)&&((_mc&&bookMainCat(rb)===_mc)||(rb.subject&&rb.subject===b.subject)||bookTags(rb).some(t=>_tg.includes(t)))).slice(0,8);
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
-    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${rImg}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
+    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy"><div class="rel-name">${escapeHTML(rb.name)}</div><div class="rel-price">৳ ${Number(rb.price)||0}</div></div>`;}).join('');}
 
     loadRecent();updateCartCount();
 
@@ -1221,7 +1254,7 @@ function loadLeaderboard(){
 
             const medals=['<svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="8" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/><text x="12" y="18" text-anchor="middle" font-size="10" font-weight="bold" fill="white">1</text><path d="M8 7L5 3M16 7L19 3" stroke="#f59e0b" stroke-width="2"/></svg>','<svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="8" fill="#9ca3af" stroke="#6b7280" stroke-width="1.5"/><text x="12" y="18" text-anchor="middle" font-size="10" font-weight="bold" fill="white">2</text><path d="M8 7L5 3M16 7L19 3" stroke="#9ca3af" stroke-width="2"/></svg>','<svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="8" fill="#cd7c2f" stroke="#b45309" stroke-width="1.5"/><text x="12" y="18" text-anchor="middle" font-size="10" font-weight="bold" fill="white">3</text><path d="M8 7L5 3M16 7L19 3" stroke="#cd7c2f" stroke-width="2"/></svg>'];
             document.getElementById('lbList').innerHTML=entries.map((e,i)=>{
-                const isYou=e.uid===localStorage.getItem('alaziz_uid');
+                const currentUid=firebase.auth().currentUser?.uid||null; const isYou=currentUid&&e.uid===currentUid;
                 return `<div class="lb-row${isYou?' lb-you':''}">
                     <div class="lb-rank${i<3?' gold':''}">${medals[i]||toBN(i+1)}</div>
                     <div class="lb-av" style="background:${['#d97706','#6b7280','#b45309','#059669','#7c3aed'][i%5]||'#059669'};color:#fff;">${(e.name||'?')[0]}</div>
@@ -1230,12 +1263,12 @@ function loadLeaderboard(){
                 </div>`;
             }).join('');
 
-            const myPhone=localStorage.getItem('alaziz_phone');
-            if(myPhone){
-                db.ref('leaderboard/'+myPhone.replace(/\+/g,'_')).get().then(me=>{
+            const myUid=firebase.auth().currentUser?.uid||null;
+            if(myUid){
+                db.ref('leaderboard/'+myUid).get().then(me=>{
                     if(me.exists()){
                         const md=me.val();
-                        const myPos=entries.findIndex(e=>e.uid===myPhone.replace(/\+/g,'_'));
+                        const myPos=entries.findIndex(e=>e.uid===myUid);
                         const nextEntry=myPos>0?entries[myPos-1]:null;
                         document.getElementById('myProgress').style.display='block';
                         document.getElementById('myRank').innerText='#'+(myPos+1);
@@ -1321,5 +1354,67 @@ document.addEventListener('DOMContentLoaded', function(){
 </div>
 
 <script src="common.js"></script>
+<style>
+.gkOfferPopOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:none;align-items:center;justify-content:center;padding:20px;}
+.gkOfferPopOverlay.show{display:flex;}
+.gkOfferPopBox{position:relative;max-width:380px;width:100%;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35);animation:gkOfferPopIn .3s cubic-bezier(.4,0,.2,1);}
+@keyframes gkOfferPopIn{from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
+.gkOfferPopClose{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;border:none;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+.gkOfferPopImgWrap{cursor:pointer;display:block;}
+.gkOfferPopImgWrap img{width:100%;display:block;max-height:70vh;object-fit:cover;}
+.gkOfferPopText{padding:14px 16px;}
+.gkOfferPopText .t{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.gkOfferPopText .s{font-size:12.5px;color:var(--text2);}
+</style>
+<div class="gkOfferPopOverlay" id="gkOfferPopOverlay">
+    <div class="gkOfferPopBox" id="gkOfferPopBox">
+        <button class="gkOfferPopClose" onclick="gkCloseOfferPopup()" aria-label="বন্ধ করুন">✕</button>
+        <div id="gkOfferPopInner"></div>
+    </div>
+</div>
+<script>
+(function(){
+    function esc(s){return typeof escapeHTML==='function'?escapeHTML(s):String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+    function showOfferPopup(p){
+        const inner=document.getElementById('gkOfferPopInner');
+        const overlay=document.getElementById('gkOfferPopOverlay');
+        if(!inner||!overlay) return;
+        const imgHtml=`<img src="${esc(p.img)}" alt="${esc(p.title||'অফার')}" loading="lazy">`;
+        const clickable=!!(p.link);
+        inner.innerHTML=(clickable
+            ? `<a class="gkOfferPopImgWrap" href="${esc(p.link)}">${imgHtml}</a>`
+            : `<div class="gkOfferPopImgWrap">${imgHtml}</div>`)
+            + ((p.title||p.sub)?`<div class="gkOfferPopText">${p.title?`<div class="t">${esc(p.title)}</div>`:''}${p.sub?`<div class="s">${esc(p.sub)}</div>`:''}</div>`:'');
+        overlay.classList.add('show');
+    }
+    window.gkCloseOfferPopup=function(){
+        const ov=document.getElementById('gkOfferPopOverlay');
+        if(ov) ov.classList.remove('show');
+    };
+    /* এই ব্রাউজার সেশনে এই পেজে (index/book/filter) একবার দেখানোর পর আর দেখাবে না —
+       কিন্তু অন্য পেজে গেলে (নতুন পেজ = নতুন key) আবার দেখাবে */
+    function gkOfferPopPageKey(){
+        return 'gkOfferPopShown_'+(location.pathname.split('/').pop()||'index.html');
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+        const ov=document.getElementById('gkOfferPopOverlay');
+        if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) gkCloseOfferPopup(); });
+        let alreadyShown=false;
+        try{ alreadyShown = sessionStorage.getItem(gkOfferPopPageKey())==='1'; }catch(e){}
+        if(alreadyShown) return;
+        if(typeof db==='undefined') return;
+        db.ref('siteConfig/offerPopups').once('value').then(function(snap){
+            const v=snap.val()||{};
+            const list=Object.keys(v).map(function(k){return v[k];}).filter(function(p){return p&&p.enabled&&p.img;});
+            if(!list.length) return;
+            const pick=list[Math.floor(Math.random()*list.length)];
+            setTimeout(function(){
+                try{ sessionStorage.setItem(gkOfferPopPageKey(),'1'); }catch(e){}
+                showOfferPopup(pick);
+            }, 5000);
+        }).catch(function(){});
+    });
+})();
+</script>
 </body>
 </html>

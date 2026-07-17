@@ -1598,14 +1598,14 @@ function runSearch(){
     const found=books.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
     if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
     const shown=found.slice(0,40);
-    body.innerHTML=`<div class="search-count show">🔍 "${document.getElementById('searchInput').value}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
+    body.innerHTML=`<div class="search-count show">🔍 "${escapeHTML(document.getElementById('searchInput').value)}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
         const idx=books.indexOf(b),pct=discPct(b),out=window.gkIsOut&&window.gkIsOut(idx);
         return `<div class="search-item" onclick="closeSearch();goToBook(${idx})">
-            <img src="${getImg(b)}" class="search-item-img" alt="" loading="lazy" decoding="async">
+            <img src="${escapeHTML(getImg(b))}" class="search-item-img" alt="" loading="lazy" decoding="async">
             <div style="flex:1;min-width:0;">
-                <div class="si-name">${b.name}</div>
-                <div class="si-author">✍️ ${b.author}</div>
-                <div class="si-pub">🏢 ${b.pub}</div>
+                <div class="si-name">${escapeHTML(b.name)}</div>
+                <div class="si-author">✍️ ${escapeHTML(b.author||'')}</div>
+                <div class="si-pub">🏢 ${escapeHTML(b.pub||'')}</div>
                 <div><span class="si-price">৳${b.price}</span>${b.original_price>b.price?`<span class="si-orig">৳${b.original_price}</span>`:''} ${out?`<span class="si-badge" style="background:#dc2626;">স্টক শেষ</span>`:(pct>0?`<span class="si-badge">${pct}% ছাড়</span>`:'')}</div>
             </div></div>`;
     }).join('');
@@ -1632,6 +1632,7 @@ const GK_TAG_SECTIONS=[
     {name:'Pre Order', emoji:'📦'},
     {name:'Best Writer', emoji:'✍️'}
 ];
+function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function getImg(b){return (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';}
 function isWL(name){return wishlist.includes(name);}
 function toggleWL(e,name){
@@ -1658,10 +1659,10 @@ function openWLModal(added, b){
     const inner=document.getElementById('wlModalInner');
     inner.innerHTML=`
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
-            <img src="${bImg}" style="width:64px;height:86px;object-fit:cover;border-radius:0;border:1px solid #111;flex-shrink:0;">
+            <img src="${escapeHTML(bImg)}" style="width:64px;height:86px;object-fit:cover;border-radius:0;border:1px solid #111;flex-shrink:0;">
             <div>
-                <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${b.name}</div>
-                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${b.author}</div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${escapeHTML(b.name)}</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${escapeHTML(b.author||'')}</div>
                 <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#ecfdf5':'#fff5f5'};border:1.5px solid ${added?'#6ee7b7':'#fca5a5'};border-radius:0;padding:5px 12px;">
                     <span style="font-size:15px;">${added?'❤️':'🤍'}</span>
                     <span style="font-size:12px;font-weight:700;color:${added?'#059669':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>
@@ -1698,16 +1699,16 @@ function makeCard(b){
     return `<div class="book-card${out?' gk-out':''}" data-bookidx="${idx}" onclick="goToBook(${idx})">
         <div class="bc-img-box">
         ${out?`<div class="gk-out-badge">স্টক শেষ</div>`:(pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:'')}
-        <button class="wl-btn ${wl?'active':''}" onclick="toggleWL(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'❤️':'🤍'}</button>
-        <img src="${getImg(b)}" alt="বই" loading="lazy">
+        <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'❤️':'🤍'}</button>
+        <img src="${escapeHTML(getImg(b))}" alt="${escapeHTML(b.name)}" loading="lazy">
         </div>
         <div class="book-card-info">
-            <div class="bc-name">${b.name}</div>
-            <div class="bc-author">${bookType(b)==='প্রোডাক্ট'?(b.brand||''):(b.author||'')}</div>
+            <div class="bc-name">${escapeHTML(b.name)}</div>
+            <div class="bc-author">${bookType(b)==='প্রোডাক্ট'?escapeHTML(b.brand||''):escapeHTML(b.author||'')}</div>
             <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
             ${out
                 ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই আইটেমটি এখন স্টকে নেই');">${GK_NOSTOCK_SVG}<span>স্টক শেষ</span></button>`
-                : `<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">${GK_CART_SVG}<span>কার্টে যোগ করুন</span></button>`}
+                : `<button class="bc-btn" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">${GK_CART_SVG}<span>কার্টে যোগ করুন</span></button>`}
         </div></div>`;
 }
 function goToBook(idx){
@@ -1845,9 +1846,9 @@ function showWishlist(){
     if(!wishlist.length){box.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';}
     else{box.innerHTML=wishlist.map(name=>{const b=books.find(bk=>bk.name===name);if(!b)return '';const idx=books.indexOf(b);
         return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="goToBook(${idx})">
-            <img src="${getImg(b)}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${b.name}</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳${b.price}</div></div>
-            <button onclick="event.stopPropagation();toggleWL(event,'${b.name.replace(/'/g,"\\'")}')" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button>
+            <img src="${escapeHTML(getImg(b))}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${escapeHTML(b.name)}</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳${b.price}</div></div>
+            <button data-name="${escapeHTML(b.name)}" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button>
         </div>`;
     }).join('');}
     document.getElementById('wishlistBox').style.display='flex';
@@ -2013,14 +2014,14 @@ function updateCartUI(){
         const grouped={};
         cart.forEach(item=>{if(grouped[item.name])grouped[item.name].qty++;else grouped[item.name]={price:item.price,qty:1,img:item.img||''};});
         for(let name in grouped){
-            const item=grouped[name];subtotal+=item.price*item.qty;const en=name.replace(/'/g,"\\'");
+            const item=grouped[name];subtotal+=item.price*item.qty;
             box.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px;">
-                <img src="${item.img}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
-                <div style="flex:1;"><h4 style="font-size:13px;margin:0;color:var(--text);">${name}</h4><span style="color:#dc2626;font-size:13px;font-weight:bold;">৳${item.price}</span></div>
+                <img src="${escapeHTML(item.img)}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
+                <div style="flex:1;"><h4 style="font-size:13px;margin:0;color:var(--text);">${escapeHTML(name)}</h4><span style="color:#dc2626;font-size:13px;font-weight:bold;">৳${item.price}</span></div>
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <button class="qty-ctrl-btn" onclick="changeQty('${en}',-1)">-</button>
+                    <button class="qty-ctrl-btn" data-name="${escapeHTML(name)}" onclick="changeQty(this.dataset.name,-1)">-</button>
                     <span style="font-weight:bold;color:var(--text);">${item.qty}</span>
-                    <button class="qty-ctrl-btn" onclick="changeQty('${en}',1)">+</button>
+                    <button class="qty-ctrl-btn" data-name="${escapeHTML(name)}" onclick="changeQty(this.dataset.name,1)">+</button>
                 </div></div>`;
         }
     }
@@ -2634,5 +2635,67 @@ document.addEventListener('keydown', function(e) {
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="common.js"></script>
+<style>
+.gkOfferPopOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:none;align-items:center;justify-content:center;padding:20px;}
+.gkOfferPopOverlay.show{display:flex;}
+.gkOfferPopBox{position:relative;max-width:380px;width:100%;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35);animation:gkOfferPopIn .3s cubic-bezier(.4,0,.2,1);}
+@keyframes gkOfferPopIn{from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
+.gkOfferPopClose{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;border:none;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+.gkOfferPopImgWrap{cursor:pointer;display:block;}
+.gkOfferPopImgWrap img{width:100%;display:block;max-height:70vh;object-fit:cover;}
+.gkOfferPopText{padding:14px 16px;}
+.gkOfferPopText .t{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.gkOfferPopText .s{font-size:12.5px;color:var(--text2);}
+</style>
+<div class="gkOfferPopOverlay" id="gkOfferPopOverlay">
+    <div class="gkOfferPopBox" id="gkOfferPopBox">
+        <button class="gkOfferPopClose" onclick="gkCloseOfferPopup()" aria-label="বন্ধ করুন">✕</button>
+        <div id="gkOfferPopInner"></div>
+    </div>
+</div>
+<script>
+(function(){
+    function esc(s){return typeof escapeHTML==='function'?escapeHTML(s):String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+    function showOfferPopup(p){
+        const inner=document.getElementById('gkOfferPopInner');
+        const overlay=document.getElementById('gkOfferPopOverlay');
+        if(!inner||!overlay) return;
+        const imgHtml=`<img src="${esc(p.img)}" alt="${esc(p.title||'অফার')}" loading="lazy">`;
+        const clickable=!!(p.link);
+        inner.innerHTML=(clickable
+            ? `<a class="gkOfferPopImgWrap" href="${esc(p.link)}">${imgHtml}</a>`
+            : `<div class="gkOfferPopImgWrap">${imgHtml}</div>`)
+            + ((p.title||p.sub)?`<div class="gkOfferPopText">${p.title?`<div class="t">${esc(p.title)}</div>`:''}${p.sub?`<div class="s">${esc(p.sub)}</div>`:''}</div>`:'');
+        overlay.classList.add('show');
+    }
+    window.gkCloseOfferPopup=function(){
+        const ov=document.getElementById('gkOfferPopOverlay');
+        if(ov) ov.classList.remove('show');
+    };
+    /* এই ব্রাউজার সেশনে এই পেজে (index/book/filter) একবার দেখানোর পর আর দেখাবে না —
+       কিন্তু অন্য পেজে গেলে (নতুন পেজ = নতুন key) আবার দেখাবে */
+    function gkOfferPopPageKey(){
+        return 'gkOfferPopShown_'+(location.pathname.split('/').pop()||'index.html');
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+        const ov=document.getElementById('gkOfferPopOverlay');
+        if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) gkCloseOfferPopup(); });
+        let alreadyShown=false;
+        try{ alreadyShown = sessionStorage.getItem(gkOfferPopPageKey())==='1'; }catch(e){}
+        if(alreadyShown) return;
+        if(typeof db==='undefined') return;
+        db.ref('siteConfig/offerPopups').once('value').then(function(snap){
+            const v=snap.val()||{};
+            const list=Object.keys(v).map(function(k){return v[k];}).filter(function(p){return p&&p.enabled&&p.img;});
+            if(!list.length) return;
+            const pick=list[Math.floor(Math.random()*list.length)];
+            setTimeout(function(){
+                try{ sessionStorage.setItem(gkOfferPopPageKey(),'1'); }catch(e){}
+                showOfferPopup(pick);
+            }, 5000);
+        }).catch(function(){});
+    });
+})();
+</script>
 </body>
 </html>

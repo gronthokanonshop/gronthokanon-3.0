@@ -559,9 +559,42 @@ function escapeHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g
 
 function toggleWL(e, name) {
     e.stopPropagation();
-    wishlist.includes(name) ? wishlist = wishlist.filter(w => w !== name) : wishlist.push(name);
+    const adding = !wishlist.includes(name);
+    adding ? wishlist.push(name) : wishlist = wishlist.filter(w => w !== name);
     localStorage.setItem('gronthokanon_wishlist', JSON.stringify(wishlist));
     renderBooks(getList());
+    const b = books.find(bk => bk.name === name);
+    if (b) openWLModal(adding, b);
+}
+function openWLModal(added, b) {
+    const bImg = (typeof bookImgs !== 'undefined' && bookImgs[b.name]) || b.img || '';
+    const inner = document.getElementById('wlModalInner');
+    inner.innerHTML = `
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+            <img src="${escapeHTML(bImg)}" style="width:64px;height:86px;object-fit:cover;border-radius:0;border:1px solid #111;flex-shrink:0;">
+            <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${escapeHTML(b.name)}</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${(b.type||'বই')==='বই'?escapeHTML(b.author||''):escapeHTML(b.brand||'')}</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#ecfdf5':'#fff5f5'};border:1.5px solid ${added?'#6ee7b7':'#fca5a5'};border-radius:0;padding:5px 12px;">
+                    <span style="font-size:15px;">${added?'❤️':'🤍'}</span>
+                    <span style="font-size:12px;font-weight:700;color:${added?'#059669':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>
+                </div>
+            </div>
+        </div>
+        ${added?`<div style="display:flex;gap:10px;">
+            <button onclick="closeWLModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--text);border:1px solid #111;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">কেনাকাটা চালিয়ে যান</button>
+            <button onclick="closeWLModal();window.location.href='index.html';" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
+        </div>`:`<button onclick="closeWLModal()" style="width:100%;padding:12px;background:#059669;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">ঠিক আছে</button>`}`;
+    document.getElementById('wlOverlay').style.display='block';
+    const modal=document.getElementById('wlModal');
+    modal.style.display='block';
+    requestAnimationFrame(()=>{modal.style.transform='translateY(0)';});
+    setTimeout(()=>closeWLModal(), 3000);
+}
+function closeWLModal() {
+    const modal=document.getElementById('wlModal');
+    modal.style.transform='translateY(100%)';
+    setTimeout(()=>{modal.style.display='none';document.getElementById('wlOverlay').style.display='none';},350);
 }
 
 function makeCard(b, delay) {
@@ -949,6 +982,73 @@ if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
     renderBooks(getList());
 });
 </script>
+<div id="wlOverlay" onclick="closeWLModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9998;"></div>
+<div id="wlModal" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-radius:24px 24px 0 0;z-index:9999;padding:0 0 40px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);">
+    <div style="width:40px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 16px;"></div>
+    <div id="wlModalInner" style="padding:0 20px;"></div>
+</div>
 <script src="common.js"></script>
+<style>
+.gkOfferPopOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100000;display:none;align-items:center;justify-content:center;padding:20px;}
+.gkOfferPopOverlay.show{display:flex;}
+.gkOfferPopBox{position:relative;max-width:380px;width:100%;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35);animation:gkOfferPopIn .3s cubic-bezier(.4,0,.2,1);}
+@keyframes gkOfferPopIn{from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
+.gkOfferPopClose{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;border:none;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+.gkOfferPopImgWrap{cursor:pointer;display:block;}
+.gkOfferPopImgWrap img{width:100%;display:block;max-height:70vh;object-fit:cover;}
+.gkOfferPopText{padding:14px 16px;}
+.gkOfferPopText .t{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.gkOfferPopText .s{font-size:12.5px;color:var(--text2);}
+</style>
+<div class="gkOfferPopOverlay" id="gkOfferPopOverlay">
+    <div class="gkOfferPopBox" id="gkOfferPopBox">
+        <button class="gkOfferPopClose" onclick="gkCloseOfferPopup()" aria-label="বন্ধ করুন">✕</button>
+        <div id="gkOfferPopInner"></div>
+    </div>
+</div>
+<script>
+(function(){
+    function esc(s){return typeof escapeHTML==='function'?escapeHTML(s):String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+    function showOfferPopup(p){
+        const inner=document.getElementById('gkOfferPopInner');
+        const overlay=document.getElementById('gkOfferPopOverlay');
+        if(!inner||!overlay) return;
+        const imgHtml=`<img src="${esc(p.img)}" alt="${esc(p.title||'অফার')}" loading="lazy">`;
+        const clickable=!!(p.link);
+        inner.innerHTML=(clickable
+            ? `<a class="gkOfferPopImgWrap" href="${esc(p.link)}">${imgHtml}</a>`
+            : `<div class="gkOfferPopImgWrap">${imgHtml}</div>`)
+            + ((p.title||p.sub)?`<div class="gkOfferPopText">${p.title?`<div class="t">${esc(p.title)}</div>`:''}${p.sub?`<div class="s">${esc(p.sub)}</div>`:''}</div>`:'');
+        overlay.classList.add('show');
+    }
+    window.gkCloseOfferPopup=function(){
+        const ov=document.getElementById('gkOfferPopOverlay');
+        if(ov) ov.classList.remove('show');
+    };
+    /* এই ব্রাউজার সেশনে এই পেজে (index/book/filter) একবার দেখানোর পর আর দেখাবে না —
+       কিন্তু অন্য পেজে গেলে (নতুন পেজ = নতুন key) আবার দেখাবে */
+    function gkOfferPopPageKey(){
+        return 'gkOfferPopShown_'+(location.pathname.split('/').pop()||'index.html');
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+        const ov=document.getElementById('gkOfferPopOverlay');
+        if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) gkCloseOfferPopup(); });
+        let alreadyShown=false;
+        try{ alreadyShown = sessionStorage.getItem(gkOfferPopPageKey())==='1'; }catch(e){}
+        if(alreadyShown) return;
+        if(typeof db==='undefined') return;
+        db.ref('siteConfig/offerPopups').once('value').then(function(snap){
+            const v=snap.val()||{};
+            const list=Object.keys(v).map(function(k){return v[k];}).filter(function(p){return p&&p.enabled&&p.img;});
+            if(!list.length) return;
+            const pick=list[Math.floor(Math.random()*list.length)];
+            setTimeout(function(){
+                try{ sessionStorage.setItem(gkOfferPopPageKey(),'1'); }catch(e){}
+                showOfferPopup(pick);
+            }, 5000);
+        }).catch(function(){});
+    });
+})();
+</script>
 </body>
 </html>

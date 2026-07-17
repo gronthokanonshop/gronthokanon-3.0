@@ -701,7 +701,8 @@ function getVerifiedPrice(itemName){
 function getSubtotal(){
   const g = {};
   cart.forEach(i => {
-    const price = getVerifiedPrice(i.name) || i.price;
+    const price = getVerifiedPrice(i.name);
+    if(price === null) return; /* ক্যাটালগে নেই এমন আইটেমের (client-controlled) দাম কখনোই টোটালে ধরা হবে না */
     g[i.name] = g[i.name] ? {price, qty:g[i.name].qty+1} : {price, qty:1};
   });
   return Object.values(g).reduce((s,i) => s + i.price * i.qty, 0);
@@ -848,10 +849,33 @@ async function confirmOrder(){
     if(outItem){ isSubmitting=false; return showToast('⚠️ "'+outItem.name+'" এখন স্টকে নেই — কার্ট থেকে সরিয়ে আবার চেষ্টা করুন','#dc2626'); }
   }
 
+  /* মূল্য-যাচাই: cart-এ থাকা প্রতিটা আইটেম বর্তমান books ক্যাটালগে নাম মিলিয়ে verify
+     করা হচ্ছে। localStorage গ্রাহকের ব্রাউজারে থাকে বলে সেখানে ম্যানুয়ালি বসানো ভুয়া
+     নাম/দামের আইটেম সম্ভব — এমন আইটেম পেলে তা কার্ট থেকে বাদ দেওয়া হচ্ছে, কখনোই
+     client-এর পাঠানো দামে ভরসা করা হবে না। */
+  if(typeof books === 'undefined' || !books.length){
+    isSubmitting=false;
+    return showToast('⚠️ দাম যাচাই করা যাচ্ছে না, একটু পর আবার চেষ্টা করুন','#dc2626');
+  }
+  const unverified = cart.filter(i => getVerifiedPrice(i.name) === null);
+  if(unverified.length){
+    cart = cart.filter(i => getVerifiedPrice(i.name) !== null);
+    localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
+    renderSummary();
+    isSubmitting=false;
+    const names = [...new Set(unverified.map(i=>i.name))].join(', ');
+    return showToast('⚠️ "'+names+'" যাচাই করা যায়নি, কার্ট থেকে সরানো হলো। বাকি বই নিয়ে আবার "অর্ডার নিশ্চিত করুন" চাপুন।','#dc2626');
+  }
+
   if(coupon === 'FIRSTORDER'){
     try{
-      const used = await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).get();
-      if(used.exists()){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626'); }
+      const couponRef = firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_'));
+      let couponBlocked = false;
+      await couponRef.transaction(current => {
+        if(current !== null){ couponBlocked = true; return; /* abort — আগেই ব্যবহার হয়েছে */ }
+        return true; /* atomic: check + set একসাথে */
+      });
+      if(couponBlocked){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626'); }
     }catch(e){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ কুপন যাচাই করা যাচ্ছে না।','#dc2626'); }
   }
 
@@ -879,7 +903,7 @@ async function confirmOrder(){
   const orderData = {
     orderId, name, phone,
     address: fullAddr,
-    items: cart.map(i => ({...i, price: getVerifiedPrice(i.name) || i.price})),
+    items: cart.map(i => ({...i, price: getVerifiedPrice(i.name)})).filter(i => i.price !== null),
     books: bookList,
     payment: payMethod + (txId ? ` (TxID: ${txId})` : ''),
     delivery: (coupon && cType === 'delivery') ? '৳0 (ফ্রি ডেলিভারি কুপন)' : '৳' + delivCharge,
@@ -905,9 +929,7 @@ async function confirmOrder(){
         localStorage.removeItem('gk_custinfo');
       }
     }catch(e){}
-    if(coupon === 'FIRSTORDER'){
-      await firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).set(true);
-    }
+    /* FIRSTORDER কুপন transaction-এ আগেই atomic ভাবে set হয়েছে — এখানে আর দরকার নেই */
     lastOrderData = orderData;
     if(window.fbq){try{fbq('track','Purchase',{value:grand,currency:'BDT',num_items:cart.length});}catch(e){}}
   }catch(e){
@@ -1052,12 +1074,12 @@ function buildInvoiceHTML(o){
     <div style="display:flex;gap:0;margin:20px 28px;background:#f0fdf4;border:1.5px solid #a7f3d0;border-radius:10px;overflow:hidden;">
       <div style="flex:1;padding:16px 20px;border-right:1.5px solid #a7f3d0;">
         <div style="font-size:10px;font-weight:800;color:#6b7280;margin-bottom:6px;letter-spacing:1px;">BILL TO</div>
-        <div style="font-size:14px;font-weight:700;">${o.name}</div>
-        <div style="font-size:13px;color:#4b5563;">${o.phone}</div>
+        <div style="font-size:14px;font-weight:700;">${escapeHTML(o.name)}</div>
+        <div style="font-size:13px;color:#4b5563;">${escapeHTML(o.phone)}</div>
       </div>
       <div style="flex:1;padding:16px 20px;">
         <div style="font-size:10px;font-weight:800;color:#6b7280;margin-bottom:6px;letter-spacing:1px;">ডেলিভারি ঠিকানা</div>
-        <div style="font-size:13px;color:#4b5563;line-height:1.5;">${o.address}</div>
+        <div style="font-size:13px;color:#4b5563;line-height:1.5;">${escapeHTML(o.address)}</div>
       </div>
     </div>
     <table style="width:calc(100% - 56px);margin:0 28px;border-collapse:collapse;">
@@ -1088,11 +1110,11 @@ function buildInvoiceHTML(o){
     <div style="margin:16px 28px;display:flex;gap:0;background:#f0fdf4;border:1.5px solid #a7f3d0;overflow:hidden;">
       <div style="flex:1;padding:14px 18px;${o.coupon?'border-right:1.5px solid #a7f3d0;':''}">
         <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Payment Method</div>
-        <div style="font-size:14px;font-weight:700;">${o.payment}</div>
+        <div style="font-size:14px;font-weight:700;">${escapeHTML(o.payment)}</div>
       </div>
       ${o.coupon?`<div style="flex:1;padding:14px 18px;">
         <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Coupon Applied</div>
-        <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️ ${o.coupon}</div>
+        <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️ ${escapeHTML(o.coupon)}</div>
       </div>`:''}
     </div>    <div style="background:#065f46;padding:14px 28px;text-align:center;margin-top:8px;border-top:3px solid #059669;">
       <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! 📚</div>

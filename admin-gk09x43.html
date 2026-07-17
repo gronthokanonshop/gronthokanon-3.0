@@ -135,6 +135,28 @@
             margin-left:auto;background:#c81e1e;color:white;
             font-size:9px;padding:1px 6px;border-radius:10px;font-weight:700;
         }
+        /* ── TOOLS SUB-MENU ── */
+        .nav-group-toggle{display:flex;}
+        .nav-group-toggle .chevron{margin-left:auto;transition:transform .25s;opacity:.6;flex-shrink:0;}
+        .nav-group-toggle.expanded .chevron{transform:rotate(90deg);}
+        .nav-subgroup{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+        .nav-subgroup.open{max-height:800px;}
+        .nav-sub-item{
+            display:flex;align-items:center;gap:8px;
+            width:100%;text-align:left;background:transparent;border:none;
+            color:var(--sidebar-text);font-family:var(--font-main);
+            font-size:11px;font-weight:600;line-height:1.3;
+            padding:7px 11px 7px 30px;border-radius:8px;cursor:pointer;
+            transition:var(--trans);margin-bottom:1px;
+        }
+        .nav-sub-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.8);}
+        .nav-sub-item.active{background:var(--sidebar-active);color:var(--sidebar-active-text);}
+        .nav-sub-item .heavy-dot{width:5px;height:5px;border-radius:50%;background:#FBBF24;flex-shrink:0;}
+        @keyframes toolCardPulse{
+            0%{box-shadow:0 0 0 0 rgba(251,191,36,.55);}
+            100%{box-shadow:0 0 0 10px rgba(251,191,36,0);}
+        }
+        .tool-card-highlight{animation:toolCardPulse 0.9s ease-out 2;border-color:#FBBF24 !important;}
         .sidebar-footer{
             padding:12px 14px;border-top:1px solid var(--sidebar-border);
             display:flex;align-items:center;gap:9px;
@@ -863,10 +885,31 @@
                 রিভিউ
             </button>
             <div class="nav-section-label" style="margin-top:8px;">SYSTEM</div>
-            <button class="nav-item" id="navTools" onclick="switchTab('tools',this)">
-                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                টুলস
-            </button>
+            <div class="nav-group">
+                <button class="nav-item nav-group-toggle" id="navTools" onclick="toggleToolsGroup()">
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    টুলস
+                    <svg class="icon-sm chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+                <div class="nav-subgroup" id="toolsSubgroup">
+                    <button class="nav-sub-item" data-tool="toolCard_phoneIndex" onclick="openToolCard('toolCard_phoneIndex',this)">Phone Index Migration</button>
+                    <button class="nav-sub-item" data-tool="toolCard_orderSummary" onclick="openToolCard('toolCard_orderSummary',this)">অর্ডার সংক্ষেপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_fraudCheck" onclick="openToolCard('toolCard_fraudCheck',this)"><span class="heavy-dot"></span>Manual Fraud Check</button>
+                    <button class="nav-sub-item" data-tool="toolCard_bookJs" onclick="openToolCard('toolCard_bookJs',this)">book.js ডাউনলোড</button>
+                    <button class="nav-sub-item" data-tool="toolCard_sitemap" onclick="openToolCard('toolCard_sitemap',this)">sitemap.xml ডাউনলোড</button>
+                    <button class="nav-sub-item" data-tool="toolCard_catChips" onclick="openToolCard('toolCard_catChips',this)"><span class="heavy-dot"></span>হোমপেজ ক্যাটাগরি চিপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_pubChips" onclick="openToolCard('toolCard_pubChips',this)"><span class="heavy-dot"></span>হোমপেজ প্রকাশনী চিপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_authorChips" onclick="openToolCard('toolCard_authorChips',this)"><span class="heavy-dot"></span>হোমপেজ প্রিয় লেখক চিপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_banner" onclick="openToolCard('toolCard_banner',this)"><span class="heavy-dot"></span>হোমপেজ ব্যানার / অফার</button>
+                    <button class="nav-sub-item" data-tool="toolCard_offerPopup" onclick="openToolCard('toolCard_offerPopup',this)"><span class="heavy-dot"></span>অফার পোস্টার পপআপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_coupon" onclick="openToolCard('toolCard_coupon',this)"><span class="heavy-dot"></span>কুপন কোড ম্যানেজমেন্ট</button>
+                    <button class="nav-sub-item" data-tool="toolCard_blog" onclick="openToolCard('toolCard_blog',this)"><span class="heavy-dot"></span>পাঠকদের ব্লগ</button>
+                    <button class="nav-sub-item" data-tool="modManageCard" onclick="openToolCard('modManageCard',this)">মডারেটর ম্যানেজ</button>
+                    <button class="nav-sub-item" data-tool="imgbbCard" onclick="openToolCard('imgbbCard',this)">ছবি আপলোড সেটিংস</button>
+                    <button class="nav-sub-item" data-tool="pixelCard" onclick="openToolCard('pixelCard',this)">Meta Pixel</button>
+                    <button class="nav-sub-item" data-tool="courierCard" onclick="openToolCard('courierCard',this)">Courier API Settings</button>
+                </div>
+            </div>
         </nav>
 
         <div class="sidebar-footer">
@@ -1291,17 +1334,17 @@
             <!-- ═══ TOOLS TAB ═══ -->
             <div id="tabPanelTools" style="display:none;">
                 <div class="sec-title">টুলস ও ইউটিলিটি</div>
-                <div class="tool-card">
+                <div class="tool-card" id="toolCard_phoneIndex">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.5"></path></svg> Phone Index Migration</h3>
                     <p>পুরনো orders এর phoneIndex ঠিক করতে।</p>
                     <button class="migrate-btn" onclick="migratePhoneIndex()" id="migrateBtn"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.5"></path></svg> Phone Index ঠিক করুন</button>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" id="toolCard_orderSummary">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> অর্ডার সংক্ষেপ</h3>
                     <div id="orderSummary" class="text-sm text-muted" style="line-height:2;">লোড হচ্ছে...</div>
                 </div>
 
-                <div class="tool-card" style="grid-column:1/-1;">
+                <div class="tool-card" id="toolCard_fraudCheck" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Manual Fraud Check</h3>
                     <p>ফোন নম্বর দিয়ে সেই কাস্টমারের সম্পূর্ণ অর্ডার হিস্ট্রি ও সন্দেহজনক প্যাটার্ন চেক করুন।</p>
                     <div style="display:flex;gap:8px;margin:12px 0;flex-wrap:wrap;">
@@ -1310,18 +1353,18 @@
                     </div>
                     <div id="fraudCheckResult"></div>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" id="toolCard_bookJs">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> book.js ডাউনলোড</h3>
                     <p>বর্তমান বইয়ের লিস্ট book.js হিসেবে ডাউনলোড করুন।</p>
                     <button class="btn btn-primary w-full" onclick="downloadBookJs()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> book.js ডাউনলোড করুন</button>
                 </div>
-                <div class="tool-card">
+                <div class="tool-card" id="toolCard_sitemap">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> sitemap.xml ডাউনলোড</h3>
                     <p>Google-এর জন্য সব বইয়ের লিংকসহ sitemap বানিয়ে ডাউনলোড করুন। মাসে একবার হোস্টিংয়ে আপলোড করলেই যথেষ্ট।</p>
                     <button class="btn btn-primary w-full" onclick="downloadSitemap()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> sitemap.xml ডাউনলোড করুন</button>
                 </div>
 
-                <div class="tool-card" style="grid-column:1/-1;">
+                <div class="tool-card" id="toolCard_catChips" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> হোমপেজ ক্যাটাগরি চিপ</h3>
                     <p style="margin-bottom:12px;">হোমপেজের উপরে চলমান রঙিন ক্যাটাগরি চিপগুলো এখান থেকে নিয়ন্ত্রণ করুন। <b>নাম</b> অবশ্যই বইয়ের বিভাগের সাথে হুবহু মিলতে হবে (যেমন: ইসলামি বই)। রঙ আপনাআপনি বসে। সেভ করলেই হোমপেজে লাইভ। (কিছু না থাকলে ডিফল্ট তালিকা দেখাবে।)</p>
                     <div id="homeCatList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
@@ -1342,7 +1385,7 @@
                     <button class="btn btn-primary w-full" onclick="saveHomeCats()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> ক্যাটাগরি সেভ করুন (হোমপেজে লাইভ)</button>
                 </div>
 
-                <div class="tool-card" style="grid-column:1/-1;">
+                <div class="tool-card" id="toolCard_pubChips" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> হোমপেজ প্রকাশনী চিপ</h3>
                     <p style="margin-bottom:12px;">হোমপেজে ক্যাটাগরি চিপের নিচে প্রকাশনীর লোগো/নাম চিপ দেখানোর জন্য এখান থেকে নিয়ন্ত্রণ করুন। নাম বাছার সময় বইয়ের ডেটা থেকে অটোকমপ্লিট সাজেশন আসবে (টাইপো এড়াতে)। সেভ করলেই হোমপেজে লাইভ। কিছু না থাকলে সেকশনটা হোমপেজে দেখাবে না।</p>
                     <div id="homePubList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
@@ -1363,7 +1406,7 @@
                     <button class="btn btn-primary w-full" onclick="saveHomePubs()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> প্রকাশনী চিপ সেভ করুন (হোমপেজে লাইভ)</button>
                 </div>
 
-                <div class="tool-card" style="grid-column:1/-1;">
+                <div class="tool-card" id="toolCard_authorChips" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> হোমপেজ প্রিয় লেখক চিপ</h3>
                     <p style="margin-bottom:12px;">হোমপেজে লেখকের ছবি/নাম চিপ দেখানোর জন্য এখান থেকে নিয়ন্ত্রণ করুন। নাম বাছার সময় বইয়ের ডেটা থেকে অটোকমপ্লিট সাজেশন আসবে (টাইপো এড়াতে)। সেভ করলেই হোমপেজে লাইভ। কিছু না থাকলে সেকশনটা হোমপেজে দেখাবে না।</p>
                     <div id="homeAuthorList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
@@ -1384,7 +1427,7 @@
                     <button class="btn btn-primary w-full" onclick="saveHomeAuthors()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> লেখক চিপ সেভ করুন (হোমপেজে লাইভ)</button>
                 </div>
 
-                <div class="tool-card" style="grid-column:1/-1;">
+                <div class="tool-card" id="toolCard_banner" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg> হোমপেজ ব্যানার / অফার</h3>
                     <p style="margin-bottom:12px;">হোমপেজের স্লাইডার ব্যানার এখান থেকেই বদলান। ছবির লিংক (URL) দিন, অথবা ছবি ছাড়া শুধু অফারের লেখা দিন। সেভ করলেই সাইটে লাইভ হবে। (কিছু না থাকলে সাইটে ডিফল্ট ব্যানার দেখাবে।)</p>
                     <div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.25);border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:var(--text-main);line-height:1.6;">
@@ -1406,7 +1449,7 @@
                     <button class="btn btn-primary w-full" onclick="saveBanners()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> সব ব্যানার সেভ করুন (সাইটে লাইভ)</button>
                 </div>
 
-                <div class="tool-card" style="grid-column:1/-1;">
+                <div class="tool-card" id="toolCard_offerPopup" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> অফার পোস্টার পপআপ</h3>
                     <p style="margin-bottom:12px;">সাইটে ঢুকলেই ছবিওয়ালা অফার পোস্টার দেখাবে (চেকআউট পেজ বাদে)। <b>চালু</b> রাখলে ও ছবির URL দিলে তবেই পপআপ দেখাবে, নাহলে দেখাবে না।</p>
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
@@ -1442,7 +1485,7 @@
                     </button>
                 </div>
 
-                <div class="tool-card" style="grid-column:1/-1;">
+                <div class="tool-card" id="toolCard_coupon" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> কুপন কোড ম্যানেজমেন্ট</h3>
                     <p style="margin-bottom:12px;">নতুন কুপন কোড ও ছাড়ের হার (%) যোগ করুন — সেভ করলেই সাইটে কাজ করবে। (বিল্ট-ইন <b>FIRSTORDER</b> — ৫% সবসময় চালু থাকে।)</p>
                     <div id="couponList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
@@ -1461,7 +1504,7 @@
                     </div>
                 </div>
 
-                <div class="tool-card" style="grid-column:1/-1;">
+                <div class="tool-card" id="toolCard_blog" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> পাঠকদের ব্লগ (মাসিক প্রতিযোগিতা)</h3>
                     <p style="margin-bottom:12px;">কাস্টমারদের জমা দেওয়া লেখা এখানে আসবে। পড়ে পছন্দ হলে <b>"প্রকাশ করুন"</b> চাপুন — সাইটের ব্লগ ও হোমপেজে লাইভ হবে। লেখকের ফোন নম্বরে যোগাযোগ করে 🎁 হাদিয়া পাঠাবেন।</p>
                     <div style="border:1.5px dashed #f59e0b;border-radius:10px;padding:12px;margin-bottom:16px;background:rgba(251,191,36,0.06);">
@@ -1757,6 +1800,29 @@ function toggleSidebar(){
     document.getElementById('sidebar').classList.toggle('open');
     document.getElementById('mobileOverlay').classList.toggle('open');
 }
+function toggleToolsGroup(){
+    const sub=document.getElementById('toolsSubgroup');
+    const btn=document.getElementById('navTools');
+    sub.classList.toggle('open');
+    btn.classList.toggle('expanded');
+}
+function openToolCard(cardId, btnEl){
+    // টুলস ট্যাবে যাই (নিজস্ব প্যানেল-সুইচিং লজিক অক্ষত রেখে)
+    switchTab('tools', document.getElementById('navTools'));
+    // সাবমেনু খোলা রাখি এবং ক্লিক করা আইটেমটি অ্যাকটিভ দেখাই
+    document.getElementById('toolsSubgroup').classList.add('open');
+    document.getElementById('navTools').classList.add('expanded');
+    document.querySelectorAll('.nav-sub-item').forEach(b=>b.classList.remove('active'));
+    if(btnEl) btnEl.classList.add('active');
+    setTimeout(()=>{
+        const card=document.getElementById(cardId);
+        if(!card) return;
+        card.scrollIntoView({behavior:'smooth', block:'start'});
+        card.classList.add('tool-card-highlight');
+        setTimeout(()=>card.classList.remove('tool-card-highlight'), 1800);
+    }, 90);
+}
+
 function closeSidebar(){
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('mobileOverlay').classList.remove('open');
@@ -2066,7 +2132,30 @@ function orderCardHTML(o){
     </div>`;
 }
 
+/* checkout.html-এর সময় পাঠানো item-প্রতি দাম বর্তমান ক্যাটালগ-দামের সাথে মিলছে কিনা
+   যাচাই করা হচ্ছে — কেউ checkout.html বাইপাস করে সরাসরি Firebase-এ ভুয়া দামের অর্ডার
+   লিখলে (Firebase rules structure/format যাচাই করে কিন্তু দাম সঠিক কিনা যাচাই করে না,
+   কারণ RTDB rules-এ items array-এর যোগফল করে মেলানো সম্ভব না) এটা কনফার্ম করার আগেই ধরবে। */
+function checkOrderPriceMismatch(o){
+    const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
+    const problems=[];
+    if(!Array.isArray(o.items)||!o.items.length) return problems; /* পুরনো অর্ডার/items ফিল্ড না থাকলে স্কিপ */
+    o.items.forEach(it=>{
+        const real=src.find(b=>b&&b.name===it.name);
+        if(!real){ problems.push(`"${it.name}" — ক্যাটালগে বইটাই খুঁজে পাওয়া যায়নি`); return; }
+        if(Number(it.price)!==Number(real.price)){ problems.push(`"${it.name}" — অর্ডারে ৳${it.price}, বর্তমান দাম ৳${real.price}`); }
+    });
+    return problems;
+}
 async function quickConfirm(orderId){
+    const o=allOrders.find(x=>x.orderId===orderId);
+    if(o){
+        const mismatch=checkOrderPriceMismatch(o);
+        if(mismatch.length){
+            const msg='⚠️ এই অর্ডারে দামের গরমিল পাওয়া গেছে (হয়তো checkout বাইপাস করে বসানো হয়েছে):\n\n'+mismatch.join('\n')+'\n\nএরপরও কনফার্ম করতে চান?';
+            if(!confirm(msg)) return;
+        }
+    }
     try{
         await db.ref('orders/'+orderId+'/status').set('confirmed');
         showToast('অর্ডার কনফার্ম হয়েছে','#0B6E4F');
@@ -3201,7 +3290,7 @@ function downloadSitemap(){
 
 /* ── DOWNLOAD book.js ── */
 function downloadBookJs(){
-    const FIELDS=['type','name','author','price','original_price','cat','subcat','subject','cover','pub','pages','brand','img','desc'];
+    const FIELDS=['bid','type','name','author','price','original_price','cat','subcat','subject','cover','pub','pages','brand','img','desc'];
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
     const esc=s=>String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r\n/g,'\\n').replace(/\r/g,'\\n').replace(/\n/g,'\\n');
     const lines=src.map(b=>{
@@ -3308,6 +3397,14 @@ function closeModalOnBg(e){
 async function updateStatusFromModal(){
     if(!modalOrderId)return;
     const status=document.getElementById('modalStatusSelect').value;
+    const o=allOrders.find(x=>x.orderId===modalOrderId);
+    if(o&&o.status==='pending'&&status!=='pending'){
+        const mismatch=checkOrderPriceMismatch(o);
+        if(mismatch.length){
+            const msg='⚠️ এই অর্ডারে দামের গরমিল পাওয়া গেছে:\n\n'+mismatch.join('\n')+'\n\nএরপরও এগোতে চান?';
+            if(!confirm(msg)) return;
+        }
+    }
     try{
         await db.ref('orders/'+modalOrderId+'/status').set(status);
         showToast('স্ট্যাটাস আপডেট হয়েছে','#0B6E4F');
@@ -4054,6 +4151,14 @@ function renderKanban(){
             col.classList.remove('drag-over');
             const newStatus=col.dataset.status;
             if(!kanbanDragId||!newStatus)return;
+            const o=allOrders.find(x=>x.orderId===kanbanDragId);
+            if(o&&o.status==='pending'&&newStatus!=='pending'){
+                const mismatch=checkOrderPriceMismatch(o);
+                if(mismatch.length){
+                    const msg='⚠️ এই অর্ডারে দামের গরমিল পাওয়া গেছে:\n\n'+mismatch.join('\n')+'\n\nএরপরও এগোতে চান?';
+                    if(!confirm(msg)){ kanbanDragId=null; return; }
+                }
+            }
             try{
                 await db.ref('orders/'+kanbanDragId+'/status').set(newStatus);
                 showToast('Status → '+STATUS_LABELS[newStatus],'#0B6E4F');
