@@ -93,10 +93,10 @@
 
         /* ── SIDEBAR ── */
         .sidebar{
-            width:220px;min-height:100vh;flex-shrink:0;
+            width:220px;height:100vh;flex-shrink:0;
             background:var(--sidebar-bg);
             display:flex;flex-direction:column;
-            position:fixed;top:0;left:0;z-index:200;
+            position:fixed;top:0;left:0;bottom:0;z-index:200;
             transition:transform .3s cubic-bezier(0.4,0,0.2,1);
         }
         .sidebar-logo{
@@ -150,13 +150,18 @@
         .nav-group-toggle .chevron{margin-left:auto;transition:transform .25s;opacity:.6;flex-shrink:0;}
         .nav-group-toggle.expanded .chevron{transform:rotate(90deg);}
         .nav-subgroup{max-height:none;overflow:visible;}
+        .nav-subgroup-label{
+            font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+            color:rgba(255,255,255,0.22);padding:9px 11px 3px 30px;
+        }
+        .nav-subgroup-label:first-child{padding-top:4px;}
         .nav-sub-item{
             display:flex;align-items:center;gap:8px;
             width:100%;text-align:left;background:transparent;border:none;
             color:var(--sidebar-text);font-family:var(--font-main);
             font-size:11px;font-weight:600;line-height:1.3;
-            padding:7px 11px 7px 30px;border-radius:8px;cursor:pointer;
-            transition:var(--trans);margin-bottom:1px;
+            padding:6px 11px 6px 30px;border-radius:8px;cursor:pointer;
+            transition:var(--trans);margin-bottom:0;
         }
         .nav-sub-item:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.8);}
         .nav-sub-item.active{background:var(--sidebar-active);color:var(--sidebar-active-text);}
@@ -902,22 +907,29 @@
                     টুলস
                 </button>
                 <div class="nav-subgroup open" id="toolsSubgroup">
-                    <button class="nav-sub-item" data-tool="toolCard_phoneIndex" onclick="openToolCard('toolCard_phoneIndex',this)">Phone Index Migration</button>
-                    <button class="nav-sub-item" data-tool="toolCard_orderSummary" onclick="openToolCard('toolCard_orderSummary',this)">অর্ডার সংক্ষেপ</button>
-                    <button class="nav-sub-item" data-tool="toolCard_fraudCheck" onclick="openToolCard('toolCard_fraudCheck',this)"><span class="heavy-dot"></span>Manual Fraud Check</button>
-                    <button class="nav-sub-item" data-tool="toolCard_bookJs" onclick="openToolCard('toolCard_bookJs',this)">book.js ডাউনলোড</button>
-                    <button class="nav-sub-item" data-tool="toolCard_sitemap" onclick="openToolCard('toolCard_sitemap',this)">sitemap.xml ডাউনলোড</button>
-                    <button class="nav-sub-item" data-tool="toolCard_catChips" onclick="openToolCard('toolCard_catChips',this)"><span class="heavy-dot"></span>হোমপেজ ক্যাটাগরি চিপ</button>
-                    <button class="nav-sub-item" data-tool="toolCard_pubChips" onclick="openToolCard('toolCard_pubChips',this)"><span class="heavy-dot"></span>হোমপেজ প্রকাশনী চিপ</button>
-                    <button class="nav-sub-item" data-tool="toolCard_authorChips" onclick="openToolCard('toolCard_authorChips',this)"><span class="heavy-dot"></span>হোমপেজ প্রিয় লেখক চিপ</button>
-                    <button class="nav-sub-item" data-tool="toolCard_banner" onclick="openToolCard('toolCard_banner',this)"><span class="heavy-dot"></span>হোমপেজ ব্যানার / অফার</button>
+                    <div class="nav-subgroup-label">হোমপেজ কাস্টমাইজেশন</div>
+                    <button class="nav-sub-item" data-tool="toolCard_catChips" onclick="openToolCard('toolCard_catChips',this)"><span class="heavy-dot"></span>ক্যাটাগরি চিপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_pubChips" onclick="openToolCard('toolCard_pubChips',this)"><span class="heavy-dot"></span>প্রকাশনী চিপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_authorChips" onclick="openToolCard('toolCard_authorChips',this)"><span class="heavy-dot"></span>প্রিয় লেখক চিপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_banner" onclick="openToolCard('toolCard_banner',this)"><span class="heavy-dot"></span>ব্যানার / অফার</button>
                     <button class="nav-sub-item" data-tool="toolCard_offerPopup" onclick="openToolCard('toolCard_offerPopup',this)"><span class="heavy-dot"></span>অফার পোস্টার পপআপ</button>
+
+                    <div class="nav-subgroup-label">বিক্রয় ও কনটেন্ট</div>
                     <button class="nav-sub-item" data-tool="toolCard_coupon" onclick="openToolCard('toolCard_coupon',this)"><span class="heavy-dot"></span>কুপন কোড ম্যানেজমেন্ট</button>
                     <button class="nav-sub-item" data-tool="toolCard_blog" onclick="openToolCard('toolCard_blog',this)"><span class="heavy-dot"></span>পাঠকদের ব্লগ</button>
+
+                    <div class="nav-subgroup-label">রিপোর্ট ও যাচাই</div>
+                    <button class="nav-sub-item" data-tool="toolCard_orderSummary" onclick="openToolCard('toolCard_orderSummary',this)">অর্ডার সংক্ষেপ</button>
+                    <button class="nav-sub-item" data-tool="toolCard_fraudCheck" onclick="openToolCard('toolCard_fraudCheck',this)"><span class="heavy-dot"></span>Manual Fraud Check</button>
+                    <button class="nav-sub-item" data-tool="toolCard_phoneIndex" onclick="openToolCard('toolCard_phoneIndex',this)">Phone Index Migration</button>
+
+                    <div class="nav-subgroup-label">সেটিংস ও এক্সপোর্ট</div>
                     <button class="nav-sub-item" data-tool="modManageCard" onclick="openToolCard('modManageCard',this)">মডারেটর ম্যানেজ</button>
                     <button class="nav-sub-item" data-tool="imgbbCard" onclick="openToolCard('imgbbCard',this)">ছবি আপলোড সেটিংস</button>
                     <button class="nav-sub-item" data-tool="pixelCard" onclick="openToolCard('pixelCard',this)">Meta Pixel</button>
                     <button class="nav-sub-item" data-tool="courierCard" onclick="openToolCard('courierCard',this)">Courier API Settings</button>
+                    <button class="nav-sub-item" data-tool="toolCard_bookJs" onclick="openToolCard('toolCard_bookJs',this)">book.js ডাউনলোড</button>
+                    <button class="nav-sub-item" data-tool="toolCard_sitemap" onclick="openToolCard('toolCard_sitemap',this)">sitemap.xml ডাউনলোড</button>
                 </div>
             </div>
         </nav>
@@ -2856,11 +2868,13 @@ function beRenderList(){
     }).join('');
 }
 
-/* ── FIREBASE SYNC ── */
-async function syncBookToFirebase(idx, bookData, msg){ // idx & bookData reserved for future per-book sync
+/* ── FIREBASE SYNC ──
+   শুধু বদলানো/নতুন বইটাই পাঠানো হয় (পুরো ১০০০+ বইয়ের লিস্ট বারবার আপলোড না
+   করে), তাই "সেভ" বাটনে চাপ দিলে সাথে সাথেই শেষ হয়ে যায়। */
+async function syncBookToFirebase(idx, bookData, msg){
     try{
         await ensureBookIdsAndMigrate(localBooks);
-        await db.ref('bookList').set(localBooks);
+        await db.ref('bookList/'+idx).set(localBooks[idx]);
         showToast(msg||'Firebase-এ সেভ হয়েছে','#0B6E4F');
     }catch(e){
         console.error('Firebase sync error:',e);
@@ -3217,14 +3231,15 @@ function renderOfferPopupList(){
         box.innerHTML='<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px;">এখনো কোনো পোস্টার যোগ করা হয়নি — নিচে থেকে যোগ করুন।</div>';
     } else {
         box.innerHTML = list.map((p,i)=>`
-            <div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface);">
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface);">
                 <div style="width:48px;height:64px;border-radius:6px;background:#064e3b url('${escapeHTML(p.img||'')}') center/cover no-repeat;flex-shrink:0;"></div>
-                <div style="flex:1;min-width:0;">
-                    <div style="font-size:11px;font-weight:800;color:var(--primary);letter-spacing:.5px;margin-bottom:2px;">পোস্টার #${i+1}</div>
-                    <div style="font-size:13px;font-weight:700;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(p.title||'(শুধু ছবি)')}</div>
-                    <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(p.sub||p.img||'')}</div>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;">
+                    <div style="font-size:11px;font-weight:800;color:var(--primary);letter-spacing:.5px;">পোস্টার #${i+1}</div>
+                    <input class="form-input" style="font-size:12px;padding:6px 8px;" placeholder="শিরোনাম (ঐচ্ছিক)" value="${escapeHTML(p.title||'')}" oninput="updateOfferPopupField(${i},'title',this.value)">
+                    <input class="form-input" style="font-size:12px;padding:6px 8px;" placeholder="সাবটাইটেল (ঐচ্ছিক)" value="${escapeHTML(p.sub||'')}" oninput="updateOfferPopupField(${i},'sub',this.value)">
+                    <input class="form-input" style="font-size:12px;padding:6px 8px;" placeholder="লিংক (ঐচ্ছিক) — ক্লিক করলে কোথায় যাবে" value="${escapeHTML(p.link||'')}" oninput="updateOfferPopupField(${i},'link',this.value)">
                 </div>
-                <div style="display:flex;gap:4px;flex-shrink:0;">
+                <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
                     <button class="btn btn-sm btn-ghost" onclick="moveOfferPopup(${i},-1)" ${i===0?'disabled':''} title="উপরে">▲</button>
                     <button class="btn btn-sm btn-ghost" onclick="moveOfferPopup(${i},1)" ${i===list.length-1?'disabled':''} title="নিচে">▼</button>
                     <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="removeOfferPopup(${i})" title="মুছুন">✕</button>
@@ -3252,6 +3267,7 @@ function addOfferPopup(){
     renderOfferPopupList();
     showToast('তালিকায় যোগ হয়েছে — এখন "সব পোস্টার সেভ করুন" চাপুন','#059669');
 }
+function updateOfferPopupField(i,field,value){ if(offerPopupData.posters[i]) offerPopupData.posters[i][field]=value; }
 function removeOfferPopup(i){ offerPopupData.posters.splice(i,1); renderOfferPopupList(); }
 function moveOfferPopup(i,dir){
     const list=offerPopupData.posters;

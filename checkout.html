@@ -1186,6 +1186,22 @@ function applySavedInfo(){
    কার্টের তথ্য রেডি হওয়া মাত্র দেখাবে — চেকআউট পেজে এটা বিশেষভাবে জরুরি। */
 document.addEventListener('DOMContentLoaded', function(){ renderSummary(); prefillSavedInfo(); });
 
+/* কাস্টমার কুপন প্রয়োগ করার পর যদি ব্রাউজারের "ব্যাক" বাটন চেপে অন্য পেজে
+   গিয়ে আরও বই কার্টে যোগ করে, তারপর আবার ব্যাক/ফরওয়ার্ড দিয়ে চেকআউটে ফেরে —
+   কিছু ব্রাউজার (বিশেষত মোবাইল) পেজটা নতুন করে লোড না করে আগের অবস্থাই
+   (bfcache) দেখিয়ে দেয়, ফলে পুরনো কার্ট/টোটাল দেখা যায় যদিও localStorage-এ
+   নতুন বই যোগ হয়ে গেছে। pageshow ইভেন্টে persisted true হলে কার্ট+কুপন
+   আবার লোকালস্টোরেজ থেকে টাটকা করে পড়ে টোটাল ঠিক করে দিচ্ছি। */
+window.addEventListener('pageshow', function(e){
+  if(!e.persisted) return;
+  cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
+  discPct = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
+  coupon = localStorage.getItem('gronthokanon_coupon') || '';
+  cType = localStorage.getItem('gronthokanon_ctype') || (coupon ? 'percent' : '');
+  cValue = parseInt(localStorage.getItem('gronthokanon_cvalue') || String(discPct) || '0');
+  renderSummary();
+});
+
 </script>
 
 <script src="common.js"></script>

@@ -5,6 +5,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://gronthokanon-8573e-default-rtdb.firebaseio.com">
+    <link rel="preconnect" href="https://i.ibb.co.com">
+    <link rel="preconnect" href="https://i.ibb.co">
     <link rel="icon" href="logo.png" type="image/png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -1548,7 +1550,7 @@ footer {
 </button>
 
 <script src="book.js" defer></script>
-<script src="gkbooks-live.js"></script>
+<script src="gkbooks-live.js" defer></script>
 <script>
 /* categoryConfig — হোমপেজের সেকশন ও সাইডবার মেনু; window.GK_HOME_CATS থেকে তৈরি (অ্যাডমিন-নিয়ন্ত্রিত) */
 function buildCategoryConfig(){
@@ -2379,12 +2381,17 @@ function goBannerSlide(idx){
 setInterval(()=>{if(totalBannerSlides>0)goBannerSlide((curBanner+1)%totalBannerSlides);},3800);
 
 /* ═══ অ্যাডমিন-নিয়ন্ত্রিত ব্যানার — Firebase থেকে লোড ═══ */
-/* অ্যাডমিন প্যানেলে ব্যানার সেট করলে এখানে লাইভ দেখাবে; Firebase খালি থাকলে উপরের ডিফল্ট স্লাইড থাকবে */
+/* অ্যাডমিন প্যানেলে ব্যানার সেট করলে এখানে লাইভ দেখাবে; Firebase খালি থাকলে উপরের ডিফল্ট স্লাইড থাকবে।
+   পারফরম্যান্স: আগে প্রতিবার Firebase থেকে টেনে আনার পর ছবি বদলাতো (একটা "ফ্ল্যাশ"
+   দেখা যেত — আগে স্ট্যাটিক ছবি, তারপর হঠাৎ নতুন ছবি)। এখন ১০ মিনিটের জন্য
+   localStorage-এ ক্যাশ রাখা হয়, তাজা ক্যাশ থাকলে সাথে সাথেই দেখানো হয় —
+   Firebase কল ছাড়াই — তাই ব্যানার আর দেরি করে/বদলে দেখায় না। */
 function loadBanners(){
     if(typeof db==='undefined'||!db)return;
-    db.ref('banners').get().then(snap=>{
-        if(!snap.exists())return;
-        let raw=snap.val();
+    const CACHE_KEY='gk_banners_cache_v1';
+    const CACHE_TTL=10*60*1000;
+
+    function applyBannerData(raw){
         /* অ্যাডমিন সব ব্যানার মুছে সেভ করলে {none:true} — সেকশনটাই লুকাও */
         if(raw&&raw.none===true){
             const bw=document.querySelector('.banner-wrap');
@@ -2415,7 +2422,27 @@ function loadBanners(){
         totalBannerSlides=list.length;
         curBanner=0;
         goBannerSlide(0);
-    }).catch(()=>{});
+    }
+
+    function fetchFresh(){
+        db.ref('banners').get().then(snap=>{
+            if(!snap.exists())return;
+            const raw=snap.val();
+            try{ localStorage.setItem(CACHE_KEY, JSON.stringify({t:Date.now(), v:raw})); }catch(e){}
+            applyBannerData(raw);
+        }).catch(()=>{});
+    }
+
+    let cached=null;
+    try{ const c=localStorage.getItem(CACHE_KEY); if(c) cached=JSON.parse(c); }catch(e){}
+    if(cached && cached.v && (Date.now()-cached.t)<CACHE_TTL){
+        applyBannerData(cached.v); /* তাজা ক্যাশ — Firebase কল লাগবে না */
+    }else if(cached && cached.v){
+        applyBannerData(cached.v); /* পুরনো ক্যাশ — আগে দেখাও, তারপর ব্যাকগ্রাউন্ডে আপডেট */
+        fetchFresh();
+    }else{
+        fetchFresh();
+    }
 }
 
 /* BANNER SWIPE */

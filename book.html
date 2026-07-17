@@ -488,7 +488,6 @@
 </div>
 
 <style>
-<style>
 footer {
     background: #ffffff;
     color: #4b5563;
@@ -547,7 +546,30 @@ footer {
 [data-theme="dark"] .footer-copy { color: #4b5563; }
 [data-theme="dark"] .footer-copy strong { color: #6ee7b7; }
 </style>
-</style>
+
+<!-- REVIEW SECTION -->
+<div style="padding:14px;margin-bottom:80px;">
+    <div style="background:var(--card);border-radius:0;padding:18px;border:1px solid #111;border-left:4px solid var(--gold);">
+        <h3 style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;"><svg class="eico" viewBox="0 0 24 24" fill="#d97706" width="17" height="17"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg> পাঠকদের মতামত</h3>
+        <div id="reviewForm" style="margin-bottom:20px;padding:14px;background:var(--bg);border-radius:0;border:1px solid #111;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">আপনার রিভিউ লিখুন</div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <span class="rv-star" onclick="setRating(1)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+                <span class="rv-star" onclick="setRating(2)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+                <span class="rv-star" onclick="setRating(3)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+                <span class="rv-star" onclick="setRating(4)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+                <span class="rv-star" onclick="setRating(5)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+            </div>
+            <textarea id="reviewText" placeholder="আপনার মতামত লিখুন..." style="width:100%;padding:10px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;resize:none;height:80px;outline:none;box-sizing:border-box;"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+                <input id="reviewName" placeholder="আপনার নাম" style="flex:1;padding:9px 12px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
+                <button onclick="submitReview()" style="padding:9px 16px;background:var(--gold);color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">পাঠাও</button>
+            </div>
+        </div>
+        <div id="reviewsList"><div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div></div>
+    </div>
+</div>
+
 <footer>
   <div class="footer-inner">
     <!-- Brand -->
@@ -1318,29 +1340,6 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 </script>
-
-<!-- REVIEW SECTION -->
-<div style="padding:14px;margin-bottom:80px;">
-    <div style="background:var(--card);border-radius:0;padding:18px;border:1px solid #111;border-left:4px solid var(--gold);">
-        <h3 style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;"><svg class="eico" viewBox="0 0 24 24" fill="#d97706" width="17" height="17"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg> পাঠকদের মতামত</h3>
-        <div id="reviewForm" style="margin-bottom:20px;padding:14px;background:var(--bg);border-radius:0;border:1px solid #111;">
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">আপনার রিভিউ লিখুন</div>
-            <div style="display:flex;gap:6px;margin-bottom:10px;">
-                <span class="rv-star" onclick="setRating(1)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-                <span class="rv-star" onclick="setRating(2)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-                <span class="rv-star" onclick="setRating(3)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-                <span class="rv-star" onclick="setRating(4)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-                <span class="rv-star" onclick="setRating(5)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-            </div>
-            <textarea id="reviewText" placeholder="আপনার মতামত লিখুন..." style="width:100%;padding:10px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;resize:none;height:80px;outline:none;box-sizing:border-box;"></textarea>
-            <div style="display:flex;gap:8px;margin-top:8px;">
-                <input id="reviewName" placeholder="আপনার নাম" style="flex:1;padding:9px 12px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
-                <button onclick="submitReview()" style="padding:9px 16px;background:var(--gold);color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">পাঠাও</button>
-            </div>
-        </div>
-        <div id="reviewsList"><div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div></div>
-    </div>
-</div>
 
 <!-- ══ book.html নিজস্ব সার্চ স্ক্রিন ══ -->
 <div id="bkSearchOverlay" onclick="closeBkSearch()"></div>

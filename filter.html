@@ -44,7 +44,7 @@
             --search-bg:rgba(255,255,255,0.07); --search-border:rgba(255,255,255,0.14);
         }
         * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-        body { font-family:'Hind Siliguri',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding-bottom:90px; }
+        body { font-family:'Hind Siliguri',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding-bottom:90px; display:flex; flex-direction:column; }
 
         /* ── NAVBAR (থিম-অ্যাওয়্যার: লাইট মোডে সাদা, ডার্ক মোডে গাঢ়) ── */
         .navbar { background:var(--nav-bg); position:sticky; top:0; z-index:100; box-shadow:0 2px 16px rgba(0,0,0,0.1); border-bottom:1px solid var(--nav-border); }
@@ -394,13 +394,14 @@
 </a>
 
 <style>
-<style>
 footer {
     background: #ffffff;
     color: #4b5563;
     padding: 32px 16px 24px;
+    margin-top: auto; /* কনটেন্ট কম থাকলেও ফুটার সবসময় নিচে থাকবে */
     margin-bottom: 70px; /* bottom nav height */
     border-top: 1px solid rgba(5,150,105,0.15);
+    width: 100%;
 }
 [data-theme="dark"] footer {
     background: linear-gradient(135deg, #011f16 0%, #013d2b 60%, #025939 100%);
@@ -452,7 +453,6 @@ footer {
 .footer-copy strong { color: #059669; font-weight: 600; }
 [data-theme="dark"] .footer-copy { color: #4b5563; }
 [data-theme="dark"] .footer-copy strong { color: #6ee7b7; }
-</style>
 </style>
 <footer>
   <div class="footer-inner">
