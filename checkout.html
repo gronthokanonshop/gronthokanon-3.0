@@ -1184,7 +1184,12 @@ function applySavedInfo(){
 /* window.onload আগে ব্যবহার হতো — bKash/card/WhatsApp আইকন ডাউনলোড শেষ না
    হওয়া পর্যন্ত অর্ডার সামারি দেখাত না। DOMContentLoaded ব্যবহার করলে
    কার্টের তথ্য রেডি হওয়া মাত্র দেখাবে — চেকআউট পেজে এটা বিশেষভাবে জরুরি। */
-document.addEventListener('DOMContentLoaded', function(){ renderSummary(); prefillSavedInfo(); });
+document.addEventListener('DOMContentLoaded', function(){
+  renderSummary(); prefillSavedInfo();
+  if(window.fbq && cart.length){
+    try{fbq('track','InitiateCheckout',{value:getSubtotal(),currency:'BDT',num_items:cart.length});}catch(e){}
+  }
+});
 
 /* কাস্টমার কুপন প্রয়োগ করার পর যদি ব্রাউজারের "ব্যাক" বাটন চেপে অন্য পেজে
    গিয়ে আরও বই কার্টে যোগ করে, তারপর আবার ব্যাক/ফরওয়ার্ড দিয়ে চেকআউটে ফেরে —

@@ -795,6 +795,7 @@ function addToCart(name, price, img, btn) {
     updateCounts();
     if (btn) { btn.classList.add('added'); btn.textContent = '✅ যোগ হয়েছে'; }
     showToast('✅ কার্টে যোগ হয়েছে!');
+    if(window.fbq){try{fbq('track','AddToCart',{content_name:name.trim(),value:Number(price),currency:'BDT',contents:[{id:name.trim(),quantity:1}]});}catch(e){}}
 }
 
 function showToast(msg) {

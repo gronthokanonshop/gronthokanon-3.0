@@ -472,12 +472,6 @@
         <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg> একই বিষয়ের বই</h3>
         <div class="rel-row" id="relatedBooks"></div>
     </div>
-
-    <!-- RECENTLY VIEWED -->
-    <div class="related-card" id="recentSection" style="display:none;">
-        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> সম্প্রতি দেখেছেন</h3>
-        <div class="rel-row" id="recentBooks"></div>
-    </div>
     </div>
 </div>
 
@@ -549,6 +543,12 @@ footer {
 [data-theme="dark"] .footer-copy { color: #4b5563; }
 [data-theme="dark"] .footer-copy strong { color: #6ee7b7; }
 </style>
+
+<!-- RECENTLY VIEWED -->
+<div class="related-card" id="recentSection" style="display:none;margin:0 14px 14px;">
+    <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> সম্প্রতি দেখেছেন</h3>
+    <div class="rel-row" id="recentBooks"></div>
+</div>
 
 <!-- REVIEW SECTION -->
 <div style="padding:14px;margin-bottom:80px;">
@@ -803,12 +803,14 @@ function addToCartShow(){
     localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
     updateCartCount();flyToCart(r.left+r.width/2,r.top+r.height/2);
     showToast(`✅ ${toBN(qty)}টি বই কার্টে যোগ হয়েছে!`);
+    if(window.fbq){try{fbq('track','AddToCart',{content_name:curBook.name,value:curBook.price*qty,currency:'BDT',contents:[{id:curBook.name,quantity:qty}]});}catch(e){}}
 }
 function buyNow(){
     if(!curBook)return;
     cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[]; // ড্রয়ার-পরিবর্তন sync
     for(let i=0;i<qty;i++)cart.push({name:curBook.name,price:curBook.price,img:curBook.img});
     localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
+    if(window.fbq){try{fbq('track','AddToCart',{content_name:curBook.name,value:curBook.price*qty,currency:'BDT',contents:[{id:curBook.name,quantity:qty}]});}catch(e){}}
     window.location.href='checkout.html';
 }
 /* WhatsApp-এ সরাসরি অর্ডার — বইয়ের নাম/দাম/পরিমাণ/লিংক অটো বসে */
@@ -917,6 +919,12 @@ function loadBook(){
         hadiyaBanner.style.display='flex';
     } else {
         hadiyaBanner.style.display='none';
+    }
+    /* একই বই বারবার loadBook() রি-রান হলে (লাইভ ডেটা সিঙ্কের কারণে) যাতে
+       ViewContent বারবার না পাঠায়, তাই বই-প্রতি একবারই পাঠানো হয় */
+    if(window.fbq && window._fbqViewedBook!==b.name){
+        window._fbqViewedBook=b.name;
+        try{fbq('track','ViewContent',{content_name:b.name,value:b.price,currency:'BDT',contents:[{id:b.name,quantity:1}]});}catch(e){}
     }
     /* info-table: বই হলে আগের rows, প্রোডাক্ট হলে brand + custom attributes */
     document.getElementById('bookDetailsTitle').innerHTML=`<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> ${isBook?'বইয়ের তথ্য':'প্রোডাক্টের তথ্য'}`;
