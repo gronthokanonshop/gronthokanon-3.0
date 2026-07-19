@@ -2084,9 +2084,10 @@ function renderCouponSection(){
     } else {
         sec.innerHTML=`
         <div style="display:flex;gap:6px;">
-            <input type="text" id="couponCode" placeholder="কুপন কোড লিখুন" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
+            <input type="text" id="couponCode" placeholder="কুপন কোড লিখুন" onkeydown="if(event.key==='Enter')applyCoupon()" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
             <button onclick="applyCoupon()" style="background:#059669;color:white;border:none;padding:0 14px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;">Apply</button>
-        </div>`;
+        </div>
+        <div id="cartCouponMsg" style="display:none;font-size:12px;font-weight:700;margin-top:7px;padding:7px 10px;border-radius:8px;"></div>`;
     }
 }
 function removeCoupon(){
@@ -2101,6 +2102,11 @@ function removeCoupon(){
 }
 function applyCoupon(){
     const code=(document.getElementById('couponCode').value||'').trim().toUpperCase();
+    const msgEl=document.getElementById('cartCouponMsg');
+    if(!code){
+        if(msgEl){ msgEl.style.display='block'; msgEl.style.background='#fef2f2'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; }
+        return;
+    }
     const info=(typeof gkCouponInfo==='function')?gkCouponInfo(code):null;
     if(info){
         discountPercent=info.type==='percent'?info.value:0;
@@ -2110,8 +2116,9 @@ function applyCoupon(){
         localStorage.setItem('gronthokanon_discount',String(discountPercent));
         showToast('🎉 '+gkCouponLabel(info)+' যুক্ত হয়েছে!','#059669');
         updateCartUI();
-            renderCouponSection();
+        renderCouponSection();
     } else {
+        if(msgEl){ msgEl.style.display='block'; msgEl.style.background='#fef2f2'; msgEl.style.color='#dc2626'; msgEl.textContent='❌ "'+escapeHTML(code)+'" ভুল কুপন কোড, আবার চেষ্টা করুন।'; }
         showToast('❌ ভুল কুপন কোড!','#dc2626');
     }
 }

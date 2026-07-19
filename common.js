@@ -94,6 +94,7 @@ window.gkCouponInfo = function (code) {
 window.gkCouponLabel = function (info) {
     if (!info) return '';
     if (info.type === 'delivery') return 'ফ্রি ডেলিভারি';
+    if (info.type === 'delivery_fixed') return '৳' + info.value + ' ডেলিভারি চার্জ';
     if (info.type === 'taka') return '৳' + info.value + ' ছাড়';
     return info.value + '% ডিসকাউন্ট';
 };
@@ -121,6 +122,8 @@ window.gkCouponDiscAmt = function (sub) {
                         window.GK_COUPONS[code] = { type: 'percent', value: c.discount }; /* পুরনো ফরম্যাট */
                     } else if (c.type === 'delivery') {
                         window.GK_COUPONS[code] = { type: 'delivery', value: 0 };
+                    } else if (c.type === 'delivery_fixed' && typeof c.value === 'number' && c.value >= 0) {
+                        window.GK_COUPONS[code] = { type: 'delivery_fixed', value: c.value };
                     } else if ((c.type === 'taka' || c.type === 'percent') && typeof c.value === 'number' && c.value > 0) {
                         if (c.type === 'percent' && c.value > 100) return;
                         window.GK_COUPONS[code] = { type: c.type, value: c.value };

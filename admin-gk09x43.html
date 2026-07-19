@@ -1580,6 +1580,7 @@
                                 <option value="percent">% ছাড়</option>
                                 <option value="taka">৳ টাকা ছাড়</option>
                                 <option value="delivery">🚚 ফ্রি ডেলিভারি</option>
+                                <option value="delivery_fixed">🚚 নির্দিষ্ট ডেলিভারি চার্জ</option>
                             </select>
                             <input class="form-input" id="cpnPct" type="number" min="1" placeholder="ছাড় %" style="flex:1;min-width:80px;">
                             <button class="btn btn-primary" onclick="addCoupon()" style="flex-shrink:0;">যোগ করুন</button>
@@ -3493,6 +3494,7 @@ function couponAdminLabel(c){
     /* পুরনো {discount:N} = % ছাড়; নতুন {type,value} */
     if(typeof c.discount==='number') return c.discount+'% ছাড়';
     if(c.type==='delivery') return '🚚 ফ্রি ডেলিভারি';
+    if(c.type==='delivery_fixed') return '🚚 ডেলিভারি ৳'+(c.value||0);
     if(c.type==='taka') return '৳'+(c.value||0)+' ছাড়';
     return (c.value||0)+'% ছাড়';
 }
@@ -3500,7 +3502,10 @@ function cpnTypeChanged(){
     const t=document.getElementById('cpnType').value;
     const v=document.getElementById('cpnPct');
     if(t==='delivery'){ v.style.display='none'; v.value=''; }
-    else{ v.style.display='block'; v.placeholder=(t==='taka'?'ছাড় ৳ (যেমন: 50)':'ছাড় %'); }
+    else{
+        v.style.display='block';
+        v.placeholder = t==='taka' ? 'ছাড় ৳ (যেমন: 50)' : t==='delivery_fixed' ? 'ডেলিভারি চার্জ ৳ (যেমন: 36)' : 'ছাড় %';
+    }
 }
 function renderCouponList(){
     const box=document.getElementById('couponList'); if(!box) return;
@@ -3526,6 +3531,7 @@ async function addCoupon(){
     if(code==='FIRSTORDER'){ showToast('FIRSTORDER বিল্ট-ইন — অন্য নাম দিন','#dc2626'); return; }
     if(type==='percent'&&(!val||val<1||val>100)){ showToast('ছাড় ১-১০০% এর মধ্যে দিন','#dc2626'); return; }
     if(type==='taka'&&(!val||val<1)){ showToast('টাকার অঙ্ক দিন (যেমন: 50)','#dc2626'); return; }
+    if(type==='delivery_fixed'&&(isNaN(val)||val<0)){ showToast('ডেলিভারি চার্জ দিন (যেমন: 36, ফ্রি হলে 0)','#dc2626'); return; }
     const data={type, value:(type==='delivery'?0:val), active:true};
     try{
         await db.ref('coupons/'+code).set(data);

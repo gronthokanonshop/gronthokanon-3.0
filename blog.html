@@ -35,6 +35,9 @@
 .article-cta{margin-top:20px;text-align:center;}
 .article-cta a{display:inline-block;background:linear-gradient(135deg,#059669,#047857);color:#fff;padding:12px 26px;border-radius:11px;font-size:14px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(5,150,105,0.3);}
 .back-to-blog{display:inline-flex;align-items:center;gap:6px;color:#059669;font-weight:700;font-size:13px;text-decoration:none;margin-bottom:16px;}
+.pdf-dl-btn{display:inline-flex;align-items:center;gap:6px;background:var(--card);color:#059669;border:1.5px solid #059669;padding:9px 18px;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px;}
+.pdf-dl-btn:hover{background:rgba(5,150,105,0.08);}
+.pdf-dl-btn:disabled{opacity:.6;cursor:wait;}
 
 /* ══ মাসিক ব্লগ প্রতিযোগিতা ══ */
 .comp-card{background:linear-gradient(135deg,rgba(251,191,36,0.12),rgba(5,150,105,0.1));border:1.5px dashed #f59e0b;border-radius:14px;padding:18px;margin-bottom:20px;text-align:center;}
@@ -196,13 +199,15 @@ function renderReaderPost(id){
     document.title=b.title+' — গ্রন্থকানন ব্লগ';
     const md=document.getElementById('metaDesc'); if(md)md.setAttribute('content',String(b.content).slice(0,150));
     const paras=String(b.content).split(/\n+/).filter(x=>x.trim()).map(x=>'<p>'+esc(x)+'</p>').join('');
+    const rawMeta='✍️ '+(b.author||'পাঠক')+(b.publishedAt?' · '+new Date(b.publishedAt).toLocaleDateString('bn-BD'):'');
     document.getElementById('blogWrap').innerHTML=
       '<a class="back-to-blog" href="blog.html">‹ সব লেখা</a>'+
       `<div class="article">
         <span class="tag">পাঠকের লেখা</span><span class="reader-badge">🏆 প্রতিযোগিতা বিজয়ী</span>
         <h1>${esc(b.title)}</h1>
-        <p style="font-size:12.5px;color:var(--text2);">✍️ ${esc(b.author||'পাঠক')} ${b.publishedAt?'· '+new Date(b.publishedAt).toLocaleDateString('bn-BD'):''}</p>
+        <p style="font-size:12.5px;color:var(--text2);">${esc(rawMeta)}</p>
         ${paras}
+        <button class="pdf-dl-btn" onclick="downloadBlogPDF(${JSON.stringify(b.title)},${JSON.stringify(rawMeta)},this)">📥 PDF ডাউনলোড</button>
         <div class="article-cta"><a href="blog.html" onclick="event.preventDefault();location.href='blog.html';setTimeout(openSubmitForm,600);">✍️ আপনিও লিখুন — হাদিয়া জিতুন</a></div>
       </div>`;
   }).catch(()=>renderList());
@@ -264,8 +269,44 @@ function renderPost(post){
   document.getElementById('blogWrap').innerHTML=
     '<a class="back-to-blog" href="blog.html">‹ সব লেখা</a>'+
     `<div class="article"><span class="tag">${esc(post.tag)}</span><h1>${esc(post.title)}</h1>${post.body}
+      <button class="pdf-dl-btn" onclick="downloadBlogPDF(${JSON.stringify(post.title)},'',this)">📥 PDF ডাউনলোড</button>
       <div class="article-cta"><a href="${esc(post.cta.link)}">${esc(post.cta.text)}</a></div>
     </div>`;
+}
+
+/* ══ ব্লগ পোস্ট PDF ডাউনলোড (html2canvas + jsPDF — ফোনেও কাজ করে) ══ */
+async function downloadBlogPDF(title, meta, btnEl){
+  if(typeof html2canvas==='undefined'||!window.jspdf){ if(typeof showToast==='function')showToast('PDF লাইব্রেরি লোড হয়নি — নেট চেক করুন','#dc2626'); return; }
+  const articleEl=btnEl.closest('.article');
+  if(!articleEl) return;
+  const orig=btnEl.innerText; btnEl.disabled=true; btnEl.innerText='তৈরি হচ্ছে...';
+  const clone=articleEl.cloneNode(true);
+  clone.querySelectorAll('.pdf-dl-btn, .article-cta, .tag, .reader-badge').forEach(el=>el.remove());
+  const wrap=document.createElement('div');
+  wrap.style.cssText='position:fixed;left:-9999px;top:0;width:650px;background:#fff;z-index:-1;padding:30px;font-family:"Hind Siliguri",Arial,sans-serif;color:#111;';
+  wrap.innerHTML='<div style="text-align:center;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid #059669;"><strong style="font-size:18px;color:#059669;">গ্রন্থকানন</strong><div style="font-size:11px;color:#666;margin-top:2px;">gronthokanon.com</div></div>'+clone.outerHTML;
+  document.body.appendChild(wrap);
+  try{
+    const canvas=await html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#ffffff'});
+    const imgData=canvas.toDataURL('image/png');
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const W=210, pageH=297;
+    const imgH=(canvas.height/canvas.width)*W;
+    let heightLeft=imgH, y=0;
+    pdf.addImage(imgData,'PNG',0,y,W,imgH);
+    heightLeft-=pageH;
+    while(heightLeft>0){
+      y=heightLeft-imgH;
+      pdf.addPage();
+      pdf.addImage(imgData,'PNG',0,y,W,imgH);
+      heightLeft-=pageH;
+    }
+    const safeTitle=String(title).replace(/[^ঀ-৿a-zA-Z0-9]+/g,'-').slice(0,50);
+    pdf.save('গ্রন্থকানন-'+safeTitle+'.pdf');
+  }catch(e){ if(typeof showToast==='function')showToast('❌ PDF তৈরি হয়নি, আবার চেষ্টা করুন','#dc2626'); }
+  document.body.removeChild(wrap);
+  btnEl.disabled=false; btnEl.innerText=orig;
 }
 
 (function(){
@@ -298,6 +339,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSubmitForm();})
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="common.js"></script>
 </body>
 </html>

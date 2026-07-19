@@ -715,17 +715,26 @@ function updateWLUI(){
     if(lg){lg.innerText=wl?'❤️':'🤍';lg.classList.toggle('active',wl);}
     if(btn){btn.innerHTML=wl?'❤️ উইশলিস্ট থেকে সরান':'🤍 উইশলিস্টে যোগ করুন';btn.classList.toggle('active',wl);}
 }
-function toggleWL(){
-    if(!curBook)return;
+/* উইশলিস্ট তালিকা মোডাল থেকে ❌ চাপলে toggleWL(event, name) — নির্দিষ্ট বইয়ের নাম দিয়ে ডাকে;
+   এই পেজের নিজের হার্ট বাটন থেকে ডাকলে কোনো নাম ছাড়াই (তখন curBook ধরে নেয়া হয়) */
+function toggleWL(e, name){
+    name = name || (curBook && curBook.name);
+    if(!name) return;
     let added;
-    if(wishlist.includes(curBook.name)){wishlist=wishlist.filter(w=>w!==curBook.name);added=false;}
-    else{wishlist.push(curBook.name);added=true;}
+    if(wishlist.includes(name)){wishlist=wishlist.filter(w=>w!==name);added=false;}
+    else{wishlist.push(name);added=true;}
     localStorage.setItem('gronthokanon_wishlist',JSON.stringify(wishlist));
-    updateWLUI();
-    openWLModal(added);
+    if(curBook && curBook.name===name) updateWLUI();
+    if(typeof window.gkRefreshBadges==='function') window.gkRefreshBadges();
+    /* উইশলিস্ট তালিকা খোলা থাকলে সাথে সাথেই রিফ্রেশ করো */
+    const wb=document.getElementById('wishlistBox');
+    if(wb && wb.style.display==='flex' && typeof showWishlist==='function'){ showWishlist(); return; }
+    const b=(typeof books!=='undefined')?books.find(bk=>bk.name===name):null;
+    if(b) openWLModal(added, b);
 }
-function openWLModal(added){
-    const b=curBook;
+function openWLModal(added, b){
+    b=b||curBook;
+    if(!b) return;
     const bImg=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
     const inner=document.getElementById('wlModalInner');
     inner.innerHTML=`

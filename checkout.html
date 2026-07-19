@@ -332,7 +332,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
           <div class="field">
             <label class="bng">থানা / উপজেলা <span class="req">*</span></label>
             <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l4-4 4 4v10H3z"/><path d="M13 7l4-4 4 4v12h-8z"/><path d="M7 13H5v6h2z"/></svg>️</span>
-              <select id="thana" class="bng"><option value="">থানা বেছে নিন</option></select>
+              <select id="thana" class="bng" onchange="onThanaChange()"><option value="">থানা বেছে নিন</option></select>
             </div>
           </div>
           <div class="field">
@@ -503,20 +503,27 @@ function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
 let discPct = parseInt(localStorage.getItem('gronthokanon_discount') || '0');
 let coupon = localStorage.getItem('gronthokanon_coupon') || '';
-/* কুপন টাইপ: percent | taka | delivery (ফ্রি ডেলিভারি) */
+/* কুপন টাইপ: percent | taka | delivery (ফ্রি ডেলিভারি) | delivery_fixed (নির্দিষ্ট ডেলিভারি চার্জ) */
 let cType = localStorage.getItem('gronthokanon_ctype') || (coupon ? 'percent' : '');
 let cValue = parseInt(localStorage.getItem('gronthokanon_cvalue') || String(discPct) || '0');
 function calcCouponDisc(sub){
   if(!coupon) return 0;
   if(cType === 'taka') return Math.min(cValue, sub);
   if(cType === 'percent') return Math.round(sub * cValue / 100);
-  return 0; /* delivery টাইপে পণ্যের দামে ছাড় নেই */
+  return 0; /* delivery/delivery_fixed টাইপে পণ্যের দামে ছাড় নেই, শুধু ডেলিভারি চার্জ বদলায় */
 }
 function couponLabelTxt(){
   if(!coupon) return '';
   if(cType === 'delivery') return 'ফ্রি ডেলিভারি';
+  if(cType === 'delivery_fixed') return '৳' + cValue + ' ডেলিভারি চার্জ';
   if(cType === 'taka') return '৳' + cValue + ' ছাড়';
   return cValue + '% ডিসকাউন্ট';
+}
+/* ঢাকা জেলার মধ্যে হলেও দূরবর্তী/উপশহর এলাকা — এগুলোতে ৬০ না, ৮০ টাকা চার্জ */
+const SUBURBAN_THANAS = new Set(['আশুলিয়া','ধামরাই','দোহার','হেমায়েতপুর','কেরানীগঞ্জ','সাভার','নবাবগঞ্জ']);
+function calcDeliveryCharge(dist, thana){
+  if(dist === 'ঢাকা') return (thana && SUBURBAN_THANAS.has(thana)) ? 80 : 60;
+  return 90;
 }
 let delivCharge = 60;
 
@@ -566,7 +573,7 @@ function showToast(msg, color='#dc2626'){
 ══════════════════════════════════ */
 const locationData = {
   "ঢাকা":{
-    "ঢাকা":["আদাবর","বাড্ডা","বংশাল","ক্যান্টনমেন্ট","চকবাজার","দারুস সালাম","ডেমরা","ধানমন্ডি","দোহার","গেন্ডারিয়া","গুলশান","হাজারীবাগ","কদমতলী","কামরাঙ্গীরচর","কেরানীগঞ্জ","খিলগাঁও","খিলক্ষেত","কোতোয়ালি","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নবাবগঞ্জ","নিউ মার্কেট","পল্লবী","পল্টন","রমনা","সাভার","শাহজাহানপুর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","উত্তরা","উত্তর খান","দক্ষিণ খান","ওয়ারী"],
+    "ঢাকা":["আদাবর","আশুলিয়া","বাড্ডা","বংশাল","ক্যান্টনমেন্ট","চকবাজার","দারুস সালাম","ডেমরা","ধানমন্ডি","ধামরাই","দোহার","গেন্ডারিয়া","গুলশান","হাজারীবাগ","হেমায়েতপুর","কদমতলী","কামরাঙ্গীরচর","কেরানীগঞ্জ","খিলগাঁও","খিলক্ষেত","কোতোয়ালি","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নবাবগঞ্জ","নিউ মার্কেট","পল্লবী","পল্টন","রমনা","সাভার","শাহজাহানপুর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","উত্তরা","উত্তর খান","দক্ষিণ খান","ওয়ারী"],
     "গাজীপুর":["গাজীপুর সদর","কালীগঞ্জ","কাপাসিয়া","শ্রীপুর","টঙ্গী"],
     "নারায়ণগঞ্জ":["নারায়ণগঞ্জ সদর","আড়াইহাজার","বন্দর","রূপগঞ্জ","সোনারগাঁও","সিদ্ধিরগঞ্জ"],
     "মানিকগঞ্জ":["মানিকগঞ্জ সদর","দৌলতপুর","ঘিওর","হরিরামপুর","সাটুরিয়া","শিবালয়","সিংগাইর"],
@@ -665,7 +672,10 @@ function updateThanas(){
   if(div && dist && locationData[div] && locationData[div][dist])
     locationData[div][dist].forEach(t => { opts += `<option value="${t}">${t}</option>`; });
   ts.innerHTML = opts;
-  delivCharge = dist === 'ঢাকা' ? 60 : 90;
+  delivCharge = calcDeliveryCharge(dist, '');
+  updateTotal();
+}
+function onThanaChange(){
   updateTotal();
 }
 
@@ -713,8 +723,10 @@ function getSubtotal(){
 function updateTotal(){
   const sub = getSubtotal();
   const dist = document.getElementById('district')?.value || '';
-  delivCharge = dist === 'ঢাকা' ? 60 : 90;
+  const thanaVal = document.getElementById('thana')?.value || '';
+  delivCharge = calcDeliveryCharge(dist, thanaVal);
   if(coupon && cType === 'delivery') delivCharge = 0; /* ফ্রি ডেলিভারি কুপন */
+  else if(coupon && cType === 'delivery_fixed') delivCharge = cValue; /* নির্দিষ্ট ডেলিভারি চার্জ কুপন */
   const disc = calcCouponDisc(sub);
   const total = sub - disc + delivCharge;
   document.getElementById('subtotalShow').innerText = '৳' + sub;
@@ -896,8 +908,9 @@ async function confirmOrder(){
   cart.forEach(i => { g[i.name] = (g[i.name]||0)+1; });
   const bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
   const sub = getSubtotal();
-  delivCharge = (district === 'ঢাকা' ? 60 : 90);
+  delivCharge = calcDeliveryCharge(district, thana);
   if(coupon && cType === 'delivery') delivCharge = 0; /* ফ্রি ডেলিভারি কুপন */
+  else if(coupon && cType === 'delivery_fixed') delivCharge = cValue; /* নির্দিষ্ট ডেলিভারি চার্জ কুপন */
   const discountAmt = calcCouponDisc(sub);
   const grand = sub + delivCharge - discountAmt;
   const fullAddr = `${thana}, ${district}, ${division} — ${address}`;
@@ -909,7 +922,7 @@ async function confirmOrder(){
     items: cart.map(i => ({...i, price: getVerifiedPrice(i.name)})).filter(i => i.price !== null),
     books: bookList,
     payment: payMethod + (txId ? ` (TxID: ${txId})` : ''),
-    delivery: (coupon && cType === 'delivery') ? '৳0 (ফ্রি ডেলিভারি কুপন)' : '৳' + delivCharge,
+    delivery: (coupon && cType === 'delivery') ? '৳0 (ফ্রি ডেলিভারি কুপন)' : (coupon && cType === 'delivery_fixed') ? '৳' + delivCharge + ' (কুপন — নির্দিষ্ট চার্জ)' : '৳' + delivCharge,
     total: '৳' + grand,
     discount: discountAmt,
     discountPct: discPct,
@@ -1184,7 +1197,12 @@ function applySavedInfo(){
 /* window.onload আগে ব্যবহার হতো — bKash/card/WhatsApp আইকন ডাউনলোড শেষ না
    হওয়া পর্যন্ত অর্ডার সামারি দেখাত না। DOMContentLoaded ব্যবহার করলে
    কার্টের তথ্য রেডি হওয়া মাত্র দেখাবে — চেকআউট পেজে এটা বিশেষভাবে জরুরি। */
-document.addEventListener('DOMContentLoaded', function(){ renderSummary(); prefillSavedInfo(); });
+document.addEventListener('DOMContentLoaded', function(){
+  renderSummary(); prefillSavedInfo();
+  if(window.fbq && cart.length){
+    try{fbq('track','InitiateCheckout',{value:getSubtotal(),currency:'BDT',num_items:cart.length});}catch(e){}
+  }
+});
 
 /* কাস্টমার কুপন প্রয়োগ করার পর যদি ব্রাউজারের "ব্যাক" বাটন চেপে অন্য পেজে
    গিয়ে আরও বই কার্টে যোগ করে, তারপর আবার ব্যাক/ফরওয়ার্ড দিয়ে চেকআউটে ফেরে —
