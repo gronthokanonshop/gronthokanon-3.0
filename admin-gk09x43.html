@@ -421,9 +421,13 @@
         .cattree-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
         .cattree-chip{background:rgba(11,110,79,0.12);color:#0B6E4F;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;}
         [data-theme="dark"] .cattree-chip{background:rgba(52,211,153,0.15);color:#6ee7b7;}
-        .cattree-chip span{cursor:pointer;opacity:.55;font-weight:900;line-height:1;}
+        .cattree-chip span{cursor:pointer;opacity:.55;font-weight:900;line-height:1;margin-left:2px;}
         .cattree-chip span:hover{opacity:1;color:#dc2626;}
         .cattree-addsub{display:flex;gap:8px;}
+        .cattree-chip-orphan{background:rgba(217,119,6,0.12);color:#b45309;}
+        [data-theme="dark"] .cattree-chip-orphan{background:rgba(251,191,36,0.15);color:#fbbf24;}
+        .cattree-card-orphan{border-color:#fde68a;background:rgba(217,119,6,0.04);}
+        [data-theme="dark"] .cattree-card-orphan{border-color:rgba(251,191,36,0.3);background:rgba(217,119,6,0.06);}
         .fraud-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:14px;}
         .fraud-stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;}
         .fraud-stat-val{font-size:20px;font-weight:800;color:var(--text-main);}
@@ -2937,22 +2941,62 @@ function loadCatTreeAdmin(){
         renderCatTreeAdmin();
     });
 }
+function gkFieldUsageCount(field, value, catCtx){
+    return (localBooks||[]).filter(b=>{
+        if(!b) return false;
+        if(field==='subcat') return b.cat===catCtx && b.subcat===value;
+        return b[field]===value;
+    }).length;
+}
+/* বই এডিটরে সরাসরি টাইপ করা বিভাগ/উপ-বিভাগ (তালিকায় নেই এমন) —
+   এগুলোকেও এখানে দেখানো হয় যাতে মুছে ফেলা বা তালিকায় যোগ করা যায় */
+let gkOrphanCats=[];
+let gkOrphanSubsMap={};
 function renderCatTreeAdmin(){
     const box=document.getElementById('catTreeBox'); if(!box||!siteCatTreeData) return;
-    box.innerHTML=siteCatTreeData.map((c,i)=>`
-        <div class="cattree-card">
+    const treeCatNames=new Set(siteCatTreeData.map(c=>c.name));
+    gkOrphanCats=gkAllMainCats().filter(c=>c&&!treeCatNames.has(c));
+    gkOrphanSubsMap={};
+
+    let html=siteCatTreeData.map((c,i)=>{
+        const treeSubs=c.subs;
+        const usedSubs=gkAllSubcats(c.name);
+        const orphanSubs=usedSubs.filter(s=>!treeSubs.includes(s));
+        gkOrphanSubsMap[i]=orphanSubs;
+        const officialChips=treeSubs.map((s,j)=>`<span class="cattree-chip">${escapeHTML(s)} <span onclick="removeCatTreeSub(${i},${j})" title="তালিকা থেকে মুছুন">✕</span></span>`).join('');
+        const orphanChips=orphanSubs.map((s,k)=>`<span class="cattree-chip cattree-chip-orphan" title="বই এডিটরে সরাসরি লেখা হয়েছে, তালিকায় নেই">${escapeHTML(s)} <span onclick="promoteOrphanSubcat(${i},${k})" title="তালিকায় যোগ করুন">✅</span><span onclick="removeOrphanSubcat(${i},${k})" title="বই থেকে মুছুন">✕</span></span>`).join('');
+        const chipsHtml=officialChips+orphanChips;
+        return `<div class="cattree-card">
             <div class="cattree-head">
                 <b>${escapeHTML(c.name)}</b>
                 <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeCatTreeCategory(${i})">✕ বিভাগ মুছুন</button>
             </div>
             <div class="cattree-chips">
-                ${c.subs.length ? c.subs.map((s,j)=>`<span class="cattree-chip">${escapeHTML(s)} <span onclick="removeCatTreeSub(${i},${j})">✕</span></span>`).join('') : '<span class="text-sm text-muted">কোনো উপ-বিভাগ নেই</span>'}
+                ${chipsHtml || '<span class="text-sm text-muted">কোনো উপ-বিভাগ নেই</span>'}
             </div>
             <div class="cattree-addsub">
                 <input class="form-input" id="catTreeNewSub_${i}" placeholder="নতুন উপ-বিভাগ" onkeydown="if(event.key==='Enter')addCatTreeSub(${i})">
                 <button class="btn btn-ghost btn-sm" type="button" onclick="addCatTreeSub(${i})">＋</button>
             </div>
-        </div>`).join('');
+        </div>`;
+    }).join('');
+
+    if(gkOrphanCats.length){
+        html+=`<div style="font-weight:800;font-size:13px;margin:18px 0 10px;color:var(--text-muted);">কাস্টম বিভাগ (বই এডিটরে সরাসরি লেখা হয়েছে, তালিকায় নেই)</div>`;
+        html+=gkOrphanCats.map((cn,oi)=>{
+            const cnt=gkFieldUsageCount('cat',cn,null);
+            return `<div class="cattree-card cattree-card-orphan">
+                <div class="cattree-head">
+                    <b>${escapeHTML(cn)}</b> <span class="text-sm text-muted">(${cnt}টা বইয়ে)</span>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button class="btn btn-sm" type="button" onclick="promoteOrphanCat(${oi})">✅ তালিকায় যোগ করুন</button>
+                    <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeOrphanCat(${oi})">✕ মুছুন (বই থেকেও)</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+    box.innerHTML=html;
 }
 function removeCatTreeCategory(i){
     if(!confirm('"'+siteCatTreeData[i].name+'" বিভাগটা তালিকা থেকে মুছে ফেলতে চান? পুরনো বইয়ের ডেটা বদলাবে না, শুধু নতুন বই যোগ/এডিট করার সময় আর এই নামটা দেখাবে না।')) return;
@@ -2962,6 +3006,47 @@ function removeCatTreeCategory(i){
 function removeCatTreeSub(i,j){
     siteCatTreeData[i].subs.splice(j,1);
     renderCatTreeAdmin();
+}
+function promoteOrphanCat(oi){
+    const catName=gkOrphanCats[oi];
+    if(siteCatTreeData.some(c=>c.name===catName)) return;
+    siteCatTreeData.push({name:catName,subs:[]});
+    renderCatTreeAdmin();
+    showToast('তালিকায় যোগ হয়েছে — এখন "বিভাগ তালিকা সেভ করুন" চাপুন','#059669');
+}
+async function removeOrphanCat(oi){
+    const catName=gkOrphanCats[oi];
+    if(!confirm('"'+catName+'" (বিভাগ) সব বই থেকে মুছে ফেলতে চান? বই মুছে যাবে না, শুধু এই বিভাগের মানটা ফাঁকা হয়ে যাবে। এই কাজ পূর্বাবস্থায় ফেরানো যাবে না।')) return;
+    const affected=[];
+    localBooks.forEach((b,idx)=>{ if(b&&b.cat===catName){ b.cat=''; affected.push(idx); } });
+    if(!affected.length){ showToast('কোনো বই পাওয়া যায়নি','#dc2626'); return; }
+    showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
+    try{
+        for(const idx of affected){ await db.ref('bookList/'+idx).set(localBooks[idx]); }
+        showToast('✅ মুছে ফেলা হয়েছে ('+affected.length+'টা বই)','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
+    beUpdateStats(); beRenderList(); renderCatTreeAdmin();
+}
+function promoteOrphanSubcat(catIdx,subIdx){
+    const subName=gkOrphanSubsMap[catIdx][subIdx];
+    if(siteCatTreeData[catIdx].subs.includes(subName)) return;
+    siteCatTreeData[catIdx].subs.push(subName);
+    renderCatTreeAdmin();
+    showToast('তালিকায় যোগ হয়েছে — এখন "বিভাগ তালিকা সেভ করুন" চাপুন','#059669');
+}
+async function removeOrphanSubcat(catIdx,subIdx){
+    const catName=siteCatTreeData[catIdx].name;
+    const subName=gkOrphanSubsMap[catIdx][subIdx];
+    if(!confirm('"'+subName+'" (উপ-বিভাগ) সব বই থেকে মুছে ফেলতে চান? বই মুছে যাবে না, শুধু এই উপ-বিভাগের মানটা ফাঁকা হয়ে যাবে। এই কাজ পূর্বাবস্থায় ফেরানো যাবে না।')) return;
+    const affected=[];
+    localBooks.forEach((b,idx)=>{ if(b&&b.cat===catName&&b.subcat===subName){ b.subcat=''; affected.push(idx); } });
+    if(!affected.length){ showToast('কোনো বই পাওয়া যায়নি','#dc2626'); return; }
+    showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
+    try{
+        for(const idx of affected){ await db.ref('bookList/'+idx).set(localBooks[idx]); }
+        showToast('✅ মুছে ফেলা হয়েছে ('+affected.length+'টা বই)','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
+    beUpdateStats(); beRenderList(); renderCatTreeAdmin();
 }
 function addCatTreeSub(i){
     const inp=document.getElementById('catTreeNewSub_'+i);
@@ -2999,7 +3084,7 @@ function apFixTypeChanged(){
     const type=document.getElementById('apFixType').value;
     const list=beListFrom(type);
     const sel=document.getElementById('apFixValueSelect');
-    sel.innerHTML=beOptionsHtml(list,'');
+    sel.innerHTML='<option value="">— বাছুন —</option>'+list.map(v=>`<option value="${escapeHTML(v)}">${escapeHTML(v)} (${gkFieldUsageCount(type,v,null)}টা বই)</option>`).join('');
 }
 async function apFixApply(newValue){
     const type=document.getElementById('apFixType').value;
