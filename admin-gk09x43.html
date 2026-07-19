@@ -1641,6 +1641,19 @@
                     <div class="form-group"><label class="be-label">বাটনের লেখা</label>
                         <input class="form-input" id="lp_cta" placeholder="এখনই অর্ডার করুন">
                     </div>
+                    <div class="form-group" style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:10px 12px;">
+                        <label class="be-label" style="color:#991b1b;">⏰ অফার শেষ হওয়ার সময় (ঐচ্ছিক) — দিলে কাউন্টডাউন টাইমার দেখাবে</label>
+                        <input class="form-input" id="lp_deadline" type="datetime-local">
+                    </div>
+                    <div class="form-group editor-full"><label class="be-label">✅ কেন কিনবেন (ঐচ্ছিক) — প্রতি লাইনে: শিরোনাম | বিবরণ</label>
+                        <textarea class="form-input" id="lp_why" rows="3" placeholder="১০০% অরিজিনাল বই | সম্পূর্ণ যাচাইকৃত প্রকাশনী থেকে সংগ্রহ করা&#10;দ্রুত ডেলিভারি | সারাদেশে ১-৩ দিনে পৌঁছে যায়&#10;ক্যাশ অন ডেলিভারি | বই হাতে পেয়ে টাকা দিন"></textarea>
+                    </div>
+                    <div class="form-group editor-full"><label class="be-label">❓ সচরাচর জিজ্ঞাসা / FAQ (ঐচ্ছিক) — প্রতি লাইনে: প্রশ্ন | উত্তর</label>
+                        <textarea class="form-input" id="lp_faq" rows="3" placeholder="ডেলিভারি চার্জ কত? | ঢাকার ভেতরে ৬০৳, বাইরে ১২০৳&#10;টাকা কখন দিতে হবে? | বই হাতে পাওয়ার পর ক্যাশ অন ডেলিভারিতে দিতে পারবেন"></textarea>
+                    </div>
+                    <div class="form-group editor-full"><label class="be-label">⭐ কাস্টমার রিভিউ (ঐচ্ছিক) — প্রতি লাইনে: নাম | রেটিং(১-৫) | মন্তব্য | ছবিলিংক(ঐচ্ছিক)</label>
+                        <textarea class="form-input" id="lp_reviews" rows="3" placeholder="মোঃ নজরুল ইসলাম | 5 | বইটা সত্যিই অসাধারণ, দ্রুত ডেলিভারিও পেয়েছি | &#10;সালমা আক্তার | 4 | ভালো মানের বই, প্যাকেজিং সুন্দর ছিল |"></textarea>
+                    </div>
                     <div class="flex gap-2" style="margin-bottom:18px;">
                         <button class="btn btn-primary" onclick="saveLandingPage()">🚀 ল্যান্ডিং পেজ তৈরি করুন</button>
                     </div>
@@ -3919,6 +3932,15 @@ function copyLandingLink(link,btnEl){
         showToast('✅ লিংক কপি হয়েছে!','#059669');
     }).catch(()=>{ showToast('❌ কপি করা যায়নি, নিজে সিলেক্ট করে কপি করুন','#dc2626'); });
 }
+/* "অংশ | অংশ | অংশ" — প্রতি লাইনে পাইপ (|) দিয়ে আলাদা করা তথ্য থেকে অবজেক্ট বানায় */
+function parsePipeLines(text, fields){
+    return (text||'').split('\n').map(l=>l.trim()).filter(Boolean).map(line=>{
+        const parts=line.split('|').map(p=>p.trim());
+        const obj={};
+        fields.forEach((f,i)=>{ obj[f]=parts[i]||''; });
+        return obj;
+    });
+}
 async function saveLandingPage(){
     const g=id=>document.getElementById(id);
     const bookName=g('lp_book').value;
@@ -3926,6 +3948,9 @@ async function saveLandingPage(){
     if(!bookName){ showToast('বই বাছাই করুন','#dc2626'); return; }
     if(!headline){ showToast('হেডলাইন লিখুন','#dc2626'); return; }
     const bullets=(g('lp_bullets').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+    const why=parsePipeLines(g('lp_why').value, ['title','desc']);
+    const faq=parsePipeLines(g('lp_faq').value, ['q','a']);
+    const reviews=parsePipeLines(g('lp_reviews').value, ['name','rating','comment','img']).map(r=>({...r, rating:Math.min(5,Math.max(1,Number(r.rating)||5))}));
     let base=slugifyBn(headline), slug=base, n=2;
     while(landingPages[slug]){ slug=base+'-'+n; n++; }
     const lp={
@@ -3934,13 +3959,15 @@ async function saveLandingPage(){
         img:(g('lp_img').value||'').trim(),
         bullets,
         cta:(g('lp_cta').value||'').trim()||'এখনই অর্ডার করুন',
+        deadline:(g('lp_deadline').value||'').trim(),
+        why, faq, reviews,
         createdAt:Date.now()
     };
     try{
         await db.ref('siteConfig/landingPages/'+slug).set(lp);
         landingPages[slug]=lp;
         renderLandingList();
-        ['lp_headline','lp_sub','lp_img','lp_bullets'].forEach(id=>{const el=g(id);if(el)el.value='';});
+        ['lp_headline','lp_sub','lp_img','lp_bullets','lp_deadline','lp_why','lp_faq','lp_reviews'].forEach(id=>{const el=g(id);if(el)el.value='';});
         showToast('✅ ল্যান্ডিং পেজ তৈরি হয়েছে! লিংক কপি করে ব্যবহার করুন।','#059669');
     }catch(e){ showToast('❌ সেভ করা যায়নি: '+e.message,'#dc2626'); }
 }
