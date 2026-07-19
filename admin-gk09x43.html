@@ -113,8 +113,11 @@
         .sidebar-logo-text h2{font-size:14px;font-weight:700;color:#fff;line-height:1.2;}
         .sidebar-logo-text span{font-size:10px;color:rgba(255,255,255,0.3);}
         .sidebar-nav-wrap{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;}
-        .sidebar-nav{flex:1;min-height:0;padding:10px 8px;overflow-y:auto;scrollbar-width:none;}
-        .sidebar-nav::-webkit-scrollbar{display:none;}
+        .sidebar-nav{flex:1;min-height:0;padding:10px 8px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.18) transparent;}
+        .sidebar-nav::-webkit-scrollbar{width:5px;}
+        .sidebar-nav::-webkit-scrollbar-track{background:transparent;}
+        .sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:3px;}
+        .sidebar-nav::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.3);}
         .sidebar-scroll-hint{
             position:absolute;left:0;right:0;bottom:0;height:34px;
             background:linear-gradient(to bottom, rgba(6,46,34,0) 0%, var(--sidebar-bg) 78%);
@@ -412,6 +415,15 @@
            TOOLS — original style (unchanged)
         ══════════════════════════════════════════ */
         .tool-card{background:var(--surface);border-radius:14px;padding:16px;border:1px solid var(--border);margin-bottom:12px;}
+        .cattree-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+        .cattree-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+        .cattree-head b{font-size:14.5px;color:var(--text-main);}
+        .cattree-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+        .cattree-chip{background:rgba(11,110,79,0.12);color:#0B6E4F;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;}
+        [data-theme="dark"] .cattree-chip{background:rgba(52,211,153,0.15);color:#6ee7b7;}
+        .cattree-chip span{cursor:pointer;opacity:.55;font-weight:900;line-height:1;}
+        .cattree-chip span:hover{opacity:1;color:#dc2626;}
+        .cattree-addsub{display:flex;gap:8px;}
         .fraud-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:14px;}
         .fraud-stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;}
         .fraud-stat-val{font-size:20px;font-weight:800;color:var(--text-main);}
@@ -907,31 +919,18 @@
                     টুলস
                 </button>
                 <div class="nav-subgroup open" id="toolsSubgroup">
-                    <div class="nav-subgroup-label">হোমপেজ কাস্টমাইজেশন</div>
-                    <button class="nav-sub-item" data-tool="toolCard_tags" onclick="openToolCard('toolCard_tags',this)"><span class="heavy-dot"></span>ট্যাগ তালিকা</button>
-                    <button class="nav-sub-item" data-tool="toolCard_catChips" onclick="openToolCard('toolCard_catChips',this)"><span class="heavy-dot"></span>ক্যাটাগরি চিপ</button>
-                    <button class="nav-sub-item" data-tool="toolCard_pubChips" onclick="openToolCard('toolCard_pubChips',this)"><span class="heavy-dot"></span>প্রকাশনী চিপ</button>
-                    <button class="nav-sub-item" data-tool="toolCard_authorChips" onclick="openToolCard('toolCard_authorChips',this)"><span class="heavy-dot"></span>প্রিয় লেখক চিপ</button>
-                    <button class="nav-sub-item" data-tool="toolCard_banner" onclick="openToolCard('toolCard_banner',this)"><span class="heavy-dot"></span>ব্যানার / অফার</button>
-                    <button class="nav-sub-item" data-tool="toolCard_offerPopup" onclick="openToolCard('toolCard_offerPopup',this)"><span class="heavy-dot"></span>অফার পোস্টার পপআপ</button>
-
-                    <div class="nav-subgroup-label">বিক্রয় ও কনটেন্ট</div>
-                    <button class="nav-sub-item" data-tool="toolCard_coupon" onclick="openToolCard('toolCard_coupon',this)"><span class="heavy-dot"></span>কুপন কোড ম্যানেজমেন্ট</button>
-                    <button class="nav-sub-item" data-tool="toolCard_blog" onclick="openToolCard('toolCard_blog',this)"><span class="heavy-dot"></span>পাঠকদের ব্লগ</button>
-
-                    <div class="nav-subgroup-label">রিপোর্ট ও যাচাই</div>
-                    <button class="nav-sub-item" data-tool="toolCard_orderSummary" onclick="openToolCard('toolCard_orderSummary',this)">অর্ডার সংক্ষেপ</button>
-                    <button class="nav-sub-item" data-tool="toolCard_fraudCheck" onclick="openToolCard('toolCard_fraudCheck',this)"><span class="heavy-dot"></span>Manual Fraud Check</button>
-                    <button class="nav-sub-item" data-tool="toolCard_phoneIndex" onclick="openToolCard('toolCard_phoneIndex',this)">Phone Index Migration</button>
-
-                    <div class="nav-subgroup-label">সেটিংস ও এক্সপোর্ট</div>
-                    <button class="nav-sub-item" data-tool="toolCard_cleanup" onclick="openToolCard('toolCard_cleanup',this)"><span class="heavy-dot"></span>ভুল এন্ট্রি মুছুন</button>
-                    <button class="nav-sub-item" data-tool="modManageCard" onclick="openToolCard('modManageCard',this)">মডারেটর ম্যানেজ</button>
-                    <button class="nav-sub-item" data-tool="imgbbCard" onclick="openToolCard('imgbbCard',this)">ছবি আপলোড সেটিংস</button>
-                    <button class="nav-sub-item" data-tool="pixelCard" onclick="openToolCard('pixelCard',this)">Meta Pixel</button>
-                    <button class="nav-sub-item" data-tool="courierCard" onclick="openToolCard('courierCard',this)">Courier API Settings</button>
-                    <button class="nav-sub-item" data-tool="toolCard_bookJs" onclick="openToolCard('toolCard_bookJs',this)">book.js ডাউনলোড</button>
-                    <button class="nav-sub-item" data-tool="toolCard_sitemap" onclick="openToolCard('toolCard_sitemap',this)">sitemap.xml ডাউনলোড</button>
+                    <button class="nav-sub-item tool-cat-item active" data-cat="all" onclick="switchTool('all',this)">🧰 সব টুলস</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="banner" onclick="switchTool('banner',this)">🖼️ ব্যানার</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="offerPopup" onclick="switchTool('offerPopup',this)">🎯 অফার পোস্টার</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="coupon" onclick="switchTool('coupon',this)">🎟️ কুপন</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="homeChips" onclick="switchTool('homeChips',this)">🏠 হোমপেজ চিপ</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="tags" onclick="switchTool('tags',this)">🔖 ক্যাটাগরি-ট্যাগ তালিকা</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="cleanup" onclick="switchTool('cleanup',this)">🧹 লেখক/প্রকাশনী ঠিক</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="blog" onclick="switchTool('blog',this)">📝 ব্লগ</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="imgPixel" onclick="switchTool('imgPixel',this)">📸 ছবি ও Pixel</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="moderator" onclick="switchTool('moderator',this)">👥 মডারেটর</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="courier" onclick="switchTool('courier',this)">🚚 কুরিয়ার</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="misc" onclick="switchTool('misc',this)">📦 ডাউনলোড ও অন্যান্য</button>
                 </div>
             </div>
         </nav>
@@ -1397,8 +1396,23 @@
                 </div>
 
                 <div class="tool-card" id="toolCard_tags" style="grid-column:1/-1;">
-                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> ট্যাগ তালিকা</h3>
-                    <p style="margin-bottom:12px;">এখান থেকে ট্যাগ (Best Selling, Trending ইত্যাদি) যোগ/মুছুন। বই এডিট করার সময় এই তালিকা থেকেই ট্যাগ বাছা যাবে, আর হোমপেজে প্রতিটা ট্যাগের জন্য আলাদা সেকশন (শেলফ) দেখাবে — যেসব বইয়ে সেই ট্যাগ আছে সেগুলো নিয়ে। নতুন ট্যাগ সেভ করলে হোমপেজে নতুন সেকশন এমনিতেই তৈরি হয়ে যাবে (অন্তত ১টা বইয়ে সেই ট্যাগ দিলে)।</p>
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> ক্যাটাগরি, উপ-বিভাগ ও ট্যাগ তালিকা</h3>
+                    <p style="margin-bottom:14px;">ভুল নাম মুছুন বা নতুন যোগ করুন — সেভ করলেই অ্যাডমিনের ড্রপডাউন ও পুরো সাইটে (হোম চিপ, ফিল্টার, drawer) এই তালিকাই চলবে। মুছলে পুরনো বইয়ের ডেটা বদলায় না, শুধু তালিকা থেকে যায়।</p>
+
+                    <div style="font-weight:800;font-size:13.5px;margin-bottom:10px;">বিভাগ ও উপ-বিভাগ</div>
+                    <div id="catTreeBox" style="margin-bottom:14px;"></div>
+                    <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:rgba(0,0,0,0.02);">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন বিভাগ</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <input class="form-input" id="newCatNameInput" placeholder="বিভাগের নাম (যেমন: শিশুতোষ বই)" style="flex:1;min-width:150px;">
+                            <button class="btn btn-ghost" type="button" onclick="addCatTreeCategory()" style="flex-shrink:0;">＋ যোগ</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="saveCatTree()" style="margin-bottom:22px;"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> বিভাগ তালিকা সেভ করুন (লাইভ)</button>
+
+                    <hr style="border:none;border-top:1.5px solid var(--border);margin-bottom:18px;">
+
+                    <div style="font-weight:800;font-size:13.5px;margin-bottom:10px;">ট্যাগ তালিকা</div>
                     <div id="tagListBox" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
                         <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ট্যাগ</div>
@@ -1411,27 +1425,22 @@
                 </div>
 
                 <div class="tool-card" id="toolCard_cleanup" style="grid-column:1/-1;">
-                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg> ভুল এন্ট্রি মুছুন</h3>
-                    <p style="margin-bottom:12px;">বই এডিট করার সময় বানান ভুল করে নতুন বিভাগ/উপ-বিভাগ/লেখক/প্রকাশনী/বিষয় লিখে ফেললে সেটা সব বইয়ের ড্রপডাউনে চলে আসে। এখান থেকে ভুল এন্ট্রিগুলো মুছে ফেলুন — যেসব বইয়ে সেটা ব্যবহার হয়েছিল, সেগুলোর ওই ফিল্ড খালি হয়ে যাবে (বইটা মুছে যাবে না, শুধু ভুল মানটা সরে যাবে)।</p>
-                    <div style="margin-bottom:14px;">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">বিভাগ (কাস্টম)</div>
-                        <div id="cleanupCatList"></div>
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> লেখক / প্রকাশনী ঠিক করুন</h3>
+                    <p style="margin-bottom:14px;">কোনো লেখক, প্রকাশনী বা বিষয়ের নাম ভুল লেখা হলে — এখান থেকে বাছুন, নতুন/সঠিক নাম লিখুন, "নাম বদলে দিন" চাপুন — সব বইয়ে একসাথে ঠিক হয়ে Firebase-এ সেভ হবে। "মুছে দিন" চাপলে নামটা সব বই থেকে ফাঁকা হয়ে যাবে।</p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+                        <select class="form-input" id="apFixType" onchange="apFixTypeChanged()" style="flex:1;min-width:140px;">
+                            <option value="author">লেখক</option>
+                            <option value="pub">প্রকাশনী</option>
+                            <option value="subject">বিষয়</option>
+                        </select>
+                        <select class="form-input" id="apFixValueSelect" style="flex:1;min-width:140px;">
+                            <option value="">— বাছুন —</option>
+                        </select>
                     </div>
-                    <div style="margin-bottom:14px;">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">উপ-বিভাগ (কাস্টম)</div>
-                        <div id="cleanupSubcatList"></div>
-                    </div>
-                    <div style="margin-bottom:14px;">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">লেখক</div>
-                        <div id="cleanupAuthorList"></div>
-                    </div>
-                    <div style="margin-bottom:14px;">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">প্রকাশনী</div>
-                        <div id="cleanupPubList"></div>
-                    </div>
-                    <div>
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">বিষয়</div>
-                        <div id="cleanupSubjectList"></div>
+                    <input class="form-input" id="apFixNewName" placeholder="সঠিক / নতুন নাম লিখুন" style="margin-bottom:14px;">
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <button class="btn btn-primary" type="button" onclick="apFixRename()">✅ নাম বদলে দিন (সব বইয়ে)</button>
+                        <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="apFixDelete()">🗑️ মুছে দিন (ফাঁকা হবে)</button>
                     </div>
                 </div>
 
@@ -1838,6 +1847,7 @@ function showDashboard(){
         loadOrders();
         loadBooksFromFirebase();
         loadTagsAdmin(); // বই এডিটরে সঠিক ট্যাগ তালিকা দেখানোর জন্য শুরুতেই লোড করা হয়
+        loadCatTreeAdmin(); // বই এডিটরের বিভাগ/উপ-বিভাগ ড্রপডাউনও শুরুতেই লোড করা হয়
         loadCourierApiKeys(); // auto-load API keys
         loadImgbbKey(); // imgbb key (ছবি আপলোডের জন্য)
         loadPixelId(); // Meta Pixel
@@ -1857,7 +1867,7 @@ function switchTab(tab, btnEl){
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools'){ renderOrderSummary(); loadTagsAdmin(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); renderCleanupLists(); }
+    if(tab==='tools'){ renderOrderSummary(); loadTagsAdmin(); loadCatTreeAdmin(); apFixTypeChanged(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -1911,6 +1921,33 @@ function openToolCard(cardId, btnEl){
         card.scrollIntoView({behavior:'smooth', block:'start'});
         card.classList.add('tool-card-highlight');
         setTimeout(()=>card.classList.remove('tool-card-highlight'), 1800);
+    }, 90);
+}
+
+/* ═══ Tools ট্যাবের কার্ডগুলো বিষয়ভিত্তিক ফিল্টার করা ═══ */
+const TOOL_CATEGORIES={
+    banner:['toolCard_banner'],
+    offerPopup:['toolCard_offerPopup'],
+    coupon:['toolCard_coupon'],
+    homeChips:['toolCard_catChips','toolCard_pubChips','toolCard_authorChips'],
+    tags:['toolCard_tags'],
+    cleanup:['toolCard_cleanup'],
+    blog:['toolCard_blog'],
+    imgPixel:['imgbbCard','pixelCard'],
+    moderator:['modManageCard'],
+    courier:['courierCard'],
+    misc:['toolCard_phoneIndex','toolCard_orderSummary','toolCard_fraudCheck','toolCard_bookJs','toolCard_sitemap']
+};
+function switchTool(key, btnEl){
+    switchTab('tools', document.getElementById('navTools'));
+    document.querySelectorAll('.tool-cat-item').forEach(b=>b.classList.remove('active'));
+    if(btnEl) btnEl.classList.add('active');
+    setTimeout(()=>{
+        const showIds = key==='all' ? null : new Set(TOOL_CATEGORIES[key]||[]);
+        document.querySelectorAll('.tool-card').forEach(card=>{
+            card.style.display = (!showIds || showIds.has(card.id)) ? '' : 'none';
+        });
+        document.getElementById('tabPanelTools')?.scrollIntoView?.({behavior:'smooth',block:'start'});
     }, 90);
 }
 
@@ -2805,7 +2842,7 @@ function beEditorBody(b,i,imgPrevHtml){
    ক্যাটাগরি + সাব-ক্যাটাগরি + ট্যাগ সিস্টেম
    (পুরনো cat/cats field gracefully handle করা হয়)
 ═══════════════════════════════════════════════ */
-const GK_CAT_TREE=[
+let GK_CAT_TREE=[
     {name:'ইসলামি বই', subs:['আকিদা','ফিকহ','হাদিস','তাফসির','সিরাত']},
     {name:'একাডেমিক বই', subs:['ক্লাস ১-৫','ক্লাস ৬-১০','HSC']},
     {name:'মাদ্রাসার বই', subs:['নাহু-সরফ','কিতাব']},
@@ -2882,85 +2919,114 @@ function gkReadTags(prefix){
 }
 
 /* ══════════════════════════════════════════════
-   ভুল এন্ট্রি মুছুন — বানান ভুলে তৈরি হওয়া কাস্টম বিভাগ/উপবিভাগ/
-   লেখক/প্রকাশনী/বিষয় মুছে ফেলার টুল। যেসব বইয়ে সেই মান আছে,
-   সেগুলোর শুধু ওই ফিল্ডটা খালি করে দেওয়া হয় (বই মুছে যায় না)।
+   ক্যাটাগরি/উপ-বিভাগ তালিকা — Firebase siteConfig/categoryTree
+   এখান থেকে বদলালে অ্যাডমিনের ড্রপডাউন ও পুরো সাইট (হোম চিপ,
+   ফিল্টার, drawer, বই এডিটর) — সবখানে এই তালিকাই চলে। মুছলে
+   পুরনো বইয়ের ডেটা বদলায় না, শুধু "মেনু" থেকে বাদ পড়ে।
 ══════════════════════════════════════════════ */
-function gkCustomCats(){
-    const fixed=new Set(GK_CAT_TREE.map(c=>c.name));
-    return gkAllMainCats().filter(c=>c&&!fixed.has(c));
-}
-function gkCustomSubcatsFlat(){
-    const out=[]; const seen=new Set();
-    (localBooks||[]).forEach(b=>{
-        if(!b||!b.cat||!b.subcat) return;
-        const cat=gkFindCat(b.cat); const fixedSubs=cat?cat.subs:[];
-        if(fixedSubs.includes(b.subcat)) return;
-        const key=b.cat+'|||'+b.subcat;
-        if(seen.has(key)) return;
-        seen.add(key); out.push({cat:b.cat, sub:b.subcat});
+let siteCatTreeData=null;
+function loadCatTreeAdmin(){
+    db.ref('siteConfig/categoryTree').once('value').then(function(s){
+        const v=s.val();
+        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
+        siteCatTreeData=(list&&list.length) ? list.map(c=>({name:c.name,subs:Array.isArray(c.subs)?c.subs.slice():[]})) : GK_CAT_TREE.map(c=>({name:c.name,subs:c.subs.slice()}));
+        GK_CAT_TREE=siteCatTreeData;
+        renderCatTreeAdmin();
+    }).catch(function(){
+        siteCatTreeData=GK_CAT_TREE.map(c=>({name:c.name,subs:c.subs.slice()}));
+        renderCatTreeAdmin();
     });
-    return out;
 }
-function gkFieldUsageCount(field, value, catCtx){
-    return (localBooks||[]).filter(b=>{
-        if(!b) return false;
-        if(field==='subcat') return b.cat===catCtx && b.subcat===value;
-        return b[field]===value;
-    }).length;
+function renderCatTreeAdmin(){
+    const box=document.getElementById('catTreeBox'); if(!box||!siteCatTreeData) return;
+    box.innerHTML=siteCatTreeData.map((c,i)=>`
+        <div class="cattree-card">
+            <div class="cattree-head">
+                <b>${escapeHTML(c.name)}</b>
+                <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeCatTreeCategory(${i})">✕ বিভাগ মুছুন</button>
+            </div>
+            <div class="cattree-chips">
+                ${c.subs.length ? c.subs.map((s,j)=>`<span class="cattree-chip">${escapeHTML(s)} <span onclick="removeCatTreeSub(${i},${j})">✕</span></span>`).join('') : '<span class="text-sm text-muted">কোনো উপ-বিভাগ নেই</span>'}
+            </div>
+            <div class="cattree-addsub">
+                <input class="form-input" id="catTreeNewSub_${i}" placeholder="নতুন উপ-বিভাগ" onkeydown="if(event.key==='Enter')addCatTreeSub(${i})">
+                <button class="btn btn-ghost btn-sm" type="button" onclick="addCatTreeSub(${i})">＋</button>
+            </div>
+        </div>`).join('');
 }
-let gkCleanupLists={cat:[],subcat:[],author:[],pub:[],subject:[]};
-function renderCleanupLists(){
-    gkCleanupLists.cat=gkCustomCats();
-    gkCleanupLists.subcat=gkCustomSubcatsFlat();
-    gkCleanupLists.author=beListFrom('author');
-    gkCleanupLists.pub=beListFrom('pub');
-    gkCleanupLists.subject=beListFrom('subject');
+function removeCatTreeCategory(i){
+    if(!confirm('"'+siteCatTreeData[i].name+'" বিভাগটা তালিকা থেকে মুছে ফেলতে চান? পুরনো বইয়ের ডেটা বদলাবে না, শুধু নতুন বই যোগ/এডিট করার সময় আর এই নামটা দেখাবে না।')) return;
+    siteCatTreeData.splice(i,1);
+    renderCatTreeAdmin();
+}
+function removeCatTreeSub(i,j){
+    siteCatTreeData[i].subs.splice(j,1);
+    renderCatTreeAdmin();
+}
+function addCatTreeSub(i){
+    const inp=document.getElementById('catTreeNewSub_'+i);
+    const v=(inp.value||'').trim();
+    if(!v) return;
+    if(siteCatTreeData[i].subs.includes(v)){ showToast('এই উপ-বিভাগ আগেই আছে','#dc2626'); return; }
+    siteCatTreeData[i].subs.push(v);
+    inp.value='';
+    renderCatTreeAdmin();
+}
+function addCatTreeCategory(){
+    const inp=document.getElementById('newCatNameInput');
+    const v=(inp.value||'').trim();
+    if(!v){ showToast('বিভাগের নাম দিন','#dc2626'); return; }
+    if(siteCatTreeData.some(c=>c.name===v)){ showToast('এই বিভাগ আগেই আছে','#dc2626'); return; }
+    siteCatTreeData.push({name:v,subs:[]});
+    inp.value='';
+    renderCatTreeAdmin();
+}
+async function saveCatTree(){
+    if(!siteCatTreeData||!siteCatTreeData.length){ showToast('অন্তত ১টা বিভাগ রাখতে হবে','#dc2626'); return; }
+    try{
+        await db.ref('siteConfig/categoryTree').set(siteCatTreeData);
+        GK_CAT_TREE=siteCatTreeData;
+        showToast('✅ বিভাগ তালিকা সেভ হয়েছে — সাইটে লাইভ!','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); }
+}
 
-    function row(field,i,label,cnt){
-        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;flex-wrap:wrap;">
-            <span style="flex:1;font-size:12.5px;min-width:120px;">${label} <span style="color:var(--text-muted);">(${cnt}টা বইয়ে)</span></span>
-            <button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="gkDeleteFieldValue('${field}',${i})">✕ মুছুন</button>
-        </div>`;
-    }
-    function renderBox(id,field){
-        const box=document.getElementById(id); if(!box) return;
-        const list=gkCleanupLists[field];
-        if(!list.length){ box.innerHTML='<div class="text-sm text-muted">কিছু নেই</div>'; return; }
-        box.innerHTML=list.map((v,i)=>{
-            if(field==='subcat') return row(field,i,escapeHTML(v.cat)+' → '+escapeHTML(v.sub),gkFieldUsageCount('subcat',v.sub,v.cat));
-            return row(field,i,escapeHTML(v),gkFieldUsageCount(field,v,null));
-        }).join('');
-    }
-    renderBox('cleanupCatList','cat');
-    renderBox('cleanupSubcatList','subcat');
-    renderBox('cleanupAuthorList','author');
-    renderBox('cleanupPubList','pub');
-    renderBox('cleanupSubjectList','subject');
+/* ══════════════════════════════════════════════
+   লেখক / প্রকাশনী / বিষয় ঠিক করা — ভুল বানান বাছাই করে সঠিক
+   নাম দিলে সব বইয়ে একসাথে বদলে যায় (rename), অথবা মুছে (ফাঁকা
+   করে) দেওয়া যায়।
+══════════════════════════════════════════════ */
+function apFixTypeChanged(){
+    const type=document.getElementById('apFixType').value;
+    const list=beListFrom(type);
+    const sel=document.getElementById('apFixValueSelect');
+    sel.innerHTML=beOptionsHtml(list,'');
 }
-async function gkDeleteFieldValue(field, i){
-    const entry=gkCleanupLists[field] && gkCleanupLists[field][i];
-    if(entry===undefined) return;
-    const value = field==='subcat' ? entry.sub : entry;
-    const catCtx = field==='subcat' ? entry.cat : null;
-    const label = field==='subcat' ? (catCtx+' → '+value) : value;
-    if(!confirm('"'+label+'" মুছে ফেলতে চান? যেসব বইয়ে এটা ব্যবহার হয়েছে সেগুলোর এই ফিল্ড খালি হয়ে যাবে। বই মুছে যাবে না। এই কাজ পূর্বাবস্থায় ফেরানো যাবে না।')) return;
+async function apFixApply(newValue){
+    const type=document.getElementById('apFixType').value;
+    const oldValue=document.getElementById('apFixValueSelect').value;
+    if(!oldValue){ showToast('আগে একটা নাম বাছুন','#dc2626'); return; }
     const affected=[];
-    localBooks.forEach((b,idx)=>{
-        if(!b) return;
-        if(field==='subcat'){
-            if(b.cat===catCtx && b.subcat===value){ b.subcat=''; affected.push(idx); }
-        } else {
-            if(b[field]===value){ b[field]=''; affected.push(idx); }
-        }
-    });
+    localBooks.forEach((b,idx)=>{ if(b && b[type]===oldValue){ b[type]=newValue; affected.push(idx); } });
     if(!affected.length){ showToast('কোনো বই পাওয়া যায়নি','#dc2626'); return; }
     showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
     try{
         for(const idx of affected){ await db.ref('bookList/'+idx).set(localBooks[idx]); }
-        showToast('✅ মুছে ফেলা হয়েছে ('+affected.length+'টা বই আপডেট হলো)','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); }
-    beUpdateStats(); beRenderList(); renderCleanupLists();
+        showToast('✅ হয়ে গেছে ('+affected.length+'টা বই আপডেট হলো)','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
+    beUpdateStats(); beRenderList();
+    document.getElementById('apFixNewName').value='';
+    apFixTypeChanged();
+}
+function apFixRename(){
+    const newVal=(document.getElementById('apFixNewName').value||'').trim();
+    if(!newVal){ showToast('সঠিক/নতুন নাম লিখুন','#dc2626'); return; }
+    apFixApply(newVal);
+}
+function apFixDelete(){
+    const oldValue=document.getElementById('apFixValueSelect').value;
+    if(!oldValue){ showToast('আগে একটা নাম বাছুন','#dc2626'); return; }
+    if(!confirm('"'+oldValue+'" সব বই থেকে মুছে ফেলতে (ফাঁকা করতে) চান? এই কাজ পূর্বাবস্থায় ফেরানো যাবে না।')) return;
+    apFixApply('');
 }
 
 /* ══════════════════════════════════════════════

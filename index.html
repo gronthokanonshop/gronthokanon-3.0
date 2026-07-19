@@ -1622,6 +1622,19 @@ let GK_TAG_SECTIONS=[
     {name:'Pre Order'},
     {name:'Best Writer'}
 ];
+/* অ্যাডমিন siteConfig/categoryTree-এ বিভাগ/উপ-বিভাগ বদলালে হোমপেজে (সাইডবার + মোবাইল ড্রয়ার) লাইভ আপডেট হয় */
+function loadCatTreeHome(){
+    if(typeof db==='undefined'||!db)return;
+    db.ref('siteConfig/categoryTree').get().then(function(snap){
+        const v=snap.val();
+        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
+        if(!list||!list.length)return;
+        window.GK_CAT_TREE=list.map(function(c){return {name:c.name, subs:Array.isArray(c.subs)?c.subs.slice():[]};});
+        if(typeof buildCatSidebar==='function') buildCatSidebar();
+        if(typeof buildCatDrawerList==='function') buildCatDrawerList();
+        if(typeof renderCategoryNav==='function') renderCategoryNav();
+    }).catch(function(){});
+}
 /* অ্যাডমিন siteConfig/tags-এ ট্যাগ তালিকা বদলালে হোমপেজে লাইভ আপডেট হয় */
 function loadTagsHome(){
     if(typeof db==='undefined'||!db)return;
@@ -2241,6 +2254,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadReviewSlider();
     loadBanners();
     loadTagsHome();
+    loadCatTreeHome();
     loadHomeCats();
     loadHomePubs();
     loadHomeAuthors();
