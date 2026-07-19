@@ -1243,8 +1243,10 @@ function loadHomeAuthors(){
 .rvs-meta { border-top: 1px dashed var(--border); padding-top: 8px; }
 .rvs-name { font-size: 12px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 6px; }
 .rvs-name .rvs-av { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg,#059669,#047857); color: #fff; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.rvs-book { font-size: 10.5px; color: #059669; font-weight: 600; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.rvs-book { font-size: 10.5px; color: #059669; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 [data-theme="dark"] .rvs-book { color: #34d399; }
+.rvs-book-row { display: flex; align-items: center; gap: 6px; margin-top: 5px; min-width: 0; }
+.rvs-book-thumb { width: 22px; height: 30px; object-fit: cover; border-radius: 3px; flex-shrink: 0; border: 1px solid var(--border); }
 </style>
 <div class="rvs-section" id="reviewSliderSection">
     <div class="rvs-title">💬 পাঠকদের ভালোবাসা</div>
@@ -1663,10 +1665,14 @@ function toggleWL(e,name){
         const btn=card.querySelector('.wl-btn');
         if(btn){ btn.innerText=adding?'❤️':'🤍'; btn.classList.toggle('active',adding); }
     });
-    // wishlist modal open থাকলে সাথে সাথে refresh করো
+    // wishlist ড্রয়ার খোলা থাকলে সাথে সাথে রিফ্রেশ করো + ড্রয়ারের ভেতরেই কনফার্মেশন লাইন দেখাও
+    // (আলাদা পপআপ দেখাই না, কারণ সেটা খোলা ড্রয়ারের আড়ালে পড়ে যেতে পারে)
     const box=document.getElementById('wishlistBox');
-    if(box && box.style.display==='flex') showWishlist();
-    // সুন্দর wl modal দেখাও
+    if(box && box.style.display==='flex'){
+        showWishlist(adding ? `✅ "${escapeHTML(name)}" উইশলিস্টে যোগ হয়েছে` : `🗑️ "${escapeHTML(name)}" উইশলিস্ট থেকে সরানো হয়েছে`);
+        return;
+    }
+    // ড্রয়ার বন্ধ থাকলে সুন্দর wl modal দেখাও
     const b=books.find(bk=>bk.name===name);
     if(b) openWLModal(adding, b);
 }
@@ -1861,12 +1867,13 @@ function toggleSubMenu(id){
 }
 function filterSidebarList(subId,query){document.querySelectorAll(`#${subId} .sidebar-sub-item`).forEach(item=>{item.style.display=item.textContent.includes(query)?'block':'none';});}
 
-/* WISHLIST */
-function showWishlist(){
+/* WISHLIST — msg দিলে ড্রয়ারের ভেতরেই উপরে একটা কনফার্মেশন লাইন দেখায় (যোগ/সরানো হয়েছে) */
+function showWishlist(msg){
     if(document.getElementById('sidebar').classList.contains('active'))toggleSidebar();
     const box=document.getElementById('wishlistItems');
-    if(!wishlist.length){box.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';}
-    else{box.innerHTML=wishlist.map(name=>{const b=books.find(bk=>bk.name===name);if(!b)return '';const idx=books.indexOf(b);
+    const msgHtml=msg?`<div style="padding:9px 12px;margin-bottom:10px;background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:8px;color:#065f46;font-size:12.5px;font-weight:700;">${msg}</div>`:'';
+    if(!wishlist.length){box.innerHTML=msgHtml+'<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';}
+    else{box.innerHTML=msgHtml+wishlist.map(name=>{const b=books.find(bk=>bk.name===name);if(!b)return '';const idx=books.indexOf(b);
         return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="goToBook(${idx})">
             <img src="${escapeHTML(getImg(b))}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">
             <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${escapeHTML(b.name)}</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳${b.price}</div></div>
@@ -2368,15 +2375,20 @@ function loadReviewSlider(){
         const list=all.slice(0,12);
         const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         document.getElementById('rvsRow').innerHTML=list.map(r=>{
-            const bid=parseInt(r.bookId),b=(!isNaN(bid)&&books[bid])?books[bid]:null;
+            /* bookId এখন slug (bid) হতে পারে অথবা পুরনো লেগেসি লিংকে সংখ্যা —
+               দুটোই মিলিয়ে বই খুঁজে বের করা হচ্ছে, নাহলে নতুন রিভিউতে বই/ছবি/লিংক দেখাত না */
+            let bIdx=books.findIndex(bk=>bk&&bk.bid===r.bookId);
+            if(bIdx===-1){ const ni=parseInt(r.bookId); if(!isNaN(ni)&&books[ni])bIdx=ni; }
+            const b=bIdx!==-1?books[bIdx]:null;
+            const bImg=b?((typeof getImg==='function'&&getImg(b))||b.img||''):'';
             const nm=String(r.name||'পাঠক');
             const stars='★'.repeat(Math.min(5,r.rating||5))+'☆'.repeat(Math.max(0,5-(r.rating||5)));
-            return `<div class="rvs-card" ${b?`onclick="goToBook(${bid})"`:''}>
+            return `<div class="rvs-card" ${b?`onclick="goToBook(${bIdx})"`:''}>
                 <div class="rvs-stars">${stars}</div>
                 <div class="rvs-comment">${esc(r.comment)}</div>
                 <div class="rvs-meta">
                     <div class="rvs-name"><span class="rvs-av">${esc(nm[0]||'প')}</span> ${esc(nm)}</div>
-                    ${b?`<span class="rvs-book">📖 ${esc(b.name)}</span>`:''}
+                    ${b?`<div class="rvs-book-row">${bImg?`<img src="${esc(bImg)}" class="rvs-book-thumb" onerror="this.style.display='none'">`:''}<span class="rvs-book">${esc(b.name)}</span></div>`:''}
                 </div>
             </div>`;
         }).join('');

@@ -566,6 +566,13 @@ function toggleWL(e, name) {
     adding ? wishlist.push(name) : wishlist = wishlist.filter(w => w !== name);
     localStorage.setItem('gronthokanon_wishlist', JSON.stringify(wishlist));
     renderBooks(getList());
+    if (typeof window.gkRefreshBadges === 'function') window.gkRefreshBadges();
+    /* উইশলিস্ট তালিকা খোলা থাকলে সাথে সাথেই রিফ্রেশ করো, সাথে একটা কনফার্মেশন লাইনও দেখাই */
+    const wb = document.getElementById('wishlistBox');
+    if (wb && wb.style.display === 'flex' && typeof showWishlist === 'function') {
+        showWishlist(adding ? ('✅ "'+escapeHTML(name)+'" উইশলিস্টে যোগ হয়েছে') : ('🗑️ "'+escapeHTML(name)+'" উইশলিস্ট থেকে সরানো হয়েছে'));
+        return;
+    }
     const b = books.find(bk => bk.name === name);
     if (b) openWLModal(adding, b);
 }

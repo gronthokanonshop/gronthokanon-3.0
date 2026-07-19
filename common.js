@@ -800,8 +800,10 @@ window.gkToggleContact = function () {
         }
     })();
 
-    /* ── উইশলিস্ট ড্রয়ার (books/getImg/goToBook যে পেজে সংজ্ঞায়িত আছে, সেখানে পূর্ণ তথ্য দেখাবে) ── */
-    window.showWishlist = window.showWishlist || function () {
+    /* ── উইশলিস্ট ড্রয়ার (books/getImg/goToBook যে পেজে সংজ্ঞায়িত আছে, সেখানে পূর্ণ তথ্য দেখাবে) ──
+       msg দিলে ড্রয়ারের ভেতরেই উপরে একটা কনফার্মেশন লাইন দেখায় (যোগ/সরানো হয়েছে) —
+       আলাদা পপআপের বদলে, যেন ড্রয়ার খোলা থাকা অবস্থায় বার্তাটা আড়ালে না পড়ে */
+    window.showWishlist = window.showWishlist || function (msg) {
         injectNavAuth();
         var sidebar = document.getElementById('sidebar');
         if (sidebar && sidebar.classList.contains('active') && typeof toggleSidebar === 'function') toggleSidebar();
@@ -809,10 +811,11 @@ window.gkToggleContact = function () {
         try { wl = JSON.parse(localStorage.getItem('gronthokanon_wishlist')) || []; } catch (e) {}
         var box = document.getElementById('wishlistItems');
         if (!box) return;
+        var msgHtml = msg ? '<div style="padding:9px 12px;margin:10px;background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:8px;color:#065f46;font-size:12.5px;font-weight:700;">' + msg + '</div>' : '';
         if (!wl.length) {
-            box.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';
+            box.innerHTML = msgHtml + '<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';
         } else if (typeof books !== 'undefined' && typeof getImg === 'function') {
-            box.innerHTML = wl.map(function (name) {
+            box.innerHTML = msgHtml + wl.map(function (name) {
                 var b = books.find(function (bk) { return bk.name === name; });
                 if (!b) return '';
                 var idx = books.indexOf(b);
@@ -824,7 +827,7 @@ window.gkToggleContact = function () {
             }).join('');
         } else {
             /* এই পেজে বইয়ের ডেটা লোড করা নেই (যেমন checkout.html) — শুধু নাম দেখাও, হোম পেজে বিস্তারিত */
-            box.innerHTML = '<div style="padding:16px;">' + wl.map(function (name) {
+            box.innerHTML = msgHtml + '<div style="padding:16px;">' + wl.map(function (name) {
                 return '<div style="padding:10px 4px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);">' + escapeHTML(name) + '</div>';
             }).join('') + '<button onclick="window.location.href=\'index.html\'" style="width:100%;margin-top:12px;padding:11px;background:#059669;color:#fff;border:none;border-radius:8px;font-family:\'Hind Siliguri\',Arial,sans-serif;font-weight:700;cursor:pointer;">হোম পেজে বিস্তারিত দেখুন</button></div>';
         }
