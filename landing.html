@@ -36,6 +36,58 @@
         .lp-trust{display:flex;justify-content:space-between;gap:8px;margin-top:20px;padding-top:16px;border-top:1px dashed var(--border);}
         .lp-trust div{flex:1;text-align:center;font-size:10.5px;color:var(--text2);font-weight:600;line-height:1.5;}
         .lp-trust svg{width:22px;height:22px;color:#059669;margin-bottom:4px;}
+        .lp-countdown{margin:14px 0;padding:12px;background:linear-gradient(135deg,#7f1d1d,#991b1b);border-radius:0;text-align:center;}
+        .lp-countdown-label{font-size:11.5px;font-weight:700;color:#fecaca;margin-bottom:8px;}
+        .lp-countdown-row{display:flex;justify-content:center;gap:8px;}
+        .lp-countdown-box{background:rgba(255,255,255,0.12);border-radius:6px;padding:6px 10px;min-width:44px;}
+        .lp-countdown-num{font-size:19px;font-weight:900;color:#fff;line-height:1.1;}
+        .lp-countdown-unit{font-size:9px;color:#fecaca;font-weight:600;}
+        .lp-section-title{font-size:17px;font-weight:800;color:var(--text);margin:24px 0 12px;}
+        .lp-why-list{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
+        .lp-why-item{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:0;padding:10px 12px;}
+        .lp-why-icon{font-size:20px;flex-shrink:0;line-height:1.3;}
+        .lp-why-title{font-size:13.5px;font-weight:700;color:var(--text);}
+        .lp-why-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5;}
+        .lp-reviews{display:flex;flex-direction:column;gap:10px;}
+        .lp-review-card{background:var(--card);border:1px solid var(--border);border-radius:0;padding:12px;}
+        .lp-review-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+        .lp-review-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;}
+        .lp-review-name{font-size:13px;font-weight:700;color:var(--text);}
+        .lp-review-stars{font-size:11px;color:#f59e0b;}
+        .lp-review-comment{font-size:12.5px;color:var(--text2);line-height:1.6;}
+        .lp-faq details{background:var(--card);border:1px solid var(--border);border-radius:0;padding:11px 14px;margin-bottom:8px;}
+        .lp-faq summary{font-size:13px;font-weight:700;color:var(--text);cursor:pointer;list-style:none;}
+        .lp-faq summary::-webkit-details-marker{display:none;}
+        .lp-faq summary::after{content:'+';float:right;font-size:16px;color:#059669;font-weight:800;}
+        .lp-faq details[open] summary::after{content:'−';}
+        .lp-faq-a{font-size:12.5px;color:var(--text2);margin-top:8px;line-height:1.6;}
+        .lp-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(5,150,105,0.08);color:#059669;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:10px;}
+        .lp-social-row{display:flex;align-items:center;gap:10px;margin:2px 0 10px;flex-wrap:wrap;}
+        .lp-rating{display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;color:var(--text);}
+        .lp-rating .stars{color:#f59e0b;font-size:13px;}
+        .lp-sold{font-size:11.5px;color:var(--text2);font-weight:600;}
+        .lp-diff-list{list-style:none;margin:0 0 6px;padding:0;display:flex;flex-direction:column;gap:8px;}
+        .lp-diff-list li{display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:600;color:var(--text);}
+        .lp-diff-list svg{flex-shrink:0;width:18px;height:18px;color:#059669;margin-top:1px;}
+        .lp-benefits{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:lpbn;}
+        .lp-benefits li{display:flex;gap:10px;align-items:flex-start;font-size:13px;font-weight:600;color:var(--text);}
+        .lp-bn-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:#059669;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+        .lp-video{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:0;overflow:hidden;margin-bottom:6px;}
+        .lp-video iframe{width:100%;height:100%;border:0;}
+        .lp-gallery{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;}
+        .lp-gallery-card{flex:0 0 130px;background:var(--card);border:1px solid var(--border);border-radius:0;overflow:hidden;cursor:pointer;}
+        .lp-gallery-card img{width:100%;height:130px;object-fit:cover;display:block;background:#f0fdf4;}
+        .lp-gallery-name{font-size:11px;font-weight:700;color:var(--text);padding:6px 8px 2px;line-height:1.35;}
+        .lp-gallery-price{font-size:12px;font-weight:800;color:var(--red);padding:0 8px 8px;}
+        .lp-closing{background:linear-gradient(135deg,#065f46,#059669);border-radius:0;padding:22px 18px;text-align:center;margin-top:26px;}
+        .lp-closing-text{color:#fff;font-size:14.5px;font-weight:700;line-height:1.6;margin-bottom:14px;}
+        .lp-closing .lp-cta{background:#fff;color:#059669;box-shadow:none;}
+        .lp-quickgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+        .lp-quickbtn{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:0;font-size:12.5px;font-weight:700;text-decoration:none;border:none;cursor:pointer;}
+        .lp-qb-call{background:#fbbf24;color:#78350f;}
+        .lp-qb-wa{background:#22c55e;color:#fff;}
+        .lp-qb-fb{background:#2563eb;color:#fff;}
+        .lp-qb-track{background:rgba(255,255,255,0.16);color:#fff;}
         .lp-sticky{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--border);padding:10px 16px;z-index:999;backdrop-filter:blur(10px);box-shadow:0 -4px 20px rgba(0,0,0,0.08);}
         .lp-sticky-inner{max-width:480px;margin:0 auto;}
         .lp-empty{text-align:center;padding:80px 20px;color:var(--text2);}
@@ -91,6 +143,8 @@ function lpShowEmpty(){
         </div>`;
 }
 
+const LP_WHY_ICONS=['✅','🌿','⭐','💪','📦','🚚','🎁','🔒'];
+function lpStars(n){ n=Math.min(5,Math.max(1,Number(n)||5)); return '★★★★★☆☆☆☆☆'.slice(5-n,10-n); }
 function lpRender(lp, book){
     const isBook=(book.type||'বই')==='বই';
     const price=Number(book.price)||0;
@@ -100,15 +154,86 @@ function lpRender(lp, book){
     const bulletsHtml=(lp.bullets&&lp.bullets.length?lp.bullets:['১০০% অরিজিনাল বই','ক্যাশ অন ডেলিভারি সুবিধা','সারাদেশে হোম ডেলিভারি']).map(t=>
         `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6"/></svg> ${escapeHTML(t)}</li>`
     ).join('');
+    const countdownHtml=(lp.deadline && new Date(lp.deadline).getTime()>Date.now())?`
+        <div class="lp-countdown" id="lpCountdown">
+            <div class="lp-countdown-label">⏰ অফারটি শেষ হচ্ছে</div>
+            <div class="lp-countdown-row" id="lpCountdownRow">
+                <div class="lp-countdown-box"><div class="lp-countdown-num" id="lpCdD">০০</div><div class="lp-countdown-unit">দিন</div></div>
+                <div class="lp-countdown-box"><div class="lp-countdown-num" id="lpCdH">০০</div><div class="lp-countdown-unit">ঘন্টা</div></div>
+                <div class="lp-countdown-box"><div class="lp-countdown-num" id="lpCdM">০০</div><div class="lp-countdown-unit">মিনিট</div></div>
+                <div class="lp-countdown-box"><div class="lp-countdown-num" id="lpCdS">০০</div><div class="lp-countdown-unit">সেকেন্ড</div></div>
+            </div>
+        </div>`:'';
+    const whyHtml=(lp.why&&lp.why.length)?`
+        <div class="lp-section-title">কেন কিনবেন?</div>
+        <div class="lp-why-list">${lp.why.map((w,i)=>`
+            <div class="lp-why-item"><div class="lp-why-icon">${LP_WHY_ICONS[i%LP_WHY_ICONS.length]}</div><div><div class="lp-why-title">${escapeHTML(w.title)}</div>${w.desc?`<div class="lp-why-desc">${escapeHTML(w.desc)}</div>`:''}</div></div>
+        `).join('')}</div>`:'';
+    const reviewsHtml=(lp.reviews&&lp.reviews.length)?`
+        <div class="lp-section-title">কাস্টমারদের মতামত</div>
+        <div class="lp-reviews">${lp.reviews.map(r=>`
+            <div class="lp-review-card">
+                <div class="lp-review-head">
+                    ${r.img?`<img class="lp-review-avatar" src="${escapeHTML(r.img)}" alt="">`:`<div class="lp-review-avatar">${escapeHTML((r.name||'?').trim().charAt(0))}</div>`}
+                    <div><div class="lp-review-name">${escapeHTML(r.name||'কাস্টমার')}</div><div class="lp-review-stars">${lpStars(r.rating)}</div></div>
+                </div>
+                <div class="lp-review-comment">${escapeHTML(r.comment||'')}</div>
+            </div>
+        `).join('')}</div>`:'';
+    const faqHtml=(lp.faq&&lp.faq.length)?`
+        <div class="lp-section-title">সচরাচর জিজ্ঞাসা</div>
+        <div class="lp-faq">${lp.faq.map(f=>`
+            <details><summary>${escapeHTML(f.q)}</summary><div class="lp-faq-a">${escapeHTML(f.a)}</div></details>
+        `).join('')}</div>`:'';
+    const socialHtml=(lp.rating||lp.soldcount)?`
+        <div class="lp-social-row">
+            ${lp.rating?`<div class="lp-rating"><span class="stars">${lpStars(Math.round(Number(lp.rating)||5))}</span> ${escapeHTML(lp.rating)}/5</div>`:''}
+            ${lp.soldcount?`<div class="lp-sold">👥 ${escapeHTML(lp.soldcount)}</div>`:''}
+        </div>`:'';
+    const differentHtml=(lp.different&&lp.different.length)?`
+        <div class="lp-section-title">কেন আমরা অন্য সবার থেকে আলাদা?</div>
+        <ul class="lp-diff-list">${lp.different.map(t=>`
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6"/></svg> ${escapeHTML(t)}</li>
+        `).join('')}</ul>`:'';
+    const benefitsHtml=(lp.benefits&&lp.benefits.length)?`
+        <div class="lp-section-title">উপকারিতা</div>
+        <ul class="lp-benefits">${lp.benefits.map((t,i)=>`
+            <li><span class="lp-bn-num">${i+1}</span> ${escapeHTML(t)}</li>
+        `).join('')}</ul>`:'';
+    const videoHtml=lp.youtube?`
+        <div class="lp-section-title">ভিডিওতে দেখুন</div>
+        <div class="lp-video"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(lp.youtube)}" title="ভিডিও" loading="lazy" allowfullscreen></iframe></div>`:'';
+    const allBooks=(typeof books!=='undefined'?books:[]);
+    let related;
+    if(lp.gallery && lp.gallery.length){
+        related=lp.gallery.map(name=>allBooks.find(b=>b.name===name)).filter(Boolean);
+    } else {
+        related=allBooks.filter(rb=>rb.name!==book.name&&((rb.cat&&rb.cat===book.cat)||(rb.subject&&rb.subject===book.subject))).slice(0,8);
+    }
+    const galleryHtml=related.length?`
+        <div class="lp-section-title">আমাদের পণ্যের গ্যালারি</div>
+        <div class="lp-gallery">${related.map(rb=>{
+            const ri=allBooks.indexOf(rb);
+            return `<div class="lp-gallery-card" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'">
+                <img src="${escapeHTML(rb.img||'')}" alt="${escapeHTML(rb.name)}" loading="lazy">
+                <div class="lp-gallery-name">${escapeHTML(rb.name)}</div>
+                <div class="lp-gallery-price">৳${Number(rb.price)||0}</div>
+            </div>`;
+        }).join('')}</div>`:'';
+    const waNum='8801516595762';
     document.getElementById('lpWrap').innerHTML=`
         <img class="lp-banner" src="${escapeHTML(img)}" alt="${escapeHTML(book.name)}">
+        ${lp.badge?`<div class="lp-badge">${escapeHTML(lp.badge)}</div>`:''}
         <h1 class="lp-headline">${escapeHTML(lp.headline)}</h1>
         ${lp.subheadline?`<p class="lp-sub">${escapeHTML(lp.subheadline)}</p>`:''}
+        ${socialHtml}
+        ${countdownHtml}
         <div class="lp-price-row">
             <span class="lp-price">৳${price}</span>
             ${oprice>price?`<span class="lp-oprice">৳${oprice}</span><span class="lp-disc">${pct}% ছাড়ে</span>`:''}
         </div>
         <ul class="lp-bullets">${bulletsHtml}</ul>
+        ${whyHtml}
         <button class="lp-cta" onclick="lpOrder()">🛒 ${escapeHTML(lp.cta||'এখনই অর্ডার করুন')}</button>
         <a class="lp-wa" href="#" onclick="lpOrderWA(event)"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.42 1.3-1.96 1.35-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36l.55.01c.18.01.41-.07.64.49.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.72 1.18 1.54 1.92 1.06.94 1.95 1.23 2.23 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.75 1.87.89.28.14.46.21.53.32.07.12.07.68-.17 1.36z"/></svg> WhatsApp-এ অর্ডার করুন</a>
         <div class="lp-trust">
@@ -116,10 +241,48 @@ function lpRender(lp, book){
             <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="13" rx="1.5"/><path d="M16 10h3.5L22 13.5V19h-6"/><circle cx="6" cy="19.5" r="1.6"/><circle cx="17.5" cy="19.5" r="1.6"/></svg><br>দ্রুত ডেলিভারি</div>
             <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg><br>ক্যাশ অন ডেলিভারি</div>
         </div>
+        ${galleryHtml}
+        ${differentHtml}
+        ${videoHtml}
+        ${benefitsHtml}
+        ${reviewsHtml}
+        ${faqHtml}
+        <div class="lp-closing">
+            <div class="lp-closing-text">সেরা মানের ${escapeHTML(book.name)}<br>এখনই অর্ডার করতে নিচের বাটনে ক্লিক করুন</div>
+            <button class="lp-cta" onclick="lpOrder()">🛒 ${escapeHTML(lp.cta||'এখনই অর্ডার করুন')}</button>
+            <div class="lp-quickgrid">
+                <a class="lp-quickbtn lp-qb-call" href="tel:+${waNum}">📞 কল করুন</a>
+                <a class="lp-quickbtn lp-qb-wa" href="#" onclick="lpOrderWA(event)">💬 WhatsApp</a>
+                <a class="lp-quickbtn lp-qb-fb" href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener">📘 Page</a>
+                <a class="lp-quickbtn lp-qb-track" href="track.html">🔍 অর্ডার ট্র্যাক</a>
+            </div>
+        </div>
         <div class="lp-sticky"><div class="lp-sticky-inner"><button class="lp-cta" onclick="lpOrder()">🛒 ${escapeHTML(lp.cta||'এখনই অর্ডার করুন')} — ৳${price}</button></div></div>
     `;
     document.title=lp.headline+' — গ্রন্থকানন';
+    if(lp.deadline) lpStartCountdown(lp.deadline);
     if(window.fbq){ try{ fbq('track','ViewContent',{content_name:book.name,value:price,currency:'BDT'}); }catch(e){} }
+}
+let lpCdInterval=null;
+const lpBnDigits=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+function lpToBn(n){ return String(n).padStart(2,'0').split('').map(d=>lpBnDigits[d]||d).join(''); }
+function lpStartCountdown(deadline){
+    if(lpCdInterval) clearInterval(lpCdInterval);
+    const target=new Date(deadline).getTime();
+    function tick(){
+        const diff=target-Date.now();
+        const box=document.getElementById('lpCountdown');
+        if(!box) return;
+        if(diff<=0){ box.style.display='none'; clearInterval(lpCdInterval); return; }
+        const d=Math.floor(diff/86400000), h=Math.floor(diff%86400000/3600000), m=Math.floor(diff%3600000/60000), s=Math.floor(diff%60000/1000);
+        const dEl=document.getElementById('lpCdD'), hEl=document.getElementById('lpCdH'), mEl=document.getElementById('lpCdM'), sEl=document.getElementById('lpCdS');
+        if(dEl) dEl.textContent=lpToBn(d);
+        if(hEl) hEl.textContent=lpToBn(h);
+        if(mEl) mEl.textContent=lpToBn(m);
+        if(sEl) sEl.textContent=lpToBn(s);
+    }
+    tick();
+    lpCdInterval=setInterval(tick,1000);
 }
 
 let lpBook=null;

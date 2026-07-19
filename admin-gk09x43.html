@@ -1213,7 +1213,7 @@
                 </div>
 
                 <div class="flex justify-between gap-2" style="margin-bottom:16px;flex-wrap:wrap;">
-                    <div class="search-wrap" style="flex:1;min-width:200px;"><span class="search-ic"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><input class="form-input" id="beSearch" placeholder="নাম, লেখক বা প্রকাশনী..." oninput="beRenderList()"></div>
+                    <div class="search-wrap" style="flex:1;min-width:200px;"><span class="search-ic"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><input class="form-input" id="beSearch" placeholder="নাম, লেখক বা প্রকাশনী..." oninput="beSearchInput()"></div>
                     <div class="flex gap-2">
                         <button class="btn btn-sm btn-primary" id="beFAll" onclick="beSetFilter('all')">সব</button>
                         <button class="btn btn-sm btn-ghost" id="beFLinked" onclick="beSetFilter('linked')">ছবি</button>
@@ -1623,6 +1623,7 @@
                 <div class="tool-card" id="toolCard_landing" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg> ল্যান্ডিং পেজ (Facebook Ad-এর জন্য)</h3>
                     <p style="margin-bottom:12px;">নির্দিষ্ট একটা বই/অফারের জন্য আলাদা একটা প্রমোশন পেজ বানান — বড় ছবি, নিজের লেখা হেডলাইন ও পয়েন্টসহ। বানানোর পর লিংক কপি করে আপনি নিজে Facebook Page-এ পোস্ট বা Ad-এ ব্যবহার করবেন।</p>
+                    <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#1e40af;">💡 নিচের সব ঘরে <b>উদাহরণ হিসেবে লেখা ভরা আছে</b> — শুধু বুঝিয়ে দেওয়ার জন্য, কোথায় কী লিখতে হয়। আপনি শুধু ঘরের লেখা মুছে/এডিট করে নিজের আসল তথ্য বসিয়ে দিন। শুধু <b>"বই বাছাই করুন"</b> ড্রপডাউনটা নিজে বেছে নিতে হবে।</div>
                     <div class="form-group"><label class="be-label">বই বাছাই করুন *</label>
                         <select class="form-input" id="lp_book"></select>
                     </div>
@@ -1641,6 +1642,15 @@
                     <div class="form-group"><label class="be-label">বাটনের লেখা</label>
                         <input class="form-input" id="lp_cta" placeholder="এখনই অর্ডার করুন">
                     </div>
+                    <div class="form-group"><label class="be-label">🏷️ ছোট ব্যাজ (ঐচ্ছিক) — হেডলাইনের উপরে দেখাবে</label>
+                        <input class="form-input" id="lp_badge" placeholder="যেমন: ✓ সরাসরি প্রকাশনী থেকে">
+                    </div>
+                    <div class="form-group"><label class="be-label">⭐ রেটিং (ঐচ্ছিক)</label>
+                        <input class="form-input" id="lp_rating" placeholder="যেমন: 4.9">
+                    </div>
+                    <div class="form-group"><label class="be-label">🧾 বিক্রির সংখ্যা (ঐচ্ছিক)</label>
+                        <input class="form-input" id="lp_soldcount" placeholder="যেমন: ৫৯,০০০+ কাস্টমার">
+                    </div>
                     <div class="form-group" style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:10px 12px;">
                         <label class="be-label" style="color:#991b1b;">⏰ অফার শেষ হওয়ার সময় (ঐচ্ছিক) — দিলে কাউন্টডাউন টাইমার দেখাবে</label>
                         <input class="form-input" id="lp_deadline" type="datetime-local">
@@ -1648,12 +1658,25 @@
                     <div class="form-group editor-full"><label class="be-label">✅ কেন কিনবেন (ঐচ্ছিক) — প্রতি লাইনে: শিরোনাম | বিবরণ</label>
                         <textarea class="form-input" id="lp_why" rows="3" placeholder="১০০% অরিজিনাল বই | সম্পূর্ণ যাচাইকৃত প্রকাশনী থেকে সংগ্রহ করা&#10;দ্রুত ডেলিভারি | সারাদেশে ১-৩ দিনে পৌঁছে যায়&#10;ক্যাশ অন ডেলিভারি | বই হাতে পেয়ে টাকা দিন"></textarea>
                     </div>
+                    <div class="form-group editor-full"><label class="be-label">🆚 কেন আমরা অন্য সবার থেকে আলাদা (ঐচ্ছিক) — প্রতি লাইনে একটা পয়েন্ট</label>
+                        <textarea class="form-input" id="lp_different" rows="3" placeholder="আমাদের বইগুলো সম্পূর্ণ অরিজিনাল ও যাচাইকৃত&#10;সরাসরি প্রকাশনী থেকে সংগ্রহ করা হয়&#10;মান নিয়ে কোনো আপোষ করি না"></textarea>
+                    </div>
+                    <div class="form-group editor-full"><label class="be-label">🔢 উপকারিতা / বৈশিষ্ট্য (ঐচ্ছিক) — প্রতি লাইনে একটা, নম্বর দিয়ে দেখাবে</label>
+                        <textarea class="form-input" id="lp_benefits" rows="3" placeholder="সহজ ও প্রাঞ্জল ভাষায় লেখা&#10;নতুন পাঠকদের জন্য উপযুক্ত&#10;জীবন গঠনে সহায়ক"></textarea>
+                    </div>
+                    <div class="form-group"><label class="be-label">🎬 ইউটিউব ভিডিও আইডি (ঐচ্ছিক)</label>
+                        <input class="form-input" id="lp_youtube" placeholder="যেমন: dQw4w9WgXcQ (ইউটিউব লিংকের শেষ অংশ)">
+                    </div>
                     <div class="form-group editor-full"><label class="be-label">❓ সচরাচর জিজ্ঞাসা / FAQ (ঐচ্ছিক) — প্রতি লাইনে: প্রশ্ন | উত্তর</label>
                         <textarea class="form-input" id="lp_faq" rows="3" placeholder="ডেলিভারি চার্জ কত? | ঢাকার ভেতরে ৬০৳, বাইরে ১২০৳&#10;টাকা কখন দিতে হবে? | বই হাতে পাওয়ার পর ক্যাশ অন ডেলিভারিতে দিতে পারবেন"></textarea>
                     </div>
                     <div class="form-group editor-full"><label class="be-label">⭐ কাস্টমার রিভিউ (ঐচ্ছিক) — প্রতি লাইনে: নাম | রেটিং(১-৫) | মন্তব্য | ছবিলিংক(ঐচ্ছিক)</label>
                         <textarea class="form-input" id="lp_reviews" rows="3" placeholder="মোঃ নজরুল ইসলাম | 5 | বইটা সত্যিই অসাধারণ, দ্রুত ডেলিভারিও পেয়েছি | &#10;সালমা আক্তার | 4 | ভালো মানের বই, প্যাকেজিং সুন্দর ছিল |"></textarea>
                     </div>
+                    <div class="form-group editor-full"><label class="be-label">📸 গ্যালারিতে নির্দিষ্ট বই (ঐচ্ছিক) — প্রতি লাইনে একটা বইয়ের নাম (হুবহু বইয়ের তালিকার নামের মতো লিখুন)</label>
+                        <textarea class="form-input" id="lp_gallery" rows="2" placeholder="খালি রাখলে এই বইয়ের সাথে একই বিভাগের বইগুলো স্বয়ংক্রিয়ভাবেই দেখাবে। নির্দিষ্ট বই দেখাতে চাইলে এখানে নাম লিখুন — যেমন:&#10;প্যারাডক্সিকেল সাজিদ ২&#10;হায়াতের দিন ফুরোলে"></textarea>
+                    </div>
+                    <p style="font-size:11px;color:var(--text-muted);margin:-8px 0 4px;">📞 শেষের কুইক-অ্যাকশন (কল/হোয়াটসঅ্যাপ/ফেসবুক/ট্র্যাক) স্বয়ংক্রিয়ভাবেই পেজে যোগ হয়ে যাবে, আলাদা কিছু লিখতে হবে না।</p>
                     <div class="flex gap-2" style="margin-bottom:18px;">
                         <button class="btn btn-primary" onclick="saveLandingPage()">🚀 ল্যান্ডিং পেজ তৈরি করুন</button>
                     </div>
@@ -2517,6 +2540,15 @@ let beFilter='all';
 let beOpenIdx=null;
 let beAddFormOpen=false;
 let localBooks=[];
+/* হাজারখানেক বই একসাথে DOM-এ বসালে ফোনে খুব স্লো হয়ে যায় (বিশেষ করে প্রতি
+   কি-স্ট্রোকে) — তাই একবারে সীমিত সংখ্যক দেখানো হয়, "আরও দেখান" চাপলে বাড়ে */
+const BE_PAGE_SIZE=40;
+let beShownCount=BE_PAGE_SIZE;
+let beSearchDebounceTimer=null;
+function beSearchInput(){
+    clearTimeout(beSearchDebounceTimer);
+    beSearchDebounceTimer=setTimeout(()=>{ beShownCount=BE_PAGE_SIZE; beRenderList(); }, 250);
+}
 
 /* ══════════════════════════════════════════════
    স্থায়ী বই-আইডি (bid) — অ্যারের position-এর বদলে
@@ -2624,10 +2656,12 @@ function beUpdateStats(){
 
 function beSetFilter(f){
     beFilter=f;
+    beShownCount=BE_PAGE_SIZE;
     ['beFAll','beFLinked','beFMissing'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
     document.getElementById(f==='all'?'beFAll':f==='linked'?'beFLinked':'beFMissing')?.classList.add('active');
     beRenderList();
 }
+function beShowMore(){ beShownCount+=BE_PAGE_SIZE; beRenderList(); }
 
 function beFillAddForm(){
     beAttrSel['add']=[];
@@ -3295,13 +3329,22 @@ function beRenderList(){
 
     if(!filtered.length){list.innerHTML='<div class="empty-state">কোনো বই পাওয়া যায়নি</div>';return;}
 
-    list.innerHTML=filtered.map(b=>{
+    /* খোলা থাকা বইটা (beOpenIdx) পেজিনেশনের বাইরে চলে গেলেও যেন দেখা যায়,
+       তাই সেটাকে সবসময় দৃশ্যমান তালিকায় জোর করে রাখা হয় */
+    let visible=filtered.slice(0,beShownCount);
+    if(beOpenIdx!=null && !visible.some(b=>b._i===beOpenIdx)){
+        const openBook=filtered.find(b=>b._i===beOpenIdx);
+        if(openBook) visible=[openBook,...visible];
+    }
+    const remaining=filtered.length-Math.min(beShownCount,filtered.length);
+
+    list.innerHTML=visible.map(b=>{
         const i=b._i;
         beCatSel[i]=beBookCats(b);
         beAttrSel[i]=Array.isArray(b.attributes)?b.attributes.map(a=>({...a})):[];
         const hasImg=isRealUrl(b.img);
         const isOpen=beOpenIdx===i;
-        const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+        const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" loading="lazy" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
         const imgPrevHtml=hasImg?`<img src="${escapeHTML(b.img)}" onerror="this.style.display='none'">`:`<span class="be-empty-img">ছবি নেই</span>`;
 
         return `<div class="be-list-item ${hasImg?'hasimg':'missing'}">
@@ -3316,7 +3359,7 @@ function beRenderList(){
             </div>
             <div class="be-body ${isOpen?'open':''}">${isOpen?beEditorBody(b,i,imgPrevHtml):''}</div>
         </div>`;
-    }).join('');
+    }).join('') + (remaining>0?`<button class="btn btn-ghost w-full" style="margin-top:10px;" onclick="beShowMore()">⬇️ আরও ${Math.min(remaining,BE_PAGE_SIZE)}টা দেখান (বাকি ${remaining}টা)</button>`:'');
 }
 
 /* ── FIREBASE SYNC ──
@@ -3899,9 +3942,39 @@ function loadLandingBookSelect(){
     sel.innerHTML='<option value="">— বাছুন —</option>'+src.map(b=>`<option value="${escapeHTML(b.name)}">${escapeHTML(b.name)} (৳${b.price})</option>`).join('');
     if(cur) sel.value=cur;
 }
+/* নতুন অ্যাডমিনের জন্য ফর্মটা খালি না দিয়ে একটা পূর্ণ উদাহরণ ভরা থাকে —
+   কোথায় কী লিখতে হয় বুঝতে সুবিধা হয়, শুধু "বই বাছাই" টা নিজে করতে হবে,
+   বাকি লেখা এডিট/মুছে নিজের তথ্য বসিয়ে দিলেই হবে */
+const LP_TEMPLATE_DEFAULTS={
+    lp_headline:'ঈদ স্পেশাল অফার — মাত্র ৩ দিনের জন্য বিশেষ ছাড়!',
+    lp_sub:'সীমিত সময়ের জন্য বইটি বিশেষ ছাড়ে পাচ্ছেন। আজই অর্ডার করে সংগ্রহ করুন, শেষ হয়ে গেলে আর পাবেন না।',
+    lp_bullets:'১০০% অরিজিনাল বই\nক্যাশ অন ডেলিভারি সুবিধা\nসারাদেশে হোম ডেলিভারি',
+    lp_cta:'এখনই অর্ডার করুন',
+    lp_badge:'✓ সরাসরি প্রকাশনী থেকে সংগ্রহকৃত',
+    lp_rating:'4.9',
+    lp_soldcount:'৫,০০০+ কাস্টমার সন্তুষ্ট',
+    lp_why:'১০০% অরিজিনাল বই | সম্পূর্ণ যাচাইকৃত প্রকাশনী থেকে সংগ্রহ করা হয়\nদ্রুত ডেলিভারি | সারাদেশে ১-৩ কার্যদিবসে পৌঁছে যায়\nক্যাশ অন ডেলিভারি | বই হাতে পেয়ে টাকা দিন, আগে টাকা লাগবে না',
+    lp_different:'আমাদের বইগুলো সম্পূর্ণ অরিজিনাল ও যাচাইকৃত\nসরাসরি প্রকাশনী থেকে সংগ্রহ করা হয়, নকল/পাইরেটেড বই নেই\nহাজারো সন্তুষ্ট কাস্টমারের আস্থা অর্জন করেছি',
+    lp_benefits:'সহজ ও প্রাঞ্জল ভাষায় লেখা, সহজে বোঝা যায়\nনতুন ও পুরনো — সব পাঠকের জন্য উপযুক্ত\nজীবন গঠনে ও চিন্তার খোরাক জোগাতে সহায়ক',
+    lp_faq:'ডেলিভারি চার্জ কত? | ঢাকার ভেতরে ৬০৳, ঢাকার বাইরে ৯০৳\nটাকা কখন দিতে হবে? | বই হাতে পাওয়ার পর ক্যাশ অন ডেলিভারিতে দিতে পারবেন\nঅর্ডার করলে কতদিনে পাবো? | সাধারণত ১-৩ কার্যদিবসের মধ্যে পৌঁছে যায়',
+    lp_reviews:'মোঃ নজরুল ইসলাম | 5 | বইটা সত্যিই অসাধারণ, দ্রুত ডেলিভারিও পেয়েছি |\nসালমা আক্তার | 5 | ভালো মানের বই, প্যাকেজিং খুব সুন্দর ছিল |\nরাকিব হাসান | 4 | বই ভালো লেগেছে, দামটাও ঠিকঠাক |'
+};
+function lpFillTemplateDefaults(){
+    Object.keys(LP_TEMPLATE_DEFAULTS).forEach(id=>{
+        const el=document.getElementById(id);
+        if(el && !el.value) el.value=LP_TEMPLATE_DEFAULTS[id];
+    });
+    const dl=document.getElementById('lp_deadline');
+    if(dl && !dl.value){
+        const d=new Date(Date.now()+3*86400000);
+        d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+        dl.value=d.toISOString().slice(0,16);
+    }
+}
 function loadLandingAdmin(){
     if(typeof db==='undefined'||!db){setTimeout(loadLandingAdmin,300);return;}
     loadLandingBookSelect();
+    lpFillTemplateDefaults();
     db.ref('siteConfig/landingPages').get().then(snap=>{
         landingPages=snap.val()||{};
         renderLandingList();
@@ -3951,6 +4024,9 @@ async function saveLandingPage(){
     const why=parsePipeLines(g('lp_why').value, ['title','desc']);
     const faq=parsePipeLines(g('lp_faq').value, ['q','a']);
     const reviews=parsePipeLines(g('lp_reviews').value, ['name','rating','comment','img']).map(r=>({...r, rating:Math.min(5,Math.max(1,Number(r.rating)||5))}));
+    const different=(g('lp_different').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+    const benefits=(g('lp_benefits').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+    const gallery=(g('lp_gallery').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
     let base=slugifyBn(headline), slug=base, n=2;
     while(landingPages[slug]){ slug=base+'-'+n; n++; }
     const lp={
@@ -3960,14 +4036,19 @@ async function saveLandingPage(){
         bullets,
         cta:(g('lp_cta').value||'').trim()||'এখনই অর্ডার করুন',
         deadline:(g('lp_deadline').value||'').trim(),
-        why, faq, reviews,
+        badge:(g('lp_badge').value||'').trim(),
+        rating:(g('lp_rating').value||'').trim(),
+        soldcount:(g('lp_soldcount').value||'').trim(),
+        youtube:(g('lp_youtube').value||'').trim(),
+        why, faq, reviews, different, benefits, gallery,
         createdAt:Date.now()
     };
     try{
         await db.ref('siteConfig/landingPages/'+slug).set(lp);
         landingPages[slug]=lp;
         renderLandingList();
-        ['lp_headline','lp_sub','lp_img','lp_bullets','lp_deadline','lp_why','lp_faq','lp_reviews'].forEach(id=>{const el=g(id);if(el)el.value='';});
+        ['lp_headline','lp_sub','lp_img','lp_bullets','lp_deadline','lp_why','lp_faq','lp_reviews','lp_badge','lp_rating','lp_soldcount','lp_youtube','lp_different','lp_benefits','lp_gallery'].forEach(id=>{const el=g(id);if(el)el.value='';});
+        lpFillTemplateDefaults(); /* পরের বার নতুন পেজ বানাতে গেলে ফর্মটা আবার উদাহরণ ভরা থাকবে */
         showToast('✅ ল্যান্ডিং পেজ তৈরি হয়েছে! লিংক কপি করে ব্যবহার করুন।','#059669');
     }catch(e){ showToast('❌ সেভ করা যায়নি: '+e.message,'#dc2626'); }
 }
