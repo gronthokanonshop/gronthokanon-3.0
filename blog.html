@@ -288,19 +288,46 @@ async function downloadBlogPDF(title, meta, btnEl){
   document.body.appendChild(wrap);
   try{
     const canvas=await html2canvas(wrap,{scale:2,useCORS:true,backgroundColor:'#ffffff'});
-    const imgData=canvas.toDataURL('image/png');
     const {jsPDF}=window.jspdf;
     const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-    const W=210, pageH=297;
-    const imgH=(canvas.height/canvas.width)*W;
-    let heightLeft=imgH, y=0;
-    pdf.addImage(imgData,'PNG',0,y,W,imgH);
-    heightLeft-=pageH;
-    while(heightLeft>0){
-      y=heightLeft-imgH;
-      pdf.addPage();
-      pdf.addImage(imgData,'PNG',0,y,W,imgH);
-      heightLeft-=pageH;
+    const W=210, pageH=297, marginMM=10;
+    const usableW=W-2*marginMM, usableH=pageH-2*marginMM;
+    const pxPerMM=canvas.width/usableW;
+    const pageHeightPx=Math.floor(usableH*pxPerMM);
+    const ctx=canvas.getContext('2d');
+    /* পেজ কাটার আগে কাছাকাছি একটা সাদা (ফাঁকা) row খুঁজে বের করে, যাতে কোনো লাইনের মাঝখানে কাট না পড়ে */
+    function isRowBlank(y){
+        const row=ctx.getImageData(0,y,canvas.width,1).data;
+        for(let i=0;i<row.length;i+=4){ if(row[i]<250||row[i+1]<250||row[i+2]<250) return false; }
+        return true;
+    }
+    function findCut(idealY){
+        const maxScan=Math.floor(pxPerMM*8); // সর্বোচ্চ ~৮মিমি পিছনে গিয়ে ফাঁকা জায়গা খোঁজা
+        for(let d=0; d<maxScan; d++){
+            const y=idealY-d;
+            if(y<=0) break;
+            if(isRowBlank(y)) return y;
+        }
+        return idealY; // ফাঁকা row না পেলে আগের মতোই কাটবে
+    }
+    let srcY=0;
+    const totalH=canvas.height;
+    while(srcY<totalH){
+        let sliceH=Math.min(pageHeightPx, totalH-srcY);
+        if(srcY+sliceH<totalH){
+            const cutY=findCut(srcY+sliceH);
+            sliceH=(cutY>srcY)?(cutY-srcY):pageHeightPx;
+        }
+        const pageCanvas=document.createElement('canvas');
+        pageCanvas.width=canvas.width; pageCanvas.height=sliceH;
+        const pctx=pageCanvas.getContext('2d');
+        pctx.fillStyle='#ffffff'; pctx.fillRect(0,0,pageCanvas.width,pageCanvas.height);
+        pctx.drawImage(canvas,0,srcY,canvas.width,sliceH,0,0,canvas.width,sliceH);
+        const imgData=pageCanvas.toDataURL('image/png');
+        const imgHmm=sliceH/pxPerMM;
+        if(srcY>0) pdf.addPage();
+        pdf.addImage(imgData,'PNG',marginMM,marginMM,usableW,imgHmm);
+        srcY+=sliceH;
     }
     const safeTitle=String(title).replace(/[^ঀ-৿a-zA-Z0-9]+/g,'-').slice(0,50);
     pdf.save('গ্রন্থকানন-'+safeTitle+'.pdf');
