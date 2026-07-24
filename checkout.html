@@ -934,6 +934,9 @@ async function confirmOrder(){
     userId: firebase.auth().currentUser?.uid || 'guest'
   };
 
+  console.log('ORDER DATA:', JSON.stringify(orderData, null, 2));
+  Object.keys(orderData).forEach(k => console.log(k, '=>', typeof orderData[k], orderData[k]));
+
   try{
     await firebase.database().ref('orders/' + orderId).set(orderData);
     await firebase.database().ref('phoneIndex/' + orderData.phone + '/' + orderId).set(true);
