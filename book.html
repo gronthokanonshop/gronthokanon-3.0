@@ -658,8 +658,9 @@ footer {
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
-<script src="book.js"></script>
-<script src="gkbooks-live.js"></script>
+<script src="book.js" defer></script>
+<script src="book-desc.js" defer></script>
+<script src="gkbooks-live.js" defer></script>
 
 <script>
 function escapeHTML(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -995,9 +996,49 @@ function loadBook(){
         crEl.innerHTML=ch;
     }
 
-    const desc=(typeof bookDescs!=='undefined'&&bookDescs[b.name]&&bookDescs[b.name]!=='শীঘ্রই আপডেট করা হবে'?bookDescs[b.name]:null)||b.desc||'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
-    const descEl=document.getElementById('bookDesc');descEl.innerText=desc;
-    if(desc.length>200){descEl.style.maxHeight='80px';descEl.style.overflow='hidden';document.getElementById('descToggle').style.display='inline-block';}
+    /* desc priority (উপরেরটা জিতবে):
+       ১. bookDescs[b.bid] — static book-desc.js (instant, deploy-time snapshot)
+       ২. Firebase bookDescs/{bid} — admin edit করলে সর্বশেষ desc (lazy fetch)
+       ৩. fallback text
+       NOTE: gkbooks-live এখন bookList এ desc রাখে না (performance),
+             তাই b.desc সবসময় "" — Firebase bookDescs path থেকে আনতে হয় */
+    const PLACEHOLDER='শীঘ্রই আপডেট করা হবে';
+    const descKey=b.bid||b.name;
+    const descStatic=(typeof bookDescs!=='undefined')&&(bookDescs[descKey]||bookDescs[b.name]);
+    const descStaticClean=(descStatic&&descStatic!==PLACEHOLDER)?descStatic:null;
+    const descEl=document.getElementById('bookDesc');
+
+    function renderDesc(txt){
+        const d=txt||'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
+        descEl.innerText=d;
+        const tog=document.getElementById('descToggle');
+        if(d.length>200){descEl.style.maxHeight='80px';descEl.style.overflow='hidden';if(tog)tog.style.display='inline-block';}
+        else{descEl.style.maxHeight='';descEl.style.overflow='';if(tog)tog.style.display='none';}
+    }
+
+    /* ১. সাথে সাথে static desc দেখাও */
+    renderDesc(descStaticClean);
+
+    /* ২. Firebase bookDescs/{bid} থেকে সর্বশেষ desc আনো (lazy) */
+    if(descKey){
+        var _descCacheKey='gk_desc_'+descKey;
+        var _cached=null;
+        try{ var _r=sessionStorage.getItem(_descCacheKey); if(_r) _cached=_r; }catch(e){}
+        if(_cached){
+            /* session cache hit — re-render শুধু দরকার হলে */
+            if(_cached!==PLACEHOLDER) renderDesc(_cached);
+        } else {
+            fetch('https://gronthokanon-8573e-default-rtdb.firebaseio.com/bookDescs/'+encodeURIComponent(descKey)+'.json')
+                .then(function(r){ return r.ok?r.json():null; })
+                .then(function(fbDesc){
+                    if(fbDesc&&typeof fbDesc==='string'&&fbDesc.trim()&&fbDesc!==PLACEHOLDER){
+                        try{ sessionStorage.setItem(_descCacheKey, fbDesc); }catch(e){}
+                        renderDesc(fbDesc);
+                    }
+                })
+                .catch(function(){});
+        }
+    }
 
     const origEl=document.getElementById('bookOrigPrice');
     if(b.original_price>b.price)origEl.innerText='৳ '+b.original_price;else origEl.style.display='none';
@@ -1426,8 +1467,9 @@ function loadLeaderboard(){
 /* INIT */
 /* window.onload আগে ব্যবহার হতো — যেটা WhatsApp আইকন (wikimedia থেকে) সহ পেজের
    সব external ছবি ডাউনলোড শেষ না হওয়া পর্যন্ত ফায়ার হতো না, ফলে বইয়ের তথ্য
-   (নাম/দাম/বিবরণ) থাকা সত্ত্বেও দেরিতে দেখাত। DOMContentLoaded ব্যবহার করলে
-   book.js (এখানে defer ছাড়াই, তাই আগেই লোড হয়) রেডি হওয়া মাত্র দেখাবে। */
+   (নাম/দাম/বিবরণ) থাকা সত্ত্বেও দেরিতে দেখাত।
+   book.js এখন defer দিয়ে লোড হয় — HTML parse ব্লক না করে parallel download হয়,
+   DOMContentLoaded fire হলে book.js নিশ্চিতভাবেই execute শেষ। */
 document.addEventListener('DOMContentLoaded', function(){
     loadBook();
     loadTagsBook();

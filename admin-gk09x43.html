@@ -3169,7 +3169,7 @@ async function removeOrphanCat(oi){
     if(!affected.length){ showToast('কোনো বই পাওয়া যায়নি','#dc2626'); return; }
     showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
     try{
-        for(const idx of affected){ await db.ref('bookList/'+idx).set(localBooks[idx]); }
+        for(const idx of affected){ await saveBookToFirebase(idx); }
         showToast('✅ মুছে ফেলা হয়েছে ('+affected.length+'টা বই)','#059669');
     }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
     beUpdateStats(); beRenderList(); renderCatTreeAdmin();
@@ -3190,7 +3190,7 @@ async function removeOrphanSubcat(catIdx,subIdx){
     if(!affected.length){ showToast('কোনো বই পাওয়া যায়নি','#dc2626'); return; }
     showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
     try{
-        for(const idx of affected){ await db.ref('bookList/'+idx).set(localBooks[idx]); }
+        for(const idx of affected){ await saveBookToFirebase(idx); }
         showToast('✅ মুছে ফেলা হয়েছে ('+affected.length+'টা বই)','#059669');
     }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
     beUpdateStats(); beRenderList(); renderCatTreeAdmin();
@@ -3242,7 +3242,7 @@ async function apFixApply(newValue){
     if(!affected.length){ showToast('কোনো বই পাওয়া যায়নি','#dc2626'); return; }
     showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
     try{
-        for(const idx of affected){ await db.ref('bookList/'+idx).set(localBooks[idx]); }
+        for(const idx of affected){ await saveBookToFirebase(idx); }
         showToast('✅ হয়ে গেছে ('+affected.length+'টা বই আপডেট হলো)','#059669');
     }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
     beUpdateStats(); beRenderList();
@@ -3365,10 +3365,49 @@ function beRenderList(){
 /* ── FIREBASE SYNC ──
    শুধু বদলানো/নতুন বইটাই পাঠানো হয় (পুরো ১০০০+ বইয়ের লিস্ট বারবার আপলোড না
    করে), তাই "সেভ" বাটনে চাপ দিলে সাথে সাথেই শেষ হয়ে যায়। */
+
+/* ═══════════════════════════════════════════════════════
+   desc আলাদা Firebase path-এ সেভ করার helper
+   bookList/idx → desc ছাড়া (ছোট, fast)
+   bookDescs/bid → শুধু desc (book.html lazy load করে)
+═══════════════════════════════════════════════════════ */
+function bookWithoutDesc(b){
+    const copy={...b};
+    delete copy.desc;
+    return copy;
+}
+
+async function saveBookToFirebase(idx){
+    const b=localBooks[idx];
+    if(!b)return;
+    const bid=b.bid||String(idx);
+    /* desc আলাদা path এ */
+    if(b.desc&&b.desc.trim()){
+        await db.ref('bookDescs/'+bid).set(b.desc);
+    }
+    /* bookList এ desc ছাড়া */
+    await db.ref('bookList/'+idx).set(bookWithoutDesc(b));
+}
+
+async function saveAllBooksToFirebase(){
+    await ensureBookIdsAndMigrate(localBooks);
+    /* সব desc এক batch এ */
+    const descs={};
+    const booksClean=localBooks.map((b,i)=>{
+        const bid=b.bid||String(i);
+        if(b.desc&&b.desc.trim()) descs[bid]=b.desc;
+        return bookWithoutDesc(b);
+    });
+    await Promise.all([
+        db.ref('bookDescs').update(descs),
+        db.ref('bookList').set(booksClean)
+    ]);
+}
+
 async function syncBookToFirebase(idx, bookData, msg){
     try{
         await ensureBookIdsAndMigrate(localBooks);
-        await db.ref('bookList/'+idx).set(localBooks[idx]);
+        await saveBookToFirebase(idx);
         showToast(msg||'Firebase-এ সেভ হয়েছে','#0B6E4F');
     }catch(e){
         console.error('Firebase sync error:',e);
@@ -3380,8 +3419,7 @@ async function syncAllBooksToFirebase(silent=false){
     const btn=document.getElementById('syncAllBtn');
     if(btn){btn.disabled=true;btn.innerHTML='<svg class="spin-ic" style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg> সেভ হচ্ছে...';}
     try{
-        await ensureBookIdsAndMigrate(localBooks);
-        await db.ref('bookList').set(localBooks);
+        await saveAllBooksToFirebase();
         if(!silent)showToast('সব বই Firebase-এ সেভ হয়েছে! Website আপডেট হবে।','#0B6E4F');
     }catch(e){showToast('Firebase sync ব্যর্থ','#dc2626');}
     if(btn){btn.disabled=false;btn.innerHTML=`<svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> সব সেভ করুন`;}
@@ -4107,11 +4145,14 @@ function downloadSitemap(){
     showToast('sitemap.xml ডাউনলোড হচ্ছে ('+src.length+'টি বই)...','#059669');
 }
 
-/* ── DOWNLOAD book.js ── */
+/* ── DOWNLOAD book.js + book-desc.js (একসাথে দুটো) ── */
 function downloadBookJs(){
-    const FIELDS=['bid','type','name','author','price','original_price','cat','subcat','subject','cover','pub','pages','brand','img','desc'];
+    const FIELDS=['bid','type','name','author','price','original_price','cat','subcat','subject','cover','pub','pages','brand','img'];
+    /* desc এখন আলাদা — book.js তে থাকবে না */
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
     const esc=s=>String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r\n/g,'\\n').replace(/\r/g,'\\n').replace(/\n/g,'\\n');
+
+    /* ── book.js (desc ছাড়া) ── */
     const lines=src.map(b=>{
         const fields=FIELDS.map(f=>{
             if(f==='type')return `type: "${esc(b.type||'বই')}"`;
@@ -4119,22 +4160,33 @@ function downloadBookJs(){
             if(f==='price'||f==='original_price')return `${f}: ${Number(v)||0}`;
             return `${f}: "${esc(v)}"`;
         });
-        /* ট্যাগ array (Best Selling/New Arrived/Trending ইত্যাদি) — পুরনো cats থেকেও derive হয় */
+        fields.push(`desc: ""`); /* placeholder — book-desc.js এ আসল desc */
         const tags=Array.isArray(b.tags)?b.tags:bookTags(b);
         fields.push(`tags: [${tags.map(c=>`"${esc(c)}"`).join(', ')}]`);
-        /* সাধারণ প্রোডাক্টের কাস্টম বৈশিষ্ট্য (Size/Color/মেয়াদ ইত্যাদি) */
         const attrs=Array.isArray(b.attributes)?b.attributes.filter(a=>a&&a.label):[];
         fields.push(`attributes: [${attrs.map(a=>`{label: "${esc(a.label)}", value: "${esc(a.value||'')}"}`).join(', ')}]`);
         return `  { ${fields.join(', ')} }`;
     });
     const fallback=`\n\n/* ═══ IMAGE FALLBACK ═══\n   যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —\n   সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */\nbooks.forEach(function(b){\n    if(!b.img || !/^https?:\\/\\//.test(b.img)) b.img = 'book-placeholder.svg';\n});`;
-    const code=`const books = [\n${lines.join(',\n')}\n];`+fallback;
-    const blob=new Blob([code],{type:'text/javascript;charset=utf-8'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;a.download='book.js';a.click();
-    URL.revokeObjectURL(url);
-    showToast('book.js ডাউনলোড হচ্ছে...','#0B6E4F');
+    const bookJsCode=`const books = [\n${lines.join(',\n')}\n];`+fallback;
+
+    /* ── book-desc.js (শুধু desc, bid key দিয়ে) ── */
+    const descLines=src
+        .filter(b=>b.desc&&b.desc.trim())
+        .map(b=>`  "${esc(b.bid||b.name)}": "${esc(b.desc)}"`);
+    const descJsCode=`/* গ্রন্থকানন — বইয়ের বিবরণ\n   শুধু book.html (ডিটেইল পেজ) লোড করে */\nconst bookDescs = {\n${descLines.join(',\n')}\n};\n`;
+
+    /* ── দুটো ফাইল download ── */
+    function dlBlob(code, filename){
+        const blob=new Blob([code],{type:'text/javascript;charset=utf-8'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url; a.download=filename; a.click();
+        setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    }
+    dlBlob(bookJsCode,'book.js');
+    setTimeout(()=>dlBlob(descJsCode,'book-desc.js'), 500);
+    showToast('book.js + book-desc.js ডাউনলোড হচ্ছে...','#0B6E4F');
 }
 
 /* ══════════════════════════════════════════════
