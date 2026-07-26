@@ -10,10 +10,14 @@
    সাইট স্লো করে দিত। এখন ৫ মিনিটের জন্য localStorage-এ
    ক্যাশ রাখা হয় — ক্যাশ থাকলে সাথে সাথেই দেখানো হয়, সাথে
    ব্যাকগ্রাউন্ডে নতুন ডাটা টেনে ক্যাশ আপডেট করে রাখা হয়।
+
+   v2 পরিবর্তন: bookList এখন desc ছাড়া (desc আলাদা bookDescs
+   path-এ, book.html lazy load করে) — cache key v2 করা হয়েছে
+   যাতে পুরনো desc-সহ cache automatically invalidate হয়।
 ═══════════════════════════════════════════════════════ */
 (function () {
     var DBURL = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com/bookList.json';
-    var CACHE_KEY = 'gk_booklist_cache_v1';
+    var CACHE_KEY = 'gk_booklist_cache_v2'; /* v2: desc ছাড়া bookList */
     var CACHE_TTL = 5 * 60 * 1000; // ৫ মিনিট
 
     function applyBooks(arr) {
@@ -55,6 +59,9 @@
             })
             .catch(function () { return false; });
     }
+
+    /* পুরনো v1 cache পরিষ্কার করো (desc ছিল, এখন দরকার নেই) */
+    try { localStorage.removeItem('gk_booklist_cache_v1'); } catch (e) {}
 
     var cached = readCache();
     if (cached && (Date.now() - cached.t) < CACHE_TTL) {

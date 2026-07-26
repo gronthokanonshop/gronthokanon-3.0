@@ -1203,6 +1203,10 @@
                         <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white;fill:none;stroke-width:2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.5"></path></svg>
                         book.js রিলোড
                     </button>
+                    <button class="sync-btn" id="migrateDescBtn" onclick="migrateDescsToFirebase()" style="background:rgba(255,165,0,0.7);" title="পুরনো বইয়ের desc bookDescs path-এ move করবে (একবারই চালাতে হবে)">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white;fill:none;stroke-width:2"><polyline points="5 12 12 5 19 12"></polyline><polyline points="5 19 12 12 19 19"></polyline></svg>
+                        Desc Migrate
+                    </button>
                     </div>
                 </div>
 
@@ -3402,6 +3406,59 @@ async function saveAllBooksToFirebase(){
         db.ref('bookDescs').update(descs),
         db.ref('bookList').set(booksClean)
     ]);
+}
+
+/* ═══════════════════════════════════════════════════════
+   DESC MIGRATION — একবারই চালাতে হবে
+   পুরনো bookList-এ desc ছিল — সেগুলো bookDescs/{bid}-এ move করে
+   bookList থেকে desc সরিয়ে দেয়।
+═══════════════════════════════════════════════════════ */
+async function migrateDescsToFirebase(){
+    const btn=document.getElementById('migrateDescBtn');
+    if(btn){btn.disabled=true;btn.textContent='চলছে...';}
+
+    try{
+        /* Firebase থেকে পুরো bookList আনো */
+        const snap=await db.ref('bookList').once('value');
+        const fbData=snap.val();
+        if(!fbData){showToast('Firebase-এ কোনো বই নেই','#dc2626');return;}
+
+        const arr=Array.isArray(fbData)?fbData:Object.values(fbData);
+        const books=arr.filter(Boolean);
+
+        /* desc আছে এমন বই খোঁজো */
+        const descs={};
+        const cleanBooks=books.map((b,i)=>{
+            if(b.desc&&b.desc.trim()&&b.desc!=='শীঘ্রই আপডেট করা হবে'){
+                const bid=b.bid||String(i);
+                descs[bid]=b.desc;
+            }
+            const copy={...b};
+            delete copy.desc;
+            return copy;
+        });
+
+        const descCount=Object.keys(descs).length;
+        if(!descCount){
+            showToast('কোনো desc পাওয়া যায়নি — আগেই migrate হয়ে গেছে?','#0B6E4F');
+            if(btn){btn.disabled=false;btn.textContent='Desc Migrate';}
+            return;
+        }
+
+        /* একসাথে save করো */
+        await Promise.all([
+            db.ref('bookDescs').update(descs),
+            db.ref('bookList').set(cleanBooks)
+        ]);
+
+        showToast(descCount+'টা বইয়ের desc migrate হয়েছে ✅','#0B6E4F');
+        if(btn){btn.style.background='rgba(0,150,0,0.7)';btn.textContent='✅ Done';}
+
+    }catch(e){
+        console.error('Migration error:',e);
+        showToast('Migration ব্যর্থ: '+e.message,'#dc2626');
+        if(btn){btn.disabled=false;btn.textContent='Desc Migrate';}
+    }
 }
 
 async function syncBookToFirebase(idx, bookData, msg){
