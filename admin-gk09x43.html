@@ -2455,8 +2455,7 @@ function downloadTodayBookList(){
         `মোট অর্ডার: ${todayOrders.length}`
     ];
 
-    const csv=rows.join('
-');
+    const csv=rows.join('\n');
     const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
@@ -3537,6 +3536,8 @@ async function syncBookToFirebase(idx, bookData, msg){
     try{
         await ensureBookIdsAndMigrate(localBooks);
         await saveBookToFirebase(idx);
+        /* admin-এর নিজের cache clear — সাথে সাথে নতুন data দেখবে */
+        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
         showToast(msg||'Firebase-এ সেভ হয়েছে','#0B6E4F');
     }catch(e){
         console.error('Firebase sync error:',e);
@@ -3549,6 +3550,8 @@ async function syncAllBooksToFirebase(silent=false){
     if(btn){btn.disabled=true;btn.innerHTML='<svg class="spin-ic" style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg> সেভ হচ্ছে...';}
     try{
         await saveAllBooksToFirebase();
+        /* admin-এর নিজের cache clear */
+        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
         if(!silent)showToast('সব বই Firebase-এ সেভ হয়েছে! Website আপডেট হবে।','#0B6E4F');
     }catch(e){showToast('Firebase sync ব্যর্থ','#dc2626');}
     if(btn){btn.disabled=false;btn.innerHTML=`<svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> সব সেভ করুন`;}
