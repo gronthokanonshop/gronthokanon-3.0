@@ -1291,6 +1291,10 @@
                             <label class="be-label" style="color:#9a3412;">📦 প্রি-অর্ডার প্রকাশের সম্ভাব্য তারিখ (ঐচ্ছিক) — দিলে বই পেজে হাইলাইট করে দেখাবে</label>
                             <input class="form-input" id="fa_preorderdate" type="date">
                         </div>
+                        <div class="form-group editor-full" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;">
+                            <label class="be-label" style="color:#15803d;">📄 শর্ট PDF লিংক (ঐচ্ছিক) — Google Drive লিংক দিন, বই পেজে "একটু পড়ুন" বাটন দেখাবে</label>
+                            <input class="form-input" id="fa_pdflink" placeholder="https://drive.google.com/file/d/.../view">
+                        </div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label>
                             <div style="display:flex;gap:8px;">
                                 <input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;min-width:0;">
@@ -1711,6 +1715,25 @@
                     <div id="imgbbKeyStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.25);border-radius:8px;"></div>
                 </div>
 
+                <div class="tool-card" id="driveApiCard">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Google Drive API Key</h3>
+                    <p style="margin-bottom:12px;">Publisher-এর Drive folder থেকে ছবি, PDF, desc automatically আনার জন্য। Google Cloud Console থেকে Drive API key নিয়ে এখানে সেভ করুন।</p>
+                    <input class="form-input" id="driveApiKeyInput" placeholder="AIza..." style="margin-bottom:10px;">
+                    <button class="btn btn-primary" onclick="saveDriveApiKey()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> সেভ করুন</button>
+                    <div id="driveApiKeyStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.25);border-radius:8px;"></div>
+                </div>
+
+                <div class="tool-card" id="driveFolderCard">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে বই আপডেট</h3>
+                    <p style="margin-bottom:12px;">Publisher-এর Drive folder link দিন — ভেতরে যা আছে (ছবি, PDF, desc) automatically বই-এ assign হবে। ফাইলের নাম বইয়ের নামের সাথে মিলিয়ে করা হবে।</p>
+                    <input class="form-input" id="driveFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:10px;">
+                    <button class="btn btn-primary" onclick="importFromDriveFolder()" id="driveFolderBtn">
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+                        Drive থেকে আনো
+                    </button>
+                    <div id="driveFolderStatus" style="margin-top:10px;font-size:12px;"></div>
+                </div>
+
                 <div class="tool-card" id="pixelCard">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Meta Pixel (Facebook অ্যাড)</h3>
                     <p style="margin-bottom:12px;">Facebook-এ অ্যাড চালালে Pixel লাগে — এতে Facebook শিখে যায় কারা বই কেনে, অ্যাডের টাকা কম নষ্ট হয়। <strong>business.facebook.com → Events Manager → Data Sources</strong> থেকে Pixel বানিয়ে ID-টা (শুধু সংখ্যা) এখানে বসান — সাথে সাথে পুরো সাইটে চালু হবে, কোনো ফাইল আপলোড লাগবে না।</p>
@@ -1945,6 +1968,7 @@ function showDashboard(){
         loadCatTreeAdmin(); // বই এডিটরের বিভাগ/উপ-বিভাগ ড্রপডাউনও শুরুতেই লোড করা হয়
         loadCourierApiKeys(); // auto-load API keys
         loadImgbbKey(); // imgbb key (ছবি আপলোডের জন্য)
+        loadDriveApiKey(); // Google Drive API key
         loadPixelId(); // Meta Pixel
     },300);
 }
@@ -2056,6 +2080,131 @@ function closeSidebar(){
    IMGBB IMAGE UPLOAD
 ══════════════════════════════════════════════ */
 let IMGBB_KEY='';
+/* ── GOOGLE DRIVE API KEY ── */
+var DRIVE_API_KEY='';
+
+async function loadDriveApiKey(){
+    try{
+        const snap=await db.ref('driveApiKey').once('value');
+        DRIVE_API_KEY=snap.val()||'';
+        const st=document.getElementById('driveApiKeyStatus');
+        if(st){
+            st.style.display='block';
+            st.innerHTML=DRIVE_API_KEY?'✅ Drive API key সেভ করা আছে':'⚠️ key সেভ করা নেই';
+        }
+        if(DRIVE_API_KEY){
+            const inp=document.getElementById('driveApiKeyInput');
+            if(inp) inp.placeholder='✅ সেভ করা আছে (পরিবর্তন করতে নতুন key দিন)';
+        }
+    }catch(e){}
+}
+
+async function saveDriveApiKey(){
+    const v=(document.getElementById('driveApiKeyInput')?.value||'').trim();
+    if(!v){showToast('Key দিন','#dc2626');return;}
+    try{
+        await db.ref('driveApiKey').set(v);
+        DRIVE_API_KEY=v;
+        document.getElementById('driveApiKeyInput').value='';
+        document.getElementById('driveApiKeyInput').placeholder='✅ সেভ করা আছে';
+        const st=document.getElementById('driveApiKeyStatus');
+        if(st){st.style.display='block';st.innerHTML='✅ Drive API key সেভ হয়েছে';}
+        showToast('Drive API key সেভ হলো','#0B6E4F');
+    }catch(e){showToast('সেভ ব্যর্থ: '+e.message,'#dc2626');}
+}
+
+/* ── DRIVE FOLDER IMPORT ── */
+async function importFromDriveFolder(){
+    if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
+    const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
+    if(!folderUrl){showToast('Drive folder link দিন','#dc2626');return;}
+
+    /* Folder ID বের করো */
+    const m=folderUrl.match(/folders\/([a-zA-Z0-9_-]+)/);
+    if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
+    const folderId=m[1];
+
+    const btn=document.getElementById('driveFolderBtn');
+    const status=document.getElementById('driveFolderStatus');
+    btn.disabled=true; btn.textContent='চলছে...';
+    status.innerHTML='<span style="color:#059669">Drive folder থেকে ফাইল আনা হচ্ছে...</span>';
+
+    try{
+        /* Drive API দিয়ে folder contents আনো */
+        const apiUrl=`https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&fields=files(id,name,mimeType)&key=${DRIVE_API_KEY}&pageSize=200`;
+        const res=await fetch(apiUrl);
+        if(!res.ok) throw new Error('Drive API error: '+res.status);
+        const data=await res.json();
+        const files=data.files||[];
+
+        if(!files.length){
+            status.innerHTML='<span style="color:#dc2626">Folder-এ কোনো ফাইল পাওয়া যায়নি। Folder কি public share করা আছে?</span>';
+            btn.disabled=false; btn.textContent='Drive থেকে আনো';
+            return;
+        }
+
+        /* ফাইল categorize করো */
+        const images=files.filter(f=>f.mimeType.startsWith('image/'));
+        const pdfs=files.filter(f=>f.mimeType==='application/pdf');
+        const txts=files.filter(f=>f.mimeType==='text/plain'||f.name.endsWith('.txt'));
+
+        status.innerHTML=`<span style="color:#059669">পাওয়া গেছে: ${images.length}টি ছবি, ${pdfs.length}টি PDF, ${txts.length}টি text ফাইল</span><br>বইয়ের সাথে মিলিয়ে assign করা হচ্ছে...`;
+
+        let matched=0, imgCount=0, pdfCount=0, descCount=0;
+
+        /* বইয়ের নাম normalize করার function */
+        function normalize(str){
+            return (str||'').toLowerCase()
+                .replace(/[।,.!?;:'"()\[\]{}\-_]/g,' ')
+                .replace(/\s+/g,' ').trim();
+        }
+
+        for(let i=0;i<localBooks.length;i++){
+            const b=localBooks[i];
+            if(!b||!b.name) continue;
+            const bookNorm=normalize(b.name);
+            let changed=false;
+
+            /* ছবি match */
+            const imgFile=images.find(f=>normalize(f.name.replace(/\.[^.]+$/,'')).includes(bookNorm)||bookNorm.includes(normalize(f.name.replace(/\.[^.]+$/,''))));
+            if(imgFile){
+                /* ImgBB upload করতে হবে — এখানে Drive direct link দিচ্ছি */
+                const driveImgUrl=`https://drive.google.com/uc?export=view&id=${imgFile.id}`;
+                b.img=driveImgUrl;
+                imgCount++; changed=true;
+            }
+
+            /* PDF match */
+            const pdfFile=pdfs.find(f=>normalize(f.name.replace(/\.[^.]+$/,'')).includes(bookNorm)||bookNorm.includes(normalize(f.name.replace(/\.[^.]+$/,''))));
+            if(pdfFile){
+                b.pdfLink=`https://drive.google.com/file/d/${pdfFile.id}/view`;
+                pdfCount++; changed=true;
+            }
+
+            /* Text/desc match */
+            const txtFile=txts.find(f=>normalize(f.name.replace(/\.[^.]+$/,'')).includes(bookNorm)||bookNorm.includes(normalize(f.name.replace(/\.[^.]+$/,''))));
+            if(txtFile){
+                /* Text content fetch */
+                try{
+                    const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txtFile.id}?alt=media&key=${DRIVE_API_KEY}`);
+                    if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
+                }catch(e){}
+            }
+
+            if(changed){ matched++; await saveBookToFirebase(i); }
+        }
+
+        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
+        status.innerHTML=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট হয়েছে (ছবি: ${imgCount}, PDF: ${pdfCount}, desc: ${descCount})</span>`;
+        showToast(`${matched}টি বই Drive থেকে আপডেট হয়েছে`,'#0B6E4F');
+
+    }catch(e){
+        status.innerHTML=`<span style="color:#dc2626">❌ Error: ${e.message}</span>`;
+        showToast('Drive import ব্যর্থ: '+e.message,'#dc2626');
+    }
+    btn.disabled=false; btn.textContent='Drive থেকে আনো';
+}
+
 async function loadImgbbKey(){
     try{
         const snap=await db.ref('imgbbKey').once('value');
@@ -2814,6 +2963,7 @@ function beAddBook(){
         tags:tags,
         hadiya:(g('fa_hadiya')?.value||'').trim(),
         preorderDate:(g('fa_preorderdate')?.value||'').trim(),
+        pdfLink:(g('fa_pdflink')?.value||'').trim(),
         img:g('fa_img').value.trim(),
         desc:g('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
     };
@@ -2831,7 +2981,7 @@ function beAddBook(){
         newBook.attributes=(beAttrSel['add']||[]).filter(a=>a.label&&a.label.trim());
     }
     localBooks.push(newBook);
-    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand','fa_hadiya','fa_preorderdate'].forEach(id=>{const el=g(id);if(el)el.value='';});
+    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand','fa_hadiya','fa_preorderdate','fa_pdflink'].forEach(id=>{const el=g(id);if(el)el.value='';});
     beAttrSel['add']=[];
     beToggleAddForm();
     beOpenIdx=localBooks.length-1;
@@ -2876,6 +3026,7 @@ function beSaveBook(idx){
     b.tags=gkReadTags(idx);
     b.hadiya=(g('be_hadiya_'+idx)?.value||'').trim();
     b.preorderDate=(g('be_preorderdate_'+idx)?.value||'').trim();
+    b.pdfLink=(g('be_pdflink_'+idx)?.value||'').trim();
     delete b.cats; /* পুরনো multi-cat field সরানো */
     beUpdateStats();
     beRenderList();
@@ -3036,6 +3187,10 @@ function beEditorBody(b,i,imgPrevHtml){
                     <div class="form-group editor-full" style="background:#fff7ed;border:1.5px solid #fdba74;border-radius:10px;padding:10px 12px;">
                         <label class="be-label" style="color:#9a3412;">📦 প্রি-অর্ডার প্রকাশের সম্ভাব্য তারিখ (ঐচ্ছিক) — দিলে বই পেজে হাইলাইট করে দেখাবে</label>
                         <input class="form-input" id="be_preorderdate_${i}" type="date" value="${escapeHTML(b.preorderDate||'')}">
+                    </div>
+                    <div class="form-group editor-full" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;">
+                        <label class="be-label" style="color:#15803d;">📄 শর্ট PDF লিংক (ঐচ্ছিক)</label>
+                        <input class="form-input" id="be_pdflink_${i}" value="${escapeHTML(b.pdfLink||'')}" placeholder="https://drive.google.com/file/d/.../view">
                     </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
@@ -3466,17 +3621,10 @@ async function saveBookToFirebase(idx){
 
 async function saveAllBooksToFirebase(){
     await ensureBookIdsAndMigrate(localBooks);
-    /* সব desc এক batch এ */
-    const descs={};
-    const booksClean=localBooks.map((b,i)=>{
-        const bid=b.bid||String(i);
-        if(b.desc&&b.desc.trim()) descs[bid]=b.desc;
-        return bookWithoutDesc(b);
-    });
-    await Promise.all([
-        db.ref('bookDescs').update(descs),
-        db.ref('bookList').set(booksClean)
-    ]);
+    /* desc বাদ দিয়ে শুধু bookList save — desc আলাদা book-desc.js এ আছে,
+       individual বই edit করলে bookDescs/{bid} এ যায় */
+    const booksClean=localBooks.map(b=>bookWithoutDesc(b));
+    await db.ref('bookList').set(booksClean);
 }
 
 /* ═══════════════════════════════════════════════════════
