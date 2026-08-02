@@ -2188,89 +2188,110 @@ async function saveDriveApiKey(){
     }catch(e){showToast('সেভ ব্যর্থ: '+e.message,'#dc2626');}
 }
 
-/* ── DRIVE FOLDER IMPORT ── */
+/* ── DRIVE FOLDER IMPORT (sub-folder structure) ── */
 async function importFromDriveFolder(){
     if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
     const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
     if(!folderUrl){showToast('Drive folder link দিন','#dc2626');return;}
 
-    /* Folder ID বের করো */
     const m=folderUrl.match(/folders\/([a-zA-Z0-9_-]+)/);
     if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
-    const folderId=m[1];
+    const mainFolderId=m[1];
 
     const btn=document.getElementById('driveFolderBtn');
     const status=document.getElementById('driveFolderStatus');
     btn.disabled=true; btn.textContent='চলছে...';
-    status.innerHTML='<span style="color:#059669">Drive folder থেকে ফাইল আনা হচ্ছে...</span>';
+    status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
+
+    function normalize(str){
+        return (str||'').replace(/[।,.!?'"()\[\]{}\-_]/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
+    }
+
+    async function driveList(folderId){
+        const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType)&key=${DRIVE_API_KEY}&pageSize=200`;
+        const r=await fetch(url);
+        if(!r.ok) throw new Error('Drive API error: '+r.status);
+        const d=await r.json();
+        return d.files||[];
+    }
 
     try{
-        /* Drive API দিয়ে folder contents আনো */
-        const apiUrl=`https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&fields=files(id,name,mimeType)&key=${DRIVE_API_KEY}&pageSize=200`;
-        const res=await fetch(apiUrl);
-        if(!res.ok) throw new Error('Drive API error: '+res.status);
-        const data=await res.json();
-        const files=data.files||[];
+        /* ১. Main folder-এর সব sub-folder আনো (প্রতিটা = একটা বই) */
+        status.innerHTML='<span style="color:#059669">📂 বইয়ের folder list আনা হচ্ছে...</span>';
+        const allFiles=await driveList(mainFolderId);
+        const subFolders=allFiles.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
 
-        if(!files.length){
-            status.innerHTML='<span style="color:#dc2626">Folder-এ কোনো ফাইল পাওয়া যায়নি। Folder কি public share করা আছে?</span>';
+        if(!subFolders.length){
+            status.innerHTML='<span style="color:#dc2626">কোনো sub-folder পাওয়া যায়নি।</span>';
             btn.disabled=false; btn.textContent='Drive থেকে আনো';
             return;
         }
 
-        /* ফাইল categorize করো */
-        const images=files.filter(f=>f.mimeType.startsWith('image/'));
-        const pdfs=files.filter(f=>f.mimeType==='application/pdf');
-        const txts=files.filter(f=>f.mimeType==='text/plain'||f.name.endsWith('.txt'));
+        status.innerHTML=`<span style="color:#059669">${subFolders.length}টি বইয়ের folder পাওয়া গেছে। আপডেট করা হচ্ছে...</span>`;
 
-        status.innerHTML=`<span style="color:#059669">পাওয়া গেছে: ${images.length}টি ছবি, ${pdfs.length}টি PDF, ${txts.length}টি text ফাইল</span><br>বইয়ের সাথে মিলিয়ে assign করা হচ্ছে...`;
+        let matched=0, imgCount=0, pdfCount=0, descCount=0, notFound=[];
 
-        let matched=0, imgCount=0, pdfCount=0, descCount=0;
+        /* ২. প্রতিটা sub-folder-এ ঢুকো */
+        for(const folder of subFolders){
+            const folderName=folder.name;
+            const folderNorm=normalize(folderName);
 
-        /* বইয়ের নাম normalize করার function */
-        function normalize(str){
-            return (str||'').toLowerCase()
-                .replace(/[।,.!?;:'"()\[\]{}\-_]/g,' ')
-                .replace(/\s+/g,' ').trim();
-        }
+            /* book.js-এ বইয়ের নাম মিলাও */
+            const bookIdx=localBooks.findIndex(b=>{
+                if(!b||!b.name) return false;
+                const bn=normalize(b.name);
+                return bn===folderNorm || bn.includes(folderNorm) || folderNorm.includes(bn);
+            });
 
-        for(let i=0;i<localBooks.length;i++){
-            const b=localBooks[i];
-            if(!b||!b.name) continue;
-            const bookNorm=normalize(b.name);
+            if(bookIdx===-1){
+                notFound.push(folderName);
+                continue;
+            }
+
+            /* Sub-folder-এর ফাইল আনো */
+            const files=await driveList(folder.id);
+            const images=files.filter(f=>f.mimeType.startsWith('image/'));
+            const pdfs=files.filter(f=>f.mimeType==='application/pdf');
+            const txts=files.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
+
+            const b=localBooks[bookIdx];
             let changed=false;
 
-            /* ছবি match */
-            const imgFile=images.find(f=>normalize(f.name.replace(/\.[^.]+$/,'')).includes(bookNorm)||bookNorm.includes(normalize(f.name.replace(/\.[^.]+$/,''))));
-            if(imgFile){
-                /* ImgBB upload করতে হবে — এখানে Drive direct link দিচ্ছি */
-                const driveImgUrl=`https://drive.google.com/uc?export=view&id=${imgFile.id}`;
-                b.img=driveImgUrl;
+            /* ছবি — cover/front/main অথবা প্রথম ছবি */
+            if(images.length){
+                const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
+                b.img=`https://drive.google.com/uc?export=view&id=${cover.id}`;
                 imgCount++; changed=true;
             }
 
-            /* PDF match */
-            const pdfFile=pdfs.find(f=>normalize(f.name.replace(/\.[^.]+$/,'')).includes(bookNorm)||bookNorm.includes(normalize(f.name.replace(/\.[^.]+$/,''))));
-            if(pdfFile){
-                b.pdfLink=`https://drive.google.com/file/d/${pdfFile.id}/view`;
+            /* PDF */
+            if(pdfs.length){
+                b.pdfLink=`https://drive.google.com/file/d/${pdfs[0].id}/view`;
                 pdfCount++; changed=true;
             }
 
-            /* Text/desc match */
-            const txtFile=txts.find(f=>normalize(f.name.replace(/\.[^.]+$/,'')).includes(bookNorm)||bookNorm.includes(normalize(f.name.replace(/\.[^.]+$/,''))));
-            if(txtFile){
-                /* Text content fetch */
+            /* desc — txt file */
+            if(txts.length){
                 try{
-                    const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txtFile.id}?alt=media&key=${DRIVE_API_KEY}`);
+                    const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
                     if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
                 }catch(e){}
             }
 
-            if(changed){ matched++; await saveBookToFirebase(i); }
+            if(changed){
+                matched++;
+                await saveBookToFirebase(bookIdx);
+                status.innerHTML=`<span style="color:#059669">✅ ${matched}টি বই আপডেট হয়েছে... (${folder.name})</span>`;
+            }
         }
 
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
-        status.innerHTML=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট হয়েছে (ছবি: ${imgCount}, PDF: ${pdfCount}, desc: ${descCount})</span>`;
+
+        let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট (ছবি: ${imgCount}, PDF: ${pdfCount}, desc: ${descCount})</span>`;
+        if(notFound.length){
+            resultHtml+=`<br><span style="color:#dc2626">⚠️ ${notFound.length}টি folder match হয়নি: ${notFound.slice(0,5).join(', ')}${notFound.length>5?'...':''}</span>`;
+        }
+        status.innerHTML=resultHtml;
         showToast(`${matched}টি বই Drive থেকে আপডেট হয়েছে`,'#0B6E4F');
 
     }catch(e){
@@ -2279,6 +2300,7 @@ async function importFromDriveFolder(){
     }
     btn.disabled=false; btn.textContent='Drive থেকে আনো';
 }
+
 
 async function loadImgbbKey(){
     try{
@@ -3266,14 +3288,6 @@ function beEditorBody(b,i,imgPrevHtml){
                     <div class="form-group editor-full" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;">
                         <label class="be-label" style="color:#15803d;">📄 শর্ট PDF লিংক (ঐচ্ছিক)</label>
                         <input class="form-input" id="be_pdflink_${i}" value="${escapeHTML(b.pdfLink||'')}" placeholder="https://drive.google.com/file/d/.../view">
-                    </div>
-                    <div class="form-group editor-full" style="background:#eff6ff;border:1.5px solid #93c5fd;border-radius:10px;padding:10px 12px;">
-                        <label class="be-label" style="color:#1d4ed8;">📁 Publisher Drive Folder (ঐচ্ছিক) — link দিলে ফাইল list দেখাবে</label>
-                        <div style="display:flex;gap:8px;">
-                            <input class="form-input" id="be_drivefolder_${i}" placeholder="https://drive.google.com/drive/folders/..." style="flex:1;min-width:0;">
-                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;background:#1d4ed8;color:#fff;border:none;" onclick="loadDriveFolderFiles(${i})">📂 দেখো</button>
-                        </div>
-                        <div id="be_drivefiles_${i}" style="margin-top:8px;"></div>
                     </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
