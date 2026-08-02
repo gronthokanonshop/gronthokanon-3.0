@@ -2080,6 +2080,81 @@ function closeSidebar(){
    IMGBB IMAGE UPLOAD
 ══════════════════════════════════════════════ */
 let IMGBB_KEY='';
+/* ── DRIVE FOLDER FILES LOADER (বই edit-এ) ── */
+async function loadDriveFolderFiles(idx){
+    if(!DRIVE_API_KEY){showToast('আগে Tools-এ Drive API key সেভ করুন','#dc2626');return;}
+    const inp=document.getElementById('be_drivefolder_'+idx);
+    const container=document.getElementById('be_drivefiles_'+idx);
+    if(!inp||!container)return;
+
+    const folderUrl=inp.value.trim();
+    if(!folderUrl){showToast('Drive folder link দিন','#dc2626');return;}
+
+    const m=folderUrl.match(/folders\/([a-zA-Z0-9_-]+)/);
+    if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
+    const folderId=m[1];
+
+    container.innerHTML='<span style="color:#6b7280;font-size:12px;">লোড হচ্ছে...</span>';
+
+    try{
+        const res=await fetch(`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType)&key=${DRIVE_API_KEY}&pageSize=50`);
+        if(!res.ok) throw new Error('API error: '+res.status);
+        const data=await res.json();
+        const files=data.files||[];
+
+        if(!files.length){
+            container.innerHTML='<span style="color:#dc2626;font-size:12px;">কোনো ফাইল পাওয়া যায়নি। Folder কি public share করা?</span>';
+            return;
+        }
+
+        const images=files.filter(f=>f.mimeType.startsWith('image/'));
+        const pdfs=files.filter(f=>f.mimeType==='application/pdf');
+
+        let html='<div style="font-size:12px;display:flex;flex-direction:column;gap:6px;">';
+
+        if(images.length){
+            html+='<div style="font-weight:600;color:#1d4ed8;margin-top:4px;">🖼️ ছবি — কোনটা Cover?</div>';
+            images.forEach(f=>{
+                const viewUrl=`https://drive.google.com/uc?export=view&id=${f.id}`;
+                html+=`<div style="display:flex;align-items:center;gap:8px;padding:6px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;">
+                    <img src="${viewUrl}" style="width:40px;height:50px;object-fit:cover;border-radius:4px;" onerror="this.style.display='none'">
+                    <span style="flex:1;color:#374151;">${f.name}</span>
+                    <button onclick="setDriveImg(${idx},'${viewUrl}')" style="background:#059669;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">Cover সেট</button>
+                </div>`;
+            });
+        }
+
+        if(pdfs.length){
+            html+='<div style="font-weight:600;color:#1d4ed8;margin-top:6px;">📄 PDF</div>';
+            pdfs.forEach(f=>{
+                const pdfUrl=`https://drive.google.com/file/d/${f.id}/view`;
+                html+=`<div style="display:flex;align-items:center;gap:8px;padding:6px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;">
+                    <span style="flex:1;color:#374151;">📄 ${f.name}</span>
+                    <button onclick="setDrivePdf(${idx},'${pdfUrl}')" style="background:#1d4ed8;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">PDF সেট</button>
+                </div>`;
+            });
+        }
+
+        html+='</div>';
+        container.innerHTML=html;
+
+    }catch(e){
+        container.innerHTML=`<span style="color:#dc2626;font-size:12px;">Error: ${e.message}</span>`;
+    }
+}
+
+function setDriveImg(idx, url){
+    const inp=document.getElementById('be_img_'+idx);
+    if(inp){ inp.value=url; beUpdateImgPreview(idx); }
+    showToast('Cover ছবি সেট হয়েছে — সেভ করুন','#0B6E4F');
+}
+
+function setDrivePdf(idx, url){
+    const inp=document.getElementById('be_pdflink_'+idx);
+    if(inp) inp.value=url;
+    showToast('PDF link সেট হয়েছে — সেভ করুন','#0B6E4F');
+}
+
 /* ── GOOGLE DRIVE API KEY ── */
 var DRIVE_API_KEY='';
 
@@ -3191,6 +3266,14 @@ function beEditorBody(b,i,imgPrevHtml){
                     <div class="form-group editor-full" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;">
                         <label class="be-label" style="color:#15803d;">📄 শর্ট PDF লিংক (ঐচ্ছিক)</label>
                         <input class="form-input" id="be_pdflink_${i}" value="${escapeHTML(b.pdfLink||'')}" placeholder="https://drive.google.com/file/d/.../view">
+                    </div>
+                    <div class="form-group editor-full" style="background:#eff6ff;border:1.5px solid #93c5fd;border-radius:10px;padding:10px 12px;">
+                        <label class="be-label" style="color:#1d4ed8;">📁 Publisher Drive Folder (ঐচ্ছিক) — link দিলে ফাইল list দেখাবে</label>
+                        <div style="display:flex;gap:8px;">
+                            <input class="form-input" id="be_drivefolder_${i}" placeholder="https://drive.google.com/drive/folders/..." style="flex:1;min-width:0;">
+                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;background:#1d4ed8;color:#fff;border:none;" onclick="loadDriveFolderFiles(${i})">📂 দেখো</button>
+                        </div>
+                        <div id="be_drivefiles_${i}" style="margin-top:8px;"></div>
                     </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
