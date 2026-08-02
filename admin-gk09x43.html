@@ -2297,9 +2297,15 @@ async function importFromDriveFolder(){
                     imgCount++;
                 }
                 if(newPdfs.length){ newBook.pdfLink=`https://drive.google.com/file/d/${newPdfs[0].id}/view`; pdfCount++; }
+                const newGdoc=newFiles.find(f=>f.mimeType==='application/vnd.google-apps.document');
                 if(newTxts.length){
                     try{
                         const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${newTxts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
+                        if(tr.ok){ newBook.desc=await tr.text(); descCount++; }
+                    }catch(e){}
+                } else if(newGdoc){
+                    try{
+                        const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${newGdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
                         if(tr.ok){ newBook.desc=await tr.text(); descCount++; }
                     }catch(e){}
                 }
@@ -2339,17 +2345,26 @@ async function importFromDriveFolder(){
             }
 
             /* PDF — আগে থেকে থাকলে skip */
-            if(pdfs.length && !b.pdfLink){
+            if(pdfs.length && !b.pdfLink?.trim()){
                 b.pdfLink=`https://drive.google.com/file/d/${pdfs[0].id}/view`;
                 pdfCount++; changed=true;
             }
 
-            /* desc — আগে থেকে থাকলে skip */
-            if(txts.length && !b.desc){
-                try{
-                    const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
-                    if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
-                }catch(e){}
+            /* desc — txt বা Google Doc থেকে, আগে থেকে থাকলে skip */
+            const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
+            if(!b.desc?.trim()){
+                if(txts.length){
+                    try{
+                        const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
+                        if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
+                    }catch(e){}
+                } else if(gdoc){
+                    /* Google Doc → plain text export */
+                    try{
+                        const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${gdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
+                        if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
+                    }catch(e){}
+                }
             }
 
             if(changed){
