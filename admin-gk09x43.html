@@ -2223,6 +2223,8 @@ async function importFromDriveFolder(){
             .replace(/ﷺ/g,'(স.)')
             .replace(/যেসব/g,'যে সব')
             .replace(/নিয়ামত পেয়ে হারিয়ে/g,'নিয়ামত পেয়েও হারিয়ে')
+            .replace(/ব্যাখ্যা/g,'ব্যখ্যা')
+            .replace(/তাক্কওয়ার পাঠশালা/g,'রমাদান ডায়েরি')
             .replace(/\s+/g,' ').trim().toLowerCase();
     }
 
@@ -2263,7 +2265,47 @@ async function importFromDriveFolder(){
             });
 
             if(bookIdx===-1){
-                notFound.push(folderName);
+                /* Book.js-এ নেই — placeholder হিসেবে add করো */
+                const newBook={
+                    bid: folderName.replace(/\s+/g,'-').replace(/[^\u0980-\u09FF\w-]/g,''),
+                    type:'বই', name:folderName, author:'', price:0, original_price:0,
+                    cat:'ইসলামি বই', subcat:'', subject:'', cover:'Paperback',
+                    pub:'রাইয়্যান প্রকাশন', pages:'', brand:'', img:'', desc:'',
+                    tags:[], attributes:[], pdfLink:''
+                };
+                localBooks.push(newBook);
+                const newIdx=localBooks.length-1;
+
+                /* sub-folder-এর files আনো */
+                const newFiles=await driveList(folder.id);
+                const newImages=newFiles.filter(f=>f.mimeType.startsWith('image/'));
+                const newPdfs=newFiles.filter(f=>f.mimeType==='application/pdf');
+                const newTxts=newFiles.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
+
+                if(newImages.length){
+                    const cover=newImages.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||newImages[0];
+                    const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
+                    try{
+                        const imgbbKey=await db.ref('imgbbKey').once('value').then(s=>s.val());
+                        if(imgbbKey){
+                            const fd=new FormData(); fd.append('image',driveImgUrl);
+                            const ir=await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`,{method:'POST',body:fd});
+                            const id=await ir.json();
+                            newBook.img=id.success?id.data.url:driveImgUrl;
+                        } else { newBook.img=driveImgUrl; }
+                    }catch(e){ newBook.img=driveImgUrl; }
+                    imgCount++;
+                }
+                if(newPdfs.length){ newBook.pdfLink=`https://drive.google.com/file/d/${newPdfs[0].id}/view`; pdfCount++; }
+                if(newTxts.length){
+                    try{
+                        const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${newTxts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
+                        if(tr.ok){ newBook.desc=await tr.text(); descCount++; }
+                    }catch(e){}
+                }
+                await saveBookToFirebase(newIdx);
+                matched++;
+                status.innerHTML=`<span style="color:#059669">✅ ${matched}টি বই আপডেট... নতুন: "${folderName}"</span>`;
                 continue;
             }
 
