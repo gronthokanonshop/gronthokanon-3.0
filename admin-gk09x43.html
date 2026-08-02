@@ -2318,8 +2318,9 @@ async function importFromDriveFolder(){
             const b=localBooks[bookIdx];
             let changed=false;
 
-            /* ছবি — cover/front/main অথবা প্রথম ছবি → ImgBB-তে upload */
-            if(images.length){
+            /* ছবি — আগে থেকে ImgBB link থাকলে skip, না থাকলে upload */
+            const hasImgBB = b.img && b.img.includes('ibb.co');
+            if(images.length && !hasImgBB){
                 const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
                 const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
                 try{
@@ -2337,14 +2338,14 @@ async function importFromDriveFolder(){
                 }catch(e){ b.img=driveImgUrl; imgCount++; changed=true; }
             }
 
-            /* PDF */
-            if(pdfs.length){
+            /* PDF — আগে থেকে থাকলে skip */
+            if(pdfs.length && !b.pdfLink){
                 b.pdfLink=`https://drive.google.com/file/d/${pdfs[0].id}/view`;
                 pdfCount++; changed=true;
             }
 
-            /* desc — txt file */
-            if(txts.length){
+            /* desc — আগে থেকে থাকলে skip */
+            if(txts.length && !b.desc){
                 try{
                     const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
                     if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
