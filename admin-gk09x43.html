@@ -2204,7 +2204,26 @@ async function importFromDriveFolder(){
     status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
 
     function normalize(str){
-        return (str||'').replace(/[।,.!?'"()\[\]{}\-_]/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
+        return (str||'')
+            /* zero-width characters সরাও */
+            .replace(/[\u200b-\u200f\u202a-\u202e]/g,'')
+            /* বিরাম চিহ্ন সরাও */
+            .replace(/[।,.!?'"()\[\]{}\-_।ঃ]/g,' ')
+            /* বাংলা spelling variations normalize */
+            .replace(/দুআ/g,'দোয়া')
+            .replace(/দুঅা/g,'দোয়া')
+            .replace(/রামাদান/g,'রমাদান')
+            .replace(/রমযান/g,'রমাদান')
+            .replace(/বিদ্ধংসী/g,'বিধ্বংসী')
+            .replace(/কাপে/g,'কাঁপে')
+            .replace(/ডায়েরী/g,'ডায়েরি')
+            .replace(/রাসূল/g,'রাসুল')
+            .replace(/নবিজির/g,'নবিজির')
+            .replace(/নবীজির/g,'নবিজির')
+            .replace(/ﷺ/g,'(স.)')
+            .replace(/যেসব/g,'যে সব')
+            .replace(/নিয়ামত পেয়ে হারিয়ে/g,'নিয়ামত পেয়েও হারিয়ে')
+            .replace(/\s+/g,' ').trim().toLowerCase();
     }
 
     async function driveList(folderId){
@@ -2257,11 +2276,23 @@ async function importFromDriveFolder(){
             const b=localBooks[bookIdx];
             let changed=false;
 
-            /* ছবি — cover/front/main অথবা প্রথম ছবি */
+            /* ছবি — cover/front/main অথবা প্রথম ছবি → ImgBB-তে upload */
             if(images.length){
                 const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
-                b.img=`https://drive.google.com/uc?export=view&id=${cover.id}`;
-                imgCount++; changed=true;
+                const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
+                try{
+                    const imgbbKey=await db.ref('imgbbKey').once('value').then(s=>s.val());
+                    if(imgbbKey){
+                        const fd=new FormData();
+                        fd.append('image', driveImgUrl); /* URL দিলে ImgBB নিজে download করে */
+                        const ir=await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`,{method:'POST',body:fd});
+                        const id=await ir.json();
+                        if(id.success){ b.img=id.data.url; imgCount++; changed=true; }
+                        else{ b.img=driveImgUrl; imgCount++; changed=true; } /* fallback */
+                    } else {
+                        b.img=driveImgUrl; imgCount++; changed=true;
+                    }
+                }catch(e){ b.img=driveImgUrl; imgCount++; changed=true; }
             }
 
             /* PDF */
