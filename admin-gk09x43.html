@@ -2097,7 +2097,7 @@ async function loadDriveFolderFiles(idx){
     container.innerHTML='<span style="color:#6b7280;font-size:12px;">লোড হচ্ছে...</span>';
 
     try{
-        const res=await fetch(`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType)&key=${DRIVE_API_KEY}&pageSize=50`);
+        const res=await fetch(`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType,createdTime)&orderBy=createdTime&key=${DRIVE_API_KEY}&pageSize=50`);
         if(!res.ok) throw new Error('API error: '+res.status);
         const data=await res.json();
         const files=data.files||[];
@@ -2107,18 +2107,19 @@ async function loadDriveFolderFiles(idx){
             return;
         }
 
-        const images=files.filter(f=>f.mimeType.startsWith('image/'));
+        /* সবচেয়ে আগে upload হওয়া ছবিটাই সাধারণত front cover — createdTime অনুযায়ী sort */
+        const images=files.filter(f=>f.mimeType.startsWith('image/')).sort((a,b)=>new Date(a.createdTime)-new Date(b.createdTime));
         const pdfs=files.filter(f=>f.mimeType==='application/pdf');
 
         let html='<div style="font-size:12px;display:flex;flex-direction:column;gap:6px;">';
 
         if(images.length){
-            html+='<div style="font-weight:600;color:#1d4ed8;margin-top:4px;">🖼️ ছবি — কোনটা Cover?</div>';
-            images.forEach(f=>{
+            html+='<div style="font-weight:600;color:#1d4ed8;margin-top:4px;">🖼️ ছবি — কোনটা Cover? (সবচেয়ে আগে upload হওয়াটা ★ চিহ্নিত, সাধারণত front cover)</div>';
+            images.forEach((f,fi)=>{
                 const viewUrl=`https://drive.google.com/uc?export=view&id=${f.id}`;
                 html+=`<div style="display:flex;align-items:center;gap:8px;padding:6px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;">
                     <img src="${viewUrl}" style="width:40px;height:50px;object-fit:cover;border-radius:4px;" onerror="this.style.display='none'">
-                    <span style="flex:1;color:#374151;">${f.name}</span>
+                    <span style="flex:1;color:#374151;">${fi===0?'★ ':''}${f.name}</span>
                     <button onclick="setDriveImg(${idx},'${viewUrl}')" style="background:#059669;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">Cover সেট</button>
                 </div>`;
             });
@@ -2229,7 +2230,7 @@ async function importFromDriveFolder(){
     }
 
     async function driveList(folderId){
-        const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType)&key=${DRIVE_API_KEY}&pageSize=200`;
+        const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType,createdTime)&orderBy=createdTime&key=${DRIVE_API_KEY}&pageSize=200`;
         const r=await fetch(url);
         if(!r.ok) throw new Error('Drive API error: '+r.status);
         const d=await r.json();
@@ -2283,6 +2284,7 @@ async function importFromDriveFolder(){
                 const newTxts=newFiles.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
 
                 if(newImages.length){
+                    /* নামে cover/front না থাকলে সবচেয়ে আগে upload হওয়া ছবিটা (index 0, createdTime অনুযায়ী sorted) — সাধারণত front cover */
                     const cover=newImages.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||newImages[0];
                     const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
                     try{
@@ -2327,6 +2329,7 @@ async function importFromDriveFolder(){
             /* ছবি — আগে থেকে ImgBB link থাকলে skip, না থাকলে upload */
             const hasImgBB = b.img && b.img.includes('ibb.co');
             if(images.length && !hasImgBB){
+                /* নামে cover/front না থাকলে সবচেয়ে আগে upload হওয়া ছবিটা (index 0, createdTime অনুযায়ী sorted) — সাধারণত front cover */
                 const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
                 const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
                 try{

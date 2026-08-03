@@ -95,14 +95,20 @@
         /* VIEW COUNTER BADGE */
         .offer-tag{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:8px;}
         .view-badge{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.65);color:#fff;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;white-space:nowrap;}
-        /* ── একটু পড়ুন বাটন ── */
-        .pdf-read-btn-wrap{display:none;justify-content:flex-end;margin-bottom:6px;}
+        /* ── একটু পড়ুন বাটন ──
+           আগে এটা normal flow-তে থেকে align-items:flex-end দিয়ে পুরো কার্ডের
+           ডানদিকে চাপা পড়ত, ফলে সেটা wl-btn-lg (top:14) ও share-btn (top:62)
+           এর উপর বসে যেত। এখন নিজে absolute হয়ে, ওই দুটো বাটনের নিচে (top:108+)
+           নিজের জায়গায় বসে — কোনো ওভারল্যাপ থাকবে না। */
+        .pdf-read-btn-wrap{display:none;position:absolute;top:108px;right:14px;flex-direction:column;align-items:flex-end;cursor:pointer;z-index:11;}
         .pdf-read-btn-wrap.show{display:flex;}
-        .pdf-read-btn{padding:0;background:transparent;border:none;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;display:flex;align-items:center;gap:5px;}
-        .pdf-read-btn-text{font-size:13px;font-weight:500;color:#d62828;white-space:nowrap;letter-spacing:0.1px;}
-        .pdf-read-btn-arrow{color:#d62828;display:flex;align-items:center;animation:pdfArrowBounce 1.4s ease-in-out infinite;}
-        @keyframes pdfArrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
-        .pdf-read-btn:hover .pdf-read-btn-text{text-decoration:underline;}
+        .pdf-read-btn-wrap:hover .pdf-read-btn-text{text-decoration:underline;}
+        .pdf-read-btn{display:none;}
+        .pdf-read-btn-text{font-size:12.5px;font-weight:600;color:#d62828;white-space:nowrap;letter-spacing:0.1px;font-family:'Hind Siliguri',Arial,sans-serif;background:rgba(255,255,255,0.9);padding:3px 8px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.08);}
+        [data-theme="dark"] .pdf-read-btn-text{background:rgba(20,20,20,0.75);}
+        .pdf-read-btn-arrow{color:#d62828;display:flex;align-items:center;justify-content:flex-end;margin-top:3px;animation:pdfArrowBounce 1.4s ease-in-out infinite;}
+        @keyframes pdfArrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+        @media(max-width:340px){.pdf-read-btn-wrap{top:100px;}}
 
         /* ── PDF Modal ── */
         #pdfModal{display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(0,0,0,0);}
@@ -111,18 +117,33 @@
         .pdf-modal-close-top{position:fixed;top:14px;right:14px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.18);color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:0.15s;z-index:10000;}
         .pdf-modal-close-top:hover{background:rgba(255,255,255,0.2);}
 
-        /* 3D Book Animation */
-        .pdf-book3d{width:240px;height:330px;perspective:1100px;transform-style:preserve-3d;position:relative;}
+        /* 3D Book Animation — একটু পড়ুন এ ক্লিক করলে বই যেভাবে খোলে
+           নতুন ভার্সন: বইটা আগে হালকা bounce করে উঠে আসে (float-in), তারপর
+           কভারটা একটা halo/glow ঝলকানি সহ খোলে, আর পাতাগুলো একে একে (staggered)
+           ফুটে ওঠে — আগের সাধারণ ফ্লিপের বদলে এটা অনেকটা "বই হাতে নিয়ে খোলার" মতো লাগে */
+        .pdf-book3d{width:240px;height:330px;perspective:1100px;transform-style:preserve-3d;position:relative;opacity:0;transform-origin:center bottom;animation:pdfBookFloatIn 0.5s cubic-bezier(.34,1.56,.64,1) forwards;}
+        @keyframes pdfBookFloatIn{0%{opacity:0;transform:translateY(36px) scale(0.82) rotateX(14deg)}70%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1) rotateX(0)}}
         .pdf-b-spine{position:absolute;left:-14px;top:4px;width:14px;height:322px;background:linear-gradient(to right,#063d23,#0a5230);border-radius:3px 0 0 3px;}
         .pdf-b-back{position:absolute;inset:0;background:#0a3d28;border-radius:3px 10px 10px 3px;}
         .pdf-b-pages{position:absolute;inset:0;background:linear-gradient(to right,#d8d0be 0%,#f7f3ec 6%,#fdfaf5 100%);border-radius:3px 10px 10px 3px;display:flex;flex-direction:column;padding:24px 20px;gap:8px;opacity:0;}
         .pdf-b-cover{position:absolute;inset:0;border-radius:3px 10px 10px 3px;overflow:hidden;transform-origin:left center;box-shadow:4px 4px 18px rgba(0,0,0,0.3);}
         .pdf-b-cover img{width:100%;height:100%;object-fit:cover;display:block;}
-        .pdf-book3d.opening .pdf-b-cover{animation:pdfCoverOpen 0.72s cubic-bezier(.4,0,.2,1) forwards;}
-        @keyframes pdfCoverOpen{0%{transform:rotateY(0);box-shadow:4px 4px 18px rgba(0,0,0,0.3)}45%{box-shadow:-16px 8px 32px rgba(0,0,0,0.35)}100%{transform:rotateY(-174deg);box-shadow:-4px 2px 10px rgba(0,0,0,0.2)}}
-        .pdf-book3d.opening .pdf-b-pages{animation:pdfPagesIn 0.45s 0.38s both;}
-        @keyframes pdfPagesIn{from{opacity:0;transform:scaleX(0.97)}to{opacity:1;transform:scaleX(1)}}
-        .pdf-page-line{height:1px;background:rgba(0,0,0,0.07);border-radius:1px;}
+        .pdf-b-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,0.55) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none;}
+        .pdf-book3d.opening .pdf-b-cover{animation:pdfCoverOpen 0.75s cubic-bezier(.4,0,.2,1) forwards;}
+        .pdf-book3d.opening .pdf-b-cover::after{animation:pdfCoverShine 0.75s cubic-bezier(.4,0,.2,1) forwards;}
+        @keyframes pdfCoverOpen{0%{transform:rotateY(0) translateZ(0);box-shadow:4px 4px 18px rgba(0,0,0,0.3)}40%{box-shadow:-18px 10px 34px rgba(0,0,0,0.35)}100%{transform:rotateY(-174deg) translateZ(6px);box-shadow:-4px 2px 10px rgba(0,0,0,0.2)}}
+        @keyframes pdfCoverShine{0%{transform:translateX(-120%)}55%{transform:translateX(120%)}100%{transform:translateX(120%)}}
+        .pdf-book3d.opening .pdf-b-pages{animation:pdfPagesIn 0.4s 0.4s both;}
+        @keyframes pdfPagesIn{from{opacity:0;transform:scaleX(0.96)}to{opacity:1;transform:scaleX(1)}}
+        .pdf-page-line{height:1px;background:rgba(0,0,0,0.07);border-radius:1px;opacity:0;transform:translateX(-6px);}
+        .pdf-book3d.opening .pdf-page-line{animation:pdfLineIn 0.35s both;}
+        .pdf-book3d.opening .pdf-page-line:nth-child(1){animation-delay:.46s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(2){animation-delay:.51s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(3){animation-delay:.56s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(4){animation-delay:.61s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(5){animation-delay:.66s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(6){animation-delay:.71s}
+        @keyframes pdfLineIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
 
         /* PDF+Cart wrapper */
         .pdf-cart-wrap{display:none;align-items:flex-start;gap:14px;width:96%;max-width:860px;max-height:90vh;animation:pdfPanelUp 0.32s cubic-bezier(.4,0,.2,1);}
@@ -410,15 +431,16 @@
             <div class="share-opt" onclick="copyLink()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <span id="copyTxt">লিঙ্ক কপি করুন</span></div>
         </div>
         <div id="discRibbon" class="disc-ribbon" style="display:none;"><span id="discRibbonText">30%<small>ছাড়</small></span></div>
-        <div class="pdf-read-btn-wrap" id="pdfReadBtnWrap">
-            <button class="pdf-read-btn" id="pdfReadBtn" onclick="openPdfModal()">
-                <span class="pdf-read-btn-text">একটু পড়ে দেখুন</span>
-                <span class="pdf-read-btn-arrow">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-                </span>
-            </button>
+        <div class="pdf-read-btn-wrap" id="pdfReadBtnWrap" onclick="openPdfModal()">
+            <span class="pdf-read-btn-text">একটু পড়ে দেখুন</span>
+            <span class="pdf-read-btn-arrow">
+                <svg width="30" height="26" viewBox="0 0 34 30" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M30,2 C30,15 18,24 7,24" fill="none"/>
+                    <polyline points="12,17 6,24 13,29"/>
+                </svg>
+            </span>
         </div>
-        <div class="book-img-wrap" onclick="openImgModal()" style="cursor:zoom-in;">
+        <div class="book-img-wrap" id="bookImgWrap" onclick="onBookImgClick()" style="cursor:pointer;">
             <div class="img-skel" id="imgSkel"></div>
             <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
         </div>
@@ -914,6 +936,15 @@ function closeImgModal(){document.getElementById('imgModal').classList.remove('o
 
 /* SHARE */
 /* PDF Modal — বই খোলার animation সহ */
+function onBookImgClick(){
+    /* PDF আছে → PDF খোলো, না থাকলে zoom modal */
+    if(curBook&&curBook.pdfLink&&curBook.pdfLink.trim()){
+        openPdfModal();
+    } else {
+        openImgModal();
+    }
+}
+
 function openPdfModal(){
     const b=curBook;
     if(!b||!b.pdfLink) return;
