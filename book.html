@@ -96,7 +96,9 @@
         .offer-tag{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:8px;}
         .view-badge{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.65);color:#fff;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;white-space:nowrap;}
         /* ── একটু পড়ুন বাটন ── */
-        .pdf-read-btn{display:none;position:absolute;top:-14px;right:0;padding:0;background:transparent;border:none;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;align-items:center;gap:5px;z-index:10;}
+        .pdf-read-btn-wrap{display:none;justify-content:flex-end;margin-bottom:6px;}
+        .pdf-read-btn-wrap.show{display:flex;}
+        .pdf-read-btn{padding:0;background:transparent;border:none;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;display:flex;align-items:center;gap:5px;}
         .pdf-read-btn-text{font-size:13px;font-weight:500;color:#d62828;white-space:nowrap;letter-spacing:0.1px;}
         .pdf-read-btn-arrow{color:#d62828;display:flex;align-items:center;animation:pdfArrowBounce 1.4s ease-in-out infinite;}
         @keyframes pdfArrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
@@ -122,20 +124,39 @@
         @keyframes pdfPagesIn{from{opacity:0;transform:scaleX(0.97)}to{opacity:1;transform:scaleX(1)}}
         .pdf-page-line{height:1px;background:rgba(0,0,0,0.07);border-radius:1px;}
 
-        /* PDF Panel — clean white fullscreen style */
-        .pdf-modal-box{display:none;flex-direction:column;width:94%;max-width:680px;max-height:88vh;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 2px 60px rgba(0,0,0,0.5);}
-        .pdf-modal-box.show{display:flex;animation:pdfPanelUp 0.32s cubic-bezier(.4,0,.2,1);}
+        /* PDF+Cart wrapper */
+        .pdf-cart-wrap{display:none;align-items:flex-start;gap:14px;width:96%;max-width:860px;max-height:90vh;animation:pdfPanelUp 0.32s cubic-bezier(.4,0,.2,1);}
+        .pdf-cart-wrap.show{display:flex;}
         @keyframes pdfPanelUp{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
-        .pdf-modal-head{display:flex;align-items:center;justify-content:flex-end;padding:8px 10px;background:#f8f8f8;border-bottom:1px solid #e5e5e5;}
+        /* PDF Panel */
+        .pdf-modal-box{display:flex;flex-direction:column;flex:1;min-width:0;max-height:90vh;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 4px 40px rgba(0,0,0,0.45);}
+        .pdf-modal-head{display:flex;align-items:center;justify-content:flex-end;padding:7px 10px;background:#f5f5f5;border-bottom:1px solid #e0e0e0;}
         .pdf-modal-title{display:none;}
-        .pdf-modal-close{background:none;border:none;cursor:pointer;color:#666;font-size:20px;line-height:1;padding:4px 8px;border-radius:4px;}
-        .pdf-modal-close:hover{background:#ececec;}
-        .pdf-modal-frame{width:100%;flex:1;border:none;min-height:320px;}
-        .pdf-modal-foot{padding:8px 14px;border-top:1px solid #e5e5e5;display:flex;justify-content:space-between;align-items:center;background:#f8f8f8;}
-        .pdf-modal-foot a{font-size:12px;color:#059669;text-decoration:none;font-weight:500;}
+        .pdf-modal-close{background:none;border:none;cursor:pointer;color:#555;font-size:20px;line-height:1;padding:4px 8px;border-radius:4px;}
+        .pdf-modal-close:hover{background:#e5e5e5;}
+        .pdf-modal-frame{width:100%;flex:1;border:none;min-height:400px;}
+        .pdf-modal-foot{padding:7px 12px;border-top:1px solid #e0e0e0;display:flex;justify-content:flex-end;background:#f5f5f5;}
+        .pdf-modal-foot a{font-size:11px;color:#059669;text-decoration:none;font-weight:500;}
         .pdf-step-dots{display:flex;gap:5px;}
         .pdf-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.25);transition:0.3s;}
         .pdf-dot.active{background:#059669;width:14px;border-radius:3px;}
+        /* Cart Card */
+        .pdf-cart-popup{width:220px;flex-shrink:0;background:#fff;border-radius:10px;box-shadow:0 4px 24px rgba(0,0,0,0.22);padding:14px;display:none;flex-direction:column;gap:10px;}
+        .pdf-cart-popup.show{display:flex;}
+        .pdf-cart-top{display:flex;gap:10px;align-items:flex-start;}
+        .pdf-cart-img{width:56px;height:74px;object-fit:cover;border-radius:4px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+        .pdf-cart-info{flex:1;}
+        .pdf-cart-name{font-size:12px;font-weight:600;color:#111;line-height:1.4;margin-bottom:6px;}
+        .pdf-cart-price{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+        .pdf-cart-orig{font-size:11px;color:#999;text-decoration:line-through;}
+        .pdf-cart-current{font-size:14px;font-weight:700;color:#d62828;}
+        .pdf-cart-btn{width:100%;padding:10px;background:#d62828;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;transition:0.18s;}
+        .pdf-cart-btn:hover{background:#b91c1c;}
+        @media(max-width:640px){
+          .pdf-cart-wrap{flex-direction:column;align-items:stretch;max-height:none;}
+          .pdf-modal-frame{min-height:55vh;}
+          .pdf-cart-popup{width:100%;}
+        }
 
         /* BOOK INFO CARD */
         .info-card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 4px 20px var(--shadow);}
@@ -389,17 +410,17 @@
             <div class="share-opt" onclick="copyLink()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <span id="copyTxt">লিঙ্ক কপি করুন</span></div>
         </div>
         <div id="discRibbon" class="disc-ribbon" style="display:none;"><span id="discRibbonText">30%<small>ছাড়</small></span></div>
-        <div class="book-img-wrap" style="position:relative;">
-            <div onclick="openImgModal()" style="cursor:zoom-in;">
-                <div class="img-skel" id="imgSkel"></div>
-                <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
-            </div>
+        <div class="pdf-read-btn-wrap" id="pdfReadBtnWrap">
             <button class="pdf-read-btn" id="pdfReadBtn" onclick="openPdfModal()">
                 <span class="pdf-read-btn-text">একটু পড়ে দেখুন</span>
                 <span class="pdf-read-btn-arrow">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
                 </span>
             </button>
+        </div>
+        <div class="book-img-wrap" onclick="openImgModal()" style="cursor:zoom-in;">
+            <div class="img-skel" id="imgSkel"></div>
+            <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
         </div>
         <div class="badges" id="bookBadges"></div>
         <div class="trust-mini">
@@ -410,7 +431,7 @@
         <div style="margin-top:8px;font-size:11px;color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> ট্যাপ করুন বড় করে দেখতে</div>
         <div class="view-badge" id="viewBadge"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> লোড হচ্ছে...</div>
         <button class="wl-btn-lg" id="wlBtnLg" onclick="toggleWL()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-    </div>
+    </div><!-- end img-card -->
 
     <!-- PDF Modal — বই খোলার animation সহ -->
     <div id="pdfModal" onclick="if(event.target===this)closePdfModal()">
@@ -433,19 +454,36 @@
             </div>
         </div>
 
-        <!-- PDF Panel -->
-        <div class="pdf-modal-box" id="pdfModalBox">
-            <div class="pdf-modal-head">
-                <span class="pdf-modal-title" id="pdfModalTitle"></span>
-                <button class="pdf-modal-close" onclick="closePdfModal()">✕</button>
-            </div>
-            <iframe class="pdf-modal-frame" id="pdfFrame" src="" allow="autoplay"></iframe>
-            <div class="pdf-modal-foot">
-                <div class="pdf-step-dots">
-                    <div class="pdf-dot" id="pdfDot1"></div>
-                    <div class="pdf-dot active" id="pdfDot2"></div>
+        <!-- PDF + Cart wrapper -->
+        <div class="pdf-cart-wrap" id="pdfCartWrap">
+            <!-- PDF Panel -->
+            <div class="pdf-modal-box" id="pdfModalBox">
+                <div class="pdf-modal-head">
+                    <span class="pdf-modal-title" id="pdfModalTitle"></span>
+                    <button class="pdf-modal-close" onclick="closePdfModal()">✕</button>
                 </div>
-                <a id="pdfDriveLink" href="#" target="_blank" rel="noopener">Drive-এ খুলুন ↗</a>
+                <iframe class="pdf-modal-frame" id="pdfFrame" src="" allow="autoplay"></iframe>
+                <div class="pdf-modal-foot">
+                    <a id="pdfDriveLink" href="#" target="_blank" rel="noopener">Drive-এ খুলুন ↗</a>
+                </div>
+            </div>
+
+            <!-- Cart Card -->
+            <div class="pdf-cart-popup" id="pdfCartPopup">
+                <div class="pdf-cart-top">
+                    <img class="pdf-cart-img" id="pdfCartImg" src="" alt="">
+                    <div class="pdf-cart-info">
+                        <div class="pdf-cart-name" id="pdfCartName"></div>
+                        <div class="pdf-cart-price">
+                            <span class="pdf-cart-orig" id="pdfCartOrig"></span>
+                            <span class="pdf-cart-current" id="pdfCartCurrent"></span>
+                        </div>
+                    </div>
+                </div>
+                <button class="pdf-cart-btn" onclick="closePdfModal();addToCart(curBook)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    কার্টে যোগ করুন
+                </button>
             </div>
         </div>
     </div>
@@ -900,8 +938,8 @@ function openPdfModal(){
 
     book.style.display='block';
     panel.classList.remove('show');
-    document.getElementById('pdfDot1').classList.add('active');
-    document.getElementById('pdfDot2').classList.remove('active');
+    document.getElementById('pdfCartWrap').classList.remove('show');
+    document.getElementById('pdfCartPopup').classList.remove('show');
 
     /* Animation শুরু */
     setTimeout(function(){ book.classList.add('opening'); }, 80);
@@ -912,10 +950,15 @@ function openPdfModal(){
         book.classList.remove('opening');
         document.getElementById('pdfFrame').src=embedUrl;
         document.getElementById('pdfDriveLink').href=raw;
-        document.getElementById('pdfModalTitle').innerText=(b.name||'বই')+' — একটু পড়ুন';
         panel.classList.add('show');
-        document.getElementById('pdfDot1').classList.remove('active');
-        document.getElementById('pdfDot2').classList.add('active');
+        document.getElementById('pdfCartWrap').classList.add('show');
+        /* Cart popup */
+        var bImg=document.getElementById('bookImg');
+        document.getElementById('pdfCartImg').src=bImg?bImg.src:'';
+        document.getElementById('pdfCartName').innerText=b.name||'';
+        document.getElementById('pdfCartOrig').innerText=(b.original_price>b.price)?'৳ '+b.original_price:'';
+        document.getElementById('pdfCartCurrent').innerText='৳ '+b.price;
+        document.getElementById('pdfCartPopup').classList.add('show');
     }, 1100);
 }
 function closePdfModal(){
@@ -926,6 +969,8 @@ function closePdfModal(){
         document.getElementById('pdfBook3d').classList.remove('opening');
         document.getElementById('pdfModalBox').classList.remove('show');
         document.getElementById('pdfFrame').src='';
+        document.getElementById('pdfCartPopup').classList.remove('show');
+        document.getElementById('pdfCartWrap').classList.remove('show');
     }, 300);
     document.body.style.overflow='';
 }
@@ -1085,11 +1130,11 @@ function loadBook(){
     document.getElementById('bookPrice').innerText='৳ '+b.price;
     document.getElementById('stickyPrice').innerText='৳ '+b.price;
     /* PDF preview বাটন */
-    const pdfBtn=document.getElementById('pdfReadBtn');
+    const pdfBtnWrap=document.getElementById('pdfReadBtnWrap');
     if(b.pdfLink&&b.pdfLink.trim()){
-        pdfBtn.style.display='flex';
+        pdfBtnWrap.classList.add('show');
     } else {
-        pdfBtn.style.display='none';
+        pdfBtnWrap.classList.remove('show');
     }
 
     const preOrderBox=document.getElementById('preOrderBox');
