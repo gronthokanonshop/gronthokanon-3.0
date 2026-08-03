@@ -2230,11 +2230,22 @@ async function importFromDriveFolder(){
     }
 
     async function driveList(folderId){
-        const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType,createdTime)&orderBy=createdTime&key=${DRIVE_API_KEY}&pageSize=200`;
+        const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType,createdTime,shortcutDetails)&orderBy=createdTime&key=${DRIVE_API_KEY}&pageSize=200`;
         const r=await fetch(url);
         if(!r.ok) throw new Error('Drive API error: '+r.status);
         const d=await r.json();
-        return d.files||[];
+        const files=d.files||[];
+        /* কেউ কেউ PDF/ছবি সরাসরি upload না করে "Add shortcut to Drive" দিয়ে যোগ করে —
+           সেক্ষেত্রে mimeType আসে 'application/vnd.google-apps.shortcut', আসল PDF/ছবি হিসেবে ধরা পড়ে না।
+           তাই shortcut হলে আসল ফাইলের id ও mimeType বের করে নিচ্ছি। */
+        const resolved=files.map(f=>{
+            if(f.mimeType==='application/vnd.google-apps.shortcut' && f.shortcutDetails){
+                return {...f, id:f.shortcutDetails.targetId||f.id, mimeType:f.shortcutDetails.targetMimeType||f.mimeType, isShortcut:true};
+            }
+            return f;
+        });
+        console.log(`[Drive Debug] Folder ${folderId} — ${resolved.length}টি ফাইল:`, resolved.map(f=>`${f.name} → ${f.mimeType}${f.isShortcut?' (shortcut resolved)':''}`));
+        return resolved;
     }
 
     try{
