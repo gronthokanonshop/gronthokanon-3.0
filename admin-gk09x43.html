@@ -1745,6 +1745,10 @@
                             📦 সব একসাথে
                         </label>
                     </div>
+                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:12px;color:#dc2626;">
+                        <input type="checkbox" id="driveForceReplace" style="accent-color:#dc2626;">
+                        ♻️ পুরনো বইয়ের PDF/ছবি/desc আগে থেকে থাকলেও নতুনটা দিয়ে বদলে দাও (Replace)
+                    </label>
                     <button class="btn btn-primary" onclick="importFromDriveFolder()" id="driveFolderBtn">
                         <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
                         Drive থেকে আনো
@@ -2220,6 +2224,7 @@ async function importFromDriveFolder(){
     const btn=document.getElementById('driveFolderBtn');
     const status=document.getElementById('driveFolderStatus');
     const mode=document.querySelector('input[name="driveImportMode"]:checked')?.value||'pdf';
+    const forceReplace=document.getElementById('driveForceReplace')?.checked||false;
     btn.disabled=true; btn.textContent='চলছে...';
     status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
 
@@ -2361,7 +2366,7 @@ async function importFromDriveFolder(){
             let changed=false;
 
             /* PDF */
-            if((mode==='pdf'||mode==='all') && pdfs.length && !b.pdfLink?.trim()){
+            if((mode==='pdf'||mode==='all') && pdfs.length && (forceReplace || !b.pdfLink?.trim())){
                 b.pdfLink=`https://drive.google.com/file/d/${pdfs[0].id}/view`;
                 pdfCount++; changed=true;
             }
@@ -2369,7 +2374,7 @@ async function importFromDriveFolder(){
             /* desc */
             if(mode==='desc'||mode==='all'){
                 const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
-                if(!b.desc?.trim()){
+                if(forceReplace || !b.desc?.trim()){
                     if(txts.length){
                         try{
                             const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
@@ -2387,7 +2392,7 @@ async function importFromDriveFolder(){
             /* ছবি */
             if(mode==='img'||mode==='all'){
                 const hasImgBB=b.img&&b.img.includes('ibb.co');
-                if(images.length&&!hasImgBB){
+                if(images.length&&(forceReplace || !hasImgBB)){
                     const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
                     const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
                     try{
