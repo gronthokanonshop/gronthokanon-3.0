@@ -2416,6 +2416,8 @@ async function importFromDriveFolder(){
         }
 
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
+        beUpdateStats();
+        beRenderList();
 
         let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট (ছবি: ${imgCount}, PDF: ${pdfCount}, desc: ${descCount})</span>`;
         if(notFound.length){
