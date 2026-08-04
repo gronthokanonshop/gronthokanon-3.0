@@ -1725,8 +1725,26 @@
 
                 <div class="tool-card" id="driveFolderCard">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে বই আপডেট</h3>
-                    <p style="margin-bottom:12px;">Publisher-এর Drive folder link দিন — ভেতরে যা আছে (ছবি, PDF, desc) automatically বই-এ assign হবে। ফাইলের নাম বইয়ের নামের সাথে মিলিয়ে করা হবে।</p>
-                    <input class="form-input" id="driveFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:10px;">
+                    <p style="margin-bottom:12px;">Publisher-এর Drive folder link দিন — কী আনতে চান বেছে নিন।</p>
+                    <input class="form-input" id="driveFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:12px;">
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);">
+                            <input type="radio" name="driveImportMode" value="pdf" id="driveModePdf" checked style="accent-color:#059669;">
+                            📄 শুধু PDF
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);">
+                            <input type="radio" name="driveImportMode" value="desc" id="driveModeDesc" style="accent-color:#059669;">
+                            📝 শুধু desc
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);">
+                            <input type="radio" name="driveImportMode" value="img" id="driveModeImg" style="accent-color:#059669;">
+                            🖼️ শুধু ছবি
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);">
+                            <input type="radio" name="driveImportMode" value="all" id="driveModeAll" style="accent-color:#059669;">
+                            📦 সব একসাথে
+                        </label>
+                    </div>
                     <button class="btn btn-primary" onclick="importFromDriveFolder()" id="driveFolderBtn">
                         <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
                         Drive থেকে আনো
@@ -2201,6 +2219,7 @@ async function importFromDriveFolder(){
 
     const btn=document.getElementById('driveFolderBtn');
     const status=document.getElementById('driveFolderStatus');
+    const mode=document.querySelector('input[name="driveImportMode"]:checked')?.value||'pdf';
     btn.disabled=true; btn.textContent='চলছে...';
     status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
 
@@ -2322,26 +2341,46 @@ async function importFromDriveFolder(){
             const b=localBooks[bookIdx];
             let changed=false;
 
-            /* PDF — আগে থেকে থাকলে skip */
-            if(pdfs.length && !b.pdfLink?.trim()){
+            /* PDF */
+            if((mode==='pdf'||mode==='all') && pdfs.length && !b.pdfLink?.trim()){
                 b.pdfLink=`https://drive.google.com/file/d/${pdfs[0].id}/view`;
                 pdfCount++; changed=true;
             }
 
-            /* desc — txt বা Google Doc থেকে, আগে থেকে থাকলে skip */
-            const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
-            if(!b.desc?.trim()){
-                if(txts.length){
+            /* desc */
+            if(mode==='desc'||mode==='all'){
+                const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
+                if(!b.desc?.trim()){
+                    if(txts.length){
+                        try{
+                            const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
+                            if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
+                        }catch(e){}
+                    } else if(gdoc){
+                        try{
+                            const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${gdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
+                            if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
+                        }catch(e){}
+                    }
+                }
+            }
+
+            /* ছবি */
+            if(mode==='img'||mode==='all'){
+                const hasImgBB=b.img&&b.img.includes('ibb.co');
+                if(images.length&&!hasImgBB){
+                    const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
+                    const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
                     try{
-                        const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
-                        if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
-                    }catch(e){}
-                } else if(gdoc){
-                    /* Google Doc → plain text export */
-                    try{
-                        const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${gdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
-                        if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
-                    }catch(e){}
+                        const imgbbKey=await db.ref('imgbbKey').once('value').then(s=>s.val());
+                        if(imgbbKey){
+                            const fd=new FormData(); fd.append('image',driveImgUrl);
+                            const ir=await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`,{method:'POST',body:fd});
+                            const id=await ir.json();
+                            b.img=id.success?id.data.url:driveImgUrl;
+                        } else { b.img=driveImgUrl; }
+                        imgCount++; changed=true;
+                    }catch(e){ b.img=driveImgUrl; imgCount++; changed=true; }
                 }
             }
 
@@ -2354,7 +2393,7 @@ async function importFromDriveFolder(){
 
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
 
-        let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট (PDF: ${pdfCount}, desc: ${descCount})</span>`;
+        let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট (ছবি: ${imgCount}, PDF: ${pdfCount}, desc: ${descCount})</span>`;
         if(notFound.length){
             resultHtml+=`<br><span style="color:#dc2626">⚠️ ${notFound.length}টি folder match হয়নি: ${notFound.slice(0,5).join(', ')}${notFound.length>5?'...':''}</span>`;
         }
