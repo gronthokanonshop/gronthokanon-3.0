@@ -2289,10 +2289,29 @@ async function importFromDriveFolder(){
             const folderNorm=normalize(folderName);
 
             /* book.js-এ বইয়ের নাম মিলাও */
-            const bookIdx=localBooks.findIndex(b=>{
-                if(!b||!b.name) return false;
+            /* ── Fuzzy match — শব্দ মিলিয়ে score করি ──
+               Drive folder: "গাইরত" → book.js: "গাইরত (পুরুষের হারানো আত্মমর্যাদাবোধ)"
+               normalize করার পর common words count করি — 60%+ মিললে match */
+            function wordScore(a,b){
+                const wa=a.split(' ').filter(w=>w.length>1);
+                const wb=b.split(' ').filter(w=>w.length>1);
+                if(!wa.length||!wb.length) return 0;
+                const common=wa.filter(w=>wb.includes(w)).length;
+                return common/Math.min(wa.length,wb.length);
+            }
+
+            let bookIdx=-1, bestScore=0;
+            localBooks.forEach((b,i)=>{
+                if(!b||!b.name) return;
                 const bn=normalize(b.name);
-                return bn===folderNorm || bn.includes(folderNorm) || folderNorm.includes(bn);
+                /* exact match */
+                if(bn===folderNorm||bn.includes(folderNorm)||folderNorm.includes(bn)){
+                    if(bestScore<1){ bookIdx=i; bestScore=1; }
+                    return;
+                }
+                /* fuzzy word score */
+                const score=wordScore(folderNorm,bn);
+                if(score>=0.6&&score>bestScore){ bookIdx=i; bestScore=score; }
             });
 
             if(bookIdx===-1){
