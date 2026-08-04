@@ -2294,21 +2294,6 @@ async function importFromDriveFolder(){
                 const newPdfs=newFiles.filter(f=>f.mimeType==='application/pdf');
                 const newTxts=newFiles.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
 
-                if(newImages.length){
-                    /* নামে cover/front না থাকলে সবচেয়ে আগে upload হওয়া ছবিটা (index 0, createdTime অনুযায়ী sorted) — সাধারণত front cover */
-                    const cover=newImages.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||newImages[0];
-                    const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
-                    try{
-                        const imgbbKey=await db.ref('imgbbKey').once('value').then(s=>s.val());
-                        if(imgbbKey){
-                            const fd=new FormData(); fd.append('image',driveImgUrl);
-                            const ir=await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`,{method:'POST',body:fd});
-                            const id=await ir.json();
-                            newBook.img=id.success?id.data.url:driveImgUrl;
-                        } else { newBook.img=driveImgUrl; }
-                    }catch(e){ newBook.img=driveImgUrl; }
-                    imgCount++;
-                }
                 if(newPdfs.length){ newBook.pdfLink=`https://drive.google.com/file/d/${newPdfs[0].id}/view`; pdfCount++; }
                 const newGdoc=newFiles.find(f=>f.mimeType==='application/vnd.google-apps.document');
                 if(newTxts.length){
@@ -2336,27 +2321,6 @@ async function importFromDriveFolder(){
 
             const b=localBooks[bookIdx];
             let changed=false;
-
-            /* ছবি — আগে থেকে ImgBB link থাকলে skip, না থাকলে upload */
-            const hasImgBB = b.img && b.img.includes('ibb.co');
-            if(images.length && !hasImgBB){
-                /* নামে cover/front না থাকলে সবচেয়ে আগে upload হওয়া ছবিটা (index 0, createdTime অনুযায়ী sorted) — সাধারণত front cover */
-                const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
-                const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
-                try{
-                    const imgbbKey=await db.ref('imgbbKey').once('value').then(s=>s.val());
-                    if(imgbbKey){
-                        const fd=new FormData();
-                        fd.append('image', driveImgUrl); /* URL দিলে ImgBB নিজে download করে */
-                        const ir=await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`,{method:'POST',body:fd});
-                        const id=await ir.json();
-                        if(id.success){ b.img=id.data.url; imgCount++; changed=true; }
-                        else{ b.img=driveImgUrl; imgCount++; changed=true; } /* fallback */
-                    } else {
-                        b.img=driveImgUrl; imgCount++; changed=true;
-                    }
-                }catch(e){ b.img=driveImgUrl; imgCount++; changed=true; }
-            }
 
             /* PDF — আগে থেকে থাকলে skip */
             if(pdfs.length && !b.pdfLink?.trim()){
@@ -2390,7 +2354,7 @@ async function importFromDriveFolder(){
 
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
 
-        let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট (ছবি: ${imgCount}, PDF: ${pdfCount}, desc: ${descCount})</span>`;
+        let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট (PDF: ${pdfCount}, desc: ${descCount})</span>`;
         if(notFound.length){
             resultHtml+=`<br><span style="color:#dc2626">⚠️ ${notFound.length}টি folder match হয়নি: ${notFound.slice(0,5).join(', ')}${notFound.length>5?'...':''}</span>`;
         }
