@@ -1691,6 +1691,40 @@ function loadLeaderboard(){
     doLb();
 }
 
+/* ── লাইভ সিঙ্ক ──
+   পেজ প্রথমে static book.js থেকে সাথে সাথে দেখায় (fast), তারপর ব্যাকগ্রাউন্ডে
+   Firebase-এ এই একটা বইয়ের bookList/{idx} node থেকে সবশেষ তথ্য (pdfLink,
+   দাম, ছবি ইত্যাদি) এনে books[idx]-এ বসিয়ে আবার render করে। এতে admin panel
+   থেকে বই আপডেট করলে (যেমন Drive import দিয়ে PDF বসানো) সাথে সাথেই এই পেজে
+   দেখা যাবে — book.js re-download/re-upload করা লাগবে না। পুরো bookList
+   (৪০০+ বই) না এনে শুধু এই একটা বইয়ের node আনা হচ্ছে বলে খরচ/স্পিড কম থাকে। */
+function syncLiveBookData(){
+    try{
+        const idParam=new URLSearchParams(window.location.search).get('id');
+        if(idParam===null||typeof books==='undefined'||!books.length) return Promise.resolve();
+
+        let idx=books.findIndex(bk=>bk&&bk.bid&&bk.bid===idParam);
+        if(idx===-1){
+            const n=parseInt(idParam);
+            if(!isNaN(n)&&books[n]) idx=n;
+        }
+        if(idx===-1) idx=findIdxBySlug(idParam);
+        if(idx===-1) return Promise.resolve();
+
+        return db.ref('bookList/'+idx).once('value').then(function(snap){
+            if(snap.exists()){
+                const live=snap.val();
+                if(live&&typeof live==='object'){
+                    books[idx]=Object.assign({},books[idx],live);
+                }
+            }
+        }).catch(function(e){ console.warn('Live book sync ব্যর্থ:',e); });
+    }catch(e){
+        console.warn('Live book sync ব্যর্থ:',e);
+        return Promise.resolve();
+    }
+}
+
 /* INIT */
 /* window.onload আগে ব্যবহার হতো — যেটা WhatsApp আইকন (wikimedia থেকে) সহ পেজের
    সব external ছবি ডাউনলোড শেষ না হওয়া পর্যন্ত ফায়ার হতো না, ফলে বইয়ের তথ্য
@@ -1702,6 +1736,7 @@ document.addEventListener('DOMContentLoaded', function(){
     loadTagsBook();
     loadCatTreeBook();
     /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট (নতুন প্রোডাক্টসহ) এলে আবার রেন্ডার */
+    window.GK_BOOKS_LIVE=syncLiveBookData();
     if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(function(){ loadBook(); });
     /* fallback: কিছুক্ষণেও বই না পেলে হোমে ফেরত */
     setTimeout(function(){
