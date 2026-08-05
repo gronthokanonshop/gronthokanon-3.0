@@ -2426,6 +2426,219 @@ async function importFromDriveFolder(){
 }
 
 
+/* ── PUBLISHER RESET & REBUILD ──
+   একটা নির্দিষ্ট publisher-এর সব বই Drive folder-গঠন অনুযায়ী নতুন করে সাজায়।
+   ম্যাচ পাওয়া গেলে পুরনো বইয়ের দাম/ক্যাটাগরি/লেখক/স্টক ইত্যাদি রেখে দিয়ে শুধু
+   নাম/PDF/ছবি/desc আপডেট করে। ম্যাচ না পেলে নতুন বই যোগ হয়। যেসব পুরনো বই
+   কোনো Drive folder-এর সাথে মেলেনি (orphan), সেগুলো মুছে ফেলা হয় না — শুধু
+   দেখানো হয়, ম্যানুয়ালি ডিসিশন admin-ই নেবেন। ── */
+
+function raiyanWordScore(a,b){
+    const wa=a.split(' ').filter(w=>w.length>1);
+    const wb=b.split(' ').filter(w=>w.length>1);
+    if(!wa.length||!wb.length) return 0;
+    const common=wa.filter(w=>wb.includes(w)).length;
+    return common/Math.min(wa.length,wb.length);
+}
+
+async function previewRaiyanRebuild(){
+    const pubName=(document.getElementById('raiyanPubName')?.value||'').trim();
+    const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
+    const status=document.getElementById('raiyanRebuildStatus');
+    const previewBtn=document.getElementById('raiyanPreviewBtn');
+    const applyBtn=document.getElementById('raiyanApplyBtn');
+
+    if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
+    if(!pubName){showToast('Publisher-এর নাম দিন','#dc2626');return;}
+    if(!folderUrl){showToast('উপরের Drive folder ঘরে লিংক দিন','#dc2626');return;}
+    const m=folderUrl.match(/folders\/([a-zA-Z0-9_-]+)/);
+    if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
+    const mainFolderId=m[1];
+
+    previewBtn.disabled=true; previewBtn.textContent='চলছে...';
+    applyBtn.disabled=true; applyBtn.style.opacity='0.5';
+    status.innerHTML='<span style="color:#059669">📂 Drive folder list আনা হচ্ছে...</span>';
+
+    try{
+        const allFiles=await driveList(mainFolderId);
+        const subFolders=allFiles.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
+        if(!subFolders.length){
+            status.innerHTML='<span style="color:#dc2626">কোনো sub-folder পাওয়া যায়নি।</span>';
+            previewBtn.disabled=false; previewBtn.textContent='📋 প্রিভিউ দেখুন';
+            return;
+        }
+
+        const pubNorm=normalize(pubName);
+        /* এই publisher-এর সব পুরনো বই — pool হিসেবে রাখি, ম্যাচ হলে used=true হবে */
+        const pool=[];
+        localBooks.forEach((b,i)=>{
+            if(b && normalize(b.pub||'')===pubNorm) pool.push({idx:i,name:b.name||'',used:false});
+        });
+
+        const updates=[], news=[];
+        subFolders.forEach(folder=>{
+            const folderNorm=normalize(folder.name);
+            let best=-1, bestScore=0;
+            pool.forEach((p,pi)=>{
+                if(p.used) return;
+                const bn=normalize(p.name);
+                if(bn===folderNorm||bn.includes(folderNorm)||folderNorm.includes(bn)){
+                    if(bestScore<1){ best=pi; bestScore=1; }
+                    return;
+                }
+                const score=raiyanWordScore(folderNorm,bn);
+                if(score>=0.6&&score>bestScore){ best=pi; bestScore=score; }
+            });
+            if(best!==-1){
+                pool[best].used=true;
+                updates.push({folderId:folder.id, folderName:folder.name, oldIdx:pool[best].idx, oldName:pool[best].name});
+            } else {
+                news.push({folderId:folder.id, folderName:folder.name});
+            }
+        });
+
+        const orphans=pool.filter(p=>!p.used);
+
+        window._raiyanRebuildPlan={pubName, mainFolderId, updates, news, orphans};
+
+        let html=`<span style="color:#059669">📋 প্রিভিউ তৈরি হয়েছে — Apply চাপার আগে ভালো করে দেখে নিন:</span><br><br>`;
+        html+=`✅ <b>আপডেট হবে (${updates.length}):</b> পুরনো বই, দাম/ক্যাটাগরি থাকবে, নাম/PDF/ছবি/desc বদলাবে<br>`;
+        if(updates.length){
+            html+='<div style="max-height:140px;overflow-y:auto;margin:6px 0 10px;padding:8px;background:rgba(5,150,105,0.06);border-radius:8px;">';
+            updates.slice(0,30).forEach(u=>{ html+=`• ${escapeHTML(u.oldName)} → <b>${escapeHTML(u.folderName)}</b><br>`; });
+            if(updates.length>30) html+=`...আরও ${updates.length-30}টি`;
+            html+='</div>';
+        }
+        html+=`🆕 <b>নতুন যোগ হবে (${news.length}):</b> এই বইগুলো এখন সিস্টেমে নেই, নতুন বানানো হবে (দাম ০, পরে বসাতে হবে)<br>`;
+        if(news.length){
+            html+='<div style="max-height:120px;overflow-y:auto;margin:6px 0 10px;padding:8px;background:rgba(37,99,235,0.06);border-radius:8px;">';
+            news.slice(0,30).forEach(n=>{ html+=`• ${escapeHTML(n.folderName)}<br>`; });
+            if(news.length>30) html+=`...আরও ${news.length-30}টি`;
+            html+='</div>';
+        }
+        html+=`⚠️ <b>Drive-এ পাওয়া যায়নি (${orphans.length}):</b> এই পুরনো বইগুলো এখনো সিস্টেমে থাকবে (মোছা হবে না), কিন্তু আপনার এই Drive folder-এ এদের কোনো subfolder পাওয়া যায়নি — চাইলে ম্যানুয়ালি চেক করুন<br>`;
+        if(orphans.length){
+            html+='<div style="max-height:120px;overflow-y:auto;margin:6px 0;padding:8px;background:rgba(220,38,38,0.06);border-radius:8px;">';
+            orphans.slice(0,30).forEach(o=>{ html+=`• ${escapeHTML(o.name)}<br>`; });
+            if(orphans.length>30) html+=`...আরও ${orphans.length-30}টি`;
+            html+='</div>';
+        }
+        status.innerHTML=html;
+
+        if(updates.length||news.length){
+            applyBtn.disabled=false; applyBtn.style.opacity='1';
+        }
+        showToast('প্রিভিউ তৈরি হয়েছে — নিচে দেখুন','#0B6E4F');
+    }catch(e){
+        status.innerHTML=`<span style="color:#dc2626">❌ Error: ${e.message}</span>`;
+        showToast('প্রিভিউ ব্যর্থ: '+e.message,'#dc2626');
+    }
+    previewBtn.disabled=false; previewBtn.textContent='📋 প্রিভিউ দেখুন';
+}
+
+async function raiyanFetchPdfDescImg(folderId){
+    const files=await driveList(folderId);
+    const images=files.filter(f=>f.mimeType.startsWith('image/'));
+    const pdfs=files.filter(f=>f.mimeType==='application/pdf');
+    const txts=files.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
+    const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
+
+    const out={pdfLink:null, desc:null, img:null};
+
+    if(pdfs.length) out.pdfLink=`https://drive.google.com/file/d/${pdfs[0].id}/view`;
+
+    if(txts.length){
+        try{
+            const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
+            if(tr.ok) out.desc=await tr.text();
+        }catch(e){}
+    } else if(gdoc){
+        try{
+            const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${gdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
+            if(tr.ok) out.desc=await tr.text();
+        }catch(e){}
+    }
+
+    if(images.length){
+        const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
+        const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
+        if(IMGBB_KEY){
+            try{
+                const fd=new FormData(); fd.append('image',driveImgUrl);
+                const ir=await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`,{method:'POST',body:fd});
+                const idr=await ir.json();
+                out.img=idr.success?idr.data.url:driveImgUrl;
+            }catch(e){ out.img=driveImgUrl; }
+        } else { out.img=driveImgUrl; }
+    }
+
+    return out;
+}
+
+async function applyRaiyanRebuild(){
+    const plan=window._raiyanRebuildPlan;
+    if(!plan){ showToast('আগে প্রিভিউ দেখুন','#dc2626'); return; }
+    if(!confirm(`এটা "${plan.pubName}"-এর ${plan.updates.length}টি বই আপডেট করবে আর ${plan.news.length}টি নতুন বই যোগ করবে — Firebase-এ সরাসরি লেখা হবে। নিশ্চিত?`)) return;
+
+    const status=document.getElementById('raiyanRebuildStatus');
+    const previewBtn=document.getElementById('raiyanPreviewBtn');
+    const applyBtn=document.getElementById('raiyanApplyBtn');
+    previewBtn.disabled=true; applyBtn.disabled=true; applyBtn.style.opacity='0.5';
+
+    let done=0;
+    const total=plan.updates.length+plan.news.length;
+
+    try{
+        for(const u of plan.updates){
+            status.innerHTML=`<span style="color:#059669">⏳ আপডেট হচ্ছে (${done+1}/${total}): ${escapeHTML(u.folderName)}</span>`;
+            const data=await raiyanFetchPdfDescImg(u.folderId);
+            const b=localBooks[u.oldIdx];
+            b.name=u.folderName;
+            if(data.pdfLink) b.pdfLink=data.pdfLink;
+            if(data.desc!==null) b.desc=data.desc;
+            if(data.img) b.img=data.img;
+            await saveBookToFirebase(u.oldIdx);
+            done++;
+        }
+
+        for(const n of plan.news){
+            status.innerHTML=`<span style="color:#059669">⏳ নতুন যোগ হচ্ছে (${done+1}/${total}): ${escapeHTML(n.folderName)}</span>`;
+            const data=await raiyanFetchPdfDescImg(n.folderId);
+            const newBook={
+                bid: n.folderName.replace(/\s+/g,'-').replace(/[^\u0980-\u09FF\w-]/g,''),
+                type:'বই', name:n.folderName, author:'', price:0, original_price:0,
+                cat:'ইসলামি বই', subcat:'', subject:'', cover:'Paperback',
+                pub: plan.pubName, pages:'', brand:'', img:data.img||'', desc:data.desc||'',
+                tags:[], attributes:[], pdfLink:data.pdfLink||''
+            };
+            localBooks.push(newBook);
+            const newIdx=localBooks.length-1;
+            await saveBookToFirebase(newIdx);
+            done++;
+        }
+
+        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
+        beUpdateStats();
+        beRenderList();
+
+        let html=`<span style="color:#059669">✅ সম্পন্ন! ${plan.updates.length}টি আপডেট, ${plan.news.length}টি নতুন যোগ হয়েছে।</span><br>`;
+        if(plan.orphans.length){
+            html+=`<br>⚠️ <b>এই ${plan.orphans.length}টি পুরনো বই Drive-এ পাওয়া যায়নি (মোছা হয়নি, নিজে চেক করুন):</b><br>`;
+            html+='<div style="max-height:140px;overflow-y:auto;margin-top:6px;padding:8px;background:rgba(220,38,38,0.06);border-radius:8px;">';
+            plan.orphans.forEach(o=>{ html+=`• ${escapeHTML(o.name)}<br>`; });
+            html+='</div>';
+        }
+        status.innerHTML=html;
+        showToast('Publisher rebuild সম্পন্ন হয়েছে','#0B6E4F');
+        window._raiyanRebuildPlan=null;
+    }catch(e){
+        status.innerHTML+=`<br><span style="color:#dc2626">❌ Error: ${e.message} (এতক্ষণে ${done}/${total} হয়েছে, বাকিগুলো preview আবার চালিয়ে re-run করুন)</span>`;
+        showToast('Rebuild মাঝপথে থেমে গেছে: '+e.message,'#dc2626');
+    }
+    previewBtn.disabled=false;
+}
+
+
 async function loadImgbbKey(){
     try{
         const snap=await db.ref('imgbbKey').once('value');
