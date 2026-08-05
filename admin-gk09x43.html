@@ -1756,6 +1756,22 @@
                     <div id="driveFolderStatus" style="margin-top:10px;font-size:12px;"></div>
                 </div>
 
+                <div class="tool-card" id="raiyanRebuildCard">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg> একটা Publisher রিসেট ও রিবিল্ড</h3>
+                    <p style="margin-bottom:12px;color:#dc2626;">⚠️ এটা শুধু নির্দিষ্ট এক publisher-এর বইগুলোর জন্য — Drive folder-এর নাম/গঠনকে সঠিক ধরে নিয়ে সেই publisher-এর সব বই আবার নতুন করে সাজায়। পুরনো <strong>দাম, ক্যাটাগরি, লেখক, স্টক</strong> ইত্যাদি যেখানে মেলে সেখানে রাখা হয়। যেসব পুরনো বই Drive-এ খুঁজে পাওয়া যায়নি সেগুলো <strong>মুছে ফেলা হয় না</strong> — শুধু তালিকায় দেখানো হয়, আপনি নিজে চেক করে delete করবেন। প্রথমে "প্রিভিউ" দিয়ে যাচাই করে নিন, তারপর Apply করুন।</p>
+                    <input class="form-input" id="raiyanPubName" value="রাইয়্যান প্রকাশন" placeholder="Publisher-এর নাম (ঠিক যেভাবে বইয়ে লেখা আছে)" style="margin-bottom:10px;">
+                    <p style="margin-bottom:10px;font-size:12px;color:var(--muted);">Drive folder link উপরের "Publisher Drive Folder" ঘর থেকেই নেওয়া হবে — আগে ওখানে লিংক দিন।</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button class="btn btn-ghost" onclick="previewRaiyanRebuild()" id="raiyanPreviewBtn">
+                            📋 প্রিভিউ দেখুন
+                        </button>
+                        <button class="btn btn-primary" onclick="applyRaiyanRebuild()" id="raiyanApplyBtn" disabled style="opacity:0.5;">
+                            ✅ নিশ্চিত করে Apply করুন
+                        </button>
+                    </div>
+                    <div id="raiyanRebuildStatus" style="margin-top:12px;font-size:12px;"></div>
+                </div>
+
                 <div class="tool-card" id="pixelCard">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Meta Pixel (Facebook অ্যাড)</h3>
                     <p style="margin-bottom:12px;">Facebook-এ অ্যাড চালালে Pixel লাগে — এতে Facebook শিখে যায় কারা বই কেনে, অ্যাডের টাকা কম নষ্ট হয়। <strong>business.facebook.com → Events Manager → Data Sources</strong> থেকে Pixel বানিয়ে ID-টা (শুধু সংখ্যা) এখানে বসান — সাথে সাথে পুরো সাইটে চালু হবে, কোনো ফাইল আপলোড লাগবে না।</p>
@@ -2212,6 +2228,52 @@ async function saveDriveApiKey(){
 }
 
 /* ── DRIVE FOLDER IMPORT (sub-folder structure) ── */
+/* ── এই দুটো ফাংশন importFromDriveFolder() আর নতুন Publisher Reset/Rebuild
+   টুল — দুটোতেই লাগে, তাই module-level এ রাখা হলো ── */
+function normalize(str){
+    return (str||'')
+        /* zero-width characters সরাও */
+        .replace(/[\u200b-\u200f\u202a-\u202e]/g,'')
+        /* বিরাম চিহ্ন সরাও */
+        .replace(/[।,.!?'"()\[\]{}\-_।ঃ]/g,' ')
+        /* বাংলা spelling variations normalize */
+        .replace(/দুআ/g,'দোয়া')
+        .replace(/দুঅা/g,'দোয়া')
+        .replace(/রামাদান/g,'রমাদান')
+        .replace(/রমযান/g,'রমাদান')
+        .replace(/বিদ্ধংসী/g,'বিধ্বংসী')
+        .replace(/কাপে/g,'কাঁপে')
+        .replace(/ডায়েরী/g,'ডায়েরি')
+        .replace(/রাসূল/g,'রাসুল')
+        .replace(/নবিজির/g,'নবিজির')
+        .replace(/নবীজির/g,'নবিজির')
+        .replace(/ﷺ/g,'(স.)')
+        .replace(/যেসব/g,'যে সব')
+        .replace(/নিয়ামত পেয়ে হারিয়ে/g,'নিয়ামত পেয়েও হারিয়ে')
+        .replace(/ব্যাখ্যা/g,'ব্যখ্যা')
+        .replace(/তাক্কওয়ার পাঠশালা/g,'রমাদান ডায়েরি')
+        .replace(/\s+/g,' ').trim().toLowerCase();
+}
+
+async function driveList(folderId){
+    const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType,createdTime,shortcutDetails)&orderBy=createdTime&key=${DRIVE_API_KEY}&pageSize=200`;
+    const r=await fetch(url);
+    if(!r.ok) throw new Error('Drive API error: '+r.status);
+    const d=await r.json();
+    const files=d.files||[];
+    /* কেউ কেউ PDF/ছবি সরাসরি upload না করে "Add shortcut to Drive" দিয়ে যোগ করে —
+       সেক্ষেত্রে mimeType আসে 'application/vnd.google-apps.shortcut', আসল PDF/ছবি হিসেবে ধরা পড়ে না।
+       তাই shortcut হলে আসল ফাইলের id ও mimeType বের করে নিচ্ছি। */
+        const resolved=files.map(f=>{
+            if(f.mimeType==='application/vnd.google-apps.shortcut' && f.shortcutDetails){
+                return {...f, id:f.shortcutDetails.targetId||f.id, mimeType:f.shortcutDetails.targetMimeType||f.mimeType, isShortcut:true};
+            }
+            return f;
+        });
+        console.log(`[Drive Debug] Folder ${folderId} — ${resolved.length}টি ফাইল:`, resolved.map(f=>`${f.name} → ${f.mimeType}${f.isShortcut?' (shortcut resolved)':''}`));
+        return resolved;
+    }
+
 async function importFromDriveFolder(){
     if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
     const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
@@ -2228,49 +2290,7 @@ async function importFromDriveFolder(){
     btn.disabled=true; btn.textContent='চলছে...';
     status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
 
-    function normalize(str){
-        return (str||'')
-            /* zero-width characters সরাও */
-            .replace(/[\u200b-\u200f\u202a-\u202e]/g,'')
-            /* বিরাম চিহ্ন সরাও */
-            .replace(/[।,.!?'"()\[\]{}\-_।ঃ]/g,' ')
-            /* বাংলা spelling variations normalize */
-            .replace(/দুআ/g,'দোয়া')
-            .replace(/দুঅা/g,'দোয়া')
-            .replace(/রামাদান/g,'রমাদান')
-            .replace(/রমযান/g,'রমাদান')
-            .replace(/বিদ্ধংসী/g,'বিধ্বংসী')
-            .replace(/কাপে/g,'কাঁপে')
-            .replace(/ডায়েরী/g,'ডায়েরি')
-            .replace(/রাসূল/g,'রাসুল')
-            .replace(/নবিজির/g,'নবিজির')
-            .replace(/নবীজির/g,'নবিজির')
-            .replace(/ﷺ/g,'(স.)')
-            .replace(/যেসব/g,'যে সব')
-            .replace(/নিয়ামত পেয়ে হারিয়ে/g,'নিয়ামত পেয়েও হারিয়ে')
-            .replace(/ব্যাখ্যা/g,'ব্যখ্যা')
-            .replace(/তাক্কওয়ার পাঠশালা/g,'রমাদান ডায়েরি')
-            .replace(/\s+/g,' ').trim().toLowerCase();
-    }
 
-    async function driveList(folderId){
-        const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType,createdTime,shortcutDetails)&orderBy=createdTime&key=${DRIVE_API_KEY}&pageSize=200`;
-        const r=await fetch(url);
-        if(!r.ok) throw new Error('Drive API error: '+r.status);
-        const d=await r.json();
-        const files=d.files||[];
-        /* কেউ কেউ PDF/ছবি সরাসরি upload না করে "Add shortcut to Drive" দিয়ে যোগ করে —
-           সেক্ষেত্রে mimeType আসে 'application/vnd.google-apps.shortcut', আসল PDF/ছবি হিসেবে ধরা পড়ে না।
-           তাই shortcut হলে আসল ফাইলের id ও mimeType বের করে নিচ্ছি। */
-        const resolved=files.map(f=>{
-            if(f.mimeType==='application/vnd.google-apps.shortcut' && f.shortcutDetails){
-                return {...f, id:f.shortcutDetails.targetId||f.id, mimeType:f.shortcutDetails.targetMimeType||f.mimeType, isShortcut:true};
-            }
-            return f;
-        });
-        console.log(`[Drive Debug] Folder ${folderId} — ${resolved.length}টি ফাইল:`, resolved.map(f=>`${f.name} → ${f.mimeType}${f.isShortcut?' (shortcut resolved)':''}`));
-        return resolved;
-    }
 
     try{
         /* ১. Main folder-এর সব sub-folder আনো (প্রতিটা = একটা বই) */
