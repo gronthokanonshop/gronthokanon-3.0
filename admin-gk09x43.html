@@ -2320,39 +2320,11 @@ async function importFromDriveFolder(){
             });
 
             if(bookIdx===-1){
-                /* Book.js-এ নেই — placeholder হিসেবে add করো */
-                const newBook={
-                    bid: folderName.replace(/\s+/g,'-').replace(/[^\u0980-\u09FF\w-]/g,''),
-                    type:'বই', name:folderName, author:'', price:0, original_price:0,
-                    cat:'ইসলামি বই', subcat:'', subject:'', cover:'Paperback',
-                    pub:'রাইয়্যান প্রকাশন', pages:'', brand:'', img:'', desc:'',
-                    tags:[], attributes:[], pdfLink:''
-                };
-                localBooks.push(newBook);
-                const newIdx=localBooks.length-1;
-
-                /* sub-folder-এর files আনো */
-                const newFiles=await driveList(folder.id);
-                const newImages=newFiles.filter(f=>f.mimeType.startsWith('image/'));
-                const newPdfs=newFiles.filter(f=>f.mimeType==='application/pdf');
-                const newTxts=newFiles.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
-
-                if(newPdfs.length){ newBook.pdfLink=`https://drive.google.com/file/d/${newPdfs[0].id}/view`; pdfCount++; }
-                const newGdoc=newFiles.find(f=>f.mimeType==='application/vnd.google-apps.document');
-                if(newTxts.length){
-                    try{
-                        const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${newTxts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
-                        if(tr.ok){ newBook.desc=await tr.text(); descCount++; }
-                    }catch(e){}
-                } else if(newGdoc){
-                    try{
-                        const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${newGdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
-                        if(tr.ok){ newBook.desc=await tr.text(); descCount++; }
-                    }catch(e){}
-                }
-                await saveBookToFirebase(newIdx);
-                matched++;
-                status.innerHTML=`<span style="color:#059669">✅ ${matched}টি বই আপডেট... নতুন: "${folderName}"</span>`;
+                /* Book.js-এ নেই — এই folder-এর নাম কোনো বইয়ের সাথে মেলেনি,
+                   তাই এখানে জোর করে নতুন বই বানানো হচ্ছে না (এতে ভুল/ডুপ্লিকেট
+                   বই তৈরি হয়ে যেত)। শুধু notFound-এ যোগ করে রাখা হচ্ছে, যাতে
+                   শেষে দেখতে পান কোন folder-গুলো manual চেক করা দরকার। */
+                notFound.push(folderName);
                 continue;
             }
 
