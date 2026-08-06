@@ -2497,37 +2497,10 @@ async function previewRaiyanRebuild(){
             }
         });
 
-        const orphans=pool.filter(p=>!p.used);
+        const orphans=pool.filter(p=>!p.used).map(p=>({idx:p.idx,name:p.name}));
 
-        window._raiyanRebuildPlan={pubName, mainFolderId, updates, news, orphans};
-
-        let html=`<span style="color:#059669">📋 প্রিভিউ তৈরি হয়েছে — Apply চাপার আগে ভালো করে দেখে নিন:</span><br><br>`;
-        html+=`✅ <b>আপডেট হবে (${updates.length}):</b> পুরনো বই, দাম/ক্যাটাগরি থাকবে, নাম/PDF/ছবি/desc বদলাবে<br>`;
-        if(updates.length){
-            html+='<div style="max-height:140px;overflow-y:auto;margin:6px 0 10px;padding:8px;background:rgba(5,150,105,0.06);border-radius:8px;">';
-            updates.slice(0,30).forEach(u=>{ html+=`• ${escapeHTML(u.oldName)} → <b>${escapeHTML(u.folderName)}</b><br>`; });
-            if(updates.length>30) html+=`...আরও ${updates.length-30}টি`;
-            html+='</div>';
-        }
-        html+=`🆕 <b>নতুন যোগ হবে (${news.length}):</b> এই বইগুলো এখন সিস্টেমে নেই, নতুন বানানো হবে (দাম ০, পরে বসাতে হবে)<br>`;
-        if(news.length){
-            html+='<div style="max-height:120px;overflow-y:auto;margin:6px 0 10px;padding:8px;background:rgba(37,99,235,0.06);border-radius:8px;">';
-            news.slice(0,30).forEach(n=>{ html+=`• ${escapeHTML(n.folderName)}<br>`; });
-            if(news.length>30) html+=`...আরও ${news.length-30}টি`;
-            html+='</div>';
-        }
-        html+=`⚠️ <b>Drive-এ পাওয়া যায়নি (${orphans.length}):</b> এই পুরনো বইগুলো এখনো সিস্টেমে থাকবে (মোছা হবে না), কিন্তু আপনার এই Drive folder-এ এদের কোনো subfolder পাওয়া যায়নি — চাইলে ম্যানুয়ালি চেক করুন<br>`;
-        if(orphans.length){
-            html+='<div style="max-height:120px;overflow-y:auto;margin:6px 0;padding:8px;background:rgba(220,38,38,0.06);border-radius:8px;">';
-            orphans.slice(0,30).forEach(o=>{ html+=`• ${escapeHTML(o.name)}<br>`; });
-            if(orphans.length>30) html+=`...আরও ${orphans.length-30}টি`;
-            html+='</div>';
-        }
-        status.innerHTML=html;
-
-        if(updates.length||news.length){
-            applyBtn.disabled=false; applyBtn.style.opacity='1';
-        }
+        window._raiyanRebuildPlan={pubName, mainFolderId, updates, news, orphans, toDelete:[]};
+        renderRaiyanPreview();
         showToast('প্রিভিউ তৈরি হয়েছে — নিচে দেখুন','#0B6E4F');
     }catch(e){
         status.innerHTML=`<span style="color:#dc2626">❌ Error: ${e.message}</span>`;
@@ -2535,6 +2508,114 @@ async function previewRaiyanRebuild(){
     }
     previewBtn.disabled=false; previewBtn.textContent='📋 প্রিভিউ দেখুন';
 }
+
+/* না-মেলা পুরনো বই (orphan)-এর জন্য "news" তালিকা থেকে সবচেয়ে কাছাকাছি নাম খুঁজে বের করে —
+   থ্রেশহোল্ড ছাড়াই (60% নিচেও দেখাবে), যাতে admin নিজে চোখে দেখে মিলিয়ে নিতে পারেন। */
+function raiyanBestCandidate(orphanName, newsList){
+    const on=normalize(orphanName);
+    let best=-1, bestScore=0;
+    newsList.forEach((n,ni)=>{
+        const nn=normalize(n.folderName);
+        const score=raiyanWordScore(on,nn);
+        if(score>bestScore){ bestScore=score; best=ni; }
+    });
+    return best===-1?null:{newsIdx:best, score:bestScore};
+}
+
+function renderRaiyanPreview(){
+    const plan=window._raiyanRebuildPlan;
+    const status=document.getElementById('raiyanRebuildStatus');
+    const applyBtn=document.getElementById('raiyanApplyBtn');
+    if(!plan||!status) return;
+    const {updates, news, orphans, toDelete}=plan;
+
+    let html=`<span style="color:#059669">📋 প্রিভিউ — Apply চাপার আগে ভালো করে দেখে নিন:</span><br><br>`;
+
+    html+=`✅ <b>আপডেট হবে (${updates.length}):</b> পুরনো বই, দাম/ক্যাটাগরি থাকবে, নাম/PDF/ছবি/desc বদলাবে<br>`;
+    if(updates.length){
+        html+='<div style="max-height:140px;overflow-y:auto;margin:6px 0 10px;padding:8px;background:rgba(5,150,105,0.06);border-radius:8px;">';
+        updates.slice(0,50).forEach(u=>{ html+=`• ${escapeHTML(u.oldName)} → <b>${escapeHTML(u.folderName)}</b><br>`; });
+        if(updates.length>50) html+=`...আরও ${updates.length-50}টি`;
+        html+='</div>';
+    }
+
+    html+=`🆕 <b>নতুন যোগ হবে (${news.length}):</b> নিচের orphan তালিকায় "লিংক করো" চাপলে এখান থেকে সরে গিয়ে update-এ যোগ হবে<br>`;
+    if(news.length){
+        html+='<div style="max-height:120px;overflow-y:auto;margin:6px 0 10px;padding:8px;background:rgba(37,99,235,0.06);border-radius:8px;">';
+        news.slice(0,50).forEach(n=>{ html+=`• ${escapeHTML(n.folderName)}<br>`; });
+        if(news.length>50) html+=`...আরও ${news.length-50}টি`;
+        html+='</div>';
+    }
+
+    html+=`⚠️ <b>Drive-এ পাওয়া যায়নি (${orphans.length}):</b> প্রতিটার জন্য সবচেয়ে কাছাকাছি নতুন folder-এর নাম দেখানো হলো — মিললে "লিংক করো", না মিললে "মুছে ফেলুন" চাপুন<br>`;
+    if(orphans.length){
+        html+='<div style="max-height:280px;overflow-y:auto;margin-top:6px;">';
+        orphans.forEach((o,oi)=>{
+            const cand=raiyanBestCandidate(o.name, news);
+            html+=`<div style="padding:9px 10px;margin-bottom:6px;background:rgba(220,38,38,0.06);border-radius:8px;">`;
+            html+=`<div style="margin-bottom:6px;"><b>${escapeHTML(o.name)}</b></div>`;
+            if(cand){
+                const pct=Math.round(cand.score*100);
+                html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:6px;">সবচেয়ে কাছাকাছি: "${escapeHTML(news[cand.newsIdx].folderName)}" (${pct}% মিল)</div>`;
+                html+=`<button class="btn btn-sm btn-primary" style="margin-right:6px;" onclick="raiyanLinkOrphan(${oi})">🔗 এই নামের সাথে লিংক করো</button>`;
+            } else {
+                html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:6px;">কাছাকাছি কোনো নতুন folder পাওয়া যায়নি</div>`;
+            }
+            html+=`<button class="btn btn-sm btn-danger" onclick="raiyanQueueDeleteOrphan(${oi})">🗑️ মুছে ফেলুন</button>`;
+            html+='</div>';
+        });
+        html+='</div>';
+    }
+
+    if(toDelete.length){
+        html+=`<br>🗑️ <b>মুছে ফেলার জন্য চিহ্নিত (${toDelete.length}):</b> Apply চাপলে এগুলো মুছে যাবে<br>`;
+        html+='<div style="max-height:100px;overflow-y:auto;margin:6px 0;padding:8px;background:rgba(120,120,120,0.08);border-radius:8px;">';
+        toDelete.forEach(d=>{ html+=`• ${escapeHTML(d.name)}<br>`; });
+        html+='</div>';
+    }
+
+    status.innerHTML=html;
+
+    if(updates.length||news.length||toDelete.length){
+        applyBtn.disabled=false; applyBtn.style.opacity='1';
+    } else {
+        applyBtn.disabled=true; applyBtn.style.opacity='0.5';
+    }
+}
+
+function raiyanLinkOrphan(orphanIdx){
+    const plan=window._raiyanRebuildPlan;
+    if(!plan) return;
+    const orphan=plan.orphans[orphanIdx];
+    if(!orphan) return;
+    const cand=raiyanBestCandidate(orphan.name, plan.news);
+    if(!cand){ showToast('কাছাকাছি কোনো নাম পাওয়া যায়নি','#dc2626'); return; }
+    const newsItem=plan.news[cand.newsIdx];
+
+    /* news থেকে সরিয়ে updates-এ যোগ করি */
+    plan.news.splice(cand.newsIdx,1);
+    plan.updates.push({folderId:newsItem.folderId, folderName:newsItem.folderName, oldIdx:orphan.idx, oldName:orphan.name});
+    /* orphans থেকে সরাই */
+    plan.orphans.splice(orphanIdx,1);
+
+    renderRaiyanPreview();
+    showToast(`"${orphan.name}" ↔ "${newsItem.folderName}" লিংক হয়েছে`,'#0B6E4F');
+}
+
+function raiyanQueueDeleteOrphan(orphanIdx){
+    const plan=window._raiyanRebuildPlan;
+    if(!plan) return;
+    const orphan=plan.orphans[orphanIdx];
+    if(!orphan) return;
+    if(!confirm(`"${orphan.name}" — এই বইটা মোছার জন্য চিহ্নিত হবে (Apply চাপলে তখন মুছে যাবে)। নিশ্চিত?`)) return;
+
+    plan.orphans.splice(orphanIdx,1);
+    plan.toDelete.push(orphan);
+
+    renderRaiyanPreview();
+    showToast(`"${orphan.name}" মোছার জন্য চিহ্নিত হলো`,'#dc2626');
+}
+
 
 async function raiyanFetchPdfDescImg(folderId){
     const files=await driveList(folderId);
@@ -2578,7 +2659,10 @@ async function raiyanFetchPdfDescImg(folderId){
 async function applyRaiyanRebuild(){
     const plan=window._raiyanRebuildPlan;
     if(!plan){ showToast('আগে প্রিভিউ দেখুন','#dc2626'); return; }
-    if(!confirm(`এটা "${plan.pubName}"-এর ${plan.updates.length}টি বই আপডেট করবে আর ${plan.news.length}টি নতুন বই যোগ করবে — Firebase-এ সরাসরি লেখা হবে। নিশ্চিত?`)) return;
+    let confirmMsg=`এটা "${plan.pubName}"-এর ${plan.updates.length}টি বই আপডেট করবে, ${plan.news.length}টি নতুন বই যোগ করবে`;
+    if(plan.toDelete.length) confirmMsg+=`, আর ${plan.toDelete.length}টি বই মুছে ফেলবে`;
+    confirmMsg+=` — Firebase-এ সরাসরি লেখা হবে। নিশ্চিত?`;
+    if(!confirm(confirmMsg)) return;
 
     const status=document.getElementById('raiyanRebuildStatus');
     const previewBtn=document.getElementById('raiyanPreviewBtn');
@@ -2617,13 +2701,26 @@ async function applyRaiyanRebuild(){
             done++;
         }
 
+        /* মোছা সবার শেষে — কারণ splice করলে array-এর index শিফট হয়ে যায়,
+           তাই updates/news যতক্ষণ চলছে ততক্ষণ কোনো delete করা হয়নি (idx স্থির ছিল)।
+           এখন সব delete একসাথে (বড় idx থেকে ছোট idx-এর দিকে) করে শেষে পুরো
+           array-টা একবারে Firebase-এ পুরোপুরি সেভ করছি (index মিলিয়ে)। */
+        if(plan.toDelete.length){
+            status.innerHTML=`<span style="color:#059669">⏳ ${plan.toDelete.length}টি বই মোছা হচ্ছে...</span>`;
+            const sortedDeletes=[...plan.toDelete].sort((a,b)=>b.idx-a.idx);
+            sortedDeletes.forEach(d=>{ localBooks.splice(d.idx,1); });
+            await syncAllBooksToFirebase(true);
+        }
+
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
         beUpdateStats();
         beRenderList();
 
-        let html=`<span style="color:#059669">✅ সম্পন্ন! ${plan.updates.length}টি আপডেট, ${plan.news.length}টি নতুন যোগ হয়েছে।</span><br>`;
+        let html=`<span style="color:#059669">✅ সম্পন্ন! ${plan.updates.length}টি আপডেট, ${plan.news.length}টি নতুন`;
+        if(plan.toDelete.length) html+=`, ${plan.toDelete.length}টি মোছা`;
+        html+=` হয়েছে।</span><br>`;
         if(plan.orphans.length){
-            html+=`<br>⚠️ <b>এই ${plan.orphans.length}টি পুরনো বই Drive-এ পাওয়া যায়নি (মোছা হয়নি, নিজে চেক করুন):</b><br>`;
+            html+=`<br>⚠️ <b>এই ${plan.orphans.length}টি পুরনো বই এখনো অমীমাংসিত (মোছা হয়নি, নিজে চেক করুন):</b><br>`;
             html+='<div style="max-height:140px;overflow-y:auto;margin-top:6px;padding:8px;background:rgba(220,38,38,0.06);border-radius:8px;">';
             plan.orphans.forEach(o=>{ html+=`• ${escapeHTML(o.name)}<br>`; });
             html+='</div>';
