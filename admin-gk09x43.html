@@ -1723,65 +1723,19 @@
                     <div id="driveApiKeyStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(5,150,105,0.07);border:1px solid rgba(5,150,105,0.25);border-radius:8px;"></div>
                 </div>
 
-                <div class="tool-card" id="newPubCard" style="border-color:#059669;">
-                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> নতুন Publisher-এর সব বই যোগ করুন (সহজ পদ্ধতি)</h3>
-                    <p style="margin-bottom:12px;">দোকানে <strong>একদম নতুন</strong> publisher হলে এটাই ব্যবহার করুন — শুধু লিংক আর নাম দিন, একটা বাটনে সব বই যোগ হয়ে যাবে (দাম/পৃষ্ঠা/লেখক যেখানে Drive-এর বিবরণ ফাইলে পাওয়া যায় সেখান থেকে অটো বসবে)। পুরনো কোনো বইয়ের সাথে মেলানোর/আপডেটের ঝামেলা নেই — নিচের দুটো টুল শুধু <strong>আগে থেকে দোকানে থাকা</strong> publisher রিফ্রেশ করার জন্য, সেগুলো এখন লাগবে না।</p>
-                    <input class="form-input" id="newPubFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:10px;">
-                    <input class="form-input" id="newPubName" placeholder="Publisher-এর নাম (বইয়ে যেভাবে ছাপা আছে)" style="margin-bottom:12px;">
-                    <button class="btn btn-primary" onclick="addNewPublisherBooks()" id="newPubAddBtn">
-                        <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        📥 সব বই যোগ করো
-                    </button>
-                    <div id="newPubStatus" style="margin-top:10px;font-size:12px;"></div>
-                </div>
-
                 <div class="tool-card" id="driveFolderCard">
-                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে বই আপডেট (আগে থেকে থাকা Publisher-এর জন্য)</h3>
-                    <p style="margin-bottom:12px;">নতুন publisher হলে ওপরের সবুজ কার্ডটা ব্যবহার করুন — এটা শুধু <strong>দোকানে আগে থেকে আছে এমন</strong> publisher-এর বই রিফ্রেশ করতে। Drive folder link দিন — কী আনতে চান বেছে নিন।</p>
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে PDF আনো</h3>
+                    <p style="margin-bottom:12px;">দোকানে <strong>আগে থেকে থাকা</strong> বইগুলোর মধ্যে যেগুলোয় PDF নেই, সেগুলোয় Drive folder থেকে PDF লিংক বসিয়ে দেয় (নাম মিলিয়ে) — দাম/ছবি/ক্যাটাগরি ছোঁয় না। নতুন বই যোগ করা বা desc/ছবি আনার কাজ এখন থেকে সরাসরি Claude-এর মাধ্যমে হয়, এখানে না।</p>
                     <input class="form-input" id="driveFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:12px;">
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);">
-                            <input type="radio" name="driveImportMode" value="pdf" id="driveModePdf" checked style="accent-color:#059669;">
-                            📄 শুধু PDF
-                        </label>
-                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);">
-                            <input type="radio" name="driveImportMode" value="desc" id="driveModeDesc" style="accent-color:#059669;">
-                            📝 শুধু desc
-                        </label>
-                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);">
-                            <input type="radio" name="driveImportMode" value="img" id="driveModeImg" style="accent-color:#059669;">
-                            🖼️ শুধু ছবি
-                        </label>
-                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);">
-                            <input type="radio" name="driveImportMode" value="all" id="driveModeAll" style="accent-color:#059669;">
-                            📦 সব একসাথে
-                        </label>
-                    </div>
                     <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:12px;color:#dc2626;">
                         <input type="checkbox" id="driveForceReplace" style="accent-color:#dc2626;">
-                        ♻️ পুরনো বইয়ের PDF/ছবি/desc আগে থেকে থাকলেও নতুনটা দিয়ে বদলে দাও (Replace)
+                        ♻️ পুরনো বইয়ের PDF আগে থেকে থাকলেও নতুনটা দিয়ে বদলে দাও (Replace)
                     </label>
                     <button class="btn btn-primary" onclick="importFromDriveFolder()" id="driveFolderBtn">
                         <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                        Drive থেকে আনো
+                        📄 PDF আনো
                     </button>
                     <div id="driveFolderStatus" style="margin-top:10px;font-size:12px;"></div>
-                </div>
-
-                <div class="tool-card" id="raiyanRebuildCard">
-                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg> একটা Publisher রিসেট ও রিবিল্ড (আগে থেকে থাকা Publisher-এর জন্য)</h3>
-                    <p style="margin-bottom:12px;color:#dc2626;">নতুন publisher হলে ওপরের সবুজ কার্ডটা ব্যবহার করুন। ⚠️ এটা শুধু নির্দিষ্ট এক publisher-এর বইগুলোর জন্য — Drive folder-এর নাম/গঠনকে সঠিক ধরে নিয়ে সেই publisher-এর সব বই আবার নতুন করে সাজায়। পুরনো <strong>দাম, ক্যাটাগরি, লেখক, স্টক</strong> ইত্যাদি যেখানে মেলে সেখানে রাখা হয়। যেসব পুরনো বই Drive-এ খুঁজে পাওয়া যায়নি সেগুলো <strong>মুছে ফেলা হয় না</strong> — শুধু তালিকায় দেখানো হয়, আপনি নিজে চেক করে delete করবেন। প্রথমে "প্রিভিউ" দিয়ে যাচাই করে নিন, তারপর Apply করুন।</p>
-                    <input class="form-input" id="raiyanPubName" value="রাইয়্যান প্রকাশন" placeholder="Publisher-এর নাম (ঠিক যেভাবে বইয়ে লেখা আছে)" style="margin-bottom:10px;">
-                    <p style="margin-bottom:10px;font-size:12px;color:var(--muted);">Drive folder link উপরের "Publisher Drive Folder" ঘর থেকেই নেওয়া হবে — আগে ওখানে লিংক দিন।</p>
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                        <button class="btn btn-ghost" onclick="previewRaiyanRebuild()" id="raiyanPreviewBtn">
-                            📋 প্রিভিউ দেখুন
-                        </button>
-                        <button class="btn btn-primary" onclick="applyRaiyanRebuild()" id="raiyanApplyBtn" disabled style="opacity:0.5;">
-                            ✅ নিশ্চিত করে Apply করুন
-                        </button>
-                    </div>
-                    <div id="raiyanRebuildStatus" style="margin-top:12px;font-size:12px;"></div>
                 </div>
 
                 <div class="tool-card" id="pixelCard">
@@ -1830,7 +1784,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════
@@ -2316,68 +2269,6 @@ async function driveListDeep(folderId, depth){
     return out;
 }
 
-/* Publisher-রা desc প্রায়ই .docx ফাইলে দেয় (Google Doc বা .txt না) —
-   Drive API-র export endpoint শুধু native Google Doc-এর জন্য কাজ করে, .docx-এর
-   জন্য না। তাই raw .docx (আসলে একটা .zip) ডাউনলোড করে JSZip দিয়ে খুলে
-   word/document.xml থেকে টেক্সট বের করে আনা হচ্ছে। */
-async function extractDocxText(fileId){
-    if(typeof JSZip==='undefined') return null;
-    const r=await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${DRIVE_API_KEY}`);
-    if(!r.ok) return null;
-    const buf=await r.arrayBuffer();
-    const zip=await JSZip.loadAsync(buf);
-    const xmlFile=zip.file('word/document.xml');
-    if(!xmlFile) return null;
-    const xml=await xmlFile.async('text');
-    /* প্যারাগ্রাফ ব্রেক (</w:p>) নতুন লাইনে বদলে, বাকি সব ট্যাগ ফেলে দিয়ে প্লেইন টেক্সট বানানো হচ্ছে */
-    const text=xml
-        .replace(/<\/w:p>/g,'\n')
-        .replace(/<[^>]+>/g,'')
-        .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'")
-        .replace(/\n{3,}/g,'\n\n')
-        .trim();
-    return text||null;
-}
-
-function bnToEnDigits(s){
-    const map={'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
-    return (s||'').replace(/[০-৯]/g,d=>map[d]);
-}
-
-/* Publisher-দের বিবরণ (desc) ফাইলের শেষে প্রায়ই একটা "বইয়ের তথ্য" ব্লক থাকে —
-   বই/লেখক/প্রকাশনী/মোট পৃষ্ঠা/মুদ্রিত মূল্য লেবেল করা। এখান থেকে আসল বিবরণ
-   (desc) আলাদা করে, আর দাম/পৃষ্ঠা/লেখক/প্রকাশনী বের করে আনা হচ্ছে — যাতে
-   নতুন বই যোগ করার সময় দাম ০ রয়ে না যায়, হাতে বসাতে না হয়। */
-function parseBookInfoBlock(text){
-    if(!text) return {desc:text, meta:{}};
-    const meta={};
-
-    /* কিছু publisher "বইয়ের তথ্য" হেডিং দেয় (Sukun), কিছু publisher সরাসরি
-       "বই:/লেখিকা:/মুদ্রিত মুল্য:" লাইন শুরু করে দেয় কোনো হেডিং ছাড়াই
-       (Raiyan) — তাই পুরো টেক্সটেই সরাসরি এই লেবেলগুলো খোঁজা হচ্ছে, কোনো
-       হেডিং-এর ওপর নির্ভর না করে। "মূল্য"/"মুল্য" দুই বানানই মেলানো হচ্ছে। */
-    const priceM=text.match(/(?:মুদ্রিত\s*)?ম[ুূ]ল্য\s*[:：]\s*([০-৯0-9,]+)/)||text.match(/দাম\s*[:：]\s*([০-৯0-9,]+)/);
-    if(priceM){ const n=parseInt(bnToEnDigits(priceM[1]).replace(/,/g,''),10); if(n) meta.price=n; }
-
-    const pagesM=text.match(/(?:মোট\s*)?পৃষ্ঠা(?:\s*সংখ্যা)?\s*[:：]\s*([০-৯0-9]+)/);
-    if(pagesM) meta.pages=bnToEnDigits(pagesM[1])+' পৃষ্ঠা';
-
-    const authorM=text.match(/(?:লেখক|লেখিকা)\s*[:：]\s*([^\n\r]+)/);
-    if(authorM) meta.author=authorM[1].replace(/[।.]+$/,'').trim();
-
-    const pubM=text.match(/প্রকাশনী\s*[:：]\s*([^\n\r]+)/);
-    if(pubM) meta.pub=pubM[1].replace(/[।.]+$/,'').trim();
-
-    /* desc কোথায় শেষ — যে লেবেল-লাইনটা লাইনের শুরুতে সবার আগে পাওয়া যায়
-       সেখান থেকে কেটে বাকিটা বাদ দেওয়া হচ্ছে, যাতে "বই সম্পর্কে" লেখাটার
-       সাথে "বই: ...", "মুদ্রিত মুল্য: ..." গুলো মিশে না থাকে */
-    const blockStartRe=/^[ \t]*(?:বইয়ের\s*তথ্য|বই|লেখক|লেখিকা|অনুবাদ|ভাষান্তর|সম্পাদনায়|সম্পাদক|প্রকাশনী|প্রচ্ছদ|(?:মুদ্রিত\s*)?ম[ুূ]ল্য|দাম|(?:মোট\s*)?পৃষ্ঠা(?:\s*সংখ্যা)?|ধরন|ধরণ)\s*[:：—]/m;
-    const cutM=text.match(blockStartRe);
-    const desc=cutM?text.slice(0,cutM.index).trim():text.trim();
-
-    return {desc, meta};
-}
-
 async function importFromDriveFolder(){
     if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
     const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
@@ -2389,36 +2280,29 @@ async function importFromDriveFolder(){
 
     const btn=document.getElementById('driveFolderBtn');
     const status=document.getElementById('driveFolderStatus');
-    const mode=document.querySelector('input[name="driveImportMode"]:checked')?.value||'pdf';
     const forceReplace=document.getElementById('driveForceReplace')?.checked||false;
     btn.disabled=true; btn.textContent='চলছে...';
     status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
 
-
-
     try{
-        /* ১. Main folder-এর সব sub-folder আনো (প্রতিটা = একটা বই) */
-        status.innerHTML='<span style="color:#059669">📂 বইয়ের folder list আনা হচ্ছে...</span>';
         const allFiles=await driveList(mainFolderId);
         const subFolders=allFiles.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
 
         if(!subFolders.length){
             status.innerHTML='<span style="color:#dc2626">কোনো sub-folder পাওয়া যায়নি।</span>';
-            btn.disabled=false; btn.textContent='Drive থেকে আনো';
+            btn.disabled=false; btn.textContent='📄 PDF আনো';
             return;
         }
 
-        status.innerHTML=`<span style="color:#059669">${subFolders.length}টি বইয়ের folder পাওয়া গেছে। আপডেট করা হচ্ছে...</span>`;
+        status.innerHTML=`<span style="color:#059669">${subFolders.length}টি বইয়ের folder পাওয়া গেছে। PDF আনা হচ্ছে...</span>`;
 
-        let matched=0, imgCount=0, pdfCount=0, descCount=0, notFound=[];
+        let matched=0, notFound=[];
 
-        /* ২. প্রতিটা sub-folder-এ ঢুকো */
         for(const folder of subFolders){
             const folderName=folder.name;
             const folderNorm=normalize(folderName);
 
-            /* book.js-এ বইয়ের নাম মিলাও */
-            /* ── Fuzzy match — শব্দ মিলিয়ে score করি ──
+            /* book.js-এ বইয়ের নাম মিলাও — শব্দ মিলিয়ে score করি
                Drive folder: "গাইরত" → book.js: "গাইরত (পুরুষের হারানো আত্মমর্যাদাবোধ)"
                normalize করার পর common words count করি — 60%+ মিললে match */
             function wordScore(a,b){
@@ -2433,98 +2317,35 @@ async function importFromDriveFolder(){
             localBooks.forEach((b,i)=>{
                 if(!b||!b.name) return;
                 const bn=normalize(b.name);
-                /* exact match */
                 if(bn===folderNorm||bn.includes(folderNorm)||folderNorm.includes(bn)){
                     if(bestScore<1){ bookIdx=i; bestScore=1; }
                     return;
                 }
-                /* fuzzy word score */
                 const score=wordScore(folderNorm,bn);
                 if(score>=0.6&&score>bestScore){ bookIdx=i; bestScore=score; }
             });
 
             if(bookIdx===-1){
-                /* Book.js-এ নেই — এই folder-এর নাম কোনো বইয়ের সাথে মেলেনি,
-                   তাই এখানে জোর করে নতুন বই বানানো হচ্ছে না (এতে ভুল/ডুপ্লিকেট
-                   বই তৈরি হয়ে যেত)। শুধু notFound-এ যোগ করে রাখা হচ্ছে, যাতে
-                   শেষে দেখতে পান কোন folder-গুলো manual চেক করা দরকার। */
+                /* মেলেনি — নতুন বই বানানো হচ্ছে না (ডুপ্লিকেট এড়াতে),
+                   শুধু notFound-এ রাখা হচ্ছে দেখার জন্য */
                 notFound.push(folderName);
                 continue;
             }
 
-            /* Sub-folder-এর ফাইল আনো — এক লেভেল গভীর পর্যন্ত (কিছু publisher
-               বইয়ের folder-এর ভেতরে আরেক লেভেল sub-folder বানায়, যেমন
-               প্রচ্ছদ/শর্ট পিডিএফ/বই পরিচিতি) */
+            /* এক লেভেল গভীর পর্যন্ত দেখে — কিছু publisher বইয়ের folder-এর
+               ভেতরে আরেক লেভেল sub-folder বানায় (যেমন প্রচ্ছদ/শর্ট পিডিএফ) */
             const files=await driveListDeep(folder.id,1);
-            const images=files.filter(f=>f.mimeType.startsWith('image/'));
             const pdfs=files.filter(f=>f.mimeType==='application/pdf');
-            const txts=files.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
-            const docxs=files.filter(f=>f.mimeType==='application/vnd.openxmlformats-officedocument.wordprocessingml.document'||/\.docx?$/i.test(f.name));
 
             const b=localBooks[bookIdx];
-            let changed=false;
-
-            /* PDF — "প্রচ্ছদ" folder-এ ভুলবশত রাখা PDF এড়াতে "পিডিএফ/pdf/short/sample"
-               নামের sub-folder/ফাইলকে প্রায়োরিটি দেওয়া হচ্ছে */
-            if((mode==='pdf'||mode==='all') && pdfs.length && (forceReplace || !b.pdfLink?.trim())){
+            if(pdfs.length && (forceReplace || !b.pdfLink?.trim())){
+                /* "প্রচ্ছদ" folder-এ ভুলবশত রাখা PDF এড়াতে "পিডিএফ/pdf/short/sample"
+                   নামের sub-folder/ফাইলকে প্রায়োরিটি দেওয়া হচ্ছে */
                 const preferred=pdfs.find(f=>/পিডিএফ|pdf|short|sample|শর্ট/i.test(f._parentFolder||'')||/পিডিএফ|pdf|short|sample|শর্ট/i.test(f.name));
                 b.pdfLink=`https://drive.google.com/file/d/${(preferred||pdfs[0]).id}/view`;
-                pdfCount++; changed=true;
-            }
-
-            /* desc */
-            if(mode==='desc'||mode==='all'){
-                const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
-                if(forceReplace || !b.desc?.trim()){
-                    let rawDesc=null;
-                    if(txts.length){
-                        try{
-                            const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
-                            if(tr.ok) rawDesc=await tr.text();
-                        }catch(e){}
-                    } else if(gdoc){
-                        try{
-                            const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${gdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
-                            if(tr.ok) rawDesc=await tr.text();
-                        }catch(e){}
-                    } else if(docxs.length){
-                        try{ rawDesc=await extractDocxText(docxs[0].id); }catch(e){}
-                    }
-                    if(rawDesc){
-                        /* বিবরণের শেষের "বইয়ের তথ্য" ব্লক থেকে দাম/পৃষ্ঠা/লেখক
-                           আলাদা করে — খালি/০ থাকলেই বসানো হচ্ছে, বিদ্যমান দাম বদলাচ্ছে না */
-                        const parsed=parseBookInfoBlock(rawDesc);
-                        b.desc=parsed.desc; descCount++; changed=true;
-                        if(parsed.meta.price && !b.price){ b.price=parsed.meta.price; changed=true; }
-                        if(parsed.meta.pages && !b.pages){ b.pages=parsed.meta.pages; changed=true; }
-                        if(parsed.meta.author && !b.author){ b.author=parsed.meta.author; changed=true; }
-                    }
-                }
-            }
-
-            /* ছবি */
-            if(mode==='img'||mode==='all'){
-                const hasImgBB=b.img&&b.img.includes('ibb.co');
-                if(images.length&&(forceReplace || !hasImgBB)){
-                    const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name)||/cover|প্রচ্ছদ|কভার|কাভার/i.test(f._parentFolder||''))||images[0];
-                    const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
-                    try{
-                        const imgbbKey=await db.ref('imgbbKey').once('value').then(s=>s.val());
-                        if(imgbbKey){
-                            const fd=new FormData(); fd.append('image',driveImgUrl);
-                            const ir=await fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`,{method:'POST',body:fd});
-                            const id=await ir.json();
-                            b.img=id.success?id.data.url:driveImgUrl;
-                        } else { b.img=driveImgUrl; }
-                        imgCount++; changed=true;
-                    }catch(e){ b.img=driveImgUrl; imgCount++; changed=true; }
-                }
-            }
-
-            if(changed){
                 matched++;
                 await saveBookToFirebase(bookIdx);
-                status.innerHTML=`<span style="color:#059669">✅ ${matched}টি বই আপডেট হয়েছে... (${folder.name})</span>`;
+                status.innerHTML=`<span style="color:#059669">✅ ${matched}টি বইয়ে PDF বসেছে... (${folder.name})</span>`;
             }
         }
 
@@ -2532,423 +2353,18 @@ async function importFromDriveFolder(){
         beUpdateStats();
         beRenderList();
 
-        let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বই আপডেট (ছবি: ${imgCount}, PDF: ${pdfCount}, desc: ${descCount})</span>`;
+        let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বইয়ে PDF বসেছে</span>`;
         if(notFound.length){
             resultHtml+=`<br><span style="color:#dc2626">⚠️ ${notFound.length}টি folder match হয়নি: ${notFound.slice(0,5).join(', ')}${notFound.length>5?'...':''}</span>`;
         }
         status.innerHTML=resultHtml;
-        showToast(`${matched}টি বই Drive থেকে আপডেট হয়েছে`,'#0B6E4F');
+        showToast(`${matched}টি বইয়ে PDF বসেছে`,'#0B6E4F');
 
     }catch(e){
         status.innerHTML=`<span style="color:#dc2626">❌ Error: ${e.message}</span>`;
         showToast('Drive import ব্যর্থ: '+e.message,'#dc2626');
     }
-    btn.disabled=false; btn.textContent='Drive থেকে আনো';
-}
-
-
-/* ── PUBLISHER RESET & REBUILD ──
-   একটা নির্দিষ্ট publisher-এর সব বই Drive folder-গঠন অনুযায়ী নতুন করে সাজায়।
-   ম্যাচ পাওয়া গেলে পুরনো বইয়ের দাম/ক্যাটাগরি/লেখক/স্টক ইত্যাদি রেখে দিয়ে শুধু
-   নাম/PDF/ছবি/desc আপডেট করে। ম্যাচ না পেলে নতুন বই যোগ হয়। যেসব পুরনো বই
-   কোনো Drive folder-এর সাথে মেলেনি (orphan), সেগুলো মুছে ফেলা হয় না — শুধু
-   দেখানো হয়, ম্যানুয়ালি ডিসিশন admin-ই নেবেন। ── */
-
-function raiyanWordScore(a,b){
-    const wa=a.split(' ').filter(w=>w.length>1);
-    const wb=b.split(' ').filter(w=>w.length>1);
-    if(!wa.length||!wb.length) return 0;
-    const common=wa.filter(w=>wb.includes(w)).length;
-    return common/Math.min(wa.length,wb.length);
-}
-
-async function previewRaiyanRebuild(){
-    const pubName=(document.getElementById('raiyanPubName')?.value||'').trim();
-    const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
-    const status=document.getElementById('raiyanRebuildStatus');
-    const previewBtn=document.getElementById('raiyanPreviewBtn');
-    const applyBtn=document.getElementById('raiyanApplyBtn');
-
-    if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
-    if(!pubName){showToast('Publisher-এর নাম দিন','#dc2626');return;}
-    if(!folderUrl){showToast('উপরের Drive folder ঘরে লিংক দিন','#dc2626');return;}
-    const m=folderUrl.match(/folders\/([a-zA-Z0-9_-]+)/);
-    if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
-    const mainFolderId=m[1];
-
-    previewBtn.disabled=true; previewBtn.textContent='চলছে...';
-    applyBtn.disabled=true; applyBtn.style.opacity='0.5';
-    status.innerHTML='<span style="color:#059669">📂 Drive folder list আনা হচ্ছে...</span>';
-
-    try{
-        const allFiles=await driveList(mainFolderId);
-        const subFolders=allFiles.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
-        if(!subFolders.length){
-            status.innerHTML='<span style="color:#dc2626">কোনো sub-folder পাওয়া যায়নি।</span>';
-            previewBtn.disabled=false; previewBtn.textContent='📋 প্রিভিউ দেখুন';
-            return;
-        }
-
-        const pubNorm=normalize(pubName);
-        /* এই publisher-এর সব পুরনো বই — pool হিসেবে রাখি, ম্যাচ হলে used=true হবে */
-        const pool=[];
-        localBooks.forEach((b,i)=>{
-            if(b && normalize(b.pub||'')===pubNorm) pool.push({idx:i,name:b.name||'',used:false});
-        });
-
-        const updates=[], news=[];
-        subFolders.forEach(folder=>{
-            const folderNorm=normalize(folder.name);
-            let best=-1, bestScore=0;
-            pool.forEach((p,pi)=>{
-                if(p.used) return;
-                const bn=normalize(p.name);
-                if(bn===folderNorm||bn.includes(folderNorm)||folderNorm.includes(bn)){
-                    if(bestScore<1){ best=pi; bestScore=1; }
-                    return;
-                }
-                const score=raiyanWordScore(folderNorm,bn);
-                if(score>=0.6&&score>bestScore){ best=pi; bestScore=score; }
-            });
-            if(best!==-1){
-                pool[best].used=true;
-                updates.push({folderId:folder.id, folderName:folder.name, oldIdx:pool[best].idx, oldName:pool[best].name});
-            } else {
-                news.push({folderId:folder.id, folderName:folder.name});
-            }
-        });
-
-        const orphans=pool.filter(p=>!p.used).map(p=>({idx:p.idx,name:p.name}));
-
-        window._raiyanRebuildPlan={pubName, mainFolderId, updates, news, orphans, toDelete:[]};
-        renderRaiyanPreview();
-        showToast('প্রিভিউ তৈরি হয়েছে — নিচে দেখুন','#0B6E4F');
-    }catch(e){
-        status.innerHTML=`<span style="color:#dc2626">❌ Error: ${e.message}</span>`;
-        showToast('প্রিভিউ ব্যর্থ: '+e.message,'#dc2626');
-    }
-    previewBtn.disabled=false; previewBtn.textContent='📋 প্রিভিউ দেখুন';
-}
-
-/* না-মেলা পুরনো বই (orphan)-এর জন্য "news" তালিকা থেকে সবচেয়ে কাছাকাছি নাম খুঁজে বের করে —
-   থ্রেশহোল্ড ছাড়াই (60% নিচেও দেখাবে), যাতে admin নিজে চোখে দেখে মিলিয়ে নিতে পারেন। */
-function raiyanBestCandidate(orphanName, newsList){
-    const on=normalize(orphanName);
-    let best=-1, bestScore=0;
-    newsList.forEach((n,ni)=>{
-        const nn=normalize(n.folderName);
-        const score=raiyanWordScore(on,nn);
-        if(score>bestScore){ bestScore=score; best=ni; }
-    });
-    return best===-1?null:{newsIdx:best, score:bestScore};
-}
-
-function renderRaiyanPreview(){
-    const plan=window._raiyanRebuildPlan;
-    const status=document.getElementById('raiyanRebuildStatus');
-    const applyBtn=document.getElementById('raiyanApplyBtn');
-    if(!plan||!status) return;
-    const {updates, news, orphans, toDelete}=plan;
-
-    let html=`<span style="color:#059669">📋 প্রিভিউ — Apply চাপার আগে ভালো করে দেখে নিন:</span><br><br>`;
-
-    html+=`✅ <b>আপডেট হবে (${updates.length}):</b> পুরনো বই, দাম/ক্যাটাগরি থাকবে, নাম/PDF/ছবি/desc বদলাবে<br>`;
-    if(updates.length){
-        html+='<div style="max-height:140px;overflow-y:auto;margin:6px 0 10px;padding:8px;background:rgba(5,150,105,0.06);border-radius:8px;">';
-        updates.slice(0,50).forEach(u=>{ html+=`• ${escapeHTML(u.oldName)} → <b>${escapeHTML(u.folderName)}</b><br>`; });
-        if(updates.length>50) html+=`...আরও ${updates.length-50}টি`;
-        html+='</div>';
-    }
-
-    html+=`🆕 <b>নতুন যোগ হবে (${news.length}):</b> নিচের orphan তালিকায় "লিংক করো" চাপলে এখান থেকে সরে গিয়ে update-এ যোগ হবে<br>`;
-    if(news.length){
-        html+='<div style="max-height:120px;overflow-y:auto;margin:6px 0 10px;padding:8px;background:rgba(37,99,235,0.06);border-radius:8px;">';
-        news.slice(0,50).forEach(n=>{ html+=`• ${escapeHTML(n.folderName)}<br>`; });
-        if(news.length>50) html+=`...আরও ${news.length-50}টি`;
-        html+='</div>';
-    }
-
-    html+=`⚠️ <b>Drive-এ পাওয়া যায়নি (${orphans.length}):</b> প্রতিটার জন্য সবচেয়ে কাছাকাছি নতুন folder-এর নাম দেখানো হলো — মিললে "লিংক করো", না মিললে "মুছে ফেলুন" চাপুন<br>`;
-    if(orphans.length){
-        html+='<div style="max-height:280px;overflow-y:auto;margin-top:6px;">';
-        orphans.forEach((o,oi)=>{
-            const cand=raiyanBestCandidate(o.name, news);
-            html+=`<div style="padding:9px 10px;margin-bottom:6px;background:rgba(220,38,38,0.06);border-radius:8px;">`;
-            html+=`<div style="margin-bottom:6px;"><b>${escapeHTML(o.name)}</b></div>`;
-            if(cand){
-                const pct=Math.round(cand.score*100);
-                html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:6px;">সবচেয়ে কাছাকাছি: "${escapeHTML(news[cand.newsIdx].folderName)}" (${pct}% মিল)</div>`;
-                html+=`<button class="btn btn-sm btn-primary" style="margin-right:6px;" onclick="raiyanLinkOrphan(${oi})">🔗 এই নামের সাথে লিংক করো</button>`;
-            } else {
-                html+=`<div style="font-size:11px;color:var(--muted);margin-bottom:6px;">কাছাকাছি কোনো নতুন folder পাওয়া যায়নি</div>`;
-            }
-            html+=`<button class="btn btn-sm btn-danger" onclick="raiyanQueueDeleteOrphan(${oi})">🗑️ মুছে ফেলুন</button>`;
-            html+='</div>';
-        });
-        html+='</div>';
-    }
-
-    if(toDelete.length){
-        html+=`<br>🗑️ <b>মুছে ফেলার জন্য চিহ্নিত (${toDelete.length}):</b> Apply চাপলে এগুলো মুছে যাবে<br>`;
-        html+='<div style="max-height:100px;overflow-y:auto;margin:6px 0;padding:8px;background:rgba(120,120,120,0.08);border-radius:8px;">';
-        toDelete.forEach(d=>{ html+=`• ${escapeHTML(d.name)}<br>`; });
-        html+='</div>';
-    }
-
-    status.innerHTML=html;
-
-    if(updates.length||news.length||toDelete.length){
-        applyBtn.disabled=false; applyBtn.style.opacity='1';
-    } else {
-        applyBtn.disabled=true; applyBtn.style.opacity='0.5';
-    }
-}
-
-function raiyanLinkOrphan(orphanIdx){
-    const plan=window._raiyanRebuildPlan;
-    if(!plan) return;
-    const orphan=plan.orphans[orphanIdx];
-    if(!orphan) return;
-    const cand=raiyanBestCandidate(orphan.name, plan.news);
-    if(!cand){ showToast('কাছাকাছি কোনো নাম পাওয়া যায়নি','#dc2626'); return; }
-    const newsItem=plan.news[cand.newsIdx];
-
-    /* news থেকে সরিয়ে updates-এ যোগ করি */
-    plan.news.splice(cand.newsIdx,1);
-    plan.updates.push({folderId:newsItem.folderId, folderName:newsItem.folderName, oldIdx:orphan.idx, oldName:orphan.name});
-    /* orphans থেকে সরাই */
-    plan.orphans.splice(orphanIdx,1);
-
-    renderRaiyanPreview();
-    showToast(`"${orphan.name}" ↔ "${newsItem.folderName}" লিংক হয়েছে`,'#0B6E4F');
-}
-
-function raiyanQueueDeleteOrphan(orphanIdx){
-    const plan=window._raiyanRebuildPlan;
-    if(!plan) return;
-    const orphan=plan.orphans[orphanIdx];
-    if(!orphan) return;
-    if(!confirm(`"${orphan.name}" — এই বইটা মোছার জন্য চিহ্নিত হবে (Apply চাপলে তখন মুছে যাবে)। নিশ্চিত?`)) return;
-
-    plan.orphans.splice(orphanIdx,1);
-    plan.toDelete.push(orphan);
-
-    renderRaiyanPreview();
-    showToast(`"${orphan.name}" মোছার জন্য চিহ্নিত হলো`,'#dc2626');
-}
-
-
-async function raiyanFetchPdfDescImg(folderId){
-    /* এক লেভেল গভীর পর্যন্ত দেখে — কিছু publisher বইয়ের folder-এর ভেতরে
-       আরেক লেভেল sub-folder (প্রচ্ছদ/শর্ট পিডিএফ/বই পরিচিতি) বানায় */
-    const files=await driveListDeep(folderId,1);
-    const images=files.filter(f=>f.mimeType.startsWith('image/'));
-    const pdfs=files.filter(f=>f.mimeType==='application/pdf');
-    const txts=files.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
-    const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
-    const docxs=files.filter(f=>f.mimeType==='application/vnd.openxmlformats-officedocument.wordprocessingml.document'||/\.docx?$/i.test(f.name));
-
-    const out={pdfLink:null, desc:null, img:null, meta:{}};
-
-    if(pdfs.length){
-        /* "প্রচ্ছদ/cover" নামের sub-folder-এ ভুলবশত রাখা PDF যেন সিলেক্ট না হয়,
-           তাই "পিডিএফ/pdf/short/sample" নামের sub-folder-এর PDF-কে প্রায়োরিটি দেওয়া হচ্ছে */
-        const preferred=pdfs.find(f=>/পিডিএফ|pdf|short|sample|শর্ট/i.test(f._parentFolder||'')||/পিডিএফ|pdf|short|sample|শর্ট/i.test(f.name));
-        out.pdfLink=`https://drive.google.com/file/d/${(preferred||pdfs[0]).id}/view`;
-    }
-
-    let rawDesc=null;
-    if(txts.length){
-        try{
-            const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
-            if(tr.ok) rawDesc=await tr.text();
-        }catch(e){}
-    } else if(gdoc){
-        try{
-            const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${gdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
-            if(tr.ok) rawDesc=await tr.text();
-        }catch(e){}
-    } else if(docxs.length){
-        try{ rawDesc=await extractDocxText(docxs[0].id); }catch(e){}
-    }
-    if(rawDesc){
-        /* বিবরণ ফাইলের শেষে "বইয়ের তথ্য" ব্লক থাকলে সেখান থেকে দাম/পৃষ্ঠা/লেখক/
-           প্রকাশনী আলাদা করে বের করে নেওয়া হচ্ছে (meta), বাকিটা আসল desc */
-        const parsed=parseBookInfoBlock(rawDesc);
-        out.desc=parsed.desc;
-        out.meta=parsed.meta;
-    }
-
-    if(images.length){
-        const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name)||/cover|প্রচ্ছদ|কভার|কাভার/i.test(f._parentFolder||''))||images[0];
-        const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
-        if(IMGBB_KEY){
-            try{
-                const fd=new FormData(); fd.append('image',driveImgUrl);
-                const ir=await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`,{method:'POST',body:fd});
-                const idr=await ir.json();
-                out.img=idr.success?idr.data.url:driveImgUrl;
-            }catch(e){ out.img=driveImgUrl; }
-        } else { out.img=driveImgUrl; }
-    }
-
-    return out;
-}
-
-/* একদম নতুন publisher (দোকানে আগে নেই) যোগ করার সহজ পথ — কোনো matching/orphan
-   জটিলতা নেই, main folder-এর প্রতিটা sub-folder-কেই সরাসরি একটা নতুন বই
-   ধরে নিয়ে যোগ করে দেয়। raiyanFetchPdfDescImg()-ই ব্যবহার হয় (nested
-   folder/.docx/দাম-পৃষ্ঠা-লেখক parsing সহ), শুধু matching অংশটা বাদ। */
-async function addNewPublisherBooks(){
-    if(!DRIVE_API_KEY){showToast('আগে Tools-এ Drive API key সেভ করুন','#dc2626');return;}
-    const pubName=(document.getElementById('newPubName')?.value||'').trim();
-    const folderUrl=(document.getElementById('newPubFolderInput')?.value||'').trim();
-    const status=document.getElementById('newPubStatus');
-    const btn=document.getElementById('newPubAddBtn');
-    if(!pubName){showToast('Publisher-এর নাম দিন','#dc2626');return;}
-    if(!folderUrl){showToast('Drive folder link দিন','#dc2626');return;}
-    const m=folderUrl.match(/folders\/([a-zA-Z0-9_-]+)/);
-    if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
-    const mainFolderId=m[1];
-
-    btn.disabled=true; btn.textContent='চলছে...';
-    status.innerHTML='<span style="color:#059669">📂 বইয়ের folder list আনা হচ্ছে...</span>';
-
-    try{
-        const allFiles=await driveList(mainFolderId);
-        const subFolders=allFiles.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
-        if(!subFolders.length){
-            status.innerHTML='<span style="color:#dc2626">কোনো বইয়ের folder পাওয়া যায়নি।</span>';
-            btn.disabled=false; btn.textContent='📥 সব বই যোগ করো';
-            return;
-        }
-        if(!confirm(`"${pubName}"-এর Drive folder-এ ${subFolders.length}টি বইয়ের folder পাওয়া গেছে। সবগুলো নতুন বই হিসেবে যোগ হবে (Firebase-এ সরাসরি লেখা হবে) — দাম/পৃষ্ঠা/লেখক যেখানে বিবরণ ফাইলে লেখা পাওয়া যাবে সেখান থেকে অটো বসবে, বাকিগুলো পরে হাতে বসাতে হবে। এগোবেন?`)){
-            btn.disabled=false; btn.textContent='📥 সব বই যোগ করো';
-            status.innerHTML='';
-            return;
-        }
-
-        let added=0, priceFound=0; const failed=[];
-        for(const folder of subFolders){
-            status.innerHTML=`<span style="color:#059669">⏳ যোগ হচ্ছে (${added+1}/${subFolders.length}): ${escapeHTML(folder.name)}</span>`;
-            try{
-                const data=await raiyanFetchPdfDescImg(folder.id);
-                const meta=data.meta||{};
-                const newBook={
-                    bid: folder.name.replace(/\s+/g,'-').replace(/[^ঀ-৿\w-]/g,''),
-                    type:'বই', name:folder.name, author:meta.author||'', price:meta.price||0, original_price:meta.price||0,
-                    cat:'ইসলামি বই', subcat:'', subject:'', cover:'Paperback',
-                    pub: pubName, pages:meta.pages||'', brand:'', img:data.img||'', desc:data.desc||'',
-                    tags:[], attributes:[], pdfLink:data.pdfLink||''
-                };
-                localBooks.push(newBook);
-                const newIdx=localBooks.length-1;
-                await saveBookToFirebase(newIdx);
-                added++;
-                if(meta.price) priceFound++;
-            }catch(e){
-                failed.push(folder.name);
-            }
-        }
-
-        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
-        beUpdateStats();
-        beRenderList();
-
-        let doneHtml=`<span style="color:#059669">✅ সম্পন্ন! ${added}টি নতুন বই যোগ হয়েছে (${priceFound}টায় দাম অটো বসেছে, বাকি ${added-priceFound}টায় হাতে দাম বসাতে হবে)।</span>`;
-        if(failed.length) doneHtml+=`<br><span style="color:#dc2626">⚠️ ${failed.length}টি folder ব্যর্থ হয়েছে, আবার চেষ্টা করুন: ${failed.slice(0,10).map(escapeHTML).join(', ')}${failed.length>10?'...':''}</span>`;
-        status.innerHTML=doneHtml;
-        showToast(`${added}টি বই যোগ হয়েছে`,'#0B6E4F');
-    }catch(e){
-        status.innerHTML=`<span style="color:#dc2626">❌ Error: ${e.message}</span>`;
-        showToast('ব্যর্থ: '+e.message,'#dc2626');
-    }
-    btn.disabled=false; btn.textContent='📥 সব বই যোগ করো';
-}
-
-async function applyRaiyanRebuild(){
-    const plan=window._raiyanRebuildPlan;
-    if(!plan){ showToast('আগে প্রিভিউ দেখুন','#dc2626'); return; }
-    let confirmMsg=`এটা "${plan.pubName}"-এর ${plan.updates.length}টি বই আপডেট করবে, ${plan.news.length}টি নতুন বই যোগ করবে`;
-    if(plan.toDelete.length) confirmMsg+=`, আর ${plan.toDelete.length}টি বই মুছে ফেলবে`;
-    confirmMsg+=` — Firebase-এ সরাসরি লেখা হবে। নিশ্চিত?`;
-    if(!confirm(confirmMsg)) return;
-
-    const status=document.getElementById('raiyanRebuildStatus');
-    const previewBtn=document.getElementById('raiyanPreviewBtn');
-    const applyBtn=document.getElementById('raiyanApplyBtn');
-    previewBtn.disabled=true; applyBtn.disabled=true; applyBtn.style.opacity='0.5';
-
-    let done=0;
-    const total=plan.updates.length+plan.news.length;
-
-    try{
-        for(const u of plan.updates){
-            status.innerHTML=`<span style="color:#059669">⏳ আপডেট হচ্ছে (${done+1}/${total}): ${escapeHTML(u.folderName)}</span>`;
-            const data=await raiyanFetchPdfDescImg(u.folderId);
-            const b=localBooks[u.oldIdx];
-            b.name=u.folderName;
-            if(data.pdfLink) b.pdfLink=data.pdfLink;
-            if(data.desc!==null) b.desc=data.desc;
-            if(data.img) b.img=data.img;
-            if(data.meta){
-                if(data.meta.price && !b.price) b.price=data.meta.price;
-                if(data.meta.pages && !b.pages) b.pages=data.meta.pages;
-                if(data.meta.author && !b.author) b.author=data.meta.author;
-            }
-            await saveBookToFirebase(u.oldIdx);
-            done++;
-        }
-
-        for(const n of plan.news){
-            status.innerHTML=`<span style="color:#059669">⏳ নতুন যোগ হচ্ছে (${done+1}/${total}): ${escapeHTML(n.folderName)}</span>`;
-            const data=await raiyanFetchPdfDescImg(n.folderId);
-            const meta=data.meta||{};
-            const newBook={
-                bid: n.folderName.replace(/\s+/g,'-').replace(/[^\u0980-\u09FF\w-]/g,''),
-                type:'বই', name:n.folderName, author:meta.author||'', price:meta.price||0, original_price:meta.price||0,
-                cat:'ইসলামি বই', subcat:'', subject:'', cover:'Paperback',
-                pub: plan.pubName, pages:meta.pages||'', brand:'', img:data.img||'', desc:data.desc||'',
-                tags:[], attributes:[], pdfLink:data.pdfLink||''
-            };
-            localBooks.push(newBook);
-            const newIdx=localBooks.length-1;
-            await saveBookToFirebase(newIdx);
-            done++;
-        }
-
-        /* মোছা সবার শেষে — কারণ splice করলে array-এর index শিফট হয়ে যায়,
-           তাই updates/news যতক্ষণ চলছে ততক্ষণ কোনো delete করা হয়নি (idx স্থির ছিল)।
-           এখন সব delete একসাথে (বড় idx থেকে ছোট idx-এর দিকে) করে শেষে পুরো
-           array-টা একবারে Firebase-এ পুরোপুরি সেভ করছি (index মিলিয়ে)। */
-        if(plan.toDelete.length){
-            status.innerHTML=`<span style="color:#059669">⏳ ${plan.toDelete.length}টি বই মোছা হচ্ছে...</span>`;
-            const sortedDeletes=[...plan.toDelete].sort((a,b)=>b.idx-a.idx);
-            sortedDeletes.forEach(d=>{ localBooks.splice(d.idx,1); });
-            await syncAllBooksToFirebase(true);
-        }
-
-        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
-        beUpdateStats();
-        beRenderList();
-
-        let html=`<span style="color:#059669">✅ সম্পন্ন! ${plan.updates.length}টি আপডেট, ${plan.news.length}টি নতুন`;
-        if(plan.toDelete.length) html+=`, ${plan.toDelete.length}টি মোছা`;
-        html+=` হয়েছে।</span><br>`;
-        if(plan.orphans.length){
-            html+=`<br>⚠️ <b>এই ${plan.orphans.length}টি পুরনো বই এখনো অমীমাংসিত (মোছা হয়নি, নিজে চেক করুন):</b><br>`;
-            html+='<div style="max-height:140px;overflow-y:auto;margin-top:6px;padding:8px;background:rgba(220,38,38,0.06);border-radius:8px;">';
-            plan.orphans.forEach(o=>{ html+=`• ${escapeHTML(o.name)}<br>`; });
-            html+='</div>';
-        }
-        status.innerHTML=html;
-        showToast('Publisher rebuild সম্পন্ন হয়েছে','#0B6E4F');
-        window._raiyanRebuildPlan=null;
-    }catch(e){
-        status.innerHTML+=`<br><span style="color:#dc2626">❌ Error: ${e.message} (এতক্ষণে ${done}/${total} হয়েছে, বাকিগুলো preview আবার চালিয়ে re-run করুন)</span>`;
-        showToast('Rebuild মাঝপথে থেমে গেছে: '+e.message,'#dc2626');
-    }
-    previewBtn.disabled=false;
+    btn.disabled=false; btn.textContent='📄 PDF আনো';
 }
 
 
