@@ -1818,6 +1818,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════
@@ -2274,6 +2275,97 @@ async function driveList(folderId){
         return resolved;
     }
 
+/* কিছু publisher বইয়ের folder-এর মধ্যে সরাসরি ফাইল না রেখে আরেক লেভেল
+   sub-folder বানায় (যেমন: "বইয়ের নাম" → "১.প্রচ্ছদ" / "২.শর্ট পিডিএফ" / "৩.বই পরিচিতি"
+   → এর ভেতরে ফাইল)। driveList() শুধু এক লেভেল দেখে বলে সেসব ক্ষেত্রে কিছুই
+   পাওয়া যেত না। driveListDeep() folder-এর ভেতরের sub-folder-গুলোতেও ঢুকে
+   ফাইল খুঁজে আনে (এক লেভেল পর্যন্ত), আর কোন sub-folder থেকে এলো সেটা
+   _parentFolder-এ রেখে দেয় — যাতে "প্রচ্ছদ" folder-এর PDF আর "শর্ট পিডিএফ"
+   folder-এর PDF গুলিয়ে না যায়। */
+async function driveListDeep(folderId, depth){
+    if(depth===undefined) depth=1;
+    const files=await driveList(folderId);
+    const direct=files.filter(f=>f.mimeType!=='application/vnd.google-apps.folder').map(f=>({...f,_parentFolder:null}));
+    let out=direct;
+    if(depth>0){
+        const subFolders=files.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
+        for(const sub of subFolders){
+            try{
+                const innerFiles=await driveList(sub.id);
+                const innerDirect=innerFiles.filter(f=>f.mimeType!=='application/vnd.google-apps.folder').map(f=>({...f,_parentFolder:sub.name}));
+                out=out.concat(innerDirect);
+                if(depth>1){
+                    const deeper=await driveListDeep(sub.id,depth-1);
+                    out=out.concat(deeper.filter(f=>f._parentFolder!==null));
+                }
+            }catch(e){}
+        }
+    }
+    return out;
+}
+
+/* Publisher-রা desc প্রায়ই .docx ফাইলে দেয় (Google Doc বা .txt না) —
+   Drive API-র export endpoint শুধু native Google Doc-এর জন্য কাজ করে, .docx-এর
+   জন্য না। তাই raw .docx (আসলে একটা .zip) ডাউনলোড করে JSZip দিয়ে খুলে
+   word/document.xml থেকে টেক্সট বের করে আনা হচ্ছে। */
+async function extractDocxText(fileId){
+    if(typeof JSZip==='undefined') return null;
+    const r=await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${DRIVE_API_KEY}`);
+    if(!r.ok) return null;
+    const buf=await r.arrayBuffer();
+    const zip=await JSZip.loadAsync(buf);
+    const xmlFile=zip.file('word/document.xml');
+    if(!xmlFile) return null;
+    const xml=await xmlFile.async('text');
+    /* প্যারাগ্রাফ ব্রেক (</w:p>) নতুন লাইনে বদলে, বাকি সব ট্যাগ ফেলে দিয়ে প্লেইন টেক্সট বানানো হচ্ছে */
+    const text=xml
+        .replace(/<\/w:p>/g,'\n')
+        .replace(/<[^>]+>/g,'')
+        .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'")
+        .replace(/\n{3,}/g,'\n\n')
+        .trim();
+    return text||null;
+}
+
+function bnToEnDigits(s){
+    const map={'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
+    return (s||'').replace(/[০-৯]/g,d=>map[d]);
+}
+
+/* Publisher-দের বিবরণ (desc) ফাইলের শেষে প্রায়ই একটা "বইয়ের তথ্য" ব্লক থাকে —
+   বই/লেখক/প্রকাশনী/মোট পৃষ্ঠা/মুদ্রিত মূল্য লেবেল করা। এখান থেকে আসল বিবরণ
+   (desc) আলাদা করে, আর দাম/পৃষ্ঠা/লেখক/প্রকাশনী বের করে আনা হচ্ছে — যাতে
+   নতুন বই যোগ করার সময় দাম ০ রয়ে না যায়, হাতে বসাতে না হয়। */
+function parseBookInfoBlock(text){
+    if(!text) return {desc:text, meta:{}};
+    const meta={};
+
+    /* কিছু publisher "বইয়ের তথ্য" হেডিং দেয় (Sukun), কিছু publisher সরাসরি
+       "বই:/লেখিকা:/মুদ্রিত মুল্য:" লাইন শুরু করে দেয় কোনো হেডিং ছাড়াই
+       (Raiyan) — তাই পুরো টেক্সটেই সরাসরি এই লেবেলগুলো খোঁজা হচ্ছে, কোনো
+       হেডিং-এর ওপর নির্ভর না করে। "মূল্য"/"মুল্য" দুই বানানই মেলানো হচ্ছে। */
+    const priceM=text.match(/(?:মুদ্রিত\s*)?ম[ুূ]ল্য\s*[:：]\s*([০-৯0-9,]+)/)||text.match(/দাম\s*[:：]\s*([০-৯0-9,]+)/);
+    if(priceM){ const n=parseInt(bnToEnDigits(priceM[1]).replace(/,/g,''),10); if(n) meta.price=n; }
+
+    const pagesM=text.match(/(?:মোট\s*)?পৃষ্ঠা(?:\s*সংখ্যা)?\s*[:：]\s*([০-৯0-9]+)/);
+    if(pagesM) meta.pages=bnToEnDigits(pagesM[1])+' পৃষ্ঠা';
+
+    const authorM=text.match(/(?:লেখক|লেখিকা)\s*[:：]\s*([^\n\r]+)/);
+    if(authorM) meta.author=authorM[1].replace(/[।.]+$/,'').trim();
+
+    const pubM=text.match(/প্রকাশনী\s*[:：]\s*([^\n\r]+)/);
+    if(pubM) meta.pub=pubM[1].replace(/[।.]+$/,'').trim();
+
+    /* desc কোথায় শেষ — যে লেবেল-লাইনটা লাইনের শুরুতে সবার আগে পাওয়া যায়
+       সেখান থেকে কেটে বাকিটা বাদ দেওয়া হচ্ছে, যাতে "বই সম্পর্কে" লেখাটার
+       সাথে "বই: ...", "মুদ্রিত মুল্য: ..." গুলো মিশে না থাকে */
+    const blockStartRe=/^[ \t]*(?:বইয়ের\s*তথ্য|বই|লেখক|লেখিকা|অনুবাদ|ভাষান্তর|সম্পাদনায়|সম্পাদক|প্রকাশনী|প্রচ্ছদ|(?:মুদ্রিত\s*)?ম[ুূ]ল্য|দাম|(?:মোট\s*)?পৃষ্ঠা(?:\s*সংখ্যা)?|ধরন|ধরণ)\s*[:：—]/m;
+    const cutM=text.match(blockStartRe);
+    const desc=cutM?text.slice(0,cutM.index).trim():text.trim();
+
+    return {desc, meta};
+}
+
 async function importFromDriveFolder(){
     if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
     const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
@@ -2348,18 +2440,23 @@ async function importFromDriveFolder(){
                 continue;
             }
 
-            /* Sub-folder-এর ফাইল আনো */
-            const files=await driveList(folder.id);
+            /* Sub-folder-এর ফাইল আনো — এক লেভেল গভীর পর্যন্ত (কিছু publisher
+               বইয়ের folder-এর ভেতরে আরেক লেভেল sub-folder বানায়, যেমন
+               প্রচ্ছদ/শর্ট পিডিএফ/বই পরিচিতি) */
+            const files=await driveListDeep(folder.id,1);
             const images=files.filter(f=>f.mimeType.startsWith('image/'));
             const pdfs=files.filter(f=>f.mimeType==='application/pdf');
             const txts=files.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
+            const docxs=files.filter(f=>f.mimeType==='application/vnd.openxmlformats-officedocument.wordprocessingml.document'||/\.docx?$/i.test(f.name));
 
             const b=localBooks[bookIdx];
             let changed=false;
 
-            /* PDF */
+            /* PDF — "প্রচ্ছদ" folder-এ ভুলবশত রাখা PDF এড়াতে "পিডিএফ/pdf/short/sample"
+               নামের sub-folder/ফাইলকে প্রায়োরিটি দেওয়া হচ্ছে */
             if((mode==='pdf'||mode==='all') && pdfs.length && (forceReplace || !b.pdfLink?.trim())){
-                b.pdfLink=`https://drive.google.com/file/d/${pdfs[0].id}/view`;
+                const preferred=pdfs.find(f=>/পিডিএফ|pdf|short|sample|শর্ট/i.test(f._parentFolder||'')||/পিডিএফ|pdf|short|sample|শর্ট/i.test(f.name));
+                b.pdfLink=`https://drive.google.com/file/d/${(preferred||pdfs[0]).id}/view`;
                 pdfCount++; changed=true;
             }
 
@@ -2367,16 +2464,28 @@ async function importFromDriveFolder(){
             if(mode==='desc'||mode==='all'){
                 const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
                 if(forceReplace || !b.desc?.trim()){
+                    let rawDesc=null;
                     if(txts.length){
                         try{
                             const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
-                            if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
+                            if(tr.ok) rawDesc=await tr.text();
                         }catch(e){}
                     } else if(gdoc){
                         try{
                             const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${gdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
-                            if(tr.ok){ b.desc=await tr.text(); descCount++; changed=true; }
+                            if(tr.ok) rawDesc=await tr.text();
                         }catch(e){}
+                    } else if(docxs.length){
+                        try{ rawDesc=await extractDocxText(docxs[0].id); }catch(e){}
+                    }
+                    if(rawDesc){
+                        /* বিবরণের শেষের "বইয়ের তথ্য" ব্লক থেকে দাম/পৃষ্ঠা/লেখক
+                           আলাদা করে — খালি/০ থাকলেই বসানো হচ্ছে, বিদ্যমান দাম বদলাচ্ছে না */
+                        const parsed=parseBookInfoBlock(rawDesc);
+                        b.desc=parsed.desc; descCount++; changed=true;
+                        if(parsed.meta.price && !b.price){ b.price=parsed.meta.price; changed=true; }
+                        if(parsed.meta.pages && !b.pages){ b.pages=parsed.meta.pages; changed=true; }
+                        if(parsed.meta.author && !b.author){ b.author=parsed.meta.author; changed=true; }
                     }
                 }
             }
@@ -2385,7 +2494,7 @@ async function importFromDriveFolder(){
             if(mode==='img'||mode==='all'){
                 const hasImgBB=b.img&&b.img.includes('ibb.co');
                 if(images.length&&(forceReplace || !hasImgBB)){
-                    const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
+                    const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name)||/cover|প্রচ্ছদ|কভার|কাভার/i.test(f._parentFolder||''))||images[0];
                     const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
                     try{
                         const imgbbKey=await db.ref('imgbbKey').once('value').then(s=>s.val());
@@ -2618,30 +2727,48 @@ function raiyanQueueDeleteOrphan(orphanIdx){
 
 
 async function raiyanFetchPdfDescImg(folderId){
-    const files=await driveList(folderId);
+    /* এক লেভেল গভীর পর্যন্ত দেখে — কিছু publisher বইয়ের folder-এর ভেতরে
+       আরেক লেভেল sub-folder (প্রচ্ছদ/শর্ট পিডিএফ/বই পরিচিতি) বানায় */
+    const files=await driveListDeep(folderId,1);
     const images=files.filter(f=>f.mimeType.startsWith('image/'));
     const pdfs=files.filter(f=>f.mimeType==='application/pdf');
     const txts=files.filter(f=>f.mimeType==='text/plain'||f.name.toLowerCase().endsWith('.txt'));
     const gdoc=files.find(f=>f.mimeType==='application/vnd.google-apps.document');
+    const docxs=files.filter(f=>f.mimeType==='application/vnd.openxmlformats-officedocument.wordprocessingml.document'||/\.docx?$/i.test(f.name));
 
-    const out={pdfLink:null, desc:null, img:null};
+    const out={pdfLink:null, desc:null, img:null, meta:{}};
 
-    if(pdfs.length) out.pdfLink=`https://drive.google.com/file/d/${pdfs[0].id}/view`;
+    if(pdfs.length){
+        /* "প্রচ্ছদ/cover" নামের sub-folder-এ ভুলবশত রাখা PDF যেন সিলেক্ট না হয়,
+           তাই "পিডিএফ/pdf/short/sample" নামের sub-folder-এর PDF-কে প্রায়োরিটি দেওয়া হচ্ছে */
+        const preferred=pdfs.find(f=>/পিডিএফ|pdf|short|sample|শর্ট/i.test(f._parentFolder||'')||/পিডিএফ|pdf|short|sample|শর্ট/i.test(f.name));
+        out.pdfLink=`https://drive.google.com/file/d/${(preferred||pdfs[0]).id}/view`;
+    }
 
+    let rawDesc=null;
     if(txts.length){
         try{
             const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${txts[0].id}?alt=media&key=${DRIVE_API_KEY}`);
-            if(tr.ok) out.desc=await tr.text();
+            if(tr.ok) rawDesc=await tr.text();
         }catch(e){}
     } else if(gdoc){
         try{
             const tr=await fetch(`https://www.googleapis.com/drive/v3/files/${gdoc.id}/export?mimeType=text/plain&key=${DRIVE_API_KEY}`);
-            if(tr.ok) out.desc=await tr.text();
+            if(tr.ok) rawDesc=await tr.text();
         }catch(e){}
+    } else if(docxs.length){
+        try{ rawDesc=await extractDocxText(docxs[0].id); }catch(e){}
+    }
+    if(rawDesc){
+        /* বিবরণ ফাইলের শেষে "বইয়ের তথ্য" ব্লক থাকলে সেখান থেকে দাম/পৃষ্ঠা/লেখক/
+           প্রকাশনী আলাদা করে বের করে নেওয়া হচ্ছে (meta), বাকিটা আসল desc */
+        const parsed=parseBookInfoBlock(rawDesc);
+        out.desc=parsed.desc;
+        out.meta=parsed.meta;
     }
 
     if(images.length){
-        const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name))||images[0];
+        const cover=images.find(f=>/cover|front|main|কভার|কাভার/i.test(f.name)||/cover|প্রচ্ছদ|কভার|কাভার/i.test(f._parentFolder||''))||images[0];
         const driveImgUrl=`https://drive.google.com/uc?export=view&id=${cover.id}`;
         if(IMGBB_KEY){
             try{
@@ -2681,6 +2808,11 @@ async function applyRaiyanRebuild(){
             if(data.pdfLink) b.pdfLink=data.pdfLink;
             if(data.desc!==null) b.desc=data.desc;
             if(data.img) b.img=data.img;
+            if(data.meta){
+                if(data.meta.price && !b.price) b.price=data.meta.price;
+                if(data.meta.pages && !b.pages) b.pages=data.meta.pages;
+                if(data.meta.author && !b.author) b.author=data.meta.author;
+            }
             await saveBookToFirebase(u.oldIdx);
             done++;
         }
@@ -2688,11 +2820,12 @@ async function applyRaiyanRebuild(){
         for(const n of plan.news){
             status.innerHTML=`<span style="color:#059669">⏳ নতুন যোগ হচ্ছে (${done+1}/${total}): ${escapeHTML(n.folderName)}</span>`;
             const data=await raiyanFetchPdfDescImg(n.folderId);
+            const meta=data.meta||{};
             const newBook={
                 bid: n.folderName.replace(/\s+/g,'-').replace(/[^\u0980-\u09FF\w-]/g,''),
-                type:'বই', name:n.folderName, author:'', price:0, original_price:0,
+                type:'বই', name:n.folderName, author:meta.author||'', price:meta.price||0, original_price:meta.price||0,
                 cat:'ইসলামি বই', subcat:'', subject:'', cover:'Paperback',
-                pub: plan.pubName, pages:'', brand:'', img:data.img||'', desc:data.desc||'',
+                pub: plan.pubName, pages:meta.pages||'', brand:'', img:data.img||'', desc:data.desc||'',
                 tags:[], attributes:[], pdfLink:data.pdfLink||''
             };
             localBooks.push(newBook);

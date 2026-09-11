@@ -1353,7 +1353,7 @@ function loadBook(){
     loadAISuggest(b);
 
     /* ══ SEO: বইভিত্তিক meta + structured data (Google-এ বইয়ের নাম সার্চে আসার জন্য) ══ */
-    updateSEO(b,idx,bookImg,desc);
+    updateSEO(b,idx,bookImg,descStaticClean||'');
 }
 
 function updateSEO(b,idx,bookImg,desc){
