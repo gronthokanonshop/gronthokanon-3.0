@@ -409,6 +409,11 @@
         .be-img-preview{margin-top:6px;width:100%;height:80px;border-radius:8px;background:var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border);}
         .be-img-preview img{max-height:100%;max-width:100%;object-fit:contain;}
         .be-empty-img{font-size:11px;color:var(--text-muted);}
+        .be-gal-thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;min-height:0;}
+        .be-gal-thumb{position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--border);flex-shrink:0;}
+        .be-gal-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+        .be-gal-thumb button{position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.55);color:#fff;border:none;border-radius:50%;width:18px;height:18px;line-height:1;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+        .be-gal-thumb button:hover{background:var(--danger);}
         .be-edit-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
 
         /* ══════════════════════════════════════════
@@ -3190,6 +3195,8 @@ function beSaveBook(idx){
     b.hadiya=(g('be_hadiya_'+idx)?.value||'').trim();
     b.preorderDate=(g('be_preorderdate_'+idx)?.value||'').trim();
     b.pdfLink=(g('be_pdflink_'+idx)?.value||'').trim();
+    const gal=(beImagesSel[idx]||[]).filter(u=>u&&u.trim());
+    if(gal.length)b.images=gal; else delete b.images;
     delete b.cats; /* পুরনো multi-cat field সরানো */
     beUpdateStats();
     beRenderList();
@@ -3222,6 +3229,7 @@ function beUpdateImgPreview(idx){
 const BE_COVER_OPTIONS=['Paperback','Hardcover','Hardback','Board Book','Spiral','ই-বুক'];
 const BE_SEED_CATS=['ইসলামি বই','একাডেমিক বই','মাদ্রাসার বই','আত্মউন্নয়ন বই','English বই','Sunnah Item','প্যাকেজসমূহ','Stationery','খাবার','Best Selling','Trending','নতুন প্রকাশিত','Pre Order'];
 let beCatSel={};   // idx বা 'add' → নির্বাচিত বিভাগের array
+let beImagesSel={};   // idx বা 'add' → গ্যালারি ছবির URL array (b.img আলাদা, এটা অতিরিক্ত ছবি)
 
 function beBookCats(b){ return (b&&Array.isArray(b.cats)&&b.cats.length)?b.cats.slice():(b&&b.cat?[b.cat]:[]); }
 function beAllCatsList(){
@@ -3275,6 +3283,26 @@ function beCatAddNew(key){
     beRenderCatChips(key);
 }
 function beCatRemoveAt(key,ci){ if(!beCatSel[key])return; beCatSel[key].splice(ci,1); beRenderCatChips(key); }
+
+/* ─── গ্যালারি (অতিরিক্ত ছবি, multi-image) ─── */
+function beImagesMarkup(key){
+    const imgs=beImagesSel[key]||[];
+    return imgs.map((url,ii)=>`<div class="be-gal-thumb">
+            <img src="${escapeHTML(url)}" onerror="this.style.display='none'">
+            <button type="button" onclick="beImagesRemoveAt('${key}',${ii})" title="মুছুন">×</button>
+        </div>`).join('');
+}
+function beRenderImagesGallery(key){ const el=document.getElementById('beGalThumbs_'+key); if(el)el.innerHTML=beImagesMarkup(key); }
+function beImagesUpload(key,inp){
+    const f=inp.files[0]; inp.value='';
+    if(!f)return;
+    uploadToImgbb(f,function(url){
+        beImagesSel[key]=beImagesSel[key]||[];
+        beImagesSel[key].push(url);
+        beRenderImagesGallery(key);
+    },800);
+}
+function beImagesRemoveAt(key,ii){ if(!beImagesSel[key])return; beImagesSel[key].splice(ii,1); beRenderImagesGallery(key); }
 
 async function beToggleStock(idx){
     const cur=stockData[idx]!==false; const next=!cur;
@@ -3363,6 +3391,12 @@ function beEditorBody(b,i,imgPrevHtml){
                             <input type="file" id="be_imgfile_${i}" accept="image/*" style="display:none;" onchange="beUploadImg(${i},this)">
                         </div>
                         <div class="be-img-preview" id="beImgPrev_${i}">${imgPrevHtml}</div>
+                    </div>
+                    <div class="form-group editor-full">
+                        <label class="be-label">🖼️ অতিরিক্ত ছবি (গ্যালারি — ঐচ্ছিক, একাধিক দেওয়া যাবে)</label>
+                        <div class="be-gal-thumbs" id="beGalThumbs_${i}">${beImagesMarkup(i)}</div>
+                        <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('beGalFile_${i}').click()">📤 গ্যালারিতে ছবি যোগ করুন</button>
+                        <input type="file" id="beGalFile_${i}" accept="image/*" style="display:none;" onchange="beImagesUpload(${i},this)">
                     </div>
                     <div class="form-group editor-full">
                         <label class="be-label">বিবরণ</label>
@@ -3735,6 +3769,7 @@ function beRenderList(){
         const i=b._i;
         beCatSel[i]=beBookCats(b);
         beAttrSel[i]=Array.isArray(b.attributes)?b.attributes.map(a=>({...a})):[];
+        beImagesSel[i]=Array.isArray(b.images)?b.images.slice():[];
         const hasImg=isRealUrl(b.img);
         const isOpen=beOpenIdx===i;
         const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" loading="lazy" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;

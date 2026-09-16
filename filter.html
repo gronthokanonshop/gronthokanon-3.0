@@ -116,11 +116,14 @@
         .result-count { font-size:11.5px; color:var(--text3); font-weight:600; }
 
         /* GRID — index-এর কার্ডের মাপে (~145px) auto-fill */
-        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:12px; padding:4px 14px 14px; }
-        @media(max-width:430px) { .grid { gap:9px; padding:4px 10px 80px; } }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:10px; padding:4px 14px 14px; }
+        @media(max-width:430px) { .grid { gap:8px; padding:4px 10px 80px; } }
+        /* বড় স্ক্রিনে auto-fill-এ কলাম সংখ্যা যেন অস্বাভাবিক বেশি না হয়ে যায়, তাই বেঁধে দেওয়া */
+        @media(min-width:1000px) { .grid { grid-template-columns:repeat(7,1fr); } }
+        @media(min-width:1300px) { .grid { grid-template-columns:repeat(8,1fr); } }
 
-        /* BOOK CARD — index.html-এর প্রো লুকের সাথে মিলিয়ে */
-        .book-card { background:var(--card); border-radius:14px; overflow:hidden; border:1px solid var(--border); cursor:pointer; position:relative; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; animation:cardIn .3s ease both; box-shadow:0 1px 5px rgba(16,24,40,0.06); }
+        /* BOOK CARD — index.html-এর প্রো লুকের সাথে মিলিয়ে (কোনো curve নেই, sharp rectangular) */
+        .book-card { background:var(--card); border-radius:0; overflow:hidden; border:1px solid var(--border); cursor:pointer; position:relative; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; animation:cardIn .3s ease both; box-shadow:0 1px 5px rgba(16,24,40,0.06); }
         [data-theme="dark"] .book-card { border-color:rgba(255,255,255,0.09); box-shadow:0 1px 5px rgba(0,0,0,0.3); }
         @keyframes cardIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         .book-card:hover { transform:translateY(-5px); box-shadow:0 14px 30px rgba(5,150,105,0.18); border-color:rgba(5,150,105,0.4); }
@@ -131,25 +134,25 @@
         .book-card img { width:100%; aspect-ratio:145/195; height:auto; object-fit:cover; display:block; transition:transform .45s ease; }
         .book-card:hover img { transform:scale(1.07); }
 
-        .disc-badge { position:absolute; top:8px; left:0; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:9.5px; font-weight:800; padding:3px 9px 3px 7px; border-radius:0 20px 20px 0; z-index:2; letter-spacing:.4px; box-shadow:0 2px 8px rgba(220,38,38,0.35); }
-        .wl-btn { position:absolute; top:7px; right:7px; background:rgba(255,255,255,0.92); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.14); transition:.2s; }
+        .disc-badge { position:absolute; top:6px; left:0; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:8.5px; font-weight:800; padding:2px 7px 2px 6px; border-radius:0 20px 20px 0; z-index:2; letter-spacing:.3px; box-shadow:0 2px 8px rgba(220,38,38,0.35); }
+        .wl-btn { position:absolute; top:6px; right:6px; background:rgba(255,255,255,0.92); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.14); transition:.2s; }
         .wl-btn:hover { transform:scale(1.14); box-shadow:0 4px 12px rgba(0,0,0,0.2); }
         .wl-btn.active { background:#fee2e2; box-shadow:0 2px 10px rgba(220,38,38,0.3); }
 
         /* card label ribbon */
         .cat-label { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding:20px 7px 5px; font-size:9px; font-weight:700; color:rgba(255,255,255,0.9); letter-spacing:.5px; }
 
-        .bc-info { padding:9px 10px 10px; }
-        .bc-pub { font-size:9px; color:var(--green); font-weight:700; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-transform:uppercase; letter-spacing:.5px; }
+        .bc-info { padding:7px 8px 8px; }
+        .bc-pub { font-size:8px; color:var(--green); font-weight:700; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-transform:uppercase; letter-spacing:.4px; }
         [data-theme="dark"] .bc-pub { color:#34d399; }
-        .bc-name { font-size:12px; font-weight:800; color:var(--text); margin-bottom:2px; line-height:1.3; height:31px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
-        .bc-author { font-size:10.5px; color:var(--text2); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .price-row { display:flex; align-items:baseline; gap:5px; margin-bottom:8px; flex-wrap:wrap; }
-        .price-sell { color:#dc2626; font-weight:900; font-size:14.5px; }
+        .bc-name { font-size:10px; font-weight:800; color:var(--text); margin-bottom:2px; line-height:1.3; height:26px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+        .bc-author { font-size:9px; color:var(--text2); margin-bottom:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .price-row { display:flex; align-items:baseline; gap:4px; margin-bottom:6px; flex-wrap:wrap; }
+        .price-sell { color:#dc2626; font-weight:900; font-size:12px; }
         [data-theme="dark"] .price-sell { color:#f87171; }
-        .price-orig { color:var(--text3); font-size:10.5px; text-decoration:line-through; }
+        .price-orig { color:var(--text3); font-size:9px; text-decoration:line-through; }
 
-        .bc-btn { display:block; padding:8px 6px; background:linear-gradient(135deg,#059669,#047857); color:#fff; border-radius:9px; cursor:pointer; width:100%; border:none; font-weight:700; font-size:11px; text-align:center; font-family:'Hind Siliguri',sans-serif; transition:all .2s; letter-spacing:.3px; box-shadow:0 2px 8px rgba(5,150,105,0.28); }
+        .bc-btn { display:block; padding:6px 5px; background:linear-gradient(135deg,#059669,#047857); color:#fff; border-radius:8px; cursor:pointer; width:100%; border:none; font-weight:700; font-size:10px; text-align:center; font-family:'Hind Siliguri',sans-serif; transition:all .2s; letter-spacing:.3px; box-shadow:0 2px 8px rgba(5,150,105,0.28); }
         .bc-btn:hover { background:linear-gradient(135deg,#047857,#065f46); box-shadow:0 4px 12px rgba(5,150,105,0.38); }
         .bc-btn:active { transform:scale(0.97); }
         .bc-btn.added { background:var(--green-light); color:var(--green-dark); border:1.5px solid var(--border-g); box-shadow:none; }
@@ -162,9 +165,11 @@
         [data-theme="dark"] .bc-btn.added { color:#6ee7b7; }
 
         /* SKELETON */
-        .skel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:12px; padding:4px 14px; }
-        @media(max-width:430px) { .skel-grid { gap:9px; padding:4px 10px; } }
-        .skel-card { background:var(--card); border-radius:14px; overflow:hidden; border:1px solid var(--border); }
+        .skel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:10px; padding:4px 14px; }
+        @media(max-width:430px) { .skel-grid { gap:8px; padding:4px 10px; } }
+        @media(min-width:1000px) { .skel-grid { grid-template-columns:repeat(7,1fr); } }
+        @media(min-width:1300px) { .skel-grid { grid-template-columns:repeat(8,1fr); } }
+        .skel-card { background:var(--card); border-radius:0; overflow:hidden; border:1px solid var(--border); }
         .skel-img { aspect-ratio:145/195; height:auto; animation:shimmer 1.4s infinite; background:linear-gradient(90deg,var(--green-light) 25%,var(--green-mid) 50%,var(--green-light) 75%); background-size:200% 100%; }
         .skel-line { height:10px; margin:8px 9px; border-radius:0; animation:shimmer 1.4s infinite; background:linear-gradient(90deg,var(--green-light) 25%,var(--green-mid) 50%,var(--green-light) 75%); background-size:200% 100%; }
         .skel-line.s { width:55%; }
@@ -184,24 +189,41 @@
         .float-cart:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(5,150,105,0.5); }
 
 
-        /* ── PAGE LAYOUT ── */
-        .page-layout { display:flex; align-items:flex-start; }
-        .page-right { flex:1; min-width:0; }
-        /* ── FILTER BUTTON (sort-row) ── */
+        /* ── PAGE LAYOUT — ডেস্কটপে বাঁ পাশে ফিল্টার সাইডবার + ডানে গ্রিড (একসাথে ইনলাইন),
+           ৯০০px-এর নিচে সাইডবার লুকিয়ে শুধু গ্রিড, ফিল্টার বাটনে ফুলস্ক্রিন প্যানেল টগল হয় ── */
+        .page-layout { display:grid; grid-template-columns:250px 1fr; gap:16px; align-items:start; max-width:1300px; margin:0 auto; padding:0 14px; }
+        @media(max-width:900px) { .page-layout { grid-template-columns:1fr; padding:0; } }
+        .page-right { min-width:0; }
+        /* ── FILTER BUTTON (sort-row) — ডেস্কটপে লাগে না, সাইডবার সবসময় দৃশ্যমান ── */
         .filter-open-btn { display:flex; align-items:center; gap:5px; padding:5px 12px; border-radius:0; font-size:11.5px; font-weight:700; cursor:pointer; border:1.5px solid var(--green); background:var(--green-light); color:var(--green-dark); white-space:nowrap; font-family:'Hind Siliguri',sans-serif; transition:.2s; flex-shrink:0; }
         .filter-open-btn:hover { background:var(--green); color:#fff; }
         .filter-open-btn .fcount { background:var(--green); color:#fff; border-radius:50%; min-width:16px; height:16px; font-size:9.5px; display:none; align-items:center; justify-content:center; padding:0 3px; }
         [data-theme="dark"] .filter-open-btn { background:rgba(52,211,153,0.1); }
         .filter-open-btn .fcount.show { display:inline-flex; }
+        @media(min-width:901px) { .filter-open-btn { display:none; } }
 
-        /* ── FILTER DRAWER (নূরুল ইলম শপ স্টাইলে: ক্যাটাগরি রেডিও + দাম রেঞ্জ + বিশেষ চেকবক্স) ── */
-        .filter-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1998; display:none; opacity:0; transition:opacity .25s ease; }
-        .filter-overlay.show { display:block; opacity:1; }
-        .filter-drawer { position:fixed; top:0; left:0; bottom:0; width:290px; max-width:86vw; background:var(--card); z-index:1999; box-shadow:6px 0 30px rgba(0,0,0,0.25); transform:translateX(-100%); transition:transform .28s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; overflow:hidden; }
-        .filter-drawer.show { transform:translateX(0); }
+        /* ── FILTER SIDEBAR — ডেস্কটপে পেজের ভেতরেই sticky ব্লক হিসেবে সবসময় দৃশ্যমান,
+           ৯০০px-এর নিচে ফুলস্ক্রিন টগল প্যানেল (আগের বটম/সাইড-শিট ড্রয়ারের বদলে) ── */
+        .filter-overlay { display:none; }
+        .filter-drawer {
+            background:var(--card); border:1px solid var(--border); border-radius:14px;
+            display:flex; flex-direction:column; overflow:hidden;
+            position:sticky; top:14px; max-height:calc(100vh - 28px);
+        }
+        @media(max-width:900px) {
+            .filter-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1998; display:none; }
+            .filter-overlay.show { display:block; }
+            .filter-drawer {
+                display:none; position:fixed; inset:0; z-index:1999;
+                border-radius:0; border:none; max-height:none;
+            }
+            .filter-drawer.show { display:flex; }
+        }
+        .filter-drawer-close { display:none; }
+        @media(max-width:900px) { .filter-drawer-close { display:flex; } }
         .filter-drawer-head { display:flex; align-items:center; justify-content:space-between; padding:16px 18px; background:linear-gradient(135deg,#064e3b,#059669); color:#fff; flex-shrink:0; }
         .filter-drawer-head b { font-size:15px; font-weight:800; }
-        .filter-drawer-close { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.16); border:none; color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .filter-drawer-close { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.16); border:none; color:#fff; font-size:18px; cursor:pointer; align-items:center; justify-content:center; flex-shrink:0; }
         .filter-drawer-close:hover { background:rgba(255,255,255,0.28); }
         .filter-drawer-body { flex:1; overflow-y:auto; padding:16px 18px 10px; }
         .filter-block { margin-bottom:22px; }
@@ -322,25 +344,8 @@
 
 <!-- CONTENT -->
 <div class="page-layout">
-<div class="page-right">
-<div id="mainContent">
-    <div class="skel-grid" id="skelGrid">
-        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
-        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
-        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
-        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
-        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
-        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
-        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
-        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
-    </div>
-    <div id="bookGrid" style="display:none;"></div>
-    <div class="pagination" id="paginationBar" style="display:none;"></div>
-</div>
-</div>
-</div>
 
-<!-- FILTER DRAWER (ক্যাটাগরি রেডিও + দাম রেঞ্জ + বিশেষ চেকবক্স) -->
+<!-- FILTER SIDEBAR (আগে ছিল slide-in ড্রয়ার — এখন পেজের ভেতরেই ইনলাইন সাইডবার, ডেস্কটপে সবসময় দৃশ্যমান) -->
 <div class="filter-overlay" id="filterOverlay" onclick="closeFilterDrawer()"></div>
 <div class="filter-drawer" id="filterDrawer">
     <div class="filter-drawer-head">
@@ -377,6 +382,24 @@
         <button class="filter-reset-btn" onclick="resetDrawerFilters()">রিসেট</button>
         <button class="filter-apply-btn" onclick="applyDrawerFilters()">ফিল্টার প্রয়োগ করুন</button>
     </div>
+</div>
+
+<div class="page-right">
+<div id="mainContent">
+    <div class="skel-grid" id="skelGrid">
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line s"></div><div class="skel-line"></div></div>
+    </div>
+    <div id="bookGrid" style="display:none;"></div>
+    <div class="pagination" id="paginationBar" style="display:none;"></div>
+</div>
+</div>
 </div>
 
 <div class="float-cart" onclick="goToCart()">
@@ -1004,6 +1027,10 @@ function resetDrawerFilters() {
 }
 
 updateFilterCount();
+/* সাইডবার এখন সবসময় দৃশ্যমান (আগে শুধু "ফিল্টার" বাটনে ক্লিক করলে বানানো হতো) —
+   তাই পেজ লোড হওয়ার সাথে সাথেই একবার বানিয়ে নেওয়া হচ্ছে, Firebase categoryTree
+   আসার জন্য অপেক্ষা না করে (books array দিয়েই fallback তালিকা তৈরি হয়ে যাবে) */
+buildFilterDrawer();
 loadTagsFilter();
 loadCatTreeFilter();
 setTimeout(() => {
@@ -1019,6 +1046,18 @@ if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
     else filtered = [...books];
     renderBooks(getList());
 });
+
+/* এই ফাংশনগুলো HTML-এর onclick="..." অ্যাট্রিবিউট থেকে ডাকা হয়, যেগুলো window
+   স্কোপেই খোঁজে — কিন্তু এগুলো gkFilterInit()-এর ভেতরে declare করা (local),
+   তাই window-এ এক্সপোজ না করলে "is not defined" এরর দিয়ে সাইডবার ফিল্টার
+   করাই কাজ করত না (ক্যাটাগরি বাছাই, Apply, Reset — কিছুই কাজ করত না) */
+window.openFilterDrawer = openFilterDrawer;
+window.closeFilterDrawer = closeFilterDrawer;
+window.selectDrawerCategory = selectDrawerCategory;
+window.selectDrawerSubcat = selectDrawerSubcat;
+window.onTagFltChange = onTagFltChange;
+window.applyDrawerFilters = applyDrawerFilters;
+window.resetDrawerFilters = resetDrawerFilters;
 } /* gkFilterInit end */
 document.addEventListener('DOMContentLoaded', gkFilterInit);
 </script>

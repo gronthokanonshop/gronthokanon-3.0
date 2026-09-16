@@ -76,6 +76,13 @@
         .book-img-wrap img:hover{transform:scale(1.04);}
         .img-skel{width:180px;height:260px;border-radius:14px;background:linear-gradient(90deg,var(--border) 25%,var(--bg) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;display:none;}
         @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+        /* ── MULTI-IMAGE GALLERY THUMBS — img থাকলেই একাধিক ছবির মাঝে সুইচ করা যায় ── */
+        .img-thumbs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+        .img-thumb{width:44px;height:60px;border-radius:8px;border:2px solid transparent;overflow:hidden;cursor:pointer;flex-shrink:0;transition:border-color 0.2s,transform 0.15s;background:var(--bg);}
+        .img-thumb:hover{transform:translateY(-2px);}
+        .img-thumb.active{border-color:#059669;}
+        .img-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
         .share-btn{position:absolute;top:62px;right:14px;background:var(--card-solid);border:1.5px solid var(--border2);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--shadow);transition:0.2s;z-index:11;}
         .share-btn:hover{transform:scale(1.12);border-color:#059669;}
         .wl-btn-lg{position:absolute;top:14px;right:14px;background:var(--card-solid);border:1.5px solid var(--border2);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:19px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--shadow);transition:0.2s;}
@@ -272,6 +279,16 @@
         .sticky-buy{flex:1;padding:12px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.18s;box-shadow:0 6px 16px var(--green-glow);}
         .sticky-buy:hover{transform:translateY(-1px);}
 
+        /* ══ TABS (বিবরণ / রিভিউ) ══ */
+        .tabs-nav{display:flex;gap:4px;border-bottom:2px solid var(--border);margin-bottom:16px;overflow-x:auto;scrollbar-width:none;}
+        .tabs-nav::-webkit-scrollbar{display:none;}
+        .tab-btn{padding:10px 20px;background:none;border:none;color:var(--text2);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;position:relative;transition:color 0.2s;}
+        .tab-btn::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:#059669;transform:scaleX(0);transition:transform 0.2s;}
+        .tab-btn.active{color:#059669;}
+        .tab-btn.active::after{transform:scaleX(1);}
+        .tab-content{display:none;}
+        .tab-content.active{display:block;}
+
         /* DESC */
         .desc-card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 4px 20px var(--shadow);}
         .desc-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
@@ -444,6 +461,7 @@
             <div class="img-skel" id="imgSkel"></div>
             <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
         </div>
+        <div class="img-thumbs" id="imgThumbs" style="display:none;"></div>
         <div class="badges" id="bookBadges"></div>
         <div class="trust-mini">
             <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/><path d="M9 12l2 2 4-4"/></svg> ১০০% অরিজিনাল বই</div>
@@ -554,6 +572,13 @@
         <button class="btn-wa-order" id="btnWaOrder" onclick="orderViaWA()"><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;flex-shrink:0;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.42 1.3-1.96 1.35-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36l.55.01c.18.01.41-.07.64.49.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.72 1.18 1.54 1.92 1.06.94 1.95 1.23 2.23 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.75 1.87.89.28.14.46.21.53.32.07.12.07.68-.17 1.36z"/></svg> WhatsApp-এ অর্ডার করুন</button>
     </div>
 
+    <!-- ══ TABS (বিবরণ / রিভিউ) ══ -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="gkSwitchTab('desc',this)">বিবরণ</button>
+        <button class="tab-btn" onclick="gkSwitchTab('reviews',this)">রিভিউ</button>
+    </div>
+
+    <div class="tab-content active" id="tab-desc">
     <!-- BOOK DETAILS — SEPARATE CARD -->
     <div class="desc-card" id="bookDetailsCard">
         <h3 id="bookDetailsTitle"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> বইয়ের তথ্য</h3>
@@ -574,7 +599,9 @@
         <div class="desc-text" id="bookDesc"></div>
         <span class="desc-toggle" id="descToggle" onclick="toggleDesc()" style="display:none;">আরো দেখুন ▼</span>
     </div>
+    </div><!-- end tab-desc -->
 
+    <div class="tab-content" id="tab-reviews">
     <!-- ══ RATING SUMMARY ══ -->
     <div class="rating-section">
         <h3>⭐ রেটিং সারসংক্ষেপ</h3>
@@ -593,6 +620,28 @@
             </div>
         </div>
     </div>
+
+    <!-- পাঠকদের মতামত (রিভিউ ফর্ম + তালিকা) — আগে ফুটারের কাছে আলাদা ছিল, এখন রিভিউ ট্যাবে একত্র করা হলো -->
+    <div style="background:var(--card);border-radius:18px;padding:18px;border:1px solid var(--border);border-left:4px solid var(--gold);box-shadow:0 4px 20px var(--shadow);">
+        <h3 style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;"><svg class="eico" viewBox="0 0 24 24" fill="#d97706" width="17" height="17"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg> পাঠকদের মতামত</h3>
+        <div id="reviewForm" style="margin-bottom:20px;padding:14px;background:var(--bg);border-radius:0;border:1px solid #111;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">আপনার রিভিউ লিখুন</div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <span class="rv-star" onclick="setRating(1)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+                <span class="rv-star" onclick="setRating(2)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+                <span class="rv-star" onclick="setRating(3)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+                <span class="rv-star" onclick="setRating(4)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+                <span class="rv-star" onclick="setRating(5)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+            </div>
+            <textarea id="reviewText" placeholder="আপনার মতামত লিখুন..." style="width:100%;padding:10px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;resize:none;height:80px;outline:none;box-sizing:border-box;"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+                <input id="reviewName" placeholder="আপনার নাম" style="flex:1;padding:9px 12px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
+                <button onclick="submitReview()" style="padding:9px 16px;background:var(--gold);color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">পাঠাও</button>
+            </div>
+        </div>
+        <div id="reviewsList"><div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div></div>
+    </div>
+    </div><!-- end tab-reviews -->
 
     <!-- ══ VIDEO PREVIEW ══ -->
     <div class="video-section" id="videoSection" style="display:none;">
@@ -699,29 +748,6 @@ footer {
 <div class="related-card" id="recentSection" style="display:none;margin:0 14px 14px;">
     <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> সম্প্রতি দেখেছেন</h3>
     <div class="rel-row" id="recentBooks"></div>
-</div>
-
-<!-- REVIEW SECTION -->
-<div style="padding:14px;margin-bottom:80px;">
-    <div style="background:var(--card);border-radius:0;padding:18px;border:1px solid #111;border-left:4px solid var(--gold);">
-        <h3 style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;"><svg class="eico" viewBox="0 0 24 24" fill="#d97706" width="17" height="17"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg> পাঠকদের মতামত</h3>
-        <div id="reviewForm" style="margin-bottom:20px;padding:14px;background:var(--bg);border-radius:0;border:1px solid #111;">
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">আপনার রিভিউ লিখুন</div>
-            <div style="display:flex;gap:6px;margin-bottom:10px;">
-                <span class="rv-star" onclick="setRating(1)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-                <span class="rv-star" onclick="setRating(2)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-                <span class="rv-star" onclick="setRating(3)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-                <span class="rv-star" onclick="setRating(4)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-                <span class="rv-star" onclick="setRating(5)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
-            </div>
-            <textarea id="reviewText" placeholder="আপনার মতামত লিখুন..." style="width:100%;padding:10px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;resize:none;height:80px;outline:none;box-sizing:border-box;"></textarea>
-            <div style="display:flex;gap:8px;margin-top:8px;">
-                <input id="reviewName" placeholder="আপনার নাম" style="flex:1;padding:9px 12px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
-                <button onclick="submitReview()" style="padding:9px 16px;background:var(--gold);color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">পাঠাও</button>
-            </div>
-        </div>
-        <div id="reviewsList"><div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div></div>
-    </div>
 </div>
 
 <footer>
@@ -932,6 +958,32 @@ function changeQty(d){
 /* IMAGE */
 function onImgLoad(){document.getElementById('imgSkel').style.display='none';document.getElementById('bookImg').style.display='block';}
 function openImgModal(){const s=document.getElementById('bookImg').src;document.getElementById('modalImg').src=s;document.getElementById('imgModal').classList.add('open');}
+
+/* মাল্টি-ইমেজ গ্যালারি — b.images থাকলেই থাম্বনেইল রো দেখায়, নাহলে আগের মতো একটাই ছবি */
+function gkRenderImgThumbs(b, coverImg){
+    const wrap=document.getElementById('imgThumbs');
+    if(!wrap)return;
+    const extra=Array.isArray(b.images)?b.images.filter(u=>u&&u.trim()):[];
+    const all=[coverImg,...extra].filter((u,i,arr)=>u&&arr.indexOf(u)===i);
+    if(all.length<2){ wrap.style.display='none'; wrap.innerHTML=''; return; }
+    wrap.innerHTML=all.map((url,i)=>`<div class="img-thumb${i===0?' active':''}" onclick="gkSetBookImg('${escapeHTML(url).replace(/'/g,"\\'")}',this)"><img src="${escapeHTML(url)}" loading="lazy" onerror="this.style.display='none'"></div>`).join('');
+    wrap.style.display='flex';
+}
+function gkSetBookImg(url, el){
+    const img=document.getElementById('bookImg');
+    if(img) img.src=url;
+    document.querySelectorAll('#imgThumbs .img-thumb').forEach(t=>t.classList.remove('active'));
+    if(el) el.classList.add('active');
+}
+
+/* ট্যাব সুইচ (বিবরণ / রিভিউ) */
+function gkSwitchTab(id, btn){
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    const panel=document.getElementById('tab-'+id);
+    if(panel) panel.classList.add('active');
+    if(btn) btn.classList.add('active');
+}
 function closeImgModal(){document.getElementById('imgModal').classList.remove('open');}
 
 /* SHARE */
@@ -1143,6 +1195,7 @@ function loadBook(){
     document.getElementById('bookImg').style.display='none';
     const bookImg=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
     document.getElementById('bookImg').src=bookImg;
+    gkRenderImgThumbs(b, bookImg);
     document.getElementById('bookTitle').innerText=b.name;
     const isBook=(b.type||'বই')==='বই';
     const authorEl=document.getElementById('bookAuthor');
