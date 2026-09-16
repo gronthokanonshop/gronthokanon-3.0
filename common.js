@@ -995,3 +995,16 @@ window.gkToggleContact = function () {
         try { firebase.database().goOnline(); } catch (e) {}
     });
 })();
+/* ═══════════════════════════════════════════════════════════════
+   দাম বসানো হয়নি (৳0) এমন বই তালিকায় দেখানো হয় না।
+   ডেটা মুছে না, বইয়ের নম্বরও (index) পাল্টায় না — তাই Firebase-এর
+   স্টকের তথ্য ঠিক থাকে। অ্যাডমিন প্যানেলে দাম বসালেই আবার দেখাবে।
+═══════════════════════════════════════════════════════════════ */
+function gkIsHiddenBook(b) {
+    return !b || Number(b.price) === 0;
+}
+function gkVisibleBooks(list) {
+    return (list || []).filter(function (b) { return !gkIsHiddenBook(b); });
+}
+window.gkIsHiddenBook = gkIsHiddenBook;
+window.gkVisibleBooks = gkVisibleBooks;

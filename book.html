@@ -520,7 +520,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="pdf-cart-btn" onclick="closePdfModal();addToCart(curBook)">
+                <button class="pdf-cart-btn" onclick="closePdfModal();addToCartShow()">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                     কার্টে যোগ করুন
                 </button>
@@ -1125,7 +1125,7 @@ function orderViaWA(){
 /* RECENTLY VIEWED */
 function loadRecent(){
     let r=JSON.parse(localStorage.getItem('gronthokanon_recent'))||[];
-    r=r.filter(i=>i!==curIdx).slice(0,6);
+    r=r.filter(i=>i!==curIdx&&!gkIsHiddenBook(books[i])).slice(0,6);
     if(!r.length)return;
     document.getElementById('recentSection').style.display='block';
     document.getElementById('recentBooks').innerHTML=r.map(ri=>{
@@ -1395,7 +1395,7 @@ function loadBook(){
     updateWLUI();
 
     const _mc=bookMainCat(b), _tg=bookTags(b);
-    const related=books.filter((rb,i)=>i!==idx&&(isBook?rb.author!==b.author:true)&&((_mc&&bookMainCat(rb)===_mc)||(rb.subject&&rb.subject===b.subject)||bookTags(rb).some(t=>_tg.includes(t)))).slice(0,8);
+    const related=books.filter((rb,i)=>i!==idx&&!gkIsHiddenBook(rb)&&(isBook?rb.author!==b.author:true)&&((_mc&&bookMainCat(rb)===_mc)||(rb.subject&&rb.subject===b.subject)||bookTags(rb).some(t=>_tg.includes(t)))).slice(0,8);
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
     else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy"><div class="rel-name">${escapeHTML(rb.name)}</div><div class="rel-price">৳ ${Number(rb.price)||0}</div></div>`;}).join('');}
 
@@ -1480,7 +1480,7 @@ function bkRunSearch(){
     const body=document.getElementById('bkSearchBody');
     if(!q){bkClearSearch();return;}
     if(typeof books==='undefined'||!books.length){body.innerHTML='<div class="bks-hint">⏳ বই লোড হচ্ছে...</div>';return;}
-    const found=books.filter(b=>b.name.normalize('NFC').toLowerCase().includes(q)||(b.author||'').normalize('NFC').toLowerCase().includes(q)||(b.pub||'').normalize('NFC').toLowerCase().includes(q));
+    const found=gkVisibleBooks(books).filter(b=>b.name.normalize('NFC').toLowerCase().includes(q)||(b.author||'').normalize('NFC').toLowerCase().includes(q)||(b.pub||'').normalize('NFC').toLowerCase().includes(q));
     if(!found.length){body.innerHTML='<div class="bks-hint">📚 এই নামে কোনো বই পাওয়া যায়নি</div>';return;}
     body.innerHTML=`<div class="bks-count">🔍 ${found.length}টি বই</div>`+found.slice(0,40).map(b=>{
         const idx=books.indexOf(b);
@@ -1608,7 +1608,7 @@ function loadAuthorProfile(b){
     document.getElementById('authorAv').innerText=initials||'?';
     document.getElementById('authorName').innerText=b.author;
 
-    const authorBooks=books.filter(bk=>bk.author===b.author);
+    const authorBooks=gkVisibleBooks(books).filter(bk=>bk.author===b.author);
     const profile=authorProfiles[b.author]||authorProfiles['default'];
     document.getElementById('authorRole').innerText=profile.role;
     document.getElementById('authorBio').innerText=profile.bio;
@@ -1670,7 +1670,7 @@ function toggleAiTag(el,tag){
 }
 function renderAISuggest(){
     const pool=books.filter((b,i)=>{
-        if(i===curIdx)return false;
+        if(i===curIdx||gkIsHiddenBook(b))return false;
         return selectedTags.some(t=>bookMainCat(b)===t||bookTags(b).includes(t)||b.subject===t);
     });
     pool.sort(()=>Math.random()-0.5);

@@ -596,7 +596,7 @@
         }
         .book-card .bc-img-box { width: 100%; aspect-ratio: 145/195; height: auto; overflow: hidden; position: relative; background: linear-gradient(135deg,#f0fdf4,#ecfdf5); }
         [data-theme="dark"] .book-card .bc-img-box { background: linear-gradient(135deg,#0f2a1e,#132d20); }
-        .book-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.45s ease; }
+        .book-card img { width: 100%; height: 100%; object-fit: contain; padding: 9px; box-sizing: border-box; display: block; transition: transform 0.45s ease; }
         .book-card:hover img { transform: scale(1.07); }
 
         /* discount badge — gradient ribbon */
@@ -1591,7 +1591,7 @@ function runSearch(){
     const body=document.getElementById('searchBody');
     if(typeof books==='undefined'||!books.length){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">⏳</div><p>বই লোড হচ্ছে, একটু অপেক্ষা করুন...</p></div>`;return;}
     if(!q){body.innerHTML='';return;}
-    const found=books.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
+    const found=gkVisibleBooks(books).filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
     if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
     const shown=found.slice(0,40);
     body.innerHTML=`<div class="search-count show">🔍 "${escapeHTML(document.getElementById('searchInput').value)}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
@@ -1765,9 +1765,10 @@ function gkSweepStock(){
 window.gkOnStockReady=gkSweepStock;
 function renderRecent(){
     const sec=document.getElementById('recentlySection'),row=document.getElementById('recentlyRow');
-    if(!recentlyViewed.length){sec.style.display='none';return;}
+    const shown=recentlyViewed.filter(idx=>!gkIsHiddenBook(books[idx]));
+    if(!shown.length){sec.style.display='none';return;}
     sec.style.display='block';
-    row.innerHTML=recentlyViewed.map(idx=>{const b=books[idx];return b?makeCard(b):'';}).join('');
+    row.innerHTML=shown.map(idx=>{const b=books[idx];return b?makeCard(b):'';}).join('');
 }
 /* হোমপেজ সেকশন — বই: ট্যাগ অনুযায়ী · প্রোডাক্ট: ধরন (category) অনুযায়ী */
 function gkSectionHtml(label, id, target, items){
@@ -1783,6 +1784,7 @@ function gkSectionHtml(label, id, target, items){
 function renderSections(list){
     const w=document.getElementById('sectionsWrapper');
     w.style.display='block';
+    list=gkVisibleBooks(list);
     let html='';
     let authorStripPlaced=false;
     /* ১. বই — ট্যাগ অনুযায়ী সেকশন। "প্রিয় লেখক" চিপ সবসময় "Best Writer"
@@ -2200,7 +2202,7 @@ function deskCatClick(key, el) {
         }
         window.scrollTo({top: document.getElementById('sectionsWrapper').offsetTop - 60, behavior: 'smooth'});
     } else {
-        const filtered = books.filter(b => b.category === key || (b.cat && b.cat === key) || (Array.isArray(b.categories) && b.categories.includes(key)));
+        const filtered = gkVisibleBooks(books).filter(b => b.category === key || (b.cat && b.cat === key) || (Array.isArray(b.categories) && b.categories.includes(key)));
         if (sec) {
             sec.style.display = 'block';
             if (filtered.length === 0) {

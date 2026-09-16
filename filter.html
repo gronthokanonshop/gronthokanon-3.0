@@ -131,7 +131,7 @@
 
         .book-img-wrap { position:relative; overflow:hidden; background:linear-gradient(135deg,#f0fdf4,#ecfdf5); }
         [data-theme="dark"] .book-img-wrap { background:linear-gradient(135deg,#0f2a1e,#132d20); }
-        .book-card img { width:100%; aspect-ratio:145/195; height:auto; object-fit:cover; display:block; transition:transform .45s ease; }
+        .book-card img { width:100%; aspect-ratio:145/195; height:auto; object-fit:contain; padding:9px; box-sizing:border-box; display:block; transition:transform .45s ease; }
         .book-card:hover img { transform:scale(1.07); }
 
         .disc-badge { position:absolute; top:6px; left:0; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:8.5px; font-weight:800; padding:2px 7px 2px 6px; border-radius:0 20px 20px 0; z-index:2; letter-spacing:.3px; box-shadow:0 2px 8px rgba(220,38,38,0.35); }
@@ -191,7 +191,7 @@
 
         /* ── PAGE LAYOUT — ডেস্কটপে বাঁ পাশে ফিল্টার সাইডবার + ডানে গ্রিড (একসাথে ইনলাইন),
            ৯০০px-এর নিচে সাইডবার লুকিয়ে শুধু গ্রিড, ফিল্টার বাটনে ফুলস্ক্রিন প্যানেল টগল হয় ── */
-        .page-layout { display:grid; grid-template-columns:250px 1fr; gap:16px; align-items:start; max-width:1300px; margin:0 auto; padding:0 14px; }
+        .page-layout { width:100%; display:grid; grid-template-columns:250px 1fr; gap:16px; align-items:start; max-width:1300px; margin:0 auto; padding:0 14px; box-sizing:border-box; }
         @media(max-width:900px) { .page-layout { grid-template-columns:1fr; padding:0; } }
         .page-right { min-width:0; }
         /* ── FILTER BUTTON (sort-row) — ডেস্কটপে লাগে না, সাইডবার সবসময় দৃশ্যমান ── */
@@ -863,9 +863,9 @@ const iconMap = { cat: '📚', author: '✍️', pub: '🏢', tag: '🏷️', su
 
 let activeCategory = value;
 /* URL অনুযায়ী প্রাথমিক ফিল্টার — বিভাগ/উপ-বিভাগ/ট্যাগ ড্রয়ার-স্টেটে, লেখক/প্রকাশনী filtered-এ */
-if (type === 'author') filtered = books.filter(b => b.author === value);
-else if (type === 'pub') filtered = books.filter(b => b.pub === value);
-else filtered = [...books];
+if (type === 'author') filtered = gkVisibleBooks(books).filter(b => b.author === value);
+else if (type === 'pub') filtered = gkVisibleBooks(books).filter(b => b.pub === value);
+else filtered = gkVisibleBooks(books);
 if (type === 'cat') { drawerCategory = value; activeCategory = value; }
 else if (type === 'subcat') drawerSubcat = value;
 else if (type === 'tag') drawerTags = [value];
@@ -886,9 +886,9 @@ function allAvailableCats() {
     if (typeof categoryConfig !== 'undefined' && categoryConfig.length) {
         allCats = categoryConfig.map(c => c.key || c.label || c).filter(Boolean);
     } else {
-        allCats = [...new Set(books.flatMap(bookCats).filter(Boolean))];
+        allCats = [...new Set(gkVisibleBooks(books).flatMap(bookCats).filter(Boolean))];
     }
-    return allCats.filter(cat => books.some(b => bookCats(b).includes(cat)));
+    return allCats.filter(cat => gkVisibleBooks(books).some(b => bookCats(b).includes(cat)));
 }
 
 /* ট্যাগ-নাম কখনো ক্যাটাগরি হিসেবে দেখাবে না (পুরনো বইয়ে ট্যাগ-মান cat-এ বসানো ছিল) */
@@ -921,7 +921,7 @@ function buildFilterDrawer() {
        পুরনো book.js-এর ফ্রি-টেক্সট বিভাগ বাদ (যেসব বইয়ে tags/type/subcat নেই) */
     const taxo = new Set(GK_CAT_TREE.map(c=>c.name));
     const present = new Set();
-    books.forEach(b=>{ const c=bookMainCat(b); if(!c||GK_TAG_NAMES.has(c))return; if(taxo.has(c)||Array.isArray(b.tags)||b.type==='প্রোডাক্ট'||b.subcat) present.add(c); });
+    gkVisibleBooks(books).forEach(b=>{ const c=bookMainCat(b); if(!c||GK_TAG_NAMES.has(c))return; if(taxo.has(c)||Array.isArray(b.tags)||b.type==='প্রোডাক্ট'||b.subcat) present.add(c); });
     let cats = GK_CAT_TREE.map(c=>c.name).filter(n=>present.has(n));
     [...present].forEach(n=>{ if(!cats.includes(n)) cats.push(n); });
     const list = document.getElementById('catRadioList');
@@ -944,7 +944,7 @@ function buildSubcatList() {
     /* উপ-বিভাগ শুধু যেসব প্রকৃত আছে সেগুলো + taxonomy */
     let subs = cat ? cat.subs.slice() : [];
     if (drawerCategory) {
-        const present = new Set(books.filter(b=>bookMainCat(b)===drawerCategory).map(bookSubcat).filter(Boolean));
+        const present = new Set(gkVisibleBooks(books).filter(b=>bookMainCat(b)===drawerCategory).map(bookSubcat).filter(Boolean));
         [...present].forEach(s=>{ if(!subs.includes(s)) subs.push(s); });
     }
     if (!drawerCategory || !subs.length) { block.style.display='none'; list.innerHTML=''; if(drawerSubcat){drawerSubcat=null;} return; }
@@ -1008,7 +1008,7 @@ function applyDrawerFilters() {
     drawerFilters.max = max !== '' ? Number(max) : null;
     drawerFilters.discount = document.getElementById('fltDiscount').checked;
     /* ড্রয়ার সব বই-এর উপর ফিল্টার করে (URL base উপেক্ষা) */
-    filtered = [...books];
+    filtered = gkVisibleBooks(books);
     activeCategory = drawerCategory;
     currentPage = 1;
     const title = drawerCategory || (drawerTags.length?drawerTags.join(', '):'সকল আইটেম');
@@ -1041,9 +1041,9 @@ setTimeout(() => {
 /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
 if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
     if(!ok) return;
-    if (type === 'author') filtered = books.filter(b => b.author === value);
-    else if (type === 'pub') filtered = books.filter(b => b.pub === value);
-    else filtered = [...books];
+    if (type === 'author') filtered = gkVisibleBooks(books).filter(b => b.author === value);
+    else if (type === 'pub') filtered = gkVisibleBooks(books).filter(b => b.pub === value);
+    else filtered = gkVisibleBooks(books);
     renderBooks(getList());
 });
 
