@@ -1729,16 +1729,20 @@
                 </div>
 
                 <div class="tool-card" id="driveFolderCard">
-                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে PDF আনো</h3>
-                    <p style="margin-bottom:12px;">দোকানে <strong>আগে থেকে থাকা</strong> বইগুলোর মধ্যে যেগুলোয় PDF নেই, সেগুলোয় Drive folder থেকে PDF লিংক বসিয়ে দেয় (নাম মিলিয়ে) — দাম/ছবি/ক্যাটাগরি ছোঁয় না। নতুন বই যোগ করা বা desc/ছবি আনার কাজ এখন থেকে সরাসরি Claude-এর মাধ্যমে হয়, এখানে না।</p>
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে ছবি + PDF + বিবরণ আনো</h3>
+                    <p style="margin-bottom:12px;">Publisher-এর Drive folder-এর লিংক দিন (প্রতিটা বইয়ের আলাদা sub-folder থাকতে হবে)। দোকানে <strong>আগে থেকে থাকা</strong> বই নাম মিলিয়ে খুঁজে — যেটায় যা নেই, সেটা বসায়:<br>
+                    🖼️ <strong>ছবি</strong> — folder-এর সব ছবির মাপ দেখে <em>লম্বা front-page</em>-টা বাছে (চওড়া full-cover, বর্গাকার promo, ফোনে তোলা ছবি বাদ), imgbb-তে আপলোড করে বসায়<br>
+                    📄 <strong>PDF</strong> — শর্ট PDF-এর Drive লিংক<br>
+                    📝 <strong>বিবরণ</strong> — folder-এ Google Doc বা .txt থাকলে<br>
+                    দাম/ক্যাটাগরি/লেখক ছোঁয় না, নতুন বইও বানায় না (মেলেনি এমন folder শেষে দেখাবে)।</p>
                     <input class="form-input" id="driveFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:12px;">
                     <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:12px;color:#dc2626;">
                         <input type="checkbox" id="driveForceReplace" style="accent-color:#dc2626;">
-                        ♻️ পুরনো বইয়ের PDF আগে থেকে থাকলেও নতুনটা দিয়ে বদলে দাও (Replace)
+                        ♻️ আগে থেকে ছবি/PDF/বিবরণ থাকলেও Drive-এরটা দিয়ে বদলে দাও (Replace)
                     </label>
                     <button class="btn btn-primary" onclick="importFromDriveFolder()" id="driveFolderBtn">
                         <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                        📄 PDF আনো
+                        📥 ছবি + PDF + বিবরণ আনো
                     </button>
                     <div id="driveFolderStatus" style="margin-top:10px;font-size:12px;"></div>
                 </div>
@@ -2203,6 +2207,9 @@ async function saveDriveApiKey(){
    টুল — দুটোতেই লাগে, তাই module-level এ রাখা হলো ── */
 function normalize(str){
     return (str||'')
+        /* য়/ড়/ঢ় — Drive-এর নামে এক কোডপয়েন্ট, book.js-এ দুই কোডপয়েন্ট (বা উল্টো) হতে পারে;
+           দুটোকেই এক রূপে আনা হচ্ছে, নাহলে একই নাম "মেলেনি" দেখায় */
+        .replace(/\u09DF/g,'\u09AF\u09BC').replace(/\u09DC/g,'\u09A1\u09BC').replace(/\u09DD/g,'\u09A2\u09BC')
         /* zero-width characters সরাও */
         .replace(/[\u200b-\u200f\u202a-\u202e]/g,'')
         /* বিরাম চিহ্ন সরাও */
@@ -2222,7 +2229,6 @@ function normalize(str){
         .replace(/যেসব/g,'যে সব')
         .replace(/নিয়ামত পেয়ে হারিয়ে/g,'নিয়ামত পেয়েও হারিয়ে')
         .replace(/ব্যাখ্যা/g,'ব্যখ্যা')
-        .replace(/তাক্কওয়ার পাঠশালা/g,'রমাদান ডায়েরি')
         .replace(/\s+/g,' ').trim().toLowerCase();
 }
 
@@ -2274,6 +2280,99 @@ async function driveListDeep(folderId, depth){
     return out;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   Drive folder থেকে ছবি বাছাই — মাপ দেখে
+   • লম্বা (উচ্চতা/প্রস্থ ≥ 1.2) = front-page  → এটাই নেওয়া হয়
+   • চওড়া (≤ 0.8) = full cover (front+spine+back) → বাদ
+   • বর্গাকার = promo/মোকাপ → বাদ
+   একাধিক front থাকলে নাম দেখে ডিজাইন ফাইল আগে, ফোনে তোলা/মোকাপ পরে।
+   মাপ পড়া হয় Drive-এর ছোট thumbnail থেকে (পুরো ছবি নামাতে হয় না)।
+══════════════════════════════════════════════════════════════ */
+function gkDriveImgKind(w,h){
+    const r=h/w;
+    return r>=1.2?'portrait':(r<=0.8?'landscape':'square');
+}
+function gkDriveImgScore(name,ratio){
+    const n=(name||'').toLowerCase();
+    let s=0;
+    if(/front|cover|final|কাভার|কভার|প্রচ্ছদ/.test(n)) s+=5;
+    /* ফোন-ক্যামেরা / মেসেঞ্জার ডাম্প (timestamp, IMG-...-WA, UUID নাম) — সাধারণত বইয়ের ছবি, আর্ট না */
+    if(/^\d{8}_\d{6}|^img[-_]\d{8}[-_]wa\d+|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/.test(n)) s-=8;
+    if(/^whatsapp image/.test(n)) s-=3;
+    if(/mock|mokup|মোকাপ|marketing|মার্কেটিং|gift|promo|post|banner/.test(n)) s-=4;
+    if(/back|spine|পিছন|ব্যাক/.test(n)) s-=6;
+    if(/\(1\)|copy/.test(n)) s-=2;
+    s-=Math.abs(ratio-1.45)*2;   /* বইয়ের স্বাভাবিক অনুপাত ~1.45-এর কাছাকাছি হলে ভালো */
+    return s;
+}
+function gkDriveImgDims(fileId){
+    return new Promise(res=>{
+        const im=new Image();
+        const t=setTimeout(()=>res(null),15000);
+        im.onload=()=>{clearTimeout(t);res({w:im.naturalWidth,h:im.naturalHeight});};
+        im.onerror=()=>{clearTimeout(t);res(null);};
+        im.src='https://drive.google.com/thumbnail?id='+encodeURIComponent(fileId)+'&sz=w600';
+    });
+}
+async function gkDrivePickFront(imgFiles){
+    const measured=[];
+    for(const f of imgFiles){
+        const d=await gkDriveImgDims(f.id);
+        if(!d||!d.w||!d.h) continue;
+        measured.push({...f,w:d.w,h:d.h,ratio:d.h/d.w,kind:gkDriveImgKind(d.w,d.h)});
+    }
+    const portrait=measured.filter(m=>m.kind==='portrait');
+    if(portrait.length){
+        portrait.sort((a,b)=>gkDriveImgScore(b.name,b.ratio)-gkDriveImgScore(a.name,a.ratio));
+        return {pick:portrait[0],reason:portrait.length>1?portrait.length+'টা front-এর মধ্যে বাছাই: '+portrait[0].name:'front-only: '+portrait[0].name};
+    }
+    if(measured.some(m=>m.kind==='landscape')) return {pick:null,reason:'শুধু full-cover (চওড়া) ছবি আছে, আলাদা front নেই'};
+    if(measured.length) return {pick:null,reason:'শুধু বর্গাকার ছবি (promo?)'};
+    return {pick:null,reason:imgFiles.length?'ছবির মাপ পড়া যায়নি':'ছবি নেই'};
+}
+/* Drive API দিয়ে আসল ফাইল নামানো (public ফাইল + API key) — CORS ঠিক আছে */
+async function gkDriveFetchBlob(fileId){
+    const r=await fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(fileId)+'?alt=media&key='+DRIVE_API_KEY);
+    if(!r.ok) throw new Error('Drive download '+r.status);
+    return await r.blob();
+}
+/* uploadToImgbb-এর Promise রূপ — Blob দিলে ছোট করে আপলোড, URL (string) দিলে imgbb নিজেই টেনে নেয় */
+async function uploadToImgbbAsync(src,maxW){
+    if(!IMGBB_KEY) throw new Error('imgbb key নেই');
+    const fd=new FormData();
+    if(typeof src==='string'){
+        fd.append('image',src);
+    }else{
+        const small=await new Promise(res=>gkCompressImg(src,maxW||800,res));
+        fd.append('image',small,'photo.jpg');
+    }
+    const res=await fetch('https://api.imgbb.com/1/upload?key='+encodeURIComponent(IMGBB_KEY),{method:'POST',body:fd});
+    const j=await res.json();
+    if(j&&j.success&&j.data&&j.data.url) return j.data.url;
+    throw new Error('imgbb আপলোড ব্যর্থ');
+}
+/* folder-এ Google Doc বা .txt থাকলে সেটা থেকে বিবরণ — "পরিচিতি/বিবরণ/desc" নামেরটা আগে */
+async function gkDriveFetchDesc(files){
+    const docs=files.filter(f=>f.mimeType==='application/vnd.google-apps.document');
+    const txts=files.filter(f=>f.mimeType==='text/plain'||/\.txt$/i.test(f.name||''));
+    const pref=x=>/পরিচিতি|বিবরণ|desc|intro|about|ভূমিকা|summary|সারসংক্ষেপ/i.test(x.name||'')||/পরিচিতি|বিবরণ|desc/i.test(x._parentFolder||'');
+    const cands=[...docs.filter(pref),...txts.filter(pref),...docs,...txts];
+    const seen=new Set();
+    for(const f of cands){
+        if(seen.has(f.id)) continue; seen.add(f.id);
+        try{
+            const url=f.mimeType==='application/vnd.google-apps.document'
+                ?'https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'/export?mimeType=text/plain&key='+DRIVE_API_KEY
+                :'https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'?alt=media&key='+DRIVE_API_KEY;
+            const r=await fetch(url);
+            if(!r.ok) continue;
+            let t=(await r.text()).replace(/\r/g,'').replace(/﻿/g,'').trim().replace(/\n{3,}/g,'\n\n');
+            if(t.length>=40) return {text:t.slice(0,4000),src:f.name};
+        }catch(e){}
+    }
+    return null;
+}
+
 async function importFromDriveFolder(){
     if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
     const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
@@ -2283,41 +2382,42 @@ async function importFromDriveFolder(){
     if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
     const mainFolderId=m[1];
 
+    const BTN_LABEL='📥 ছবি + PDF + বিবরণ আনো';
     const btn=document.getElementById('driveFolderBtn');
     const status=document.getElementById('driveFolderStatus');
     const forceReplace=document.getElementById('driveForceReplace')?.checked||false;
     btn.disabled=true; btn.textContent='চলছে...';
     status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
+    if(!IMGBB_KEY) showToast('imgbb key নেই — ছবি বাদ দিয়ে শুধু PDF/বিবরণ আনা হবে','#d97706');
 
     try{
         const allFiles=await driveList(mainFolderId);
         const subFolders=allFiles.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
 
         if(!subFolders.length){
-            status.innerHTML='<span style="color:#dc2626">কোনো sub-folder পাওয়া যায়নি।</span>';
-            btn.disabled=false; btn.textContent='📄 PDF আনো';
+            status.innerHTML='<span style="color:#dc2626">কোনো sub-folder পাওয়া যায়নি — প্রতিটা বইয়ের আলাদা folder থাকতে হবে।</span>';
+            btn.disabled=false; btn.textContent=BTN_LABEL;
             return;
         }
 
-        status.innerHTML=`<span style="color:#059669">${subFolders.length}টি বইয়ের folder পাওয়া গেছে। PDF আনা হচ্ছে...</span>`;
+        let nPdf=0,nImg=0,nDesc=0,done=0;
+        const notFound=[],imgIssues=[],docxOnly=[],log=[];
 
-        let matched=0, notFound=[];
+        function wordScore(a,b){
+            const wa=a.split(' ').filter(w=>w.length>1);
+            const wb=b.split(' ').filter(w=>w.length>1);
+            if(!wa.length||!wb.length) return 0;
+            const common=wa.filter(w=>wb.includes(w)).length;
+            return common/Math.min(wa.length,wb.length);
+        }
 
         for(const folder of subFolders){
+            done++;
             const folderName=folder.name;
             const folderNorm=normalize(folderName);
+            status.innerHTML=`<span style="color:#059669">📂 ${done}/${subFolders.length} — ${escapeHTML(folderName)}</span><br><span style="color:#6b7280">ছবি ${nImg} · PDF ${nPdf} · বিবরণ ${nDesc}</span>`;
 
-            /* book.js-এ বইয়ের নাম মিলাও — শব্দ মিলিয়ে score করি
-               Drive folder: "গাইরত" → book.js: "গাইরত (পুরুষের হারানো আত্মমর্যাদাবোধ)"
-               normalize করার পর common words count করি — 60%+ মিললে match */
-            function wordScore(a,b){
-                const wa=a.split(' ').filter(w=>w.length>1);
-                const wb=b.split(' ').filter(w=>w.length>1);
-                if(!wa.length||!wb.length) return 0;
-                const common=wa.filter(w=>wb.includes(w)).length;
-                return common/Math.min(wa.length,wb.length);
-            }
-
+            /* book.js-এ বইয়ের নাম মিলাও — হুবহু/containment আগে, নাহলে শব্দ মিলিয়ে 60%+ */
             let bookIdx=-1, bestScore=0;
             localBooks.forEach((b,i)=>{
                 if(!b||!b.name) return;
@@ -2329,49 +2429,78 @@ async function importFromDriveFolder(){
                 const score=wordScore(folderNorm,bn);
                 if(score>=0.6&&score>bestScore){ bookIdx=i; bestScore=score; }
             });
-
-            if(bookIdx===-1){
-                /* মেলেনি — নতুন বই বানানো হচ্ছে না (ডুপ্লিকেট এড়াতে),
-                   শুধু notFound-এ রাখা হচ্ছে দেখার জন্য */
-                notFound.push(folderName);
-                continue;
-            }
-
-            /* এক লেভেল গভীর পর্যন্ত দেখে — কিছু publisher বইয়ের folder-এর
-               ভেতরে আরেক লেভেল sub-folder বানায় (যেমন প্রচ্ছদ/শর্ট পিডিএফ) */
-            const files=await driveListDeep(folder.id,1);
-            const pdfs=files.filter(f=>f.mimeType==='application/pdf');
+            if(bookIdx===-1){ notFound.push(folderName); continue; }
 
             const b=localBooks[bookIdx];
-            if(pdfs.length && (forceReplace || !b.pdfLink?.trim())){
-                /* "প্রচ্ছদ" folder-এ ভুলবশত রাখা PDF এড়াতে "পিডিএফ/pdf/short/sample"
-                   নামের sub-folder/ফাইলকে প্রায়োরিটি দেওয়া হচ্ছে */
+            const files=await driveListDeep(folder.id,1);
+            let changed=false;
+
+            /* ── ১. PDF ── */
+            const pdfs=files.filter(f=>f.mimeType==='application/pdf');
+            if(pdfs.length&&(forceReplace||!(b.pdfLink||'').trim())){
                 const preferred=pdfs.find(f=>/পিডিএফ|pdf|short|sample|শর্ট/i.test(f._parentFolder||'')||/পিডিএফ|pdf|short|sample|শর্ট/i.test(f.name));
-                b.pdfLink=`https://drive.google.com/file/d/${(preferred||pdfs[0]).id}/view`;
-                matched++;
-                await saveBookToFirebase(bookIdx);
-                status.innerHTML=`<span style="color:#059669">✅ ${matched}টি বইয়ে PDF বসেছে... (${folder.name})</span>`;
+                b.pdfLink='https://drive.google.com/file/d/'+(preferred||pdfs[0]).id+'/view';
+                nPdf++; changed=true;
             }
+
+            /* ── ২. ছবি ── (নেই / Drive-এর অস্থায়ী লিংক / Replace টিক থাকলে) */
+            const needImg=forceReplace||!/^https?:\/\//.test(b.img||'')||/drive\.google\.com\/thumbnail/.test(b.img||'');
+            if(needImg&&IMGBB_KEY){
+                const imgs=files.filter(f=>/^image\//.test(f.mimeType||''));
+                if(imgs.length){
+                    const {pick,reason}=await gkDrivePickFront(imgs);
+                    if(pick){
+                        try{
+                            let url;
+                            try{
+                                const blob=await gkDriveFetchBlob(pick.id);
+                                url=await uploadToImgbbAsync(blob,800);
+                            }catch(e1){
+                                /* Drive API download না হলে imgbb-কে thumbnail লিংক দিয়ে টানতে বলা */
+                                url=await uploadToImgbbAsync('https://drive.google.com/thumbnail?id='+pick.id+'&sz=w1000');
+                            }
+                            b.img=url; nImg++; changed=true;
+                            log.push(folderName+' ← '+pick.name+' ('+reason+')');
+                        }catch(e2){ imgIssues.push(folderName+': আপলোড ব্যর্থ — '+e2.message); }
+                    }else{
+                        imgIssues.push(folderName+': '+reason);
+                    }
+                }
+            }
+
+            /* ── ৩. বিবরণ ── (Firebase-এ bookDescs/{bid} খালি হলে বা Replace টিক থাকলে) */
+            const bid=b.bid||String(bookIdx);
+            let hasDesc=false;
+            if(!forceReplace){
+                try{ const ds=await db.ref('bookDescs/'+bid).once('value'); hasDesc=!!(ds.val()&&String(ds.val()).trim()); }catch(e){}
+            }
+            if(!hasDesc){
+                const d=await gkDriveFetchDesc(files);
+                if(d){ b.desc=d.text; nDesc++; changed=true; }
+                else if(files.some(f=>/wordprocessingml|msword/.test(f.mimeType||'')||/\.docx?$/i.test(f.name||''))) docxOnly.push(folderName);
+            }
+
+            if(changed) await saveBookToFirebase(bookIdx);
         }
 
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
         beUpdateStats();
         beRenderList();
 
-        let resultHtml=`<span style="color:#059669">✅ সম্পন্ন! ${matched}টি বইয়ে PDF বসেছে</span>`;
-        if(notFound.length){
-            resultHtml+=`<br><span style="color:#dc2626">⚠️ ${notFound.length}টি folder match হয়নি: ${notFound.slice(0,5).join(', ')}${notFound.length>5?'...':''}</span>`;
-        }
+        let resultHtml=`<span style="color:#059669;font-weight:700">✅ সম্পন্ন — ছবি ${nImg}টি · PDF ${nPdf}টি · বিবরণ ${nDesc}টি বসেছে</span>`;
+        if(imgIssues.length) resultHtml+=`<br><span style="color:#d97706">🖼️ ছবি বসেনি ${imgIssues.length}টিতে:</span><br><span style="color:#6b7280">${imgIssues.map(escapeHTML).join('<br>')}</span>`;
+        if(docxOnly.length) resultHtml+=`<br><span style="color:#d97706">📝 ${docxOnly.length}টিতে শুধু .docx আছে (পড়া যায় না) — Drive-এ Google Doc-এ convert করে আবার চালান: ${escapeHTML(docxOnly.slice(0,5).join(', '))}${docxOnly.length>5?'...':''}</span>`;
+        if(notFound.length) resultHtml+=`<br><span style="color:#dc2626">⚠️ ${notFound.length}টি folder দোকানের কোনো বইয়ের সাথে মেলেনি (নতুন বই হলে আগে যোগ করুন): ${escapeHTML(notFound.join(', '))}</span>`;
+        if(log.length) resultHtml+=`<details style="margin-top:8px"><summary style="cursor:pointer;color:#6b7280">কোন বইয়ে কোন ছবি বসল (${log.length})</summary><div style="color:#6b7280;font-size:11px">${log.map(escapeHTML).join('<br>')}</div></details>`;
         status.innerHTML=resultHtml;
-        showToast(`${matched}টি বইয়ে PDF বসেছে`,'#0B6E4F');
+        showToast(`ছবি ${nImg} · PDF ${nPdf} · বিবরণ ${nDesc} বসেছে`,'#0B6E4F');
 
     }catch(e){
-        status.innerHTML=`<span style="color:#dc2626">❌ Error: ${e.message}</span>`;
+        status.innerHTML=`<span style="color:#dc2626">❌ Error: ${escapeHTML(e.message)}</span>`;
         showToast('Drive import ব্যর্থ: '+e.message,'#dc2626');
     }
-    btn.disabled=false; btn.textContent='📄 PDF আনো';
+    btn.disabled=false; btn.textContent=BTN_LABEL;
 }
-
 
 async function loadImgbbKey(){
     try{
