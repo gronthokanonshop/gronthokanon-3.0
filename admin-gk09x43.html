@@ -1731,11 +1731,15 @@
                 <div class="tool-card" id="driveFolderCard">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে ছবি + PDF + বিবরণ আনো</h3>
                     <p style="margin-bottom:12px;">Publisher-এর Drive folder-এর লিংক দিন (প্রতিটা বইয়ের আলাদা sub-folder থাকতে হবে)। দোকানে <strong>আগে থেকে থাকা</strong> বই নাম মিলিয়ে খুঁজে — যেটায় যা নেই, সেটা বসায়:<br>
-                    🖼️ <strong>ছবি</strong> — folder-এর সব ছবির মাপ দেখে <em>লম্বা front-page</em>-টা বাছে (চওড়া full-cover, বর্গাকার promo, ফোনে তোলা ছবি বাদ), imgbb-তে আপলোড করে বসায়<br>
+                    🖼️ <strong>ছবি</strong> — folder-এর সব ছবির মাপ দেখে <em>লম্বা front-page</em>-টা বাছে (বর্গাকার promo, ফোনে তোলা ছবি বাদ)। শুধু চওড়া full-cover থাকলে তার থেকে front অংশ কেটে নেয়। imgbb-তে আপলোড করে বসায়<br>
                     📄 <strong>PDF</strong> — শর্ট PDF-এর Drive লিংক<br>
-                    📝 <strong>বিবরণ</strong> — folder-এ Google Doc বা .txt থাকলে<br>
+                    📝 <strong>বিবরণ</strong> — folder-এ Google Doc, .docx বা .txt থাকলে (উপরের "নাম/লেখক/মূল্য:" লাইনগুলো বাদ দিয়ে)<br>
                     দাম/ক্যাটাগরি/লেখক ছোঁয় না, নতুন বইও বানায় না (মেলেনি এমন folder শেষে দেখাবে)।</p>
                     <input class="form-input" id="driveFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:12px;">
+                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:8px;">
+                        <input type="checkbox" id="driveCropSpread" checked style="accent-color:#059669;">
+                        ✂️ আলাদা front না থাকলে full-cover থেকে front কেটে নাও (spine-এর ডান পাশ = front ধরে; কাটা ছবিগুলো পরে একবার দেখে নিন)
+                    </label>
                     <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:12px;color:#dc2626;">
                         <input type="checkbox" id="driveForceReplace" style="accent-color:#dc2626;">
                         ♻️ আগে থেকে ছবি/PDF/বিবরণ থাকলেও Drive-এরটা দিয়ে বদলে দাও (Replace)
@@ -1745,6 +1749,24 @@
                         📥 ছবি + PDF + বিবরণ আনো
                     </button>
                     <div id="driveFolderStatus" style="margin-top:10px;font-size:12px;"></div>
+                </div>
+
+                <div class="tool-card" id="pubOfferCard">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> প্রকাশনী-ভিত্তিক অফার (এক ক্লিকে সব বইয়ে ছাড়)</h3>
+                    <p style="margin-bottom:12px;">একটা প্রকাশনী (বা সব বই) বেছে ছাড়ের % দিন — ঐ সব বইয়ের বিক্রয়মূল্য <strong>MRP-এর উপর</strong> ঐ % কমে যাবে, Firebase-এ সাথে সাথে সেভ হবে। MRP (original_price) কখনো বদলায় না। অফার দেওয়ার আগে প্রতিটা বইয়ের তখনকার দাম মনে রাখা হয় — তাই পরে <em>"আগের দামে ফেরাও"</em> দিলে যার যা ছাড় ছিল সেটাই ফিরে আসে।</p>
+                    <select class="form-input" id="pubOfferSelect" style="margin-bottom:10px;" onmousedown="buildPubOfferSelect()" onfocus="buildPubOfferSelect()" onchange="previewPubOffer()">
+                        <option value="">— প্রকাশনী বাছুন —</option>
+                    </select>
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+                        <input class="form-input" id="pubOfferPct" type="number" min="0" max="90" step="1" placeholder="ছাড় % (যেমন 50)" style="max-width:170px;" oninput="previewPubOffer()">
+                        <button class="btn btn-primary" onclick="applyPubOffer()" id="pubOfferBtn">🏷️ অফার দাও</button>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                        <button class="btn btn-ghost btn-sm" onclick="restorePubOffer('prev')">↩️ আগের দামে ফেরাও</button>
+                        <button class="btn btn-ghost btn-sm" onclick="restorePubOffer('mrp')">🧾 MRP-তে ফেরাও (ছাড় নেই)</button>
+                    </div>
+                    <div id="pubOfferPreview" style="font-size:12px;color:var(--text-muted);"></div>
+                    <div id="pubOfferStatus" style="margin-top:8px;font-size:12px;"></div>
                 </div>
 
                 <div class="tool-card" id="pixelCard">
@@ -2283,21 +2305,25 @@ async function driveListDeep(folderId, depth){
 /* ══════════════════════════════════════════════════════════════
    Drive folder থেকে ছবি বাছাই — মাপ দেখে
    • লম্বা (উচ্চতা/প্রস্থ ≥ 1.2) = front-page  → এটাই নেওয়া হয়
-   • চওড়া (≤ 0.8) = full cover (front+spine+back) → বাদ
+   • চওড়া (≤ 0.8) = full cover (flap+back+spine+front+flap) → আলাদা front না থাকলে
+     spine-এর ডান পাশ থেকে front কেটে নেওয়া হয় (ফোনে তোলা চওড়া ছবি বাদ)
    • বর্গাকার = promo/মোকাপ → বাদ
-   একাধিক front থাকলে নাম দেখে ডিজাইন ফাইল আগে, ফোনে তোলা/মোকাপ পরে।
+   একাধিক থাকলে নাম দেখে ডিজাইন ফাইল আগে, ফোনে তোলা/মোকাপ পরে।
    মাপ পড়া হয় Drive-এর ছোট thumbnail থেকে (পুরো ছবি নামাতে হয় না)।
 ══════════════════════════════════════════════════════════════ */
 function gkDriveImgKind(w,h){
     const r=h/w;
     return r>=1.2?'portrait':(r<=0.8?'landscape':'square');
 }
+function gkIsPhonePhotoName(n){
+    n=(n||'').toLowerCase();
+    return /^\d{8}_\d{6}|^img[-_]\d{8}|^img_\d+|^dsc[-_]?\d+|^pxl_|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/.test(n);
+}
 function gkDriveImgScore(name,ratio){
     const n=(name||'').toLowerCase();
     let s=0;
     if(/front|cover|final|কাভার|কভার|প্রচ্ছদ/.test(n)) s+=5;
-    /* ফোন-ক্যামেরা / মেসেঞ্জার ডাম্প (timestamp, IMG-...-WA, UUID নাম) — সাধারণত বইয়ের ছবি, আর্ট না */
-    if(/^\d{8}_\d{6}|^img[-_]\d{8}[-_]wa\d+|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/.test(n)) s-=8;
+    if(gkIsPhonePhotoName(n)) s-=8;
     if(/^whatsapp image/.test(n)) s-=3;
     if(/mock|mokup|মোকাপ|marketing|মার্কেটিং|gift|promo|post|banner/.test(n)) s-=4;
     if(/back|spine|পিছন|ব্যাক/.test(n)) s-=6;
@@ -2314,7 +2340,8 @@ function gkDriveImgDims(fileId){
         im.src='https://drive.google.com/thumbnail?id='+encodeURIComponent(fileId)+'&sz=w600';
     });
 }
-async function gkDrivePickFront(imgFiles){
+/* ফেরত: {pick, crop:false} = সরাসরি front · {pick, crop:true} = full-cover, কেটে নিতে হবে · {pick:null, reason} */
+async function gkDrivePickFront(imgFiles, allowCrop){
     const measured=[];
     for(const f of imgFiles){
         const d=await gkDriveImgDims(f.id);
@@ -2324,11 +2351,33 @@ async function gkDrivePickFront(imgFiles){
     const portrait=measured.filter(m=>m.kind==='portrait');
     if(portrait.length){
         portrait.sort((a,b)=>gkDriveImgScore(b.name,b.ratio)-gkDriveImgScore(a.name,a.ratio));
-        return {pick:portrait[0],reason:portrait.length>1?portrait.length+'টা front-এর মধ্যে বাছাই: '+portrait[0].name:'front-only: '+portrait[0].name};
+        return {pick:portrait[0],crop:false,reason:portrait.length>1?portrait.length+'টা front-এর মধ্যে বাছাই: '+portrait[0].name:'front-only: '+portrait[0].name};
     }
-    if(measured.some(m=>m.kind==='landscape')) return {pick:null,reason:'শুধু full-cover (চওড়া) ছবি আছে, আলাদা front নেই'};
+    /* full-cover spread: চওড়া (w/h ≥ 1.3) কিন্তু ফোনে তোলা নয় */
+    const spreads=measured.filter(m=>m.kind==='landscape'&&(m.w/m.h)>=1.3&&!gkIsPhonePhotoName(m.name));
+    if(spreads.length){
+        if(!allowCrop) return {pick:null,reason:'শুধু full-cover (চওড়া) ছবি আছে, আলাদা front নেই (কাটা বন্ধ আছে)'};
+        spreads.sort((a,b)=>gkDriveImgScore(b.name,b.ratio)-gkDriveImgScore(a.name,a.ratio));
+        return {pick:spreads[0],crop:true,reason:'full-cover থেকে front কেটে নেওয়া: '+spreads[0].name+' — যাচাই করুন'};
+    }
+    if(measured.some(m=>m.kind==='landscape')) return {pick:null,reason:'শুধু চওড়া ফোনে-তোলা ছবি আছে, আসল কভার নেই'};
     if(measured.length) return {pick:null,reason:'শুধু বর্গাকার ছবি (promo?)'};
     return {pick:null,reason:imgFiles.length?'ছবির মাপ পড়া যায়নি':'ছবি নেই'};
+}
+/* full-cover spread থেকে front কাটা — spine ছবির ঠিক মাঝে ধরে, তার ডান থেকে (উচ্চতা ÷ 1.45) প্রস্থ পর্যন্ত */
+async function gkCropFrontFromSpread(blob){
+    const url=URL.createObjectURL(blob);
+    try{
+        const img=await new Promise((res,rej)=>{const i=new Image(); i.onload=()=>res(i); i.onerror=()=>rej(new Error('ছবি খোলা যায়নি')); i.src=url;});
+        const w=img.naturalWidth,h=img.naturalHeight;
+        const x0=Math.round(w/2+w*0.02);
+        const cw=Math.max(40,Math.min(Math.round(h/1.45),w-x0));
+        const c=document.createElement('canvas'); c.width=cw; c.height=h;
+        c.getContext('2d').drawImage(img,x0,0,cw,h,0,0,cw,h);
+        const out=await new Promise(res=>c.toBlob(res,'image/jpeg',0.9));
+        if(!out) throw new Error('কাটা যায়নি');
+        return out;
+    }finally{ URL.revokeObjectURL(url); }
 }
 /* Drive API দিয়ে আসল ফাইল নামানো (public ফাইল + API key) — CORS ঠিক আছে */
 async function gkDriveFetchBlob(fileId){
@@ -2351,26 +2400,66 @@ async function uploadToImgbbAsync(src,maxW){
     if(j&&j.success&&j.data&&j.data.url) return j.data.url;
     throw new Error('imgbb আপলোড ব্যর্থ');
 }
-/* folder-এ Google Doc বা .txt থাকলে সেটা থেকে বিবরণ — "পরিচিতি/বিবরণ/desc" নামেরটা আগে */
+/* .docx পড়া — দরকার হলে তবেই JSZip লোড হয় */
+function gkLoadJSZip(){
+    if(window.JSZip) return Promise.resolve();
+    return new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+        s.onload=res; s.onerror=()=>rej(new Error('JSZip লোড হয়নি'));
+        document.head.appendChild(s);
+    });
+}
+async function gkDocxText(blob){
+    await gkLoadJSZip();
+    const z=await JSZip.loadAsync(blob);
+    const f=z.file('word/document.xml');
+    if(!f) return '';
+    const xml=await f.async('string');
+    let t=xml.replace(/<w:tab\/>/g,'\t').replace(/<w:br\/>/g,'\n').replace(/<\/w:p>/g,'\n').replace(/<[^>]+>/g,'');
+    return t.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&#(\d+);/g,(m,n)=>String.fromCharCode(n));
+}
+/* বই-পরিচিতি ফাইলের উপরের "নাম: / লেখক: / মূল্য:" জাতীয় লাইন বাদ দিয়ে শুধু বিবরণ */
+function gkCleanDesc(t){
+    const meta=/^\s*(বই(য়ের)?\s*নাম|নাম|শিরোনাম|লেখক|মূল লেখক|অনুবাদ(ক)?|সম্পাদ(ক|না)|প্রকাশ(ক|নী|নায়|কাল)|মূল্য|মুদ্রিত মূল্য|দাম|পৃষ্ঠা|কভার|বাঁধাই|ISBN|সংস্করণ|প্রচ্ছদ|ধরন|ক্যাটাগরি|বিষয়|ভাষা|ওজন|সাইজ|book name|author|price|pages|publisher)\s*[:：\-–]/i;
+    const lines=(t||'').replace(/\r/g,'').replace(/﻿/g,'').split('\n').map(l=>l.trim());
+    const kept=lines.filter(l=>!meta.test(l));
+    return kept.join('\n').replace(/\n{3,}/g,'\n\n').trim();
+}
+/* folder-এ Google Doc / .docx / .txt থাকলে সেটা থেকে বিবরণ — "পরিচিতি/বিবরণ/desc" নামেরটা আগে */
 async function gkDriveFetchDesc(files){
+    const isDocx=f=>/wordprocessingml/.test(f.mimeType||'')||/\.docx$/i.test(f.name||'');
     const docs=files.filter(f=>f.mimeType==='application/vnd.google-apps.document');
+    const docx=files.filter(isDocx);
     const txts=files.filter(f=>f.mimeType==='text/plain'||/\.txt$/i.test(f.name||''));
     const pref=x=>/পরিচিতি|বিবরণ|desc|intro|about|ভূমিকা|summary|সারসংক্ষেপ/i.test(x.name||'')||/পরিচিতি|বিবরণ|desc/i.test(x._parentFolder||'');
-    const cands=[...docs.filter(pref),...txts.filter(pref),...docs,...txts];
+    const cands=[...docs.filter(pref),...docx.filter(pref),...txts.filter(pref),...docs,...docx,...txts];
     const seen=new Set();
     for(const f of cands){
         if(seen.has(f.id)) continue; seen.add(f.id);
         try{
-            const url=f.mimeType==='application/vnd.google-apps.document'
-                ?'https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'/export?mimeType=text/plain&key='+DRIVE_API_KEY
-                :'https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'?alt=media&key='+DRIVE_API_KEY;
-            const r=await fetch(url);
-            if(!r.ok) continue;
-            let t=(await r.text()).replace(/\r/g,'').replace(/﻿/g,'').trim().replace(/\n{3,}/g,'\n\n');
+            let t='';
+            if(f.mimeType==='application/vnd.google-apps.document'){
+                const r=await fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'/export?mimeType=text/plain&key='+DRIVE_API_KEY);
+                if(!r.ok) continue; t=await r.text();
+            }else if(isDocx(f)){
+                t=await gkDocxText(await gkDriveFetchBlob(f.id));
+            }else{
+                const r=await fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'?alt=media&key='+DRIVE_API_KEY);
+                if(!r.ok) continue; t=await r.text();
+            }
+            t=gkCleanDesc(t);
             if(t.length>=40) return {text:t.slice(0,4000),src:f.name};
         }catch(e){}
     }
     return null;
+}
+/* নাম মেলানোর শেষ চেষ্টা — ৪-অক্ষরের টুকরো মিলিয়ে সাদৃশ্য (বানান সামান্য আলাদা হলেও ধরে) */
+function gkGramSim(a,b){
+    if(a.length<4||b.length<4) return 0;
+    const g=s=>{const m=new Set(); for(let i=0;i<=s.length-4;i++) m.add(s.substr(i,4)); return m;};
+    const ga=g(a),gb=g(b); let c=0; ga.forEach(x=>{ if(gb.has(x)) c++; });
+    return (2*c)/(ga.size+gb.size);
 }
 
 async function importFromDriveFolder(){
@@ -2386,6 +2475,7 @@ async function importFromDriveFolder(){
     const btn=document.getElementById('driveFolderBtn');
     const status=document.getElementById('driveFolderStatus');
     const forceReplace=document.getElementById('driveForceReplace')?.checked||false;
+    const allowCrop=document.getElementById('driveCropSpread')?.checked!==false;
     btn.disabled=true; btn.textContent='চলছে...';
     status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
     if(!IMGBB_KEY) showToast('imgbb key নেই — ছবি বাদ দিয়ে শুধু PDF/বিবরণ আনা হবে','#d97706');
@@ -2400,8 +2490,8 @@ async function importFromDriveFolder(){
             return;
         }
 
-        let nPdf=0,nImg=0,nDesc=0,done=0;
-        const notFound=[],imgIssues=[],docxOnly=[],log=[];
+        let nPdf=0,nImg=0,nCrop=0,nDesc=0,done=0;
+        const notFound=[],imgIssues=[],docxFail=[],log=[],cropLog=[];
 
         function wordScore(a,b){
             const wa=a.split(' ').filter(w=>w.length>1);
@@ -2410,18 +2500,19 @@ async function importFromDriveFolder(){
             const common=wa.filter(w=>wb.includes(w)).length;
             return common/Math.min(wa.length,wb.length);
         }
+        const normBooks=localBooks.map(b=>(b&&b.name)?normalize(b.name):'');
+        const compact=s=>s.replace(/\s+/g,'');
 
         for(const folder of subFolders){
             done++;
             const folderName=folder.name;
             const folderNorm=normalize(folderName);
-            status.innerHTML=`<span style="color:#059669">📂 ${done}/${subFolders.length} — ${escapeHTML(folderName)}</span><br><span style="color:#6b7280">ছবি ${nImg} · PDF ${nPdf} · বিবরণ ${nDesc}</span>`;
+            status.innerHTML=`<span style="color:#059669">📂 ${done}/${subFolders.length} — ${escapeHTML(folderName)}</span><br><span style="color:#6b7280">ছবি ${nImg} (কাটা ${nCrop}) · PDF ${nPdf} · বিবরণ ${nDesc}</span>`;
 
-            /* book.js-এ বইয়ের নাম মিলাও — হুবহু/containment আগে, নাহলে শব্দ মিলিয়ে 60%+ */
+            /* ১. হুবহু / containment  ২. শব্দ মিল 60%+  ৩. ৪-অক্ষর সাদৃশ্য 0.72+ */
             let bookIdx=-1, bestScore=0;
-            localBooks.forEach((b,i)=>{
-                if(!b||!b.name) return;
-                const bn=normalize(b.name);
+            normBooks.forEach((bn,i)=>{
+                if(!bn) return;
                 if(bn===folderNorm||bn.includes(folderNorm)||folderNorm.includes(bn)){
                     if(bestScore<1){ bookIdx=i; bestScore=1; }
                     return;
@@ -2429,6 +2520,11 @@ async function importFromDriveFolder(){
                 const score=wordScore(folderNorm,bn);
                 if(score>=0.6&&score>bestScore){ bookIdx=i; bestScore=score; }
             });
+            if(bookIdx===-1){
+                const fc=compact(folderNorm); let bs=0;
+                normBooks.forEach((bn,i)=>{ if(!bn) return; const s=gkGramSim(fc,compact(bn)); if(s>bs){bs=s;bookIdx=i;} });
+                if(bs<0.72) bookIdx=-1;
+            }
             if(bookIdx===-1){ notFound.push(folderName); continue; }
 
             const b=localBooks[bookIdx];
@@ -2448,16 +2544,23 @@ async function importFromDriveFolder(){
             if(needImg&&IMGBB_KEY){
                 const imgs=files.filter(f=>/^image\//.test(f.mimeType||''));
                 if(imgs.length){
-                    const {pick,reason}=await gkDrivePickFront(imgs);
+                    const {pick,crop,reason}=await gkDrivePickFront(imgs,allowCrop);
                     if(pick){
                         try{
                             let url;
-                            try{
+                            if(crop){
+                                /* কাটতে হলে আসল ফাইল লাগবেই (thumbnail দিয়ে canvas কাজ করে না) */
                                 const blob=await gkDriveFetchBlob(pick.id);
-                                url=await uploadToImgbbAsync(blob,800);
-                            }catch(e1){
-                                /* Drive API download না হলে imgbb-কে thumbnail লিংক দিয়ে টানতে বলা */
-                                url=await uploadToImgbbAsync('https://drive.google.com/thumbnail?id='+pick.id+'&sz=w1000');
+                                const front=await gkCropFrontFromSpread(blob);
+                                url=await uploadToImgbbAsync(front,800);
+                                nCrop++; cropLog.push(folderName);
+                            }else{
+                                try{
+                                    const blob=await gkDriveFetchBlob(pick.id);
+                                    url=await uploadToImgbbAsync(blob,800);
+                                }catch(e1){
+                                    url=await uploadToImgbbAsync('https://drive.google.com/thumbnail?id='+pick.id+'&sz=w1000');
+                                }
                             }
                             b.img=url; nImg++; changed=true;
                             log.push(folderName+' ← '+pick.name+' ('+reason+')');
@@ -2477,7 +2580,7 @@ async function importFromDriveFolder(){
             if(!hasDesc){
                 const d=await gkDriveFetchDesc(files);
                 if(d){ b.desc=d.text; nDesc++; changed=true; }
-                else if(files.some(f=>/wordprocessingml|msword/.test(f.mimeType||'')||/\.docx?$/i.test(f.name||''))) docxOnly.push(folderName);
+                else if(files.some(f=>/wordprocessingml|msword/.test(f.mimeType||'')||/\.docx?$/i.test(f.name||''))) docxFail.push(folderName);
             }
 
             if(changed) await saveBookToFirebase(bookIdx);
@@ -2487,9 +2590,10 @@ async function importFromDriveFolder(){
         beUpdateStats();
         beRenderList();
 
-        let resultHtml=`<span style="color:#059669;font-weight:700">✅ সম্পন্ন — ছবি ${nImg}টি · PDF ${nPdf}টি · বিবরণ ${nDesc}টি বসেছে</span>`;
+        let resultHtml=`<span style="color:#059669;font-weight:700">✅ সম্পন্ন — ছবি ${nImg}টি (তার মধ্যে full-cover থেকে কাটা ${nCrop}টি) · PDF ${nPdf}টি · বিবরণ ${nDesc}টি বসেছে</span>`;
+        if(cropLog.length) resultHtml+=`<br><span style="color:#d97706">✂️ কাটা ছবিগুলো একবার বই-এডিটরে দেখে নিন (flap/spine ঢুকে গেলে ম্যানুয়াল ছবি দিন): ${escapeHTML(cropLog.join(', '))}</span>`;
         if(imgIssues.length) resultHtml+=`<br><span style="color:#d97706">🖼️ ছবি বসেনি ${imgIssues.length}টিতে:</span><br><span style="color:#6b7280">${imgIssues.map(escapeHTML).join('<br>')}</span>`;
-        if(docxOnly.length) resultHtml+=`<br><span style="color:#d97706">📝 ${docxOnly.length}টিতে শুধু .docx আছে (পড়া যায় না) — Drive-এ Google Doc-এ convert করে আবার চালান: ${escapeHTML(docxOnly.slice(0,5).join(', '))}${docxOnly.length>5?'...':''}</span>`;
+        if(docxFail.length) resultHtml+=`<br><span style="color:#d97706">📝 ${docxFail.length}টিতে docx/doc ছিল কিন্তু বিবরণ পড়া যায়নি (পুরনো .doc বা খালি ফাইল?): ${escapeHTML(docxFail.slice(0,8).join(', '))}${docxFail.length>8?'...':''}</span>`;
         if(notFound.length) resultHtml+=`<br><span style="color:#dc2626">⚠️ ${notFound.length}টি folder দোকানের কোনো বইয়ের সাথে মেলেনি (নতুন বই হলে আগে যোগ করুন): ${escapeHTML(notFound.join(', '))}</span>`;
         if(log.length) resultHtml+=`<details style="margin-top:8px"><summary style="cursor:pointer;color:#6b7280">কোন বইয়ে কোন ছবি বসল (${log.length})</summary><div style="color:#6b7280;font-size:11px">${log.map(escapeHTML).join('<br>')}</div></details>`;
         status.innerHTML=resultHtml;
@@ -2500,6 +2604,132 @@ async function importFromDriveFolder(){
         showToast('Drive import ব্যর্থ: '+e.message,'#dc2626');
     }
     btn.disabled=false; btn.textContent=BTN_LABEL;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   প্রকাশনী-ভিত্তিক অফার — এক ক্লিকে কোনো প্রকাশনীর (বা সব) বইয়ে ছাড়
+   • price = round(original_price × (1 − %/100)); original_price (MRP) অপরিবর্তিত
+   • অফার দেওয়ার আগে তখনকার price Firebase-এর priceBackup/{idx}-এ রাখা হয়
+     (একবারই — নতুন অফারে পুরনো backup overwrite হয় না), যাতে "আগের দামে ফেরাও" কাজ করে
+   • Firebase-এ পুরো বই-অবজেক্ট লেখা হয় (শুধু price না) — যাতে যে বই এখনো
+     Firebase-এ নেই সেটা অর্ধেক-অবজেক্ট হয়ে না যায়
+══════════════════════════════════════════════════════════════ */
+const PUB_OFFER_ALL='__ALL__';
+function pubOfferPubMap(){
+    const m={};
+    (localBooks||[]).forEach(b=>{ if(!b) return; const p=(b.pub||'').trim()||'(প্রকাশনী নেই)'; m[p]=(m[p]||0)+1; });
+    return m;
+}
+function buildPubOfferSelect(){
+    const sel=document.getElementById('pubOfferSelect'); if(!sel) return;
+    const cur=sel.value;
+    const m=pubOfferPubMap();
+    const pubs=Object.keys(m).sort((a,b)=>a.localeCompare(b,'bn'));
+    let html='<option value="">— প্রকাশনী বাছুন —</option>';
+    html+=`<option value="${PUB_OFFER_ALL}">🌐 সব বই (${(localBooks||[]).length}টি)</option>`;
+    pubs.forEach(p=>{ html+=`<option value="${escapeHTML(p)}">${escapeHTML(p)} (${m[p]}টি)</option>`; });
+    if(sel.innerHTML!==html){ sel.innerHTML=html; sel.value=cur; }
+}
+/* যেসব বইয়ে অফার লাগবে — index তালিকা (MRP > 0 না হলে বাদ) */
+function pubOfferTargets(){
+    const v=document.getElementById('pubOfferSelect')?.value||'';
+    if(!v) return [];
+    const out=[];
+    (localBooks||[]).forEach((b,i)=>{
+        if(!b) return;
+        const p=(b.pub||'').trim()||'(প্রকাশনী নেই)';
+        if(v!==PUB_OFFER_ALL && p!==v) return;
+        if(!(Number(b.original_price)>0)) return;
+        out.push(i);
+    });
+    return out;
+}
+function previewPubOffer(){
+    const el=document.getElementById('pubOfferPreview'); if(!el) return;
+    const idxs=pubOfferTargets();
+    const pct=Number(document.getElementById('pubOfferPct')?.value||0);
+    if(!idxs.length){ el.innerHTML=''; return; }
+    let sumDisc=0;
+    idxs.forEach(i=>{ const b=localBooks[i]; const o=Number(b.original_price), p=Number(b.price)||o; sumDisc+=(1-p/o)*100; });
+    const avg=Math.round(sumDisc/idxs.length);
+    const ex=localBooks[idxs[0]];
+    let s=`📚 ${idxs.length}টি বই · এখন গড় ছাড় ${avg}%`;
+    if(pct>0&&pct<=90) s+=` · ${pct}% দিলে উদাহরণ: <b>${escapeHTML(ex.name)}</b> ৳${ex.original_price} → <b>৳${Math.round(ex.original_price*(1-pct/100))}</b>`;
+    el.innerHTML=s;
+}
+async function applyPubOffer(){
+    const sel=document.getElementById('pubOfferSelect');
+    const pct=Number(document.getElementById('pubOfferPct')?.value);
+    const st=document.getElementById('pubOfferStatus');
+    if(!sel?.value){ showToast('আগে প্রকাশনী বাছুন','#dc2626'); return; }
+    if(!(pct>=0&&pct<=90)){ showToast('ছাড় ০ থেকে ৯০%-এর মধ্যে দিন','#dc2626'); return; }
+    const idxs=pubOfferTargets();
+    if(!idxs.length){ showToast('এই বাছাইয়ে কোনো বই নেই','#dc2626'); return; }
+    const label=sel.value===PUB_OFFER_ALL?'সব বই':sel.value;
+    if(!confirm(`${label} — ${idxs.length}টি বইয়ে ${pct}% ছাড় বসবে (MRP-এর উপর)। এগিয়ে যাবেন?`)) return;
+    const btn=document.getElementById('pubOfferBtn'); btn.disabled=true;
+    st.innerHTML='<span style="color:#059669">⏳ দাম বসানো হচ্ছে...</span>';
+    try{
+        await ensureBookIdsAndMigrate(localBooks);
+        const bk=(await db.ref('priceBackup').once('value')).val()||{};
+        const updates={};
+        idxs.forEach(i=>{
+            const b=localBooks[i];
+            const o=Number(b.original_price);
+            if(bk[i]==null) updates['priceBackup/'+i]=Number(b.price)||o;   /* প্রথমবারই মনে রাখা */
+            b.price=Math.round(o*(1-pct/100));
+            updates['bookList/'+i]=bookWithoutDesc(b);
+        });
+        await db.ref().update(updates);
+        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
+        beUpdateStats(); beRenderList(); previewPubOffer();
+        st.innerHTML=`<span style="color:#059669;font-weight:700">✅ ${idxs.length}টি বইয়ে ${pct}% ছাড় বসেছে — সাইটে লাইভ।</span><br><span style="color:var(--text-muted)">book.js ফাইলেও নতুন দাম রাখতে চাইলে নিচে "book.js ডাউনলোড করুন" দিয়ে GitHub-এ আপলোড করুন।</span>`;
+        showToast(`${idxs.length}টি বইয়ে ${pct}% ছাড় বসেছে`,'#0B6E4F');
+    }catch(e){
+        st.innerHTML=`<span style="color:#dc2626">❌ ব্যর্থ: ${escapeHTML(e.message)}</span>`;
+        showToast('অফার বসানো ব্যর্থ: '+e.message,'#dc2626');
+    }
+    btn.disabled=false;
+}
+/* mode='prev' → অফারের আগের দামে; mode='mrp' → MRP-তে (ছাড় নেই) */
+async function restorePubOffer(mode){
+    const sel=document.getElementById('pubOfferSelect');
+    const st=document.getElementById('pubOfferStatus');
+    if(!sel?.value){ showToast('আগে প্রকাশনী বাছুন','#dc2626'); return; }
+    const idxs=pubOfferTargets();
+    if(!idxs.length){ showToast('এই বাছাইয়ে কোনো বই নেই','#dc2626'); return; }
+    const label=sel.value===PUB_OFFER_ALL?'সব বই':sel.value;
+    const what=mode==='prev'?'অফারের আগের দামে':'MRP-তে (ছাড় ছাড়া)';
+    if(!confirm(`${label} — ${idxs.length}টি বই ${what} ফেরানো হবে। এগিয়ে যাবেন?`)) return;
+    st.innerHTML='<span style="color:#059669">⏳ দাম ফেরানো হচ্ছে...</span>';
+    try{
+        await ensureBookIdsAndMigrate(localBooks);
+        const bk=(await db.ref('priceBackup').once('value')).val()||{};
+        const updates={}; let n=0, noBackup=0;
+        idxs.forEach(i=>{
+            const b=localBooks[i];
+            const o=Number(b.original_price);
+            if(mode==='prev'){
+                if(bk[i]==null){ noBackup++; return; }   /* এই বইয়ে কখনো অফার দেওয়া হয়নি — ছোঁয়া হলো না */
+                b.price=Number(bk[i]);
+            }else{
+                b.price=o;
+            }
+            updates['priceBackup/'+i]=null;
+            updates['bookList/'+i]=bookWithoutDesc(b);
+            n++;
+        });
+        if(n) await db.ref().update(updates);
+        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
+        beUpdateStats(); beRenderList(); previewPubOffer();
+        let msg=`<span style="color:#059669;font-weight:700">✅ ${n}টি বই ${what} ফিরেছে।</span>`;
+        if(noBackup) msg+=`<br><span style="color:#d97706">${noBackup}টি বইয়ে আগের দামের রেকর্ড ছিল না (এই টুল দিয়ে অফার দেওয়া হয়নি) — সেগুলো যেমন ছিল তেমনই আছে। দরকার হলে "MRP-তে ফেরাও" ব্যবহার করুন।</span>`;
+        st.innerHTML=msg;
+        showToast(`${n}টি বইয়ের দাম ফিরেছে`,'#0B6E4F');
+    }catch(e){
+        st.innerHTML=`<span style="color:#dc2626">❌ ব্যর্থ: ${escapeHTML(e.message)}</span>`;
+        showToast('দাম ফেরানো ব্যর্থ: '+e.message,'#dc2626');
+    }
 }
 
 async function loadImgbbKey(){
