@@ -832,6 +832,7 @@ footer {
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="book.js" defer></script>
+<script src="gksearch.js" defer></script>
 <script src="book-desc.js" defer></script>
 <script src="gkbooks-live.js" defer></script>
 
@@ -1480,7 +1481,9 @@ function bkRunSearch(){
     const body=document.getElementById('bkSearchBody');
     if(!q){bkClearSearch();return;}
     if(typeof books==='undefined'||!books.length){body.innerHTML='<div class="bks-hint">⏳ বই লোড হচ্ছে...</div>';return;}
-    const found=gkVisibleBooks(books).filter(b=>b.name.normalize('NFC').toLowerCase().includes(q)||(b.author||'').normalize('NFC').toLowerCase().includes(q)||(b.pub||'').normalize('NFC').toLowerCase().includes(q));
+    const found=(typeof gkSearchBooks==='function')
+        ? gkSearchBooks(gkVisibleBooks(books), q)
+        : gkVisibleBooks(books).filter(b=>b.name.normalize('NFC').toLowerCase().includes(q)||(b.author||'').normalize('NFC').toLowerCase().includes(q)||(b.pub||'').normalize('NFC').toLowerCase().includes(q));
     if(!found.length){body.innerHTML='<div class="bks-hint">📚 এই নামে কোনো বই পাওয়া যায়নি</div>';return;}
     body.innerHTML=`<div class="bks-count">🔍 ${found.length}টি বই</div>`+found.slice(0,40).map(b=>{
         const idx=books.indexOf(b);

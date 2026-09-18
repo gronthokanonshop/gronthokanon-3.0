@@ -1811,6 +1811,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="book.js"></script>
+<script src="gksearch.js"></script>
 <!-- স্লিপ PDF ডাউনলোডের জন্য (ফোনে window.print ভালো কাজ করে না বলে) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -4102,11 +4103,14 @@ function beRenderList(){
     const list=document.getElementById('beBookList');
     if(!list)return;
 
+    /* বাংলা/English/Banglish + keyword সার্চ (gksearch.js) — না থাকলে আগের সরল মিল */
+    const sq=(search&&typeof gkSearchParse==='function')?gkSearchParse(search):null;
     const filtered=localBooks.map((b,i)=>({...b,_i:i})).filter(b=>{
         const matchSearch=!search
-            ||b.name.toLowerCase().includes(search)
-            ||(b.author||'').toLowerCase().includes(search)
-            ||(b.pub||'').toLowerCase().includes(search);
+            ||(sq ? gkSearchScore(localBooks[b._i],sq)>0
+                  : (b.name.toLowerCase().includes(search)
+                    ||(b.author||'').toLowerCase().includes(search)
+                    ||(b.pub||'').toLowerCase().includes(search)));
         if(!matchSearch)return false;
         if(beFilter==='linked')return isRealUrl(b.img);
         if(beFilter==='missing')return !isRealUrl(b.img);

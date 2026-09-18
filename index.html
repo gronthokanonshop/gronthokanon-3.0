@@ -1541,6 +1541,7 @@ footer {
 </button>
 
 <script src="book.js" defer></script>
+<script src="gksearch.js" defer></script>
 <script src="gkbooks-live.js" defer></script>
 <script>
 /* categoryConfig — হোমপেজের সেকশন ও সাইডবার মেনু; window.GK_HOME_CATS থেকে তৈরি (অ্যাডমিন-নিয়ন্ত্রিত) */
@@ -1591,7 +1592,9 @@ function runSearch(){
     const body=document.getElementById('searchBody');
     if(typeof books==='undefined'||!books.length){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">⏳</div><p>বই লোড হচ্ছে, একটু অপেক্ষা করুন...</p></div>`;return;}
     if(!q){body.innerHTML='';return;}
-    const found=gkVisibleBooks(books).filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
+    const found=(typeof gkSearchBooks==='function')
+        ? gkSearchBooks(gkVisibleBooks(books), q)
+        : gkVisibleBooks(books).filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
     if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
     const shown=found.slice(0,40);
     body.innerHTML=`<div class="search-count show">🔍 "${escapeHTML(document.getElementById('searchInput').value)}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
