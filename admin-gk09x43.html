@@ -4381,12 +4381,16 @@ function renderCatCardsAdmin(){
             const pickedName=bk?bk.name:'';
             return '<div style="border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">'
                 +'<div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:#f2f2ec;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+thumb+'</div>'
-                +'<input class="form-input" style="flex:1;min-width:100px;font-size:12px;" placeholder="টাইলের নাম" value="'+escapeHTML(s.label||'')+'" oninput="ccSetLabel('+ci+','+si+',this.value)">'
+                +'<div style="flex:1;min-width:100px;">'
+                +'<input class="form-input" style="width:100%;font-size:12px;" placeholder="উপ-বিভাগের নাম (যেমন: সিরাত)" value="'+escapeHTML(s.label||'')+'" oninput="ccSetLabel('+ci+','+si+',this.value)">'
+                +'<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">এই নামেই বই খুঁজে পাওয়া যাবে</div>'
+                +'</div>'
                 +'<div style="position:relative;flex:2;min-width:140px;">'
-                +'<input class="form-input" style="font-size:12px;" placeholder="'+(pickedName?escapeHTML(pickedName):'বই খুঁজুন...')+'" oninput="ccSearchBooks('+ci+','+si+',this.value)" onfocus="ccSearchBooks('+ci+','+si+',this.value)" onblur="ccHideRes('+ci+','+si+')">'
+                +'<input class="form-input" style="font-size:12px;" placeholder="'+(pickedName?escapeHTML(pickedName):'কভারের জন্য একটা বই খুঁজুন...')+'" oninput="ccSearchBooks('+ci+','+si+',this.value)" onfocus="ccSearchBooks('+ci+','+si+',this.value)" onblur="ccHideRes('+ci+','+si+')">'
                 +'<div class="cc-search-res" id="ccRes_'+ci+'_'+si+'" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--card,#fff);border:1px solid var(--border);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:220px;overflow-y:auto;z-index:20;"></div>'
                 +'</div>'
                 +(s.bid?'<button class="btn btn-ghost btn-sm" type="button" onclick="ccClearBid('+ci+','+si+')" title="বাদ দিন">✕</button>':'')
+                +'<button class="btn btn-sm" type="button" style="background:#ecfdf5;color:#059669;border:1px solid #a7f3d0;white-space:nowrap;" onclick="ccJumpToSubTag('+ci+','+si+')" title="এই উপ-বিভাগে একসাথে অনেক বই ট্যাগ করুন">🏷️ বই ট্যাগ করুন</button>'
                 +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" type="button" onclick="ccRemoveTile('+ci+','+si+')" title="টাইল মুছুন">🗑️</button>'
                 +'</div>';
         }).join('');
@@ -4401,6 +4405,24 @@ function ccSetLabel(ci,si,val){ if(catCardsData[ci]&&catCardsData[ci].subs[si]) 
 function ccAddTile(ci){ if(catCardsData[ci]&&catCardsData[ci].subs.length<4){ catCardsData[ci].subs.push({label:'',bid:''}); renderCatCardsAdmin(); } }
 function ccRemoveTile(ci,si){ if(catCardsData[ci]){ catCardsData[ci].subs.splice(si,1); renderCatCardsAdmin(); } }
 function ccClearBid(ci,si){ if(catCardsData[ci]&&catCardsData[ci].subs[si]){ catCardsData[ci].subs[si].bid=''; renderCatCardsAdmin(); } }
+/* "🏷️ বই ট্যাগ করুন" বাটন — নিচের "উপ-বিভাগ অনুযায়ী বই ট্যাগ করুন" টুলে
+   এই বিভাগ+উপবিভাগ আগে থেকেই বাছাই করে সরাসরি নিয়ে যায়, যাতে আলাদা করে
+   আবার বিভাগ/উপবিভাগ খুঁজে বাছতে না হয় */
+function ccJumpToSubTag(ci,si){
+    const cat=catCardsData[ci]; if(!cat) return;
+    const sub=cat.subs[si]; if(!sub) return;
+    const label=(sub.label||'').trim();
+    if(!label){ showToast('আগে উপ-বিভাগের নামের ঘরে কিছু লিখুন','#dc2626'); return; }
+    const catSel=document.getElementById('subTagCatSelect');
+    if(catSel) catSel.value=cat.name;
+    subTagOnCatChange(cat.name);
+    subTagSub=label;
+    const subSel=document.querySelector('#subTagBox select');
+    if(subSel) subSel.value=label;
+    renderSubTagBookList();
+    const card=document.getElementById('toolCard_subTag');
+    if(card) card.scrollIntoView({behavior:'smooth', block:'start'});
+}
 function ccHideRes(ci,si){ setTimeout(function(){ const box=document.getElementById('ccRes_'+ci+'_'+si); if(box) box.style.display='none'; }, 150); }
 function ccSearchBooks(ci,si,q){
     const box=document.getElementById('ccRes_'+ci+'_'+si); if(!box) return;
