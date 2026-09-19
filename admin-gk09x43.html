@@ -4379,11 +4379,20 @@ function renderCatCardsAdmin(){
                 ? '<img src="'+escapeHTML(bk.img)+'" style="width:100%;height:100%;object-fit:contain;">'
                 : '<span style="font-size:18px;">📖</span>';
             const pickedName=bk?bk.name:'';
+            /* উপ-বিভাগ এখন ড্রপডাউন থেকে বাছতে হবে (বিদ্যমান তালিকা থেকে) —
+               ফ্রি-টেক্সট লিখলে বানান/টাইপো ভিন্ন হয়ে ফিল্টার কাজ করত না */
+            let subOptions=gkAllSubcats(cat.name);
+            if(s.label && !subOptions.includes(s.label)) subOptions=[s.label].concat(subOptions);
+            const labelSelectHtml='<select class="form-input" style="width:100%;font-size:12px;" onchange="ccOnLabelSelect('+ci+','+si+',this.value)">'
+                +'<option value="">— উপ-বিভাগ বাছুন —</option>'
+                +subOptions.map(function(o){ return '<option value="'+escapeHTML(o)+'"'+(o===s.label?' selected':'')+'>'+escapeHTML(o)+'</option>'; }).join('')
+                +'<option value="__new__">＋ নতুন উপ-বিভাগ...</option>'
+                +'</select>';
             return '<div style="border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">'
                 +'<div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:#f2f2ec;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+thumb+'</div>'
                 +'<div style="flex:1;min-width:100px;">'
-                +'<input class="form-input" style="width:100%;font-size:12px;" placeholder="উপ-বিভাগের নাম (যেমন: সিরাত)" value="'+escapeHTML(s.label||'')+'" oninput="ccSetLabel('+ci+','+si+',this.value)">'
-                +'<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">এই নামেই বই খুঁজে পাওয়া যাবে</div>'
+                +labelSelectHtml
+                +'<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">এই উপ-বিভাগের বই-ই এখানে দেখাবে</div>'
                 +'</div>'
                 +'<div style="position:relative;flex:2;min-width:140px;">'
                 +'<input class="form-input" style="font-size:12px;" placeholder="'+(pickedName?escapeHTML(pickedName):'কভারের জন্য একটা বই খুঁজুন...')+'" oninput="ccSearchBooks('+ci+','+si+',this.value)" onfocus="ccSearchBooks('+ci+','+si+',this.value)" onblur="ccHideRes('+ci+','+si+')">'
@@ -4402,6 +4411,17 @@ function renderCatCardsAdmin(){
     }).join('');
 }
 function ccSetLabel(ci,si,val){ if(catCardsData[ci]&&catCardsData[ci].subs[si]) catCardsData[ci].subs[si].label=val; }
+function ccOnLabelSelect(ci,si,val){
+    if(val==='__new__'){
+        const cur=(catCardsData[ci]&&catCardsData[ci].subs[si]&&catCardsData[ci].subs[si].label)||'';
+        const val2=prompt('নতুন উপ-বিভাগের নাম লিখুন:', cur);
+        if(val2!==null && val2.trim()) ccSetLabel(ci,si,val2.trim());
+        renderCatCardsAdmin();
+        return;
+    }
+    ccSetLabel(ci,si,val);
+    renderCatCardsAdmin();
+}
 function ccAddTile(ci){ if(catCardsData[ci]&&catCardsData[ci].subs.length<4){ catCardsData[ci].subs.push({label:'',bid:''}); renderCatCardsAdmin(); } }
 function ccRemoveTile(ci,si){ if(catCardsData[ci]){ catCardsData[ci].subs.splice(si,1); renderCatCardsAdmin(); } }
 function ccClearBid(ci,si){ if(catCardsData[ci]&&catCardsData[ci].subs[si]){ catCardsData[ci].subs[si].bid=''; renderCatCardsAdmin(); } }
