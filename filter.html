@@ -281,7 +281,7 @@
 <nav class="navbar">
     <div class="nav-top">
         <button class="back-btn" onclick="goBack()">‹</button>
-        <div class="page-title" id="pageTitle" style="display:flex;justify-content:center;"><img src="logo.png" alt="গ্রন্থকানন" style="height:30px;width:auto;object-fit:contain;border-radius:5px;"></div>
+        <div class="page-title" id="pageTitle" style="display:flex;justify-content:center;cursor:pointer;" onclick="window.location.href='index.html'" title="হোম"><img src="logo.png" alt="গ্রন্থকানন" style="height:30px;width:auto;object-fit:contain;border-radius:5px;"></div>
         <div class="navbar-icons">
             <button class="dark-pill" id="darkBtn" onclick="toggleDark()"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
             <div class="nav-cart-btn" onclick="goToCart()">
@@ -870,7 +870,14 @@ if (type === 'author') filtered = gkVisibleBooks(books).filter(b => b.author ===
 else if (type === 'pub') filtered = gkVisibleBooks(books).filter(b => b.pub === value);
 else filtered = gkVisibleBooks(books);
 if (type === 'cat') { drawerCategory = value; activeCategory = value; }
-else if (type === 'subcat') drawerSubcat = value;
+else if (type === 'subcat') {
+    drawerSubcat = value;
+    /* subcat ড্রয়ার তখনই দেখায়/টেকে যখন drawerCategory সেট থাকে —
+       সরাসরি subcat লিংকে (book.html থেকে) আসলে বইয়ের নিজের cat থেকে বিভাগ বের করে বসিয়ে দিই,
+       নাহলে buildSubcatList() ফাঁকা drawerCategory দেখে drawerSubcat রিসেট করে দেয় */
+    const subOwner = books.find(b => bookSubcat(b) === value);
+    if (subOwner) drawerCategory = bookMainCat(subOwner);
+}
 else if (type === 'tag') drawerTags = [value];
 
 const displayTitle = (iconMap[type] || '📚') + ' ' + value;

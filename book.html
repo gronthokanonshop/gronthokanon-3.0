@@ -242,6 +242,8 @@
         .info-table td{padding:13px 4px;font-size:14px;}
         .info-label{color:var(--text3);width:120px;font-weight:500;}
         .info-val{color:var(--text);font-weight:700;}
+        .info-val.info-link{color:#059669;cursor:pointer;}
+        .info-val.info-link:hover{text-decoration:underline;}
 
         /* DELIVERY CARD */
         .delivery-card{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid var(--green-border);border-radius:16px;padding:14px 18px;margin-bottom:16px;}
@@ -1255,10 +1257,11 @@ function loadBook(){
     const mc=bookMainCat(b), sc=bookSubcat(b), tg=bookTags(b);
     let rows='';
     if(isBook){
-        if(b.author)rows+=`<tr><td class="info-label">লেখক</td><td class="info-val">${escapeHTML(b.author)}</td></tr>`;
-        if(b.pub)rows+=`<tr><td class="info-label">প্রকাশনী</td><td class="info-val">${escapeHTML(b.pub)}</td></tr>`;
+        if(b.author)rows+=`<tr><td class="info-label">লেখক</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=author&value=${encodeURIComponent(b.author)}'">${escapeHTML(b.author)}</td></tr>`;
+        if(b.pub)rows+=`<tr><td class="info-label">প্রকাশনী</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=pub&value=${encodeURIComponent(b.pub)}'">${escapeHTML(b.pub)}</td></tr>`;
         if(b.pages)rows+=`<tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val">${escapeHTML(b.pages)}</td></tr>`;
         if(b.cover)rows+=`<tr><td class="info-label">কভার</td><td class="info-val">${escapeHTML(b.cover)}</td></tr>`;
+        if(sc)rows+=`<tr><td class="info-label">উপ-বিভাগ</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=subcat&value=${encodeURIComponent(sc)}'">${escapeHTML(sc)}</td></tr>`;
         if(b.subject)rows+=`<tr><td class="info-label">বিষয়</td><td class="info-val">${escapeHTML(b.subject)}</td></tr>`;
     } else {
         if(b.brand)rows+=`<tr><td class="info-label">ব্র্যান্ড</td><td class="info-val">${escapeHTML(b.brand)}</td></tr>`;
