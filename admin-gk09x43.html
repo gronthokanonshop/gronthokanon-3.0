@@ -1510,6 +1510,14 @@
                     <button class="btn btn-primary w-full" style="margin-top:10px;" onclick="saveCatCards()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> কার্ড সেভ করুন (হোমপেজে লাইভ)</button>
                 </div>
 
+                <div class="tool-card" id="toolCard_subTag" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="12" y1="2" x2="12" y2="17"></line></svg> উপ-বিভাগ অনুযায়ী বই ট্যাগ করুন</h3>
+                    <p style="margin-bottom:12px;">হোমপেজের ক্যাটাগরি কার্ডে কোনো টাইলে (যেমন "সিরাত") ক্লিক করলে যেন সেই উপ-বিভাগের সব বই একসাথে দেখায়, তার জন্য বইগুলোর "উপ-বিভাগ" ফিল্ডে একই নাম বসানো থাকতে হবে। এখান থেকে একটা বিভাগ ও উপ-বিভাগ বেছে, যেসব বই সেই উপ-বিভাগে রাখতে চান তাতে টিক দিন — একসাথে অনেক বইয়ে বসিয়ে দেওয়া যাবে। টিক তুললে সেই বই থেকে উপ-বিভাগ বাদ যাবে।</p>
+                    <select class="form-input" id="subTagCatSelect" style="margin-bottom:10px;" onchange="subTagOnCatChange(this.value)"></select>
+                    <div id="subTagBox"></div>
+                    <p style="margin-top:10px;font-size:11.5px;color:var(--text-muted);">টিক দেওয়ার পর নিচে "Firebase Sync" সেকশনে গিয়ে "সব সেভ করুন" চাপলে সাইটে লাইভ হবে। "book.js ডাউনলোড করুন" দিয়ে ফাইলটাও GitHub-এ আপডেট রাখবেন।</p>
+                </div>
+
                 <div class="tool-card" id="toolCard_pubChips" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> হোমপেজ প্রকাশনী চিপ</h3>
                     <p style="margin-bottom:12px;">হোমপেজে ক্যাটাগরি চিপের নিচে প্রকাশনীর লোগো/নাম চিপ দেখানোর জন্য এখান থেকে নিয়ন্ত্রণ করুন। নাম বাছার সময় বইয়ের ডেটা থেকে অটোকমপ্লিট সাজেশন আসবে (টাইপো এড়াতে)। সেভ করলেই হোমপেজে লাইভ। কিছু না থাকলে সেকশনটা হোমপেজে দেখাবে না।</p>
@@ -2029,7 +2037,7 @@ function switchTab(tab, btnEl){
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools'){ renderOrderSummary(); loadTagsAdmin(); loadCatTreeAdmin(); apFixTypeChanged(); loadHomeCatsAdmin(); loadCatCardsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); loadLandingAdmin(); }
+    if(tab==='tools'){ renderOrderSummary(); loadTagsAdmin(); loadCatTreeAdmin(); apFixTypeChanged(); loadHomeCatsAdmin(); loadCatCardsAdmin(); loadSubTagAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); loadLandingAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -4368,7 +4376,7 @@ function renderCatCardsAdmin(){
         const tilesHtml=(cat.subs||[]).map(function(s,si){
             const bk=ccBookThumb(s.bid);
             const thumb=bk&&bk.img
-                ? '<img src="'+escapeHTML(bk.img)+'" style="width:100%;height:100%;object-fit:cover;">'
+                ? '<img src="'+escapeHTML(bk.img)+'" style="width:100%;height:100%;object-fit:contain;">'
                 : '<span style="font-size:18px;">📖</span>';
             const pickedName=bk?bk.name:'';
             return '<div style="border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">'
@@ -4415,6 +4423,78 @@ async function saveCatCards(){
         await db.ref('siteConfig/catCards').set(catCardsData);
         showToast('✅ ক্যাটাগরি কার্ড সেভ হয়েছে — লাইভ!','#059669');
     }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+}
+
+/* ══════════════════════════════════════════════
+   উপ-বিভাগ অনুযায়ী বই ট্যাগ করা — একসাথে অনেক বইয়ের subcat ফিল্ড বসানো,
+   যাতে হোমপেজ ক্যাটাগরি কার্ডের টাইলে ক্লিক করলে সেই উপ-বিভাগের সব
+   বই একসাথে (filter.html?type=subcat) দেখা যায়। book.js/Firebase-এর
+   নিজস্ব সেভ/ডাউনলোড বাটন দিয়েই এই বদল সাইটে যাবে — এখানে শুধু
+   localBooks-এ subcat বসানো হয়।
+══════════════════════════════════════════════ */
+let subTagCat='', subTagSub='', subTagQuery='';
+function loadSubTagAdmin(){
+    const sel=document.getElementById('subTagCatSelect');
+    if(sel) sel.innerHTML=gkMainCatOptions(subTagCat);
+    renderSubTagPanel();
+}
+function subTagOnCatChange(v){ subTagCat=v; subTagSub=''; subTagQuery=''; renderSubTagPanel(); }
+function subTagOnSubChange(v){ subTagSub=v; renderSubTagBookList(); }
+function subTagNewSub(v){ subTagSub=(v||'').trim(); renderSubTagBookList(); }
+function subTagSearch(v){ subTagQuery=(v||'').trim(); renderSubTagBookList(); }
+function subTagBooksInCat(){
+    const out=[];
+    (localBooks||[]).forEach(function(b,i){ if(b && b.cat===subTagCat) out.push({b:b,i:i}); });
+    return out;
+}
+function renderSubTagPanel(){
+    const box=document.getElementById('subTagBox'); if(!box) return;
+    if(!subTagCat){ box.innerHTML='<div class="text-sm text-muted">আগে একটা বিভাগ বাছুন</div>'; return; }
+    const subs=gkAllSubcats(subTagCat);
+    box.innerHTML=
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">'
+        +'<select class="form-input" style="flex:1;min-width:150px;" onchange="subTagOnSubChange(this.value)">'
+        +'<option value="">— উপ-বিভাগ বাছুন —</option>'
+        +subs.map(function(s){ return '<option value="'+escapeHTML(s)+'"'+(s===subTagSub?' selected':'')+'>'+escapeHTML(s)+'</option>'; }).join('')
+        +'</select>'
+        +'<input class="form-input" placeholder="অথবা নতুন উপ-বিভাগ লিখুন" style="flex:1;min-width:150px;" oninput="subTagNewSub(this.value)">'
+        +'</div>'
+        +'<input class="form-input" placeholder="🔍 এই বিভাগে বই খুঁজুন..." style="margin-bottom:10px;" oninput="subTagSearch(this.value)">'
+        +'<div id="subTagBookList" style="max-height:340px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;"></div>'
+        +'<button class="btn btn-primary w-full" style="margin-top:10px;" type="button" onclick="subTagApply()">✅ বাছাই করা বইগুলোতে উপ-বিভাগ বসান</button>';
+    renderSubTagBookList();
+}
+function renderSubTagBookList(){
+    const list=document.getElementById('subTagBookList'); if(!list) return;
+    if(!subTagSub){ list.innerHTML='<div style="padding:12px;font-size:12px;color:var(--text-muted);">উপ-বিভাগ বাছুন বা লিখুন</div>'; return; }
+    let items=subTagBooksInCat();
+    if(subTagQuery){
+        const q=subTagQuery.normalize('NFC').toLowerCase();
+        items=items.filter(function(x){ return x.b.name && x.b.name.normalize('NFC').toLowerCase().includes(q); });
+    }
+    if(!items.length){ list.innerHTML='<div style="padding:12px;font-size:12px;color:var(--text-muted);">কোনো বই নেই</div>'; return; }
+    list.innerHTML=items.slice(0,200).map(function(x){
+        const checked=x.b.subcat===subTagSub;
+        const curSub=(x.b.subcat && x.b.subcat!==subTagSub)?(' <span style="font-size:10px;color:var(--text-muted);">(বর্তমান: '+escapeHTML(x.b.subcat)+')</span>'):'';
+        return '<label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--border);font-size:12.5px;cursor:pointer;">'
+            +'<input type="checkbox" class="subtag-chk" data-idx="'+x.i+'" '+(checked?'checked':'')+'>'
+            +'<span style="flex:1;">'+escapeHTML(x.b.name)+curSub+'</span>'
+            +'</label>';
+    }).join('');
+}
+function subTagApply(){
+    if(!subTagCat||!subTagSub){ showToast('বিভাগ ও উপ-বিভাগ বাছুন','#dc2626'); return; }
+    const boxes=document.querySelectorAll('.subtag-chk');
+    let n=0;
+    boxes.forEach(function(cb){
+        const idx=parseInt(cb.dataset.idx,10);
+        if(!localBooks[idx]) return;
+        if(cb.checked){ if(localBooks[idx].subcat!==subTagSub){ localBooks[idx].subcat=subTagSub; n++; } }
+        else { if(localBooks[idx].subcat===subTagSub){ localBooks[idx].subcat=''; n++; } }
+    });
+    if(typeof beUpdateStats==='function') beUpdateStats();
+    showToast('✅ '+n+'টি বইয়ে উপ-বিভাগ বসানো হয়েছে — এখন নিচে "Firebase Sync"-এ "সব সেভ করুন" চাপুন','#059669');
+    renderSubTagBookList();
 }
 
 /* ══════════════════════════════════════════════

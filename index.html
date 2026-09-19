@@ -943,9 +943,9 @@
     width: 100%; aspect-ratio: 1/1; border-radius: 11px; overflow: hidden;
     background: #f2f2ec; border: 1px solid rgba(0,0,0,.06);
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
+    font-size: 22px; padding: 6px; box-sizing: border-box;
 }
-.catcard-tile-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.catcard-tile-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .catcard-tile-label {
     margin-top: 5px; font-size: 11px; font-weight: 600; color: var(--text2);
     line-height: 1.25; font-family: 'Hind Siliguri', Arial, sans-serif;
@@ -1085,64 +1085,37 @@ function renderHomeCatChips(){
 /* ডেস্কটপে ">" বাটন — একটা কার্ড-সমান ডানে scroll, শেষে গেলে শুরুতে ফিরে আসে */
 function catStripScroll(){
     var s=document.getElementById('catStrip'); if(!s) return;
-    gkPauseCatCarousel();
     var max=s.scrollWidth-s.clientWidth;
     if(s.scrollLeft>=max-5) s.scrollTo({left:0,behavior:'smooth'});
     else s.scrollBy({left:Math.min(246,max-s.scrollLeft),behavior:'smooth'});
 }
 renderHomeCatChips();
 
-/* ═══ ক্যাটাগরি-স্ট্রিপ ক্যারোজেল — নিজে নিজে আস্তে আস্তে সরবে (auto),
-   আবার আঙুল/মাউস দিয়ে টেনেও (manual drag) সরানো যাবে ═══ */
+/* ═══ ক্যাটাগরি-স্ট্রিপ — মাউস/আঙুল দিয়ে টেনে (manual drag) সরানো যাবে,
+   এমনি এমনি নিজে থেকে সরবে না (শুধু manual) ═══ */
 (function(){
-    var timer=null, paused=false, resumeTimer=null;
-    var dragging=false, startX=0, startScroll=0, moved=false;
+    var dragging=false, startX=0, startScroll=0;
     function el(){ return document.getElementById('catStrip'); }
-    /* requestAnimationFrame ব্যবহার করা হয়নি — কিছু ব্রাউজার/এমবেডেড ভিউ
-       ট্যাব ফোকাসে না থাকলে rAF থামিয়ে দেয়, ফলে auto-scroll আটকে যেত।
-       setInterval নির্ভরযোগ্যভাবে চলে, ফোকাস না থাকলেও। */
-    function tick(){
-        var s=el();
-        if(s && !paused && !dragging){
-            var max=s.scrollWidth-s.clientWidth;
-            if(max>2){
-                s.scrollLeft += 1.1;
-                if(s.scrollLeft>=max-1) s.scrollLeft=0;
-            }
-        }
-    }
-    function schedResume(delay){
-        clearTimeout(resumeTimer);
-        resumeTimer=setTimeout(function(){ paused=false; }, delay||1500);
-    }
-    window.gkPauseCatCarousel=function(){ paused=true; schedResume(1800); };
     function bindDrag(){
         var s=el(); if(!s || s._gkDragBound) return; s._gkDragBound=true;
-        s.addEventListener('mouseenter', function(){ paused=true; });
-        s.addEventListener('mouseleave', function(){ if(!dragging) paused=false; });
         s.addEventListener('pointerdown', function(e){
-            dragging=true; moved=false; s.__gkMoved=false;
+            dragging=true; s.__gkMoved=false;
             startX=e.clientX; startScroll=s.scrollLeft;
             s.classList.add('dragging');
-            paused=true;
         });
         window.addEventListener('pointermove', function(e){
             if(!dragging) return;
             var dx=e.clientX-startX;
-            if(Math.abs(dx)>4){ moved=true; s.__gkMoved=true; }
+            if(Math.abs(dx)>4) s.__gkMoved=true;
             s.scrollLeft = startScroll - dx;
         });
         window.addEventListener('pointerup', function(){
-            if(dragging){ dragging=false; s.classList.remove('dragging'); schedResume(1800); }
+            if(dragging){ dragging=false; s.classList.remove('dragging'); }
             setTimeout(function(){ s.__gkMoved=false; }, 50);
         });
-        s.addEventListener('touchstart', function(){ paused=true; }, {passive:true});
-        s.addEventListener('touchend', function(){ schedResume(1500); }, {passive:true});
-        s.addEventListener('wheel', function(){ paused=true; schedResume(1500); }, {passive:true});
     }
-    function init(){ bindDrag(); if(!timer) timer=setInterval(tick, 30); }
-    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
-    else init();
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bindDrag);
+    else bindDrag();
 })();
 </script>
 
