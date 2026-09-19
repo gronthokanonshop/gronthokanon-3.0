@@ -1503,6 +1503,13 @@
                     <button class="btn btn-primary w-full" onclick="saveHomeCats()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> ক্যাটাগরি সেভ করুন (হোমপেজে লাইভ)</button>
                 </div>
 
+                <div class="tool-card" id="toolCard_catCards" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> হোমপেজ ক্যাটাগরি কার্ড — উপ-বিভাগের ছবি</h3>
+                    <p style="margin-bottom:12px;">হোমপেজের ক্যাটাগরি কার্ডে (প্রতিটা ক্যাটাগরির নিচে ৪টা ছোট বই-কভার) কোন উপ-বিভাগে কোন বইয়ের কভার দেখাবে তা এখান থেকে বাছাই করুন — নতুন কোনো ছবি আপলোড লাগবে না, শুধু একটা বই খুঁজে বাছাই করলেই তার কভার টাইলে বসে যাবে। বাছাই না করলে খালি বই-আইকন দেখাবে।</p>
+                    <div id="catCardsBox"></div>
+                    <button class="btn btn-primary w-full" style="margin-top:10px;" onclick="saveCatCards()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> কার্ড সেভ করুন (হোমপেজে লাইভ)</button>
+                </div>
+
                 <div class="tool-card" id="toolCard_pubChips" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> হোমপেজ প্রকাশনী চিপ</h3>
                     <p style="margin-bottom:12px;">হোমপেজে ক্যাটাগরি চিপের নিচে প্রকাশনীর লোগো/নাম চিপ দেখানোর জন্য এখান থেকে নিয়ন্ত্রণ করুন। নাম বাছার সময় বইয়ের ডেটা থেকে অটোকমপ্লিট সাজেশন আসবে (টাইপো এড়াতে)। সেভ করলেই হোমপেজে লাইভ। কিছু না থাকলে সেকশনটা হোমপেজে দেখাবে না।</p>
@@ -2022,7 +2029,7 @@ function switchTab(tab, btnEl){
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools'){ renderOrderSummary(); loadTagsAdmin(); loadCatTreeAdmin(); apFixTypeChanged(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); loadLandingAdmin(); }
+    if(tab==='tools'){ renderOrderSummary(); loadTagsAdmin(); loadCatTreeAdmin(); apFixTypeChanged(); loadHomeCatsAdmin(); loadCatCardsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); loadLandingAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -4322,6 +4329,91 @@ async function saveHomeCats(){
     try{
         await db.ref('siteConfig/homeCats').set(homeCatsData);
         showToast('✅ হোমপেজ ক্যাটাগরি সেভ হয়েছে — লাইভ!','#059669');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+}
+
+/* ══════════════════════════════════════════════
+   হোমপেজ ক্যাটাগরি কার্ড — উপ-বিভাগ টাইলে কোন বইয়ের কভার বসবে
+   (Firebase siteConfig/catCards) — নতুন ছবি আপলোড না করে বিদ্যমান
+   বইয়ের কভার বেছে ব্যবহার করা হয়
+══════════════════════════════════════════════ */
+let catCardsData=[];
+function loadCatCardsAdmin(){
+    db.ref('siteConfig/catCards').once('value').then(function(s){
+        const v=s.val();
+        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
+        catCardsData=(list&&list.length)?list.map(c=>({name:c.name,subs:Array.isArray(c.subs)?c.subs.map(x=>({label:x.label||'',bid:x.bid||''})):[]})):[];
+        renderCatCardsAdmin();
+    }).catch(function(){ catCardsData=[]; renderCatCardsAdmin(); });
+}
+function ccDefaultSubs(cat){
+    const subs=(cat.subs&&cat.subs.length)?cat.subs.slice(0,4):[cat.name];
+    return subs.map(s=>({label:s,bid:''}));
+}
+function ccEnsureAll(){
+    GK_CAT_TREE.forEach(function(cat){
+        let entry=catCardsData.find(c=>c.name===cat.name);
+        if(!entry){ entry={name:cat.name, subs:ccDefaultSubs(cat)}; catCardsData.push(entry); }
+    });
+}
+function ccBookThumb(bid){
+    if(!bid) return null;
+    const b=(localBooks||[]).find(x=>x.bid===bid);
+    return b?{name:b.name,img:b.img||''}:null;
+}
+function renderCatCardsAdmin(){
+    ccEnsureAll();
+    const box=document.getElementById('catCardsBox'); if(!box) return;
+    box.innerHTML=catCardsData.map(function(cat,ci){
+        const tilesHtml=(cat.subs||[]).map(function(s,si){
+            const bk=ccBookThumb(s.bid);
+            const thumb=bk&&bk.img
+                ? '<img src="'+escapeHTML(bk.img)+'" style="width:100%;height:100%;object-fit:cover;">'
+                : '<span style="font-size:18px;">📖</span>';
+            const pickedName=bk?bk.name:'';
+            return '<div style="border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">'
+                +'<div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:#f2f2ec;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+thumb+'</div>'
+                +'<input class="form-input" style="flex:1;min-width:100px;font-size:12px;" placeholder="টাইলের নাম" value="'+escapeHTML(s.label||'')+'" oninput="ccSetLabel('+ci+','+si+',this.value)">'
+                +'<div style="position:relative;flex:2;min-width:140px;">'
+                +'<input class="form-input" style="font-size:12px;" placeholder="'+(pickedName?escapeHTML(pickedName):'বই খুঁজুন...')+'" oninput="ccSearchBooks('+ci+','+si+',this.value)" onfocus="ccSearchBooks('+ci+','+si+',this.value)" onblur="ccHideRes('+ci+','+si+')">'
+                +'<div class="cc-search-res" id="ccRes_'+ci+'_'+si+'" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--card,#fff);border:1px solid var(--border);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:220px;overflow-y:auto;z-index:20;"></div>'
+                +'</div>'
+                +(s.bid?'<button class="btn btn-ghost btn-sm" type="button" onclick="ccClearBid('+ci+','+si+')" title="বাদ দিন">✕</button>':'')
+                +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" type="button" onclick="ccRemoveTile('+ci+','+si+')" title="টাইল মুছুন">🗑️</button>'
+                +'</div>';
+        }).join('');
+        return '<div style="border:1.5px dashed var(--border);border-radius:10px;padding:12px;margin-bottom:12px;">'
+            +'<div style="font-weight:800;margin-bottom:8px;">'+escapeHTML(cat.name)+'</div>'
+            +tilesHtml
+            +((cat.subs||[]).length<4?'<button class="btn btn-ghost btn-sm" type="button" onclick="ccAddTile('+ci+')">＋ টাইল যোগ করুন</button>':'')
+            +'</div>';
+    }).join('');
+}
+function ccSetLabel(ci,si,val){ if(catCardsData[ci]&&catCardsData[ci].subs[si]) catCardsData[ci].subs[si].label=val; }
+function ccAddTile(ci){ if(catCardsData[ci]&&catCardsData[ci].subs.length<4){ catCardsData[ci].subs.push({label:'',bid:''}); renderCatCardsAdmin(); } }
+function ccRemoveTile(ci,si){ if(catCardsData[ci]){ catCardsData[ci].subs.splice(si,1); renderCatCardsAdmin(); } }
+function ccClearBid(ci,si){ if(catCardsData[ci]&&catCardsData[ci].subs[si]){ catCardsData[ci].subs[si].bid=''; renderCatCardsAdmin(); } }
+function ccHideRes(ci,si){ setTimeout(function(){ const box=document.getElementById('ccRes_'+ci+'_'+si); if(box) box.style.display='none'; }, 150); }
+function ccSearchBooks(ci,si,q){
+    const box=document.getElementById('ccRes_'+ci+'_'+si); if(!box) return;
+    q=(q||'').trim().normalize('NFC').toLowerCase();
+    if(!q){ box.style.display='none'; box.innerHTML=''; return; }
+    const matches=(localBooks||[]).filter(function(b){ return b&&b.name&&b.name.normalize('NFC').toLowerCase().includes(q); }).slice(0,8);
+    if(!matches.length){ box.innerHTML='<div style="padding:8px;font-size:12px;color:var(--text-muted);">কিছু পাওয়া যায়নি</div>'; box.style.display='block'; return; }
+    box.innerHTML=matches.map(function(b){
+        const thumb=b.img?'<img src="'+escapeHTML(b.img)+'" style="width:28px;height:28px;object-fit:cover;border-radius:5px;">':'<span style="font-size:14px;">📖</span>';
+        return '<div style="display:flex;align-items:center;gap:8px;padding:7px 9px;cursor:pointer;border-bottom:1px solid var(--border);font-size:12px;" onmousedown="ccPickBook('+ci+','+si+',\''+b.bid.replace(/'/g,"\\'")+'\')">'+thumb+'<span style="flex:1;">'+escapeHTML(b.name)+'</span></div>';
+    }).join('');
+    box.style.display='block';
+}
+function ccPickBook(ci,si,bid){
+    if(catCardsData[ci]&&catCardsData[ci].subs[si]) catCardsData[ci].subs[si].bid=bid;
+    renderCatCardsAdmin();
+}
+async function saveCatCards(){
+    try{
+        await db.ref('siteConfig/catCards').set(catCardsData);
+        showToast('✅ ক্যাটাগরি কার্ড সেভ হয়েছে — লাইভ!','#059669');
     }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
 }
 

@@ -914,44 +914,48 @@
 }
 .cat-strip-wrap { position: relative; }
 .cat-strip {
-    display: flex; gap: 10px;
-    overflow-x: auto; scroll-snap-type: x proximity;
+    display: flex; gap: 14px;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 4px 14px 8px;
+    padding: 4px 14px 10px;
     scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
 }
 .cat-strip::-webkit-scrollbar { display: none; }
-.cat-card {
-    flex: 0 0 auto; width: 92px;
-    scroll-snap-align: start;
-    cursor: pointer;
-    display: flex; flex-direction: column; align-items: center;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform .18s ease;
-}
-.cat-card:active { transform: scale(.95); }
-.cat-card-img {
-    width: 92px; height: 92px;
+.cat-strip.dragging { cursor: grabbing; }
+.catcard {
+    flex: 0 0 auto; width: 232px;
+    background: var(--card, #fff);
+    border: 1px solid var(--border);
     border-radius: 16px;
-    background: #ffffff;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    border: 1px solid rgba(0,0,0,.06);
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-    padding: 10px;
-    box-sizing: border-box;
+    padding: 14px 14px 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    -webkit-tap-highlight-color: transparent;
 }
-.cat-card-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.cat-card:hover .cat-card-img { box-shadow: 0 6px 16px rgba(0,0,0,.14); }
-.cat-card-label {
-    margin-top: 7px; font-size: 11.5px; font-weight: 700;
-    color: var(--text); text-align: center; line-height: 1.25;
-    font-family: 'Hind Siliguri', Arial, sans-serif;
-    max-width: 92px; word-break: break-word;
+.catcard-title {
+    font-size: 14.5px; font-weight: 800; color: var(--text);
+    margin-bottom: 10px; font-family: 'Hind Siliguri', Arial, sans-serif;
+}
+.catcard-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-bottom: 10px; }
+.catcard-tile { cursor: pointer; text-align: center; }
+.catcard-tile-img {
+    width: 100%; aspect-ratio: 1/1; border-radius: 11px; overflow: hidden;
+    background: #f2f2ec; border: 1px solid rgba(0,0,0,.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+}
+.catcard-tile-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.catcard-tile-label {
+    margin-top: 5px; font-size: 11px; font-weight: 600; color: var(--text2);
+    line-height: 1.25; font-family: 'Hind Siliguri', Arial, sans-serif;
+}
+.catcard-more {
+    font-size: 12.5px; font-weight: 700; color: #059669;
+    display: inline-flex; align-items: center; gap: 2px; cursor: pointer;
 }
 .cat-strip-next {
-    position: absolute; top: 46px; right: 6px; transform: translateY(-50%);
+    position: absolute; top: 46%; right: 6px; transform: translateY(-50%);
     width: 38px; height: 38px; border-radius: 50%;
     background: #fff; color: #111;
     border: 1px solid var(--border); box-shadow: 0 3px 12px rgba(0,0,0,.18);
@@ -960,11 +964,8 @@
     z-index: 4;
 }
 @media (min-width: 768px) { .cat-strip-next { display: flex; } }
-[data-theme="dark"] .cat-card-img {
-    background: linear-gradient(135deg,#132d20,#0f2a1e);
-    border-color: rgba(255,255,255,.06);
-    box-shadow: 0 2px 10px rgba(0,0,0,.35);
-}
+[data-theme="dark"] .catcard { background: #132018; border-color: rgba(255,255,255,.08); }
+[data-theme="dark"] .catcard-tile-img { background: linear-gradient(135deg,#132d20,#0f2a1e); border-color: rgba(255,255,255,.06); }
 [data-theme="dark"] .cat-strip-next { background: #1f2937; color: #e5e7eb; border-color: rgba(255,255,255,.12); }
 </style>
 
@@ -1034,29 +1035,115 @@ window.GK_CHIP_PALETTE = [
 const GK_TAG_LEGACY_EXTRA=['নতুন প্রকাশিত'];
 function gkRebuildTagNames(){ window.GK_TAG_NAMES=new Set([...GK_TAG_SECTIONS.map(function(t){return t.name;}), ...GK_TAG_LEGACY_EXTRA]); }
 window.GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+
+/* প্রতিটা ক্যাটাগরি-কার্ডে কোন উপ-বিভাগের টাইলে কোন বইয়ের কভার দেখাবে —
+   অ্যাডমিন siteConfig/catCards থেকে বদলে দিতে পারবে (বই বাছাই করে)।
+   কিছু সেট না থাকলে GK_CAT_TREE-র উপ-বিভাগ নাম দিয়েই খালি (bid ছাড়া) টাইল দেখাবে। */
+window.GK_CAT_CARDS_DEFAULT = GK_CAT_TREE.map(function(c){
+    var subs = (c.subs && c.subs.length) ? c.subs.slice(0,4) : [c.name];
+    return { name: c.name, subs: subs.map(function(s){ return {label:s, bid:''}; }) };
+});
+window.GK_CAT_CARDS = GK_CAT_CARDS_DEFAULT.slice();
+function findCatCard(name){
+    return (window.GK_CAT_CARDS||[]).find(function(c){ return c && c.name===name; });
+}
+function gkBookByBid(bid){
+    if(!bid || typeof books==='undefined') return null;
+    return books.find(function(b){ return b.bid===bid; }) || null;
+}
 function renderHomeCatChips(){
     var strip=document.getElementById('catStrip');
     if(!strip) return;
     var list=(window.GK_HOME_CATS||[]).filter(function(c){return c&&c.name&&!window.GK_TAG_NAMES.has(c.name);});
     strip.innerHTML=list.map(function(c){
-        var val=(c.name||'').toString();
-        var img=(c.img||'').toString().trim();
-        /* ছবি থাকলে দেখাই; না থাকলে/ভাঙা হলে হালকা placeholder box থাকবে (ভাঙা আইকন নয়) */
-        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
-        return '<div class="cat-card" onclick="window.location.href=\'filter.html?type=cat&value='+encodeURIComponent(val)+'\'">'
-            +'<div class="cat-card-img">'+imgTag+'</div>'
-            +'<div class="cat-card-label">'+val.replace(/</g,'&lt;')+'</div>'
+        var name=(c.name||'').toString();
+        var card=findCatCard(name);
+        var subs=(card&&Array.isArray(card.subs)&&card.subs.length)?card.subs:[{label:name,bid:''}];
+        subs=subs.slice(0,4);
+        var tilesHtml=subs.map(function(s){
+            var label=(s&&s.label||'').toString();
+            var bk=gkBookByBid(s&&s.bid);
+            var img=(bk&&bk.img)?bk.img:'';
+            var isReal=img && /^https?:\/\//.test(img);
+            var filterType = (s&&s.bid) ? 'subcat' : 'cat';
+            var filterVal = (s&&s.bid) ? (label||name) : name;
+            var imgTag = isReal
+                ? '<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'📖\'">'
+                : '📖';
+            return '<div class="catcard-tile" onclick="event.stopPropagation();if(!this.closest(\'.cat-strip\').__gkMoved)window.location.href=\'filter.html?type='+filterType+'&value='+encodeURIComponent(filterVal)+'\'">'
+                +'<div class="catcard-tile-img">'+imgTag+'</div>'
+                +'<div class="catcard-tile-label">'+label.replace(/</g,'&lt;')+'</div>'
+                +'</div>';
+        }).join('');
+        return '<div class="catcard">'
+            +'<div class="catcard-title">'+name.replace(/</g,'&lt;')+'</div>'
+            +'<div class="catcard-grid">'+tilesHtml+'</div>'
+            +'<div class="catcard-more" onclick="event.stopPropagation();if(!this.closest(\'.cat-strip\').__gkMoved)window.location.href=\'filter.html?type=cat&value='+encodeURIComponent(name)+'\'">সব দেখুন <span style="font-size:14px;">›</span></div>'
             +'</div>';
     }).join('');
 }
-/* ডেস্কটপে ">" বাটন — ডানে scroll, শেষে গেলে শুরুতে ফিরে আসে */
+/* ডেস্কটপে ">" বাটন — একটা কার্ড-সমান ডানে scroll, শেষে গেলে শুরুতে ফিরে আসে */
 function catStripScroll(){
     var s=document.getElementById('catStrip'); if(!s) return;
+    gkPauseCatCarousel();
     var max=s.scrollWidth-s.clientWidth;
     if(s.scrollLeft>=max-5) s.scrollTo({left:0,behavior:'smooth'});
-    else s.scrollBy({left:Math.min(260,max-s.scrollLeft),behavior:'smooth'});
+    else s.scrollBy({left:Math.min(246,max-s.scrollLeft),behavior:'smooth'});
 }
 renderHomeCatChips();
+
+/* ═══ ক্যাটাগরি-স্ট্রিপ ক্যারোজেল — নিজে নিজে আস্তে আস্তে সরবে (auto),
+   আবার আঙুল/মাউস দিয়ে টেনেও (manual drag) সরানো যাবে ═══ */
+(function(){
+    var timer=null, paused=false, resumeTimer=null;
+    var dragging=false, startX=0, startScroll=0, moved=false;
+    function el(){ return document.getElementById('catStrip'); }
+    /* requestAnimationFrame ব্যবহার করা হয়নি — কিছু ব্রাউজার/এমবেডেড ভিউ
+       ট্যাব ফোকাসে না থাকলে rAF থামিয়ে দেয়, ফলে auto-scroll আটকে যেত।
+       setInterval নির্ভরযোগ্যভাবে চলে, ফোকাস না থাকলেও। */
+    function tick(){
+        var s=el();
+        if(s && !paused && !dragging){
+            var max=s.scrollWidth-s.clientWidth;
+            if(max>2){
+                s.scrollLeft += 1.1;
+                if(s.scrollLeft>=max-1) s.scrollLeft=0;
+            }
+        }
+    }
+    function schedResume(delay){
+        clearTimeout(resumeTimer);
+        resumeTimer=setTimeout(function(){ paused=false; }, delay||1500);
+    }
+    window.gkPauseCatCarousel=function(){ paused=true; schedResume(1800); };
+    function bindDrag(){
+        var s=el(); if(!s || s._gkDragBound) return; s._gkDragBound=true;
+        s.addEventListener('mouseenter', function(){ paused=true; });
+        s.addEventListener('mouseleave', function(){ if(!dragging) paused=false; });
+        s.addEventListener('pointerdown', function(e){
+            dragging=true; moved=false; s.__gkMoved=false;
+            startX=e.clientX; startScroll=s.scrollLeft;
+            s.classList.add('dragging');
+            paused=true;
+        });
+        window.addEventListener('pointermove', function(e){
+            if(!dragging) return;
+            var dx=e.clientX-startX;
+            if(Math.abs(dx)>4){ moved=true; s.__gkMoved=true; }
+            s.scrollLeft = startScroll - dx;
+        });
+        window.addEventListener('pointerup', function(){
+            if(dragging){ dragging=false; s.classList.remove('dragging'); schedResume(1800); }
+            setTimeout(function(){ s.__gkMoved=false; }, 50);
+        });
+        s.addEventListener('touchstart', function(){ paused=true; }, {passive:true});
+        s.addEventListener('touchend', function(){ schedResume(1500); }, {passive:true});
+        s.addEventListener('wheel', function(){ paused=true; schedResume(1500); }, {passive:true});
+    }
+    function init(){ bindDrag(); if(!timer) timer=setInterval(tick, 30); }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+})();
 </script>
 
 <!-- ═══════ প্রকাশনী চিপ সেকশন (Firebase siteConfig/homePubs) ═══════ -->
@@ -1563,6 +1650,20 @@ function loadHomeCats(){
     db.ref('siteConfig/homeCats').once('value').then(function(snap){
         var v=snap.val();
         if(Array.isArray(v)&&v.length) applyHomeCats(v);
+    }).catch(function(){});
+}
+/* ক্যাটাগরি-কার্ডের উপ-বিভাগ টাইল (কোন বইয়ের কভার কোথায় বসবে) — অ্যাডমিন siteConfig/catCards */
+function applyCatCards(list){
+    if(!Array.isArray(list)||!list.length) return;
+    window.GK_CAT_CARDS = list.filter(function(c){ return c&&c.name; });
+    if(typeof renderHomeCatChips==='function') renderHomeCatChips();
+}
+function loadCatCards(){
+    if(typeof db==='undefined'||!db) return;
+    db.ref('siteConfig/catCards').once('value').then(function(snap){
+        var v=snap.val();
+        var list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
+        if(list&&list.length) applyCatCards(list);
     }).catch(function(){});
 }
 let cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
@@ -2246,6 +2347,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRecent();
         buildPubList();
         buildAuthorList();
+        if(typeof renderHomeCatChips==='function') renderHomeCatChips();
     }
 
     // book.js-এ books আছে কিনা চেক করো, না থাকলে আবার চেক
@@ -2279,6 +2381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTagsHome();
     loadCatTreeHome();
     loadHomeCats();
+    loadCatCards();
     loadHomePubs();
     loadHomeAuthors();
     loadHomeBlogs();
@@ -2287,6 +2390,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok=>{
         if(!ok || typeof books==='undefined') return;
         renderSections(books); renderRecent(); buildPubList(); buildAuthorList();
+        if(typeof renderHomeCatChips==='function') renderHomeCatChips();
     });
 });
 
