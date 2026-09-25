@@ -1236,6 +1236,13 @@
                     </div>
                 </div>
 
+                <!-- প্রকাশনী বেছে বই দেখা -->
+                <div style="display:flex;gap:8px;align-items:center;margin:-6px 0 10px;">
+                    <select class="form-input" id="bePubSel" onchange="bePubChange(this.value)" style="flex:1;min-width:0;font-weight:600;"><option value="">🏢 সব প্রকাশনী</option></select>
+                    <button class="btn btn-sm btn-ghost" id="bePubClear" onclick="document.getElementById('bePubSel').value='';bePubChange('')" style="display:none;white-space:nowrap;">✕ সব দেখান</button>
+                </div>
+                <div id="bePubInfo" style="display:none;margin-bottom:16px;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--primary);font-size:13px;line-height:1.7;"></div>
+
                 <button class="btn btn-ghost w-full" style="margin-bottom:16px;border:1px dashed var(--border);" onclick="beToggleAddForm()" id="beAddToggle">
                     <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     নতুন বই যোগ করুন
@@ -2015,6 +2022,7 @@ function showDashboard(){
     setTimeout(()=>{
         loadOrders();
         loadBooksFromFirebase();
+        gkWatchBookVer(); // bookList ভার্সন — সাইট যেন অকারণে পুরো লিস্ট না নামায়
         loadTagsAdmin(); // বই এডিটরে সঠিক ট্যাগ তালিকা দেখানোর জন্য শুরুতেই লোড করা হয়
         loadCatTreeAdmin(); // বই এডিটরের বিভাগ/উপ-বিভাগ ড্রপডাউনও শুরুতেই লোড করা হয়
         loadCourierApiKeys(); // auto-load API keys
@@ -3360,6 +3368,86 @@ async function ensureBookIdsAndMigrate(arr){
     return arr;
 }
 
+/* ═══════════════════════════════════════════════════════
+   bookList ভার্সন (সাইটের গতির জন্য)
+   bookList-এ যেকোনো লেখা (set/update/remove) হলেই siteConfig/bookListVer
+   নতুন টাইমস্ট্যাম্পে বদলায়। book.js ডাউনলোডের সময় এই সংখ্যাটা ফাইলে
+   বসে যায় — সাইট সংখ্যা মিলিয়ে দেখে, মিললে Firebase থেকে পুরো লিস্ট আর
+   নামায় না। Reference-এর মেথডগুলো একবারে wrap করা, তাই ভবিষ্যতে নতুন
+   কোনো সেভ-বাটন যোগ হলেও ভার্সন আপনাআপনি বদলাবে।
+═══════════════════════════════════════════════════════ */
+let GK_ADMIN_BOOKVER=null, gkOwnBumpAt=0, gkForeignBookEdit=false;
+(function(){
+    const R=firebase.database.Reference.prototype;
+    const isBookPath=p=>/^\/?bookList(\/|$)/.test(p);
+    function refPath(ref){ try{ return decodeURIComponent(new URL(ref.toString()).pathname); }catch(e){ return ''; } }
+    function touches(ref,val,method){
+        const p=refPath(ref);
+        if(isBookPath(p)) return true;
+        if(method==='update' && (p===''||p==='/') && val && typeof val==='object')
+            return Object.keys(val).some(isBookPath);
+        return false;
+    }
+    let t=null;
+    function bump(){
+        clearTimeout(t);
+        t=setTimeout(()=>{
+            gkOwnBumpAt=Date.now();
+            firebase.database().ref('siteConfig/bookListVer').set(firebase.database.ServerValue.TIMESTAMP).catch(e=>console.warn('bookListVer bump failed',e));
+        },400);
+    }
+    ['set','update','remove'].forEach(m=>{
+        const orig=R[m];
+        R[m]=function(val){
+            const res=orig.apply(this,arguments);
+            if(touches(this,val,m)) Promise.resolve(res).then(bump).catch(()=>{});
+            return res;
+        };
+    });
+})();
+function gkWatchBookVer(){
+    let first=true;
+    db.ref('siteConfig/bookListVer').on('value',s=>{
+        GK_ADMIN_BOOKVER=s.val();
+        /* নিজের সেভ ছাড়া অন্য কোথাও (মডারেটর/অন্য ডিভাইস) থেকে বই বদলালে এই পেজের লিস্ট পুরনো */
+        if(!first && Date.now()-gkOwnBumpAt>15000) gkForeignBookEdit=true;
+        first=false;
+    });
+}
+/* book.js-এ আছে কিন্তু Firebase-এ নেই এমন বই — সাইট লাইভ লিস্ট আনলে এগুলো হারিয়ে যায় */
+function gkCheckMissingBooks(){
+    const old=document.getElementById('gkMissingBar'); if(old) old.remove();
+    if(typeof books==='undefined'||!books.length) return;
+    const have=new Set(localBooks.map(b=>b&&b.bid).filter(Boolean));
+    const missing=books.filter(b=>b&&b.bid&&!have.has(b.bid));
+    if(!missing.length) return;
+    const bar=document.createElement('div');
+    bar.id='gkMissingBar';
+    bar.style.cssText='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;max-width:560px;width:calc(100% - 24px);background:#fff7ed;border:2px solid #f97316;color:#7c2d12;padding:14px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-family:inherit;font-size:13.5px;line-height:1.6;';
+    bar.innerHTML=`<b>⚠️ ${missing.length}টি বই শুধু book.js-এ আছে, Firebase-এ নেই।</b><br>এগুলো অ্যাডমিন প্যানেলে দেখা যায় না, আর সাইটে লাইভ লিস্ট এলে হারিয়ে যায়। একবার "Firebase-এ তুলুন" চাপলেই ঠিক হয়ে যাবে।
+        <div style="display:flex;gap:8px;margin-top:10px;"><button id="gkMissingBtn" class="btn btn-primary" style="flex:2;">⬆️ ${missing.length}টি বই Firebase-এ তুলুন</button><button class="btn" style="flex:1;" onclick="this.closest('#gkMissingBar').remove()">পরে</button></div>`;
+    document.body.appendChild(bar);
+    document.getElementById('gkMissingBtn').onclick=async function(){
+        this.disabled=true; this.textContent='⏳ তোলা হচ্ছে...';
+        try{
+            const start=localBooks.length, updates={};
+            missing.forEach((b,i)=>{
+                const copy=bookWithoutDesc(JSON.parse(JSON.stringify(b)));
+                if(copy.img==='book-placeholder.svg') copy.img='';
+                localBooks[start+i]=copy;
+                updates['bookList/'+(start+i)]=copy;
+            });
+            await db.ref().update(updates);
+            bar.remove();
+            beUpdateStats(); if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
+            showToast(`✅ ${missing.length}টি বই Firebase-এ উঠেছে — এখন Tools থেকে book.js ডাউনলোড করে আপলোড করুন`,'#059669');
+        }catch(e){
+            this.disabled=false; this.textContent='আবার চেষ্টা করুন';
+            showToast('❌ ব্যর্থ: '+e.message,'#dc2626');
+        }
+    };
+}
+
 function loadBooksFromFirebase(){
     db.ref('bookList').once('value').then(snap=>{
         if(snap.exists()){
@@ -3372,6 +3460,7 @@ function loadBooksFromFirebase(){
             }
             if(arr&&arr.length){
                 localBooks=arr;
+                gkCheckMissingBooks();
                 beUpdateStats();
                 if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
                 return;
@@ -3418,7 +3507,43 @@ function beUpdateStats(){
     const ok=localBooks.filter(b=>isRealUrl(b.img)).length;
     document.getElementById('beStatTotal').innerHTML=`<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> মোট: <span>${total}</span>`;
     document.getElementById('beStatOk').innerHTML=`<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> ছবি আছে: <span>${ok}</span>`;
+    bePopulatePubs();
     document.getElementById('beStatMiss').innerHTML=`<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> ছবি নেই: <span>${total-ok}</span>`;
+}
+
+/* ── প্রকাশনী বেছে বই দেখা — ড্রপডাউনে প্রতিটা প্রকাশনীর পাশে বইয়ের সংখ্যা ── */
+let bePub='';
+const BE_NO_PUB='(প্রকাশনী নেই)';
+function bePubOf(b){ return ((b&&b.pub)||'').trim()||BE_NO_PUB; }
+function bePopulatePubs(){
+    const sel=document.getElementById('bePubSel');
+    if(!sel)return;
+    const m={};
+    localBooks.forEach(b=>{ if(!b)return; const p=bePubOf(b); m[p]=(m[p]||0)+1; });
+    const list=Object.entries(m).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'bn'));
+    if(bePub && !m[bePub]) bePub='';
+    sel.innerHTML=`<option value="">🏢 সব প্রকাশনী (${list.length}টি)</option>`+
+        list.map(([p,n])=>`<option value="${escapeHTML(p)}"${p===bePub?' selected':''}>${escapeHTML(p)} — ${n}টি বই</option>`).join('');
+    bePubInfo();
+}
+function bePubInfo(){
+    const box=document.getElementById('bePubInfo'), clr=document.getElementById('bePubClear');
+    if(clr) clr.style.display=bePub?'':'none';
+    if(!box)return;
+    if(!bePub){ box.style.display='none'; return; }
+    const bs=localBooks.filter(b=>b&&bePubOf(b)===bePub);
+    const noImg=bs.filter(b=>!isRealUrl(b.img)).length;
+    const disc=bs.filter(b=>Number(b.original_price)>Number(b.price)).length;
+    box.style.display='';
+    box.innerHTML=`<b>${escapeHTML(bePub)}</b> — মোট <b>${bs.length}</b>টি বই · ছবি নেই <b style="color:${noImg?'#dc2626':'inherit'}">${noImg}</b>টি · ছাড় আছে <b>${disc}</b>টিতে`+
+        (bePub!==BE_NO_PUB?` · <a href="filter.html?type=pub&value=${encodeURIComponent(bePub)}" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;">সাইটে দেখুন ↗</a>`:'');
+}
+function bePubChange(v){
+    bePub=v||'';
+    beShownCount=BE_PAGE_SIZE;
+    beOpenIdx=null;
+    bePubInfo();
+    beRenderList();
 }
 
 function beSetFilter(f){
@@ -4135,6 +4260,7 @@ function beRenderList(){
                     ||(b.author||'').toLowerCase().includes(search)
                     ||(b.pub||'').toLowerCase().includes(search)));
         if(!matchSearch)return false;
+        if(bePub && bePubOf(b)!==bePub)return false;
         if(beFilter==='linked')return isRealUrl(b.img);
         if(beFilter==='missing')return !isRealUrl(b.img);
         return true;
@@ -5210,6 +5336,14 @@ function downloadSitemap(){
 
 /* ── DOWNLOAD book.js + book-desc.js (একসাথে দুটো) ── */
 function downloadBookJs(){
+    if(gkForeignBookEdit){
+        alert('অন্য কোনো ডিভাইস/মডারেটর থেকে বই বদলানো হয়েছে — এই পেজের লিস্ট পুরনো।\n\nপেজটা রিফ্রেশ করে তারপর book.js ডাউনলোড করুন।');
+        return;
+    }
+    if(document.getElementById('gkMissingBar')){
+        alert('কিছু বই এখনো Firebase-এ তোলা হয়নি (নিচের কমলা বক্স দেখুন)। আগে "Firebase-এ তুলুন" চাপুন, তারপর book.js ডাউনলোড করুন — নইলে ওই বইগুলো book.js থেকে বাদ পড়বে।');
+        return;
+    }
     const FIELDS=['bid','type','name','author','price','original_price','cat','subcat','subject','cover','pub','pages','brand','img'];
     /* desc এখন আলাদা — book.js তে থাকবে না */
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
@@ -5228,10 +5362,16 @@ function downloadBookJs(){
         fields.push(`tags: [${tags.map(c=>`"${esc(c)}"`).join(', ')}]`);
         const attrs=Array.isArray(b.attributes)?b.attributes.filter(a=>a&&a.label):[];
         fields.push(`attributes: [${attrs.map(a=>`{label: "${esc(a.label)}", value: "${esc(a.value||'')}"}`).join(', ')}]`);
+        /* বাকি সব ফিল্ড (pdfLink, hadiya, preorderDate, ভবিষ্যতের নতুন ফিল্ড) — সাইট এখন
+           ভার্সন মিললে Firebase থেকে লিস্ট আনে না, তাই book.js-এ কিছু বাদ পড়া চলবে না */
+        const done=new Set([...FIELDS,'desc','tags','attributes']);
+        Object.keys(b).forEach(k=>{ if(!done.has(k)&&b[k]!==undefined) fields.push(`${JSON.stringify(k)}: ${JSON.stringify(b[k])}`); });
         return `  { ${fields.join(', ')} }`;
     });
     const fallback=`\n\n/* ═══ IMAGE FALLBACK ═══\n   যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —\n   সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */\nbooks.forEach(function(b){\n    if(!b.img || !/^https?:\\/\\//.test(b.img)) b.img = 'book-placeholder.svg';\n});`;
-    const bookJsCode=`const books = [\n${lines.join(',\n')}\n];`+fallback;
+    /* Firebase-এর bookListVer এই ফাইলে বসে — সাইট মিলিয়ে দেখে, মিললে বাড়তি ডাউনলোড নেই */
+    const verLine=`/* bookList ভার্সন — অ্যাডমিন প্যানেল থেকে আপনাআপনি বসে, হাতে বদলাবেন না */\nvar GK_BOOKS_VER = ${JSON.stringify(GK_ADMIN_BOOKVER)};\n`;
+    const bookJsCode=verLine+`const books = [\n${lines.join(',\n')}\n];`+fallback;
 
     /* ── book-desc.js (শুধু desc, bid key দিয়ে) ── */
     const descLines=src

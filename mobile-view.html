@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>মোবাইল ভিউ প্রিভিউ — গ্রন্থকানন</title>
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;background:#e5e7eb;font-family:'Hind Siliguri','Segoe UI',Arial,sans-serif;}
+body{display:flex;flex-direction:column;}
+.mv-topbar{
+  flex-shrink:0;background:#1a1a1a;color:#fff;
+  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.mv-topbar span{font-size:0.88rem;font-weight:600;}
+.mv-back{
+  background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;
+  padding:9px 18px;border-radius:20px;font-weight:700;font-size:0.85rem;
+  cursor:pointer;font-family:inherit;white-space:nowrap;
+}
+.mv-back:active{transform:scale(0.97);}
+.mv-frame-wrap{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:22px 12px;overflow:auto;}
+.mv-phone{
+  width:390px;max-width:100%;height:800px;max-height:calc(100vh - 96px);
+  border-radius:30px;border:10px solid #1a1a1a;
+  box-shadow:0 24px 60px rgba(0,0,0,0.35);
+  overflow:hidden;background:#fff;flex-shrink:0;
+}
+.mv-phone iframe{width:100%;height:100%;border:0;display:block;}
+</style>
+</head>
+<body>
+  <div class="mv-topbar">
+    <span>📱 মোবাইল ভিউ প্রিভিউ দেখছেন</span>
+    <button class="mv-back" onclick="backToDesktop()">🖥️ ডেস্কটপে ফিরুন</button>
+  </div>
+  <div class="mv-frame-wrap">
+    <div class="mv-phone">
+      <iframe id="mvFrame"></iframe>
+    </div>
+  </div>
+<script>
+function getTargetPage(){
+  var params = new URLSearchParams(location.search);
+  var p = params.get('page') || '';
+  if(/^[a-zA-Z0-9_-]+\.html(\?[a-zA-Z0-9_&=%.\-]*)?$/.test(p)) return p;
+  return 'index.html';
+}
+function backToDesktop(){
+  try{ localStorage.removeItem('od_view_mode'); }catch(e){}
+  location.href = getTargetPage();
+}
+document.getElementById('mvFrame').src = getTargetPage();
+</script>
+</body>
+</html>

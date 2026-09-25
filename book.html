@@ -8,7 +8,24 @@
     <link rel="icon" href="logo.png" type="image/png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
     <title>বই বিস্তারিত — গ্রন্থকানন</title>
     <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বই। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।" id="metaDesc">
     <link rel="canonical" href="https://gronthokanon.com/book.html" id="canonicalLink">
@@ -212,6 +229,17 @@
         .trust-mini{margin-top:14px;display:flex;flex-direction:column;gap:9px;}
         .trust-mini .row{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--text2);}
         .trust-mini svg{width:16px;height:16px;color:#059669;flex-shrink:0;}
+        /* মোবাইলে কভারের ঠিক পরেই বইয়ের নাম — স্টক-ব্যাজ দামের নিচে, ট্রাস্ট লাইন বাটনের নিচে সরে যায় */
+        #mBadgeSlot .badges{margin:0 0 12px;}
+        /* বইয়ের তথ্য — ইনফো-কার্ডের ভেতরে, দামের নিচে কমপ্যাক্ট বক্স */
+        .info-card #bookDetailsCard{background:var(--bg);box-shadow:none;border-radius:12px;padding:12px 14px 4px;margin:0 0 14px;}
+        .info-card #bookDetailsCard h3{font-size:14px;margin-bottom:4px;padding-bottom:8px;}
+        .info-card #bookDetailsCard .info-table td{padding:9px 4px;font-size:13.5px;}
+        #mTrustSlot .trust-mini{margin-top:16px;padding-top:14px;border-top:1px dashed var(--border2);}
+        @media(max-width:899px){
+            .img-card{padding-bottom:16px;}
+            .img-card .view-badge{position:static;transform:none;display:inline-block;margin-top:8px;}
+        }
         .badge{font-size:12px;padding:5px 14px;border-radius:20px;font-weight:600;}
         .b-cat{background:var(--green-bg);color:#059669;border:1px solid var(--green-border);}
         .b-ok{background:var(--green-bg);color:#059669;border:1px solid var(--green-border);}
@@ -465,7 +493,7 @@
         </div>
         <div class="img-thumbs" id="imgThumbs" style="display:none;"></div>
         <div class="badges" id="bookBadges"></div>
-        <div class="trust-mini">
+        <div class="trust-mini" id="trustMini">
             <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/><path d="M9 12l2 2 4-4"/></svg> ১০০% অরিজিনাল বই</div>
             <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="13" rx="1.5"/><path d="M16 10h3.5L22 13.5V19h-6"/><circle cx="6" cy="19.5" r="1.6"/><circle cx="17.5" cy="19.5" r="1.6"/></svg> সারাদেশে হোম ডেলিভারি</div>
             <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg> ক্যাশ অন ডেলিভারি সুবিধা</div>
@@ -544,6 +572,20 @@
             <div class="price-disc" id="bookDisc"></div>
         </div>
         <div id="savingsLabel" style="display:none;font-size:12px;color:#059669;font-weight:600;margin-bottom:10px;"><svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 13l3.5 3.5L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="savingsText"></span></div>
+    <!-- BOOK DETAILS — নাম/দামের ঠিক পরে (ইনফো-কার্ডের ভেতরে), যাতে কাস্টমার সহজে বইয়ের তথ্য দেখে -->
+    <div class="desc-card" id="bookDetailsCard">
+        <h3 id="bookDetailsTitle"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> বইয়ের তথ্য</h3>
+        <table class="info-table">
+            <tbody id="bookInfoRows">
+                <tr><td class="info-label">লেখক</td><td class="info-val" id="bookAuthorRow"></td></tr>
+                <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
+                <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
+                <tr><td class="info-label">কভার</td><td class="info-val" id="bookCover"></td></tr>
+                <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
+            </tbody>
+        </table>
+    </div>
+        <div id="mBadgeSlot"></div>
         <div id="preOrderBox" style="display:none;align-items:flex-start;gap:8px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1.5px solid #fb923c;border-radius:0;padding:11px 12px;margin-bottom:12px;font-size:12.5px;font-weight:600;color:#9a3412;line-height:1.5;">
             <span style="font-size:18px;line-height:1;">📦</span> <span id="preOrderText"></span>
         </div>
@@ -572,6 +614,7 @@
         </div>
         <div id="notifyMeBox" style="display:none;"></div>
         <button class="btn-wa-order" id="btnWaOrder" onclick="orderViaWA()"><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;flex-shrink:0;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.42 1.3-1.96 1.35-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36l.55.01c.18.01.41-.07.64.49.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.72 1.18 1.54 1.92 1.06.94 1.95 1.23 2.23 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.75 1.87.89.28.14.46.21.53.32.07.12.07.68-.17 1.36z"/></svg> WhatsApp-এ অর্ডার করুন</button>
+        <div id="mTrustSlot"></div>
     </div>
 
     <!-- ══ TABS (বিবরণ / রিভিউ) ══ -->
@@ -581,19 +624,6 @@
     </div>
 
     <div class="tab-content active" id="tab-desc">
-    <!-- BOOK DETAILS — SEPARATE CARD -->
-    <div class="desc-card" id="bookDetailsCard">
-        <h3 id="bookDetailsTitle"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> বইয়ের তথ্য</h3>
-        <table class="info-table">
-            <tbody id="bookInfoRows">
-                <tr><td class="info-label">লেখক</td><td class="info-val" id="bookAuthorRow"></td></tr>
-                <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
-                <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
-                <tr><td class="info-label">কভার</td><td class="info-val" id="bookCover"></td></tr>
-                <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
-            </tbody>
-        </table>
-    </div>
 
     <!-- DESCRIPTION -->
     <div class="desc-card">
@@ -961,6 +991,24 @@ function changeQty(d){
 }
 
 /* IMAGE */
+/* মোবাইলে (<900px) স্টক-ব্যাজ আর ট্রাস্ট লাইন কভার-কার্ড থেকে ইনফো-কার্ডে সরাই, যাতে কভারের
+   ঠিক পরেই বইয়ের নাম/দাম দেখা যায়; ডেস্কটপে দুই কলাম, তাই আগের জায়গায় ফেরত */
+(function(){
+    const mq=window.matchMedia('(max-width:899px)');
+    function place(){
+        const card=document.querySelector('.img-card'), badges=document.getElementById('bookBadges'), trust=document.getElementById('trustMini');
+        if(!card||!badges||!trust)return;
+        if(mq.matches){
+            document.getElementById('mBadgeSlot').appendChild(badges);
+            document.getElementById('mTrustSlot').appendChild(trust);
+        }else{
+            const thumbs=document.getElementById('imgThumbs');
+            thumbs.after(badges); badges.after(trust);
+        }
+    }
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',place);else place();
+    if(mq.addEventListener)mq.addEventListener('change',place);else if(mq.addListener)mq.addListener(place);
+})();
 function onImgLoad(){document.getElementById('imgSkel').style.display='none';document.getElementById('bookImg').style.display='block';}
 function openImgModal(){const s=document.getElementById('bookImg').src;document.getElementById('modalImg').src=s;document.getElementById('imgModal').classList.add('open');}
 
@@ -1774,7 +1822,9 @@ function syncLiveBookData(){
         return db.ref('bookList/'+idx).once('value').then(function(snap){
             if(snap.exists()){
                 const live=snap.val();
-                if(live&&typeof live==='object'){
+                /* একই position-এ অন্য বই থাকলে (book.js আর Firebase-এর ক্রম আলাদা হলে) ভুল বইয়ের
+                   দাম/ছবি বসে যেত — তাই bid মিললেই তবে লাইভ তথ্য বসাই */
+                if(live&&typeof live==='object'&&(!live.bid||!books[idx].bid||live.bid===books[idx].bid)){
                     books[idx]=Object.assign({},books[idx],live);
                 }
             }
@@ -1828,5 +1878,8 @@ document.addEventListener('DOMContentLoaded', function(){
 </div>
 
 <script src="common.js"></script>
+<style>.view-toggle-fab{position:fixed;bottom:84px;left:18px;z-index:140;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;box-shadow:0 4px 16px rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;font-size:1.35rem;cursor:pointer;padding:0;line-height:1;}
+@media(min-width:900px){.view-toggle-fab{bottom:24px;left:24px;}}</style>
+<button class="view-toggle-fab" id="viewModeFab" onclick="toggleViewMode()" style="display:none"></button>
 </body>
 </html>

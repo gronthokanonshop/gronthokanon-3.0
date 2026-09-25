@@ -13,7 +13,24 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="গ্রন্থকানন">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
     <title>গ্রন্থকানন — বইয়ের রাজ্যে স্বাগতম</title>
     <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
     <meta name="theme-color" content="#ffffff">
@@ -660,6 +677,13 @@
             pointer-events: none;
         }
         .bc-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+        /* দাম বাঁয়ে, ছোট চারকোনা কার্ট-আইকন ডানে — সবসময় দেখা যায় */
+        .bc-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 6px; margin-top: auto; }
+        .bc-foot .price-row { flex-direction: column; align-items: flex-start; gap: 0; margin-bottom: 0; min-width: 0; }
+        .bc-foot .price-sell { font-size: 14px; line-height: 1.2; }
+        .bc-foot .price-orig { font-size: 10px; }
+        .bc-btn.bc-icon { width: 34px; height: 34px; padding: 0; flex-shrink: 0; border-radius: 10px; opacity: 1; pointer-events: auto; }
+        .bc-btn.bc-icon svg { width: 17px; height: 17px; }
         .book-card:hover .bc-btn:not(.bc-out) { opacity: 1; pointer-events: auto; }
         @media (hover: none) {
             .bc-btn:not(.bc-out) { opacity: 1; pointer-events: auto; }
@@ -1001,17 +1025,17 @@
 
     <!-- SLIDE 1: banner1.jpg -->
     <div class="banner-slide" style="background:#064e3b;">
-      <img src="banner1.jpg" alt="ব্যানার ১" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <img data-src="banner1.jpg" data-src-m="banner1-m.jpg" alt="ব্যানার ১" decoding="async" width="1600" height="800" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
     </div>
 
     <!-- SLIDE 2: banner2.jpg -->
     <div class="banner-slide" style="background:#064e3b;">
-      <img src="banner2.jpg" alt="ব্যানার ২" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <img data-src="banner2.jpg" data-src-m="banner2-m.jpg" alt="ব্যানার ২" decoding="async" width="1600" height="800" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
     </div>
 
     <!-- SLIDE 3: banner3.jpg -->
     <div class="banner-slide" style="background:#064e3b;">
-      <img src="banner3.jpg" alt="ব্যানার ৩" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      <img data-src="banner3.jpg" data-src-m="banner3-m.jpg" alt="ব্যানার ৩" decoding="async" width="1600" height="800" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
     </div>
 
   </div>
@@ -1841,10 +1865,10 @@ function makeCard(b){
         <div class="book-card-info">
             <div class="bc-name">${escapeHTML(b.name)}</div>
             <div class="bc-author">${bookType(b)==='প্রোডাক্ট'?escapeHTML(b.brand||''):escapeHTML(b.author||'')}</div>
-            <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
             ${out
-                ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই আইটেমটি এখন স্টকে নেই');">${GK_NOSTOCK_SVG}<span>স্টক শেষ</span></button>`
-                : `<button class="bc-btn" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">${GK_CART_SVG}<span>কার্টে যোগ করুন</span></button>`}
+                ? `<div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
+                   <button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই আইটেমটি এখন স্টকে নেই');">${GK_NOSTOCK_SVG}<span>স্টক শেষ</span></button>`
+                : `<div class="bc-foot"><div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div><button class="bc-btn bc-icon"data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" title="কার্টে যোগ করুন" aria-label="কার্টে যোগ করুন" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">${GK_CART_SVG}</button></div>`}
         </div></div>`;
 }
 function goToBook(idx){
@@ -1867,6 +1891,9 @@ function gkSweepStock(){
         }
         const btn=card.querySelector('.bc-btn');
         if(btn&&!btn.classList.contains('bc-out')){
+            /* আইকন-বাটন দামের পাশে থাকে — স্টক শেষ হলে সেটাকে দামের নিচে পুরো-চওড়া বাটনে ফেরত নিই */
+            const foot=btn.closest('.bc-foot');
+            if(foot){btn.classList.remove('bc-icon');foot.after(btn);}
             btn.classList.add('bc-out');btn.innerHTML=GK_NOSTOCK_SVG+'<span>স্টক শেষ</span>';
             btn.onclick=function(e){e.stopPropagation();if(window.showToast)showToast('❌ এই বইটি এখন স্টকে নেই');};
         }
@@ -2276,8 +2303,7 @@ function toggleSidebar(){
     ov.style.display=ov.style.display==='block'?'none':'block';
 }
 function navigateToFilter(type,value){
-    document.body.style.opacity='0';document.body.style.transition='opacity 0.25s ease';
-    setTimeout(()=>{window.location.href=`filter.html?type=${type}&value=${encodeURIComponent(value)}`;},250);
+    window.location.href=`filter.html?type=${type}&value=${encodeURIComponent(value)}`;
 }
 
 
@@ -2554,6 +2580,7 @@ function loadBanners(){
         if(raw&&raw.none===true){
             const bw=document.querySelector('.banner-wrap');
             if(bw)bw.style.display='none';
+            gkBannerSet=true;
             return;
         }
         let list=raw;
@@ -2567,7 +2594,8 @@ function loadBanners(){
         const bg=['#064e3b','#047857','#065f46','#0a2e1a','#059669'];
         slider.innerHTML=list.map((b,i)=>{
             const link=b.link?`onclick="location.href='${esc(b.link)}'" style="cursor:pointer;background:${bg[i%bg.length]};"`:`style="background:${bg[i%bg.length]};"`;
-            const img=b.img?`<img src="${esc(b.img)}" alt="${esc(b.title||'ব্যানার')}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'';
+            /* প্রথম ব্যানার সাথে সাথে (high priority), বাকিগুলো প্রথমটা লোড হওয়ার পরে — একসাথে ~৯০০KB না নামিয়ে */
+            const img=b.img?`<img ${i===0?`src="${esc(b.img)}" fetchpriority="high"`:`data-src="${esc(b.img)}"`} decoding="async" alt="${esc(b.title||'ব্যানার')}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'';
             return `<div class="banner-slide" ${link}>
                 ${img}
                 <div class="banner-slide-placeholder" style="display:${b.img?'none':'flex'};">
@@ -2580,15 +2608,30 @@ function loadBanners(){
         totalBannerSlides=list.length;
         curBanner=0;
         goBannerSlide(0);
+        gkBannerSet=true;
+        const rest=slider.querySelectorAll('img[data-src]');
+        const loadRest=()=>rest.forEach(im=>{ if(im.dataset.src){ im.src=im.dataset.src; im.removeAttribute('data-src'); } });
+        const first=slider.querySelector('img');
+        if(first&&!first.complete){ first.addEventListener('load',loadRest,{once:true}); first.addEventListener('error',loadRest,{once:true}); setTimeout(loadRest,4000); }
+        else loadRest();
     }
+    /* Firebase-এ ব্যানার না থাকলে/না পৌঁছালে তবেই HTML-এর ডিফল্ট banner1-3 নামাই (মোবাইলে ছোট কপি) */
+    let gkBannerSet=false;
+    function useStaticBanners(){
+        if(gkBannerSet)return;
+        gkBannerSet=true;
+        const small=window.innerWidth<=900;
+        document.querySelectorAll('#mainSlider img[data-src-m]').forEach(im=>{ im.src=small?im.dataset.srcM:im.dataset.src; });
+    }
+    setTimeout(useStaticBanners,5000);
 
     function fetchFresh(){
         db.ref('banners').get().then(snap=>{
-            if(!snap.exists())return;
+            if(!snap.exists()){ useStaticBanners(); return; }
             const raw=snap.val();
             try{ localStorage.setItem(CACHE_KEY, JSON.stringify({t:Date.now(), v:raw})); }catch(e){}
             applyBannerData(raw);
-        }).catch(()=>{});
+        }).catch(useStaticBanners);
     }
 
     let cached=null;
@@ -2820,8 +2863,10 @@ document.addEventListener('keydown', function(e) {
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="common.js"></script>
+<style>.view-toggle-fab{position:fixed;bottom:84px;left:18px;z-index:140;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;box-shadow:0 4px 16px rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;font-size:1.35rem;cursor:pointer;padding:0;line-height:1;}
+@media(min-width:900px){.view-toggle-fab{bottom:24px;left:24px;}}</style>
+<button class="view-toggle-fab" id="viewModeFab" onclick="toggleViewMode()" style="display:none"></button>
 </body>
 </html>

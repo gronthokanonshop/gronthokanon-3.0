@@ -3,7 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" href="logo.png" type="image/png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
 <title>ডেলিভারি নীতি — গ্রন্থকানন</title>
 <meta name="theme-color" content="#059669">
 <meta name="description" content="গ্রন্থকাননের ডেলিভারি তথ্য — ঢাকায় ৳৬০, ঢাকার বাইরে ৳৯০। সারা বাংলাদেশে ক্যাশ অন ডেলিভারিতে বই পাবেন ২-৫ দিনে।">
@@ -88,5 +105,8 @@
 </div>
 
 <script src="common.js"></script>
+<style>.view-toggle-fab{position:fixed;bottom:84px;left:18px;z-index:140;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;box-shadow:0 4px 16px rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;font-size:1.35rem;cursor:pointer;padding:0;line-height:1;}
+@media(min-width:900px){.view-toggle-fab{bottom:24px;left:24px;}}</style>
+<button class="view-toggle-fab" id="viewModeFab" onclick="toggleViewMode()" style="display:none"></button>
 </body>
 </html>

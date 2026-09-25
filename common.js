@@ -60,10 +60,11 @@ function showToast(msg, color) {
     setTimeout(() => t.remove(), 2200);
 }
 
-/* ═══ PAGE NAVIGATION (smooth fade) ═══ */
+/* ═══ PAGE NAVIGATION ═══
+   আগে fade-out অ্যানিমেশনের জন্য প্রতিটা ক্লিকে ২৪০ms অপেক্ষা করা হতো —
+   এখন সাথে সাথে পরের পেজ লোড শুরু হয় (সাইট দ্রুত মনে হয়) */
 function navigateTo(url) {
-    document.body.style.animation = 'pageOut 0.25s ease forwards';
-    setTimeout(() => window.location.href = url, 240);
+    window.location.href = url;
 }
 
 /* ═══ FIX: browser Back করলে যেন blank/সাদা না থাকে ═══ */
@@ -281,9 +282,9 @@ window.gkToggleContact = function () {
                     '<img src="' + escapeHTML(item.img) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">' +
                     '<div style="flex:1;"><h4 style="font-size:13px;margin:0;color:var(--text);">' + safeName + '</h4><span style="color:#dc2626;font-size:13px;font-weight:bold;">৳' + (Number(item.price) || 0) + '</span></div>' +
                     '<div style="display:flex;align-items:center;gap:8px;">' +
-                    '<button class="gkcb-qty-btn" data-name="' + safeName + '" onclick="changeQty(this.dataset.name,-1)">-</button>' +
+                    '<button class="gkcb-qty-btn" data-name="' + safeName + '" onclick="gkCartQty(this.dataset.name,-1)">-</button>' +
                     '<span style="font-weight:bold;color:var(--text);">' + item.qty + '</span>' +
-                    '<button class="gkcb-qty-btn" data-name="' + safeName + '" onclick="changeQty(this.dataset.name,1)">+</button>' +
+                    '<button class="gkcb-qty-btn" data-name="' + safeName + '" onclick="gkCartQty(this.dataset.name,1)">+</button>' +
                     '</div></div>';
             }
             box.innerHTML = html;
@@ -344,7 +345,8 @@ window.gkToggleContact = function () {
             showToast('❌ ভুল কুপন কোড!', '#dc2626');
         }
     };
-    window.changeQty = window.changeQty || function (name, delta) {
+    /* আলাদা নাম — book.html-এর নিজস্ব changeQty(d) (পেজের পরিমাণ বক্স) এটাকে ঢেকে দিত, ফলে কার্টে +/- কাজ করত না */
+    window.gkCartQty = function (name, delta) {
         var c = readCart();
         if (delta === 1) {
             var item = c.find(function (i) { return i.name === name; });
@@ -357,6 +359,7 @@ window.gkToggleContact = function () {
         writeCart(c);
         window.gkCartUpdateUI();
     };
+    window.changeQty = window.changeQty || window.gkCartQty;
     window.showCart = window.showCart || function () {
         if (onCheckoutPage()) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
         ensureCartBox();
@@ -800,6 +803,27 @@ window.gkToggleContact = function () {
         }
     })();
 
+    /* ── PDF লাইব্রেরি (html2canvas + jsPDF, ~২০০KB) — পেজ লোডে না নামিয়ে শুধু
+       কেউ ইনভয়েস/ব্লগ PDF ডাউনলোড চাপলে তখন একবার নামায় ── */
+    window.gkLoadPdfLibs = window.gkLoadPdfLibs || (function () {
+        var p = null;
+        function load(src) {
+            return new Promise(function (res, rej) {
+                var s = document.createElement('script');
+                s.src = src; s.onload = res; s.onerror = function () { p = null; rej(new Error('PDF লাইব্রেরি লোড হয়নি — নেট চেক করুন')); };
+                document.head.appendChild(s);
+            });
+        }
+        return function () {
+            if (typeof html2canvas !== 'undefined' && window.jspdf) return Promise.resolve();
+            if (!p) p = Promise.all([
+                load('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+                load('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+            ]);
+            return p;
+        };
+    })();
+
     /* ── উইশলিস্ট ড্রয়ার (books/getImg/goToBook যে পেজে সংজ্ঞায়িত আছে, সেখানে পূর্ণ তথ্য দেখাবে) ──
        msg দিলে ড্রয়ারের ভেতরেই উপরে একটা কনফার্মেশন লাইন দেখায় (যোগ/সরানো হয়েছে) —
        আলাদা পপআপের বদলে, যেন ড্রয়ার খোলা থাকা অবস্থায় বার্তাটা আড়ালে না পড়ে */
@@ -814,14 +838,24 @@ window.gkToggleContact = function () {
         var msgHtml = msg ? '<div style="padding:9px 12px;margin:10px;background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:8px;color:#065f46;font-size:12.5px;font-weight:700;">' + msg + '</div>' : '';
         if (!wl.length) {
             box.innerHTML = msgHtml + '<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';
-        } else if (typeof books !== 'undefined' && typeof getImg === 'function') {
+        } else if (typeof books !== 'undefined') {
+            /* getImg/goToBook সব পেজে থাকে না (যেমন book.html) — না থাকলে নিজেই ছবি বের করে
+               আর বইয়ের পেজে নিয়ে যায়, যাতে সব পেজে হোমের মতো ছবিসহ পূর্ণ তালিকা দেখায় */
+            var imgOf = typeof getImg === 'function' ? getImg : function (bk) {
+                return (typeof bookImgs !== 'undefined' && bookImgs[bk.name]) || bk.img || 'book-placeholder.svg';
+            };
+            window.gkWLOpen = window.gkWLOpen || function (idx) {
+                if (typeof goToBook === 'function') return goToBook(idx);
+                var bk = books[idx];
+                window.location.href = 'book.html?id=' + encodeURIComponent((bk && bk.bid) || idx);
+            };
             box.innerHTML = msgHtml + wl.map(function (name) {
                 var b = books.find(function (bk) { return bk.name === name; });
                 if (!b) return '';
                 var idx = books.indexOf(b);
                 var safeName = escapeHTML(name);
-                return '<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="goToBook(' + idx + ')">' +
-                    '<img src="' + escapeHTML(getImg(b)) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
+                return '<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="gkWLOpen(' + idx + ')">' +
+                    '<img src="' + escapeHTML(imgOf(b)) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
                     '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">' + safeName + '</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳' + (Number(b.price) || 0) + '</div></div>' +
                     '<button data-name="' + safeName + '" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button></div>';
             }).join('');
@@ -1008,3 +1042,40 @@ function gkVisibleBooks(list) {
 }
 window.gkIsHiddenBook = gkIsHiddenBook;
 window.gkVisibleBooks = gkVisibleBooks;
+
+/* ═══════════════════════════════════════════════════════════════
+   ডেস্কটপ/মোবাইল ভিউ টগল — নিচে-বামে ভাসমান বাটন (.view-toggle-fab,
+   প্রতিটা পেজে আলাদা করে বসানো) দিয়ে চালু হয়।
+   ফোনে "ডেস্কটপ ভার্সন" দেখাতে viewport meta বদলালেই হয়, কিন্তু
+   ডেস্কটপ ব্রাউজারে "মোবাইল ভার্সন" জোর করে দেখাতে viewport meta ট্রিক
+   কাজ করে না (ডেস্কটপ ব্রাউজার আসল window width দিয়েই media query
+   ইভালুয়েট করে) — তাই mobile-view.html নামের wrapper পেজে আসল সাইটকে
+   সরু (390px) একটা <iframe>-এর ভেতরে দেখানো হয়।
+═══════════════════════════════════════════════════════════════ */
+function toggleViewMode(){
+  if(window.top !== window.self){
+    try{ localStorage.removeItem('od_view_mode'); }catch(e){}
+    window.top.location.href = (location.pathname.split('/').pop() || 'index.html') + location.search;
+    return;
+  }
+  let cur; try{ cur = localStorage.getItem('od_view_mode'); }catch(e){ cur = null; }
+  const next = cur === 'desktop' ? 'mobile' : 'desktop';
+  try{ localStorage.setItem('od_view_mode', next); }catch(e){}
+  location.reload();
+}
+(function(){
+  const inFrame = window.top !== window.self;
+  let cur; try{ cur = localStorage.getItem('od_view_mode'); }catch(e){ cur = null; }
+  const desktopLabel = '🖥️ ডেস্কটপ ভার্সন দেখুন';
+  const mobileLabel = '📱 মোবাইল ভার্সন দেখুন';
+  const link = document.getElementById('viewModeToggle'); /* ফুটারে রাখলে */
+  if(link) link.textContent = inFrame ? desktopLabel : (cur === 'desktop' ? mobileLabel : desktopLabel);
+  /* fab লুকআপ DOMContentLoaded-এর ভেতরে রাখা জরুরি — এই স্ক্রিপ্ট
+     বাটনের আগে (head-এ বা common.js হিসেবে) লোড হলে getElementById
+     তখনো null রিটার্ন করবে (DOM তখনো পার্স হয়নি) */
+  document.addEventListener('DOMContentLoaded', function(){
+    const fab = document.getElementById('viewModeFab');
+    if(fab) fab.textContent = inFrame ? '🖥️' : (cur === 'desktop' ? '📱' : '🖥️');
+    if(fab) fab.title = link ? link.textContent : desktopLabel;
+  });
+})();

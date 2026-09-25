@@ -5,7 +5,24 @@
 <link rel="icon" href="logo.png" type="image/png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
 <title>ব্লগ — গ্রন্থকানন</title>
 <meta name="description" content="বই, পাঠ ও ইসলামি জ্ঞান নিয়ে গ্রন্থকাননের ব্লগ — বই পড়ার উপকারিতা, লেখক পরিচিতি ও পাঠ-পরামর্শ।" id="metaDesc">
 <meta name="theme-color" content="#059669">
@@ -276,7 +293,7 @@ function renderPost(post){
 
 /* ══ ব্লগ পোস্ট PDF ডাউনলোড (html2canvas + jsPDF — ফোনেও কাজ করে) ══ */
 async function downloadBlogPDF(title, meta, btnEl){
-  if(typeof html2canvas==='undefined'||!window.jspdf){ if(typeof showToast==='function')showToast('PDF লাইব্রেরি লোড হয়নি — নেট চেক করুন','#dc2626'); return; }
+  try{ await gkLoadPdfLibs(); }catch(e){ if(typeof showToast==='function')showToast('PDF লাইব্রেরি লোড হয়নি — নেট চেক করুন','#dc2626'); return; }
   const articleEl=btnEl.closest('.article');
   if(!articleEl) return;
   const orig=btnEl.innerText; btnEl.disabled=true; btnEl.innerText='তৈরি হচ্ছে...';
@@ -366,8 +383,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSubmitForm();})
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="common.js"></script>
+<style>.view-toggle-fab{position:fixed;bottom:84px;left:18px;z-index:140;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;box-shadow:0 4px 16px rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;font-size:1.35rem;cursor:pointer;padding:0;line-height:1;}
+@media(min-width:900px){.view-toggle-fab{bottom:24px;left:24px;}}</style>
+<button class="view-toggle-fab" id="viewModeFab" onclick="toggleViewMode()" style="display:none"></button>
 </body>
 </html>

@@ -3,7 +3,7 @@
    হালকা offline সাপোর্ট: অ্যাপ-শেল ক্যাশ করে, বাকি সব
    network-first (তাজা ডেটা আগে, নেট না থাকলে ক্যাশ)।
 ═══════════════════════════════════════════════ */
-const CACHE = 'gronthokanon-v2';
+const CACHE = 'gronthokanon-v3';
 const SHELL = [
   './index.html',
   './common.css',
@@ -22,7 +22,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== 'gk-booklist').map(k => caches.delete(k))))
   );
   self.clients.claim();
 });

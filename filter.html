@@ -8,7 +8,24 @@
     <link rel="icon" href="logo.png" type="image/png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
     <title>গ্রন্থকানন — বই খুঁজুন</title>
     <meta name="description" content="গ্রন্থকাননে ক্যাটাগরি, লেখক ও প্রকাশনী অনুযায়ী হাজারো ইসলামিক ও সাধারণ বই খুঁজুন। সাশ্রয়ী মূল্য, ক্যাশ অন ডেলিভারি।">
     <meta name="theme-color" content="#0a2e1a">
@@ -98,6 +115,22 @@
         .sub-chips::-webkit-scrollbar { display:none; }
         .sub-chips.show { display:flex; }
         .chip { padding:6px 14px; border-radius:0; font-size:12px; font-weight:600; cursor:pointer; border:1.5px solid var(--border-g); background:var(--green-light); color:var(--green-dark); white-space:nowrap; transition:.2s; flex-shrink:0; }
+        .sub-chips:has(.pill-picker) { overflow:visible; position:relative; z-index:50; }
+        .pill-picker { position:relative; flex:1; max-width:560px; }
+        .pp-input { width:100%; padding:10px 64px 10px 36px; border:1.5px solid var(--border-g); background:var(--bg); color:var(--text); font-family:'Hind Siliguri',sans-serif; font-size:13.5px; font-weight:600; outline:none; border-radius:0; }
+        .pp-input:focus { border-color:var(--green); background:var(--card); }
+        .pill-picker.has-val .pp-input { border-color:var(--green); background:var(--green-light); color:var(--green-dark); }
+        .pp-ico { position:absolute; left:11px; top:50%; transform:translateY(-50%); width:15px; height:15px; color:var(--green); pointer-events:none; }
+        .pp-caret { position:absolute; right:0; top:0; bottom:0; width:34px; display:flex; align-items:center; justify-content:center; color:var(--green); cursor:pointer; font-size:14px; }
+        .pp-clear { display:none; position:absolute; right:32px; top:50%; transform:translateY(-50%); width:24px; height:24px; border:none; background:#dc2626; color:#fff; font-size:16px; line-height:1; cursor:pointer; border-radius:50%; }
+        .pill-picker.has-val .pp-clear { display:block; }
+        .pp-list { display:none; position:absolute; left:0; right:0; top:calc(100% + 3px); max-height:320px; overflow-y:auto; background:var(--card); border:1.5px solid var(--green); box-shadow:0 12px 30px rgba(0,0,0,.18); -webkit-overflow-scrolling:touch; }
+        .pp-list.open { display:block; }
+        .pp-opt { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; font-size:13.5px; color:var(--text); cursor:pointer; border-bottom:1px solid var(--border); }
+        .pp-opt:hover, .pp-opt.act { background:var(--green-light); }
+        .pp-opt.sel { color:var(--green); font-weight:700; }
+        .pp-opt em { font-style:normal; font-size:11px; font-weight:700; color:var(--green-dark); background:var(--green-light); padding:2px 8px; flex-shrink:0; }
+        .pp-empty { padding:14px; font-size:13px; color:var(--text2); }
         .chip.active { background:var(--green); border-color:var(--green); color:#fff; }
         .chip:hover:not(.active) { border-color:var(--green); color:var(--green); }
 
@@ -619,7 +652,7 @@ function openWLModal(added, b) {
         </div>
         ${added?`<div style="display:flex;gap:10px;">
             <button onclick="closeWLModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--text);border:1px solid #111;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">কেনাকাটা চালিয়ে যান</button>
-            <button onclick="closeWLModal();window.location.href='index.html';" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
+            <button onclick="closeWLModal();showWishlist();" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
         </div>`:`<button onclick="closeWLModal()" style="width:100%;padding:12px;background:#059669;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">ঠিক আছে</button>`}`;
     document.getElementById('wlOverlay').style.display='block';
     const modal=document.getElementById('wlModal');
@@ -745,26 +778,82 @@ function setFilterTab(el, tab) {
     filterTab = tab; filterPill = '';
     currentPage = 1;
     const sc = document.getElementById('subChips');
-    if (tab === 'all') { sc.classList.remove('show'); sc.innerHTML = ''; }
+    if (tab === 'all') { sc.classList.remove('show'); sc.innerHTML = ''; pillValues = []; }
     else {
-        const sets = {
-            cat: [...new Set(filtered.flatMap(bookCats).filter(Boolean))],
-            pub: [...new Set(filtered.map(b => b.pub).filter(Boolean))],
-            auth: [...new Set(filtered.map(b => b.author).filter(Boolean))]
-        };
-        sc.innerHTML = sets[tab].map(v => `<div class="chip" onclick="setPill(this,'${escapeHTML(v)}')">${escapeHTML(v)}</div>`).join('');
+        /* শত শত লেখক/প্রকাশনী চিপ-সারিতে খুঁজে পাওয়া যেত না — এখন সার্চসহ ড্রপডাউন,
+           প্রতিটার পাশে বইয়ের সংখ্যা, বেশি বই যার সে আগে */
+        const counts = new Map();
+        const keyOf = { cat: bookCats, pub: b => [b.pub], auth: b => [b.author] }[tab];
+        filtered.forEach(b => keyOf(b).filter(Boolean).forEach(v => counts.set(v, (counts.get(v) || 0) + 1)));
+        pillValues = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'bn'));
+        const label = { cat: 'ক্যাটাগরি', pub: 'প্রকাশনী', auth: 'লেখক' }[tab];
+        sc.innerHTML = `<div class="pill-picker" id="pillPicker">
+            <svg class="pp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="pillSearch" class="pp-input" autocomplete="off" placeholder="${label} খুঁজুন বা বেছে নিন (${pillValues.length}টি)"
+                oninput="renderPillList(this.value);openPillList()" onfocus="this.select();renderPillList(filterPill ? '' : this.value);openPillList()" onkeydown="pillKey(event)">
+            <button class="pp-clear" id="pillClear" onclick="clearPill()" title="সব দেখুন">×</button>
+            <span class="pp-caret" onclick="togglePillList()">▾</span>
+            <div class="pp-list" id="pillList"></div>
+        </div>`;
         sc.classList.add('show');
+        renderPillList('');
+        openPillList();
     }
     renderBooks(getList());
 }
 
-function setPill(el, val) {
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
+let pillValues = [], pillShown = [];
+function renderPillList(q) {
+    const list = document.getElementById('pillList');
+    if (!list) return;
+    const nq = String(q || '').normalize('NFC').toLowerCase().trim();
+    pillShown = (nq ? pillValues.filter(([v]) => v.normalize('NFC').toLowerCase().includes(nq)) : pillValues).slice(0, 300);
+    list.innerHTML = pillShown.length
+        ? pillShown.map(([v, n], i) => `<div class="pp-opt${v === filterPill ? ' sel' : ''}" data-i="${i}"><span>${escapeHTML(v)}</span><em>${toBNnum(n)}</em></div>`).join('')
+        : '<div class="pp-empty">কিছু পাওয়া যায়নি</div>';
+}
+function toBNnum(n) { return String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]); }
+function openPillList() { const l = document.getElementById('pillList'); if (l) l.classList.add('open'); }
+function closePillList() { const l = document.getElementById('pillList'); if (l) l.classList.remove('open'); }
+function togglePillList() {
+    const l = document.getElementById('pillList');
+    if (!l) return;
+    if (l.classList.contains('open')) closePillList(); else { renderPillList(''); openPillList(); }
+}
+function pickPill(val) {
     filterPill = val;
+    const inp = document.getElementById('pillSearch');
+    if (inp) { inp.value = val; inp.blur(); }
+    document.getElementById('pillPicker').classList.toggle('has-val', !!val);
+    closePillList();
     currentPage = 1;
     renderBooks(getList());
 }
+function clearPill() { pickPill(''); renderPillList(''); openPillList(); }
+function pillKey(e) {
+    const opts = [...document.querySelectorAll('#pillList .pp-opt')];
+    let i = opts.findIndex(o => o.classList.contains('act'));
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!opts.length) return;
+        opts.forEach(o => o.classList.remove('act'));
+        i = e.key === 'ArrowDown' ? (i + 1) % opts.length : (i - 1 + opts.length) % opts.length;
+        opts[i].classList.add('act'); opts[i].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const pick = opts[i >= 0 ? i : 0];
+        if (pick) pickPill(pillShown[+pick.dataset.i][0]);
+    } else if (e.key === 'Escape') { closePillList(); e.target.blur(); }
+}
+document.addEventListener('mousedown', function (e) {
+    const opt = e.target.closest && e.target.closest('#pillList .pp-opt');
+    if (opt) { e.preventDefault(); pickPill(pillShown[+opt.dataset.i][0]); return; }
+    if (!e.target.closest || !e.target.closest('#pillPicker')) {
+        closePillList();
+        const inp = document.getElementById('pillSearch');
+        if (inp && document.activeElement !== inp) inp.value = filterPill;
+    }
+});
 
 function sortBooks(type) {
     currentSort = type;
@@ -1045,11 +1134,10 @@ updateFilterCount();
 buildFilterDrawer();
 loadTagsFilter();
 loadCatTreeFilter();
-setTimeout(() => {
-    document.getElementById('skelGrid').style.display = 'none';
-    document.getElementById('bookGrid').style.display = 'block';
-    renderBooks(getList());
-}, 600);
+/* বই এখানে আগেই লোড হয়ে আছে — আগের মতো ৬০০ms বসিয়ে না রেখে সাথে সাথে দেখাই */
+document.getElementById('skelGrid').style.display = 'none';
+document.getElementById('bookGrid').style.display = 'block';
+renderBooks(getList());
 /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
 if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
     if(!ok) return;
@@ -1079,5 +1167,8 @@ document.addEventListener('DOMContentLoaded', gkFilterInit);
     <div id="wlModalInner" style="padding:0 20px;"></div>
 </div>
 <script src="common.js"></script>
+<style>.view-toggle-fab{position:fixed;bottom:84px;left:18px;z-index:140;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;box-shadow:0 4px 16px rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;font-size:1.35rem;cursor:pointer;padding:0;line-height:1;}
+@media(min-width:900px){.view-toggle-fab{bottom:24px;left:24px;}}</style>
+<button class="view-toggle-fab" id="viewModeFab" onclick="toggleViewMode()" style="display:none"></button>
 </body>
 </html>

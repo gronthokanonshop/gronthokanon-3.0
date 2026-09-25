@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /checkout.html
+Disallow: /mobile-view.html
 
 Sitemap: https://gronthokanon.com/sitemap.xml
