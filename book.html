@@ -887,7 +887,9 @@ function loadCatTreeBook(){
 }
 function bookTags(b){ if(b&&Array.isArray(b.tags))return b.tags; const out=[]; const src=(b&&Array.isArray(b.cats))?b.cats:(b&&b.cat?[b.cat]:[]); src.forEach(c=>{const t=GK_OLD_TAGMAP[c]; if(t&&!out.includes(t))out.push(t);}); return out; }
 function bookMainCat(b){ let c=(b&&b.cat)||(b&&Array.isArray(b.cats)&&b.cats.find(x=>!GK_TAG_NAMES.has(x)))||''; return GK_TAG_NAMES.has(c)?'':c; }
-function bookSubcat(b){ return (b&&b.subcat)||''; }
+/* উপ-বিভাগ হিসেবে এখন subject ফিল্ডই ব্যবহার হয় — আলাদা subcat আর দরকার নেই,
+   বই আপলোডের সময় শুধু "বিষয়" ঠিকভাবে বসালেই ফিল্টার/হোমপেজ কার্ড কাজ করবে */
+function bookSubcat(b){ return (b&&b.subject)||''; }
 
 /* WISHLIST */
 function updateWLUI(){
@@ -1261,8 +1263,7 @@ function loadBook(){
         if(b.pub)rows+=`<tr><td class="info-label">প্রকাশনী</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=pub&value=${encodeURIComponent(b.pub)}'">${escapeHTML(b.pub)}</td></tr>`;
         if(b.pages)rows+=`<tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val">${escapeHTML(b.pages)}</td></tr>`;
         if(b.cover)rows+=`<tr><td class="info-label">কভার</td><td class="info-val">${escapeHTML(b.cover)}</td></tr>`;
-        if(sc)rows+=`<tr><td class="info-label">উপ-বিভাগ</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=subcat&value=${encodeURIComponent(sc)}'">${escapeHTML(sc)}</td></tr>`;
-        if(b.subject)rows+=`<tr><td class="info-label">বিষয়</td><td class="info-val">${escapeHTML(b.subject)}</td></tr>`;
+        if(sc)rows+=`<tr><td class="info-label">বিষয়</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=subcat&value=${encodeURIComponent(sc)}'">${escapeHTML(sc)}</td></tr>`;
     } else {
         if(b.brand)rows+=`<tr><td class="info-label">ব্র্যান্ড</td><td class="info-val">${escapeHTML(b.brand)}</td></tr>`;
         if(Array.isArray(b.attributes)){
