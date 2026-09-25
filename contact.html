@@ -1,90 +1,332 @@
 <!DOCTYPE html>
-<html lang="bn" data-theme="light">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" href="logo.png" type="image/png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>যোগাযোগ — গ্রন্থকানন</title>
-<meta name="theme-color" content="#059669">
-<meta name="description" content="গ্রন্থকাননের সাথে যোগাযোগ করুন — WhatsApp, ফোন বা Facebook-এ। বই অর্ডার বা যেকোনো প্রশ্নে আমরা পাশে আছি।">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css">
-<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewportMeta">
+<script>
+(function(){
+  try{
+    if(localStorage.getItem('od_view_mode') === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    }
+  }catch(e){}
+})();
+</script>
+<title>যোগাযোগ — OurDedication</title>
+<meta name="description" content="OurDedication-এর সাথে যোগাযোগ করুন — ফোন, WhatsApp, ইমেইল ও ফেসবুকের মাধ্যমে সরাসরি কথা বলুন।">
+<link rel="canonical" href="https://ourdedication.com/contact.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OurDedication">
+<meta property="og:image" content="https://ourdedication.com/ourdedication10.jpeg">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#CB2527">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-.page-wrap{max-width:580px;margin:0 auto;padding:24px 16px 100px;}
-.hero-banner{background:linear-gradient(135deg,#064e3b,#059669);padding:28px 24px;text-align:center;margin-bottom:20px;}
-.hero-banner h1{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
-.hero-banner p{font-size:12px;color:#a7f3d0;}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-.contact-card{background:var(--card);border:1px solid var(--border);padding:18px 14px;text-align:center;text-decoration:none;display:block;transition:.2s;}
-.contact-card:hover{border-color:#059669;transform:translateY(-2px);}
-.contact-card .icon{font-size:28px;margin-bottom:8px;}
-.contact-card .label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.contact-card .val{font-size:12px;color:#059669;font-weight:600;}
-.info-card{background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:14px;}
-.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;padding-left:10px;border-left:3px solid #059669;}
-.hours-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
-.hours-row:last-child{border:none;}
-.hours-row span:first-child{color:var(--text2);}
-.hours-row .open{color:#059669;font-weight:700;}
-.hours-row .closed{color:#dc2626;font-weight:700;}
-.wa-big{display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,#128c7e,#25d366);padding:18px;margin-bottom:14px;cursor:pointer;text-decoration:none;transition:.2s;}
-.wa-big:hover{opacity:0.92;}
-.wa-big span{font-size:15px;font-weight:800;color:#fff;}
+:root {
+  --navy:     #ffffff;
+  --navy2:    #faf9fa;
+  --indigo:   #CB2527;
+  --indigo2:  #1a1a1a;
+  --amber:    #CB2527;
+  --amber2:   #1a1a1a;
+  --white:    #ffffff;
+  --muted:    #6b7280;
+  --border:   #e5e7eb;
+  --border-i: #c7d2fe;
+  --card-bg:  #ffffff;
+  --glass:    rgba(10,30,54,0.92);
+  --red:      #ef4444;
+  --green:    #10b981;
+  --font-en:  'Sora', sans-serif;
+  --font-bn:  'Hind Siliguri', sans-serif;
+  --r:        18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-bn);background:var(--navy);color:#1e1b4b;overflow-x:hidden;padding-bottom:80px;}
+
+/* ══ NAVBAR (copied from index.html) ══ */
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid #e5e7eb;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+.nav-wrap{max-width:1200px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--indigo),var(--amber));display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(203,37,39,0.4);}
+.logo-icon svg{width:20px;height:20px;}
+.logo-name{font-family:var(--font-en);font-size:1.05rem;font-weight:800;letter-spacing:-0.3px;color:#fff;}
+.logo-name span{color:var(--indigo);}
+.nav-search{flex:1;max-width:480px;display:flex;align-items:center;background:#f8f9ff;border:1.5px solid transparent;border-radius:12px;overflow:hidden;transition:border-color 0.2s;}
+.nav-search:focus-within{border-color:var(--indigo);}
+.nav-search input{flex:1;background:none;border:none;outline:none;padding:9px 14px;font-family:var(--font-bn);font-size:0.88rem;color:#1e1b4b;}
+.nav-search input::placeholder{color:var(--muted);}
+.nav-search button{background:linear-gradient(135deg,var(--indigo2),var(--indigo));border:none;padding:9px 14px;cursor:pointer;color:#fff;font-size:1rem;transition:filter 0.2s;}
+.nav-search button:hover{filter:brightness(1.15);}
+.nav-actions{display:flex;align-items:center;gap:6px;}
+.nav-btn{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--indigo2),var(--indigo));border:none;color:#fff;font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;position:relative;transition:filter 0.2s;}
+.nav-btn:hover{filter:brightness(1.15);}
+.nav-badge{position:absolute;top:-5px;right:-5px;background:linear-gradient(135deg,var(--amber),var(--indigo2));color:#fff;font-size:9px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--font-en);}
+.ham{display:none;}
+@media(max-width:700px){.nav-search{display:none;}.ham{display:flex;}}
+@media(max-width:600px){.nav-wrap{padding:0 12px;height:54px;gap:8px;}.logo-name{font-size:0.88rem;}.logo-icon{width:32px;height:32px;}.nav-search{flex:1;min-width:0;}.nav-search input{font-size:0.82rem;padding:7px 10px;}.nav-search button{padding:7px 10px;}.nav-btn{width:32px;height:32px;font-size:0.9rem;}}
+
+/* ══ BOTTOM NAV (copied from index.html) ══ */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:150;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);box-shadow:0 -2px 12px rgba(0,0,0,0.06);border-top:1px solid #e5e7eb;display:flex;padding:8px 0 max(8px,env(safe-area-inset-bottom));}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;cursor:pointer;font-family:var(--font-bn);font-size:0.65rem;color:#6b7280;padding:4px 0;transition:color 0.2s;position:relative;background:none;border:none;}
+.bn-item.active{color:var(--indigo2);}
+.bn-item:hover{color:var(--indigo2);}
+.bn-icon{font-size:1.25rem;line-height:1;}
+.bn-badge{position:absolute;top:2px;right:calc(50% - 18px);background:linear-gradient(135deg,var(--amber),var(--indigo2));color:#fff;font-size:8px;font-weight:700;min-width:15px;height:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-en);}
+@media(min-width:900px){.bottom-nav{display:none;}body{padding-bottom:0;}}
+@media(max-width:900px){body{padding-bottom:68px;}.bottom-nav{padding:6px 0 max(6px,env(safe-area-inset-bottom));}.bn-item{font-size:0.6rem;}.bn-icon{font-size:1.1rem;}}
+
+/* ══ WA FLOAT / TOAST ══ */
+.wa-float{position:fixed;bottom:84px;right:18px;z-index:140;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 6px 20px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s;}
+.wa-float:hover{transform:scale(1.1);}
+@media(min-width:900px){.wa-float{bottom:28px;right:24px;}}
+.toast-wrap{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;}
+.toast-item{background:#1e1b4b;border:1px solid rgba(203,37,39,0.3);backdrop-filter:blur(16px);color:#ffffff;font-family:var(--font-bn);font-size:0.88rem;padding:10px 20px;border-radius:25px;box-shadow:0 8px 24px rgba(0,0,0,0.4);animation:toastIn 0.3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══ PAGE SPECIFIC ══ */
+.page-hero{padding:44px 20px 30px;text-align:center;background:linear-gradient(135deg,#1a1a1a 0%,#3d0a0a 55%,#CB2527 100%);}
+.page-hero h1{font-family:var(--font-en);font-size:clamp(1.5rem,3.5vw,2.1rem);font-weight:800;color:#fff;margin-bottom:8px;}
+.page-hero p{color:var(--muted);font-size:0.92rem;max-width:520px;margin:0 auto;}
+.wrap{max-width:1000px;margin:0 auto;padding:36px 20px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;}
+@media(max-width:800px){.wrap{grid-template-columns:1fr;}}
+.card{background:var(--card-bg);border:1.5px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:20px;}
+.card h2{font-family:var(--font-en);font-size:1.1rem;font-weight:800;color:var(--indigo2);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.info-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.info-row:last-child{border-bottom:none;}
+.info-ic{width:38px;height:38px;border-radius:10px;background:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.info-txt h4{font-size:0.85rem;font-weight:700;margin-bottom:3px;}
+.info-txt p,.info-txt a{font-size:0.85rem;color:#374151;text-decoration:none;}
+.info-txt a:hover{color:var(--indigo2);}
+.wa-btn{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:11px 18px;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.88rem;margin-top:6px;}
+.hours-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.hours-table td{padding:8px 4px;font-size:0.85rem;border-bottom:1px solid var(--border);}
+.hours-table td:last-child{text-align:right;font-weight:600;color:var(--indigo2);}
+.f-group{margin-bottom:14px;}
+.f-group label{display:block;font-size:0.82rem;font-weight:600;margin-bottom:6px;color:#374151;}
+.f-group input,.f-group textarea{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-family:var(--font-bn);font-size:0.88rem;outline:none;transition:border-color 0.2s;}
+.f-group input:focus,.f-group textarea:focus{border-color:var(--indigo);}
+.f-group textarea{resize:vertical;min-height:100px;}
+.submit-btn{width:100%;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--indigo2));color:#fff;font-family:var(--font-bn);font-size:0.95rem;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(203,37,39,0.3);transition:transform 0.2s;}
+.submit-btn:hover{transform:translateY(-1px);}
+.eico{width:18px;height:18px;flex-shrink:0;display:block;}
+.nav-search button .eico{width:19px;height:19px;}
+.bn-icon .eico{width:21px;height:21px;}
+/* ══ FOOTER ══ */
+.site-footer{background:#0d1535;color:#c7d2fe;padding:32px 20px 20px;margin-top:12px;}
+.footer-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px;}
+@media(max-width:700px){.footer-wrap{grid-template-columns:1fr;gap:20px;text-align:center;}}
+.footer-brand .logo-name{color:#fff;}
+.footer-brand p{font-size:0.82rem;color:#9ca8d8;margin-top:8px;line-height:1.6;}
+.footer-col h4{font-family:var(--font-en);font-size:0.85rem;font-weight:700;color:#fff;margin-bottom:10px;}
+.footer-col a{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:#9ca8d8;text-decoration:none;margin-bottom:9px;transition:color 0.2s;}
+@media(max-width:700px){.footer-col a{justify-content:center;}}
+.fico{width:16px;height:16px;flex-shrink:0;}
+.footer-col a:hover{color:var(--amber);}
+.footer-bottom{max-width:1200px;margin:20px auto 0;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.75rem;color:#7d89bd;text-align:center;}
 </style>
 </head>
 <body>
-<nav class="navbar">
-  <div class="navbar-top">
-    <button class="back-btn" onclick="history.back()">‹</button>
-    <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">যোগাযোগ</span>
-    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+
+<nav class="nav">
+  <div class="nav-wrap">
+    <a href="index.html" class="logo">
+      <img src="ourdedication10.jpeg" alt="OurDedication" style="height:46px;width:106px;display:block;object-fit:cover;object-position:50% 50%;">
+    </a>
+    <div class="nav-search">
+      <input type="text" id="searchInp" placeholder="পণ্য খুঁজুন... Search products" onkeydown="if(event.key==='Enter') doSearch()">
+      <button onclick="doSearch()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    </div>
+    <div class="nav-actions">
+      <a href="#" class="nav-btn" title="wishlist"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></a>
+      <a href="checkout.html" class="nav-btn" id="cartNavBtn" title="cart">
+        <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="nav-badge" id="cartCount">0</span>
+      </a>
+      <button class="nav-btn ham" id="hamBtn" onclick="toggleMenu()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    </div>
   </div>
 </nav>
 
-<div class="page-wrap">
-  <div class="hero-banner">
-    <h1>📞 আমাদের সাথে কথা বলুন</h1>
-    <p>যেকোনো প্রশ্ন বা সমস্যায় আমরা সদা প্রস্তুত</p>
-  </div>
+<div class="page-hero">
+  <h1>📞 যোগাযোগ করুন</h1>
+  <p>যেকোনো প্রশ্ন, অর্ডার সংক্রান্ত সাহায্য বা মতামতের জন্য আমাদের সাথে যোগাযোগ করুন</p>
+</div>
 
-  <a href="https://wa.me/8801516595762" target="_blank" rel="noopener" class="wa-big">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:32px;" alt="WhatsApp">
-    <span>WhatsApp এ এখনই মেসেজ করুন</span>
-  </a>
+<div class="wrap">
+  <div>
+    <div class="card">
+      <h2>📇 যোগাযোগের তথ্য</h2>
+      <div class="info-row">
+        <div class="info-ic">📱</div>
+        <div class="info-txt">
+          <h4>ফোন</h4>
+          <a href="tel:01842970565">01842970565</a>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-ic">💬</div>
+        <div class="info-txt">
+          <h4>WhatsApp</h4>
+          <a href="https://wa.me/8801842970565" target="_blank">01842970565</a>
+          <div><a class="wa-btn" href="https://wa.me/8801842970565" target="_blank"><svg class="eico" viewBox="0 0 32 32" fill="currentColor"><path d="M16.001 2.667c-7.363 0-13.333 5.97-13.333 13.333 0 2.353.615 4.56 1.69 6.475L2.667 29.333l7.03-1.844a13.26 13.26 0 0 0 6.304 1.605h.006c7.362 0 13.332-5.97 13.332-13.333S23.363 2.667 16.001 2.667zm7.82 18.836c-.334.94-1.652 1.72-2.702 1.945-.719.152-1.658.273-4.818-1.035-3.926-1.626-6.453-5.615-6.65-5.876-.19-.262-1.594-2.121-1.594-4.046 0-1.925.997-2.868 1.353-3.262.334-.367.728-.459.97-.459.243 0 .486.002.699.013.224.011.525-.085.822.626.303.724 1.03 2.5 1.12 2.682.09.182.15.397.03.639-.12.242-.18.393-.36.605-.18.212-.379.474-.542.636-.18.181-.368.378-.158.741.211.363.94 1.55 2.017 2.51 1.386 1.238 2.555 1.622 2.917 1.803.363.182.575.152.788-.09.212-.243.91-1.06 1.152-1.424.242-.363.485-.302.818-.181.333.121 2.122.999 2.485 1.182.363.181.605.272.696.424.09.151.09.878-.243 1.816z"/></svg> WhatsApp-এ মেসেজ দিন</a></div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-ic">✉️</div>
+        <div class="info-txt">
+          <h4>ইমেইল</h4>
+          <a href="mailto:sajidurr317@gmail.com">sajidurr317@gmail.com</a>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-ic">📍</div>
+        <div class="info-txt">
+          <h4>ঠিকানা</h4>
+          <p>PLACEHOLDER_ADDRESS, বাংলাদেশ</p>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-ic">📘</div>
+        <div class="info-txt">
+          <h4>ফেসবুক পেজ</h4>
+          <a href="https://www.facebook.com/Sajidbookshop" target="_blank">আমাদের ফেসবুক পেজ দেখুন</a>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-ic">🎵</div>
+        <div class="info-txt">
+          <h4>টিকটক</h4>
+          <a href="https://www.tiktok.com/@sajidurrahman9804" target="_blank">আমাদের টিকটক দেখুন</a>
+        </div>
+      </div>
+    </div>
 
-  <div class="contact-grid">
-    <a href="tel:+8801516595762" class="contact-card">
-      <div class="icon">📞</div>
-      <div class="label">ফোন</div>
-      <div class="val">01516595762</div>
-    </a>
-    <a href="mailto:gronthokanon4309@gmail.com" class="contact-card">
-      <div class="icon">📧</div>
-      <div class="label">ইমেইল</div>
-      <div class="val">Gmail</div>
-    </a>
-    <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener" class="contact-card">
-      <div class="icon">📘</div>
-      <div class="label">Facebook</div>
-      <div class="val">আমাদের পেজ</div>
-    </a>
-    <div class="contact-card" style="cursor:default;">
-      <div class="icon">📍</div>
-      <div class="label">ঠিকানা</div>
-      <div class="val">ঢাকা, বাংলাদেশ</div>
+    <div class="card">
+      <h2>🕐 ব্যবসার সময়</h2>
+      <!-- সময়সূচি সাময়িক প্লেসহোল্ডার — দোকান মালিক পরে প্রকৃত সময় দিয়ে আপডেট করবেন -->
+      <table class="hours-table">
+        <tr><td>শনি — বৃহস্পতি</td><td>সকাল ৯টা — রাত ১০টা</td></tr>
+        <tr><td>শুক্রবার</td><td>সকাল ৯টা — রাত ১০টা</td></tr>
+      </table>
     </div>
   </div>
 
-  <div class="info-card">
-    <h3>সাপোর্ট সময়সূচি</h3>
-    <div class="hours-row"><span>শনি — বৃহস্পতি</span><span class="open">সকাল ৯টা — রাত ১০টা</span></div>
-    <div class="hours-row"><span>শুক্রবার</span><span class="open">বিকাল ৪টা — রাত ১০টা</span></div>
-    <div class="hours-row"><span>সরকারি ছুটি</span><span class="closed">সীমিত সেবা</span></div>
-    <div class="hours-row"><span>জরুরি যোগাযোগ</span><span style="color:#059669;font-weight:700;">WhatsApp</span></div>
+  <div class="card">
+    <h2>✍️ বার্তা পাঠান</h2>
+    <form id="contactForm" onsubmit="handleContactSubmit(event)">
+      <div class="f-group">
+        <label>আপনার নাম</label>
+        <input type="text" id="cName" required placeholder="আপনার নাম লিখুন">
+      </div>
+      <div class="f-group">
+        <label>ফোন নম্বর</label>
+        <input type="tel" id="cPhone" required placeholder="01842970565">
+      </div>
+      <div class="f-group">
+        <label>বার্তা</label>
+        <textarea id="cMsg" required placeholder="আপনার প্রশ্ন বা বার্তা লিখুন..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn">✉️ বার্তা পাঠান</button>
+    </form>
   </div>
 </div>
 
-<script src="common.js"></script>
+<footer class="site-footer">
+  <div class="footer-wrap">
+    <div class="footer-brand">
+      <img src="ourdedication10.jpeg" alt="OurDedication" loading="lazy" style="height:64px;width:147px;display:block;object-fit:cover;object-position:50% 50%;">
+      <p>ইসলামিক ও সাধারণ বইয়ের অনলাইন দোকান — সারাদেশে হোম ডেলিভারি, ক্যাশ অন ডেলিভারি সুবিধা সহ।</p>
+    </div>
+    <div class="footer-col">
+      <h4>সহায়তা</h4>
+      <a href="about.html">আমাদের সম্পর্কে</a>
+      <a href="contact.html">যোগাযোগ</a>
+      <a href="faq.html">সচরাচর জিজ্ঞাসা</a>
+      <a href="delivery.html">ডেলিভারি তথ্য</a>
+      <a href="return.html">রিটার্ন নীতি</a>
+    </div>
+    <div class="footer-col">
+      <h4>যোগাযোগ</h4>
+      <a href="tel:01842970565"><svg class="fico" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.25 1.01l-2.2 2.21z"/></svg> 01842970565</a>
+      <a href="mailto:sajidurr317@gmail.com"><svg class="fico" viewBox="0 0 24 24" fill="currentColor"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5zm2.2.5 7.8 6.2L19.8 6z"/></svg> sajidurr317@gmail.com</a>
+      <a href="https://wa.me/8801842970565" target="_blank"><svg class="fico" viewBox="0 0 32 32" fill="currentColor"><path d="M16.001 2.667c-7.363 0-13.333 5.97-13.333 13.333 0 2.353.615 4.56 1.69 6.475L2.667 29.333l7.03-1.844a13.26 13.26 0 0 0 6.304 1.605h.006c7.362 0 13.332-5.97 13.332-13.333S23.363 2.667 16.001 2.667zm7.82 18.836c-.334.94-1.652 1.72-2.702 1.945-.719.152-1.658.273-4.818-1.035-3.926-1.626-6.453-5.615-6.65-5.876-.19-.262-1.594-2.121-1.594-4.046 0-1.925.997-2.868 1.353-3.262.334-.367.728-.459.97-.459.243 0 .486.002.699.013.224.011.525-.085.822.626.303.724 1.03 2.5 1.12 2.682.09.182.15.397.03.639-.12.242-.18.393-.36.605-.18.212-.379.474-.542.636-.18.181-.368.378-.158.741.211.363.94 1.55 2.017 2.51 1.386 1.238 2.555 1.622 2.917 1.803.363.182.575.152.788-.09.212-.243.91-1.06 1.152-1.424.242-.363.485-.302.818-.181.333.121 2.122.999 2.485 1.182.363.181.605.272.696.424.09.151.09.878-.243 1.816z"/></svg> WhatsApp-এ মেসেজ দিন</a>
+      <a href="https://www.facebook.com/Sajidbookshop" target="_blank"><svg class="fico" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg> ফেসবুক পেজ</a>
+      <a href="https://www.tiktok.com/@sajidurrahman9804" target="_blank"><svg class="fico" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3.2v13.5a2.7 2.7 0 1 1-2.7-2.7c.24 0 .47.02.7.07V9.6a6 6 0 1 0 5.2 5.95V8.83a7.7 7.7 0 0 0 4.5 1.44V6.98A4.28 4.28 0 0 1 16.5 2z"/></svg> টিকটক</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="fyear"></span> OurDedication — সর্বস্বত্ব সংরক্ষিত &nbsp;·&nbsp; <a href="javascript:void(0)" id="viewModeToggle" onclick="toggleViewMode()" style="color:#9ca8d8;text-decoration:underline;">ডেস্কটপ ভার্সন দেখুন</a></div>
+</footer>
+
+<nav class="bottom-nav">
+  <button class="bn-item" onclick="location.href='index.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>হোম</button>
+  <button class="bn-item" onclick="location.href='#'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>পছন্দ</button>
+  <button class="bn-item" onclick="location.href='checkout.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>কার্ট<span class="bn-badge" id="bnCart">0</span></button>
+  <button class="bn-item" onclick="location.href='track.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></svg></span>অর্ডার</button>
+  <button class="bn-item" onclick="location.href='account.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg></span>অ্যাকাউন্ট</button>
+</nav>
+
+<a href="https://wa.me/8801842970565" class="wa-float" target="_blank" title="WhatsApp">💬</a>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+function doSearch(){
+  const q = document.getElementById('searchInp').value.trim();
+  if(q) location.href = 'filter.html?q=' + encodeURIComponent(q);
+  else location.href = 'filter.html';
+}
+function toggleMenu(){
+  const s = document.querySelector('.nav-search');
+  if(s){ s.style.display = s.style.display==='flex' ? 'none':'flex'; s.style.position='absolute'; s.style.top='64px'; s.style.left='0'; s.style.right='0'; s.style.margin='0'; s.style.borderRadius='0'; s.style.maxWidth='100%';}
+}
+function updateCartBadge(){
+  let c = 0;
+  try{ c = JSON.parse(localStorage.getItem('od_cart2')||'[]').reduce((s,i)=>s+(i.qty||1),0); }catch(e){}
+  const el = document.getElementById('cartCount');
+  const bn = document.getElementById('bnCart');
+  if(el) el.textContent = c;
+  if(bn) bn.textContent = c;
+}
+updateCartBadge();
+const fy = document.getElementById('fyear'); if(fy) fy.textContent = new Date().getFullYear().toLocaleString('bn-BD');
+
+/* ডেস্কটপ/মোবাইল ভার্সন টগল */
+function toggleViewMode(){
+  let cur; try{ cur = localStorage.getItem('od_view_mode'); }catch(e){ cur = null; }
+  const next = cur === 'desktop' ? 'mobile' : 'desktop';
+  try{ localStorage.setItem('od_view_mode', next); }catch(e){}
+  location.reload();
+}
+(function(){
+  const link = document.getElementById('viewModeToggle');
+  if(!link) return;
+  let cur; try{ cur = localStorage.getItem('od_view_mode'); }catch(e){ cur = null; }
+  link.textContent = cur === 'desktop' ? '📱 মোবাইল ভার্সন দেখুন' : '🖥️ ডেস্কটপ ভার্সন দেখুন';
+})();
+
+function showToast(msg){
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast-item';
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(()=>t.remove(), 3000);
+}
+
+/* এই ফর্মের জন্য এখনো কোনো ব্যাকএন্ড/সার্ভার সেটআপ করা হয়নি, তাই সাবমিট করলে সরাসরি
+   WhatsApp/ফোনে যোগাযোগের পরামর্শ দেওয়া হচ্ছে — বাস্তবে কোথাও ডেটা পাঠানো হচ্ছে না */
+function handleContactSubmit(e){
+  e.preventDefault();
+  showToast('শীঘ্রই এই ফর্ম চালু হবে, এখন সরাসরি WhatsApp/ফোনে যোগাযোগ করুন');
+}
+</script>
 </body>
 </html>

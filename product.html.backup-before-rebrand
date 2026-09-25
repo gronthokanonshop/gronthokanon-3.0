@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>পণ্যের বিবরণ — OurDedication</title>
+<meta name="description" id="metaDesc" content="OurDedication-এ ইসলামিক ও সাধারণ বই — সারাদেশে হোম ডেলিভারি, ক্যাশ অন ডেলিভারি সুবিধা।">
+<link rel="canonical" id="metaCanonical" href="https://ourdedication.com/product.html">
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="OurDedication">
+<meta property="og:title" id="metaOgTitle" content="OurDedication">
+<meta property="og:description" id="metaOgDesc" content="OurDedication-এ ইসলামিক ও সাধারণ বই — সারাদেশে হোম ডেলিভারি।">
+<meta property="og:image" id="metaOgImage" content="https://ourdedication.com/logo-white-bg.png">
+<meta property="og:url" id="metaOgUrl" content="https://ourdedication.com/product.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="logo-white-bg.png">
+<link rel="apple-touch-icon" href="logo-white-bg.png">
+<meta name="theme-color" content="#0a1e36">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #0a1e36;
+  --navy2:   #123256;
+  --navy3:   #1a4270;
+  --indigo:  #c9982c;
+  --indigo2: #a5790f;
+  --amber:   #d9a52c;
+  --amber2:  #8a6510;
+  --white:   #ffffff;
+  --muted:   #6b7280;
+  --border:  #e5e7eb;
+  --border-i:#c7d2fe;
+  --card:    #ffffff;
+  --glass:   rgba(10,30,54,0.92);
+  --red:     #ef4444;
+  --green:   #10b981;
+  --font-en: 'Sora', sans-serif;
+  --font-bn: 'Hind Siliguri', sans-serif;
+  --r:       16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-bn);
+  background:var(--navy);
+  color:#eef1f7;
+  min-height:100vh;
+  overflow-x:hidden;
+  padding-bottom:80px;
+}
+
+/* ORBS */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(90px);}
+.orb-1{width:450px;height:450px;background:rgba(201,152,44,0.07);top:-80px;left:-100px;}
+.orb-2{width:350px;height:350px;background:rgba(217,165,44,0.05);bottom:0;right:-60px;}
+body>*:not(:where(.orb,.bottom-nav,.toast-wrap,.menu-drawer,.menu-overlay,.cart-drawer,.cart-overlay)){position:relative;z-index:1;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:0.012;pointer-events:none;z-index:0;}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:200;background:rgba(10,30,54,0.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.08);box-shadow:0 2px 12px rgba(0,0,0,0.25);}
+.nav-wrap{max-width:1100px;margin:0 auto;padding:0 18px;height:60px;display:flex;align-items:center;gap:12px;}
+.back-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);color:var(--indigo);font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;flex-shrink:0;transition:background 0.2s,border-color 0.2s;}
+.back-btn:hover{background:rgba(201,152,44,0.18);border-color:rgba(201,152,44,0.4);}
+.nav-title{font-family:var(--font-en);font-size:0.88rem;font-weight:700;color:#fff;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.logo-small{font-family:var(--font-en);font-size:0.85rem;font-weight:800;color:var(--indigo2);text-decoration:none;flex-shrink:0;}
+.logo-small span{color:var(--amber2);}
+.nav-actions{display:flex;gap:6px;}
+.nav-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);color:#fff;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;position:relative;transition:all 0.2s;}
+.nav-btn:hover{border-color:var(--indigo);color:var(--indigo);background:rgba(201,152,44,0.14);}
+.nav-badge{position:absolute;top:-5px;right:-5px;background:var(--amber);color:#000;font-size:8px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-en);}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{max-width:1100px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:0.78rem;color:rgba(255,255,255,0.55);}
+.breadcrumb a{color:rgba(255,255,255,0.55);text-decoration:none;transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--indigo);}
+.bc-sep{opacity:0.4;font-size:0.7rem;}
+.bc-cur{color:#fff;font-weight:500;}
+
+/* ── MAIN LAYOUT ── */
+.main{max-width:1100px;margin:0 auto;padding:0 18px 32px;display:grid;grid-template-columns:1fr 1.12fr;gap:28px;align-items:start;}
+@media(max-width:780px){.main{grid-template-columns:1fr;gap:0;padding:0;}}
+
+/* ── LEFT: IMAGE PANEL ── */
+.img-panel{position:sticky;top:72px;}
+@media(max-width:780px){.img-panel{position:relative;top:0;}}
+
+.img-main{
+  background:linear-gradient(135deg,#f8f9ff,#eef2ff);
+  border-radius:20px;
+  border:1px solid var(--border);
+  overflow:hidden;
+  aspect-ratio:3/4;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+@media(max-width:780px){.img-main{border-radius:14px;aspect-ratio:3/4;max-width:180px;max-height:240px;margin:14px auto 0;}}
+.img-main img{width:100%;height:100%;object-fit:contain;padding:20px;transition:transform 0.4s;}
+.img-main:hover img{transform:scale(1.03);}
+.img-badge-wrap{position:absolute;top:14px;left:14px;display:flex;flex-direction:column;gap:6px;}
+.img-badge{font-family:var(--font-en);font-size:0.7rem;font-weight:700;padding:4px 10px;border-radius:7px;}
+.ib-hot{background:#ef4444;color:white;}
+.ib-sale{background:var(--amber);color:#000;}
+.ib-new{background:var(--indigo);color:white;}
+.img-wish{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,0.9);backdrop-filter:blur(4px);border:1.5px solid #e5e7eb;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:all 0.2s;}
+.img-wish:hover,.img-wish.active{background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.35);}
+.img-wish.active{color:#ef4444;}
+
+.img-thumbs{display:flex;gap:8px;margin-top:12px;padding:0 2px;overflow-x:auto;scrollbar-width:none;}
+.img-thumbs::-webkit-scrollbar{display:none;}
+.thumb{width:60px;height:76px;border-radius:10px;border:2px solid transparent;background:#eef2ff;overflow:hidden;cursor:pointer;flex-shrink:0;transition:border-color 0.2s;display:flex;align-items:center;justify-content:center;}
+.thumb.active{border-color:var(--indigo);}
+.thumb img{width:100%;height:100%;object-fit:contain;padding:4px;}
+
+/* share row */
+.share-row{display:flex;align-items:center;gap:8px;margin-top:12px;padding:0 2px;}
+.share-btn{flex:1;padding:9px;border-radius:10px;border:1.5px solid #e5e7eb;background:#ffffff;color:#6b7280;font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all 0.2s;font-family:var(--font-bn);}
+.share-btn:hover{border-color:var(--indigo);color:var(--indigo2);}
+@media(max-width:780px){.img-thumbs,.share-row{padding:0 18px;}.img-thumbs{margin-top:10px;}.share-row{margin:10px 0 0;}}
+
+/* ── RIGHT: INFO PANEL ── */
+.info-panel{padding:24px;background:#fff;border-radius:20px;border:1px solid #e5e7eb;box-shadow:0 20px 60px rgba(0,0,0,0.35);}
+@media(max-width:780px){.info-panel{padding:18px 18px 20px;background:#fff;border-radius:20px 20px 0 0;margin-top:16px;box-shadow:0 -8px 30px rgba(0,0,0,0.1);}}
+
+/* badges top */
+.info-top-badges{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+.it-badge{font-family:var(--font-en);font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:20px;}
+.itb-cat{background:rgba(201,152,44,0.15);color:var(--indigo2);border:1px solid rgba(201,152,44,0.2);}
+.itb-sub{background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb;}
+.itb-bs{background:rgba(217,165,44,0.15);color:var(--amber2);border:1px solid rgba(217,165,44,0.2);}
+
+.book-title{font-family:var(--font-bn);font-size:1.45rem;font-weight:700;line-height:1.35;color:#1e1b4b;margin-bottom:8px;}
+.book-author{font-size:0.92rem;color:var(--indigo2);font-weight:500;margin-bottom:14px;}
+.book-author span{color:var(--muted);}
+
+/* rating row */
+.rating-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.stars{color:var(--amber);font-size:0.85rem;letter-spacing:2px;}
+.rating-num{font-family:var(--font-en);font-size:0.88rem;font-weight:700;color:#1e1b4b;}
+.rating-count{font-size:0.8rem;color:#6b7280;}
+.rating-div{width:1px;height:14px;background:var(--border);}
+.stock-tag{font-size:0.8rem;font-weight:600;display:flex;align-items:center;gap:5px;}
+.stock-in{color:var(--green);}
+.stock-out{color:var(--red);}
+
+/* price block */
+.price-block{
+  background:rgba(201,152,44,0.07);
+  border:1px solid rgba(201,152,44,0.15);
+  border-radius:14px;padding:16px 18px;margin-bottom:18px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.price-main{font-family:var(--font-en);font-size:2rem;font-weight:800;color:#1e1b4b;}
+.price-main .cur{font-size:1rem;color:var(--indigo2);margin-right:2px;}
+.price-old{font-family:var(--font-en);font-size:1rem;color:var(--muted);text-decoration:line-through;}
+.price-disc{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.2);border-radius:7px;padding:3px 9px;font-family:var(--font-en);font-size:0.78rem;font-weight:700;}
+.price-save{font-size:0.82rem;color:var(--green);margin-left:auto;}
+
+/* delivery strip */
+.delivery-strip{
+  background:rgba(16,185,129,0.07);
+  border:1px solid rgba(16,185,129,0.15);
+  border-radius:12px;padding:12px 15px;
+  display:flex;align-items:center;gap:10px;
+  font-size:0.85rem;color:#065f46;
+  margin-bottom:18px;
+}
+.delivery-strip .icon{font-size:1.2rem;flex-shrink:0;}
+
+/* qty + add to cart */
+.action-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.qty-control{display:flex;align-items:center;gap:0;border:1.5px solid #e5e7eb;border-radius:12px;overflow:hidden;background:#f8f9ff;}
+.qty-btn{width:38px;height:44px;background:none;border:none;color:#1e1b4b;font-size:1.2rem;cursor:pointer;transition:background 0.2s;font-family:var(--font-en);}
+.qty-btn:hover{background:#eef2ff;}
+.qty-val{width:38px;text-align:center;font-family:var(--font-en);font-size:1rem;font-weight:700;color:#1e1b4b;user-select:none;}
+.btn-cart{
+  flex:1;height:44px;border-radius:12px;border:none;cursor:pointer;
+  font-family:var(--font-bn);font-size:0.97rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,var(--indigo),#a5790f);
+  color:#1a0a00;
+  box-shadow:0 6px 20px rgba(201,152,44,0.3);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.btn-cart:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(201,152,44,0.4);}
+.btn-cart.added{background:linear-gradient(135deg,var(--green),#059669);}
+.btn-buy{
+  width:100%;height:44px;border-radius:12px;border:none;cursor:pointer;
+  font-family:var(--font-bn);font-size:0.97rem;font-weight:700;
+  background:linear-gradient(135deg,var(--amber),#8a6510);
+  color:#1a0a00;
+  box-shadow:0 6px 20px rgba(217,165,44,0.3);
+  transition:transform 0.2s,box-shadow 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:16px;
+}
+.btn-buy:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(217,165,44,0.4);}
+
+/* whatsapp order */
+.btn-wa{
+  width:100%;height:42px;border-radius:12px;
+  background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.25);
+  color:#4ade80;font-family:var(--font-bn);font-size:0.9rem;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background 0.2s;margin-bottom:18px;
+  text-decoration:none;
+}
+.btn-wa:hover{background:rgba(37,211,102,0.2);}
+
+/* info table */
+.info-table{margin-bottom:18px;}
+.info-row{display:flex;align-items:flex-start;padding:9px 0;border-bottom:1px solid #f3f4f6;}
+.info-row:last-child{border-bottom:none;}
+.info-key{width:110px;flex-shrink:0;font-size:0.82rem;color:var(--muted);font-weight:500;}
+.info-val{font-size:0.88rem;color:#1e1b4b;font-weight:500;line-height:1.5;}
+.info-val-link{color:var(--indigo2);text-decoration:underline;}
+.info-val-link:hover{color:var(--indigo);}
+
+/* ── TABS (Description, Reviews) ── */
+.tabs-section{max-width:1100px;margin:24px auto 0;padding:0 18px 24px;}
+@media(max-width:780px){.tabs-section{padding:0 0 24px;}}
+
+.tabs-nav{display:flex;gap:0;border-bottom:2px solid rgba(255,255,255,0.12);margin-bottom:20px;overflow-x:auto;scrollbar-width:none;}
+.tabs-nav::-webkit-scrollbar{display:none;}
+.tab-btn{padding:10px 22px;background:none;border:none;color:rgba(255,255,255,0.6);font-family:var(--font-bn);font-size:0.9rem;font-weight:600;cursor:pointer;white-space:nowrap;position:relative;transition:color 0.2s;}
+.tab-btn::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--indigo);transform:scaleX(0);transition:transform 0.2s;}
+.tab-btn.active{color:var(--indigo);}
+.tab-btn.active::after{transform:scaleX(1);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* description */
+.desc-card{background:#ffffff;border:1.5px solid #e5e7eb;border-radius:16px;padding:22px;font-size:0.92rem;line-height:1.8;color:#374151;}
+@media(max-width:780px){.desc-card{border-radius:0;border-left:none;border-right:none;}}
+.desc-card p{margin-bottom:10px;}
+.desc-card p:last-child{margin-bottom:0;}
+
+/* reviews */
+.reviews-wrap{display:flex;flex-direction:column;gap:12px;}
+.review-card{background:#ffffff;border:1.5px solid #e5e7eb;border-radius:14px;padding:16px 18px;}
+@media(max-width:780px){.review-card{border-radius:10px;margin:0 18px;}}
+.rv-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.rv-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:700;color:white;flex-shrink:0;}
+.rv-name{font-size:0.88rem;font-weight:700;color:#1e1b4b;}
+.rv-date{font-size:0.75rem;color:var(--muted);}
+.rv-stars{color:var(--amber);font-size:0.78rem;margin-bottom:5px;}
+.rv-text{font-size:0.88rem;color:#4b5563;line-height:1.6;}
+
+/* ── RELATED BOOKS ── */
+.related-section{max-width:1100px;margin:0 auto;padding:0 18px 30px;}
+@media(max-width:780px){.related-section{padding:0 18px 30px;}}
+.rel-title{font-family:var(--font-en);font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.rel-title span{color:var(--indigo);}
+.rel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:700px){.rel-grid{grid-template-columns:repeat(2,1fr);}}
+.rel-card{background:#ffffff;border:1.5px solid #e5e7eb;border-radius:14px;overflow:hidden;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;transition:transform 0.2s,border-color 0.2s;}
+.rel-card:hover{transform:translateY(-3px);border-color:rgba(201,152,44,0.3);}
+.rel-img{aspect-ratio:3/4;background:linear-gradient(135deg,#f8f9ff,#eef2ff);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.rel-img img{width:100%;height:100%;object-fit:contain;padding:8px;transition:transform 0.3s;}
+.rel-card:hover .rel-img img{transform:scale(1.05);}
+.rel-body{padding:10px 12px 12px;}
+.rel-name{font-size:0.8rem;font-weight:600;color:#1e1b4b;line-height:1.35;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.rel-author{font-size:0.72rem;color:var(--indigo2);margin-bottom:6px;}
+.rel-price{font-family:var(--font-en);font-size:0.92rem;font-weight:800;color:#1e1b4b;}
+.rel-price .cur{font-size:0.7rem;color:var(--indigo2);}
+.rel-old{font-family:var(--font-en);font-size:0.72rem;color:var(--muted);text-decoration:line-through;}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:150;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);box-shadow:0 -2px 12px rgba(0,0,0,0.06);border-top:1px solid #e5e7eb;display:flex;padding:8px 0 max(8px,env(safe-area-inset-bottom));}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;cursor:pointer;font-family:var(--font-bn);font-size:0.62rem;color:#6b7280;padding:4px 0;transition:color 0.2s;background:none;border:none;}
+.bn-item:hover,.bn-item.active{color:var(--indigo2);}
+.bn-icon{font-size:1.2rem;line-height:1;display:flex;align-items:center;justify-content:center;}
+.bn-icon .eico{width:20px;height:20px;}
+.bn-icon.has-wish .eico{fill:currentColor;color:#ef4444;}
+@media(min-width:900px){.bottom-nav{display:none;}body{padding-bottom:0;}}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;}
+.toast-item{background:#1e1b4b;border:1px solid rgba(201,152,44,0.3);backdrop-filter:blur(16px);color:#ffffff;font-family:var(--font-bn);font-size:0.88rem;padding:10px 20px;border-radius:25px;box-shadow:0 8px 24px rgba(0,0,0,0.4);animation:toastIn 0.3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@media(min-width:900px){.toast-wrap{bottom:28px;}}
+
+/* ══ MOBILE FIXES ══ */
+@media(max-width:600px){
+  body{padding-bottom:68px;}
+  .nav-wrap{padding:0 12px;height:52px;}
+  .nav-title{font-size:0.8rem;}
+  .logo-s{font-size:0.78rem;}
+  .breadcrumb{padding:8px 12px;font-size:0.72rem;}
+  /* Image panel */
+  .img-thumbs{padding:0 12px;}
+  .share-row{padding:0 12px;gap:6px;}
+  .share-btn{font-size:0.75rem;padding:7px;}
+  /* Info panel */
+  .info-panel{padding:14px 12px 0;}
+  .book-title{font-size:1.15rem;}
+  .book-author{font-size:0.85rem;}
+  .price-main{font-size:1.6rem;}
+  .price-block{padding:12px 14px;gap:10px;}
+  .delivery-strip{padding:10px 12px;font-size:0.8rem;}
+  .delivery-strip .icon{font-size:1rem;}
+  .action-row{gap:8px;}
+  .qty-control{border-radius:10px;}
+  .qty-btn{width:34px;height:40px;font-size:1rem;}
+  .qty-val{width:32px;font-size:0.9rem;}
+  .btn-cart{height:40px;font-size:0.88rem;}
+  .btn-buy{height:40px;font-size:0.88rem;margin-bottom:12px;}
+  .btn-wa{height:38px;font-size:0.82rem;margin-bottom:14px;}
+  .info-key{width:90px;font-size:0.78rem;}
+  .info-val{font-size:0.82rem;}
+  /* tabs */
+  .tabs-section{padding:0 0 20px;}
+  .tab-btn{padding:8px 14px;font-size:0.82rem;}
+  .desc-card{padding:16px;}
+  .desc-card p{font-size:0.88rem;}
+  .review-card{padding:12px 14px;margin:0 12px;}
+  .rv-name{font-size:0.82rem;}
+  .rv-text{font-size:0.82rem;}
+  /* related */
+  .related-section{padding:0 12px 24px;}
+  .rel-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .rel-body{padding:8px 10px 10px;}
+  .rel-name{font-size:0.75rem;}
+  .rel-author{font-size:0.68rem;}
+  .rel-price{font-size:0.85rem;}
+  /* bottom nav */
+  .bn-item{font-size:0.6rem;}
+  .bn-icon{font-size:1.1rem;}
+  /* top badges */
+  .info-top-badges{gap:5px;}
+  .it-badge{font-size:0.65rem;padding:2px 8px;}
+  .rating-row{gap:7px;flex-wrap:wrap;}
+  .rating-num{font-size:0.82rem;}
+  .rating-count{font-size:0.72rem;}
+}
+@media(max-width:360px){
+  .book-title{font-size:1rem;}
+  .price-main{font-size:1.4rem;}
+  .rel-grid{gap:8px;}
+}
+
+/* stock-notify box */
+.notify-box{display:none;background:#fef2f2;border:1.5px solid #fecaca;border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.notify-box.show{display:block;}
+.notify-box p{font-size:0.85rem;color:#991b1b;font-weight:600;margin-bottom:10px;}
+.notify-row{display:flex;gap:8px;}
+.notify-row input{flex:1;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-family:var(--font-bn);font-size:0.85rem;}
+.notify-row button{padding:10px 16px;border-radius:10px;border:none;background:var(--indigo);color:#fff;font-weight:600;font-size:0.85rem;cursor:pointer;white-space:nowrap;}
+.notify-row button:hover{background:var(--indigo2);}
+
+/* review form */
+.review-form{background:#ffffff;border:1.5px solid #e5e7eb;border-radius:14px;padding:18px;margin-bottom:16px;}
+@media(max-width:780px){.review-form{border-radius:10px;margin:0 18px 16px;}}
+.review-form h4{font-size:0.92rem;color:#1e1b4b;margin-bottom:12px;}
+.rf-stars{font-size:1.4rem;letter-spacing:4px;color:#d1d5db;cursor:pointer;margin-bottom:12px;}
+.rf-stars span.on{color:var(--amber);}
+.review-form input,.review-form textarea{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;font-family:var(--font-bn);font-size:0.85rem;margin-bottom:10px;resize:vertical;}
+.review-form button{padding:10px 20px;border-radius:10px;border:none;background:var(--indigo);color:#fff;font-weight:600;font-size:0.85rem;cursor:pointer;}
+.review-form button:hover{background:var(--indigo2);}
+.reviews-empty{text-align:center;padding:24px;color:var(--muted);font-size:0.85rem;}
+
+/* ══════════════════════════════════════
+   MENU DRAWER (হ্যামবার্গার)
+══════════════════════════════════════ */
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:9000;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.menu-overlay.open{opacity:1;pointer-events:all;}
+.menu-drawer{position:fixed;top:0;left:0;bottom:0;width:min(300px,82vw);background:#fff;z-index:9001;display:flex;flex-direction:column;transform:translateX(-110%);transition:transform 0.35s cubic-bezier(.4,0,.2,1);box-shadow:8px 0 40px rgba(0,0,0,0.12);}
+.menu-drawer.open{transform:translateX(0);}
+.md-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #e5e7eb;flex-shrink:0;}
+.md-head .logo-name{font-family:var(--font-en);font-weight:800;font-size:1rem;color:#1e1b4b;}
+.md-close{width:32px;height:32px;border-radius:8px;background:#f3f4f6;border:none;font-size:1.1rem;cursor:pointer;color:#6b7280;display:flex;align-items:center;justify-content:center;}
+.md-body{flex:1;overflow-y:auto;padding:8px 0 20px;}
+.md-section-title{font-family:var(--font-en);font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;padding:14px 20px 6px;}
+.md-link{display:flex;align-items:center;gap:12px;padding:12px 20px;color:#1e1b4b;text-decoration:none;font-size:0.9rem;font-weight:500;transition:background 0.15s;}
+.md-link:hover{background:#f8f9ff;}
+.md-link .ic{font-size:1.1rem;width:22px;text-align:center;flex-shrink:0;}
+
+/* গ্রন্থকাননের মতো লাইন-স্টাইল SVG আইকন */
+.eico{width:18px;height:18px;flex-shrink:0;display:block;}
+
+/* ══════════════════════════════════════
+   CART DRAWER + WISHLIST ড্রয়ার
+══════════════════════════════════════ */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:9000;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.cart-overlay.open{opacity:1;pointer-events:all;}
+.cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:#fff;z-index:9001;display:flex;flex-direction:column;transform:translateX(110%);transition:transform 0.35s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,0.12);}
+.cart-drawer.open{transform:translateX(0);}
+.cd-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #e5e7eb;flex-shrink:0;}
+.cd-head h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:800;color:#1e1b4b;display:flex;align-items:center;gap:8px;}
+.cd-head-badge{background:#eef2ff;color:#c9982c;font-size:0.72rem;font-weight:700;padding:2px 8px;border-radius:12px;font-family:'Sora',sans-serif;}
+.cd-close{width:34px;height:34px;border-radius:9px;background:#f3f4f6;border:none;cursor:pointer;color:#6b7280;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.cd-close:hover{background:#e5e7eb;color:#1e1b4b;}
+.cd-items{flex:1;overflow-y:auto;padding:12px 0;scrollbar-width:thin;scrollbar-color:#e5e7eb transparent;}
+.cd-items::-webkit-scrollbar{width:4px;}
+.cd-items::-webkit-scrollbar-track{background:transparent;}
+.cd-items::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:4px;}
+.cd-item{display:flex;gap:12px;padding:12px 20px;border-bottom:1px solid #f3f4f6;transition:background 0.15s;}
+.cd-item:hover{background:#fafafa;}
+.cd-item-img{width:56px;height:74px;border-radius:10px;background:linear-gradient(135deg,#f8f9ff,#eef2ff);border:1px solid #e5e7eb;overflow:hidden;flex-shrink:0;}
+.cd-item-img img{width:100%;height:100%;object-fit:contain;padding:4px;}
+.cd-item-info{flex:1;min-width:0;}
+.cd-item-name{font-size:0.85rem;font-weight:600;color:#1e1b4b;line-height:1.35;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.cd-item-bottom{display:flex;align-items:center;justify-content:space-between;}
+.cd-item-price{font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:800;color:#c9982c;}
+.cd-item-qty{display:flex;align-items:center;gap:0;border:1.5px solid #e5e7eb;border-radius:8px;overflow:hidden;}
+.cd-qbtn{width:26px;height:26px;background:none;border:none;color:#6b7280;font-size:0.9rem;cursor:pointer;transition:background 0.15s;font-family:'Sora',sans-serif;}
+.cd-qbtn:hover{background:#f3f4f6;}
+.cd-qval{width:26px;text-align:center;font-family:'Sora',sans-serif;font-size:0.82rem;font-weight:700;color:#1e1b4b;}
+.cd-item-del{width:26px;height:26px;border-radius:7px;background:none;border:none;color:#d1d5db;cursor:pointer;transition:all 0.15s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.cd-item-del:hover{background:#fef2f2;color:#ef4444;}
+.wl-item{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid #f3f4f6;}
+.wl-item:hover{background:#fafafa;}
+.wl-img{width:50px;height:66px;border-radius:10px;background:linear-gradient(135deg,#f8f9ff,#eef2ff);border:1px solid #e5e7eb;overflow:hidden;flex-shrink:0;display:block;}
+.wl-img img{width:100%;height:100%;object-fit:contain;padding:4px;}
+.wl-info{flex:1;min-width:0;}
+.wl-name{font-size:0.85rem;font-weight:600;color:#1e1b4b;text-decoration:none;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.wl-price{font-family:var(--font-en);font-size:0.85rem;font-weight:800;color:var(--indigo2);margin-top:3px;}
+.wl-cart-btn,.wl-del-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;flex-shrink:0;transition:all 0.15s;display:flex;align-items:center;justify-content:center;color:#6b7280;}
+.wl-cart-btn:hover{background:var(--indigo);border-color:var(--indigo);color:#fff;}
+.wl-del-btn:hover{background:#fef2f2;border-color:#fecaca;color:#ef4444;}
+.cd-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;color:#9ca3af;}
+.cd-empty-icon{margin-bottom:14px;opacity:0.5;display:flex;justify-content:center;}
+.cd-empty h4{font-size:0.95rem;font-weight:700;color:#6b7280;margin-bottom:6px;}
+.cd-empty p{font-size:0.85rem;}
+.cd-footer{padding:16px 20px;border-top:1px solid #e5e7eb;flex-shrink:0;background:#fff;}
+.cd-totals{margin-bottom:14px;}
+.cd-total-row{display:flex;justify-content:space-between;font-size:0.85rem;color:#6b7280;padding:3px 0;}
+.cd-total-row.grand{font-size:1rem;font-weight:800;color:#1e1b4b;padding-top:8px;margin-top:4px;border-top:1.5px solid #e5e7eb;}
+.cd-total-row.grand span:last-child{color:#c9982c;}
+.cd-checkout-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#c9982c,#a5790f);color:white;font-family:'Hind Siliguri',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(201,152,44,0.3);transition:transform 0.2s,box-shadow 0.2s;text-decoration:none;}
+.cd-checkout-btn:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(201,152,44,0.4);}
+.cd-continue{display:block;text-align:center;margin-top:10px;font-size:0.82rem;color:#c9982c;cursor:pointer;background:none;border:none;font-family:'Hind Siliguri',sans-serif;width:100%;padding:4px;}
+.cd-continue:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ══ মেনু ড্রয়ার ══ -->
+<div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+<div class="menu-drawer" id="menuDrawer">
+  <div class="md-head">
+    <img src="logo-transparent.png" alt="OurDedication" style="height:36px;width:auto;display:block;">
+    <button class="md-close" onclick="closeMenu()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="md-body">
+    <a class="md-link" href="index.html"><span class="ic">🏠</span> হোম</a>
+    <a class="md-link" href="filter.html"><span class="ic">📚</span> সব পণ্য</a>
+    <a class="md-link" href="filter.html?sort=bestsell"><span class="ic">⭐</span> বেস্টসেলার</a>
+    <a class="md-link" href="filter.html?sort=discount"><span class="ic">💥</span> ছাড়ে আছে</a>
+    <div class="md-section-title" id="mdCatTitle" style="display:none;">বিভাগ</div>
+    <div id="mdCatLinks"></div>
+    <div class="md-section-title">আমার অ্যাকাউন্ট</div>
+    <a class="md-link" href="track.html"><span class="ic">📦</span> অর্ডার ট্র্যাক করুন</a>
+    <a class="md-link" href="checkout.html"><span class="ic">🛒</span> কার্ট দেখুন</a>
+    <div class="md-section-title">সহায়তা</div>
+    <a class="md-link" href="about.html"><span class="ic">ℹ️</span> আমাদের সম্পর্কে</a>
+    <a class="md-link" href="contact.html"><span class="ic">📞</span> যোগাযোগ</a>
+    <a class="md-link" href="faq.html"><span class="ic">❓</span> সচরাচর জিজ্ঞাসা</a>
+    <a class="md-link" href="delivery.html"><span class="ic">🚚</span> ডেলিভারি তথ্য</a>
+    <a class="md-link" href="return.html"><span class="ic">↩️</span> রিটার্ন নীতি</a>
+  </div>
+</div>
+
+<!-- ══ CART ড্রয়ার ══ -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cd-head">
+    <h3>আমার কার্ট <span class="cd-head-badge" id="cdBadge">0 টি</span></h3>
+    <button class="cd-close" onclick="closeCart()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="cd-items" id="cdItems"></div>
+  <div class="cd-footer" id="cdFooter" style="display:none;">
+    <div class="cd-totals">
+      <div class="cd-total-row"><span>পণ্যের মোট</span><span id="cdSub">৳০</span></div>
+      <div class="cd-total-row"><span>ডেলিভারি</span><span>পরে নির্ধারিত হবে</span></div>
+      <div class="cd-total-row grand"><span>সর্বমোট</span><span id="cdTotal">৳০</span></div>
+    </div>
+    <a class="cd-checkout-btn" href="checkout.html">✅ চেকআউট করুন →</a>
+    <button class="cd-continue" onclick="closeCart()">← কেনাকাটা চালিয়ে যান</button>
+  </div>
+</div>
+
+<!-- ══ WISHLIST ড্রয়ার ══ -->
+<div class="cart-overlay" id="wishOverlay" onclick="closeWishlist()"></div>
+<div class="cart-drawer" id="wishDrawer">
+  <div class="cd-head">
+    <h3>পছন্দের তালিকা <span class="cd-head-badge" id="wlBadge">0 টি</span></h3>
+    <button class="cd-close" onclick="closeWishlist()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="cd-items" id="wishItems" style="padding:0;"></div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav class="nav">
+  <div class="nav-wrap">
+    <a href="index.html" class="back-btn" title="পেছনে">←</a>
+    <div class="nav-title" id="navTitle">পণ্যের বিবরণ</div>
+    <a href="index.html" class="logo-small"><img src="logo-transparent.png" alt="OurDedication" style="height:30px;width:auto;display:block;"></a>
+    <div class="nav-actions">
+      <button class="nav-btn" id="wishNavBtn" title="পছন্দ" onclick="openWishlist()">
+        <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <span class="nav-badge" id="wishCount" style="display:none;">0</span>
+      </button>
+      <button class="nav-btn" title="কার্ট" onclick="openCart()">
+        <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="nav-badge" id="cartBadge">0</span>
+      </button>
+      <button class="nav-btn" onclick="openMenu()" title="মেনু"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ BREADCRUMB ══ -->
+<div class="breadcrumb" id="breadcrumb">
+  <a href="index.html">🏠 হোম</a>
+  <span class="bc-sep">›</span>
+  <a href="filter.html">বই</a>
+  <span class="bc-sep">›</span>
+  <span class="bc-cur" id="bcTitle">লোড হচ্ছে...</span>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main" id="mainContent">
+  <!-- LEFT -->
+  <div class="img-panel">
+    <div class="img-main">
+      <div class="img-badge-wrap" id="imgBadges"></div>
+      <button class="img-wish" id="wishBtn" onclick="toggleWish()">♡</button>
+      <img id="mainImg" src="" alt="বইয়ের কভার" onerror="this.src='https://via.placeholder.com/300x400/0d1530/6366f1?text=📚'">
+    </div>
+    <div class="img-thumbs" id="thumbsRow"></div>
+    <div class="share-row">
+      <button class="share-btn" onclick="shareBook()">🔗 শেয়ার করুন</button>
+      <button class="share-btn" onclick="copyLink()">📋 লিংক কপি</button>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="info-panel">
+    <div class="info-top-badges" id="topBadges"></div>
+    <div class="book-title" id="bookTitle">লোড হচ্ছে...</div>
+    <div class="book-author"><span>লেখক:</span> <span id="bookAuthor">—</span></div>
+
+    <div class="rating-row">
+      <span class="stars" id="ratingStars">☆☆☆☆☆</span>
+      <span class="rating-num" id="ratingNum">নতুন</span>
+      <span class="rating-count" id="ratingCount">(এখনো কোনো রিভিউ নেই)</span>
+      <span class="rating-div"></span>
+      <span class="stock-tag stock-in" id="stockTag">✓ স্টকে আছে</span>
+    </div>
+
+    <!-- price -->
+    <div class="price-block">
+      <div>
+        <div class="price-main" id="priceMain"><span class="cur">৳</span><span id="priceVal">—</span></div>
+        <div id="oldPriceWrap" style="display:none;margin-top:4px;">
+          <span class="price-old" id="priceOld"></span>
+          <span class="price-disc" id="priceDisc"></span>
+        </div>
+      </div>
+      <div class="price-save" id="priceSave" style="display:none;"></div>
+    </div>
+
+    <!-- Info table (বিস্তারিত তথ্য — কভারের পরেই, অ্যাকশন বাটনের আগে) -->
+    <div class="info-table" id="infoTable"></div>
+
+    <!-- স্টক না থাকলে দেখানো হবে -->
+    <div class="notify-box" id="notifyBox">
+      <p>😔 দুঃখিত, এই পণ্যটি এই মুহূর্তে স্টকে নেই</p>
+      <div class="notify-row">
+        <input type="tel" id="notifyPhone" placeholder="মোবাইল নম্বর (০১XXXXXXXXX)" maxlength="11">
+        <button onclick="notifyStock()">স্টকে এলে জানান</button>
+      </div>
+    </div>
+
+    <!-- qty + cart (একদম শেষে) -->
+    <div class="action-row" id="actionRow">
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <div class="qty-val" id="qtyVal">১</div>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+      <button class="btn-cart" id="cartBtn" onclick="addToCart()">🛒 কার্টে যোগ করুন</button>
+    </div>
+
+    <button class="btn-buy" id="buyBtn" onclick="buyNow()">⚡ এখনই কিনুন</button>
+
+    <a class="btn-wa" id="waBtn" href="#" target="_blank">
+      💬 WhatsApp-এ অর্ডার করুন
+    </a>
+  </div>
+</div>
+
+<!-- ══ TABS ══ -->
+<div class="tabs-section">
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('desc',this)">বিবরণ</button>
+    <button class="tab-btn" onclick="switchTab('reviews',this)">রিভিউ (<span id="reviewTabCount">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab('delivery',this)">ডেলিভারি তথ্য</button>
+  </div>
+
+  <div class="tab-content active" id="tab-desc">
+    <div class="desc-card" id="descText">
+      <p>এই বইটি সম্পর্কে বিস্তারিত বিবরণ শীঘ্রই যোগ করা হবে।</p>
+      <p>লেখকের অনন্য লেখনীশৈলী এবং গভীর জ্ঞানের সমন্বয়ে রচিত এই বইটি পাঠকদের মনে গভীর প্রভাব ফেলবে। ইসলামিক দৃষ্টিকোণ থেকে জীবনের নানা দিক তুলে ধরা হয়েছে এই বইয়ে।</p>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-reviews">
+    <div class="review-form">
+      <h4>✍️ আপনার রিভিউ লিখুন</h4>
+      <div class="rf-stars" id="rfStars" data-rating="0">
+        <span data-v="1">☆</span><span data-v="2">☆</span><span data-v="3">☆</span><span data-v="4">☆</span><span data-v="5">☆</span>
+      </div>
+      <input type="text" id="rfName" placeholder="আপনার নাম" maxlength="60">
+      <textarea id="rfComment" placeholder="বইটি সম্পর্কে আপনার মতামত লিখুন..." rows="3" maxlength="2000"></textarea>
+      <button onclick="submitReview()">রিভিউ জমা দিন</button>
+    </div>
+    <div class="reviews-wrap" id="reviewsWrap">
+      <div class="reviews-empty">লোড হচ্ছে...</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-delivery">
+    <div class="desc-card">
+      <p><strong style="color:var(--indigo2);">🚚 ডেলিভারি চার্জ:</strong></p>
+      <p>• ঢাকার ভেতরে: ৩০-৮০ টাকা (২-৩ কার্যদিবস)</p>
+      <p>• ঢাকার বাইরে: ৮০-১৫০ টাকা (৩-৫ কার্যদিবস)</p>
+      <br>
+      <p><strong style="color:var(--amber2);">💰 পেমেন্ট পদ্ধতি:</strong></p>
+      <p>• ক্যাশ অন ডেলিভারি (COD)</p>
+      <p>• বিকাশ / নগদ / রকেট</p>
+      <br>
+      <p><strong style="color:var(--green);">↩️ রিটার্ন পলিসি:</strong></p>
+      <p>• ৭ দিনের মধ্যে ক্ষতিগ্রস্ত পণ্য ফেরত দেওয়া যাবে</p>
+      <p>• WhatsApp এ ছবি পাঠিয়ে রিটার্ন রিকোয়েস্ট করুন</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RELATED BOOKS ══ -->
+<div class="related-section">
+  <div class="rel-title">আরও দেখুন — <span>একই লেখকের বই</span></div>
+  <div class="rel-grid" id="relatedGrid"></div>
+</div>
+
+<!-- ══ সম্প্রতি দেখেছেন ══ -->
+<div class="related-section" id="recentSection" style="display:none;">
+  <div class="rel-title">🕒 সম্প্রতি <span>দেখেছেন</span></div>
+  <div class="rel-grid" id="recentGrid"></div>
+</div>
+
+<!-- ══ BOTTOM NAV ══ -->
+<nav class="bottom-nav">
+  <button class="bn-item" onclick="location.href='index.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>হোম</button>
+  <button class="bn-item" onclick="location.href='filter.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>খুঁজুন</button>
+  <button class="bn-item" onclick="toggleWish()"><span class="bn-icon" id="bnWish"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>পছন্দ</button>
+  <button class="bn-item" onclick="openCart()"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>কার্ট</button>
+  <button class="bn-item" onclick="buyNow()"><span class="bn-icon">⚡</span>কিনুন</button>
+</nav>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- Firebase SDK + config (ধাপ ০ শেষ না হওয়া পর্যন্ত এগুলো নিষ্ক্রিয় থাকবে) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<!-- Meta Pixel (siteConfig/metaPixelId থেকে অ্যাডমিন প্যানেলে সেট করলে চালু হবে) -->
+<script>
+(function(){
+  if(!window.OD_DB_URL) return;
+  fetch(window.OD_DB_URL.replace(/\/$/,'') + '/siteConfig/metaPixelId.json')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(id){
+      if(!id || !/^\d{5,20}$/.test(id)) return;
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', id);
+      fbq('track', 'PageView');
+    }).catch(function(){});
+})();
+</script>
+<!-- বইয়ের ডেটা: book.js (মূল তালিকা) + books-live.js (অ্যাডমিন থেকে সেভ করা পরিবর্তন লাইভ দেখায়) -->
+<script src="book.js"></script>
+<script src="books-live.js"></script>
+<script>
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let currentBook = null;
+let qty = 1;
+let wished = false;
+/* কিছু ব্রাউজার/মোডে localStorage বন্ধ থাকতে পারে — তখনও যেন সাইট ক্র্যাশ না করে */
+function odGet(k, fb){ try{ const v = localStorage.getItem(k); return v!==null ? JSON.parse(v) : fb; }catch(e){ return fb; } }
+function odSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+const cart = odGet('od_cart2', []);
+let wishlist = odGet('od_wishlist', []);
+
+/* ══════════════════════════════════════
+   LOAD BOOK FROM URL PARAM
+══════════════════════════════════════ */
+function getParam(key){
+  return new URLSearchParams(location.search).get(key);
+}
+
+function init(){
+  const bid = getParam('id') || (books.length ? books[0].bid : null);
+  if(!bid){ document.getElementById('mainContent').innerHTML = '<p style="padding:40px;color:var(--muted);">পণ্য পাওয়া যায়নি।</p>'; return; }
+  const book = books.find(b => b.bid === bid);
+  if(!book){ document.getElementById('mainContent').innerHTML = '<p style="padding:40px;color:var(--muted);">পণ্য পাওয়া যায়নি।</p>'; return; }
+  currentBook = book;
+  renderBook(book);
+  renderRelated(book);
+  trackRecentlyViewed(book.bid);
+  renderRecentlyViewed(book.bid);
+  updateCartBadge();
+  updateWishBadge();
+  syncWishState();
+  loadStock(book.bid);
+  loadReviews(book.bid);
+  initStarPicker();
+  buildMenuCats();
+}
+
+/* ══════════════════════════════════════
+   মেনু ড্রয়ার
+══════════════════════════════════════ */
+function openMenu(){
+  document.getElementById('menuDrawer').classList.add('open');
+  document.getElementById('menuOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu(){
+  document.getElementById('menuDrawer').classList.remove('open');
+  document.getElementById('menuOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function buildMenuCats(){
+  const mdCatLinks = document.getElementById('mdCatLinks');
+  const mdCatTitle = document.getElementById('mdCatTitle');
+  if(!mdCatLinks || typeof books === 'undefined') return;
+  const subcats = [...new Set(books.map(b=>b.subcat).filter(Boolean))].slice(0,8);
+  if(subcats.length){
+    mdCatTitle.style.display = 'block';
+    mdCatLinks.innerHTML = subcats.map(s =>
+      `<a class="md-link" href="filter.html?subcat=${encodeURIComponent(s)}"><span class="ic">📖</span> ${s}</a>`
+    ).join('');
+  }
+}
+
+/* ══════════════════════════════════════
+   RENDER
+══════════════════════════════════════ */
+function renderBook(b){
+  // nav & breadcrumb
+  document.title = b.name + ' — OurDedication';
+  document.getElementById('navTitle').textContent = b.name;
+  document.getElementById('bcTitle').textContent = b.name;
+
+  // SEO — প্রতিটা বইয়ের জন্য আলাদা মেটা ডেসক্রিপশন/OG ট্যাগ
+  const seoDesc = `${b.name}${b.author ? ' — ' + b.author : ''} — ৳${b.price} — OurDedication-এ অর্ডার করুন, সারাদেশে হোম ডেলিভারি ও ক্যাশ অন ডেলিভারি সুবিধা।`;
+  const pageUrl = `https://ourdedication.com/product.html?id=${encodeURIComponent(b.bid)}`;
+  document.getElementById('metaDesc').setAttribute('content', seoDesc);
+  document.getElementById('metaCanonical').setAttribute('href', pageUrl);
+  document.getElementById('metaOgTitle').setAttribute('content', b.name + ' — OurDedication');
+  document.getElementById('metaOgDesc').setAttribute('content', seoDesc);
+  document.getElementById('metaOgUrl').setAttribute('content', pageUrl);
+  if(b.img && /^https?:\/\//.test(b.img)) document.getElementById('metaOgImage').setAttribute('content', b.img);
+
+  // image
+  const img = document.getElementById('mainImg');
+  img.src = b.img || 'https://via.placeholder.com/300x400/0d1530/6366f1?text=📚';
+  img.alt = b.name;
+
+  // thumbs — show 1 thumb (cover) + color variants as placeholders
+  const thumbsRow = document.getElementById('thumbsRow');
+  thumbsRow.innerHTML = `
+    <div class="thumb active" onclick="setImg('${b.img}',this)">
+      <img src="${b.img}" alt="" onerror="this.src='https://via.placeholder.com/60x76/0d1530/6366f1?text=📚'">
+    </div>`;
+
+  // badges (image)
+  const isBestseller = b.tags && b.tags.includes('Best Selling');
+  let badges = '';
+  if(isBestseller) badges += '<span class="img-badge ib-hot">🔥 Bestseller</span>';
+  if(b.original_price && b.original_price > b.price) badges += '<span class="img-badge ib-sale">💥 ছাড়</span>';
+  document.getElementById('imgBadges').innerHTML = badges;
+
+  // top badges
+  let topB = '';
+  if(b.cat)    topB += `<span class="it-badge itb-cat">${b.cat}</span>`;
+  if(b.subcat) topB += `<span class="it-badge itb-sub">${b.subcat}</span>`;
+  if(isBestseller) topB += `<span class="it-badge itb-bs">⭐ Bestseller</span>`;
+  document.getElementById('topBadges').innerHTML = topB;
+
+  // title & author
+  document.getElementById('bookTitle').textContent = b.name;
+  document.getElementById('bookAuthor').textContent = b.author || 'অজানা';
+
+  // price
+  document.getElementById('priceVal').textContent = b.price.toLocaleString('bn-BD');
+  if(b.original_price && b.original_price > b.price){
+    const disc = Math.round((1 - b.price/b.original_price)*100);
+    const save = b.original_price - b.price;
+    document.getElementById('oldPriceWrap').style.display = 'block';
+    document.getElementById('priceOld').textContent = '৳' + b.original_price.toLocaleString('bn-BD');
+    document.getElementById('priceDisc').textContent = disc + '% ছাড়';
+    document.getElementById('priceSave').style.display = 'block';
+    document.getElementById('priceSave').textContent = '৳' + save.toLocaleString('bn-BD') + ' সাশ্রয়!';
+  }
+
+  // whatsapp
+  const waMsg = encodeURIComponent(`আস-সালামু আলাইকুম! আমি এই বইটি অর্ডার করতে চাই:\n📚 ${b.name}\n✍️ ${b.author}\n💰 মূল্য: ৳${b.price}\n\nদয়া করে অর্ডার প্রক্রিয়া সম্পর্কে জানান।`);
+  document.getElementById('waBtn').href = `https://wa.me/8801842970565?text=${waMsg}`;
+
+  // info table (লেখক/প্রকাশনী/বিষয়ে ক্লিক করলে filter.html-এ সেই অনুযায়ী বই দেখাবে)
+  const rows = [
+    ['লেখক', b.author || '—', b.author ? `filter.html?author=${encodeURIComponent(b.author)}` : null],
+    ['প্রকাশনী', b.pub || '—', b.pub ? `filter.html?pub=${encodeURIComponent(b.pub)}` : null],
+    ['পৃষ্ঠা সংখ্যা', b.pages || '—', null],
+    ['বাঁধাই', b.cover || '—', null],
+    ['বিভাগ', b.cat || '—', null],
+    ['বিষয়', b.subject || '—', b.subject ? `filter.html?subject=${encodeURIComponent(b.subject)}` : null],
+  ].filter(r => r[1] && r[1] !== '—');
+
+  document.getElementById('infoTable').innerHTML = rows.map(([k,v,href]) =>
+    `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">${href ? `<a class="info-val-link" href="${href}">${v}</a>` : v}</span></div>`
+  ).join('');
+
+  // desc
+  if(b.desc){
+    document.getElementById('descText').innerHTML = `<p>${b.desc}</p>`;
+  }
+}
+
+/* ══════════════════════════════════════
+   RELATED
+══════════════════════════════════════ */
+function renderRelated(b){
+  const related = books.filter(x => x.bid !== b.bid && x.author === b.author).slice(0,4);
+  if(!related.length) return;
+  document.getElementById('relatedGrid').innerHTML = related.map(r => `
+    <a class="rel-card" href="product.html?id=${r.bid}">
+      <div class="rel-img">
+        <img src="${r.img}" alt="${r.name}" onerror="this.src='https://via.placeholder.com/120x160/0d1530/6366f1?text=📚'">
+      </div>
+      <div class="rel-body">
+        <div class="rel-name">${r.name}</div>
+        <div class="rel-author">${r.author}</div>
+        <div class="rel-price"><span class="cur">৳</span>${r.price.toLocaleString('bn-BD')}</div>
+        ${r.original_price > r.price ? `<div class="rel-old">৳${r.original_price.toLocaleString('bn-BD')}</div>` : ''}
+      </div>
+    </a>`).join('');
+}
+
+/* ══════════════════════════════════════
+   সম্প্রতি দেখেছেন (localStorage-ভিত্তিক, কোনো ব্যাকএন্ড লাগে না)
+══════════════════════════════════════ */
+function trackRecentlyViewed(bid){
+  let list = odGet('od_recently_viewed', []);
+  list = list.filter(x => x !== bid);
+  list.unshift(bid);
+  odSet('od_recently_viewed', list.slice(0, 20));
+}
+function renderRecentlyViewed(currentBid){
+  const list = odGet('od_recently_viewed', []).filter(bid => bid !== currentBid);
+  const recent = list.map(bid => books.find(b => b.bid === bid)).filter(Boolean).slice(0, 4);
+  if(!recent.length) return;
+  document.getElementById('recentGrid').innerHTML = recent.map(r => `
+    <a class="rel-card" href="product.html?id=${r.bid}">
+      <div class="rel-img">
+        <img src="${r.img}" alt="${r.name}" onerror="this.src='https://via.placeholder.com/120x160/0d1530/6366f1?text=📚'">
+      </div>
+      <div class="rel-body">
+        <div class="rel-name">${r.name}</div>
+        <div class="rel-author">${r.author||''}</div>
+        <div class="rel-price"><span class="cur">৳</span>${r.price.toLocaleString('bn-BD')}</div>
+        ${r.original_price > r.price ? `<div class="rel-old">৳${r.original_price.toLocaleString('bn-BD')}</div>` : ''}
+      </div>
+    </a>`).join('');
+  document.getElementById('recentSection').style.display = 'block';
+}
+
+/* ══════════════════════════════════════
+   CART
+══════════════════════════════════════ */
+function addToCart(){
+  if(!currentBook) return;
+  if(window.isOutOfStock){ showToast('এই পণ্যটি এই মুহূর্তে স্টকে নেই'); return; }
+  const existing = cart.find(i => i.bid === currentBook.bid);
+  if(existing){ existing.qty += qty; }
+  else { cart.push({bid: currentBook.bid, qty}); }
+  odSet('od_cart2', cart);
+  updateCartBadge();
+  const btn = document.getElementById('cartBtn');
+  btn.classList.add('added');
+  btn.textContent = '✓ কার্টে যোগ হয়েছে';
+  setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = '🛒 কার্টে যোগ করুন'; }, 2200);
+  showToast('কার্টে যোগ হয়েছে! 🛒');
+}
+function buyNow(){
+  if(window.isOutOfStock){ showToast('এই পণ্যটি এই মুহূর্তে স্টকে নেই'); return; }
+  addToCart();
+  setTimeout(() => location.href = 'checkout.html', 400);
+}
+
+/* ══════════════════════════════════════
+   STOCK (Firebase stock/{bid} — false মানে স্টক নেই)
+══════════════════════════════════════ */
+function loadStock(bid){
+  if(typeof db === 'undefined') return;
+  db.ref('stock/' + bid).get().then(snap => {
+    const out = snap.exists() && snap.val() === false;
+    window.isOutOfStock = out;
+    const tag = document.getElementById('stockTag');
+    document.getElementById('notifyBox').classList.toggle('show', out);
+    document.getElementById('actionRow').style.display = out ? 'none' : '';
+    document.getElementById('buyBtn').style.display = out ? 'none' : '';
+    if(out){ tag.textContent = '✕ স্টকে নেই'; tag.className = 'stock-tag stock-out'; }
+    else { tag.textContent = '✓ স্টকে আছে'; tag.className = 'stock-tag stock-in'; }
+  }).catch(() => {});
+}
+
+async function notifyStock(){
+  const phone = document.getElementById('notifyPhone').value.trim();
+  if(!/^01[3-9][0-9]{8}$/.test(phone)){ showToast('সঠিক মোবাইল নম্বর দিন'); return; }
+  if(!currentBook || typeof db === 'undefined') return;
+  try{
+    await db.ref('stockNotify/' + currentBook.bid + '/' + phone).set({
+      phone, bookName: currentBook.name, requestedAt: Date.now()
+    });
+    showToast('ধন্যবাদ! স্টকে এলে আপনাকে জানানো হবে');
+    document.getElementById('notifyPhone').value = '';
+  }catch(e){
+    showToast('অনুরোধ পাঠানো যায়নি, আবার চেষ্টা করুন');
+  }
+}
+
+/* ══════════════════════════════════════
+   REVIEWS (Firebase reviews/{bid})
+══════════════════════════════════════ */
+let rfRating = 0;
+function initStarPicker(){
+  document.querySelectorAll('#rfStars span').forEach(s => {
+    s.onclick = () => {
+      rfRating = Number(s.dataset.v);
+      document.getElementById('rfStars').dataset.rating = rfRating;
+      document.querySelectorAll('#rfStars span').forEach(x => {
+        x.classList.toggle('on', Number(x.dataset.v) <= rfRating);
+        x.textContent = Number(x.dataset.v) <= rfRating ? '★' : '☆';
+      });
+    };
+  });
+}
+
+function timeAgoBn(ts){
+  const diff = Date.now() - ts;
+  const day = 86400000;
+  if(diff < 3600000) return 'কিছুক্ষণ আগে';
+  if(diff < day) return Math.floor(diff/3600000) + ' ঘণ্টা আগে';
+  if(diff < day*30) return Math.floor(diff/day) + ' দিন আগে';
+  return new Date(ts).toLocaleDateString('bn-BD');
+}
+
+function loadReviews(bid){
+  if(typeof db === 'undefined'){ document.getElementById('reviewsWrap').innerHTML = '<div class="reviews-empty">এখনো Firebase সংযোগ দেওয়া হয়নি</div>'; return; }
+  db.ref('reviews/' + bid).get().then(snap => {
+    const val = snap.val();
+    const list = val ? Object.keys(val).map(k => ({key:k, ...val[k]})) : [];
+    list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+
+    document.getElementById('reviewTabCount').textContent = list.length.toLocaleString('bn-BD');
+    if(!list.length){
+      document.getElementById('ratingNum').textContent = 'নতুন';
+      document.getElementById('ratingCount').textContent = '(এখনো কোনো রিভিউ নেই)';
+      document.getElementById('ratingStars').textContent = '☆☆☆☆☆';
+      document.getElementById('reviewsWrap').innerHTML = '<div class="reviews-empty">এখনো কোনো রিভিউ নেই — প্রথম রিভিউটি আপনি লিখুন! ✍️</div>';
+      return;
+    }
+
+    const avg = list.reduce((s,r) => s + (r.rating||0), 0) / list.length;
+    document.getElementById('ratingNum').textContent = avg.toFixed(1);
+    document.getElementById('ratingCount').textContent = `(${list.length.toLocaleString('bn-BD')} টি রিভিউ)`;
+    document.getElementById('ratingStars').textContent = '★'.repeat(Math.round(avg)) + '☆'.repeat(5-Math.round(avg));
+
+    const colors = ['#c9982c,#a5790f','#d9a52c,#8a6510','#10b981,#059669','#ef4444,#b91c1c','#0ea5e9,#0369a1'];
+    document.getElementById('reviewsWrap').innerHTML = list.slice(0,30).map((r,i) => `
+      <div class="review-card">
+        <div class="rv-head">
+          <div class="rv-avatar" style="background:linear-gradient(135deg,${colors[i%colors.length]})">${(r.name||'?').trim()[0]||'?'}</div>
+          <div>
+            <div class="rv-name">${escapeHTML(r.name||'অজ্ঞাত')}</div>
+            <div class="rv-date">${r.createdAt ? timeAgoBn(r.createdAt) : ''}</div>
+          </div>
+        </div>
+        <div class="rv-stars">${'★'.repeat(r.rating||0)}${'☆'.repeat(5-(r.rating||0))}</div>
+        <p class="rv-text">${escapeHTML(r.comment||'')}</p>
+      </div>`).join('');
+  }).catch(() => {
+    document.getElementById('reviewsWrap').innerHTML = '<div class="reviews-empty">রিভিউ লোড করা যায়নি</div>';
+  });
+}
+
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function submitReview(){
+  const name = document.getElementById('rfName').value.trim();
+  const comment = document.getElementById('rfComment').value.trim();
+  if(!name){ showToast('নাম লিখুন'); return; }
+  if(!rfRating){ showToast('রেটিং দিন (তারকা ক্লিক করুন)'); return; }
+  if(!comment){ showToast('মতামত লিখুন'); return; }
+  if(!currentBook || typeof db === 'undefined'){ showToast('এখনো Firebase সংযোগ দেওয়া হয়নি'); return; }
+  try{
+    await db.ref('reviews/' + currentBook.bid).push().set({
+      name, comment, rating: rfRating, helpful: 0, createdAt: Date.now()
+    });
+    document.getElementById('rfName').value = '';
+    document.getElementById('rfComment').value = '';
+    rfRating = 0;
+    document.getElementById('rfStars').dataset.rating = 0;
+    document.querySelectorAll('#rfStars span').forEach(x => { x.classList.remove('on'); x.textContent = '☆'; });
+    showToast('ধন্যবাদ! আপনার রিভিউ জমা হয়েছে');
+    loadReviews(currentBook.bid);
+  }catch(e){
+    showToast('রিভিউ জমা দেওয়া যায়নি, আবার চেষ্টা করুন');
+  }
+}
+function updateCartBadge(){
+  const total = odGet('od_cart2', []).reduce((s,i) => s + (i.qty||1), 0);
+  document.getElementById('cartBadge').textContent = total;
+}
+
+/* ══════════════════════════════════════
+   QTY
+══════════════════════════════════════ */
+function changeQty(d){
+  qty = Math.max(1, qty + d);
+  document.getElementById('qtyVal').textContent = qty.toLocaleString('bn-BD');
+}
+
+/* ══════════════════════════════════════
+   WISHLIST
+══════════════════════════════════════ */
+function syncWishState(){
+  if(!currentBook) return;
+  wished = wishlist.includes(currentBook.bid);
+  const wb = document.getElementById('wishBtn');
+  const bw = document.getElementById('bnWish');
+  if(wb){ wb.textContent = wished ? '❤️' : '♡'; wb.classList.toggle('active', wished); }
+  if(bw) bw.classList.toggle('has-wish', wished);
+}
+function toggleWish(){
+  if(!currentBook) return;
+  const idx = wishlist.indexOf(currentBook.bid);
+  if(idx >= 0) wishlist.splice(idx,1); else wishlist.push(currentBook.bid);
+  odSet('od_wishlist', wishlist);
+  syncWishState();
+  updateWishBadge();
+  showToast(wished ? 'পছন্দে যোগ হয়েছে ❤️' : 'পছন্দ থেকে সরানো হয়েছে');
+  if(document.getElementById('wishDrawer').classList.contains('open')) renderWishDrawer();
+}
+function updateWishBadge(){
+  const n = wishlist.length;
+  const badge = document.getElementById('wishCount');
+  if(badge){ badge.textContent = n; badge.style.display = n ? 'flex' : 'none'; }
+}
+
+/* ══ CART ড্রয়ার ══ */
+function openCart(){
+  renderCartDrawer();
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart(){
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function renderCartDrawer(){
+  const liveCart = odGet('od_cart2', []);
+  const itemsEl = document.getElementById('cdItems');
+  const footerEl = document.getElementById('cdFooter');
+  document.getElementById('cdBadge').textContent = liveCart.reduce((s,i)=>s+(i.qty||1),0) + ' টি';
+  if(!liveCart.length){
+    itemsEl.innerHTML = `<div class="cd-empty">
+      <div class="cd-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:56px;height:56px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+      <h4>কার্ট খালি আছে</h4><p>পণ্য বেছে কার্টে যোগ করুন</p></div>`;
+    footerEl.style.display = 'none';
+    return;
+  }
+  let sub = 0;
+  itemsEl.innerHTML = liveCart.map(item => {
+    const b = books.find(x => x.bid === item.bid);
+    if(!b) return '';
+    const q = item.qty||1;
+    sub += b.price*q;
+    const img = b.img || '';
+    return `<div class="cd-item">
+      <div class="cd-item-img"><img src="${img}" alt="${b.name}" onerror="this.src='https://via.placeholder.com/56x74/eef2ff/6366f1?text=📚'"></div>
+      <div class="cd-item-info">
+        <div class="cd-item-name">${b.name}</div>
+        <div class="cd-item-bottom">
+          <div class="cd-item-price">৳${b.price.toLocaleString('bn-BD')}</div>
+          <div class="cd-item-qty">
+            <button class="cd-qbtn" onclick="cdChangeQty('${b.bid}',-1)">−</button>
+            <div class="cd-qval">${q}</div>
+            <button class="cd-qbtn" onclick="cdChangeQty('${b.bid}',1)">+</button>
+          </div>
+        </div>
+      </div>
+      <button class="cd-item-del" onclick="cdRemoveItem('${b.bid}')" title="সরান"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>`;
+  }).join('');
+  document.getElementById('cdSub').textContent = '৳' + sub.toLocaleString('bn-BD');
+  document.getElementById('cdTotal').textContent = '৳' + sub.toLocaleString('bn-BD');
+  footerEl.style.display = 'block';
+}
+function cdChangeQty(bid, d){
+  const c = odGet('od_cart2', []);
+  const item = c.find(i => i.bid === bid);
+  if(!item) return;
+  item.qty = Math.max(1, (item.qty||1) + d);
+  odSet('od_cart2', c);
+  renderCartDrawer();
+  updateCartBadge();
+}
+function cdRemoveItem(bid){
+  let c = odGet('od_cart2', []);
+  c = c.filter(i => i.bid !== bid);
+  odSet('od_cart2', c);
+  renderCartDrawer();
+  updateCartBadge();
+}
+
+/* ══ WISHLIST ড্রয়ার ══ */
+function openWishlist(){
+  renderWishDrawer();
+  document.getElementById('wishDrawer').classList.add('open');
+  document.getElementById('wishOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeWishlist(){
+  document.getElementById('wishDrawer').classList.remove('open');
+  document.getElementById('wishOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function renderWishDrawer(){
+  const wrap = document.getElementById('wishItems');
+  document.getElementById('wlBadge').textContent = wishlist.length + ' টি';
+  if(!wishlist.length){
+    wrap.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--muted);">💔 পছন্দের তালিকা খালি</div>';
+    return;
+  }
+  wrap.innerHTML = wishlist.map(bid => {
+    const b = books.find(x => x.bid === bid);
+    if(!b) return '';
+    const img = b.img || '';
+    return `<div class="wl-item">
+      <a href="product.html?id=${b.bid}" class="wl-img"><img src="${img}" alt="${b.name}" onerror="this.src='https://via.placeholder.com/50x66/eef2ff/6366f1?text=📚'"></a>
+      <div class="wl-info">
+        <a href="product.html?id=${b.bid}" class="wl-name">${b.name}</a>
+        <div class="wl-price">৳${b.price.toLocaleString('bn-BD')}</div>
+      </div>
+      <button class="wl-cart-btn" onclick="wishAddCart('${b.bid}')" title="কার্টে যোগ করুন"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      <button class="wl-del-btn" onclick="wishRemove('${b.bid}')" title="সরান"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>`;
+  }).join('');
+}
+function wishRemove(bid){
+  wishlist = wishlist.filter(x => x !== bid);
+  odSet('od_wishlist', wishlist);
+  updateWishBadge();
+  syncWishState();
+  renderWishDrawer();
+}
+function wishAddCart(bid){
+  const c = odGet('od_cart2', []);
+  if(!c.find(i=>i.bid===bid)) c.push({bid, qty:1});
+  odSet('od_cart2', c);
+  updateCartBadge();
+  showToast('কার্টে যোগ হয়েছে! 🛒');
+}
+
+/* ══════════════════════════════════════
+   IMAGE THUMB
+══════════════════════════════════════ */
+function setImg(src, el){
+  document.getElementById('mainImg').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ══════════════════════════════════════
+   TABS
+══════════════════════════════════════ */
+function switchTab(id, btn){
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══════════════════════════════════════
+   SHARE
+══════════════════════════════════════ */
+function shareBook(){
+  if(navigator.share && currentBook){
+    navigator.share({title: currentBook.name, text: `${currentBook.name} — ৳${currentBook.price}`, url: location.href});
+  } else { copyLink(); }
+}
+function copyLink(){
+  navigator.clipboard.writeText(location.href).then(() => showToast('লিংক কপি হয়েছে! 📋'));
+}
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+function showToast(msg){
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast-item';
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(() => t.remove(), 2400);
+}
+
+/* ══ INIT ══ */
+init();
+</script>
+</body>
+</html>

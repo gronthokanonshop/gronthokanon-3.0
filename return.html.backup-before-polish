@@ -2,16 +2,7 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0" id="viewportMeta">
-<script>
-(function(){
-  try{
-    if(localStorage.getItem('od_view_mode') === 'desktop'){
-      document.getElementById('viewportMeta').setAttribute('content','width=1280');
-    }
-  }catch(e){}
-})();
-</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>রিটার্ন ও এক্সচেঞ্জ নীতি — OurDedication</title>
 <meta name="description" content="OurDedication-এর রিটার্ন ও এক্সচেঞ্জ নীতি — ক্ষতিগ্রস্ত বা ভুল পণ্য পেলে কীভাবে ফেরত দেবেন তা জানুন।">
 <link rel="canonical" href="https://ourdedication.com/return.html">
@@ -67,7 +58,7 @@ body{font-family:var(--font-bn);background:var(--navy);color:#1e1b4b;overflow-x:
 .nav-btn:hover{filter:brightness(1.15);}
 .nav-badge{position:absolute;top:-5px;right:-5px;background:linear-gradient(135deg,var(--amber),var(--indigo2));color:#fff;font-size:9px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--font-en);}
 .ham{display:none;}
-@media(max-width:700px){.nav-search{display:none;}.ham{display:flex;}}
+@media(max-width:700px){.nav-search{display:none;}.ham{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:4px;border:none;background:none;}.ham span{display:block;width:22px;height:2px;background:#6b7280;border-radius:2px;}}
 @media(max-width:600px){.nav-wrap{padding:0 12px;height:54px;gap:8px;}.logo-name{font-size:0.88rem;}.logo-icon{width:32px;height:32px;}.nav-search{flex:1;min-width:0;}.nav-search input{font-size:0.82rem;padding:7px 10px;}.nav-search button{padding:7px 10px;}.nav-btn{width:32px;height:32px;font-size:0.9rem;}}
 
 /* ══ BOTTOM NAV (copied from index.html) ══ */
@@ -106,21 +97,7 @@ body{font-family:var(--font-bn);background:var(--navy);color:#1e1b4b;overflow-x:
 .contact-mini{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
 @media(max-width:600px){.contact-mini{grid-template-columns:1fr;}}
 .contact-mini a,.contact-mini span{display:flex;align-items:center;gap:8px;font-size:0.88rem;color:#374151;text-decoration:none;background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;}
-.contact-mini a:hover{border-color:var(--border-i);}.eico{width:18px;height:18px;flex-shrink:0;display:block;}
-.nav-search button .eico{width:19px;height:19px;}
-.bn-icon .eico{width:21px;height:21px;}
-/* ══ FOOTER ══ */
-.site-footer{background:#0d1535;color:#c7d2fe;padding:32px 20px 20px;margin-top:12px;}
-.footer-wrap{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:24px;}
-@media(max-width:700px){.footer-wrap{grid-template-columns:1fr;gap:20px;text-align:center;}}
-.footer-brand .logo-name{color:#fff;}
-.footer-brand p{font-size:0.82rem;color:#9ca8d8;margin-top:8px;line-height:1.6;}
-.footer-col h4{font-family:var(--font-en);font-size:0.85rem;font-weight:700;color:#fff;margin-bottom:10px;}
-.footer-col a{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:#9ca8d8;text-decoration:none;margin-bottom:9px;transition:color 0.2s;}
-@media(max-width:700px){.footer-col a{justify-content:center;}}
-.fico{width:16px;height:16px;flex-shrink:0;}
-.footer-col a:hover{color:var(--amber);}
-.footer-bottom{max-width:1200px;margin:20px auto 0;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.75rem;color:#7d89bd;text-align:center;}
+.contact-mini a:hover{border-color:var(--border-i);}
 </style>
 </head>
 <body>
@@ -132,15 +109,15 @@ body{font-family:var(--font-bn);background:var(--navy);color:#1e1b4b;overflow-x:
     </a>
     <div class="nav-search">
       <input type="text" id="searchInp" placeholder="পণ্য খুঁজুন... Search products" onkeydown="if(event.key==='Enter') doSearch()">
-      <button onclick="doSearch()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      <button onclick="doSearch()">🔍</button>
     </div>
     <div class="nav-actions">
-      <a href="#" class="nav-btn" title="wishlist"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></a>
+      <a href="#" class="nav-btn" title="wishlist">♡</a>
       <a href="checkout.html" class="nav-btn" id="cartNavBtn" title="cart">
-        <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        🛒
         <span class="nav-badge" id="cartCount">0</span>
       </a>
-      <button class="nav-btn ham" id="hamBtn" onclick="toggleMenu()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <button class="nav-btn ham" id="hamBtn" onclick="toggleMenu()">☰</button>
     </div>
   </div>
 </nav>
@@ -189,38 +166,12 @@ body{font-family:var(--font-bn);background:var(--navy);color:#1e1b4b;overflow-x:
   </div>
 </div>
 
-<footer class="site-footer">
-  <div class="footer-wrap">
-    <div class="footer-brand">
-      <img src="ourdedication10.jpeg" alt="OurDedication" loading="lazy" style="height:64px;width:147px;display:block;object-fit:cover;object-position:50% 50%;">
-      <p>ইসলামিক ও সাধারণ বইয়ের অনলাইন দোকান — সারাদেশে হোম ডেলিভারি, ক্যাশ অন ডেলিভারি সুবিধা সহ।</p>
-    </div>
-    <div class="footer-col">
-      <h4>সহায়তা</h4>
-      <a href="about.html">আমাদের সম্পর্কে</a>
-      <a href="contact.html">যোগাযোগ</a>
-      <a href="faq.html">সচরাচর জিজ্ঞাসা</a>
-      <a href="delivery.html">ডেলিভারি তথ্য</a>
-      <a href="return.html">রিটার্ন নীতি</a>
-    </div>
-    <div class="footer-col">
-      <h4>যোগাযোগ</h4>
-      <a href="tel:01842970565"><svg class="fico" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.25 1.01l-2.2 2.21z"/></svg> 01842970565</a>
-      <a href="mailto:sajidurr317@gmail.com"><svg class="fico" viewBox="0 0 24 24" fill="currentColor"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5zm2.2.5 7.8 6.2L19.8 6z"/></svg> sajidurr317@gmail.com</a>
-      <a href="https://wa.me/8801842970565" target="_blank"><svg class="fico" viewBox="0 0 32 32" fill="currentColor"><path d="M16.001 2.667c-7.363 0-13.333 5.97-13.333 13.333 0 2.353.615 4.56 1.69 6.475L2.667 29.333l7.03-1.844a13.26 13.26 0 0 0 6.304 1.605h.006c7.362 0 13.332-5.97 13.332-13.333S23.363 2.667 16.001 2.667zm7.82 18.836c-.334.94-1.652 1.72-2.702 1.945-.719.152-1.658.273-4.818-1.035-3.926-1.626-6.453-5.615-6.65-5.876-.19-.262-1.594-2.121-1.594-4.046 0-1.925.997-2.868 1.353-3.262.334-.367.728-.459.97-.459.243 0 .486.002.699.013.224.011.525-.085.822.626.303.724 1.03 2.5 1.12 2.682.09.182.15.397.03.639-.12.242-.18.393-.36.605-.18.212-.379.474-.542.636-.18.181-.368.378-.158.741.211.363.94 1.55 2.017 2.51 1.386 1.238 2.555 1.622 2.917 1.803.363.182.575.152.788-.09.212-.243.91-1.06 1.152-1.424.242-.363.485-.302.818-.181.333.121 2.122.999 2.485 1.182.363.181.605.272.696.424.09.151.09.878-.243 1.816z"/></svg> WhatsApp-এ মেসেজ দিন</a>
-      <a href="https://www.facebook.com/Sajidbookshop" target="_blank"><svg class="fico" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"/></svg> ফেসবুক পেজ</a>
-      <a href="https://www.tiktok.com/@sajidurrahman9804" target="_blank"><svg class="fico" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3.2v13.5a2.7 2.7 0 1 1-2.7-2.7c.24 0 .47.02.7.07V9.6a6 6 0 1 0 5.2 5.95V8.83a7.7 7.7 0 0 0 4.5 1.44V6.98A4.28 4.28 0 0 1 16.5 2z"/></svg> টিকটক</a>
-    </div>
-  </div>
-  <div class="footer-bottom">© <span id="fyear"></span> OurDedication — সর্বস্বত্ব সংরক্ষিত &nbsp;·&nbsp; <a href="javascript:void(0)" id="viewModeToggle" onclick="toggleViewMode()" style="color:#9ca8d8;text-decoration:underline;">ডেস্কটপ ভার্সন দেখুন</a></div>
-</footer>
-
 <nav class="bottom-nav">
-  <button class="bn-item" onclick="location.href='index.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>হোম</button>
-  <button class="bn-item" onclick="location.href='#'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>পছন্দ</button>
-  <button class="bn-item" onclick="location.href='checkout.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></span>কার্ট<span class="bn-badge" id="bnCart">0</span></button>
-  <button class="bn-item" onclick="location.href='track.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></svg></span>অর্ডার</button>
-  <button class="bn-item" onclick="location.href='account.html'"><span class="bn-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg></span>অ্যাকাউন্ট</button>
+  <button class="bn-item" onclick="location.href='index.html'"><span class="bn-icon">🏠</span>হোম</button>
+  <button class="bn-item" onclick="location.href='#'"><span class="bn-icon">♡</span>পছন্দ</button>
+  <button class="bn-item" onclick="location.href='checkout.html'"><span class="bn-icon">🛒</span>কার্ট<span class="bn-badge" id="bnCart">0</span></button>
+  <button class="bn-item" onclick="location.href='track.html'"><span class="bn-icon">📦</span>অর্ডার</button>
+  <button class="bn-item" onclick="location.href='account.html'"><span class="bn-icon">👤</span>অ্যাকাউন্ট</button>
 </nav>
 
 <a href="https://wa.me/8801842970565" class="wa-float" target="_blank" title="WhatsApp">💬</a>
@@ -249,21 +200,6 @@ function updateCartBadge(){
   if(bn) bn.textContent = c;
 }
 updateCartBadge();
-const fy = document.getElementById('fyear'); if(fy) fy.textContent = new Date().getFullYear().toLocaleString('bn-BD');
-
-/* ডেস্কটপ/মোবাইল ভার্সন টগল */
-function toggleViewMode(){
-  let cur; try{ cur = localStorage.getItem('od_view_mode'); }catch(e){ cur = null; }
-  const next = cur === 'desktop' ? 'mobile' : 'desktop';
-  try{ localStorage.setItem('od_view_mode', next); }catch(e){}
-  location.reload();
-}
-(function(){
-  const link = document.getElementById('viewModeToggle');
-  if(!link) return;
-  let cur; try{ cur = localStorage.getItem('od_view_mode'); }catch(e){ cur = null; }
-  link.textContent = cur === 'desktop' ? '📱 মোবাইল ভার্সন দেখুন' : '🖥️ ডেস্কটপ ভার্সন দেখুন';
-})();
 </script>
 </body>
 </html>
