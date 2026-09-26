@@ -1121,7 +1121,7 @@ function renderHomeCatChips(){
         subs=subs.slice(0,4);
         var usedImg={};
         var inCat=function(b){ return b&&(b.cat===name||(Array.isArray(b.cats)&&b.cats.indexOf(name)>-1)); };
-        var realImg=function(b){ return b&&b.img&&/^https?:\/\//.test(b.img)&&!usedImg[b.img]&&!(window.gkIsHiddenBook&&gkIsHiddenBook(b)); };
+        var realImg=function(b){ return b&&b.img&&/^https?:\/\//.test(b.img)&&!/placeholder/i.test(b.img)&&!usedImg[b.img]&&!(window.gkIsHiddenBook&&gkIsHiddenBook(b)); };
         var tilesHtml=subs.map(function(s){
             var label=(s&&s.label||'').toString();
             var bk=gkBookByBid(s&&s.bid);
