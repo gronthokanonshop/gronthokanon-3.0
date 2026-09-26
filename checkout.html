@@ -241,6 +241,9 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 
 @media(max-width:768px){
   .nav-links{display:none;}
+  .hamburger{display:none !important;}  /* মেনুতে শুধু হোম/চেকআউট ছিল — পেছনে যাওয়ার বোতামই যথেষ্ট; এটা পেজকে ফোনের চেয়ে চওড়া করে দিত */
+  .nav-container{padding:0 12px;}
+  .nav-top{gap:8px;}
   .hamburger{display:block;}
   .footer-container{gap:20px;}
   .container{padding:0 12px;}
@@ -255,6 +258,171 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 }
 
 .eico { display:inline-block; width:1em; height:1em; vertical-align:-0.15em; flex-shrink:0; }
+
+/* ═══════════════════════════════════════════════════════════════
+   প্রিমিয়াম চেহারা (২০২৬-০৯) — গাঢ় সবুজ পট্টির বদলে উজ্জ্বল সাদা কার্ড,
+   গোল কোণা, সাদা ঘর, হালকা পটভূমি। শুধু দিনের মোডে রঙ বদলায়; রাতের মোড আগের মতো।
+   পুরো অংশটা মুছে দিলে আগের চেহারা ফিরবে।
+═══════════════════════════════════════════════════════════════ */
+:root{--radius:18px;}
+html:not([data-theme="dark"]){--bg-body:#f4f6f5;--border:#e6eaee;--text-muted:#64748b;}
+html:not([data-theme="dark"]) body{background:linear-gradient(180deg,#eefaf4 0,#f4f6f5 320px);}
+.ni{border-radius:12px;}
+
+/* ধাপ (কার্ট → শিপিং → সম্পন্ন) */
+.progress-wrap{padding:16px 20px 18px;}
+.p-label{font-size:12px;}
+
+/* ভরসার সারি */
+.trust-bar{border-radius:18px;padding:16px 10px;box-shadow:0 1px 3px rgba(16,24,40,.06);}
+.trust-icon{width:40px;height:40px;margin:0 auto 6px;border-radius:12px;background:#ecfdf5;color:#059669;display:flex;align-items:center;justify-content:center;font-size:19px;}
+.trust-label{font-size:11.5px;color:#334155;}
+
+.page-title{font-size:26px;letter-spacing:.2px;}
+
+/* কার্ড — সাদা, নরম ছায়া; মাথা হালকা */
+.card{border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.05);}
+.card-header{background:transparent;padding:18px 22px 12px;border-bottom:1px solid var(--border);}
+.ch-num{width:30px;height:30px;font-size:13px;background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 3px 10px rgba(5,150,105,.3);}
+.ch-title{font-size:16.5px;font-weight:800;color:var(--text-main);}
+.ch-sub{color:var(--text-muted);font-size:12px;}
+.card-body{padding:20px 22px 22px;}
+
+/* ঘর — সাদা, বড়, পরিষ্কার */
+.field label{font-size:13px;color:#334155;letter-spacing:0;}
+html:not([data-theme="dark"]) input,html:not([data-theme="dark"]) select,html:not([data-theme="dark"]) textarea{background:#fff;}
+input,select,textarea{border-radius:12px;padding:13px 15px;font-size:15px;}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(16,185,129,.14);}
+.input-icon{color:#94a3b8;}
+.ss-list{border-radius:12px;}
+
+.os-img-real{width:52px;height:70px;border-radius:9px;box-shadow:0 3px 8px rgba(0,0,0,.1);border:none;}
+.os-name{font-size:14px;}
+.os-price{color:#0f172a;font-weight:800;}
+.total-row{font-size:14.5px;}
+/* সর্বমোট — গাঢ় বক্সের বদলে উজ্জ্বল হালকা সবুজ */
+html:not([data-theme="dark"]) .total-row.grand{background:#ecfdf5;color:#065f46;border:1.5px solid #a7f3d0;}
+html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;font-size:21px;}
+.total-row.grand{border-radius:14px;padding:16px 18px;font-size:17px;align-items:center;}
+
+/* পেমেন্ট */
+.pay-opt{border-radius:14px;padding:14px 15px;}
+.pay-logo{border-radius:12px;}
+
+/* অর্ডার নিশ্চিত বোতাম — উজ্জ্বল */
+.confirm-btn{background:linear-gradient(135deg,#10b981 0%,#059669 55%,#047857 100%);border-radius:16px;padding:17px;font-size:17px;box-shadow:0 10px 26px rgba(5,150,105,.38);letter-spacing:.2px;}
+.confirm-btn:hover{box-shadow:0 14px 32px rgba(5,150,105,.45);}
+
+/* কুপন */
+.coupon-btn{background:linear-gradient(135deg,#10b981,#059669);border-radius:12px;padding:12px 18px;}
+
+/* ── নতুন সাজানো (শিরোনাম + ধাপ, নিরাপদ চেকআউট, সারসংক্ষেপে − +) ── */
+.nav-icons{order:3;margin-left:10px;}
+.hamburger{order:4;}
+.co-nav-extra{order:2;margin-left:auto;display:flex;align-items:center;gap:10px;}
+.co-secure{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:30px;background:#ecfdf5;color:#047857;font-size:13px;font-weight:700;}
+.co-secure svg{width:15px;height:15px;}
+.co-help{display:inline-flex;align-items:center;gap:9px;padding:6px 16px 6px 8px;border-radius:30px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text-main);text-decoration:none;font-family:inherit;font-size:14px;font-weight:800;line-height:1.15;cursor:pointer;transition:border-color .15s;}
+.co-help:hover{border-color:#10b981;}
+.co-help svg{width:30px;height:30px;padding:7px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);color:#fff;flex-shrink:0;}
+.co-help small{display:block;font-size:10.5px;font-weight:600;color:var(--text-muted);}
+[data-theme="dark"] .co-secure{background:rgba(16,185,129,.12);color:#6ee7b7;}
+
+.co-hero{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:30px 0 6px;}
+.co-title{font-size:32px;font-weight:800;color:var(--text-main);line-height:1.1;letter-spacing:.2px;}
+.co-back{display:inline-block;margin-top:6px;font-size:13.5px;font-weight:600;color:var(--text-muted);text-decoration:none;}
+.co-back:hover{color:#059669;}
+.co-steps{flex:0 1 440px;margin:0;}
+.co-steps .p-circle{width:32px;height:32px;font-size:13px;}
+.co-steps .p-label{font-size:12px;white-space:nowrap;}
+
+.checkout-grid{margin-top:22px;}
+.co-pay-card{margin-top:20px;}
+.two-col{margin-bottom:14px;}  /* দুই-ঘরের সারির পরে পরের ঘর গায়ে লেগে যেত (বিশেষ করে ফোনে) */
+
+/* সারসংক্ষেপ */
+.co-items{padding:6px 20px 0;}
+.co-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+.co-item .os-img-real{width:58px;height:80px;}
+.co-i-info{flex:1;min-width:0;display:flex;flex-direction:column;}
+.co-i-info .os-name{line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.co-i-info .os-auth{font-size:12px;margin-top:2px;}
+.co-i-row{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:8px;}
+.co-qty{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:22px;overflow:hidden;background:var(--bg-card);}
+.co-qty button{width:30px;height:28px;border:none;background:transparent;color:#047857;font-size:17px;font-weight:700;cursor:pointer;line-height:1;}
+.co-qty button:hover{background:#ecfdf5;}
+.co-qty span{min-width:22px;text-align:center;font-size:13.5px;font-weight:800;color:var(--text-main);}
+.co-del{width:30px;height:30px;border:none;border-radius:9px;background:#fef2f2;color:#dc2626;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.co-del:hover{background:#fee2e2;}
+.co-del svg{width:15px;height:15px;}
+.co-item .os-price{margin-left:0;align-self:flex-start;font-size:15px;}
+.co-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:30px 10px;color:var(--text-muted);}
+.co-empty-ic{font-size:38px;}
+.co-empty b{font-size:15px;color:var(--text-main);}
+.co-empty a{color:#059669;font-weight:700;text-decoration:none;}
+
+.co-bottom{padding:14px 20px 20px;}
+.co-coupon{border:1.5px dashed var(--border);border-radius:14px;padding:0 14px;}
+.co-coupon[open]{padding-bottom:14px;border-color:#a7f3d0;}
+.co-coupon summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 0;font-size:14px;font-weight:700;color:#047857;}
+.co-coupon summary::-webkit-details-marker{display:none;}
+.co-coupon summary svg{width:17px;height:17px;}
+.co-coupon summary::after{content:'+';margin-left:auto;font-size:20px;font-weight:600;line-height:1;}
+.co-coupon[open] summary::after{content:'−';}
+.co-totals{margin-top:12px;}
+.co-summary .confirm-btn{margin-top:16px;}
+.co-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 16px;margin-top:14px;font-size:12px;font-weight:600;color:var(--text-muted);}
+.co-trust span{display:inline-flex;align-items:center;gap:5px;}
+.co-trust svg{width:14px;height:14px;color:#10b981;}
+[data-theme="dark"] .co-coupon summary,[data-theme="dark"] .co-qty button,[data-theme="dark"] .co-empty a{color:#6ee7b7;}
+[data-theme="dark"] .co-qty button:hover{background:rgba(16,185,129,.12);}
+[data-theme="dark"] .co-del{background:rgba(220,38,38,.15);color:#fca5a5;}
+
+@media(max-width:899px){
+  .nav-links{display:none;}
+  .hamburger{display:none !important;}  /* মেনুতে শুধু হোম/চেকআউট ছিল — পেছনে যাওয়ার বোতামই যথেষ্ট; এটা পেজকে ফোনের চেয়ে চওড়া করে দিত */
+  .nav-container{padding:0 12px;}
+  .nav-top{gap:8px;}
+  .co-secure span{display:none;}
+  .co-secure{padding:8px;}
+  .co-help{padding:4px;border:none;}
+  .co-help > span{display:none;}
+  .co-hero{flex-direction:column;align-items:stretch;gap:16px;margin-top:20px;}
+  .co-title{font-size:26px;}
+  .co-steps{flex:none;width:100%;}
+}
+
+/* ── ডেলিভারি ধরন (হোম / অফিস) ── */
+.co-sub-lbl{font-size:12.5px;font-weight:800;color:var(--text-muted);letter-spacing:.4px;margin-bottom:9px;}
+.dl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pay-opt.disabled,.pay-opt.disabled:hover{border-color:var(--border) !important;background:var(--bg-card) !important;box-shadow:none !important;}
+.pay-opt[data-pay="cod"].disabled .pay-sub{color:#dc2626;font-weight:600;}
+.dl-opt{position:relative;display:flex;align-items:center;gap:10px;padding:13px 12px;border:1.5px solid var(--border);border-radius:14px;cursor:pointer;background:var(--bg-card);transition:.15s;}
+.dl-opt:hover{border-color:#10b981;}
+.dl-opt.selected{border-color:#059669;background:#ecfdf5;box-shadow:0 0 0 3px rgba(16,185,129,.12);}
+.dl-opt.selected::after{content:'✓';position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:#059669;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(5,150,105,.35);}
+.dl-ic{width:38px;height:38px;border-radius:11px;background:#f1f5f9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dl-opt.selected .dl-ic{background:linear-gradient(135deg,#10b981,#059669);color:#fff;}
+.dl-ic svg{width:19px;height:19px;}
+.dl-txt{display:flex;flex-direction:column;min-width:0;line-height:1.3;}
+.dl-txt b{font-size:14px;color:var(--text-main);}
+.dl-txt small{font-size:12px;font-weight:700;color:#059669;margin-top:1px;}
+.dl-couriers{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.dl-courier{display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 6px;border-radius:24px;background:var(--bg-card);border:1.5px solid color-mix(in srgb,var(--c) 35%,transparent);font-size:13px;font-weight:700;color:var(--c);box-shadow:0 1px 3px color-mix(in srgb,var(--c) 18%,transparent);animation:dlPop .25s ease;}
+.dl-courier i{width:22px;height:22px;border-radius:50%;background:var(--c);color:#fff;font-style:normal;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+@keyframes dlPop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:none;}}
+[data-theme="dark"] .dl-opt.selected{background:rgba(16,185,129,.12);}
+[data-theme="dark"] .dl-ic{background:rgba(255,255,255,.07);color:#cbd5e1;}
+[data-theme="dark"] .dl-courier{color:#e2e8f0;}
+/* কুরিয়ার লোগো কার্ড */
+.dl-couriers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.dl-couriers.dl-office{grid-template-columns:1fr;}
+.dl-logo{height:52px;display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 10px;background:#fff;border:1.5px solid #d1fae5;border-radius:12px;box-shadow:0 2px 8px rgba(5,150,105,.08);animation:dlPop .25s ease;}
+.dl-logo img{max-height:100%;max-width:100%;object-fit:contain;display:block;}
+.dl-office .dl-logo{justify-content:flex-start;height:60px;}
+.dl-office .dl-logo img{height:48px;width:48px;border-radius:50%;}
+.dl-logo b{font-size:14.5px;color:#0f172a;}
+[data-theme="dark"] .dl-logo{border-color:rgba(255,255,255,.1);}
 </style>
 </head>
 <body>
@@ -272,42 +440,36 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
       </a>
       <div class="nav-links">
         <a href="index.html" class="nav-link bng">হোম</a>
-        <a href="checkout.html" class="nav-link active bng">চেকআউট</a>
       </div>
       <div class="nav-icons">
         <a href="index.html" class="ni" title="পেছনে যান">‹</a>
         <button class="ni" id="darkBtn" onclick="toggleDark()" title="ডার্ক মোড"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-        <a href="index.html" class="ni"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><div class="badge" id="cartBadge">0</div></a>
+      </div>
+      <!-- কার্ট আইকনের বদলে: নিরাপদ চেকআউট + হেল্পলাইন -->
+      <div class="co-nav-extra">
+        <span class="co-secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="bng">নিরাপদ চেকআউট</span></span>
+        <!-- নম্বর সবার সামনে না দেখিয়ে — চাপলে Contact কার্ড (WhatsApp/Messenger/কল) খোলে -->
+        <button type="button" class="co-help bng" onclick="event.stopPropagation();window.gkToggleContact&&gkToggleContact()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>সাহায্য</span></button>
       </div>
       <button class="hamburger" onclick="toggleMenu()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
     </div>
   </div>
 </nav>
 
-<!-- PROGRESS -->
-<div class="progress-wrap">
-  <div class="progress-steps">
-    <div class="p-step"><div class="p-circle done"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div><div class="p-label bng">কার্ট</div></div>
-    <div class="p-line done"></div>
-    <div class="p-step"><div class="p-circle active">২</div><div class="p-label active bng">শিপিং</div></div>
-    <div class="p-line"></div>
-    <div class="p-step"><div class="p-circle pending">৩</div><div class="p-label bng">সম্পন্ন</div></div>
-  </div>
-</div>
-
+<!-- শিরোনাম + ধাপ এক সারিতে (আগের আলাদা ধাপ-বার আর বড় ভরসার কার্ডের বদলে) -->
 <div class="container">
-
-  <!-- TRUST BAR -->
-  <div class="trust-bar">
-    <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="trust-label bng">নিরাপদ<br>পেমেন্ট</div></div>
-    <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="trust-label bng">দ্রুত<br>ডেলিভারি</div></div>
-    <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 13l3.5 3.5L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="trust-label bng">ক্যাশ অন<br>ডেলিভারি</div></div>
-    <div class="trust-item"><div class="trust-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="trust-label bng">কাস্টমার<br>সাপোর্ট</div></div>
-  </div>
-
-  <div class="page-title-wrap">
-    <h2 class="page-title bng"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> চেকআউট</h2>
-    <p class="page-sub bng">অর্ডার সম্পন্ন করতে নিচের তথ্য পূরণ করুন</p>
+  <div class="co-hero">
+    <div>
+      <h1 class="co-title bng">চেকআউট</h1>
+      <a href="index.html" class="co-back bng">← কেনাকাটায় ফিরে যান</a>
+    </div>
+    <div class="progress-steps co-steps">
+      <div class="p-step"><div class="p-circle done"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div><div class="p-label bng">কার্ট</div></div>
+      <div class="p-line done"></div>
+      <div class="p-step"><div class="p-circle active">২</div><div class="p-label active bng">তথ্য ও পেমেন্ট</div></div>
+      <div class="p-line"></div>
+      <div class="p-step"><div class="p-circle pending">৩</div><div class="p-label bng">সম্পন্ন</div></div>
+    </div>
   </div>
 
   <div class="checkout-grid">
@@ -319,12 +481,12 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
       <div class="card" style="margin-bottom:20px;">
         <div class="card-header">
           <span class="ch-num">১</span>
-          <div><div class="ch-title bng">ডেলিভারি তথ্য</div><div class="ch-sub bng">সঠিক তথ্য দিন, দ্রুত পৌঁছাবে</div></div>
+          <div><div class="ch-title bng">ডেলিভারি তথ্য</div></div>
         </div>
         <div class="card-body">
           <div id="useSavedInfoBtn" style="display:none;margin-bottom:14px;padding:11px 14px;background:#ecfdf5;border:1.5px dashed #059669;border-radius:10px;cursor:pointer;" onclick="applySavedInfo()">
             <div style="font-size:13px;font-weight:800;color:#047857;">👤 <span id="savedInfoLabel"></span></div>
-            <div style="font-size:11.5px;color:#059669;margin-top:2px;">এখানে ক্লিক করলে আগের অর্ডারের সব তথ্য এক ক্লিকে বসে যাবে</div>
+            <div style="font-size:11.5px;color:#059669;margin-top:2px;">আগের তথ্য ব্যবহার করুন →</div>
           </div>
           <div class="two-col">
             <div class="field">
@@ -353,7 +515,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
             </div>
           </div>
           <div class="field">
-            <label class="bng">সম্পূর্ণ ঠিকানা <span class="req">*</span></label>
+            <label class="bng" id="addrLabel">সম্পূর্ণ ঠিকানা <span class="req">*</span></label>
             <textarea id="custAddress" class="bng" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
           </div>
           <div class="field">
@@ -362,65 +524,41 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
           </div>
           <label class="bng" style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:2px;">
             <input type="checkbox" id="saveInfo" checked style="width:16px;height:16px;accent-color:#059669;flex-shrink:0;">
-            পরের বার দ্রুত অর্ডারের জন্য আমার তথ্য এই ডিভাইসে সেভ থাকুক
+            আমার তথ্য সেভ রাখুন
           </label>
-          <div id="prefillNotice" style="display:none;margin-top:8px;font-size:12px;color:#059669;font-weight:600;">✓ আগের অর্ডারের তথ্য বসানো হয়েছে — চাইলে বদলাতে পারবেন</div>
+          <div id="prefillNotice" style="display:none;margin-top:8px;font-size:12px;color:#059669;font-weight:600;">✓ আগের তথ্য বসানো হয়েছে</div>
         </div>
       </div>
 
-      <!-- COUPON -->
-      <div class="card">
-        <div class="card-header">
-          <span class="ch-num">২</span>
-          <div><div class="ch-title bng">কুপন কোড</div></div>
-        </div>
-        <div class="card-body">
-          <div class="coupon-row">
-            <input type="text" id="couponInput" class="bng" placeholder="কুপন কোড লিখুন">
-            <button class="coupon-btn bng" onclick="applyCoupon()">প্রয়োগ</button>
-          </div>
-          <div id="couponMsg" style="font-size:12px;font-weight:600;margin-top:8px;display:none;"></div>
-          <div id="checkoutCouponBadge" style="margin-top:10px;display:none;"></div>
-          <div id="checkoutOfferBanner" style="margin-top:6px;display:none;"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ══ ORDER COL (right on desktop) ══ -->
-    <div class="order-col">
-
-      <!-- ORDER SUMMARY -->
-      <div class="card" style="margin-bottom:20px;">
-        <div class="card-header">
-          <span class="ch-num">৩</span>
-          <div><div class="ch-title bng">অর্ডার সারসংক্ষেপ</div><div class="ch-sub bng" id="itemCountSub"></div></div>
-        </div>
-        <div style="padding:0 20px;" id="summaryItems">
-          <div class="empty-cart bng">কার্ট লোড হচ্ছে...</div>
-        </div>
-        <div style="padding:0 20px 20px;">
-          <div class="total-row bng"><span>বইয়ের দাম</span><span id="subtotalShow">৳০</span></div>
-          <div class="total-row bng"><span>ডেলিভারি চার্জ</span><span id="deliveryShow">৳৬০</span></div>
-          <div class="total-row red bng" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>)</span><span>-৳<span id="discountShow">0</span></span></div>
-          <div class="total-row grand bng"><span>সর্বমোট</span><span id="grandTotal">৳০</span></div>
-        </div>
-      </div>
 
       <!-- PAYMENT -->
-      <div class="card" style="margin-bottom:0;">
+      <div class="card co-pay-card">
         <div class="card-header">
-          <span class="ch-num">৪</span>
-          <div><div class="ch-title bng">পেমেন্ট পদ্ধতি</div><div class="ch-sub bng">আপনার পছন্দের মাধ্যম বেছে নিন</div></div>
+          <span class="ch-num">২</span>
+          <div><div class="ch-title bng">ডেলিভারি ও পেমেন্ট</div></div>
         </div>
         <div class="card-body">
+          <!-- ডেলিভারি ধরন: হোম (Steadfast/RedX/Pathao) বা অফিস (সুন্দরবন, ৳৫০) -->
+          <div class="co-sub-lbl bng">ডেলিভারি</div>
+          <div class="dl-grid">
+            <div class="dl-opt selected" onclick="setDelivType('home',this)">
+              <span class="dl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+              <span class="dl-txt"><b class="bng">হোম ডেলিভারি</b><small class="bng">৳৬০ – ৳৯০</small></span>
+            </div>
+            <div class="dl-opt" onclick="setDelivType('office',this)">
+              <span class="dl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></svg></span>
+              <span class="dl-txt"><b class="bng">অফিস ডেলিভারি</b><small class="bng">মাত্র ৳৫০</small></span>
+            </div>
+          </div>
+          <div class="dl-couriers" id="dlCouriers"></div>
+          <div class="co-sub-lbl bng" style="margin-top:18px;">পেমেন্ট</div>
           <div class="pay-grid">
-            <div class="pay-opt selected" onclick="selectPay(this,'cod')">
+            <div class="pay-opt selected" data-pay="cod" onclick="selectPay(this,'cod')">
               <input type="radio" name="payment" value="Cash on Delivery" checked>
               <div class="pay-logo cod"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M17 12h.01M7 12h.01"/></svg></div>
               <div><div class="pay-label bng">ক্যাশ অন ডেলিভারি</div><div class="pay-sub bng">বই পাওয়ার পর টাকা দিন</div></div>
             </div>
-            <div class="pay-opt" onclick="selectPay(this,'bkash')">
+            <div class="pay-opt" data-pay="bkash" onclick="selectPay(this,'bkash')">
               <input type="radio" name="payment" value="bKash">
               <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" class="pay-logo" alt="bKash">
               <div><div class="pay-label bng">বিকাশ</div><div class="pay-sub bng">আগে পাঠান, তারপর অর্ডার নিশ্চিত</div></div>
@@ -440,14 +578,53 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
             </div>
             <div class="bkash-num" onclick="copyBkash()">
               <span id="bkashNumDisplay">01408786396</span>
-              <span class="copy-hint"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v10M8 6l4-4 4 4"/><rect x="6" y="12" width="12" height="10" rx="2"/></svg> ট্যাপ করে কপি করুন</span>
+              <span class="copy-hint"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v10M8 6l4-4 4 4"/><rect x="6" y="12" width="12" height="10" rx="2"/></svg> কপি</span>
             </div>
             <input type="text" id="transactionId" class="bng" placeholder="Transaction ID (যেমন: 8AB12CD34E)" style="text-transform:uppercase;">
           </div>
         </div>
       </div>
 
-      <button class="confirm-btn bng" id="confirmBtn" onclick="confirmOrder()"><svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 13l3.5 3.5L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> অর্ডার নিশ্চিত করুন</button>
+    </div>
+
+    <!-- ══ ORDER COL (right on desktop) ══ -->
+    <div class="order-col">
+
+      <!-- ORDER SUMMARY — বই (− + সহ), কুপন, হিসাব আর অর্ডার বোতাম একসাথে -->
+      <div class="card co-summary">
+        <div class="card-header">
+          <span class="ch-num">৩</span>
+          <div><div class="ch-title bng">অর্ডার সারসংক্ষেপ</div><div class="ch-sub bng" id="itemCountSub"></div></div>
+        </div>
+        <div class="co-items" id="summaryItems">
+          <div class="empty-cart bng">কার্ট লোড হচ্ছে...</div>
+        </div>
+        <div class="co-bottom">
+          <!-- কুপন — দরকার হলে খুলে লিখবে -->
+          <details class="co-coupon" id="couponDetails">
+            <summary class="bng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>কুপন কোড আছে?</summary>
+            <div class="coupon-row">
+              <input type="text" id="couponInput" class="bng" placeholder="কুপন কোড লিখুন" enterkeyhint="done" onkeydown="if(event.key==='Enter'){event.preventDefault();applyCoupon();}">
+              <button class="coupon-btn bng" onclick="applyCoupon()">প্রয়োগ</button>
+            </div>
+            <div id="couponMsg" style="font-size:12px;font-weight:600;margin-top:8px;display:none;"></div>
+          </details>
+          <div id="checkoutCouponBadge" style="margin-top:10px;display:none;"></div>
+          <div id="checkoutOfferBanner" style="margin-top:10px;display:none;"></div>
+          <div class="co-totals">
+            <div class="total-row bng"><span>বইয়ের দাম</span><span id="subtotalShow">৳০</span></div>
+            <div class="total-row bng"><span>ডেলিভারি চার্জ</span><span id="deliveryShow">৳৬০</span></div>
+            <div class="total-row red bng" id="discountRow" style="display:none;"><span>ডিসকাউন্ট (<span id="couponCodeShow"></span>)</span><span>-৳<span id="discountShow">0</span></span></div>
+            <div class="total-row grand bng"><span>সর্বমোট</span><span id="grandTotal">৳০</span></div>
+          </div>
+          <button class="confirm-btn bng" id="confirmBtn" onclick="confirmOrder()"><svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,.25)"/><path d="M7 13l3.5 3.5L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> অর্ডার নিশ্চিত করুন</button>
+          <div class="co-trust bng">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>১০০% অরিজিনাল</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>সারাদেশে ডেলিভারি</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>হাতে পেয়ে টাকা</span>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -536,11 +713,38 @@ function couponLabelTxt(){
 }
 /* ঢাকা জেলার মধ্যে হলেও দূরবর্তী/উপশহর এলাকা — এগুলোতে ৬০ না, ৮০ টাকা চার্জ */
 const SUBURBAN_THANAS = new Set(['আশুলিয়া','ধামরাই','দোহার','হেমায়েতপুর','কেরানীগঞ্জ','সাভার','নবাবগঞ্জ']);
+/* ডেলিভারি ধরন — 'home' (বাসায়, Steadfast/RedX/Pathao) বা 'office' (সুন্দরবন কুরিয়ার অফিস থেকে নেবে, ফ্ল্যাট ৳৫০) */
+const OFFICE_DELIVERY_CHARGE = 50;
+let delivType = 'home';
 function calcDeliveryCharge(dist, thana){
+  if(delivType === 'office') return OFFICE_DELIVERY_CHARGE;
   if(dist === 'ঢাকা') return (thana && SUBURBAN_THANAS.has(thana)) ? 80 : 60;
   return 90;
 }
 let delivCharge = 60;
+/* কুরিয়ারের আসল লোগো (img/ ফোল্ডারে, ছোট করে কাটা) */
+const COURIERS = {
+  home:   [['Steadfast','img/courier-steadfast.jpg'],['RedX','img/courier-redx.png'],['Pathao','img/courier-pathao.png']],
+  office: [['সুন্দরবন কুরিয়ার','img/courier-sundarban.jpg']]
+};
+function renderCouriers(){
+  const box = document.getElementById('dlCouriers');
+  if(!box) return;
+  box.className = 'dl-couriers dl-' + delivType;
+  box.innerHTML = COURIERS[delivType].map(([n,src]) =>
+    `<span class="dl-logo" title="${n}"><img src="${src}" alt="${n}">${delivType === 'office' ? `<b class="bng">${n}</b>` : ''}</span>`).join('');
+}
+function setDelivType(type, el){
+  delivType = type;
+  document.querySelectorAll('.dl-opt').forEach(o => o.classList.toggle('selected', o === el));
+  /* অফিস ডেলিভারিতে ঠিকানার ঘরে কোন শাখা থেকে নেবে সেটা লিখবে */
+  const lbl = document.getElementById('addrLabel'), ta = document.getElementById('custAddress');
+  if(type === 'office'){ lbl.firstChild.textContent = 'সুন্দরবন কুরিয়ার শাখা '; ta.placeholder = 'যে শাখা থেকে নেবেন (যেমন: মিরপুর-১০ শাখা)'; }
+  else { lbl.firstChild.textContent = 'সম্পূর্ণ ঠিকানা '; ta.placeholder = 'বাড়ি নং, রোড, এলাকা...'; }
+  renderCouriers();
+  syncPayForDelivery();
+  updateTotal();
+}
 
 
 
@@ -722,13 +926,13 @@ function makeSearchable(sel){
   wrap.appendChild(inp); wrap.appendChild(list);
   let items = [], active = -1;
 
-  function placeholderText(){ return (sel.options[0] && !sel.options[0].value) ? sel.options[0].text.replace('বেছে নিন','লিখে খুঁজুন / বেছে নিন') : ''; }
+  function placeholderText(){ return sel.id === 'thana' ? 'থানা খুঁজুন' : 'জেলা খুঁজুন'; }
   function sync(){
     const o = sel.options[sel.selectedIndex];
     inp.value = (o && o.value) ? o.text : '';
     inp.placeholder = placeholderText();
     inp.disabled = sel.options.length <= 1;
-    if(inp.disabled) inp.placeholder = sel.id === 'thana' ? 'আগে জেলা বেছে নিন' : placeholderText();
+    if(inp.disabled) inp.placeholder = placeholderText();
   }
   function render(q){
     const nq = ssNorm(q);
@@ -786,10 +990,32 @@ function ssRefresh(){ ['district','thana'].forEach(id => { const s = document.ge
    PAYMENT
 ══════════════════════════════════ */
 function selectPay(el, type){
-  document.querySelectorAll('.pay-opt:not(.disabled)').forEach(o => o.classList.remove('selected'));
+  if(el.classList.contains('disabled')) return;   /* বন্ধ অপশন (যেমন অফিস ডেলিভারিতে ক্যাশ অন ডেলিভারি) বাছা যাবে না */
+  document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   el.querySelector('input[type="radio"]').checked = true;
   document.getElementById('bkashBox').style.display = type === 'bkash' ? 'block' : 'none';
+}
+/* সুন্দরবন কুরিয়ারে ক্যাশ অন ডেলিভারি নেই — অফিস ডেলিভারিতে COD বন্ধ করে বিকাশ বেছে দিই;
+   হোমে ফিরলে COD আবার চালু (আর আমরাই বিকাশে সরিয়েছিলাম হলে COD-তে ফেরত) */
+let codAutoOff = false;
+function syncPayForDelivery(){
+  const cod = document.querySelector('.pay-opt[data-pay="cod"]'), bk = document.querySelector('.pay-opt[data-pay="bkash"]');
+  if(!cod || !bk) return;
+  const sub = cod.querySelector('.pay-sub');
+  const trustCod = document.querySelector('.co-trust span:last-child');   /* "হাতে পেয়ে টাকা" — অফিস ডেলিভারিতে সত্যি নয় */
+  if(trustCod) trustCod.style.display = delivType === 'office' ? 'none' : '';
+  if(delivType === 'office'){
+    const wasCod = cod.classList.contains('selected');
+    cod.classList.add('disabled'); cod.classList.remove('selected');
+    cod.querySelector('input').checked = false;
+    if(sub) sub.textContent = 'সুন্দরবন কুরিয়ারে প্রযোজ্য নয়';
+    if(wasCod || !document.querySelector('input[name="payment"]:checked')){ codAutoOff = true; selectPay(bk, 'bkash'); }
+  } else {
+    cod.classList.remove('disabled');
+    if(sub) sub.textContent = 'বই পাওয়ার পর টাকা দিন';
+    if(codAutoOff){ codAutoOff = false; selectPay(cod, 'cod'); }
+  }
 }
 function copyBkash(){
   if(navigator.clipboard && window.isSecureContext){
@@ -831,17 +1057,20 @@ function updateTotal(){
   if(coupon && cType === 'delivery') delivCharge = 0; /* ফ্রি ডেলিভারি কুপন */
   else if(coupon && cType === 'delivery_fixed') delivCharge = cValue; /* নির্দিষ্ট ডেলিভারি চার্জ কুপন */
   const disc = calcCouponDisc(sub);
-  const total = sub - disc + delivCharge;
-  document.getElementById('subtotalShow').innerText = '৳' + sub;
-  document.getElementById('deliveryShow').innerText = (coupon && cType === 'delivery') ? '৳0 (ফ্রি! 🎉)' : '৳' + delivCharge;
+  const total = sub ? (sub - disc + delivCharge) : 0;   /* কার্ট খালি হলে শুধু ডেলিভারি চার্জ (৳৬০) দেখাত */
+  document.getElementById('subtotalShow').innerText = '৳' + coBn(sub);
+  /* হাদিয়া অফার — কার্ট ড্রয়ারের মতো চেকআউটেও দেখাই (একই GK_GIFT_THRESHOLD) */
+  const ob = document.getElementById('checkoutOfferBanner');
+  if(ob){ const gh = (sub && window.gkGiftBarHTML) ? gkGiftBarHTML(sub) : ''; ob.innerHTML = gh; ob.style.display = gh ? 'block' : 'none'; }
+  document.getElementById('deliveryShow').innerText = (coupon && cType === 'delivery') ? '৳0 (ফ্রি! 🎉)' : (sub ? '৳' + coBn(delivCharge) : '—');
   const dr = document.getElementById('discountRow');
   if(disc > 0){
-    document.getElementById('discountShow').innerText = disc;
+    document.getElementById('discountShow').innerText = coBn(disc);
     document.getElementById('couponCodeShow').innerText = coupon;
     dr.style.display = 'flex';
   } else dr.style.display = 'none';
-  document.getElementById('grandTotal').innerText = '৳' + total;
-  document.getElementById('bkashAmt').innerText = '৳' + total;
+  document.getElementById('grandTotal').innerText = '৳' + coBn(total);
+  document.getElementById('bkashAmt').innerText = '৳' + coBn(total);
 
   /* coupon badge */
   const ccb = document.getElementById('checkoutCouponBadge');
@@ -855,7 +1084,7 @@ function updateTotal(){
           <div style="font-size:12px;font-weight:800;color:#059669;letter-spacing:.5px;">${coupon} <span style="background:#059669;color:white;font-size:9px;padding:1px 7px;">সক্রিয়</span></div>
           <div style="font-size:10px;color:var(--text-muted);">${desc}</div>
         </div>
-        <button onclick="removeCoupon()" style="background:none;border:none;cursor:pointer;color:#dc2626;font-size:18px;line-height:1;padding:2px 4px;border-radius:4px;font-weight:700;" title="কুপন বাতিল করুন">✕</button>
+        <button type="button" onclick="removeCoupon()" style="flex-shrink:0;display:inline-flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #fecaca;cursor:pointer;color:#dc2626;font-family:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:20px;" title="কুপন বাতিল করুন">✕ সরান</button>
       </div>`;
     } else { ccb.style.display = 'none'; ccb.innerHTML = ''; }
   }
@@ -864,10 +1093,11 @@ function updateTotal(){
 /* ══════════════════════════════════
    RENDER SUMMARY
 ══════════════════════════════════ */
+function coBn(n){ return String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]); }
 function renderSummary(){
   const box = document.getElementById('summaryItems');
   if(!cart.length){
-    box.innerHTML = '<div class="empty-cart bng"><div style="margin-bottom:10px;font-size:40px;">📦</div><p>কার্ট খালি আছে</p></div>';
+    box.innerHTML = '<div class="co-empty bng"><div class="co-empty-ic">📦</div><b>কার্ট খালি</b><a href="index.html">বই দেখুন →</a></div>';
     document.getElementById('itemCountSub').innerText = '';
     updateTotal(); return;
   }
@@ -876,21 +1106,37 @@ function renderSummary(){
     if(g[i.name]) g[i.name].qty++;
     else g[i.name] = {price:i.price, qty:1, img:i.img||''};
   });
-  box.innerHTML = Object.entries(g).map(([name,item]) => `
-    <div class="os-item">
-      <img src="${escapeHTML(item.img)}" class="os-img-real" onerror="this.style.display='none';this.nextSibling.style.display='flex';" alt="">
-      <div class="os-img" style="display:none;">📚</div>
-      <div style="flex:1;">
-        <div class="os-name bng">${escapeHTML(name)}</div>
-        <div class="os-auth bng">৳${item.price} × ${item.qty}টি</div>
+  /* প্রতিটা বইয়ের পাশে − + আর মুছে ফেলার বোতাম — চেকআউট থেকেই পরিমাণ বদলানো যায় */
+  box.innerHTML = Object.entries(g).map(([name,item]) => {
+    const n = escapeHTML(name);
+    return `
+    <div class="co-item">
+      <img src="${escapeHTML(item.img||'book-placeholder.svg')}" class="os-img-real" onerror="this.src='book-placeholder.svg'" alt="">
+      <div class="co-i-info">
+        <div class="os-name bng">${n}</div>
+        <div class="os-auth bng">৳${coBn(item.price)} প্রতিটি</div>
+        <div class="co-i-row">
+          <div class="co-qty">
+            <button type="button" data-name="${n}" onclick="coQty(this.dataset.name,-1)" aria-label="কমান">−</button>
+            <span>${coBn(item.qty)}</span>
+            <button type="button" data-name="${n}" onclick="coQty(this.dataset.name,1)" aria-label="বাড়ান">+</button>
+          </div>
+          <button type="button" class="co-del" data-name="${n}" onclick="coQty(this.dataset.name,0)" aria-label="সরান"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
+        </div>
       </div>
-      <div class="os-price bng">৳${item.price * item.qty}</div>
-    </div>`).join('');
-  document.getElementById('itemCountSub').innerText = cart.length + 'টি বই';
+      <div class="os-price bng">৳${coBn(item.price * item.qty)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('itemCountSub').innerText = coBn(cart.length) + 'টি বই';
   updateTotal();
-  /* cart badge */
-  const cb = document.getElementById('cartBadge');
-  if(cb) cb.textContent = cart.length;
+}
+/* delta: +1 বাড়াও, -1 কমাও, 0 = বইটা পুরো সরাও */
+function coQty(name, delta){
+  if(delta === 1){ const it = cart.find(i => i.name === name); if(it) cart.push({...it}); }
+  else if(delta === -1){ for(let j = cart.length - 1; j >= 0; j--){ if(cart[j].name === name){ cart.splice(j, 1); break; } } }
+  else cart = cart.filter(i => i.name !== name);
+  localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
+  renderSummary();
 }
 
 /* ══════════════════════════════════
@@ -907,7 +1153,8 @@ function couponDiscount(code){
 function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('couponMsg');
-  if(!code){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; return; }
+  /* কুপন চালু থাকা অবস্থায় ঘর খালি করে "প্রয়োগ" চাপলে কুপন সরিয়ে দিই (আগে উল্টো "কুপন কোড লিখুন!" দেখাত, কুপন সরত না) */
+  if(!code){ if(coupon){ removeCoupon(); return; } msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; return; }
   const info = couponDiscount(code);
   if(info !== undefined){
     coupon = code; cType = info.type; cValue = info.value;
@@ -952,6 +1199,7 @@ async function confirmOrder(){
   const address  = document.getElementById('custAddress').value.trim();
   const custNote = (document.getElementById('custNote')?.value || '').trim().slice(0,500);
   const payMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
+  if(delivType === 'office' && payMethod === 'Cash on Delivery'){ isSubmitting=false; return showToast('⚠️ অফিস ডেলিভারিতে ক্যাশ অন ডেলিভারি নেই — বিকাশে পেমেন্ট করুন','#dc2626'); }
 
   if(!name)     { isSubmitting=false; return showToast('⚠️ নাম লিখুন!'); }
   if(!phone || !/^01[3-9]\d{8}$/.test(phone)){ isSubmitting=false; return showToast('⚠️ সঠিক বাংলাদেশি নম্বর দিন!'); }
@@ -1014,7 +1262,9 @@ async function confirmOrder(){
   else if(coupon && cType === 'delivery_fixed') delivCharge = cValue; /* নির্দিষ্ট ডেলিভারি চার্জ কুপন */
   const discountAmt = calcCouponDisc(sub);
   const grand = sub + delivCharge - discountAmt;
-  const fullAddr = `${thana}, ${district} — ${address}`;
+  /* অফিস ডেলিভারি হলে ঠিকানার শুরুতেই পরিষ্কার করে লিখে দিই — অ্যাডমিন/শিটে যেন চোখে পড়ে (delivery ফিল্ড ৪০ অক্ষরের বেশি নিতে পারে না) */
+  const fullAddr = ((delivType === 'office' ? '[অফিস ডেলিভারি — সুন্দরবন কুরিয়ার] ' : '') + `${thana}, ${district} — ${address}`).slice(0, 300);  /* Firebase নিয়মে ঠিকানা ৩০০ অক্ষরের বেশি হলে অর্ডারই সেভ হতো না */
+  const delivLabel = '৳' + delivCharge + (delivType === 'office' ? ' (অফিস ডেলিভারি)' : ' (হোম ডেলিভারি)');
   const orderId = 'GK-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
 
   const orderData = {
@@ -1023,7 +1273,7 @@ async function confirmOrder(){
     items: cart.map(i => ({...i, price: getVerifiedPrice(i.name)})).filter(i => i.price !== null),
     books: bookList,
     payment: payMethod + (txId ? ` (TxID: ${txId})` : ''),
-    delivery: (coupon && cType === 'delivery') ? '৳0 (ফ্রি ডেলিভারি কুপন)' : (coupon && cType === 'delivery_fixed') ? '৳' + delivCharge + ' (কুপন — নির্দিষ্ট চার্জ)' : '৳' + delivCharge,
+    delivery: (coupon && cType === 'delivery') ? '৳0 (ফ্রি ডেলিভারি কুপন)' : (coupon && cType === 'delivery_fixed') ? '৳' + delivCharge + ' (কুপন — নির্দিষ্ট চার্জ)' : delivLabel,
     total: '৳' + grand,
     discount: discountAmt,
     discountPct: discPct,
@@ -1060,7 +1310,7 @@ async function confirmOrder(){
   try{
     await fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({token:SHEET_TOKEN, name, phone, address:fullAddr, books:bookList,
-        payment:payMethod+(txId?` (TxID: ${txId})`:''), delivery:'৳'+delivCharge, total:'৳'+grand})});
+        payment:payMethod+(txId?` (TxID: ${txId})`:''), delivery:delivLabel, total:'৳'+grand})});
   }catch(e){}
 
   /* পাবলিক recent-sales ticker — আসল অর্ডার থেকে শুধু এলাকা + বই (নাম/ফোন কিছুই না) */
@@ -1301,6 +1551,7 @@ function applySavedInfo(){
    কার্টের তথ্য রেডি হওয়া মাত্র দেখাবে — চেকআউট পেজে এটা বিশেষভাবে জরুরি। */
 document.addEventListener('DOMContentLoaded', function(){
   initLocationDropdowns();
+  renderCouriers();
   makeSearchable(document.getElementById('district'));
   makeSearchable(document.getElementById('thana'));
   renderSummary(); prefillSavedInfo();

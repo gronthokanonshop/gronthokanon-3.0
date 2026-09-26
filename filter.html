@@ -103,36 +103,6 @@
         [data-theme="dark"] .hero-heading { color:#fff; }
         [data-theme="dark"] .hero-heading span { color:#6ee7b7; }
 
-        /* FILTER TABS */
-        .filter-tabs { display:flex; background:var(--nav-bg); border-top:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
-        .filter-tabs::-webkit-scrollbar { display:none; }
-        .ftab { padding:11px 18px; font-size:12.5px; font-weight:700; color:var(--text2); cursor:pointer; white-space:nowrap; border-bottom:2.5px solid transparent; transition:.2s; flex-shrink:0; }
-        .ftab:hover { color:var(--green); }
-        .ftab.active { color:var(--green); border-bottom-color:var(--green); }
-
-        /* SUB CHIPS */
-        .sub-chips { display:none; padding:10px 14px; gap:8px; overflow-x:auto; scrollbar-width:none; background:var(--card); border-bottom:1.5px solid var(--border-g); flex-wrap:nowrap; }
-        .sub-chips::-webkit-scrollbar { display:none; }
-        .sub-chips.show { display:flex; }
-        .chip { padding:6px 14px; border-radius:0; font-size:12px; font-weight:600; cursor:pointer; border:1.5px solid var(--border-g); background:var(--green-light); color:var(--green-dark); white-space:nowrap; transition:.2s; flex-shrink:0; }
-        .sub-chips:has(.pill-picker) { overflow:visible; position:relative; z-index:50; }
-        .pill-picker { position:relative; flex:1; max-width:560px; }
-        .pp-input { width:100%; padding:10px 64px 10px 36px; border:1.5px solid var(--border-g); background:var(--bg); color:var(--text); font-family:'Hind Siliguri',sans-serif; font-size:13.5px; font-weight:600; outline:none; border-radius:0; }
-        .pp-input:focus { border-color:var(--green); background:var(--card); }
-        .pill-picker.has-val .pp-input { border-color:var(--green); background:var(--green-light); color:var(--green-dark); }
-        .pp-ico { position:absolute; left:11px; top:50%; transform:translateY(-50%); width:15px; height:15px; color:var(--green); pointer-events:none; }
-        .pp-caret { position:absolute; right:0; top:0; bottom:0; width:34px; display:flex; align-items:center; justify-content:center; color:var(--green); cursor:pointer; font-size:14px; }
-        .pp-clear { display:none; position:absolute; right:32px; top:50%; transform:translateY(-50%); width:24px; height:24px; border:none; background:#dc2626; color:#fff; font-size:16px; line-height:1; cursor:pointer; border-radius:50%; }
-        .pill-picker.has-val .pp-clear { display:block; }
-        .pp-list { display:none; position:absolute; left:0; right:0; top:calc(100% + 3px); max-height:320px; overflow-y:auto; background:var(--card); border:1.5px solid var(--green); box-shadow:0 12px 30px rgba(0,0,0,.18); -webkit-overflow-scrolling:touch; }
-        .pp-list.open { display:block; }
-        .pp-opt { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; font-size:13.5px; color:var(--text); cursor:pointer; border-bottom:1px solid var(--border); }
-        .pp-opt:hover, .pp-opt.act { background:var(--green-light); }
-        .pp-opt.sel { color:var(--green); font-weight:700; }
-        .pp-opt em { font-style:normal; font-size:11px; font-weight:700; color:var(--green-dark); background:var(--green-light); padding:2px 8px; flex-shrink:0; }
-        .pp-empty { padding:14px; font-size:13px; color:var(--text2); }
-        .chip.active { background:var(--green); border-color:var(--green); color:#fff; }
-        .chip:hover:not(.active) { border-color:var(--green); color:var(--green); }
 
         /* SORT ROW */
         .sort-row { display:flex; align-items:center; justify-content:space-between; padding:9px 14px; background:var(--card); border-bottom:1px solid var(--border); }
@@ -222,62 +192,35 @@
         .float-cart:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(5,150,105,0.5); }
 
 
-        /* ── PAGE LAYOUT — ডেস্কটপে বাঁ পাশে ফিল্টার সাইডবার + ডানে গ্রিড (একসাথে ইনলাইন),
-           ৯০০px-এর নিচে সাইডবার লুকিয়ে শুধু গ্রিড, ফিল্টার বাটনে ফুলস্ক্রিন প্যানেল টগল হয় ── */
-        .page-layout { width:100%; display:grid; grid-template-columns:250px 1fr; gap:16px; align-items:start; max-width:1300px; margin:0 auto; padding:0 14px; box-sizing:border-box; }
-        @media(max-width:900px) { .page-layout { grid-template-columns:1fr; padding:0; } }
+        /* ── PAGE LAYOUT — পাশের ফিল্টার প্যানেল সরানো হয়েছে, বইয়ের গ্রিড পুরো চওড়া ── */
+        .page-layout { width:100%; max-width:1300px; margin:0 auto; box-sizing:border-box; }
         .page-right { min-width:0; }
-        /* ── FILTER BUTTON (sort-row) — ডেস্কটপে লাগে না, সাইডবার সবসময় দৃশ্যমান ── */
-        .filter-open-btn { display:flex; align-items:center; gap:5px; padding:5px 12px; border-radius:0; font-size:11.5px; font-weight:700; cursor:pointer; border:1.5px solid var(--green); background:var(--green-light); color:var(--green-dark); white-space:nowrap; font-family:'Hind Siliguri',sans-serif; transition:.2s; flex-shrink:0; }
-        .filter-open-btn:hover { background:var(--green); color:#fff; }
-        .filter-open-btn .fcount { background:var(--green); color:#fff; border-radius:50%; min-width:16px; height:16px; font-size:9.5px; display:none; align-items:center; justify-content:center; padding:0 3px; }
-        [data-theme="dark"] .filter-open-btn { background:rgba(52,211,153,0.1); }
-        .filter-open-btn .fcount.show { display:inline-flex; }
-        @media(min-width:901px) { .filter-open-btn { display:none; } }
 
-        /* ── FILTER SIDEBAR — ডেস্কটপে পেজের ভেতরেই sticky ব্লক হিসেবে সবসময় দৃশ্যমান,
-           ৯০০px-এর নিচে ফুলস্ক্রিন টগল প্যানেল (আগের বটম/সাইড-শিট ড্রয়ারের বদলে) ── */
-        .filter-overlay { display:none; }
-        .filter-drawer {
-            background:var(--card); border:1px solid var(--border); border-radius:14px;
-            display:flex; flex-direction:column; overflow:hidden;
-            position:sticky; top:14px; max-height:calc(100vh - 28px);
-        }
-        @media(max-width:900px) {
-            .filter-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1998; display:none; }
-            .filter-overlay.show { display:block; }
-            .filter-drawer {
-                display:none; position:fixed; inset:0; z-index:1999;
-                border-radius:0; border:none; max-height:none;
-            }
-            .filter-drawer.show { display:flex; }
-        }
-        .filter-drawer-close { display:none; }
-        @media(max-width:900px) { .filter-drawer-close { display:flex; } }
-        .filter-drawer-head { display:flex; align-items:center; justify-content:space-between; padding:16px 18px; background:linear-gradient(135deg,#064e3b,#059669); color:#fff; flex-shrink:0; }
-        .filter-drawer-head b { font-size:15px; font-weight:800; }
-        .filter-drawer-close { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,0.16); border:none; color:#fff; font-size:18px; cursor:pointer; align-items:center; justify-content:center; flex-shrink:0; }
-        .filter-drawer-close:hover { background:rgba(255,255,255,0.28); }
-        .filter-drawer-body { flex:1; overflow-y:auto; padding:16px 18px 10px; }
-        .filter-block { margin-bottom:22px; }
-        .filter-heading { font-size:13px; font-weight:800; color:var(--text); margin-bottom:10px; padding-bottom:6px; border-bottom:1.5px solid var(--border-g); }
-        .radio-item { display:flex; align-items:center; gap:10px; padding:7px 2px; cursor:pointer; font-size:13px; color:var(--text); }
-        .radio-item:hover { color:var(--green); }
-        .radio-dot { width:17px; height:17px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; position:relative; transition:.2s; }
-        .radio-item.active .radio-dot { border-color:var(--green); }
-        .radio-item.active .radio-dot::after { content:''; position:absolute; inset:3px; border-radius:50%; background:var(--green); }
-        .radio-item.active { color:var(--green); font-weight:700; }
-        .price-range-row { display:flex; align-items:center; gap:8px; }
-        .price-range-row input { flex:1; min-width:0; border:1.5px solid var(--border); background:var(--bg); border-radius:8px; padding:8px 10px; font-size:12.5px; color:var(--text); font-family:'Hind Siliguri',sans-serif; outline:none; transition:.2s; }
-        .price-range-row input:focus { border-color:var(--green); }
-        .price-range-row span { color:var(--text3); font-size:13px; flex-shrink:0; }
-        .filter-check { display:flex; align-items:center; gap:10px; padding:7px 2px; cursor:pointer; font-size:13px; color:var(--text); }
-        .filter-check input[type=checkbox] { width:17px; height:17px; accent-color:var(--green); cursor:pointer; flex-shrink:0; }
-        .filter-drawer-foot { padding:14px 18px; border-top:1px solid var(--border); flex-shrink:0; display:flex; gap:8px; }
-        .filter-apply-btn { flex:1; padding:11px; background:linear-gradient(135deg,#059669,#047857); color:#fff; border:none; border-radius:9px; font-weight:700; font-size:13.5px; cursor:pointer; font-family:'Hind Siliguri',sans-serif; box-shadow:0 3px 10px rgba(5,150,105,0.3); transition:.2s; }
-        .filter-apply-btn:hover { box-shadow:0 5px 16px rgba(5,150,105,0.4); }
-        .filter-reset-btn { padding:11px 14px; background:var(--bg); color:var(--text2); border:1.5px solid var(--border); border-radius:9px; font-weight:700; font-size:12.5px; cursor:pointer; font-family:'Hind Siliguri',sans-serif; }
-        .filter-reset-btn:hover { border-color:var(--green); color:var(--green); }
+        /* ── সহজ ফিল্টার (বিষয় / প্রকাশনী / লেখক / দাম) ── */
+        .qf-wrap { position:relative; z-index:40; background:var(--card); border-bottom:1px solid var(--border); }
+        .qf-bar { display:flex; gap:8px; padding:10px 14px; overflow-x:auto; scrollbar-width:none; max-width:1300px; margin:0 auto; }
+        .qf-bar::-webkit-scrollbar { display:none; }
+        .qf-btn { flex-shrink:0; display:flex; align-items:center; gap:6px; max-width:220px; padding:8px 12px 8px 14px; border:1.5px solid var(--border-g); background:var(--bg); color:var(--text); font-family:'Hind Siliguri',sans-serif; font-size:13.5px; font-weight:600; cursor:pointer; transition:.15s; }
+        .qf-btn span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .qf-btn svg { width:14px; height:14px; flex-shrink:0; color:var(--green); transition:transform .2s; }
+        .qf-btn:hover, .qf-btn.open { border-color:var(--green); }
+        .qf-btn.open svg { transform:rotate(180deg); }
+        .qf-btn.on { background:var(--green); border-color:var(--green); color:#fff; }
+        .qf-btn.on svg { color:#fff; }
+        .qf-panel { display:none; position:absolute; left:14px; right:14px; top:calc(100% - 4px); max-width:420px; background:var(--card); border:1.5px solid var(--green); box-shadow:0 14px 34px rgba(0,0,0,.18); }
+        .qf-panel.open { display:block; }
+        .qf-search { display:block; width:100%; box-sizing:border-box; padding:11px 14px; border:none; border-bottom:1px solid var(--border); background:var(--bg); color:var(--text); font-family:'Hind Siliguri',sans-serif; font-size:14px; outline:none; }
+        .qf-list { max-height:min(360px,55vh); overflow-y:auto; -webkit-overflow-scrolling:touch; }
+        .qf-opt { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:var(--text); cursor:pointer; border-bottom:1px solid var(--border); }
+        .qf-opt:hover { background:var(--green-light); }
+        .qf-opt.sel { color:var(--green); font-weight:700; }
+        .qf-opt em { font-style:normal; font-size:11.5px; font-weight:700; color:var(--green-dark); background:var(--green-light); padding:2px 8px; flex-shrink:0; }
+        .qf-any { color:var(--text2); }
+        .qf-empty { padding:14px; font-size:13px; color:var(--text2); }
+        .qf-clear { flex-shrink:0; padding:4px 10px; border:none; background:none; color:#dc2626; font-family:'Hind Siliguri',sans-serif; font-size:12.5px; font-weight:700; cursor:pointer; text-decoration:underline; }
+        [data-theme="dark"] .qf-opt em { color:#6ee7b7; }
+        .qf-x { width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; margin-left:2px; border-radius:50%; background:rgba(255,255,255,.25); font-size:16px; line-height:1; font-weight:700; }
+        .qf-x:hover { background:rgba(255,255,255,.45); }
 
         /* SCROLL TOP */
         .scroll-top { position:fixed; bottom:22px; right:16px; width:40px; height:40px; background:var(--green); color:#fff; border:none; border-radius:0; font-size:18px; cursor:pointer; box-shadow:0 4px 14px rgba(5,150,105,0.35); z-index:997; display:none; transition:.2s; }
@@ -332,6 +275,7 @@
         </div>
     </div>
 </nav>
+<div id="gkMenuBar"></div>
 
 <!-- HERO -->
 <div class="hero-strip">
@@ -339,23 +283,15 @@
     <div class="hero-heading" id="heroHeading">বই <span>খুঁজুন</span></div>
 </div>
 
-<!-- FILTER TABS -->
-<div class="filter-tabs" id="filterTabs" style="display:none">
-    <div class="ftab active" onclick="setFilterTab(this,'all')">সকল</div>
-    <div class="ftab" onclick="setFilterTab(this,'cat')">ক্যাটাগরি</div>
-    <div class="ftab" onclick="setFilterTab(this,'pub')">প্রকাশনী</div>
-    <div class="ftab" onclick="setFilterTab(this,'auth')">লেখক</div>
+<!-- সহজ ফিল্টার: বিষয় / প্রকাশনী / লেখক / দাম -->
+<div class="qf-wrap" id="qfWrap">
+    <div class="qf-bar" id="qfBar"></div>
+    <div class="qf-panel" id="qfPanel"></div>
 </div>
-<div class="sub-chips" id="subChips"></div>
 
 <!-- SORT + COUNT -->
 <div class="sort-row">
     <div style="display:flex;align-items:center;gap:8px;">
-        <div class="filter-open-btn" onclick="openFilterDrawer()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-            ফিল্টার
-            <span class="fcount" id="filterCount">0</span>
-        </div>
         <div class="sort-select-wrap">
             <select class="sort-select" id="sortSelect" onchange="sortBooks(this.value)">
                 <option value="default">🔀 ডিফল্ট</option>
@@ -377,45 +313,6 @@
 
 <!-- CONTENT -->
 <div class="page-layout">
-
-<!-- FILTER SIDEBAR (আগে ছিল slide-in ড্রয়ার — এখন পেজের ভেতরেই ইনলাইন সাইডবার, ডেস্কটপে সবসময় দৃশ্যমান) -->
-<div class="filter-overlay" id="filterOverlay" onclick="closeFilterDrawer()"></div>
-<div class="filter-drawer" id="filterDrawer">
-    <div class="filter-drawer-head">
-        <b>🔍 ফিল্টার করুন</b>
-        <button class="filter-drawer-close" onclick="closeFilterDrawer()">×</button>
-    </div>
-    <div class="filter-drawer-body">
-        <div class="filter-block">
-            <div class="filter-heading">বিভাগ (Category)</div>
-            <div id="catRadioList"></div>
-        </div>
-        <div class="filter-block" id="subcatBlock" style="display:none;">
-            <div class="filter-heading">উপ-বিভাগ (Sub-category)</div>
-            <div id="subcatRadioList"></div>
-        </div>
-        <div class="filter-block">
-            <div class="filter-heading">ট্যাগ</div>
-            <div id="tagCheckList"></div>
-        </div>
-        <div class="filter-block">
-            <div class="filter-heading">মূল্য পরিসীমা</div>
-            <div class="price-range-row">
-                <input type="number" id="priceMinInput" placeholder="সর্বনিম্ন" inputmode="numeric">
-                <span>–</span>
-                <input type="number" id="priceMaxInput" placeholder="সর্বোচ্চ" inputmode="numeric">
-            </div>
-        </div>
-        <div class="filter-block">
-            <div class="filter-heading">বিশেষ</div>
-            <label class="filter-check"><input type="checkbox" id="fltDiscount"> ছাড়যুক্ত পণ্য</label>
-        </div>
-    </div>
-    <div class="filter-drawer-foot">
-        <button class="filter-reset-btn" onclick="resetDrawerFilters()">রিসেট</button>
-        <button class="filter-apply-btn" onclick="applyDrawerFilters()">ফিল্টার প্রয়োগ করুন</button>
-    </div>
-</div>
 
 <div class="page-right">
 <div id="mainContent">
@@ -599,7 +496,6 @@ function bookMainCat(b){ return (b&&b.cat)||(b&&Array.isArray(b.cats)&&b.cats[0]
 function bookSubcat(b){ return (b&&b.subject)||''; }
 function gkFindCat(name){ return GK_CAT_TREE.find(c=>c.name===name); }
 let filtered = [], currentSort = 'default';
-let filterTab = 'all', filterPill = '';
 let currentPage = 1;
 const PAGE_SIZE = 24;
 let drawerFilters = { min: null, max: null, discount: false };
@@ -749,22 +645,50 @@ function goToPage(p) {
     document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function getList() {
+/* ═══════════════════════════════════════════════════════
+   সহজ ফিল্টার — এক সারিতে ৪টা ড্রপডাউন: বিষয় / প্রকাশনী / লেখক / দাম
+   (আগের পাশের বড় ফিল্টার প্যানেল আর ট্যাবের বদলে)।
+   অপশন আসে এই পেজে থাকা বই থেকেই — খালি অপশন কখনো দেখায় না, পাশে
+   বইয়ের সংখ্যা। প্রতিটা ড্রপডাউনের সংখ্যা বাকি বাছাইগুলো মেনে হিসাব হয়।
+═══════════════════════════════════════════════════════ */
+const QF_PRICES = [
+    { k: 'u200',  label: '৳২০০-এর নিচে',  ok: p => p < 200 },
+    { k: '200',   label: '৳২০০ – ৫০০',    ok: p => p >= 200 && p <= 500 },
+    { k: '500',   label: '৳৫০০ – ১০০০',   ok: p => p > 500 && p <= 1000 },
+    { k: '1000',  label: '৳১০০০-এর বেশি', ok: p => p > 1000 }
+];
+const QF_DEF = {
+    subj:  { label: 'বিষয়',     icon: '📂', get: b => bookSubcat(b) },
+    pub:   { label: 'প্রকাশনী', icon: '🏢', get: b => b.pub },
+    auth:  { label: 'লেখক',     icon: '✍️', get: b => b.author },
+    price: { label: 'দাম',      icon: '💰' }
+};
+const QF_KEYS = ['subj', 'pub', 'auth', 'price'];
+let qf = { subj: '', pub: '', auth: '', price: '' };
+let qfOpen = '', qfShown = [];
+
+function qfVal(b, k) { return String(QF_DEF[k].get(b) || '').trim(); }
+function qfPriceOk(b, k) { const p = QF_PRICES.find(x => x.k === k); return !p || p.ok(Number(b.price) || 0); }
+function qfLabel(k) { return k === 'price' ? (QF_PRICES.find(p => p.k === qf.price) || {}).label : qf[k]; }
+function qfMatch(b, skip) {
+    for (const k of ['subj', 'pub', 'auth']) if (k !== skip && qf[k] && qfVal(b, k) !== qf[k]) return false;
+    if (skip !== 'price' && qf.price && !qfPriceOk(b, qf.price)) return false;
+    return true;
+}
+
+/* URL-এর ক্যাটাগরি/বিষয়/ট্যাগ + সার্চ — ড্রপডাউন বাছাইয়ের আগের তালিকা */
+function baseList() {
     const q = document.getElementById('filterSearch').value.normalize('NFC').toLowerCase().trim();
     let list = !q ? [...filtered]
         : (typeof gkSearchBooks === 'function') ? gkSearchBooks(filtered, q)
         : filtered.filter(b => b.name.normalize('NFC').toLowerCase().includes(q) || (b.author||'').normalize('NFC').toLowerCase().includes(q) || (b.brand||'').normalize('NFC').toLowerCase().includes(q));
-    if (filterPill) {
-        if (filterTab === 'cat') list = list.filter(b => bookCats(b).includes(filterPill));
-        else if (filterTab === 'pub') list = list.filter(b => b.pub === filterPill);
-        else if (filterTab === 'auth') list = list.filter(b => b.author === filterPill);
-    }
     if (drawerCategory) list = list.filter(b => bookMainCat(b) === drawerCategory);
     if (drawerSubcat) list = list.filter(b => bookSubcat(b) === drawerSubcat);
     if (drawerTags.length) list = list.filter(b => drawerTags.some(t => bookTags(b).includes(t)));
-    if (drawerFilters.min !== null) list = list.filter(b => b.price >= drawerFilters.min);
-    if (drawerFilters.max !== null) list = list.filter(b => b.price <= drawerFilters.max);
-    if (drawerFilters.discount) list = list.filter(b => discPct(b) > 0);
+    return list;
+}
+function getList() {
+    const list = baseList().filter(b => qfMatch(b));
     if (currentSort === 'price-low') list.sort((a, b) => a.price - b.price);
     else if (currentSort === 'price-high') list.sort((a, b) => b.price - a.price);
     else if (currentSort === 'discount') list.sort((a, b) => discPct(b) - discPct(a));
@@ -772,87 +696,72 @@ function getList() {
     return list;
 }
 
-function setFilterTab(el, tab) {
-    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    filterTab = tab; filterPill = '';
-    currentPage = 1;
-    const sc = document.getElementById('subChips');
-    if (tab === 'all') { sc.classList.remove('show'); sc.innerHTML = ''; pillValues = []; }
-    else {
-        /* শত শত লেখক/প্রকাশনী চিপ-সারিতে খুঁজে পাওয়া যেত না — এখন সার্চসহ ড্রপডাউন,
-           প্রতিটার পাশে বইয়ের সংখ্যা, বেশি বই যার সে আগে */
-        const counts = new Map();
-        const keyOf = { cat: bookCats, pub: b => [b.pub], auth: b => [b.author] }[tab];
-        filtered.forEach(b => keyOf(b).filter(Boolean).forEach(v => counts.set(v, (counts.get(v) || 0) + 1)));
-        pillValues = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'bn'));
-        const label = { cat: 'ক্যাটাগরি', pub: 'প্রকাশনী', auth: 'লেখক' }[tab];
-        sc.innerHTML = `<div class="pill-picker" id="pillPicker">
-            <svg class="pp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="pillSearch" class="pp-input" autocomplete="off" placeholder="${label} খুঁজুন বা বেছে নিন (${pillValues.length}টি)"
-                oninput="renderPillList(this.value);openPillList()" onfocus="this.select();renderPillList(filterPill ? '' : this.value);openPillList()" onkeydown="pillKey(event)">
-            <button class="pp-clear" id="pillClear" onclick="clearPill()" title="সব দেখুন">×</button>
-            <span class="pp-caret" onclick="togglePillList()">▾</span>
-            <div class="pp-list" id="pillList"></div>
-        </div>`;
-        sc.classList.add('show');
-        renderPillList('');
-        openPillList();
-    }
-    renderBooks(getList());
+function qfOptions(k) {
+    const base = baseList().filter(b => qfMatch(b, k));
+    if (k === 'price') return QF_PRICES.map(p => [p.k, base.filter(b => p.ok(Number(b.price) || 0)).length, p.label]).filter(o => o[1] > 0);
+    const m = new Map();
+    base.forEach(b => { const v = qfVal(b, k); if (v) m.set(v, (m.get(v) || 0) + 1); });
+    return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'bn')).map(([v, n]) => [v, n, v]);
 }
-
-let pillValues = [], pillShown = [];
-function renderPillList(q) {
-    const list = document.getElementById('pillList');
-    if (!list) return;
+/* URL-ই যেটা ঠিক করে দিয়েছে (প্রকাশনীর পেজে প্রকাশনী ইত্যাদি) সেটার ড্রপডাউন লাগে না */
+function qfHidden(k) {
+    return (k === 'pub' && type === 'pub') || (k === 'auth' && type === 'author') || (k === 'subj' && type === 'subcat');
+}
+const QF_CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+function qfRenderBar() {
+    const bar = document.getElementById('qfBar');
+    if (!bar) return;
+    bar.innerHTML = QF_KEYS.map(k => {
+        if (qfHidden(k)) return '';
+        if (!qf[k] && qfOptions(k).length < 2) return '';   /* বাছার মতো কিছু নেই */
+        /* বাছাই করা থাকলে সবুজ বোতামে নামটাই দেখায়, পাশে × চাপলে বাছাই উঠে যায় */
+        if (qf[k]) return `<button type="button" class="qf-btn on${qfOpen === k ? ' open' : ''}" onclick="qfToggle('${k}')"><span>${escapeHTML(qfLabel(k))}</span><b class="qf-x" onclick="event.stopPropagation();qfSet('${k}','')" title="সরান">×</b></button>`;
+        return `<button type="button" class="qf-btn${qfOpen === k ? ' open' : ''}" onclick="qfToggle('${k}')"><span>${escapeHTML(QF_DEF[k].label)}</span>${QF_CHEV}</button>`;
+    }).join('') + (QF_KEYS.filter(k => qf[k]).length > 1 ? '<button type="button" class="qf-clear" onclick="qfClearAll()">সব মুছুন</button>' : '');
+    bar.style.display = bar.innerHTML ? '' : 'none';
+}
+function qfToggle(k) {
+    if (qfOpen === k) { qfClose(); return; }
+    qfOpen = k;
+    qfRenderBar();
+    const opts = qfOptions(k), panel = document.getElementById('qfPanel');
+    panel.innerHTML = (opts.length > 8 ? `<input type="text" class="qf-search" placeholder="${QF_DEF[k].label} খুঁজুন..." autocomplete="off" oninput="qfFillList(this.value)">` : '')
+        + '<div class="qf-list" id="qfList"></div>';
+    panel.classList.add('open');
+    qfFillList('');
+}
+function qfFillList(q) {
+    const k = qfOpen, list = document.getElementById('qfList');
+    if (!k || !list) return;
     const nq = String(q || '').normalize('NFC').toLowerCase().trim();
-    pillShown = (nq ? pillValues.filter(([v]) => v.normalize('NFC').toLowerCase().includes(nq)) : pillValues).slice(0, 300);
-    list.innerHTML = pillShown.length
-        ? pillShown.map(([v, n], i) => `<div class="pp-opt${v === filterPill ? ' sel' : ''}" data-i="${i}"><span>${escapeHTML(v)}</span><em>${toBNnum(n)}</em></div>`).join('')
-        : '<div class="pp-empty">কিছু পাওয়া যায়নি</div>';
+    const opts = qfOptions(k);
+    qfShown = (nq ? opts.filter(o => o[2].normalize('NFC').toLowerCase().includes(nq)) : opts).slice(0, 300);
+    list.innerHTML = (nq ? '' : `<div class="qf-opt qf-any${qf[k] ? '' : ' sel'}" data-i="-1"><span>সব ${QF_DEF[k].label}</span></div>`)
+        + (qfShown.length ? qfShown.map((o, i) => `<div class="qf-opt${o[0] === qf[k] ? ' sel' : ''}" data-i="${i}"><span>${escapeHTML(o[2])}</span><em>${toBNnum(o[1])}</em></div>`).join('')
+                          : '<div class="qf-empty">কিছু পাওয়া যায়নি</div>');
 }
-function toBNnum(n) { return String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]); }
-function openPillList() { const l = document.getElementById('pillList'); if (l) l.classList.add('open'); }
-function closePillList() { const l = document.getElementById('pillList'); if (l) l.classList.remove('open'); }
-function togglePillList() {
-    const l = document.getElementById('pillList');
-    if (!l) return;
-    if (l.classList.contains('open')) closePillList(); else { renderPillList(''); openPillList(); }
+function qfClose() {
+    if (!qfOpen) return;
+    qfOpen = '';
+    document.getElementById('qfPanel').classList.remove('open');
+    qfRenderBar();
 }
-function pickPill(val) {
-    filterPill = val;
-    const inp = document.getElementById('pillSearch');
-    if (inp) { inp.value = val; inp.blur(); }
-    document.getElementById('pillPicker').classList.toggle('has-val', !!val);
-    closePillList();
+function qfSet(k, v) {
+    qf[k] = v;
+    qfOpen = '';
+    document.getElementById('qfPanel').classList.remove('open');
     currentPage = 1;
+    qfRenderBar();
     renderBooks(getList());
 }
-function clearPill() { pickPill(''); renderPillList(''); openPillList(); }
-function pillKey(e) {
-    const opts = [...document.querySelectorAll('#pillList .pp-opt')];
-    let i = opts.findIndex(o => o.classList.contains('act'));
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (!opts.length) return;
-        opts.forEach(o => o.classList.remove('act'));
-        i = e.key === 'ArrowDown' ? (i + 1) % opts.length : (i - 1 + opts.length) % opts.length;
-        opts[i].classList.add('act'); opts[i].scrollIntoView({ block: 'nearest' });
-    } else if (e.key === 'Enter') {
-        e.preventDefault();
-        const pick = opts[i >= 0 ? i : 0];
-        if (pick) pickPill(pillShown[+pick.dataset.i][0]);
-    } else if (e.key === 'Escape') { closePillList(); e.target.blur(); }
-}
-document.addEventListener('mousedown', function (e) {
-    const opt = e.target.closest && e.target.closest('#pillList .pp-opt');
-    if (opt) { e.preventDefault(); pickPill(pillShown[+opt.dataset.i][0]); return; }
-    if (!e.target.closest || !e.target.closest('#pillPicker')) {
-        closePillList();
-        const inp = document.getElementById('pillSearch');
-        if (inp && document.activeElement !== inp) inp.value = filterPill;
-    }
+function qfClearAll() { qf = { subj: '', pub: '', auth: '', price: '' }; qfSet('subj', ''); }
+function toBNnum(n) { return String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]); }
+document.addEventListener('click', function (e) {
+    const opt = e.target.closest && e.target.closest('#qfPanel .qf-opt');
+    if (opt) { const i = +opt.dataset.i; qfSet(qfOpen, i < 0 ? '' : qfShown[i][0]); return; }
+    /* composedPath — বোতামে চাপলে বারটা নতুন করে আঁকা হয় (পুরনো বোতাম DOM থেকে সরে যায়),
+       তখনও যেন "বাইরে চাপা" ধরে প্যানেল বন্ধ না হয়ে যায় */
+    if (qfOpen && !e.composedPath().some(el => el.id === 'qfWrap')) qfClose();
 });
 
 function sortBooks(type) {
@@ -867,7 +776,7 @@ let __fsTimer = null;
 function searchWithin() {
     document.getElementById('searchClear').classList.toggle('show', document.getElementById('filterSearch').value.length > 0);
     clearTimeout(__fsTimer);
-    __fsTimer = setTimeout(function(){ currentPage = 1; renderBooks(getList()); }, 200);
+    __fsTimer = setTimeout(function(){ currentPage = 1; renderBooks(getList()); qfRenderBar(); }, 200);
 }
 
 function clearSearch() {
@@ -875,6 +784,7 @@ function clearSearch() {
     document.getElementById('searchClear').classList.remove('show');
     currentPage = 1;
     renderBooks(getList());
+    qfRenderBar();
 }
 
 function goToBook(idx) {
@@ -962,182 +872,38 @@ else if (type === 'pub') filtered = gkVisibleBooks(books).filter(b => b.pub === 
 else filtered = gkVisibleBooks(books);
 if (type === 'cat') { drawerCategory = value; activeCategory = value; }
 else if (type === 'subcat') {
-    drawerSubcat = value;
-    /* subcat ড্রয়ার তখনই দেখায়/টেকে যখন drawerCategory সেট থাকে —
-       সরাসরি subcat লিংকে (book.html থেকে) আসলে বইয়ের নিজের cat থেকে বিভাগ বের করে বসিয়ে দিই,
-       নাহলে buildSubcatList() ফাঁকা drawerCategory দেখে drawerSubcat রিসেট করে দেয় */
-    const subOwner = books.find(b => bookSubcat(b) === value);
-    if (subOwner) drawerCategory = bookMainCat(subOwner);
+    /* বানান একটু আলাদা হলেও (যেমন "আত্নশুদ্ধি") বইয়ের আসল বিষয়ের সাথে মিলিয়ে নিই */
+    drawerSubcat = (window.gkResolveSubject && gkResolveSubject(value)) || value;
+    /* বিষয়ের লিংকে ওই বিষয়ের সব বই — কোনো একটা ক্যাটাগরিতে আটকে রাখা হয় না */
 }
 else if (type === 'tag') drawerTags = [value];
 
-const displayTitle = (iconMap[type] || '📚') + ' ' + value;
+const shownName = (type === 'subcat' && drawerSubcat) || (type === 'tag' && window.gkTagLabel ? gkTagLabel(value) : value);   /* মিলিয়ে নেওয়া আসল বিষয়ের নামটাই দেখাই */
+const displayTitle = (iconMap[type] || '📚') + ' ' + shownName;
 document.getElementById('titleText').innerText = displayTitle;
 // pageTitle এ logo আছে, clear করব না
-document.getElementById('heroHeading').innerHTML = `<span>${escapeHTML(value || 'সকল বই')}</span>`;
+document.getElementById('heroHeading').innerHTML = `<span>${escapeHTML(shownName || 'সকল বই')}</span>`;
+/* Google-এর জন্য — প্রতিটা প্রকাশনী/লেখক/বিভাগের পেজ আলাদা পেজ হিসেবে (আগে সব filter.html-কেই এক পেজ ধরত) */
+(function(){
+    if (!type || !value || type === 'all') return;
+    const cnt = filtered && filtered.length ? filtered.length : 0;
+    const kind = { pub: 'প্রকাশনীর', author: 'লেখকের', cat: '', subcat: '', tag: '' }[type] || '';
+    const heading = kind ? `${shownName} ${kind} বই` : `${shownName}`;
+    document.title = `${heading} — গ্রন্থকানন`;
+    const md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', `${heading}${cnt && (type === 'pub' || type === 'author') ? ' — ' + String(cnt).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]) + 'টি বই' : ''} সাশ্রয়ী দামে কিনুন গ্রন্থকানন থেকে। সারা বাংলাদেশে হোম ডেলিভারি, ক্যাশ অন ডেলিভারি।`);
+    const cn = document.querySelector('link[rel="canonical"]');
+    if (cn) cn.setAttribute('href', 'https://gronthokanon.com/filter.html?type=' + encodeURIComponent(type) + '&value=' + encodeURIComponent(value));
+})();
 
-/* show filter tabs only on full listing (no type filter) */
-if (!type || type === 'all') {
-    document.getElementById('filterTabs').style.display = 'flex';
-}
-
-/* ── FILTER DRAWER ── */
-function allAvailableCats() {
-    let allCats = [];
-    if (typeof categoryConfig !== 'undefined' && categoryConfig.length) {
-        allCats = categoryConfig.map(c => c.key || c.label || c).filter(Boolean);
-    } else {
-        allCats = [...new Set(gkVisibleBooks(books).flatMap(bookCats).filter(Boolean))];
-    }
-    return allCats.filter(cat => gkVisibleBooks(books).some(b => bookCats(b).includes(cat)));
-}
-
-/* ট্যাগ-নাম কখনো ক্যাটাগরি হিসেবে দেখাবে না (পুরনো বইয়ে ট্যাগ-মান cat-এ বসানো ছিল) */
-const GK_TAG_LEGACY_EXTRA=['নতুন প্রকাশিত'];
-let GK_TAG_NAMES = new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
-/* অ্যাডমিন siteConfig/categoryTree-এ বিভাগ/উপ-বিভাগ বদলালে ফিল্টার ড্রয়ারেও লাইভ আপডেট হয় */
-function loadCatTreeFilter(){
-    if(typeof db==='undefined'||!db)return;
-    db.ref('siteConfig/categoryTree').get().then(function(snap){
-        const v=snap.val();
-        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
-        if(!list||!list.length)return;
-        GK_CAT_TREE=list.map(function(c){return {name:c.name, subs:Array.isArray(c.subs)?c.subs.slice():[]};});
-        if(typeof buildFilterDrawer==='function') buildFilterDrawer();
-    }).catch(function(){});
-}
-/* অ্যাডমিন siteConfig/tags-এ ট্যাগ তালিকা বদলালে এখানেও লাইভ আপডেট হয় */
-function loadTagsFilter(){
-    if(typeof db==='undefined'||!db)return;
-    db.ref('siteConfig/tags').get().then(function(snap){
-        const v=snap.val();
-        const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
-        if(!list||!list.length)return;
-        GK_TAGS=list.map(function(n){return {name:String(n)};});
-        GK_TAG_NAMES=new Set([...GK_TAGS.map(function(t){return t.name;}), ...GK_TAG_LEGACY_EXTRA]);
-    }).catch(function(){});
-}
-function buildFilterDrawer() {
-    /* বিভাগ = taxonomy-র বিভাগ (যেগুলোতে আইটেম আছে) + নতুন সিস্টেমে যোগ করা প্রোডাক্টের বিভাগ।
-       পুরনো book.js-এর ফ্রি-টেক্সট বিভাগ বাদ (যেসব বইয়ে tags/type/subcat নেই) */
-    const taxo = new Set(GK_CAT_TREE.map(c=>c.name));
-    const present = new Set();
-    gkVisibleBooks(books).forEach(b=>{ const c=bookMainCat(b); if(!c||GK_TAG_NAMES.has(c))return; if(taxo.has(c)||Array.isArray(b.tags)||b.type==='প্রোডাক্ট'||b.subject) present.add(c); });
-    let cats = GK_CAT_TREE.map(c=>c.name).filter(n=>present.has(n));
-    [...present].forEach(n=>{ if(!cats.includes(n)) cats.push(n); });
-    const list = document.getElementById('catRadioList');
-    let html = `<div class="radio-item ${!drawerCategory ? 'active' : ''}" onclick="selectDrawerCategory(null,this)"><span class="radio-dot"></span>সব বিভাগ</div>`;
-    html += cats.map(cat =>
-        `<div class="radio-item ${drawerCategory === cat ? 'active' : ''}" onclick="selectDrawerCategory('${escapeHTML(cat).replace(/'/g,"\\'")}',this)"><span class="radio-dot"></span>${escapeHTML(cat)}</div>`
-    ).join('');
-    list.innerHTML = html;
-    buildSubcatList();
-    buildTagChecks();
-    document.getElementById('priceMinInput').value = drawerFilters.min ?? '';
-    document.getElementById('priceMaxInput').value = drawerFilters.max ?? '';
-    document.getElementById('fltDiscount').checked = drawerFilters.discount;
-    updateFilterCount();
-}
-function buildSubcatList() {
-    const block = document.getElementById('subcatBlock');
-    const list = document.getElementById('subcatRadioList');
-    const cat = gkFindCat(drawerCategory);
-    /* উপ-বিভাগ শুধু যেসব প্রকৃত আছে সেগুলো + taxonomy */
-    let subs = cat ? cat.subs.slice() : [];
-    if (drawerCategory) {
-        const present = new Set(gkVisibleBooks(books).filter(b=>bookMainCat(b)===drawerCategory).map(bookSubcat).filter(Boolean));
-        [...present].forEach(s=>{ if(!subs.includes(s)) subs.push(s); });
-    }
-    if (!drawerCategory || !subs.length) { block.style.display='none'; list.innerHTML=''; if(drawerSubcat){drawerSubcat=null;} return; }
-    block.style.display='';
-    let html = `<div class="radio-item ${!drawerSubcat ? 'active' : ''}" onclick="selectDrawerSubcat(null,this)"><span class="radio-dot"></span>সব উপ-বিভাগ</div>`;
-    html += subs.map(s => `<div class="radio-item ${drawerSubcat === s ? 'active' : ''}" onclick="selectDrawerSubcat('${escapeHTML(s).replace(/'/g,"\\'")}',this)"><span class="radio-dot"></span>${escapeHTML(s)}</div>`).join('');
-    list.innerHTML = html;
-}
-function buildTagChecks() {
-    document.getElementById('tagCheckList').innerHTML = GK_TAGS.map(t =>
-        `<label class="filter-check"><input type="checkbox" class="gk-tagflt" value="${escapeHTML(t.name)}" ${drawerTags.includes(t.name)?'checked':''} onchange="onTagFltChange(this)"> ${escapeHTML(t.name)}</label>`
-    ).join('');
-}
-function onTagFltChange(cb){
-    if(cb.checked){ if(!drawerTags.includes(cb.value))drawerTags.push(cb.value); }
-    else { drawerTags = drawerTags.filter(t=>t!==cb.value); }
-}
-function selectDrawerCategory(cat, el) {
-    drawerCategory = cat;
-    drawerSubcat = null;
-    document.querySelectorAll('#catRadioList .radio-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-    buildSubcatList();
-}
-function selectDrawerSubcat(sub, el) {
-    drawerSubcat = sub;
-    document.querySelectorAll('#subcatRadioList .radio-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-}
-
-function openFilterDrawer() {
-    buildFilterDrawer();
-    document.getElementById('filterOverlay').classList.add('show');
-    document.getElementById('filterDrawer').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeFilterDrawer() {
-    document.getElementById('filterOverlay').classList.remove('show');
-    document.getElementById('filterDrawer').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-function updateFilterCount() {
-    let n = 0;
-    if (drawerCategory) n++;
-    if (drawerSubcat) n++;
-    n += drawerTags.length;
-    if (drawerFilters.min !== null) n++;
-    if (drawerFilters.max !== null) n++;
-    if (drawerFilters.discount) n++;
-    const badge = document.getElementById('filterCount');
-    badge.innerText = n;
-    badge.classList.toggle('show', n > 0);
-}
-
-function applyDrawerFilters() {
-    const min = document.getElementById('priceMinInput').value;
-    const max = document.getElementById('priceMaxInput').value;
-    drawerFilters.min = min !== '' ? Number(min) : null;
-    drawerFilters.max = max !== '' ? Number(max) : null;
-    drawerFilters.discount = document.getElementById('fltDiscount').checked;
-    /* ড্রয়ার সব বই-এর উপর ফিল্টার করে (URL base উপেক্ষা) */
-    filtered = gkVisibleBooks(books);
-    activeCategory = drawerCategory;
-    currentPage = 1;
-    const title = drawerCategory || (drawerTags.length?drawerTags.join(', '):'সকল আইটেম');
-    document.getElementById('heroHeading').innerHTML = `<span>${escapeHTML(title)}</span>`;
-    document.getElementById('titleText').innerText = '📚 ' + title;
-    updateFilterCount();
-    closeFilterDrawer();
-    renderBooks(getList());
-    window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function resetDrawerFilters() {
-    drawerCategory = null; drawerSubcat = null; drawerTags = [];
-    drawerFilters = { min: null, max: null, discount: false };
-    buildFilterDrawer();
-}
-
-updateFilterCount();
-/* সাইডবার এখন সবসময় দৃশ্যমান (আগে শুধু "ফিল্টার" বাটনে ক্লিক করলে বানানো হতো) —
-   তাই পেজ লোড হওয়ার সাথে সাথেই একবার বানিয়ে নেওয়া হচ্ছে, Firebase categoryTree
-   আসার জন্য অপেক্ষা না করে (books array দিয়েই fallback তালিকা তৈরি হয়ে যাবে) */
-buildFilterDrawer();
-loadTagsFilter();
-loadCatTreeFilter();
 /* বই এখানে আগেই লোড হয়ে আছে — আগের মতো ৬০০ms বসিয়ে না রেখে সাথে সাথে দেখাই */
+/* ?q=… — সহকারী/অন্য জায়গা থেকে সার্চের লেখা নিয়ে এলে সার্চ ঘরে বসিয়ে দিই */
+const q0 = params.get('q');
+if (q0) { document.getElementById('filterSearch').value = q0; document.getElementById('searchClear').classList.add('show'); }
 document.getElementById('skelGrid').style.display = 'none';
 document.getElementById('bookGrid').style.display = 'block';
 renderBooks(getList());
+qfRenderBar();
 /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
 if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
     if(!ok) return;
@@ -1145,19 +911,8 @@ if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => {
     else if (type === 'pub') filtered = gkVisibleBooks(books).filter(b => b.pub === value);
     else filtered = gkVisibleBooks(books);
     renderBooks(getList());
+    qfRenderBar();
 });
-
-/* এই ফাংশনগুলো HTML-এর onclick="..." অ্যাট্রিবিউট থেকে ডাকা হয়, যেগুলো window
-   স্কোপেই খোঁজে — কিন্তু এগুলো gkFilterInit()-এর ভেতরে declare করা (local),
-   তাই window-এ এক্সপোজ না করলে "is not defined" এরর দিয়ে সাইডবার ফিল্টার
-   করাই কাজ করত না (ক্যাটাগরি বাছাই, Apply, Reset — কিছুই কাজ করত না) */
-window.openFilterDrawer = openFilterDrawer;
-window.closeFilterDrawer = closeFilterDrawer;
-window.selectDrawerCategory = selectDrawerCategory;
-window.selectDrawerSubcat = selectDrawerSubcat;
-window.onTagFltChange = onTagFltChange;
-window.applyDrawerFilters = applyDrawerFilters;
-window.resetDrawerFilters = resetDrawerFilters;
 } /* gkFilterInit end */
 document.addEventListener('DOMContentLoaded', gkFilterInit);
 </script>

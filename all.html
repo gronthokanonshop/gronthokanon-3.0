@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="logo.png" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<title>সব প্রকাশনী ও লেখক — গ্রন্থকানন</title>
+<meta name="theme-color" content="#059669">
+<meta name="description" content="গ্রন্থকাননের সব প্রকাশনী ও লেখকের তালিকা — নাম খুঁজে এক ক্লিকে তাদের সব বই দেখুন।">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+.al-wrap{max-width:1180px;margin:0 auto;padding:16px 14px 110px;}
+.al-tabs{display:flex;gap:8px;margin-bottom:12px;}
+.al-tab{flex:1;max-width:220px;padding:11px 14px;border:1.5px solid var(--border2);background:var(--card-solid);color:var(--text2);font-family:'Hind Siliguri',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;}
+.al-tab.active{background:var(--green);border-color:var(--green);color:#fff;}
+.al-search{position:relative;margin-bottom:10px;}
+.al-search input{width:100%;padding:12px 14px 12px 40px;border:1.5px solid var(--border2);background:var(--card-solid);color:var(--text);font-family:'Hind Siliguri',sans-serif;font-size:15px;outline:none;}
+.al-search input:focus{border-color:var(--green);}
+.al-search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--green);}
+.al-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;font-size:13px;color:var(--text2);}
+.al-bar select{padding:7px 10px;border:1.5px solid var(--border2);background:var(--card-solid);color:var(--text);font-family:'Hind Siliguri',sans-serif;font-size:13px;}
+.al-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+@media(max-width:480px){.al-grid{grid-template-columns:repeat(2,1fr);gap:10px;}}
+.al-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px 14px;background:var(--card-solid);border:1px solid var(--border2);text-decoration:none;color:var(--text);text-align:center;transition:border-color .15s,transform .15s,box-shadow .15s;}
+.al-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 18px var(--green-glow);}
+.al-av{width:72px;height:72px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--border2);background:#fff;}
+.al-type-pub .al-av{border-radius:12px;}
+.al-av img{width:100%;height:100%;object-fit:cover;}
+.al-type-pub .al-av img{object-fit:contain;}
+.al-name{font-size:14px;font-weight:700;line-height:1.35;word-break:break-word;}
+.al-count{font-size:12px;font-weight:700;color:var(--green);background:var(--green-bg);padding:2px 10px;}
+.al-more{display:block;margin:18px auto 0;padding:12px 26px;border:1.5px solid var(--green);background:var(--card-solid);color:var(--green);font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.al-empty{text-align:center;padding:50px 10px;color:var(--text2);}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-top">
+    <button class="back-btn" onclick="history.length>1?history.back():location.href='index.html'">‹</button>
+    <a href="index.html" style="flex:1;display:flex;justify-content:center;"><img src="logo.png" alt="গ্রন্থকানন" style="height:34px;width:auto;"></a>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+  </div>
+</nav>
+<div id="gkMenuBar"></div>
+
+<div class="al-wrap">
+  <div class="al-tabs">
+    <a class="al-tab" id="tabPub" href="all.html?type=pub">🏢 প্রকাশনী</a>
+    <a class="al-tab" id="tabAuthor" href="all.html?type=author">✍️ লেখক</a>
+  </div>
+  <div class="al-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="alSearch" autocomplete="off" oninput="alRender(true)">
+  </div>
+  <div class="al-bar">
+    <span id="alCount" style="white-space:nowrap;"></span>
+    <select id="alSort" onchange="alRender(true)">
+      <option value="count">বেশি বই আগে</option>
+      <option value="name">নাম অনুযায়ী (অ-ঔ)</option>
+    </select>
+  </div>
+  <div class="al-grid" id="alGrid"></div>
+  <button class="al-more" id="alMore" style="display:none" onclick="alShown+=AL_PAGE;alRender(false)"></button>
+</div>
+
+<script src="book.js" defer></script>
+<script src="gkbooks-live.js" defer></script>
+<script>
+/* সব প্রকাশনী / সব লেখক — book.js থেকে নাম ও বইয়ের সংখ্যা, হোমপেজ চিপের ছবি থাকলে সেটাও */
+const AL_TYPE = new URLSearchParams(location.search).get('type') === 'author' ? 'author' : 'pub';
+const AL_PAGE = 120;
+let alShown = AL_PAGE, alItems = [], alImgs = {};
+const alLabel = AL_TYPE === 'pub' ? 'প্রকাশনী' : 'লেখক';
+document.getElementById(AL_TYPE === 'pub' ? 'tabPub' : 'tabAuthor').classList.add('active');
+document.getElementById('alSearch').placeholder = alLabel + 'র নাম লিখে খুঁজুন...';
+document.title = 'সব ' + alLabel + ' — গ্রন্থকানন';
+
+function alEsc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function alBn(n){ return String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]); }
+function alColor(name){ const p=['#059669','#0891b2','#7c3aed','#db2777','#d97706','#4f46e5']; let s=0; for(const ch of name) s+=ch.charCodeAt(0); return p[s%p.length]; }
+
+function alBuild(){
+    const m = new Map();
+    (typeof books!=='undefined'?books:[]).forEach(b => {
+        if(!b || (window.gkIsHiddenBook && gkIsHiddenBook(b))) return;
+        const v = String((AL_TYPE==='pub' ? b.pub : b.author) || '').trim();
+        if(!v) return;
+        m.set(v, (m.get(v)||0)+1);
+    });
+    alItems = [...m.entries()];
+}
+function alRender(reset){
+    if(reset) alShown = AL_PAGE;
+    const q = document.getElementById('alSearch').value.normalize('NFC').toLowerCase().trim();
+    let list = q ? alItems.filter(([n]) => n.normalize('NFC').toLowerCase().includes(q)) : alItems.slice();
+    if(document.getElementById('alSort').value === 'name') list.sort((a,b) => a[0].localeCompare(b[0],'bn'));
+    else list.sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0],'bn'));
+    document.getElementById('alCount').textContent = 'মোট ' + alBn(list.length) + 'টি ' + alLabel;
+    const grid = document.getElementById('alGrid');
+    if(!list.length){ grid.innerHTML = '<div class="al-empty" style="grid-column:1/-1">কিছু পাওয়া যায়নি</div>'; document.getElementById('alMore').style.display='none'; return; }
+    grid.className = 'al-grid al-type-' + AL_TYPE;
+    grid.innerHTML = list.slice(0, alShown).map(([n,c]) => {
+        const img = alImgs[n];
+        const av = img ? '<img src="'+alEsc(img)+'" alt="" loading="lazy" onerror="this.parentElement.style.background=\''+alColor(n)+'\';this.replaceWith(document.createTextNode(\''+alEsc(n.charAt(0))+'\'))">'
+                       : alEsc(n.charAt(0));
+        return '<a class="al-card" href="filter.html?type='+AL_TYPE+'&value='+encodeURIComponent(n)+'">'
+            + '<div class="al-av" style="'+(img?'':'background:'+alColor(n))+'">'+av+'</div>'
+            + '<div class="al-name">'+alEsc(n)+'</div><div class="al-count">'+alBn(c)+'টি বই</div></a>';
+    }).join('');
+    const more = document.getElementById('alMore'), left = list.length - alShown;
+    more.style.display = left > 0 ? '' : 'none';
+    more.textContent = 'আরও দেখুন (বাকি ' + alBn(left) + 'টি)';
+}
+/* হোমপেজ চিপে অ্যাডমিন যে লোগো/ছবি দিয়েছে সেগুলো এখানেও দেখাই */
+function alLoadImgs(){
+    fetch('https://gronthokanon-8573e-default-rtdb.firebaseio.com/siteConfig/'+(AL_TYPE==='pub'?'homePubs':'homeAuthors')+'.json')
+        .then(r => r.ok ? r.json() : null)
+        .then(v => { (Array.isArray(v)?v:[]).forEach(x => { if(x&&x.name&&x.img) alImgs[x.name]=x.img; }); alRender(false); })
+        .catch(()=>{});
+}
+document.addEventListener('DOMContentLoaded', function(){
+    alBuild(); alRender(true); alLoadImgs();
+    if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => { if(ok){ alBuild(); alRender(false); } });
+});
+</script>
+<script src="common.js"></script>
+</body>
+</html>

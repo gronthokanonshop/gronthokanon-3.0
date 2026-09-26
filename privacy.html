@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="logo.png" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
+
+<title>প্রাইভেসি পলিসি — গ্রন্থকানন</title>
+<meta name="theme-color" content="#059669">
+<meta name="description" content="গ্রন্থকানন আপনার কোন তথ্য রাখে, কেন রাখে এবং কীভাবে ব্যবহার করে।">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+.page-wrap{max-width:580px;margin:0 auto;padding:24px 16px 100px;}
+.hero-card{text-align:center;margin-bottom:22px;}
+.hero-card h1{font-size:24px;font-weight:900;color:#fff;margin-bottom:6px;}
+.hero-card p{font-size:13px;line-height:1.7;}
+.info-card{background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:14px;}
+.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:10px;padding-left:10px;border-left:3px solid #059669;}
+.info-card p,.info-card li{font-size:13.5px;color:var(--text2);line-height:1.9;}
+.info-card ul{padding-left:18px;}
+.info-card a{color:#059669;font-weight:600;}
+</style>
+</head>
+<body class="gk-info">
+<nav class="navbar">
+  <div class="navbar-top">
+    <button class="back-btn" onclick="history.back()">‹</button>
+    <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">প্রাইভেসি পলিসি</span>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero-card">
+    <h1>🔒 প্রাইভেসি পলিসি</h1>
+    <p>আপনার কোন তথ্য আমরা রাখি, কেন রাখি — সহজ ভাষায়</p>
+  </div>
+
+  <div class="info-card">
+    <h3>অর্ডারের সময় যা নেওয়া হয়</h3>
+    <ul>
+      <li>নাম, মোবাইল নম্বর ও ডেলিভারির ঠিকানা (জেলা, থানা, বিস্তারিত ঠিকানা)</li>
+      <li>কোন বই অর্ডার করেছেন, দাম, কুপন ও পেমেন্ট পদ্ধতি (বিকাশে দিলে ট্রানজেকশন আইডি)</li>
+      <li>আপনার লেখা নোট (যদি দেন)</li>
+    </ul>
+    <p>এসব তথ্য শুধু অর্ডার পৌঁছে দেওয়া, যোগাযোগ করা এবং অর্ডার ট্র্যাক করার জন্য ব্যবহার হয়। কুরিয়ারে পাঠানোর সময় তাদের নাম, নম্বর ও ঠিকানা দিতে হয়।</p>
+  </div>
+
+  <div class="info-card">
+    <h3>অ্যাকাউন্ট ও রিভিউ</h3>
+    <ul>
+      <li>অ্যাকাউন্ট খুললে আপনার নাম ও ইমেইল রাখা হয়; পাসওয়ার্ড আমরা দেখতে পাই না (Google Firebase নিরাপদে রাখে)।</li>
+      <li>কোনো বইয়ে রিভিউ দিলে আপনার দেওয়া নাম, রেটিং ও মন্তব্য সবাই দেখতে পায়।</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h3>সাইটে যা দেখানো হয়</h3>
+    <p>হোমপেজে মাঝে মাঝে "অমুক এলাকা থেকে কেউ একটি বই অর্ডার করেছেন" দেখানো হয় — সেখানে শুধু এলাকা আর বইয়ের নাম থাকে; আপনার নাম, নম্বর বা পুরো ঠিকানা কখনো দেখানো হয় না।</p>
+  </div>
+
+  <div class="info-card">
+    <h3>আপনার ফোন/ব্রাউজারে যা থাকে</h3>
+    <p>কার্ট, উইশলিস্ট, সম্প্রতি দেখা বই ও ডার্ক মোডের পছন্দ আপনার নিজের ব্রাউজারেই সেভ থাকে — ব্রাউজারের ডেটা মুছলে এগুলোও মুছে যায়। কোন বই কতবার দেখা হয়েছে সেই সংখ্যা (কে দেখেছে তা নয়) আমরা রাখি।</p>
+  </div>
+
+  <div class="info-card">
+    <h3>তথ্য কোথায় থাকে ও কারা দেখে</h3>
+    <p>তথ্য Google Firebase-এর সার্ভারে থাকে। অর্ডারের তথ্য শুধু গ্রন্থকাননের অ্যাডমিনরা দেখতে পারেন। আমরা আপনার তথ্য কারো কাছে বিক্রি করি না।</p>
+  </div>
+
+  <div class="info-card">
+    <h3>তথ্য মুছতে বা বদলাতে চাইলে</h3>
+    <p>আমাদের <a href="contact.html">যোগাযোগ পেজ</a> থেকে জানান — আপনার অর্ডার/অ্যাকাউন্টের তথ্য ঠিক করে বা মুছে দেওয়া হবে।</p>
+  </div>
+</div>
+
+<script src="common.js"></script>
+</body>
+</html>

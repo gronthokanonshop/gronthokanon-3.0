@@ -23,7 +23,7 @@
 
 <title>ডেলিভারি নীতি — গ্রন্থকানন</title>
 <meta name="theme-color" content="#059669">
-<meta name="description" content="গ্রন্থকাননের ডেলিভারি তথ্য — ঢাকায় ৳৬০, ঢাকার বাইরে ৳৯০। সারা বাংলাদেশে ক্যাশ অন ডেলিভারিতে বই পাবেন ২-৫ দিনে।">
+<meta name="description" content="গ্রন্থকাননের ডেলিভারি তথ্য — হোম ডেলিভারি ঢাকায় ৳৬০, ঢাকার বাইরে ৳৯০ (ক্যাশ অন ডেলিভারি); সুন্দরবন কুরিয়ারে অফিস ডেলিভারি ৳৫০ (বিকাশে)।">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
@@ -49,7 +49,7 @@
 .note{background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);padding:14px;font-size:12.5px;color:var(--text2);line-height:1.8;}
 </style>
 </head>
-<body>
+<body class="gk-info">
 <nav class="navbar">
   <div class="navbar-top">
     <button class="back-btn" onclick="history.back()">‹</button>
@@ -64,15 +64,21 @@
     <p>সারা বাংলাদেশে দ্রুত ও নির্ভরযোগ্য ডেলিভারি</p>
   </div>
 
-  <div class="grid2">
-    <div class="charge-box" style="margin-bottom:0;">
-      <div class="charge-big">৳৬০</div>
-      <div class="charge-label">ঢাকার ভেতরে</div>
-    </div>
-    <div class="charge-box" style="margin-bottom:0;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.04));border-color:rgba(59,130,246,0.2);">
-      <div class="charge-big" style="color:#2563eb;">৳৯০</div>
-      <div class="charge-label">ঢাকার বাইরে</div>
-    </div>
+  <!-- চার্জগুলো checkout.html-এর calcDeliveryCharge()-এর সাথে মিলিয়ে রাখা — ওখানে বদলালে এখানেও বদলাবেন -->
+  <div class="info-card">
+    <h3>🏠 হোম ডেলিভারি <span style="font-weight:600;font-size:12px;color:var(--text2);">— বাসায় পৌঁছে দেওয়া</span></h3>
+    <div class="info-row"><span>ঢাকা সিটির ভেতরে</span><span>৳৬০</span></div>
+    <div class="info-row"><span>ঢাকার আশেপাশে (সাভার, আশুলিয়া, কেরানীগঞ্জ, ধামরাই, দোহার, নবাবগঞ্জ, হেমায়েতপুর)</span><span>৳৮০</span></div>
+    <div class="info-row"><span>ঢাকার বাইরে সারা দেশে</span><span>৳৯০</span></div>
+    <div class="info-row"><span>কুরিয়ার</span><span>Steadfast / RedX / Pathao</span></div>
+    <div class="info-row"><span>পেমেন্ট</span><span>ক্যাশ অন ডেলিভারি বা বিকাশ</span></div>
+  </div>
+  <div class="info-card">
+    <h3>🏢 অফিস ডেলিভারি <span style="font-weight:600;font-size:12px;color:var(--text2);">— কুরিয়ার অফিস থেকে নিজে নেবেন</span></h3>
+    <div class="info-row"><span>যেকোনো জেলা</span><span>৳৫০</span></div>
+    <div class="info-row"><span>কুরিয়ার</span><span>সুন্দরবন কুরিয়ার</span></div>
+    <div class="info-row"><span>পেমেন্ট</span><span>শুধু বিকাশে অগ্রিম</span></div>
+    <div style="font-size:12px;color:var(--text2);margin-top:8px;line-height:1.7;">সুন্দরবন কুরিয়ারে ক্যাশ অন ডেলিভারি নেই — তাই অফিস ডেলিভারিতে অর্ডারের সময় বিকাশে পেমেন্ট করতে হয়। চেকআউটে যে শাখা থেকে নেবেন সেটা লিখে দিন।</div>
   </div>
 
   <div class="info-card">
@@ -89,12 +95,12 @@
       <div class="grid-card">
         <div class="icon">💵</div>
         <div class="title">ক্যাশ অন ডেলিভারি</div>
-        <div class="sub">বই পাওয়ার পর টাকা দিন</div>
+        <div class="sub">হোম ডেলিভারিতে বই পাওয়ার পর টাকা দিন</div>
       </div>
       <div class="grid-card">
         <div class="icon">📦</div>
         <div class="title">কুরিয়ার সার্ভিস</div>
-        <div class="sub">পাঠাও, রেডেক্স ও সুন্দরবন</div>
+        <div class="sub">স্টেডফাস্ট, রেডএক্স, পাঠাও ও সুন্দরবন</div>
       </div>
     </div>
   </div>

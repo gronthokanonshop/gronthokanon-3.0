@@ -612,6 +612,11 @@
             border-color: rgba(52,211,153,0.45);
         }
         .book-card .bc-img-box { width: 100%; aspect-ratio: 145/195; height: auto; overflow: hidden; position: relative; background: linear-gradient(135deg,#f0fdf4,#ecfdf5); }
+        /* কার্টে থাকা বই */
+        .book-card.in-cart { border-color: #10b981 !important; box-shadow: 0 0 0 1.5px #10b981, 0 6px 16px rgba(5,150,105,.18) !important; }
+        .book-card.in-cart .bc-img-box::after { content: '✓ কার্টে আছে'; position: absolute; left: 6px; bottom: 6px; z-index: 3; padding: 3px 9px; border-radius: 20px; background: rgba(5,150,105,.94); color: #fff; font-size: 10.5px; font-weight: 700; font-family: 'Hind Siliguri', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+        .bc-btn.bc-icon { position: relative; }
+        .bc-qty { position: absolute; top: -7px; right: -7px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #f59e0b; color: #fff; font-size: 11.5px; font-weight: 800; line-height: 1; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-family: 'Hind Siliguri', sans-serif; }
         [data-theme="dark"] .book-card .bc-img-box { background: linear-gradient(135deg,#0f2a1e,#132d20); }
         .book-card img { width: 100%; height: 100%; object-fit: contain; padding: 9px; box-sizing: border-box; display: block; transition: transform 0.45s ease; }
         .book-card:hover img { transform: scale(1.07); }
@@ -861,7 +866,7 @@
         <p style="margin-bottom:10px;color:var(--text2);">সাশ্রয়ী মূল্যে মানসম্পন্ন ইসলামিক বই পৌঁছে দেওয়াই আমাদের লক্ষ্য।</p>
         <hr style="border:none;border-top:1px solid var(--border);margin:10px 0;">
         <p style="color:#059669;font-weight:bold;margin-bottom:5px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> হটলাইন: 01516595762</p>
-        <p style="margin-bottom:5px;color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 3"/><path d="M5 3L2 6M22 6l-3-3"/></svg> সকাল ৯টা — রাত ১০টা</p>
+        <p style="margin-bottom:5px;color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 3"/><path d="M5 3L2 6M22 6l-3-3"/></svg> শনি–বৃহস্পতি সকাল ৯টা, শুক্রবার বিকাল ৪টা — রাত ১০টা</p>
         <p style="margin-bottom:5px;color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> সারা বাংলাদেশে ডেলিভারি</p>
         <p style="color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ঢাকা, বাংলাদেশ</p>
     </div>
@@ -980,10 +985,10 @@
     font-size: 20px; padding: 8px; box-sizing: border-box;
     box-shadow: 0 1px 4px rgba(59,130,246,.08);
 }
-.catcard-tile-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.catcard-tile-img img { width: 100%; height: 100%; object-fit: contain !important; display: block; }
 .catcard-tile-img .cc-ph {
-    width: 26px; height: 26px; border-radius: 50%;
-    background: #eff6ff; border: 1.5px solid #93c5fd; color: #3b82f6;
+    width: 100%; height: 100%; border-radius: 10px;
+    background: linear-gradient(135deg,#ecfdf5,#d1fae5); color: #059669;
     display: flex; align-items: center; justify-content: center;
     font-weight: 800; font-size: 14px;
 }
@@ -1015,11 +1020,12 @@
 }
 [data-theme="dark"] .catcard { background: #132018; border-color: rgba(255,255,255,.08); }
 [data-theme="dark"] .catcard-tile-img { background: #0f2a1e; border-color: #1e4d3a; }
-[data-theme="dark"] .catcard-tile-img .cc-ph { background: #0f2a1e; border-color: #1e4d3a; color: #60a5fa; }
+[data-theme="dark"] .catcard-tile-img .cc-ph { background: #0f2a1e; color: #34d399; }
 </style>
 
 <!-- ═══════ BANNER ═══════ -->
 <h1 class="seo-h1">গ্রন্থকানন — ইসলামিক ও সাধারণ বই কেনার নির্ভরযোগ্য অনলাইন বুকশপ</h1>
+<div id="gkMenuBar"></div>
 <div class="banner-wrap">
   <div class="banner-slider" id="mainSlider">
 
@@ -1104,22 +1110,53 @@ function gkBookByBid(bid){
 function renderHomeCatChips(){
     var strip=document.getElementById('catStrip');
     if(!strip) return;
-    var list=(window.GK_HOME_CATS||[]).filter(function(c){return c&&c.name&&!window.GK_TAG_NAMES.has(c.name);});
+    /* যে ক্যাটাগরিতে এখনো একটাও বই নেই তার কার্ড দেখাই না (চাপলে খালি পেজ আসত) —
+       বই যোগ হলেই কার্ড নিজে থেকে ফিরে আসবে */
+    var hasBooks=function(n){ return typeof books==='undefined'||!books.length||books.some(function(b){ return b&&(b.cat===n||(Array.isArray(b.cats)&&b.cats.indexOf(n)>-1)); }); };
+    var list=(window.GK_HOME_CATS||[]).filter(function(c){return c&&c.name&&!window.GK_TAG_NAMES.has(c.name)&&hasBooks(c.name);});
     strip.innerHTML=list.map(function(c){
         var name=(c.name||'').toString();
         var card=findCatCard(name);
         var subs=(card&&Array.isArray(card.subs)&&card.subs.length)?card.subs:[{label:name,bid:''}];
         subs=subs.slice(0,4);
+        var usedImg={};
+        var inCat=function(b){ return b&&(b.cat===name||(Array.isArray(b.cats)&&b.cats.indexOf(name)>-1)); };
+        var realImg=function(b){ return b&&b.img&&/^https?:\/\//.test(b.img)&&!usedImg[b.img]&&!(window.gkIsHiddenBook&&gkIsHiddenBook(b)); };
         var tilesHtml=subs.map(function(s){
             var label=(s&&s.label||'').toString();
             var bk=gkBookByBid(s&&s.bid);
             var img=(bk&&bk.img)?bk.img:'';
             var isReal=img && /^https?:\/\//.test(img);
-            var filterType = (s&&s.bid) ? 'subcat' : 'cat';
-            var filterVal = (s&&s.bid) ? (label||name) : name;
+            var rsub=(window.gkResolveSubject&&gkResolveSubject(label))||null;
+            /* অ্যাডমিন বই বাছাই না করলে "?" না দেখিয়ে ওই বিষয়ের (না পেলে ওই ক্যাটাগরির) একটা আসল বইয়ের কভার */
+            var genName='';
+            if(!isReal && typeof books!=='undefined'){
+                /* শুধু সেই বই যেটা সত্যিই এই টাইলের — বিষয় মেলে, অথবা (বিষয় না মিললে) বইয়ের নামেই টাইলের নাম আছে।
+                   এলোমেলো অন্য বইয়ের ছবি বসাই না (যেমন "ক্লাস ১-৫"-এ HSC বই) */
+                var lbl=label.trim().toLowerCase();
+                var fits=function(b){ return b&&inCat(b)&&(rsub ? b.subject===rsub : (lbl.length>1&&String(b.name||'').toLowerCase().indexOf(lbl)>-1)); };
+                var pick=books.find(function(b){ return fits(b)&&realImg(b); });
+                /* মেলানো বই না পেলে — এই ক্যাটাগরির যেকোনো ছবিওয়ালা বই, এলোমেলোভাবে (প্রতিবার আলাদা) */
+                if(!pick){ var pool=books.filter(function(b){ return inCat(b)&&realImg(b)&&!usedImg['n:'+b.name]; }); if(pool.length) pick=pool[Math.floor(Math.random()*pool.length)]; }
+                if(pick){ img=pick.img; isReal=true; usedImg['n:'+pick.name]=1; }
+                else {
+                    /* ছবিওয়ালা বই-ই নেই — ওই ক্যাটাগরির একটা আসল বইয়ের নাম দিয়ে কভার (common.js বানাবে) */
+                    var okb=function(b){ return inCat(b)&&!usedImg['n:'+b.name]&&!(window.gkIsHiddenBook&&gkIsHiddenBook(b)); };
+                    var gp=books.find(function(b){ return fits(b)&&okb(b); });
+                    if(!gp){ var gpool=books.filter(okb); if(gpool.length) gp=gpool[Math.floor(Math.random()*gpool.length)]; }
+                    if(gp){ genName=gp.name; usedImg['n:'+gp.name]=1; }
+                }
+            }
+            if(isReal) usedImg[img]=1;
+            /* টাইলের নাম → বইয়ের আসল বিষয় (বানান একটু আলাদা হলেও), না মিললে নমুনা বইয়ের
+               বিষয়, সেটাও না থাকলে পুরো ক্যাটাগরি — কখনো খালি পেজে যাবে না */
+            var subj = rsub || ((s&&s.bid&&window.gkBookSubject) ? gkBookSubject(bk) : null);
+            var filterType = subj ? 'subcat' : 'cat';
+            var filterVal = subj || name;
             var imgTag = isReal
-                ? '<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span class=&quot;cc-ph&quot;>?</span>\'">'
-                : '<span class="cc-ph">?</span>';
+                ? '<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span class=&quot;cc-ph&quot;>📚</span>\'">'
+                : genName ? '<img src="book-placeholder.svg" alt="'+genName.replace(/"/g,'&quot;').replace(/</g,'&lt;')+'" loading="lazy">'
+                : '<span class="cc-ph"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>';
             return '<div class="catcard-tile" onclick="event.stopPropagation();if(!this.closest(\'.cat-strip\').__gkMoved)window.location.href=\'filter.html?type='+filterType+'&value='+encodeURIComponent(filterVal)+'\'">'
                 +'<div class="catcard-tile-img">'+imgTag+'</div>'
                 +'<div class="catcard-tile-label">'+label.replace(/</g,'&lt;')+'</div>'
@@ -1184,6 +1221,9 @@ renderHomeCatChips();
     letter-spacing: .5px; margin: 0 0 10px 16px;
     display: flex; align-items: center; gap: 6px;
 }
+.pub-strip-title, .author-strip-title { margin-right: 16px; }
+.strip-all { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--green, #059669); text-decoration: none; padding: 5px 12px; border: 1.5px solid var(--green, #059669); border-radius: 20px; white-space: nowrap; letter-spacing: 0; transition: background .15s, color .15s; }
+.strip-all:hover { background: var(--green, #059669); color: #fff; }
 .pub-strip-wrap, .author-strip-wrap { position: relative; }
 .pub-strip, .author-strip {
     display: flex; gap: 10px;
@@ -1262,7 +1302,7 @@ function gkPubStripHtml(){
             +'</div>';
     }).join('');
     return '<div class="pub-strip-section" id="pubStripSection">'
-        +'<div class="pub-strip-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> প্রকাশনী</div>'
+        +'<div class="pub-strip-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> প্রকাশনী<a class="strip-all" href="all.html?type=pub">সব দেখুন →</a></div>'
         +'<div class="pub-strip-wrap"><div class="pub-strip" id="pubStrip">'+chips+'</div>'
         +'<button class="pub-strip-next" id="pubStripNext" onclick="pubStripScroll()" aria-label="আরো প্রকাশনী">›</button></div></div>';
 }
@@ -1289,7 +1329,7 @@ function gkAuthorStripHtml(){
             +'</div>';
     }).join('');
     return '<div class="author-strip-section" id="authorStripSection">'
-        +'<div class="author-strip-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> প্রিয় লেখক</div>'
+        +'<div class="author-strip-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> প্রিয় লেখক<a class="strip-all" href="all.html?type=author">সব দেখুন →</a></div>'
         +'<div class="author-strip-wrap"><div class="author-strip" id="authorStrip">'+chips+'</div>'
         +'<button class="author-strip-next" id="authorStripNext" onclick="authorStripScroll()" aria-label="আরো লেখক">›</button></div></div>';
 }
@@ -1305,6 +1345,31 @@ function authorStripScroll(){
     if(s.scrollLeft>=max-5) s.scrollTo({left:0,behavior:'smooth'});
     else s.scrollBy({left:Math.min(260,max-s.scrollLeft),behavior:'smooth'});
 }
+/* প্রকাশনী/লেখক চিপ নিজে থেকে একটা একটা করে সরে (প্রতি ২.৫ সেকেন্ডে এক ঘর),
+   শেষে পৌঁছালে শুরুতে ফেরে। কেউ ছুঁলে/মাউস রাখলে ৬ সেকেন্ড থেমে থাকে, আর
+   সারিটা স্ক্রিনে না থাকলে বা ট্যাব লুকানো থাকলে চলে না (ব্যাটারি বাঁচে)। */
+(function(){
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var pauseUntil={};
+    function pause(id){ pauseUntil[id]=Date.now()+6000; }
+    ['touchstart','mousedown','wheel'].forEach(function(ev){
+        document.addEventListener(ev,function(e){
+            var s=e.target.closest&&e.target.closest('#pubStrip,#authorStrip');
+            if(s) pause(s.id);
+        },{passive:true});
+    });
+    function onScreen(el){ var r=el.getBoundingClientRect(); return r.bottom>0&&r.top<window.innerHeight; }
+    function step(id){
+        var s=document.getElementById(id);
+        if(!s||document.hidden||(pauseUntil[id]||0)>Date.now()||s.matches(':hover')||!onScreen(s)) return;
+        var card=s.firstElementChild; if(!card) return;
+        var gap=parseFloat(getComputedStyle(s).columnGap)||10;
+        var max=s.scrollWidth-s.clientWidth; if(max<=4) return;
+        if(s.scrollLeft>=max-4) s.scrollTo({left:0,behavior:'smooth'});
+        else s.scrollBy({left:card.offsetWidth+gap,behavior:'smooth'});
+    }
+    setInterval(function(){ step('pubStrip'); step('authorStrip'); },2500);
+})();
 function loadHomePubs(){
     if(typeof db==='undefined'||!db) return;
     db.ref('siteConfig/homePubs').once('value').then(function(snap){
@@ -1414,36 +1479,7 @@ function loadHomeAuthors(){
     <div class="hblog-row" id="hblogRow"></div>
 </div>
 
-<!-- ═══════ CART MODAL ═══════ -->
-<div id="cartBox" class="modal">
-    <div class="modal-content">
-        <div style="padding:18px 20px;background:#059669;color:#fff;display:flex;justify-content:space-between;align-items:center;border-radius:24px 0 0 0;">
-            <h3 style="margin:0;font-size:18px;font-weight:800;display:flex;align-items:center;gap:9px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                </svg>
-                আপনার ব্যাগ
-            </h3>
-            <span onclick="closeCart()" style="cursor:pointer;font-size:24px;opacity:0.9;line-height:1;">&times;</span>
-        </div>
-        <div id="cartItems" style="flex:1;overflow-y:auto;padding:16px;"></div>
-        <div id="cartOfferBanner" style="display:none;margin:0 16px 8px;border-radius:10px;overflow:hidden;"></div>
-        <div style="padding:16px;background:var(--search-bg);border-top:1px solid var(--border);">
-            <div id="couponSection" style="margin-bottom:12px;"></div>
-            <div style="font-size:14px;line-height:2;color:var(--text);">
-                <p style="display:flex;justify-content:space-between;margin:0;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>
-                <p style="display:flex;justify-content:space-between;margin:0;color:#dc2626;">ডিসকাউন্ট: <span>-৳<span id="discountAmt">0</span></span></p>
-                <hr style="margin:10px 0;border:none;border-top:1px solid var(--border);">
-                <h4 style="display:flex;justify-content:space-between;color:#059669;font-size:18px;margin:0;">মোট: <span>৳<span id="total">0</span></span></h4>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:14px;">
-                <button onclick="closeCart()" style="flex:1;padding:11px;background:transparent;color:#059669;border:1.5px solid #059669;border-radius:10px;cursor:pointer;font-weight:700;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;">আরও কিনুন</button>
-                <button onclick="openOrderForm()" style="flex:2;padding:11px;background:#059669;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:800;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;box-shadow:0 4px 14px rgba(5,150,105,0.35);">অর্ডার করুন →</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- কার্ট ড্রয়ার এখন common.js-এর শেয়ার্ড প্রিমিয়াম ড্রয়ার (সব পেজে এক রকম) -->
 
 <!-- ═══════ WISHLIST MODAL ═══════ -->
 <div id="wishlistBox" class="wl-modal">
@@ -1521,12 +1557,54 @@ footer {
 [data-theme="dark"] .footer-copy { color: #4b5563; }
 [data-theme="dark"] .footer-copy strong { color: #6ee7b7; }
 </style>
+<!-- ═══════ কেন গ্রন্থকানন — সংখ্যাগুলো আসল বইয়ের তালিকা থেকে গুনে বসানো (বানানো কিছু নেই) ═══════ -->
+<style>
+.gk-why{max-width:1100px;margin:26px auto 6px;padding:0 14px;}
+.gk-why-in{background:linear-gradient(135deg,#064e3b,#047857 60%,#059669);border-radius:22px;padding:22px 18px;color:#fff;position:relative;overflow:hidden;box-shadow:0 14px 34px -18px rgba(4,120,87,.7);}
+.gk-why-in::after{content:"";position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.07);}
+.gk-why h2{margin:0 0 4px;font-size:19px;font-weight:800;}
+.gk-why p.sub{margin:0 0 16px;font-size:12.5px;opacity:.85;}
+.gk-why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative;z-index:1;}
+.gk-why-c{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:12px 10px;text-align:center;text-decoration:none;color:#fff;transition:background .2s;}
+a.gk-why-c:hover{background:rgba(255,255,255,.18);}
+.gk-why-c b{display:block;font-size:22px;font-weight:800;line-height:1.1;}
+.gk-why-c span{font-size:11.5px;opacity:.9;}
+@media(max-width:640px){.gk-why-grid{grid-template-columns:repeat(2,1fr);}.gk-why h2{font-size:17px;}.gk-why-c b{font-size:19px;}}
+</style>
+<section class="gk-why" id="gkWhy" style="display:none;">
+  <div class="gk-why-in">
+    <h2>কেন গ্রন্থকানন?</h2>
+    <p class="sub">এক জায়গায় বাছাই করা ইসলামি ও প্রয়োজনীয় বই — ঘরে বসে অর্ডার</p>
+    <div class="gk-why-grid">
+      <a class="gk-why-c" href="filter.html?type=all&value=%E0%A6%B8%E0%A6%95%E0%A6%B2%20%E0%A6%AC%E0%A6%87"><b id="gkwBooks">—</b><span>টি বই ও আইটেম</span></a>
+      <a class="gk-why-c" href="all.html?type=pub"><b id="gkwPubs">—</b><span>প্রকাশনী</span></a>
+      <a class="gk-why-c" href="all.html?type=author"><b id="gkwAuthors">—</b><span>লেখক</span></a>
+      <div class="gk-why-c"><b id="gkwGift">—</b><span>টাকার অর্ডারে হাদিয়া</span></div>
+    </div>
+  </div>
+</section>
+<script>
+function gkRenderWhy(){
+    if(typeof books==='undefined'||!books.length) return;
+    var vis=books.filter(function(b){ return b&&!(window.gkIsHiddenBook&&gkIsHiddenBook(b)); });
+    var uniq=function(f){ var s={}; vis.forEach(function(b){ var v=String(b[f]||'').trim(); if(v) s[v]=1; }); return Object.keys(s).length; };
+    var bn=function(n){ return n.toLocaleString('en-IN').replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d];}); };
+    /* নিচের দিকে রাউন্ড করে "+" — তাই সংখ্যাটা সবসময় সত্যি */
+    var down=function(n,step){ return n>=step*2 ? bn(Math.floor(n/step)*step)+'+' : bn(n); };
+    document.getElementById('gkwBooks').textContent=down(vis.length,100);
+    document.getElementById('gkwPubs').textContent=down(uniq('pub'),10);
+    document.getElementById('gkwAuthors').textContent=down(uniq('author'),10);
+    document.getElementById('gkwGift').textContent='৳'+bn(window.GK_GIFT_THRESHOLD||1000)+'+';
+    document.getElementById('gkWhy').style.display='';
+}
+document.addEventListener('DOMContentLoaded',function(){ gkRenderWhy(); if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(gkRenderWhy); });
+</script>
 <!-- ═══════ TRUST STRIP (শিপিং/পেমেন্ট/রিটার্ন/সাপোর্ট) — compact, ফুটারের ঠিক আগে ═══════ -->
 <div class="trust-strip">
     <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div class="ti-text"><div class="ic-title">শিপিং</div><div class="ic-sub">সারা বাংলাদেশে ক্যাশ অন ডেলিভারি</div></div></div>
     <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span><div class="ti-text"><div class="ic-title">পেমেন্ট</div><div class="ic-sub">সহজ ও নিরাপদ পেমেন্ট</div></div></div>
     <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><polyline points="23,20 23,14 17,14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></span><div class="ti-text"><div class="ic-title">রিটার্ন</div><div class="ic-sub">সহজ রিটার্ন পলিসি</div></div></div>
-    <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span><div class="ti-text"><div class="ic-title">সাপোর্ট</div><div class="ic-sub">সকাল ৯টা — রাত ১০টা</div></div></div>
+    <div class="trust-item"><span class="ic-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span><div class="ti-text"><div class="ic-title">সাপোর্ট</div><div class="ic-sub">প্রতিদিন রাত ১০টা পর্যন্ত</div></div></div>
 </div>
 <footer>
   <div class="footer-inner">
@@ -1547,6 +1625,8 @@ footer {
             <a href="delivery.html" class="footer-link">ডেলিভারি নীতি</a>
             <a href="return.html" class="footer-link">রিটার্ন নীতি</a>
             <a href="contact.html" class="footer-link">যোগাযোগ</a>
+            <a href="terms.html" class="footer-link">শর্তাবলী</a>
+            <a href="privacy.html" class="footer-link">প্রাইভেসি পলিসি</a>
         </div>
         <div class="footer-col">
             <div class="footer-col-title">ক্যাটাগরি</div>
@@ -1726,7 +1806,7 @@ function runSearch(){
     const found=(typeof gkSearchBooks==='function')
         ? gkSearchBooks(gkVisibleBooks(books), q)
         : gkVisibleBooks(books).filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
-    if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.8;text-align:center;padding:0 30px;">সম্মানিত গ্রাহক, আপনার পছন্দের বইটি এখানে না পেলে নিচে WhatsApp অথবা FB পেজে Knock করুন — আমরা সব বই কিছুদিনের মধ্যে আপলোড করে দিব ✨</p></div>`;return;}
+    if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.6;text-align:center;padding:0 30px;margin-bottom:6px;">বইটি খুঁজে পাওয়া যায়নি</p><p style="font-size:13px;color:var(--text2);text-align:center;padding:0 30px;margin-bottom:14px;">আমাদের জানালে দ্রুত এনে দেব</p><button onclick="closeSearch&&closeSearch();setTimeout(function(){window.gkToggleContact&&gkToggleContact();},50)" style="display:block;margin:0 auto;padding:10px 22px;border:none;border-radius:24px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">যোগাযোগ করুন</button></div>`;return;}
     const shown=found.slice(0,40);
     body.innerHTML=`<div class="search-count show">🔍 "${escapeHTML(document.getElementById('searchInput').value)}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
         const idx=books.indexOf(b),pct=discPct(b),out=window.gkIsOut&&window.gkIsOut(idx);
@@ -1929,7 +2009,7 @@ function renderSections(list){
     GK_TAG_SECTIONS.forEach(tag=>{
         if(tag.name==='Best Writer'){ html+=gkAuthorStripHtml(); authorStripPlaced=true; }
         const bks=list.filter(b=>bookType(b)!=='প্রোডাক্ট' && bookTags(b).includes(tag.name));
-        if(bks.length) html+=gkSectionHtml(tag.name, 'tagbook-'+tag.name, {type:'tag',value:tag.name}, bks);
+        if(bks.length) html+=gkSectionHtml(window.gkTagLabel?gkTagLabel(tag.name):tag.name, 'tagbook-'+tag.name, {type:'tag',value:tag.name}, bks);
     });
     if(!authorStripPlaced) html+=gkAuthorStripHtml();
     /* ট্যাগ-শেলফ ও ক্যাটাগরি-শেলফের মাঝামাঝি জায়গা — প্রকাশনী চিপ */
@@ -2178,41 +2258,36 @@ function showToast(msg,color){
     t.innerText=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
 }
 function saveCart(){localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));}
+/* কার্ট ড্রয়ার এখন common.js-এর শেয়ার্ড প্রিমিয়াম ড্রয়ার — এখানে শুধু হোমপেজের ব্যাজগুলো আপডেট করে সেটাকে ডাকি */
 function updateCartUI(){
-    const box=document.getElementById('cartItems');if(!box)return;
-    let subtotal=0;
-    if(!cart.length){box.innerHTML='<div style="text-align:center;padding:50px 20px;color:var(--text2);"><div style="margin-bottom:10px;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div><p>কার্ট এখনও খালি</p></div>';}
-    else{
-        box.innerHTML='';
-        const grouped={};
-        cart.forEach(item=>{if(grouped[item.name])grouped[item.name].qty++;else grouped[item.name]={price:item.price,qty:1,img:item.img||''};});
-        for(let name in grouped){
-            const item=grouped[name];subtotal+=item.price*item.qty;
-            box.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px;">
-                <img src="${escapeHTML(item.img)}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);">
-                <div style="flex:1;"><h4 style="font-size:13px;margin:0;color:var(--text);">${escapeHTML(name)}</h4><span style="color:#dc2626;font-size:13px;font-weight:bold;">৳${item.price}</span></div>
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <button class="qty-ctrl-btn" data-name="${escapeHTML(name)}" onclick="changeQty(this.dataset.name,-1)">-</button>
-                    <span style="font-weight:bold;color:var(--text);">${item.qty}</span>
-                    <button class="qty-ctrl-btn" data-name="${escapeHTML(name)}" onclick="changeQty(this.dataset.name,1)">+</button>
-                </div></div>`;
-        }
-    }
     const count=cart.length;
     const cc=document.getElementById('cartCount');if(cc)cc.innerText=count;
     const bb=document.getElementById('bnavBadge');if(bb){bb.innerText=count;bb.classList.toggle('show',count>0);}
-    const disc=(typeof gkCouponDiscAmt==='function')?gkCouponDiscAmt(subtotal):Math.round(subtotal*discountPercent/100);
-    if(document.getElementById('subtotal'))document.getElementById('subtotal').innerText=subtotal;
-    if(document.getElementById('discountAmt'))document.getElementById('discountAmt').innerText=disc;
-    if(document.getElementById('total'))document.getElementById('total').innerText=subtotal-disc;
-    // হাদিয়া প্রগ্রেস বার (common.js-এর gkGiftBarHTML)
-    const ob=document.getElementById('cartOfferBanner');
-    if(ob){
-        const html=(typeof gkGiftBarHTML==='function')?gkGiftBarHTML(subtotal):'';
-        ob.innerHTML=html;
-        ob.style.display=html?'block':'none';
-    }
+    if(document.getElementById('cartBox')&&window.gkCartUpdateUI) gkCartUpdateUI();
+    gkMarkInCart();
 }
+/* কার্টে থাকা বইয়ের কার্ডে চিহ্ন — কভারে "✓ কার্টে আছে", সবুজ কিনারা, কার্ট বোতামে কয়টা আছে */
+function gkMarkInCart(){
+    const m={};
+    (typeof cart!=='undefined'?cart:[]).forEach(i=>{ m[i.name]=(m[i.name]||0)+1; });
+    document.querySelectorAll('.book-card').forEach(card=>{
+        const btn=card.querySelector('.bc-btn.bc-icon');
+        if(!btn) return;
+        const q=m[btn.dataset.name]||0;
+        card.classList.toggle('in-cart',q>0);
+        let s=btn.querySelector('.bc-qty');
+        if(q){ if(!s){ s=document.createElement('span'); s.className='bc-qty'; btn.appendChild(s); } s.textContent=String(q).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]); }
+        else if(s) s.remove();
+    });
+}
+/* সেকশনগুলো নতুন করে আঁকা হলেও (লাইভ লিস্ট, সম্প্রতি দেখা ইত্যাদি) চিহ্ন যেন থাকে */
+(function(){
+    let t=null;
+    new MutationObserver(function(muts){
+        if(!muts.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.classList.contains('book-card')||n.querySelector&&n.querySelector('.book-card'))))) return;
+        clearTimeout(t); t=setTimeout(gkMarkInCart,60);
+    }).observe(document.documentElement,{childList:true,subtree:true});
+})();
 function changeQty(name,delta){
     if(delta===1){const item=cart.find(i=>i.name===name);if(item)cart.push({...item});}
     else{let i=-1;for(let j=cart.length-1;j>=0;j--){if(cart[j].name===name){i=j;break;}}if(i!==-1)cart.splice(i,1);}
@@ -2276,13 +2351,13 @@ function copyCoupon(code){
     const inp = document.getElementById('couponCode');
     if(inp) inp.value = code;
     navigator.clipboard.writeText(code).then(()=>{
-        showToast('✅ কুপন কপি হয়েছে — কার্টে Apply করুন!','#059669');
+        showToast('✅ কুপন কপি হয়েছে — চেকআউটে ব্যবহার করুন','#059669');
     }).catch(()=>{
         showToast('✅ কুপন কোড সেট হয়েছে!','#059669');
     });
 }
-function showCart(){document.getElementById('cartBox').style.display='flex';renderCouponSection();}
-function closeCart(){document.getElementById('cartBox').style.display='none';}
+function showCart(){ if(window.gkOpenCart) gkOpenCart(); }
+function closeCart(){ if(window.gkCloseCart) gkCloseCart(); }
 function openOrderForm(){
     if(!cart.length)return showToast('⚠️ কার্ট খালি!','#dc2626');
     const inp=document.getElementById('couponCode');
@@ -2432,7 +2507,8 @@ function loadRecentSalesTicker(){
     if(typeof db==='undefined'||!db)return;
     db.ref('recentSales').limitToLast(15).get().then(snap=>{
         if(!snap.exists())return;
-        const arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.book)arr.push(v);});
+        /* শুধু গত ৩০ দিনের অর্ডার — পুরনো অর্ডার "এইমাত্র বিক্রি" হিসেবে ঘুরিয়ে দেখাই না */
+        const arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.book&&v.t&&Date.now()-v.t<30*864e5)arr.push(v);});
         if(!arr.length)return;
         arr.sort((a,b)=>(b.t||0)-(a.t||0));
         const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -2442,7 +2518,7 @@ function loadRecentSalesTicker(){
         const el=document.createElement('div');el.className='gk-sale-toast';
         el.innerHTML='<div class="gk-sale-ico">📦</div><div class="gk-sale-txt"><div id="gkSaleMsg"></div><div class="gk-sale-time" id="gkSaleTime"></div></div>';
         document.body.appendChild(el);
-        const rel=t=>{const d=Date.now()-(t||Date.now());const m=Math.floor(d/60000);if(m<1)return'এইমাত্র';if(m<60)return m+' মিনিট আগে';const h=Math.floor(m/60);if(h<24)return h+' ঘণ্টা আগে';return Math.floor(h/24)+' দিন আগে';};
+        const bnd=n=>String(n).replace(/\d/g,x=>'০১২৩৪৫৬৭৮৯'[x]);const rel=t=>{const d=Date.now()-(t||Date.now());const m=Math.floor(d/60000);if(m<1)return'এইমাত্র';if(m<60)return bnd(m)+' মিনিট আগে';const h=Math.floor(m/60);if(h<24)return bnd(h)+' ঘণ্টা আগে';return bnd(Math.floor(h/24))+' দিন আগে';};
         let i=0;
         function showOne(){
             const s=arr[i%arr.length];i++;
@@ -2513,6 +2589,7 @@ function loadReviewSlider(){
     if(typeof db==='undefined'||!db)return;
     db.ref('reviews').get().then(snap=>{
         if(!snap.exists())return;
+        if(window.gkSetRatings) gkSetRatings(snap.val()); /* কার্ডের ★ রেটিং — একই ডেটা, আলাদা ডাউনলোড লাগে না */
         const all=[];
         snap.forEach(bk=>{bk.forEach(r=>{const v=r.val();if(v&&Number(v.rating)>=4&&v.comment&&String(v.comment).trim())all.push({...v,bookId:bk.key});});});
         if(!all.length)return;

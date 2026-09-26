@@ -465,6 +465,7 @@
         </div>
     </div>
 </nav>
+<div id="gkMenuBar"></div>
 
 <nav class="book-crumb" id="bookCrumb" aria-label="breadcrumb"></nav>
 
@@ -498,7 +499,6 @@
             <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="13" rx="1.5"/><path d="M16 10h3.5L22 13.5V19h-6"/><circle cx="6" cy="19.5" r="1.6"/><circle cx="17.5" cy="19.5" r="1.6"/></svg> সারাদেশে হোম ডেলিভারি</div>
             <div class="row"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg> ক্যাশ অন ডেলিভারি সুবিধা</div>
         </div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> ট্যাপ করুন বড় করে দেখতে</div>
         <div class="view-badge" id="viewBadge"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> লোড হচ্ছে...</div>
         <button class="wl-btn-lg" id="wlBtnLg" onclick="toggleWL()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
     </div><!-- end img-card -->
@@ -691,8 +691,7 @@
 
     <!-- ══ AI SUGGEST ══ -->
     <div class="ai-suggest-section">
-        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M12 2v4M8 11V9a4 4 0 0 1 8 0v2"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/><line x1="9" y1="19" x2="15" y2="19"/></svg> AI বই সুপারিশ</h3>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">এই বইয়ের মতো আর কী পড়তে চান?</div>
+        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M12 2v4M8 11V9a4 4 0 0 1 8 0v2"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/><line x1="9" y1="19" x2="15" y2="19"/></svg> আপনার জন্য আরও বই</h3>
         <div class="ai-tag-row" id="aiTagRow"></div>
         <div id="aiResultArea"><div class="ai-loading">বিষয় বেছে নিন...</div></div>
     </div>
@@ -1398,8 +1397,9 @@ function loadBook(){
         db.ref('stock/'+idx).once('value').then(snap=>{
             const inStock=snap.val()!==false;
             const catTxt=bookMainCat(b); const catBadge=(catTxt&&GK_TAXO_CATS.has(catTxt))?`<span class="badge b-cat">${escapeHTML(catTxt)}</span>`:'';
-            badges.innerHTML=catBadge+`<span class="${inStock?'badge b-ok':'badge b-out'}"><span class="stock-dot"></span>${inStock?'স্টক আছে — আজই অর্ডার করুন':'স্টক শেষ'}</span>`;
+            badges.innerHTML=catBadge+`<span class="${inStock?'badge b-ok':'badge b-out'}"><span class="stock-dot"></span>${inStock?'স্টকে আছে':'স্টক শেষ'}</span>`;
             if(!inStock){
+                gkLdPatch(ld=>{ ld.offers.availability='https://schema.org/OutOfStock'; });
                 ['btnCart','btnBuy','stickyBuy'].forEach(id=>{
                     const el=document.getElementById(id);
                     if(el){el.classList.add('btn-disabled');el.onclick=()=>showToast('❌ এই বইটি এখন স্টকে নেই!');}
@@ -1496,11 +1496,19 @@ function updateSEO(b,idx,bookImg,desc){
             "seller":{"@type":"Organization","name":"গ্রন্থকানন"}
         }
     };
-    if(isBook&&b.author)ld.description=`${b.author} রচিত "${b.name}"। `+desc;
-    const s=document.createElement('script');
-    s.type='application/ld+json';
+    if(isBook&&b.author){ ld.description=`${b.author} রচিত "${b.name}"। `+desc; ld.author={"@type":"Person","name":b.author}; }
+    /* প্রি-অর্ডারের বই — Google-কে "স্টকে আছে" না বলে সত্যিটা বলি */
+    if((Array.isArray(b.tags)&&b.tags.indexOf('Pre Order')>-1)||(Array.isArray(b.cats)&&b.cats.indexOf('Pre Order')>-1)) ld.offers.availability="https://schema.org/PreOrder";
+    let s=document.getElementById('gkLd');
+    if(!s){ s=document.createElement('script'); s.type='application/ld+json'; s.id='gkLd'; document.head.appendChild(s); }
     s.textContent=JSON.stringify(ld);
-    document.head.appendChild(s);
+    window.__gkLd=ld;
+}
+/* স্টক/রিভিউ পরে আসে — তখন Google-এর ডেটাও আসল তথ্য দিয়ে আপডেট করি */
+function gkLdPatch(fn){
+    const ld=window.__gkLd, s=document.getElementById('gkLd');
+    if(!ld||!s) return;
+    fn(ld); s.textContent=JSON.stringify(ld);
 }
 function goToCart(){showCart();} /* শেয়ার্ড কার্ট ড্রয়ার (common.js) */
 function goBack(){window.history.back();}
@@ -1613,6 +1621,9 @@ function updateRatingBars(reviews){
     const counts={1:0,2:0,3:0,4:0,5:0};
     reviews.forEach(r=>{if(r.rating>=1&&r.rating<=5)counts[r.rating]++;});
     const avg=total?reviews.reduce((s,r)=>s+(r.rating||0),0)/total:0;
+    /* আসল রিভিউ থাকলে তবেই Google-কে রেটিং জানাই (সার্চ রেজাল্টে ★ দেখাতে পারে) */
+    const rated=reviews.filter(r=>r.rating>=1&&r.rating<=5);
+    if(rated.length) gkLdPatch(ld=>{ ld.aggregateRating={"@type":"AggregateRating","ratingValue":(rated.reduce((s,r)=>s+Number(r.rating),0)/rated.length).toFixed(1),"reviewCount":rated.length,"bestRating":5,"worstRating":1}; });
     document.getElementById('avgRating').innerText=total?avg.toFixed(1):'—';
     document.getElementById('avgStars').innerHTML=total?'<svg class="eico" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>'.repeat(Math.round(avg))+'<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>'.repeat(5-Math.round(avg)):'<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>';
     document.getElementById('totalReviews').innerText=total+'টি রিভিউ';
@@ -1724,22 +1735,28 @@ function toggleAiTag(el,tag){
     renderAISuggest();
 }
 function renderAISuggest(){
-    const pool=books.filter((b,i)=>{
-        if(i===curIdx||gkIsHiddenBook(b))return false;
+    /* আগে প্রতিটা বইয়ে এলোমেলো "৯২% মিল" বানিয়ে দেখানো হতো — এখন আসল কারণ দেখাই
+       (একই লেখক / একই বিষয় / একই প্রকাশনী), আর সেই মিল অনুযায়ীই সাজাই */
+    const cur=curBook||{};
+    const pool=books.map((b,i)=>({b,i})).filter(({b,i})=>{
+        if(i===curIdx||!b||gkIsHiddenBook(b))return false;
         return selectedTags.some(t=>bookMainCat(b)===t||bookTags(b).includes(t)||b.subject===t);
-    });
-    pool.sort(()=>Math.random()-0.5);
+    }).map(x=>{
+        const b=x.b;
+        const sameAuth=cur.author&&b.author===cur.author, sameSubj=cur.subject&&b.subject===cur.subject, samePub=cur.pub&&b.pub===cur.pub;
+        x.score=(sameAuth?4:0)+(sameSubj?2:0)+(samePub?1:0)+(/^https?:/.test(b.img||'')?0.5:0)+Math.random()*0.4;
+        x.why=sameAuth?'একই লেখক':sameSubj?'একই বিষয়':samePub?'একই প্রকাশনী':'';
+        return x;
+    }).sort((a,b)=>b.score-a.score);
     const picks=pool.slice(0,8);
     if(!picks.length){document.getElementById('aiResultArea').innerHTML='<div class="ai-loading">এই বিষয়ে আরো বই শীঘ্রই আসছে</div>';return;}
-    document.getElementById('aiResultArea').innerHTML=`<div class="ai-result-row">${picks.map((b,i)=>{
-        const ri=books.indexOf(b);
+    document.getElementById('aiResultArea').innerHTML=`<div class="ai-result-row">${picks.map(({b,i,why})=>{
         const img=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
-        const match=Math.max(70,100-i*4-(Math.floor(Math.random()*6)));
-        return `<div class="ai-book" onclick="window.location.href='book.html?id=${encodeURIComponent(b.bid||ri)}'">
+        return `<div class="ai-book" onclick="window.location.href='book.html?id=${encodeURIComponent(b.bid||i)}'">
             <img src="${escapeHTML(img)}" alt="${escapeHTML(b.name)}" loading="lazy">
             <div class="ai-book-name">${escapeHTML(b.name)}</div>
             <div class="ai-book-price">৳ ${b.price}</div>
-            <span class="ai-match">${match}% মিল</span>
+            ${why?`<span class="ai-match">${why}</span>`:''}
         </div>`;
     }).join('')}</div>`;
 }

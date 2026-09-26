@@ -708,6 +708,324 @@
         .spin-ic{animation:spin-rotate 1s linear infinite;display:inline-block;}
         @keyframes spin-rotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
         .modal-pub-tag{color:var(--primary);font-weight:700;font-size:11px;background:var(--primary-light);padding:1px 7px;border-radius:6px;}
+
+        /* ═══════════════════════════════════════════════════════════════
+           নতুন চেহারা (২০২৬-০৯) — শুধু রঙ/মাপ/ফাঁক বদলায়, কোনো কাজ নয়।
+           উপরের পুরনো স্টাইলের উপরে বসে; পুরো অংশটা মুছে দিলেই আগের চেহারা ফিরবে।
+           রঙ বদলাতে চাইলে নিচের :root-এর --primary ইত্যাদি বদলালেই সবখানে বদলাবে।
+        ═══════════════════════════════════════════════════════════════ */
+        :root {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --primary-light: rgba(5,150,105,0.10);
+            --bg: #f3f5f7;
+            --surface: #ffffff;
+            --surface-glass: rgba(255,255,255,0.88);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e4e7ec;
+            --shadow-sm: 0 1px 2px rgba(16,24,40,0.05);
+            --shadow-md: 0 6px 18px rgba(16,24,40,0.08);
+            --shadow-lg: 0 16px 40px rgba(16,24,40,0.14);
+            --card-shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+            --radius: 16px;
+            --sidebar-bg: #0c1f1a;
+            --sidebar-border: rgba(255,255,255,0.08);
+            --sidebar-text: rgba(255,255,255,0.66);
+            --sidebar-active: rgba(52,211,153,0.16);
+            --sidebar-active-text: #ffffff;
+            --accent: #34d399;
+            /* অর্ডারের অবস্থা — প্রতিটা আলাদা রঙে, এক নজরে বোঝা যায় */
+            --st-pending-bg:#fef3c7;  --st-pending:#92400e;
+            --st-confirmed-bg:#dbeafe; --st-confirmed:#1e40af;
+            --st-processing-bg:#ede9fe; --st-processing:#5b21b6;
+            --st-shipped-bg:#e0f2fe;  --st-shipped:#075985;
+            --st-delivered-bg:#dcfce7; --st-delivered:#166534;
+        }
+        [data-theme="dark"] {
+            --primary: #34d399;
+            --primary-hover: #6ee7b7;
+            --primary-light: rgba(52,211,153,0.13);
+            --bg: #0a1110;
+            --surface: #111b18;
+            --surface-glass: rgba(17,27,24,0.88);
+            --text-main: #e7efec;
+            --text-muted: #94a9a1;
+            --border: rgba(255,255,255,0.09);
+            --card-shadow: 0 1px 2px rgba(0,0,0,0.35);
+            --sidebar-bg: #07120f;
+            --st-pending-bg:rgba(251,191,36,.15);  --st-pending:#fcd34d;
+            --st-confirmed-bg:rgba(96,165,250,.15); --st-confirmed:#93c5fd;
+            --st-processing-bg:rgba(167,139,250,.15); --st-processing:#c4b5fd;
+            --st-shipped-bg:rgba(56,189,248,.15);  --st-shipped:#7dd3fc;
+            --st-delivered-bg:rgba(52,211,153,.16); --st-delivered:#6ee7b7;
+        }
+        body{font-size:14px;-webkit-font-smoothing:antialiased;}
+        .text-xs{font-size:12px;} .text-sm{font-size:13.5px;}
+
+        /* ── সাইডবার ── */
+        .sidebar{width:236px;background:linear-gradient(180deg,#0f2a22 0%,var(--sidebar-bg) 55%);box-shadow:4px 0 24px rgba(0,0,0,0.08);}
+        [data-theme="dark"] .sidebar{background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);}
+        /* min-width:0 — আগে ভেতরের কোনো লম্বা লাইন মূল অংশকে ফোনের চেয়ে চওড়া করে দিত,
+           ফলে পুরো পেজ ছোট হয়ে যেত আর ডানের বোতাম/স্ট্যাটাস কেটে যেত */
+        .main-area{margin-left:236px;min-width:0;}
+        .topbar-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .sidebar-logo{padding:18px 16px;}
+        .sidebar-logo-icon{border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
+        .sidebar-logo-text h2{font-size:16px;letter-spacing:.2px;}
+        .sidebar-logo-text span{font-size:11px;color:rgba(255,255,255,0.45);}
+        .sidebar-nav{padding:12px 10px;}
+        .nav-section-label{font-size:10.5px;letter-spacing:1.4px;color:rgba(255,255,255,0.38);padding:14px 12px 6px;}
+        .nav-item{font-size:13.5px;padding:10px 12px;border-radius:10px;gap:11px;margin-bottom:2px;}
+        .nav-item:hover{background:rgba(255,255,255,0.07);color:#fff;}
+        .nav-item.active{background:var(--sidebar-active);color:#fff;font-weight:700;}
+        .nav-item.active::before{background:var(--accent);width:3.5px;left:-10px;top:20%;height:60%;border-radius:0 3px 3px 0;}
+        .nav-item.active .icon-sm{stroke:var(--accent);}
+        .nav-badge{background:#ef4444;font-size:10.5px;padding:1px 7px;}
+        .nav-subgroup-label{font-size:10px;color:rgba(255,255,255,0.34);padding:10px 12px 4px 34px;}
+        .nav-sub-item{font-size:12.5px;padding:7px 12px 7px 34px;border-radius:9px;}
+        .nav-sub-item:hover{background:rgba(255,255,255,0.07);color:#fff;}
+        .nav-sub-item.active{background:var(--sidebar-active);color:#fff;}
+        .nav-sub-item .heavy-dot{background:var(--accent);}
+        .sidebar-footer{padding:14px 16px;background:rgba(0,0,0,0.15);}
+        .sidebar-avatar{background:linear-gradient(135deg,#10b981,#059669);color:#fff;width:34px;height:34px;font-size:12px;}
+        .sidebar-user-info strong{font-size:13px;color:#fff;}
+        .sidebar-user-info small{font-size:11px;color:rgba(255,255,255,0.45);}
+        .sidebar-logout{color:rgba(255,255,255,0.45);}
+
+        /* ── উপরের বার ── */
+        .topbar{padding:12px 24px;min-height:62px;box-shadow:0 1px 0 var(--border);}
+        .topbar-title{font-size:17px;font-weight:800;letter-spacing:.1px;}
+        .topbar-date{font-size:12px;}
+        .topbar-icon-btn,.topbar-menu-btn{width:38px;height:38px;border-radius:10px;background:var(--surface);}
+        .topbar-new-btn{height:38px;padding:0 16px;border-radius:10px;font-size:13px;background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 4px 12px rgba(5,150,105,0.28);}
+        .topbar-new-btn:hover{background:linear-gradient(135deg,#059669,#047857);}
+        .page-content{padding:22px 24px 40px;}
+
+        /* ── বোতাম, ইনপুট, ট্যাব, চিপ ── */
+        .btn{font-size:13.5px;padding:10px 18px;border-radius:10px;}
+        .btn-sm{font-size:12.5px;padding:7px 12px;border-radius:9px;}
+        .btn-primary{background:var(--primary);box-shadow:0 2px 6px rgba(5,150,105,0.22);}
+        [data-theme="dark"] .btn-primary{color:#052e22;}
+        .btn-ghost{background:var(--surface);color:var(--text-main);}
+        .app-layout .form-input{background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:14px;padding:11px 13px;}
+        .app-layout .form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light);}
+        .app-layout .form-label,.be-label{font-size:11.5px;letter-spacing:.3px;}
+        .tabs-container{background:var(--surface);border-radius:12px;padding:5px;box-shadow:var(--card-shadow);}
+        .tab-btn{font-size:13px;padding:9px 16px;border-radius:9px;}
+        .tab-btn:hover{background:var(--bg);}
+        .tab-btn.active{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(5,150,105,0.25);}
+        [data-theme="dark"] .tab-btn.active{color:#052e22;}
+        .chip,.view-btn,.rp-btn{font-size:12.5px;padding:6px 14px;background:var(--surface);}
+        .chip.active,.view-btn.active,.rp-btn.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+        .sec-title{font-size:14px;font-weight:800;border-left-color:var(--primary);border-left-width:4px;padding-left:10px;margin-bottom:12px;}
+
+        /* ── কার্ড (সব জায়গায় এক রকম — সাদা, হালকা ছায়া, গোল কোণা) ── */
+        .dash-panel,.stat-card,.card,.tool-card,.group-card,.be-list-item,.analytics-panel,.r-stat,
+        .report-table-wrap,.chart-bar-wrap,.quick-action-btn,.kb-card{border-color:var(--border);box-shadow:var(--card-shadow);border-radius:16px;}
+        .card:hover,.be-list-item:hover,.kb-card:hover{border-color:rgba(5,150,105,0.45);box-shadow:var(--shadow-md);}
+        .dash-panel-head,.analytics-head,.report-table-head{padding:14px 18px;}
+        .dash-panel-head span,.analytics-head{font-size:14px;font-weight:800;}
+        .dash-panel-link{font-size:12.5px;}
+        .tool-card{padding:20px;}
+        .tool-card h3{font-size:15px;font-weight:800;margin-bottom:6px;}
+        .tool-card p{font-size:13px;line-height:1.7;}
+
+        /* ── ড্যাশবোর্ডের ৪টা সংখ্যা — প্রতিটা আলাদা রঙে ── */
+        .dash-stat-grid{gap:14px;margin-bottom:22px;}
+        .stat-card{padding:18px;}
+        .stat-icon{width:44px;height:44px;border-radius:12px;margin-bottom:12px;}
+        .stat-val{font-size:28px;font-weight:800;color:var(--text-main) !important;}
+        .stat-label{font-size:13px;font-weight:600;}
+        .stat-trend{font-size:11.5px;}
+        .dash-stat-grid .stat-card:nth-child(1) .stat-icon{background:#ecfdf5 !important;color:#059669 !important;}
+        .dash-stat-grid .stat-card:nth-child(2) .stat-icon{background:var(--st-pending-bg) !important;color:#d97706 !important;}
+        .dash-stat-grid .stat-card:nth-child(3) .stat-icon{background:var(--st-shipped-bg) !important;color:#0284c7 !important;}
+        .dash-stat-grid .stat-card:nth-child(4) .stat-icon{background:var(--st-delivered-bg) !important;color:#16a34a !important;}
+        .dash-stat-grid .stat-icon svg{stroke:currentColor !important;}
+        [data-theme="dark"] .dash-stat-grid .stat-card:nth-child(1) .stat-icon{background:rgba(52,211,153,.13) !important;color:#6ee7b7 !important;}
+        .dash-stat-grid .stat-card::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:#10b981;opacity:.9;}
+        .dash-stat-grid .stat-card:nth-child(2)::after{background:#f59e0b;}
+        .dash-stat-grid .stat-card:nth-child(3)::after{background:#0ea5e9;}
+        .dash-stat-grid .stat-card:nth-child(4)::after{background:#22c55e;}
+        .dash-quick-grid{gap:14px;}
+        .quick-action-btn{padding:18px 12px;font-size:13.5px;color:var(--text-main);gap:10px;}
+        .quick-action-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,rgba(16,185,129,.16),rgba(5,150,105,.08));}
+        .quick-action-btn:hover{transform:translateY(-2px);}
+        .dash-two-col{gap:16px;}
+        .bar-row{font-size:12.5px;}
+        .bar-label{width:96px;}
+        .bar-track{height:7px;border:none;background:var(--bg);}
+        .bar-fill{background:linear-gradient(90deg,#34d399,#059669);}
+
+        /* ── অর্ডার কার্ড ও অবস্থা ── */
+        .card{padding:16px 18px;}
+        .oid{font-size:13px;}
+        .order-date{font-size:11.5px;}
+        .order-name{font-size:15.5px;}
+        .info-row{font-size:13px;}
+        .total-price{font-size:16px;}
+        .pay-method{font-size:12px;padding:3px 10px;border-radius:20px;}
+        .status-badge{font-size:11px;padding:4px 10px;letter-spacing:.3px;}
+        .status-pending{background:var(--st-pending-bg);color:var(--st-pending);}
+        .status-confirmed{background:var(--st-confirmed-bg);color:var(--st-confirmed);}
+        .status-processing{background:var(--st-processing-bg);color:var(--st-processing);}
+        .status-shipped{background:var(--st-shipped-bg);color:var(--st-shipped);}
+        .status-delivered{background:var(--st-delivered-bg);color:var(--st-delivered);}
+        .kb-col{background:var(--surface);border-radius:14px;box-shadow:var(--card-shadow);}
+        .kb-col.kbc-pending{border-top:3px solid #f59e0b;}
+        .kb-col.kbc-confirmed{border-top:3px solid #3b82f6;}
+        .kb-col.kbc-processing{border-top:3px solid #8b5cf6;}
+        .kb-col.kbc-shipped{border-top:3px solid #0ea5e9;}
+        .kb-col.kbc-delivered{border-top:3px solid #22c55e;}
+        .kbc-pending .kb-count{background:var(--st-pending-bg);color:var(--st-pending);}
+        .kbc-confirmed .kb-count{background:var(--st-confirmed-bg);color:var(--st-confirmed);}
+        .kbc-processing .kb-count{background:var(--st-processing-bg);color:var(--st-processing);}
+        .kbc-shipped .kb-count{background:var(--st-shipped-bg);color:var(--st-shipped);}
+        .kbc-delivered .kb-count{background:var(--st-delivered-bg);color:var(--st-delivered);}
+        .kb-col-title{font-size:12px;}
+        .kb-card-name{font-size:13px;} .kb-card-book{font-size:12px;}
+        .group-header{padding:14px 18px;background:var(--surface);}
+        .group-title h3{font-size:14.5px;}
+        .count-badge{font-size:12px;padding:3px 10px;}
+
+        /* ── বই এডিটর / স্টক ── */
+        .sync-card{background:linear-gradient(135deg,#065f46,#059669);border-radius:16px;padding:16px 18px;box-shadow:0 6px 18px rgba(5,150,105,0.25);}
+        .sync-info h4{font-size:15px;} .sync-info p{font-size:12.5px;}
+        .be-stats{background:var(--surface);box-shadow:var(--card-shadow);border:1px solid var(--border);font-size:13px;}
+        .be-title{font-size:14px;} .be-meta{font-size:12.5px;} .be-status{font-size:11.5px;}
+        .be-list-item.missing{border-left:4px solid #f87171;}
+        .be-list-item.hasimg{border-left:4px solid #34d399;}
+        .be-body{background:var(--bg);}
+        .book-item{background:var(--surface);border:1px solid var(--border);}
+        .book-manage-name{font-size:13.5px;}
+
+        /* ── অর্ডারের বিস্তারিত (মোডাল) — বেইজ/কালো-হলুদের বদলে সাইটের সাথে মিলিয়ে ── */
+        .modal-overlay{background:rgba(15,23,42,0.45);}
+        .modal-box{border-radius:20px 20px 0 0;border-top:5px solid var(--primary);}
+        .modal-h::after{background:rgba(5,150,105,0.08);}
+        .modal-title::before{color:#059669;}
+        .modal-close{background:#f1f5f9;border-color:#e2e8f0;}
+        .modal-b{background:#f8fafc;}
+        .m-label{color:#047857;border-left-color:#059669;}
+        .m-info{border-color:#e2e8f0;}
+        .m-total{background:linear-gradient(135deg,#065f46,#059669);}
+        .bk-table thead tr{background:#065f46;}
+        .bk-table tbody tr:nth-child(even) td{background:#f8fafc;}
+        .modal-status-select,#orderModal .form-input{background:#fff;border:1px solid #cbd5e1;color:#0f172a;}
+        .modal-status-select:focus,#orderModal .form-input:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.15);background:#fff;}
+        .modal-update-btn,.note-save-btn,.nop-btn{background:linear-gradient(135deg,#10b981,#059669);color:#fff;}
+        .modal-update-btn:hover,.note-save-btn:hover,.nop-btn:hover{background:#047857;}
+        .modal-offers-box{background:#ecfdf5;border-color:#a7f3d0;}
+        .notes-section,.courier-section{border-top-color:#e2e8f0;}
+        .notes-label,.courier-label{color:#047857;border-left-color:#059669;}
+        .note-input{background:#fff;border-color:#cbd5e1;}
+        .note-input:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.15);}
+
+        /* ── নতুন অর্ডারের পপআপ ── */
+        .new-order-popup{background:#fff;border-color:#e2e8f0;border-top-color:#059669;}
+        .nop-head{background:linear-gradient(135deg,#065f46,#059669);}
+        .nop-books{background:#f0fdf4;}
+
+        /* ── লগইন পেজ ── */
+        #loginGate{background:radial-gradient(circle at 30% 20%,#14532d 0%,#0c1f1a 55%,#07120f 100%);}
+        .login-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:22px;padding:34px 30px;box-shadow:0 24px 60px rgba(0,0,0,0.35);backdrop-filter:blur(12px);}
+        .login-card h2{font-size:21px;}
+        .login-card p{font-size:13px;color:rgba(255,255,255,0.55);}
+        .login-icon{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border-radius:18px;box-shadow:0 8px 20px rgba(16,185,129,0.35);}
+        .form-label{color:rgba(255,255,255,0.6);font-size:12px;}
+        .form-input{font-size:14px;padding:12px 14px;}
+
+        /* ── বাকি ছোট জিনিস ── */
+        .toast{border-radius:12px;font-size:13.5px;}
+        .notif-item-name{font-size:13.5px;} .notif-item-sub{font-size:12px;}
+        .r-stat-val{font-size:26px;} .r-stat-lbl{font-size:12.5px;}
+        .report-table{font-size:13.5px;} .report-table th{font-size:12px;}
+        .bs-name,.area-item{font-size:13px;}
+        .cattree-card{background:var(--surface);}
+        .empty-state{font-size:14.5px;}
+
+        /* ── ফোন ── */
+        @media(max-width:768px){
+            .main-area{margin-left:0;}
+            .sidebar{width:270px;}
+            .topbar{padding:10px 14px;min-height:58px;}
+            .topbar-title{font-size:16px;}
+            .page-content{padding:14px 12px 30px;}
+            .stat-card{padding:14px;}
+            .stat-val{font-size:24px;}
+            .dash-stat-grid,.dash-quick-grid{gap:10px;}
+            .card{padding:14px;}
+        }
+
+        /* ═══ সাজানো-গোছানো (লেআউট) ═══════════════════════════════════
+           বড় পর্দায় সব পেজ মাঝখানে একটা নির্দিষ্ট চওড়ায় — আগে পুরো পর্দা জুড়ে
+           লম্বা হয়ে ছড়িয়ে যেত। প্যানেল দেখানো/লুকানো JS নিজেই করে (style="display:…"),
+           তাই এখানে শুধু "লুকানো নয়" অবস্থায় grid বসানো হয়। */
+        .page-content > div[id^="tabPanel"]{max-width:1280px;margin-left:auto;margin-right:auto;}
+        .sidebar-nav .nav-section-label{text-transform:none;letter-spacing:.3px;font-size:11.5px;}
+        /* টুলসের নিচের তালিকা শুধু টুলস পেজে থাকলে খোলা — সাইডবার ছোট থাকে */
+        .nav-group:not(:has(#navTools.active)) .nav-subgroup{display:none;}
+        #navTools{cursor:pointer;}
+
+        /* অর্ডার পেজ: উপরের ৪টা সংখ্যা এক সারিতে, রঙিন (ড্যাশবোর্ডের মতো) */
+        #tabPanelOrders .grid-2{grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+        #tabPanelOrders .grid-2 .stat-card{padding:16px 18px;}
+        #tabPanelOrders .grid-2 .stat-icon svg{stroke:currentColor !important;}
+        #tabPanelOrders .grid-2 .stat-card:nth-child(1) .stat-icon{background:#ecfdf5 !important;color:#059669 !important;}
+        #tabPanelOrders .grid-2 .stat-card:nth-child(2) .stat-icon{background:var(--st-pending-bg) !important;color:#d97706 !important;}
+        #tabPanelOrders .grid-2 .stat-card:nth-child(3) .stat-icon{background:var(--st-shipped-bg) !important;color:#0284c7 !important;}
+        #tabPanelOrders .grid-2 .stat-card:nth-child(4) .stat-icon{background:var(--st-delivered-bg) !important;color:#16a34a !important;}
+        /* ফিল্টার চিপ + লিস্ট/Kanban — একটা পরিষ্কার টুলবারে */
+        #tabPanelOrders .filter-scroll{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:8px;margin-bottom:10px;box-shadow:var(--card-shadow);}
+        #tabPanelOrders .filter-scroll .chip{border-color:transparent;background:transparent;}
+        #tabPanelOrders .filter-scroll .chip:hover{background:var(--bg);}
+        #tabPanelOrders .filter-scroll .chip.active{background:var(--primary);color:#fff;}
+        #tabPanelOrders .view-toggle{margin-bottom:14px;}
+        #ordersSecTitle{border:none !important;padding:0 !important;font-size:13.5px;color:var(--text-muted);}
+        /* অর্ডার কার্ড বড় পর্দায় পাশাপাশি (একসাথে অনেক অর্ডার দেখা যায়) */
+        @media(min-width:900px){
+            #orderList:not([style*="none"]){display:grid !important;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start;}
+            #orderList > .card{margin-bottom:0;}
+        }
+
+        /* টুলস: বড় পর্দায় দুই কলাম; দরকারি টুল আগে, কারিগরি/একবারের টুল শেষে */
+        @media(min-width:1000px){
+            #tabPanelTools:not([style*="none"]){display:grid !important;grid-template-columns:1fr 1fr;gap:16px;align-items:start;grid-auto-flow:row dense;}
+            #tabPanelTools > .sec-title{grid-column:1/-1;}
+            #tabPanelTools > .tool-card{margin-bottom:0;grid-column:auto !important;}
+            #tabPanelTools > #toolCard_tags,#tabPanelTools > #toolCard_landing{grid-column:1/-1 !important;}
+        }
+        @media(max-width:999px){ #tabPanelTools:not([style*="none"]){display:flex !important;flex-direction:column;} }
+        #tabPanelTools > .tool-card{margin-bottom:14px;}
+        #tabPanelTools > .sec-title{order:-1;}
+        /* সমান উচ্চতার কার্ড পাশাপাশি পড়ে এমন ক্রমে সাজানো */
+        #toolCard_orderSummary{order:1;} #toolCard_fraudCheck{order:2;}
+        #toolCard_coupon{order:3;} #pubOfferCard{order:4;}
+        #toolCard_banner{order:5;} #toolCard_offerPopup{order:6;}
+        #toolCard_catChips{order:7;} #toolCard_pubChips{order:8;}
+        #toolCard_catCards{order:9;} #toolCard_subTag{order:10;}
+        #toolCard_authorChips{order:11;} #toolCard_cleanup{order:12;}
+        #toolCard_tags{order:13;}
+        #toolCard_bulkUpload{order:14;} #toolCard_bookJs{order:15;}
+        #toolCard_blog{order:16;} #modManageCard{order:17;}
+        #toolCard_landing{order:18;}
+        #courierCard{order:19;} #driveFolderCard{order:20;}
+        #imgbbCard{order:21;} #driveApiCard{order:22;}
+        #pixelCard{order:23;} #toolCard_sitemap{order:24;} #toolCard_phoneIndex{order:25;}
+        #tabPanelTools[style*="none"]{display:none !important;}
+
+        @media(max-width:899px){
+            #tabPanelOrders .grid-2{grid-template-columns:repeat(2,1fr);gap:10px;}
+            /* ফোনে সংখ্যার কার্ড ছোট — আইকন বাঁয়ে, সংখ্যা ডানে (আগে অর্ধেক পর্দা নিত) */
+            .dash-stat-grid .stat-card,#tabPanelOrders .grid-2 .stat-card{display:grid;grid-template-columns:40px 1fr;column-gap:11px;align-items:center;padding:12px 13px !important;}
+            .dash-stat-grid .stat-icon,#tabPanelOrders .grid-2 .stat-icon{grid-row:span 2;margin:0;width:40px;height:40px;}
+            .dash-stat-grid .stat-val,#tabPanelOrders .grid-2 .stat-val{font-size:21px;}
+            .dash-stat-grid .stat-label,#tabPanelOrders .grid-2 .stat-label{margin-top:1px;font-size:12px;}
+            .dash-stat-grid .stat-trend{grid-column:2;margin-top:2px;}
+            .quick-action-btn{flex-direction:row;justify-content:flex-start;padding:11px 12px;gap:10px;text-align:left;font-size:13px;}
+            .quick-action-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;}
+        }
     </style>
 </head>
 <body>
@@ -885,10 +1203,10 @@
 
         <div class="sidebar-nav-wrap">
         <nav class="sidebar-nav" id="sidebarNav">
-            <div class="nav-section-label">OVERVIEW</div>
+            <div class="nav-section-label">প্রতিদিনের কাজ</div>
             <button class="nav-item active" id="navDashboard" onclick="switchTab('dashboard',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                Dashboard
+                ড্যাশবোর্ড
             </button>
             <button class="nav-item" id="navOrders" onclick="switchTab('orders',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
@@ -899,7 +1217,7 @@
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 দৈনিক
             </button>
-            <div class="nav-section-label" style="margin-top:8px;">CATALOGUE</div>
+            <div class="nav-section-label" style="margin-top:8px;">বই ও স্টক</div>
             <button class="nav-item" id="navBooks" onclick="switchTab('books',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 স্টক
@@ -908,22 +1226,22 @@
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                 বই এডিট
             </button>
-            <button class="nav-item" id="navAnalytics" onclick="switchTab('analytics',this)">
-                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line><circle cx="18" cy="6" r="2"></circle><circle cx="12" cy="2" r="2"></circle><circle cx="6" cy="14" r="2"></circle></svg>
-                Analytics
-            </button>
-                        <div class="nav-section-label" style="margin-top:8px;">ANALYTICS</div>
+            <div class="nav-section-label" style="margin-top:8px;">হিসাব ও রিপোর্ট</div>
             <button class="nav-item" id="navReport" onclick="switchTab('report',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 বিক্রয় রিপোর্ট
+            </button>
+            <button class="nav-item" id="navAnalytics" onclick="switchTab('analytics',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line><circle cx="18" cy="6" r="2"></circle><circle cx="12" cy="2" r="2"></circle><circle cx="6" cy="14" r="2"></circle></svg>
+                অ্যানালিটিক্স
             </button>
             <button class="nav-item" id="navReviews" onclick="switchTab('reviews',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 রিভিউ
             </button>
-            <div class="nav-section-label" style="margin-top:8px;">SYSTEM</div>
+            <div class="nav-section-label" style="margin-top:8px;">সেটিংস</div>
             <div class="nav-group">
-                <button class="nav-item nav-group-toggle" id="navTools" style="cursor:default;">
+                <button class="nav-item nav-group-toggle" id="navTools" onclick="switchTool('all',document.querySelector('.tool-cat-item[data-cat=all]'))">
                     <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     টুলস
                 </button>
@@ -970,7 +1288,7 @@
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
             <div style="flex:1;min-width:0;">
-                <div class="topbar-title" id="topbarTitle">Dashboard</div>
+                <div class="topbar-title" id="topbarTitle">ড্যাশবোর্ড</div>
                 <div class="topbar-date" id="topbarDate"></div>
             </div>
             <div class="topbar-actions">
@@ -2038,7 +2356,7 @@ function showDashboard(){
 function switchTab(tab, btnEl){
     document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
     if(btnEl) btnEl.classList.add('active');
-    const titles={dashboard:'Dashboard',orders:'অর্ডার',daily:'দৈনিক অর্ডার',books:'স্টক ম্যানেজ',editor:'বই এডিট',tools:'টুলস',report:'বিক্রয় রিপোর্ট',analytics:'Analytics',reviews:'রিভিউ'};
+    const titles={dashboard:'ড্যাশবোর্ড',orders:'অর্ডার',daily:'দৈনিক অর্ডার',books:'স্টক ম্যানেজ',editor:'বই এডিট',tools:'টুলস',report:'বিক্রয় রিপোর্ট',analytics:'অ্যানালিটিক্স',reviews:'রিভিউ'};
     document.getElementById('topbarTitle').innerText=titles[tab]||tab;
     ['Dashboard','Orders','Daily','Books','Editor','Tools','Report','Analytics','Reviews'].forEach(t=>{
         const el=document.getElementById('tabPanel'+t);
@@ -5321,17 +5639,26 @@ async function deleteLandingPage(slug){
 const SITE_BASE_URL='https://gronthokanon.com';
 function downloadSitemap(){
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
-    const staticPages=['','index.html','filter.html','track.html','about.html','faq.html','blog.html','blog.html?post=keno-boi-porbo','blog.html?post=notun-pathok-boi','blog.html?post=boi-upohar','contact.html','delivery.html','return.html'];
+    const staticPages=['','all.html?type=pub','all.html?type=author','track.html','about.html','faq.html','blog.html','blog.html?post=keno-boi-porbo','blog.html?post=notun-pathok-boi','blog.html?post=boi-upohar','contact.html','delivery.html','return.html','terms.html','privacy.html'];
+    const today=new Date().toISOString().slice(0,10);
+    const xmlEsc=s=>String(s).replace(/&/g,'&amp;');
+    const u=(loc,freq,pri)=>'  <url><loc>'+xmlEsc(SITE_BASE_URL+'/'+loc)+'</loc><lastmod>'+today+'</lastmod><changefreq>'+freq+'</changefreq>'+(pri?'<priority>'+pri+'</priority>':'')+'</url>\n';
     let xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-    staticPages.forEach(p=>{ xml+='  <url><loc>'+SITE_BASE_URL+'/'+p+'</loc><changefreq>weekly</changefreq></url>\n'; });
-    src.forEach((b,i)=>{ xml+='  <url><loc>'+SITE_BASE_URL+'/book.html?id='+encodeURIComponent(b.bid||i)+'</loc><changefreq>weekly</changefreq></url>\n'; });
+    staticPages.forEach(p=>{ xml+=u(p,'weekly',p===''?'1.0':''); });
+    /* দাম ০ (লুকানো) বই সাইটে দেখায় না — sitemap-এও দিই না */
+    const vis=src.filter(b=>b&&b.name&&Number(b.price)>0);
+    /* প্রতিটা প্রকাশনী ও লেখকের পেজ — "অমুক প্রকাশনীর বই" খুঁজলে Google যেন এই পেজ দেখায় */
+    const uniq=f=>[...new Set(vis.map(b=>String(b[f]||'').trim()).filter(Boolean))];
+    uniq('pub').forEach(p=>{ xml+=u('filter.html?type=pub&value='+encodeURIComponent(p),'weekly','0.7'); });
+    uniq('author').forEach(a=>{ xml+=u('filter.html?type=author&value='+encodeURIComponent(a),'weekly','0.6'); });
+    vis.forEach(b=>{ xml+=u('book.html?id='+encodeURIComponent(b.bid||src.indexOf(b)),'weekly','0.8'); });
     xml+='</urlset>\n';
     const blob=new Blob([xml],{type:'application/xml;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
     a.href=url;a.download='sitemap.xml';a.click();
     URL.revokeObjectURL(url);
-    showToast('sitemap.xml ডাউনলোড হচ্ছে ('+src.length+'টি বই)...','#059669');
+    showToast('sitemap.xml ডাউনলোড হচ্ছে ('+vis.length+'টি বই)...','#059669');
 }
 
 /* ── DOWNLOAD book.js + book-desc.js (একসাথে দুটো) ── */

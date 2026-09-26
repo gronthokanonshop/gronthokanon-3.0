@@ -71,7 +71,7 @@
         .loading-spinner{text-align:center;padding:20px;color:var(--text2);font-size:13px;}
     </style>
 </head>
-<body>
+<body class="gk-info">
 
 <nav class="navbar">
     <div class="navbar-top">
@@ -92,7 +92,6 @@
     <div id="panelId">
         <div class="track-search">
             <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21,8 21,21 3,21 3,8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg> অর্ডার খুঁজুন</h3>
-            <p>অর্ডার কনফার্মের পর আপনি যে ID পেয়েছেন সেটি লিখুন</p>
             <div class="track-input-row">
                 <input class="track-input" id="trackInput" placeholder="যেমন: GK-ABC123" oninput="this.value=this.value.toUpperCase()">
                 <button class="track-btn" onclick="searchOrder()">খুঁজুন</button>
@@ -114,7 +113,6 @@
     <div id="panelPhone" style="display:none;">
         <div class="track-search">
             <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> আমার সব অর্ডার</h3>
-            <p>আপনার মোবাইল নম্বর দিয়ে সকল অর্ডার দেখুন</p>
             <div class="track-input-row">
                 <input class="track-input" id="phoneInput" placeholder="01XXXXXXXXX" type="tel" maxlength="11">
                 <button class="track-btn" onclick="searchByPhone()">দেখুন</button>

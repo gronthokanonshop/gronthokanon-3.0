@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="logo.png" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
+<title>শর্তাবলী — গ্রন্থকানন</title>
+<meta name="theme-color" content="#059669">
+<meta name="description" content="গ্রন্থকানন থেকে অর্ডার করার শর্তাবলী।">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+.page-wrap{max-width:580px;margin:0 auto;padding:24px 16px 100px;}
+.hero-card{text-align:center;margin-bottom:22px;}
+.hero-card h1{font-size:24px;font-weight:900;color:#fff;margin-bottom:6px;}
+.hero-card p{font-size:13px;line-height:1.7;}
+.info-card{background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:14px;}
+.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:10px;padding-left:10px;border-left:3px solid #059669;}
+.info-card p,.info-card li{font-size:13.5px;color:var(--text2);line-height:1.9;}
+.info-card ul{padding-left:18px;}
+.info-card a{color:#059669;font-weight:600;}
+</style>
+</head>
+<body class="gk-info">
+<nav class="navbar">
+  <div class="navbar-top">
+    <button class="back-btn" onclick="history.back()">‹</button>
+    <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">শর্তাবলী</span>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="hero-card">
+    <h1>📜 শর্তাবলী</h1>
+    <p>গ্রন্থকানন থেকে অর্ডার করার আগে জেনে নিন</p>
+  </div>
+
+  <div class="info-card">
+    <h3>অর্ডার</h3>
+    <ul>
+      <li>চেকআউটে "অর্ডার নিশ্চিত করুন" চাপলে অর্ডার জমা হয় এবং একটি অর্ডার আইডি পাবেন — <a href="track.html">ট্র্যাক পেজে</a> সেটা দিয়ে অবস্থা দেখা যায়।</li>
+      <li>প্রয়োজনে অর্ডার যাচাই করতে আমরা আপনার নম্বরে যোগাযোগ করতে পারি।</li>
+      <li>কোনো বই স্টকে না থাকলে বা প্রকাশনী থেকে পাওয়া না গেলে আমরা আপনাকে জানিয়ে দেব।</li>
+      <li>প্রি-অর্ডারের বই প্রকাশ হওয়ার পর পাঠানো হয়।</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h3>দাম ও ছাড়</h3>
+    <ul>
+      <li>সাইটে দেখানো দামই চূড়ান্ত — অর্ডারের সময় সার্ভারের দামের সাথে মিলিয়ে নেওয়া হয়।</li>
+      <li>প্রকাশনী দাম বদলালে সাইটের দামও বদলাতে পারে; তবে আপনার জমা দেওয়া অর্ডারের দাম বদলায় না।</li>
+      <li>কুপন শুধু চেকআউটে ব্যবহার করা যায়; কিছু কুপন (যেমন FIRSTORDER) একটি মোবাইল নম্বরে একবারই চলে।</li>
+    </ul>
+  </div>
+
+  <div class="info-card">
+    <h3>ডেলিভারি ও পেমেন্ট</h3>
+    <p>ডেলিভারি চার্জ, সময় ও কোন ডেলিভারিতে কোন পেমেন্ট চলে — সব বিস্তারিত <a href="delivery.html">ডেলিভারি পেজে</a>। অফিস ডেলিভারিতে (সুন্দরবন কুরিয়ার) ক্যাশ অন ডেলিভারি নেই, বিকাশে অগ্রিম দিতে হয়।</p>
+  </div>
+
+  <div class="info-card">
+    <h3>রিটার্ন</h3>
+    <p>ভুল বা ক্ষতিগ্রস্ত বই পেলে কীভাবে বদলাবেন — <a href="return.html">রিটার্ন নীতি</a> দেখুন।</p>
+  </div>
+
+  <div class="info-card">
+    <h3>অ্যাকাউন্ট ও রিভিউ</h3>
+    <p>রিভিউতে অশালীন, ভুয়া বা বিজ্ঞাপনমূলক লেখা মুছে দেওয়ার অধিকার গ্রন্থকানন রাখে। আপনার তথ্য কীভাবে রাখা হয় তা <a href="privacy.html">প্রাইভেসি পলিসিতে</a> লেখা আছে।</p>
+  </div>
+
+  <div class="info-card">
+    <h3>প্রশ্ন থাকলে</h3>
+    <p><a href="contact.html">যোগাযোগ পেজ</a> বা <a href="faq.html">সাধারণ জিজ্ঞাসা</a> দেখুন।</p>
+  </div>
+</div>
+
+<script src="common.js"></script>
+</body>
+</html>

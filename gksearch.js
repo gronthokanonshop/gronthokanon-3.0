@@ -86,6 +86,9 @@
         var sk = skel(s);
         var skTok = sk.split(' ').filter(function (t) { return t.length >= 2; });
         if (sk.replace(/ /g, '').length < 2) skTok = [];   // এক ব্যঞ্জনের লেখায় skeleton মেলানো বন্ধ (সব মিলে যেত)
+        /* অর্থহীন ইংরেজি লেখা ("zzzqqq", "asdfgh"-এর মতো স্বরহীন বা একই অক্ষর ৩ বার) — skeleton-এ ছোট হয়ে
+           অনেক বইয়ের সাথে ভুলভাবে মিলে যেত; আসল Banglish শব্দে স্বর থাকেই */
+        if (bnTok.some(function (t) { return /^[a-z]{4,}$/.test(t) && (!/[aeiouy]/.test(t) || /(.)\1\1/.test(t)); })) skTok = [];
         return { bn: bn, bnTok: bnTok, sk: sk, skTok: skTok };
     }
     /* token শব্দের শুরুতে মিলছে কিনা (আংশিক লেখা চলবে: "ফুরা" → "ফুরাবার"; মাঝখানে মিললে না) */
@@ -97,8 +100,10 @@
         if (q.bn && k.bn.indexOf(q.bn) !== -1) return 30 + (k.bnName.indexOf(q.bn) !== -1 ? 5 : 0);
         if (q.bnTok.length && q.bnTok.every(function (t) { return atWordStart(k.bn, t); }))
             return 20 + (q.bnTok.every(function (t) { return atWordStart(k.bnName, t); }) ? 5 : 0);
-        if (q.skTok.length && q.skTok.every(function (t) { return atWordStart(k.sk, t); }))
-            return 10 + (q.skTok.every(function (t) { return atWordStart(k.skName, t); }) ? 5 : 0);
+        /* ইংরেজির "c" কখনো চ (cha), কখনো ক (paradoxical) — প্রতিটা শব্দে দুটোই চেষ্টা করি */
+        var hit = function (hay, t) { return atWordStart(hay, t) || (t.indexOf('c') !== -1 && atWordStart(hay, t.replace(/c/g, 'k'))); };
+        if (q.skTok.length && q.skTok.every(function (t) { return hit(k.sk, t); }))
+            return 10 + (q.skTok.every(function (t) { return hit(k.skName, t); }) ? 5 : 0);
         return 0;
     }
     /* list-এর যেসব বই মেলে, প্রাসঙ্গিকতা অনুযায়ী সাজিয়ে (একই স্তরে আগের ক্রম বজায়) */
