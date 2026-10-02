@@ -9,7 +9,7 @@
 <meta name="description" content="গ্রন্থকাননের সব প্রকাশনী ও লেখকের তালিকা — নাম খুঁজে এক ক্লিকে তাদের সব বই দেখুন।">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
@@ -42,15 +42,15 @@
   <div class="navbar-top">
     <button class="back-btn" onclick="history.length>1?history.back():location.href='index.html'">‹</button>
     <a href="index.html" style="flex:1;display:flex;justify-content:center;"><img src="logo.png" alt="গ্রন্থকানন" style="height:34px;width:auto;"></a>
-    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn"><i class=gi-moon></i></button>
   </div>
 </nav>
 <div id="gkMenuBar"></div>
 
 <div class="al-wrap">
   <div class="al-tabs">
-    <a class="al-tab" id="tabPub" href="all.html?type=pub">🏢 প্রকাশনী</a>
-    <a class="al-tab" id="tabAuthor" href="all.html?type=author">✍️ লেখক</a>
+    <a class="al-tab" id="tabPub" href="all.html?type=pub"><i class=gi-building></i> প্রকাশনী</a>
+    <a class="al-tab" id="tabAuthor" href="all.html?type=author"><i class=gi-pen></i> লেখক</a>
   </div>
   <div class="al-search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>

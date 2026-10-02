@@ -64,7 +64,7 @@
   "url": "https://gronthokanon.com/"
 }
 </script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
@@ -614,7 +614,7 @@
         .book-card .bc-img-box { width: 100%; aspect-ratio: 145/195; height: auto; overflow: hidden; position: relative; background: linear-gradient(135deg,#f0fdf4,#ecfdf5); }
         /* কার্টে থাকা বই */
         .book-card.in-cart { border-color: #10b981 !important; box-shadow: 0 0 0 1.5px #10b981, 0 6px 16px rgba(5,150,105,.18) !important; }
-        .book-card.in-cart .bc-img-box::after { content: '✓ কার্টে আছে'; position: absolute; left: 6px; bottom: 6px; z-index: 3; padding: 3px 9px; border-radius: 20px; background: rgba(5,150,105,.94); color: #fff; font-size: 10.5px; font-weight: 700; font-family: 'Hind Siliguri', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+        .book-card.in-cart .bc-img-box::after { content: 'কার্টে আছে'; position: absolute; left: 6px; bottom: 6px; z-index: 3; padding: 3px 9px; border-radius: 20px; background: rgba(5,150,105,.94); color: #fff; font-size: 10.5px; font-weight: 700; font-family: 'Hind Siliguri', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
         .bc-btn.bc-icon { position: relative; }
         .bc-qty { position: absolute; top: -7px; right: -7px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #f59e0b; color: #fff; font-size: 11.5px; font-weight: 800; line-height: 1; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-family: 'Hind Siliguri', sans-serif; }
         [data-theme="dark"] .book-card .bc-img-box { background: linear-gradient(135deg,#0f2a1e,#132d20); }
@@ -848,19 +848,19 @@
         <span style="font-size:28px;cursor:pointer;" onclick="toggleSidebar()">×</span>
     </div>
     <div class="sidebar-item" onclick="filterCategory('all',null);toggleSidebar()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg> হোম</div>
-    <div class="sidebar-item" onclick="toggleSubMenu('catSub')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg> ক্যাটাগরি <span id="catArrow">▶</span></div>
+    <div class="sidebar-item" onclick="toggleSubMenu('catSub')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg> ক্যাটাগরি <span id="catArrow" class="gk-arr"><i class=gi-chev></i></span></div>
     <div class="sidebar-sub" id="catSub"></div>
     <div id="pubSearchWrap" style="padding:8px 14px;display:none;">
         <input type="text" oninput="filterSidebarList('pubSub',this.value)" placeholder="প্রকাশনী খুঁজুন..." style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
     </div>
-    <div class="sidebar-item" onclick="toggleSubMenu('pubSub')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="10" height="20"/><rect x="12" y="6" width="10" height="16"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="10" x2="6.01" y2="10"/><line x1="6" y1="14" x2="6.01" y2="14"/><line x1="16" y1="10" x2="16.01" y2="10"/><line x1="16" y1="14" x2="16.01" y2="14"/></svg> প্রকাশনী <span id="pubArrow">▶</span></div>
+    <div class="sidebar-item" onclick="toggleSubMenu('pubSub')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="10" height="20"/><rect x="12" y="6" width="10" height="16"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="10" x2="6.01" y2="10"/><line x1="6" y1="14" x2="6.01" y2="14"/><line x1="16" y1="10" x2="16.01" y2="10"/><line x1="16" y1="14" x2="16.01" y2="14"/></svg> প্রকাশনী <span id="pubArrow" class="gk-arr"><i class=gi-chev></i></span></div>
     <div class="sidebar-sub" id="pubSub"></div>
-    <div class="sidebar-item" onclick="toggleSubMenu('authorSub')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>️ লেখক <span id="authorArrow">▶</span></div>
+    <div class="sidebar-item" onclick="toggleSubMenu('authorSub')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg> লেখক <span id="authorArrow" class="gk-arr"><i class=gi-chev></i></span></div>
     <div class="sidebar-sub" id="authorSub"></div>
     <div class="sidebar-item" onclick="showWishlist()"><svg class="eico" viewBox="0 0 24 24" fill="#ec4899"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> উইশলিস্ট
 <span id="wishCount" style="background:#dc2626;color:white;border-radius:50%;padding:1px 6px;font-size:11px;">0</span></div>
 <div class="sidebar-item" onclick="navigateTo('track.html')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21,8 21,21 3,21 3,8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg> আমার অর্ডার <span>›</span></div>
-    <div class="sidebar-item" onclick="toggleSubMenu('aboutSub')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg> আমাদের সম্পর্কে <span id="aboutArrow">▶</span></div>
+    <div class="sidebar-item" onclick="toggleSubMenu('aboutSub')"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg> আমাদের সম্পর্কে <span id="aboutArrow" class="gk-arr"><i class=gi-chev></i></span></div>
     <div class="sidebar-sub" id="aboutSub" style="padding:15px 20px;font-size:13px;line-height:1.9;">
         <p style="margin-bottom:10px;"><strong style="color:#059669;font-size:15px;">গ্রন্থকানন</strong> — বইয়ের এক অনন্য রাজ্য।</p>
         <p style="margin-bottom:10px;color:var(--text2);">সাশ্রয়ী মূল্যে মানসম্পন্ন ইসলামিক বই পৌঁছে দেওয়াই আমাদের লক্ষ্য।</p>
@@ -1154,7 +1154,7 @@ function renderHomeCatChips(){
             var filterType = subj ? 'subcat' : 'cat';
             var filterVal = subj || name;
             var imgTag = isReal
-                ? '<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span class=&quot;cc-ph&quot;>📚</span>\'">'
+                ? '<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.parentElement.innerHTML=\'<span class=&quot;cc-ph&quot;><i class=gi-books></i></span>\'">'
                 : genName ? '<img src="book-placeholder.svg" alt="'+genName.replace(/"/g,'&quot;').replace(/</g,'&lt;')+'" loading="lazy">'
                 : '<span class="cc-ph"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>';
             return '<div class="catcard-tile" onclick="event.stopPropagation();if(!this.closest(\'.cat-strip\').__gkMoved)window.location.href=\'filter.html?type='+filterType+'&value='+encodeURIComponent(filterVal)+'\'">'
@@ -1423,7 +1423,7 @@ function loadHomeAuthors(){
 }
 .rvs-card:hover { transform: translateY(-4px); box-shadow: 0 10px 22px rgba(5,150,105,0.14); }
 [data-theme="dark"] .rvs-card { border-color: rgba(255,255,255,0.09); }
-.rvs-card::before { content: '❝'; position: absolute; top: 8px; right: 14px; font-size: 26px; color: rgba(5,150,105,0.18); font-family: Georgia, serif; }
+.rvs-card::before { content: ''; position: absolute; top: 10px; right: 14px; width: 26px; height: 22px; background: rgba(5,150,105,0.22); -webkit-mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 21c3 0 7-1 7-8V5c0-1.3-.8-2-2-2H4c-1.3 0-2 .8-2 2v6c0 1.3.8 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 0-1 1v2c0 1 0 1 1 1zM15 21c3 0 7-1 7-8V5c0-1.3-.8-2-2-2h-4c-1.3 0-2 .8-2 2v6c0 1.3.8 2 2 2h.8c0 2.2.2 4-2.8 4v3c0 1 0 1 1 1z'/></svg>") center/contain no-repeat; mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 21c3 0 7-1 7-8V5c0-1.3-.8-2-2-2H4c-1.3 0-2 .8-2 2v6c0 1.3.8 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 0-1 1v2c0 1 0 1 1 1zM15 21c3 0 7-1 7-8V5c0-1.3-.8-2-2-2h-4c-1.3 0-2 .8-2 2v6c0 1.3.8 2 2 2h.8c0 2.2.2 4-2.8 4v3c0 1 0 1 1 1z'/></svg>") center/contain no-repeat; }
 .rvs-stars { color: #f59e0b; font-size: 13px; letter-spacing: 2px; margin-bottom: 7px; }
 .rvs-comment { font-size: 12.5px; color: var(--text); line-height: 1.55; height: 58px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; margin-bottom: 10px; }
 .rvs-meta { border-top: 1px dashed var(--border); padding-top: 8px; }
@@ -1435,7 +1435,7 @@ function loadHomeAuthors(){
 .rvs-book-thumb { width: 22px; height: 30px; object-fit: cover; border-radius: 3px; flex-shrink: 0; border: 1px solid var(--border); }
 </style>
 <div class="rvs-section" id="reviewSliderSection">
-    <div class="rvs-title">💬 পাঠকদের ভালোবাসা</div>
+    <div class="rvs-title"><i class=gi-chat></i> পাঠকদের ভালোবাসা</div>
     <div class="rvs-row" id="rvsRow"></div>
 </div>
 
@@ -1475,7 +1475,7 @@ function loadHomeAuthors(){
 .hblog-cta span { font-size: 11px; color: var(--text2); line-height: 1.6; }
 </style>
 <div class="hblog-section" id="homeBlogSection">
-    <div class="hblog-title"><span>📝 ব্লগ ও পাঠকদের লেখা</span><a href="blog.html">সবগুলো দেখুন →</a></div>
+    <div class="hblog-title"><span><i class=gi-note></i> ব্লগ ও পাঠকদের লেখা</span><a href="blog.html">সবগুলো দেখুন →</a></div>
     <div class="hblog-row" id="hblogRow"></div>
 </div>
 
@@ -1494,7 +1494,7 @@ function loadHomeAuthors(){
 
 <!-- ═══════ WHATSAPP ═══════ -->
 <a href="https://wa.me/8801516595762" class="wa-float" target="_blank" rel="noopener">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:46px;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18));">
+    <i class="gi-wa gi-w" style="font-size:28px" aria-label="WhatsApp"></i>
 </a>
 
 <!-- ═══════ FOOTER ═══════ -->
@@ -1630,16 +1630,16 @@ document.addEventListener('DOMContentLoaded',function(){ gkRenderWhy(); if(windo
         </div>
         <div class="footer-col">
             <div class="footer-col-title">ক্যাটাগরি</div>
-            <a href="javascript:void(0)" onclick="deskCatClick('ইসলামি বই',document.querySelector('[onclick*=ইসলামি]'))" class="footer-link">ইসলামি বই</a>
-            <a href="javascript:void(0)" onclick="deskCatClick('একাডেমিক বই',document.querySelector('[onclick*=একাডেমিক]'))" class="footer-link">একাডেমিক বই</a>
-            <a href="javascript:void(0)" onclick="deskCatClick('মাদ্রাসার বই',document.querySelector('[onclick*=মাদ্রাসার]'))" class="footer-link">মাদ্রাসার বই</a>
-            <a href="javascript:void(0)" onclick="deskCatClick('Sunnah Item',document.querySelector('[onclick*=Sunnah]'))" class="footer-link">Sunnah Item</a>
+            <a href="filter.html?type=cat&amp;value=ইসলামি বই" class="footer-link">ইসলামি বই</a>
+            <a href="filter.html?type=cat&amp;value=একাডেমিক বই" class="footer-link">একাডেমিক বই</a>
+            <a href="filter.html?type=cat&amp;value=মাদ্রাসার বই" class="footer-link">মাদ্রাসার বই</a>
+            <a href="filter.html?type=cat&amp;value=Sunnah Item" class="footer-link">Sunnah Item</a>
         </div>
         <div class="footer-col">
             <div class="footer-col-title">যোগাযোগ</div>
             <a href="tel:+8801516595762" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01516595762</a>
-            <a href="https://wa.me/8801516595762" target="_blank" rel="noopener" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> WhatsApp</a>
-            <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Facebook</a>
+            <a href="https://wa.me/8801516595762" target="_blank" rel="noopener" class="footer-link"><i class="gi-wa"></i> WhatsApp</a>
+            <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener" class="footer-link"><i class="gi-fb"></i> Facebook</a>
             <span class="footer-link" style="cursor:default;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ঢাকা, বাংলাদেশ</span>
         </div>
     </div>
@@ -1648,14 +1648,14 @@ document.addEventListener('DOMContentLoaded',function(){ gkRenderWhy(); if(windo
 
     <!-- Social -->
     <div class="footer-social">
-        <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener"><img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook"></a>
-        <a href="https://wa.me/8801516595762" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"></a>
+        <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener"><i class="gi-fb gk-soc" aria-label="Facebook"></i></a>
+        <a href="https://wa.me/8801516595762" target="_blank" rel="noopener"><i class="gi-wa gk-soc" aria-label="WhatsApp"></i></a>
     </div>
 
     <!-- Payment -->
     <div class="footer-payment">
-        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash">
-        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" alt="Nagad">
+        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash" loading="lazy" decoding="async" width="40" height="40">
+        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" alt="Nagad" loading="lazy" decoding="async" width="40" height="40">
     </div>
 
     <hr class="footer-divider">
@@ -1743,7 +1743,8 @@ document.addEventListener('DOMContentLoaded',function(){ gkRenderWhy(); if(windo
 <script>
 /* categoryConfig — হোমপেজের সেকশন ও সাইডবার মেনু; window.GK_HOME_CATS থেকে তৈরি (অ্যাডমিন-নিয়ন্ত্রিত) */
 function buildCategoryConfig(){
-    return (window.GK_HOME_CATS||[]).map(c=>({key:c.name, label:(c.emoji?c.emoji+' ':'')+c.name}));
+    /* অ্যাডমিনে ক্যাটাগরির সাথে ইমোজি দেওয়া থাকলেও সাইটে দেখাই না — শুধু নাম */
+    return (window.GK_HOME_CATS||[]).map(c=>({key:c.name, label:escapeHTML(c.name)}));
 }
 let categoryConfig = buildCategoryConfig();
 /* Firebase থেকে হোমপেজ ক্যাটাগরি এলে চিপ + সেকশন + মেনু রিফ্রেশ */
@@ -1787,9 +1788,9 @@ let recentlyViewed = JSON.parse(localStorage.getItem('gronthokanon_recent')) || 
 /* DARK MODE */
 
 /* SEARCH */
-function openSearch(){document.getElementById('searchScreen').classList.add('open');document.getElementById('searchOverlay').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('searchInput').focus(),300);}
+function openSearch(){document.getElementById('searchScreen').classList.add('open');if(!document.getElementById('searchInput').value.trim())document.getElementById('searchBody').innerHTML=gkSearchHome();document.getElementById('searchOverlay').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.getElementById('searchInput').focus(),300);}
 function closeSearch(){document.getElementById('searchScreen').classList.remove('open');document.getElementById('searchOverlay').classList.remove('open');document.body.style.overflow='';clearSearch();bnavActive('bnav-home');}
-function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClearBtn').classList.remove('show');document.getElementById('searchBody').innerHTML='';}
+function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClearBtn').classList.remove('show');document.getElementById('searchBody').innerHTML=gkSearchHome();}
 let __searchTimer=null;
 function handleSearch(){
     /* টাইপ থামার 200ms পরে খোঁজা শুরু — প্রতি অক্ষরে না, তাই ফোন হ্যাং করে না */
@@ -1801,26 +1802,54 @@ function handleSearch(){
 function runSearch(){
     const q=document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
     const body=document.getElementById('searchBody');
-    if(typeof books==='undefined'||!books.length){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon">⏳</div><p>বই লোড হচ্ছে, একটু অপেক্ষা করুন...</p></div>`;return;}
-    if(!q){body.innerHTML='';return;}
+    if(typeof books==='undefined'||!books.length){body.innerHTML=`<div class="search-hint"><div class="search-hint-icon"><i class=gi-hourglass></i></div><p>বই লোড হচ্ছে, একটু অপেক্ষা করুন...</p></div>`;return;}
+    if(!q){body.innerHTML=gkSearchHome();return;}
+    clearTimeout(window.__gkRecentT);
+    window.__gkRecentT=setTimeout(()=>gkSaveRecentSearch(document.getElementById('searchInput').value),1500);
     const found=(typeof gkSearchBooks==='function')
         ? gkSearchBooks(gkVisibleBooks(books), q)
         : gkVisibleBooks(books).filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||(b.author||'').normalize("NFC").toLowerCase().includes(q)||(b.pub||'').normalize("NFC").toLowerCase().includes(q));
-    if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon">📚</div><p style="font-size:16px;font-weight:700;line-height:1.6;text-align:center;padding:0 30px;margin-bottom:6px;">বইটি খুঁজে পাওয়া যায়নি</p><p style="font-size:13px;color:var(--text2);text-align:center;padding:0 30px;margin-bottom:14px;">আমাদের জানালে দ্রুত এনে দেব</p><button onclick="closeSearch&&closeSearch();setTimeout(function(){window.gkToggleContact&&gkToggleContact();},50)" style="display:block;margin:0 auto;padding:10px 22px;border:none;border-radius:24px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">যোগাযোগ করুন</button></div>`;return;}
+    if(!found.length){body.innerHTML=`<div class="search-no"><div class="search-no-icon"><i class=gi-books></i></div><p style="font-size:16px;font-weight:700;line-height:1.6;text-align:center;padding:0 30px;margin-bottom:6px;">বইটি খুঁজে পাওয়া যায়নি</p><p style="font-size:13px;color:var(--text2);text-align:center;padding:0 30px;margin-bottom:14px;">আমাদের জানালে দ্রুত এনে দেব</p><button onclick="closeSearch&&closeSearch();setTimeout(function(){window.gkToggleContact&&gkToggleContact();},50)" style="display:block;margin:0 auto;padding:10px 22px;border:none;border-radius:24px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">যোগাযোগ করুন</button></div>`;return;}
     const shown=found.slice(0,40);
-    body.innerHTML=`<div class="search-count show">🔍 "${escapeHTML(document.getElementById('searchInput').value)}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
+    body.innerHTML=`<div class="search-count show"><i class=gi-search></i> "${escapeHTML(document.getElementById('searchInput').value)}" — ${found.length}টি বই${found.length>40?' · প্রথম ৪০টি দেখানো হচ্ছে, পুরো নাম লিখলে আরো নিখুঁত ফলাফল পাবেন':''}</div>`+shown.map(b=>{
         const idx=books.indexOf(b),pct=discPct(b),out=window.gkIsOut&&window.gkIsOut(idx);
-        return `<div class="search-item" onclick="closeSearch();goToBook(${idx})">
+        return `<div class="search-item" onclick="gkSaveRecentSearch(document.getElementById('searchInput').value);closeSearch();goToBook(${idx})">
             <img src="${escapeHTML(getImg(b))}" class="search-item-img" alt="" loading="lazy" decoding="async">
             <div style="flex:1;min-width:0;">
                 <div class="si-name">${escapeHTML(b.name)}</div>
-                <div class="si-author">✍️ ${escapeHTML(b.author||'')}</div>
-                <div class="si-pub">🏢 ${escapeHTML(b.pub||'')}</div>
+                <div class="si-author"><i class=gi-pen></i> ${escapeHTML(b.author||'')}</div>
+                <div class="si-pub"><i class=gi-building></i> ${escapeHTML(b.pub||'')}</div>
                 <div><span class="si-price">৳${b.price}</span>${b.original_price>b.price?`<span class="si-orig">৳${b.original_price}</span>`:''} ${out?`<span class="si-badge" style="background:#dc2626;">স্টক শেষ</span>`:(pct>0?`<span class="si-badge">${pct}% ছাড়</span>`:'')}</div>
             </div></div>`;
     }).join('');
 }
 window.addEventListener('popstate',()=>{if(document.getElementById('searchScreen').classList.contains('open')){closeSearch();history.pushState(null,'',location.href);}});
+/* সার্চ খুললে (কিছু না লিখলে) — আগের খোঁজা লেখা আর বই সবচেয়ে বেশি এমন বিষয়গুলো, এক চাপে খোঁজা যায় */
+const GK_RECENT_KEY='gk_recent_search';
+function gkRecentSearches(){ try{ return JSON.parse(localStorage.getItem(GK_RECENT_KEY))||[]; }catch(e){ return []; } }
+function gkSaveRecentSearch(q){
+    q=String(q||'').trim();
+    if(q.length<2) return;
+    const list=[q,...gkRecentSearches().filter(x=>x.toLowerCase()!==q.toLowerCase())].slice(0,6);
+    try{ localStorage.setItem(GK_RECENT_KEY,JSON.stringify(list)); }catch(e){}
+}
+function gkClearRecent(){ try{ localStorage.removeItem(GK_RECENT_KEY); }catch(e){} document.getElementById('searchBody').innerHTML=gkSearchHome(); }
+function gkSearchFill(q){ const i=document.getElementById('searchInput'); i.value=q; handleSearch(); i.focus(); }
+function gkSearchHome(){
+    const recent=gkRecentSearches();
+    let topSubj=[];
+    if(typeof books!=='undefined'&&books.length){
+        const m={};
+        gkVisibleBooks(books).forEach(b=>{ const s=String(b.subject||'').trim(); if(s&&s.length<30&&!(window.GK_TAG_NAMES&&GK_TAG_NAMES.has(s))) m[s]=(m[s]||0)+1; });
+        const cats=new Set(books.map(b=>b&&b.cat).filter(Boolean));
+        topSubj=Object.keys(m).filter(s=>!cats.has(s)&&m[s]>=3).sort((a,b)=>m[b]-m[a]).slice(0,10);
+    }
+    const chip=(q,cls)=>`<button type="button" class="gk-schip ${cls}" data-q="${escapeHTML(q)}" onclick="gkSearchFill(this.dataset.q)">${escapeHTML(q)}</button>`;
+    let h='';
+    if(recent.length) h+=`<div class="gk-shead"><span><i class="gi gi-clock"></i> আগে খুঁজেছেন</span><button type="button" onclick="gkClearRecent()">মুছুন</button></div><div class="gk-schips">${recent.map(q=>chip(q,'rec')).join('')}</div>`;
+    if(topSubj.length) h+=`<div class="gk-shead"><span><i class="gi gi-flame"></i> জনপ্রিয় বিষয়</span></div><div class="gk-schips">${topSubj.map(q=>`<a class="gk-schip hot" href="filter.html?type=subcat&value=${encodeURIComponent(q)}">${escapeHTML(q)}</a>`).join('')}</div>`;
+    return h?`<div class="gk-shome">${h}</div>`:'';
+}
 
 /* HELPERS */
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
@@ -1881,13 +1910,13 @@ function toggleWL(e,name){
     document.querySelectorAll('.book-card').forEach(card=>{
         if(card.querySelector('.bc-name')?.innerText!==name) return;
         const btn=card.querySelector('.wl-btn');
-        if(btn){ btn.innerText=adding?'❤️':'🤍'; btn.classList.toggle('active',adding); }
+        if(btn){ btn.innerHTML=adding?'<i class="gi gi-heart"></i>':'<i class="gi gi-heart-o"></i>'; btn.classList.toggle('active',adding); }
     });
     // wishlist ড্রয়ার খোলা থাকলে সাথে সাথে রিফ্রেশ করো + ড্রয়ারের ভেতরেই কনফার্মেশন লাইন দেখাও
     // (আলাদা পপআপ দেখাই না, কারণ সেটা খোলা ড্রয়ারের আড়ালে পড়ে যেতে পারে)
     const box=document.getElementById('wishlistBox');
     if(box && box.style.display==='flex'){
-        showWishlist(adding ? `✅ "${escapeHTML(name)}" উইশলিস্টে যোগ হয়েছে` : `🗑️ "${escapeHTML(name)}" উইশলিস্ট থেকে সরানো হয়েছে`);
+        showWishlist(adding ? `<i class=gi-ok></i> "${escapeHTML(name)}" উইশলিস্টে যোগ হয়েছে` : `<i class=gi-trash></i> "${escapeHTML(name)}" উইশলিস্ট থেকে সরানো হয়েছে`);
         return;
     }
     // ড্রয়ার বন্ধ থাকলে সুন্দর wl modal দেখাও
@@ -1904,14 +1933,14 @@ function openWLModal(added, b){
                 <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${escapeHTML(b.name)}</div>
                 <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${escapeHTML(b.author||'')}</div>
                 <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#ecfdf5':'#fff5f5'};border:1.5px solid ${added?'#6ee7b7':'#fca5a5'};border-radius:0;padding:5px 12px;">
-                    <span style="font-size:15px;">${added?'❤️':'🤍'}</span>
+                    <span style="font-size:15px;">${added?'<i class=gi-heart></i>':'<i class=gi-heart-o></i>'}</span>
                     <span style="font-size:12px;font-weight:700;color:${added?'#059669':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>
                 </div>
             </div>
         </div>
         ${added?`<div style="display:flex;gap:10px;">
             <button onclick="closeWLModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--text);border:1px solid #111;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">কেনাকাটা চালিয়ে যান</button>
-            <button onclick="closeWLModal();showWishlist();" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
+            <button onclick="closeWLModal();showWishlist();" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;"><i class=gi-heart></i> উইশলিস্ট দেখুন</button>
         </div>`:`<button onclick="closeWLModal()" style="width:100%;padding:12px;background:#059669;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">ঠিক আছে</button>`}`;
     document.getElementById('wlOverlay').style.display='block';
     const modal=document.getElementById('wlModal');
@@ -1939,7 +1968,7 @@ function makeCard(b){
     return `<div class="book-card${out?' gk-out':''}" data-bookidx="${idx}" onclick="goToBook(${idx})">
         <div class="bc-img-box">
         ${out?`<div class="gk-out-badge">স্টক শেষ</div>`:(pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:'')}
-        <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'❤️':'🤍'}</button>
+        <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'<i class=gi-heart></i>':'<i class=gi-heart-o></i>'}</button>
         <img src="${escapeHTML(getImg(b))}" alt="${escapeHTML(b.name)}" loading="lazy">
         </div>
         <div class="book-card-info">
@@ -1947,7 +1976,7 @@ function makeCard(b){
             <div class="bc-author">${bookType(b)==='প্রোডাক্ট'?escapeHTML(b.brand||''):escapeHTML(b.author||'')}</div>
             ${out
                 ? `<div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-                   <button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('❌ এই আইটেমটি এখন স্টকে নেই');">${GK_NOSTOCK_SVG}<span>স্টক শেষ</span></button>`
+                   <button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('<i class=gi-no></i> এই আইটেমটি এখন স্টকে নেই');">${GK_NOSTOCK_SVG}<span>স্টক শেষ</span></button>`
                 : `<div class="bc-foot"><div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div><button class="bc-btn bc-icon"data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" title="কার্টে যোগ করুন" aria-label="কার্টে যোগ করুন" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">${GK_CART_SVG}</button></div>`}
         </div></div>`;
 }
@@ -1975,7 +2004,7 @@ function gkSweepStock(){
             const foot=btn.closest('.bc-foot');
             if(foot){btn.classList.remove('bc-icon');foot.after(btn);}
             btn.classList.add('bc-out');btn.innerHTML=GK_NOSTOCK_SVG+'<span>স্টক শেষ</span>';
-            btn.onclick=function(e){e.stopPropagation();if(window.showToast)showToast('❌ এই বইটি এখন স্টকে নেই');};
+            btn.onclick=function(e){e.stopPropagation();if(window.showToast)showToast('<i class=gi-no></i> এই বইটি এখন স্টকে নেই');};
         }
     });
 }
@@ -2043,7 +2072,7 @@ function buildCatSidebar(){
         const subsHtml=hasSubs?cat.subs.map(s=>`<div class="subcat-item" onclick="navigateToFilter('subcat','${s.replace(/'/g,"\\'")}');closeDrawer()">${s}</div>`).join(''):'';
         return `<div class="cat-row">
             <div class="sidebar-sub-item" onclick="navigateToFilter('cat','${cat.name.replace(/'/g,"\\'")}');closeDrawer()">${cat.name}</div>
-            ${hasSubs?`<div class="cat-row-toggle" id="${rowId}" onclick="event.stopPropagation();toggleCatSubList('${rowId}','${listId}')">▶</div>`:''}
+            ${hasSubs?`<div class="cat-row-toggle" id="${rowId}" onclick="event.stopPropagation();toggleCatSubList('${rowId}','${listId}')"><i class=gi-chev></i></div>`:''}
         </div>
         ${hasSubs?`<div class="subcat-list" id="${listId}">${subsHtml}</div>`:''}`;
     }).join('');
@@ -2064,7 +2093,7 @@ function buildCatDrawerList(){
         const subsHtml=hasSubs?cat.subs.map(s=>`<div class="drawer-subcat-item" onclick="navigateToFilter('subcat','${s.replace(/'/g,"\\'")}');closeDrawer()">${s}</div>`).join(''):'';
         return `<div class="drawer-cat-row">
             <div class="drawer-item" onclick="navigateToFilter('cat','${cat.name.replace(/'/g,"\\'")}');closeDrawer()">${cat.name}</div>
-            ${hasSubs?`<div class="drawer-row-toggle" id="${rowId}" onclick="event.stopPropagation();toggleDrawerCatSubList('${rowId}','${listId}')">▶</div>`:''}
+            ${hasSubs?`<div class="drawer-row-toggle" id="${rowId}" onclick="event.stopPropagation();toggleDrawerCatSubList('${rowId}','${listId}')"><i class=gi-chev></i></div>`:''}
         </div>
         ${hasSubs?`<div class="drawer-subcat-list" id="${listId}">${subsHtml}</div>`:''}`;
     }).join('');
@@ -2085,7 +2114,7 @@ function toggleSubMenu(id){
     const arrowMap={catSub:'catArrow',pubSub:'pubArrow',authorSub:'authorArrow',aboutSub:'aboutArrow'};
     const isOpen=sub.style.display==='block',arrow=document.getElementById(arrowMap[id]);
     sub.style.display=isOpen?'none':'block';
-    if(arrow)arrow.textContent=isOpen?'▶':'▼';
+    if(arrow)arrow.classList.toggle('open',!isOpen);
     if(id==='pubSub'){const s=document.getElementById('pubSearchWrap');if(s)s.style.display=isOpen?'none':'block';}
 }
 function filterSidebarList(subId,query){document.querySelectorAll(`#${subId} .sidebar-sub-item`).forEach(item=>{item.style.display=item.textContent.includes(query)?'block':'none';});}
@@ -2095,12 +2124,12 @@ function showWishlist(msg){
     if(document.getElementById('sidebar').classList.contains('active'))toggleSidebar();
     const box=document.getElementById('wishlistItems');
     const msgHtml=msg?`<div style="padding:9px 12px;margin-bottom:10px;background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:8px;color:#065f46;font-size:12.5px;font-weight:700;">${msg}</div>`:'';
-    if(!wishlist.length){box.innerHTML=msgHtml+'<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';}
+    if(!wishlist.length){box.innerHTML=msgHtml+'<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;"><i class=gi-heart-o></i></div><p>উইশলিস্ট খালি</p></div>';}
     else{box.innerHTML=msgHtml+wishlist.map(name=>{const b=books.find(bk=>bk.name===name);if(!b)return '';const idx=books.indexOf(b);
         return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="goToBook(${idx})">
             <img src="${escapeHTML(getImg(b))}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">
             <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${escapeHTML(b.name)}</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳${b.price}</div></div>
-            <button data-name="${escapeHTML(b.name)}" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button>
+            <button data-name="${escapeHTML(b.name)}" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()"><i class=gi-no></i></button>
         </div>`;
     }).join('');}
     document.getElementById('wishlistBox').style.display='flex';
@@ -2154,9 +2183,9 @@ async function doLogin(){
     setAuthBtnLoading(btn,true);
     try{
         await auth.signInWithEmailAndPassword(email,pass);
-        closeAuthModal();showToast('✅ স্বাগতম!','#059669');
+        closeAuthModal();showToast('<i class=gi-ok></i> স্বাগতম!','#059669');
     }catch(e){
-        setAuthErr(e.code==='auth/wrong-password'?'পাসওয়ার্ড ভুল':e.code==='auth/user-not-found'?'একাউন্ট নেই':e.code==='auth/invalid-email'?'সঠিক ইমেইল দিন':'লগইন ব্যর্থ হয়েছে');
+        setAuthErr(window.gkAuthErrText?gkAuthErrText(e.code,'লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন'):'লগইন ব্যর্থ হয়েছে');
     }
     setAuthBtnLoading(btn,false,'লগইন করুন');
 }
@@ -2174,7 +2203,7 @@ async function doGoogleLogin(){
                 await db.ref('users/'+user.uid).set({name:user.displayName||'',email:user.email||'',createdAt:Date.now()});
             }
         }
-        closeAuthModal();showToast('✅ স্বাগতম!','#059669');
+        closeAuthModal();showToast('<i class=gi-ok></i> স্বাগতম!','#059669');
     }catch(e){
         if(e.code!=='auth/popup-closed-by-user' && e.code!=='auth/cancelled-popup-request'){
             setAuthErr('Google লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন');
@@ -2194,9 +2223,9 @@ async function doRegister(){
         const cred=await auth.createUserWithEmailAndPassword(email,pass);
         await cred.user.updateProfile({displayName:name});
         await db.ref('users/'+cred.user.uid).set({name,email,createdAt:Date.now()});
-        closeAuthModal();showToast('✅ রেজিস্ট্রেশন সফল!','#059669');
+        closeAuthModal();showToast('<i class=gi-ok></i> রেজিস্ট্রেশন সফল!','#059669');
     }catch(e){
-        setAuthErr(e.code==='auth/email-already-in-use'?'এই ইমেইলে আগেই একাউন্ট আছে':e.code==='auth/invalid-email'?'সঠিক ইমেইল দিন':'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
+        setAuthErr(window.gkAuthErrText?gkAuthErrText(e.code,'রেজিস্ট্রেশন ব্যর্থ হয়েছে, আবার চেষ্টা করুন'):'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
     }
     setAuthBtnLoading(btn,false,'রেজিস্টার করুন');
 }
@@ -2205,7 +2234,7 @@ async function doForgotPassword(){
     if(!email){setAuthErr('আগে ইমেইলের ঘরে আপনার ইমেইল লিখুন');return;}
     try{
         await auth.sendPasswordResetEmail(email);
-        setAuthErr('✅ পাসওয়ার্ড রিসেট লিংক '+email+'-এ পাঠানো হয়েছে','ok');
+        setAuthErr('পাসওয়ার্ড রিসেট লিংক '+escapeHTML(email)+'-এ পাঠানো হয়েছে (Spam ফোল্ডারও দেখুন)','ok');
     }catch(e){
         setAuthErr(e.code==='auth/user-not-found'?'এই ইমেইলে কোনো একাউন্ট নেই':'রিসেট লিংক পাঠানো যায়নি, আবার চেষ্টা করুন');
     }
@@ -2242,20 +2271,21 @@ function addToCart(name,price,img){
     /* স্টক শেষ বইয়ে বাধা (নাম দিয়ে বইয়ের নম্বর বের করে স্টক চেক) */
     if(typeof books!=='undefined'&&window.gkIsOut){
         const bi=books.findIndex(x=>x&&x.name===name.trim());
-        if(bi>-1&&window.gkIsOut(bi)){if(window.showToast)showToast('❌ এই বইটি এখন স্টকে নেই');return;}
+        if(bi>-1&&window.gkIsOut(bi)){if(window.showToast)showToast('<i class=gi-no></i> এই বইটি এখন স্টকে নেই');return;}
     }
     cart.push({name:name.trim(),price:Number(price),img});
     saveCart();updateCartUI();
     const w=document.getElementById('cartWrap');
     w.classList.remove('bounce');void w.offsetWidth;w.classList.add('bounce');
     setTimeout(()=>w.classList.remove('bounce'),400);
-    showToast('✅ কার্টে যোগ হয়েছে!','#059669');
+    showToast('<i class=gi-ok></i> কার্টে যোগ হয়েছে!','#059669');
     if(window.fbq){try{fbq('track','AddToCart',{content_name:name.trim(),value:Number(price),currency:'BDT',contents:[{id:name.trim(),quantity:1}]});}catch(e){}}
 }
 function showToast(msg,color){
     const t=document.createElement('div');
+    t.className='gk-toast';
     t.style.cssText=`position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:${color||'#059669'};color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,0.2);`;
-    t.innerText=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
+    t.innerHTML=window.gkIconText?gkIconText(msg):escapeHTML(msg);document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
 }
 function saveCart(){localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));}
 /* কার্ট ড্রয়ার এখন common.js-এর শেয়ার্ড প্রিমিয়াম ড্রয়ার — এখানে শুধু হোমপেজের ব্যাজগুলো আপডেট করে সেটাকে ডাকি */
@@ -2266,7 +2296,7 @@ function updateCartUI(){
     if(document.getElementById('cartBox')&&window.gkCartUpdateUI) gkCartUpdateUI();
     gkMarkInCart();
 }
-/* কার্টে থাকা বইয়ের কার্ডে চিহ্ন — কভারে "✓ কার্টে আছে", সবুজ কিনারা, কার্ট বোতামে কয়টা আছে */
+/* কার্টে থাকা বইয়ের কার্ডে চিহ্ন — কভারে "<i class=gi-check></i> কার্টে আছে", সবুজ কিনারা, কার্ট বোতামে কয়টা আছে */
 function gkMarkInCart(){
     const m={};
     (typeof cart!=='undefined'?cart:[]).forEach(i=>{ m[i.name]=(m[i.name]||0)+1; });
@@ -2300,11 +2330,11 @@ function renderCouponSection(){
     if(applied){
         const ct=localStorage.getItem('gronthokanon_ctype')||'percent';
         const cv=parseInt(localStorage.getItem('gronthokanon_cvalue')||localStorage.getItem('gronthokanon_discount')||'0');
-        const label='🎉 '+applied+' — '+((typeof gkCouponLabel==='function')?gkCouponLabel({type:ct,value:cv}):cv+'% ডিসকাউন্ট');
+        const label='<i class=gi-party></i> '+applied+' — '+((typeof gkCouponLabel==='function')?gkCouponLabel({type:ct,value:cv}):cv+'% ডিসকাউন্ট');
         sec.innerHTML=`
         <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(5,150,105,0.08);border:1.5px dashed #059669;border-radius:8px;">
             <span style="flex:1;font-size:13px;font-weight:700;color:#059669;">${label}</span>
-            <button onclick="removeCoupon()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">✕ বাতিল</button>
+            <button onclick="removeCoupon()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;"><i class=gi-x></i> বাতিল</button>
         </div>`;
     } else {
         sec.innerHTML=`
@@ -2321,7 +2351,7 @@ function removeCoupon(){
     localStorage.removeItem('gronthokanon_ctype');
     localStorage.removeItem('gronthokanon_cvalue');
     discountPercent=0;
-    showToast('🗑️ কুপন বাতিল হয়েছে','#6b7280');
+    showToast('<i class=gi-trash></i> কুপন বাতিল হয়েছে','#6b7280');
     updateCartUI();
     renderCouponSection();
 }
@@ -2329,7 +2359,7 @@ function applyCoupon(){
     const code=(document.getElementById('couponCode').value||'').trim().toUpperCase();
     const msgEl=document.getElementById('cartCouponMsg');
     if(!code){
-        if(msgEl){ msgEl.style.display='block'; msgEl.style.background='#fef2f2'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; }
+        if(msgEl){ msgEl.style.display='block'; msgEl.style.background='#fef2f2'; msgEl.style.color='#dc2626'; msgEl.innerHTML='<i class=gi-warn></i> কুপন কোড লিখুন!'; }
         return;
     }
     const info=(typeof gkCouponInfo==='function')?gkCouponInfo(code):null;
@@ -2339,27 +2369,27 @@ function applyCoupon(){
         localStorage.setItem('gronthokanon_ctype',info.type);
         localStorage.setItem('gronthokanon_cvalue',String(info.value));
         localStorage.setItem('gronthokanon_discount',String(discountPercent));
-        showToast('🎉 '+gkCouponLabel(info)+' যুক্ত হয়েছে!','#059669');
+        showToast('<i class=gi-party></i> '+gkCouponLabel(info)+' যুক্ত হয়েছে!','#059669');
         updateCartUI();
         renderCouponSection();
     } else {
-        if(msgEl){ msgEl.style.display='block'; msgEl.style.background='#fef2f2'; msgEl.style.color='#dc2626'; msgEl.textContent='❌ "'+escapeHTML(code)+'" ভুল কুপন কোড, আবার চেষ্টা করুন।'; }
-        showToast('❌ ভুল কুপন কোড!','#dc2626');
+        if(msgEl){ msgEl.style.display='block'; msgEl.style.background='#fef2f2'; msgEl.style.color='#dc2626'; msgEl.innerHTML='<i class=gi-no></i> "'+escapeHTML(code)+'" ভুল কুপন কোড, আবার চেষ্টা করুন।'; }
+        showToast('<i class=gi-no></i> ভুল কুপন কোড!','#dc2626');
     }
 }
 function copyCoupon(code){
     const inp = document.getElementById('couponCode');
     if(inp) inp.value = code;
     navigator.clipboard.writeText(code).then(()=>{
-        showToast('✅ কুপন কপি হয়েছে — চেকআউটে ব্যবহার করুন','#059669');
+        showToast('<i class=gi-ok></i> কুপন কপি হয়েছে — চেকআউটে ব্যবহার করুন','#059669');
     }).catch(()=>{
-        showToast('✅ কুপন কোড সেট হয়েছে!','#059669');
+        showToast('<i class=gi-ok></i> কুপন কোড সেট হয়েছে!','#059669');
     });
 }
 function showCart(){ if(window.gkOpenCart) gkOpenCart(); }
 function closeCart(){ if(window.gkCloseCart) gkCloseCart(); }
 function openOrderForm(){
-    if(!cart.length)return showToast('⚠️ কার্ট খালি!','#dc2626');
+    if(!cart.length)return showToast('<i class=gi-warn></i> কার্ট খালি!','#dc2626');
     const inp=document.getElementById('couponCode');
     const code=inp?inp.value.trim():'';
     const appliedCoupon=localStorage.getItem('gronthokanon_coupon');
@@ -2405,9 +2435,9 @@ function deskCatClick(key, el) {
         if (sec) {
             sec.style.display = 'block';
             sec.innerHTML = `<div class="cat-section">
-                <div class="cat-section-title">📦 প্যাকেজসমূহ</div>
+                <div class="cat-section-title"><i class=gi-package></i> প্যাকেজসমূহ</div>
                 <div style="text-align:center;padding:40px 20px;color:var(--text2);font-size:15px;">
-                    🚧 প্যাকেজ সমূহ শীঘ্রই আসছে...
+                    <i class=gi-tool></i> প্যাকেজ সমূহ শীঘ্রই আসছে...
                 </div>
             </div>`;
         }
@@ -2417,7 +2447,7 @@ function deskCatClick(key, el) {
         if (sec) {
             sec.style.display = 'block';
             if (filtered.length === 0) {
-                sec.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--text2);font-size:15px;">📚 এই ক্যাটাগরিতে এখন বই নেই</div>`;
+                sec.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--text2);font-size:15px;"><i class=gi-books></i> এই ক্যাটাগরিতে এখন বই নেই</div>`;
             } else {
                 sec.innerHTML = `<div class="cat-section">
                     <div class="cat-section-title">${el ? el.innerText.trim() : key}</div>
@@ -2516,14 +2546,14 @@ function loadRecentSalesTicker(){
         st.textContent='.gk-sale-toast{position:fixed;left:14px;bottom:92px;z-index:9985;max-width:250px;background:var(--card);border:1px solid var(--border);border-left:3px solid #059669;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,0.16);padding:10px 12px;display:flex;align-items:center;gap:10px;transform:translateX(-130%);transition:transform .45s cubic-bezier(.2,.8,.2,1);font-family:\'Hind Siliguri\',Arial,sans-serif;}.gk-sale-toast.show{transform:translateX(0);}.gk-sale-ico{width:30px;height:30px;border-radius:8px;background:rgba(5,150,105,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}.gk-sale-txt{font-size:11.5px;line-height:1.45;color:var(--text);min-width:0;}.gk-sale-txt b{color:#059669;}.gk-sale-time{font-size:10px;color:var(--text2);margin-top:2px;}@media(max-width:600px){.gk-sale-toast{bottom:86px;max-width:210px;}}';
         document.head.appendChild(st);
         const el=document.createElement('div');el.className='gk-sale-toast';
-        el.innerHTML='<div class="gk-sale-ico">📦</div><div class="gk-sale-txt"><div id="gkSaleMsg"></div><div class="gk-sale-time" id="gkSaleTime"></div></div>';
+        el.innerHTML='<div class="gk-sale-ico"><i class=gi-package></i></div><div class="gk-sale-txt"><div id="gkSaleMsg"></div><div class="gk-sale-time" id="gkSaleTime"></div></div>';
         document.body.appendChild(el);
         const bnd=n=>String(n).replace(/\d/g,x=>'০১২৩৪৫৬৭৮৯'[x]);const rel=t=>{const d=Date.now()-(t||Date.now());const m=Math.floor(d/60000);if(m<1)return'এইমাত্র';if(m<60)return bnd(m)+' মিনিট আগে';const h=Math.floor(m/60);if(h<24)return bnd(h)+' ঘণ্টা আগে';return bnd(Math.floor(h/24))+' দিন আগে';};
         let i=0;
         function showOne(){
             const s=arr[i%arr.length];i++;
             document.getElementById('gkSaleMsg').innerHTML='<b>'+esc(s.area||'বাংলাদেশ')+'</b> থেকে কেউ<br>"'+esc(s.book)+'" অর্ডার করেছেন';
-            document.getElementById('gkSaleTime').innerText='🕐 '+rel(s.t);
+            document.getElementById('gkSaleTime').innerHTML='<i class=gi-clock></i> '+rel(s.t);
             el.classList.add('show');
             setTimeout(()=>el.classList.remove('show'),5000);
         }
@@ -2544,9 +2574,9 @@ function loadHomeBlogs(){
     ];
     const ctaCard=`<a class="hblog-cta" href="blog.html">
         <span id="hblogTopic" style="display:none;font-size:10px;font-weight:800;color:#b45309;background:rgba(251,191,36,0.22);padding:3px 10px;border-radius:20px;"></span>
-        <span class="big">🏆</span>
+        <span class="big"><i class=gi-trophy></i></span>
         <b>মাসিক ব্লগ প্রতিযোগিতা</b>
-        <span>আপনার লেখা জমা দিন —<br>নির্বাচিত হলে <b>🎁 হাদিয়া</b> জিতুন!</span>
+        <span>আপনার লেখা জমা দিন —<br>নির্বাচিত হলে <b><i class=gi-gift></i> হাদিয়া</b> জিতুন!</span>
     </a>`;
     /* অ্যাডমিন-সেট বিষয় (siteConfig/blogTopic) — re-render হলেও টিকে থাকে */
     function applyHblogTopic(){
@@ -2564,7 +2594,7 @@ function loadHomeBlogs(){
         <span class="hblog-tag">${esc(p.tag)}</span>
         <h3>${esc(p.title)}</h3>
         <p>${esc(p.ex)}</p>
-        <div class="hblog-meta">📖 গ্রন্থকানন</div>
+        <div class="hblog-meta"><i class=gi-book-open></i> গ্রন্থকানন</div>
     </a>`).join('');
     row.innerHTML=ctaCard+builtinCards;applyHblogTopic();
     /* পাঠকদের প্রকাশিত লেখা থাকলে CTA-র পরেই বসাও */
@@ -2575,10 +2605,10 @@ function loadHomeBlogs(){
             if(!list.length)return;
             list.sort((a,b)=>(b.publishedAt||0)-(a.publishedAt||0));
             const readerCards=list.slice(0,6).map(b=>`<a class="hblog-card" href="blog.html?pb=${encodeURIComponent(b.id)}">
-                <span class="hblog-tag win">🏆 পাঠকের লেখা</span>
+                <span class="hblog-tag win"><i class=gi-trophy></i> পাঠকের লেখা</span>
                 <h3>${esc(b.title)}</h3>
-                <p>${esc(String(b.content).slice(0,120))}</p>
-                <div class="hblog-meta">✍️ ${esc(b.author||'পাঠক')}</div>
+                <p>${esc((window.gkStripEmoji?gkStripEmoji(b.content):String(b.content)).slice(0,120))}</p>
+                <div class="hblog-meta"><i class=gi-pen></i> ${esc(b.author||'পাঠক')}</div>
             </a>`).join('');
             row.innerHTML=ctaCard+readerCards+builtinCards;applyHblogTopic();
         }).catch(()=>{});
@@ -2589,7 +2619,7 @@ function loadReviewSlider(){
     if(typeof db==='undefined'||!db)return;
     db.ref('reviews').get().then(snap=>{
         if(!snap.exists())return;
-        if(window.gkSetRatings) gkSetRatings(snap.val()); /* কার্ডের ★ রেটিং — একই ডেটা, আলাদা ডাউনলোড লাগে না */
+        if(window.gkSetRatings) gkSetRatings(snap.val()); /* কার্ডের <i class=gi-star></i> রেটিং — একই ডেটা, আলাদা ডাউনলোড লাগে না */
         const all=[];
         snap.forEach(bk=>{bk.forEach(r=>{const v=r.val();if(v&&Number(v.rating)>=4&&v.comment&&String(v.comment).trim())all.push({...v,bookId:bk.key});});});
         if(!all.length)return;
@@ -2604,10 +2634,10 @@ function loadReviewSlider(){
             const b=bIdx!==-1?books[bIdx]:null;
             const bImg=b?((typeof getImg==='function'&&getImg(b))||b.img||''):'';
             const nm=String(r.name||'পাঠক');
-            const stars='★'.repeat(Math.min(5,r.rating||5))+'☆'.repeat(Math.max(0,5-(r.rating||5)));
+            const stars='<i class=gi-star></i>'.repeat(Math.min(5,r.rating||5))+'<i class=gi-star-o></i>'.repeat(Math.max(0,5-(r.rating||5)));
             return `<div class="rvs-card" ${b?`onclick="goToBook(${bIdx})"`:''}>
                 <div class="rvs-stars">${stars}</div>
-                <div class="rvs-comment">${esc(r.comment)}</div>
+                <div class="rvs-comment">${esc(window.gkStripEmoji?gkStripEmoji(r.comment):r.comment)}</div>
                 <div class="rvs-meta">
                     <div class="rvs-name"><span class="rvs-av">${esc(nm[0]||'প')}</span> ${esc(nm)}</div>
                     ${b?`<div class="rvs-book-row">${bImg?`<img src="${esc(bImg)}" class="rvs-book-thumb" onerror="this.style.display='none'">`:''}<span class="rvs-book">${esc(b.name)}</span></div>`:''}
@@ -2926,7 +2956,7 @@ function loadBanners(){
 }
 </style>
 
-<!-- ✅ FIX: Ctrl+K Search Shortcut -->
+<!-- <i class=gi-ok></i> FIX: Ctrl+K Search Shortcut -->
 <script>
 document.addEventListener('keydown', function(e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {

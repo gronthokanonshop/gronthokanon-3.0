@@ -27,7 +27,7 @@
 <title>চেকআউট — গ্রন্থকানন</title>
 <meta name="theme-color" content="#059669">
 <meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
@@ -177,7 +177,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 .pay-opt{display:flex;align-items:center;gap:12px;padding:13px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.2s;position:relative;background:var(--bg-card);}
 .pay-opt:hover{border-color:var(--primary);background:var(--primary-xlight);}
 .pay-opt.selected{border-color:var(--primary);background:var(--primary-xlight);}
-.pay-opt.selected::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:22px;text-align:center;}
+.pay-opt.selected::after{content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--primary) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center/13px no-repeat;color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:22px;text-align:center;}
 .pay-opt.disabled{opacity:.45;cursor:not-allowed;}
 .pay-opt.disabled:hover{border-color:var(--border);background:var(--bg-card);}
 .pay-opt input[type="radio"]{display:none;}
@@ -400,7 +400,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
 .dl-opt{position:relative;display:flex;align-items:center;gap:10px;padding:13px 12px;border:1.5px solid var(--border);border-radius:14px;cursor:pointer;background:var(--bg-card);transition:.15s;}
 .dl-opt:hover{border-color:#10b981;}
 .dl-opt.selected{border-color:#059669;background:#ecfdf5;box-shadow:0 0 0 3px rgba(16,185,129,.12);}
-.dl-opt.selected::after{content:'✓';position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:#059669;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(5,150,105,.35);}
+.dl-opt.selected::after{content:'';position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;background:#059669 url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center/13px no-repeat;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(5,150,105,.35);}
 .dl-ic{width:38px;height:38px;border-radius:11px;background:#f1f5f9;color:#475569;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .dl-opt.selected .dl-ic{background:linear-gradient(135deg,#10b981,#059669);color:#fff;}
 .dl-ic svg{width:19px;height:19px;}
@@ -485,7 +485,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
         </div>
         <div class="card-body">
           <div id="useSavedInfoBtn" style="display:none;margin-bottom:14px;padding:11px 14px;background:#ecfdf5;border:1.5px dashed #059669;border-radius:10px;cursor:pointer;" onclick="applySavedInfo()">
-            <div style="font-size:13px;font-weight:800;color:#047857;">👤 <span id="savedInfoLabel"></span></div>
+            <div style="font-size:13px;font-weight:800;color:#047857;"><i class=gi-user></i> <span id="savedInfoLabel"></span></div>
             <div style="font-size:11.5px;color:#059669;margin-top:2px;">আগের তথ্য ব্যবহার করুন →</div>
           </div>
           <div class="two-col">
@@ -509,7 +509,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
             </div>
             <div class="field">
               <label class="bng">থানা / উপজেলা <span class="req">*</span></label>
-              <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l4-4 4 4v10H3z"/><path d="M13 7l4-4 4 4v12h-8z"/><path d="M7 13H5v6h2z"/></svg>️</span>
+              <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l4-4 4 4v10H3z"/><path d="M13 7l4-4 4 4v12h-8z"/><path d="M7 13H5v6h2z"/></svg></span>
                 <select id="thana" class="bng" onchange="onThanaChange()"><option value="">থানা বেছে নিন</option></select>
               </div>
             </div>
@@ -526,7 +526,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
             <input type="checkbox" id="saveInfo" checked style="width:16px;height:16px;accent-color:#059669;flex-shrink:0;">
             আমার তথ্য সেভ রাখুন
           </label>
-          <div id="prefillNotice" style="display:none;margin-top:8px;font-size:12px;color:#059669;font-weight:600;">✓ আগের তথ্য বসানো হয়েছে</div>
+          <div id="prefillNotice" style="display:none;margin-top:8px;font-size:12px;color:#059669;font-weight:600;"><i class=gi-check></i> আগের তথ্য বসানো হয়েছে</div>
         </div>
       </div>
 
@@ -646,7 +646,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
 <div class="v-toast" id="vToast"></div>
 
 <a href="https://wa.me/8801516595762" target="_blank" rel="noopener" class="wa-float">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:28px;">
+  <i class="gi-wa gi-w" style="font-size:28px" aria-label="WhatsApp"></i>
 </a>
 
 <!-- FOOTER -->
@@ -684,8 +684,6 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
    CONSTANTS
 ══════════════════════════════════ */
 const BKASH_NUMBER = '01408786396';
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz6upCtsRyDtEdJZqVUjFFuDuSmB47ZC5IInHUQAGsaNAS7XCsXtgtBNXcsXK71UbELfQ/exec';
-const SHEET_TOKEN = 'GK_SECRET_2026';
 
 function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
@@ -756,14 +754,14 @@ function toggleDark(){
   const nxt = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', nxt);
   localStorage.setItem('gronthokanon_theme', nxt);
-  document.getElementById('darkBtn').textContent = nxt === 'dark' ? '☀️' : '🌙';
+  document.getElementById('darkBtn').innerHTML = nxt === 'dark' ? '<i class="gi gi-sun"></i>' : '<i class="gi gi-moon"></i>';
 }
 (function(){
   const s = localStorage.getItem('gronthokanon_theme');
   if(s === 'dark') {
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.getElementById('darkBtn');
-      if(btn) btn.textContent = '☀️';
+      if(btn) btn.innerHTML = '<i class="gi gi-sun"></i>';
     });
   }
 })();
@@ -778,7 +776,7 @@ function toggleMenu(){
 ══════════════════════════════════ */
 function showToast(msg, color='#dc2626'){
   const t = document.getElementById('vToast');
-  t.innerHTML = msg;
+  t.innerHTML = window.gkIconText ? gkIconText(msg) : escapeHTML(msg);
   t.style.background = color;
   t.style.boxShadow = `0 6px 20px ${color}55`;
   t.classList.add('show');
@@ -1019,7 +1017,7 @@ function syncPayForDelivery(){
 }
 function copyBkash(){
   if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(BKASH_NUMBER).then(() => showToast('✅ নম্বর কপি হয়েছে!','#059669')).catch(() => fallbackCopy());
+    navigator.clipboard.writeText(BKASH_NUMBER).then(() => showToast('<i class=gi-ok></i> নম্বর কপি হয়েছে!','#059669')).catch(() => fallbackCopy());
   } else { fallbackCopy(); }
 }
 function fallbackCopy(){
@@ -1028,8 +1026,8 @@ function fallbackCopy(){
   el.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
   document.body.appendChild(el);
   el.select(); el.setSelectionRange(0,99999);
-  try{ document.execCommand('copy'); showToast('✅ নম্বর কপি হয়েছে!','#059669'); }
-  catch(e){ showToast('⚠️ কপি হয়নি, নম্বরটি লিখে নিন','#d97706'); }
+  try{ document.execCommand('copy'); showToast('<i class=gi-ok></i> নম্বর কপি হয়েছে!','#059669'); }
+  catch(e){ showToast('<i class=gi-warn></i> কপি হয়নি, নম্বরটি লিখে নিন','#d97706'); }
   document.body.removeChild(el);
 }
 
@@ -1062,7 +1060,7 @@ function updateTotal(){
   /* হাদিয়া অফার — কার্ট ড্রয়ারের মতো চেকআউটেও দেখাই (একই GK_GIFT_THRESHOLD) */
   const ob = document.getElementById('checkoutOfferBanner');
   if(ob){ const gh = (sub && window.gkGiftBarHTML) ? gkGiftBarHTML(sub) : ''; ob.innerHTML = gh; ob.style.display = gh ? 'block' : 'none'; }
-  document.getElementById('deliveryShow').innerText = (coupon && cType === 'delivery') ? '৳0 (ফ্রি! 🎉)' : (sub ? '৳' + coBn(delivCharge) : '—');
+  document.getElementById('deliveryShow').innerHTML = (coupon && cType === 'delivery') ? '৳0 (ফ্রি! <i class=gi-party></i>)' : (sub ? '৳' + coBn(delivCharge) : '—');
   const dr = document.getElementById('discountRow');
   if(disc > 0){
     document.getElementById('discountShow').innerText = coBn(disc);
@@ -1079,12 +1077,12 @@ function updateTotal(){
       const desc = couponLabelTxt() + ' পাচ্ছেন';
       ccb.style.display = 'block';
       ccb.innerHTML = `<div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.1);border:1px solid rgba(5,150,105,0.3);padding:8px 11px;border-radius:8px;">
-        <span style="font-size:16px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️</span>
+        <span style="font-size:16px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
         <div style="flex:1;">
           <div style="font-size:12px;font-weight:800;color:#059669;letter-spacing:.5px;">${coupon} <span style="background:#059669;color:white;font-size:9px;padding:1px 7px;">সক্রিয়</span></div>
           <div style="font-size:10px;color:var(--text-muted);">${desc}</div>
         </div>
-        <button type="button" onclick="removeCoupon()" style="flex-shrink:0;display:inline-flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #fecaca;cursor:pointer;color:#dc2626;font-family:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:20px;" title="কুপন বাতিল করুন">✕ সরান</button>
+        <button type="button" onclick="removeCoupon()" style="flex-shrink:0;display:inline-flex;align-items:center;gap:4px;background:#fff;border:1.5px solid #fecaca;cursor:pointer;color:#dc2626;font-family:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:20px;" title="কুপন বাতিল করুন"><i class=gi-x></i> সরান</button>
       </div>`;
     } else { ccb.style.display = 'none'; ccb.innerHTML = ''; }
   }
@@ -1097,7 +1095,7 @@ function coBn(n){ return String(n).replace(/\d/g, d => '০১২৩৪৫৬৭
 function renderSummary(){
   const box = document.getElementById('summaryItems');
   if(!cart.length){
-    box.innerHTML = '<div class="co-empty bng"><div class="co-empty-ic">📦</div><b>কার্ট খালি</b><a href="index.html">বই দেখুন →</a></div>';
+    box.innerHTML = '<div class="co-empty bng"><div class="co-empty-ic"><i class=gi-package></i></div><b>কার্ট খালি</b><a href="index.html">বই দেখুন →</a></div>';
     document.getElementById('itemCountSub').innerText = '';
     updateTotal(); return;
   }
@@ -1109,6 +1107,9 @@ function renderSummary(){
   /* প্রতিটা বইয়ের পাশে − + আর মুছে ফেলার বোতাম — চেকআউট থেকেই পরিমাণ বদলানো যায় */
   box.innerHTML = Object.entries(g).map(([name,item]) => {
     const n = escapeHTML(name);
+    /* কার্টে যোগ করার পর দাম বদলালে আগে লাইনে পুরনো দাম আর মোটে নতুন দাম দেখাত — এখন দুটোই আজকের দাম */
+    const vp = getVerifiedPrice(name);
+    if(vp !== null) item.price = vp;
     return `
     <div class="co-item">
       <img src="${escapeHTML(item.img||'book-placeholder.svg')}" class="os-img-real" onerror="this.src='book-placeholder.svg'" alt="">
@@ -1154,7 +1155,7 @@ function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   const msgEl = document.getElementById('couponMsg');
   /* কুপন চালু থাকা অবস্থায় ঘর খালি করে "প্রয়োগ" চাপলে কুপন সরিয়ে দিই (আগে উল্টো "কুপন কোড লিখুন!" দেখাত, কুপন সরত না) */
-  if(!code){ if(coupon){ removeCoupon(); return; } msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ কুপন কোড লিখুন!'; return; }
+  if(!code){ if(coupon){ removeCoupon(); return; } msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.innerHTML='<i class=gi-warn></i> কুপন কোড লিখুন!'; return; }
   const info = couponDiscount(code);
   if(info !== undefined){
     coupon = code; cType = info.type; cValue = info.value;
@@ -1164,10 +1165,10 @@ function applyCoupon(){
     localStorage.setItem('gronthokanon_cvalue', String(cValue));
     localStorage.setItem('gronthokanon_discount', String(discPct));
     msgEl.style.display='block'; msgEl.style.color='#059669';
-    msgEl.textContent = `✅ ${code} কোড প্রয়োগ হয়েছে! ${couponLabelTxt()}।`;
+    msgEl.innerHTML = `<i class=gi-ok></i> ${escapeHTML(code)} কোড প্রয়োগ হয়েছে! ${couponLabelTxt()}।`;
     updateTotal();
   } else {
-    msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='❌ কুপন কোডটি সঠিক নয়!';
+    msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.innerHTML='<i class=gi-no></i> কুপন কোডটি সঠিক নয়!';
   }
 }
 function removeCoupon(){
@@ -1179,7 +1180,7 @@ function removeCoupon(){
   document.getElementById('couponInput').value = '';
   const msgEl = document.getElementById('couponMsg');
   msgEl.style.display='block'; msgEl.style.color='#dc2626';
-  msgEl.textContent='🗑️ কুপন বাতিল করা হয়েছে!';
+  msgEl.innerHTML='<i class=gi-trash></i> কুপন বাতিল করা হয়েছে!';
   setTimeout(()=>{ msgEl.style.display='none'; }, 2500);
   updateTotal();
 }
@@ -1199,18 +1200,20 @@ async function confirmOrder(){
   const address  = document.getElementById('custAddress').value.trim();
   const custNote = (document.getElementById('custNote')?.value || '').trim().slice(0,500);
   const payMethod = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
-  if(delivType === 'office' && payMethod === 'Cash on Delivery'){ isSubmitting=false; return showToast('⚠️ অফিস ডেলিভারিতে ক্যাশ অন ডেলিভারি নেই — বিকাশে পেমেন্ট করুন','#dc2626'); }
+  if(delivType === 'office' && payMethod === 'Cash on Delivery'){ isSubmitting=false; return showToast('<i class=gi-warn></i> অফিস ডেলিভারিতে ক্যাশ অন ডেলিভারি নেই — বিকাশে পেমেন্ট করুন','#dc2626'); }
 
-  if(!name)     { isSubmitting=false; return showToast('⚠️ নাম লিখুন!'); }
-  if(!phone || !/^01[3-9]\d{8}$/.test(phone)){ isSubmitting=false; return showToast('⚠️ সঠিক বাংলাদেশি নম্বর দিন!'); }
-  if(!district) { isSubmitting=false; return showToast('⚠️ জেলা নির্বাচন করুন!'); }
-  if(!thana)    { isSubmitting=false; return showToast('⚠️ থানা নির্বাচন করুন!'); }
-  if(!address)  { isSubmitting=false; return showToast('⚠️ ঠিকানা লিখুন!'); }
-  if(!cart.length){ isSubmitting=false; return showToast('⚠️ কার্ট খালি!'); }
+  if(!name)     { isSubmitting=false; return showToast('<i class=gi-warn></i> নাম লিখুন!'); }
+  /* Firebase নিয়মে নাম ৬০ অক্ষরের বেশি হলে অর্ডার সেভই হয় না — আগেই জানিয়ে দিই */
+  if(name.length > 60){ isSubmitting=false; return showToast('<i class=gi-warn></i> নাম ৬০ অক্ষরের মধ্যে লিখুন'); }
+  if(!phone || !/^01[3-9]\d{8}$/.test(phone)){ isSubmitting=false; return showToast('<i class=gi-warn></i> সঠিক বাংলাদেশি নম্বর দিন!'); }
+  if(!district) { isSubmitting=false; return showToast('<i class=gi-warn></i> জেলা নির্বাচন করুন!'); }
+  if(!thana)    { isSubmitting=false; return showToast('<i class=gi-warn></i> থানা নির্বাচন করুন!'); }
+  if(!address)  { isSubmitting=false; return showToast('<i class=gi-warn></i> ঠিকানা লিখুন!'); }
+  if(!cart.length){ isSubmitting=false; return showToast('<i class=gi-warn></i> কার্ট খালি!'); }
   /* কার্টে থাকা কোনো বই এর মধ্যে স্টক শেষ হয়ে গেলে অর্ডার আটকাও */
   if(window.gkIsOut && typeof books!=='undefined'){
     const outItem = cart.find(it=>{ const bi=books.findIndex(x=>x&&x.name===it.name); return bi>-1 && window.gkIsOut(bi); });
-    if(outItem){ isSubmitting=false; return showToast('⚠️ "'+outItem.name+'" এখন স্টকে নেই — কার্ট থেকে সরিয়ে আবার চেষ্টা করুন','#dc2626'); }
+    if(outItem){ isSubmitting=false; return showToast('<i class=gi-warn></i> "'+outItem.name+'" এখন স্টকে নেই — কার্ট থেকে সরিয়ে আবার চেষ্টা করুন','#dc2626'); }
   }
 
   /* মূল্য-যাচাই: cart-এ থাকা প্রতিটা আইটেম বর্তমান books ক্যাটালগে নাম মিলিয়ে verify
@@ -1219,7 +1222,7 @@ async function confirmOrder(){
      client-এর পাঠানো দামে ভরসা করা হবে না। */
   if(typeof books === 'undefined' || !books.length){
     isSubmitting=false;
-    return showToast('⚠️ দাম যাচাই করা যাচ্ছে না, একটু পর আবার চেষ্টা করুন','#dc2626');
+    return showToast('<i class=gi-warn></i> দাম যাচাই করা যাচ্ছে না, একটু পর আবার চেষ্টা করুন','#dc2626');
   }
   const unverified = cart.filter(i => getVerifiedPrice(i.name) === null);
   if(unverified.length){
@@ -1228,7 +1231,16 @@ async function confirmOrder(){
     renderSummary();
     isSubmitting=false;
     const names = [...new Set(unverified.map(i=>i.name))].join(', ');
-    return showToast('⚠️ "'+names+'" যাচাই করা যায়নি, কার্ট থেকে সরানো হলো। বাকি বই নিয়ে আবার "অর্ডার নিশ্চিত করুন" চাপুন।','#dc2626');
+    return showToast('<i class=gi-warn></i> "'+names+'" যাচাই করা যায়নি, কার্ট থেকে সরানো হলো। বাকি বই নিয়ে আবার "অর্ডার নিশ্চিত করুন" চাপুন।','#dc2626');
+  }
+
+  /* বিকাশের TxID যাচাই কুপনের আগে — আগে কুপন আগে "ব্যবহৃত" হয়ে যেত, তারপর TxID ভুল/খালি থাকলে
+     অর্ডার না হয়েও ওই নম্বরে FIRSTORDER আর কখনো চলত না */
+  let txId = '';
+  if(payMethod === 'bKash'){
+    txId = document.getElementById('transactionId').value.trim().toUpperCase();
+    if(!txId){ isSubmitting=false; return showToast('<i class=gi-warn></i> Transaction ID লিখুন!'); }
+    if(!/^[A-Z0-9]{8,12}$/.test(txId)){ isSubmitting=false; return showToast('<i class=gi-warn></i> সঠিক Transaction ID দিন!'); }
   }
 
   if(coupon === 'FIRSTORDER'){
@@ -1239,15 +1251,8 @@ async function confirmOrder(){
         if(current !== null){ couponBlocked = true; return; /* abort — আগেই ব্যবহার হয়েছে */ }
         return true; /* atomic: check + set একসাথে */
       });
-      if(couponBlocked){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626'); }
-    }catch(e){ btn.disabled=false; btn.innerHTML='✅ অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('⚠️ কুপন যাচাই করা যাচ্ছে না।','#dc2626'); }
-  }
-
-  let txId = '';
-  if(payMethod === 'bKash'){
-    txId = document.getElementById('transactionId').value.trim().toUpperCase();
-    if(!txId){ isSubmitting=false; return showToast('⚠️ Transaction ID লিখুন!'); }
-    if(!/^[A-Z0-9]{8,12}$/.test(txId)){ isSubmitting=false; return showToast('⚠️ সঠিক Transaction ID দিন!'); }
+      if(couponBlocked){ btn.disabled=false; btn.innerHTML='<i class=gi-ok></i> অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('<i class=gi-warn></i> এই নম্বরে FIRSTORDER আগেই ব্যবহার হয়েছে!','#dc2626'); }
+    }catch(e){ btn.disabled=false; btn.innerHTML='<i class=gi-ok></i> অর্ডার নিশ্চিত করুন'; isSubmitting=false; return showToast('<i class=gi-warn></i> কুপন যাচাই করা যাচ্ছে না।','#dc2626'); }
   }
 
   btn.disabled = true;
@@ -1255,7 +1260,10 @@ async function confirmOrder(){
 
   const g = {};
   cart.forEach(i => { g[i.name] = (g[i.name]||0)+1; });
-  const bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
+  let bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
+  /* Firebase নিয়মে এই ঘর ৩০০০ অক্ষরের বেশি নিতে পারে না — অনেক বইয়ের বড় অর্ডারে অর্ডারই আটকে যেত।
+     পুরো তালিকা items-এ থাকেই, এখানে শুধু ছোট করে লিখি */
+  if(bookList.length > 3000) bookList = bookList.slice(0, 2960) + ' … মোট ' + cart.length + 'টি বই';
   const sub = getSubtotal();
   delivCharge = calcDeliveryCharge(district, thana);
   if(coupon && cType === 'delivery') delivCharge = 0; /* ফ্রি ডেলিভারি কুপন */
@@ -1301,17 +1309,12 @@ async function confirmOrder(){
     if(window.fbq){try{fbq('track','Purchase',{value:grand,currency:'BDT',num_items:cart.length});}catch(e){}}
   }catch(e){
     console.error('Firebase error:', e);
-    btn.disabled = false; btn.innerHTML = '✅ অর্ডার নিশ্চিত করুন';
+    btn.disabled = false; btn.innerHTML = '<i class=gi-ok></i> অর্ডার নিশ্চিত করুন';
     isSubmitting = false;
-    showToast('❌ অর্ডার সেভ হয়নি! ইন্টারনেট চেক করুন।','#dc2626');
+    showToast('<i class=gi-no></i> অর্ডার সেভ হয়নি! ইন্টারনেট চেক করুন।','#dc2626');
     return;
   }
 
-  try{
-    await fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({token:SHEET_TOKEN, name, phone, address:fullAddr, books:bookList,
-        payment:payMethod+(txId?` (TxID: ${txId})`:''), delivery:delivLabel, total:'৳'+grand})});
-  }catch(e){}
 
   /* পাবলিক recent-sales ticker — আসল অর্ডার থেকে শুধু এলাকা + বই (নাম/ফোন কিছুই না) */
   try{
@@ -1322,8 +1325,10 @@ async function confirmOrder(){
   localStorage.removeItem('gronthokanon_cart');
   localStorage.removeItem('gronthokanon_discount');
   localStorage.removeItem('gronthokanon_coupon');
+  localStorage.removeItem('gronthokanon_ctype');
+  localStorage.removeItem('gronthokanon_cvalue');
   /* মেমোরির কার্টও খালি করা হলো — নাহলে আবার "অর্ডার নিশ্চিত" চাপলে একই অর্ডার দ্বিতীয়বার চলে যেত */
-  cart = []; coupon = ''; discPct = 0;
+  cart = []; coupon = ''; discPct = 0; cType = ''; cValue = 0;
   renderSummary();
 
   document.getElementById('successInfo').innerHTML = `
@@ -1333,23 +1338,23 @@ async function confirmOrder(){
     </div>
     <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <strong>${escapeHTML(name)}</strong><br>
     <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> ${escapeHTML(phone)}<br>
-    📍 ${escapeHTML(fullAddr)}<br>
-    💳 ${escapeHTML(payMethod)}${txId ? ` (TxID: ${escapeHTML(txId)})` : ''}<br>
-    📦 ${escapeHTML(bookList)}<br>
+    <i class=gi-pin></i> ${escapeHTML(fullAddr)}<br>
+    <i class=gi-card></i> ${escapeHTML(payMethod)}${txId ? ` (TxID: ${escapeHTML(txId)})` : ''}<br>
+    <i class=gi-package></i> ${escapeHTML(bookList)}<br>
     <svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v2M12 16v2M9 9h4a2 2 0 0 1 0 4H9"/></svg> <strong style="color:#059669;">৳${grand}</strong>
     <br><br>
     <button onclick="window.location.href='track.html?id=${escapeHTML(orderId)}'"
       style="width:100%;padding:10px;background:#059669;color:white;border:none;border-radius:10px;font-family:'Hind Siliguri',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;">
-      📦 অর্ডার ট্র্যাক করুন</button>`;
+      <i class=gi-package></i> অর্ডার ট্র্যাক করুন</button>`;
 
-  btn.disabled = false; btn.innerHTML = '✅ অর্ডার নিশ্চিত করুন';
+  btn.disabled = false; btn.innerHTML = '<i class=gi-ok></i> অর্ডার নিশ্চিত করুন';
   isSubmitting = false;
   document.getElementById('successModal').classList.add('show');
   gkConfetti();
 }
 
 /* ══════════════════════════════════
-   কনফেত্তি — অর্ডার সফল হলে সেলিব্রেশন 🎊
+   কনফেত্তি — অর্ডার সফল হলে সেলিব্রেশন <i class=gi-party></i>
 ══════════════════════════════════ */
 function gkConfetti(){
   const c = document.createElement('canvas');
@@ -1402,11 +1407,11 @@ function buildInvoiceHTML(o){
   const rows = Object.entries(grouped).map(([name,e],idx) => {
     const lt = e.price * e.qty; subtotal += lt;
     const imgCell = e.img
-      ? `<img src="${e.img}" style="width:38px;height:52px;object-fit:cover;border-radius:5px;border:1px solid #d1fae5;display:block;" crossorigin="anonymous">`
-      : `<div style="width:38px;height:52px;background:#f0fdf4;border-radius:5px;border:1px solid #d1fae5;display:flex;align-items:center;justify-content:center;font-size:18px;">📚</div>`;
+      ? `<img src="${escapeHTML(e.img)}" style="width:38px;height:52px;object-fit:cover;border-radius:5px;border:1px solid #d1fae5;display:block;" crossorigin="anonymous">`
+      : `<div style="width:38px;height:52px;background:#f0fdf4;border-radius:5px;border:1px solid #d1fae5;display:flex;align-items:center;justify-content:center;font-size:18px;"></div>`;
     return `<tr style="background:${idx%2===0?'#f0fdf4':'#fff'}">
       <td style="padding:8px 10px;vertical-align:middle;">${imgCell}</td>
-      <td style="padding:8px 10px;font-size:13px;vertical-align:middle;">${name}</td>
+      <td style="padding:8px 10px;font-size:13px;vertical-align:middle;">${escapeHTML(name)}</td>
       <td style="padding:8px;text-align:center;font-size:13px;vertical-align:middle;">${e.qty}</td>
       <td style="padding:8px 10px;text-align:right;font-size:13px;vertical-align:middle;">Tk ${lt}</td>
     </tr>`;
@@ -1481,10 +1486,10 @@ function buildInvoiceHTML(o){
       </div>
       ${o.coupon?`<div style="flex:1;padding:14px 18px;">
         <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Coupon Applied</div>
-        <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>️ ${escapeHTML(o.coupon)}</div>
+        <div style="font-size:14px;font-weight:800;color:#059669;letter-spacing:1px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> ${escapeHTML(o.coupon)}</div>
       </div>`:''}
     </div>    <div style="background:#065f46;padding:14px 28px;text-align:center;margin-top:8px;border-top:3px solid #059669;">
-      <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য! 📚</div>
+      <div style="color:#fff;font-size:12px;font-weight:600;">ধন্যবাদ গ্রন্থকাননে কেনাকাটা করার জন্য!</div>
       <div style="color:#a7f3d0;font-size:11px;margin-top:4px;">Track: gronthokanon.com/track.html?id=${o.orderId}</div>
     </div>
   </div>`;
@@ -1493,10 +1498,11 @@ function buildInvoiceHTML(o){
 async function downloadInvoice(){
   const o = lastOrderData;
   if(!o){ showToast('অর্ডার তথ্য পাওয়া যায়নি','#dc2626'); return; }
-  showToast('📄 PDF তৈরি হচ্ছে...','#059669');
+  showToast('<i class=gi-doc></i> PDF তৈরি হচ্ছে...','#059669');
   const wrap = document.createElement('div');
   wrap.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1;';
   wrap.innerHTML = buildInvoiceHTML(o);
+  wrap.querySelectorAll('.gi,[class^="gi-"]').forEach(el => el.remove());  /* SVG-মাস্ক আইকন PDF-এ আঁকা যায় না */
   document.body.appendChild(wrap);
   try{
     await gkLoadPdfLibs();
@@ -1507,7 +1513,7 @@ async function downloadInvoice(){
     const W = 210, H = Math.min(297,(canvas.height/canvas.width)*210);
     pdf.addImage(imgData,'PNG',0,0,W,H);
     pdf.save('Gronthokanon-Invoice-'+o.orderId+'.pdf');
-  }catch(e){ showToast('❌ PDF তৈরি হয়নি','#dc2626'); console.error(e); }
+  }catch(e){ showToast('PDF তৈরি হয়নি','#dc2626'); console.error(e); }
   document.body.removeChild(wrap);
 }
 
@@ -1555,6 +1561,8 @@ document.addEventListener('DOMContentLoaded', function(){
   makeSearchable(document.getElementById('district'));
   makeSearchable(document.getElementById('thana'));
   renderSummary(); prefillSavedInfo();
+  /* অ্যাডমিনের সর্বশেষ বইয়ের তালিকা (নতুন দাম) এলে সামারি আবার হিসাব করি */
+  if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => { if(ok) renderSummary(); });
   if(window.fbq && cart.length){
     try{fbq('track','InitiateCheckout',{value:getSubtotal(),currency:'BDT',num_items:cart.length});}catch(e){}
   }

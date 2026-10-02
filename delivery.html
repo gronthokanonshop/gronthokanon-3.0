@@ -24,7 +24,8 @@
 <title>ডেলিভারি নীতি — গ্রন্থকানন</title>
 <meta name="theme-color" content="#059669">
 <meta name="description" content="গ্রন্থকাননের ডেলিভারি তথ্য — হোম ডেলিভারি ঢাকায় ৳৬০, ঢাকার বাইরে ৳৯০ (ক্যাশ অন ডেলিভারি); সুন্দরবন কুরিয়ারে অফিস ডেলিভারি ৳৫০ (বিকাশে)।">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
@@ -54,19 +55,19 @@
   <div class="navbar-top">
     <button class="back-btn" onclick="history.back()">‹</button>
     <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">ডেলিভারি নীতি</span>
-    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn"><i class=gi-moon></i></button>
   </div>
 </nav>
 
 <div class="page-wrap">
   <div class="hero-banner">
-    <h1>🚚 ডেলিভারি তথ্য</h1>
+    <h1><i class=gi-truck></i> ডেলিভারি তথ্য</h1>
     <p>সারা বাংলাদেশে দ্রুত ও নির্ভরযোগ্য ডেলিভারি</p>
   </div>
 
   <!-- চার্জগুলো checkout.html-এর calcDeliveryCharge()-এর সাথে মিলিয়ে রাখা — ওখানে বদলালে এখানেও বদলাবেন -->
   <div class="info-card">
-    <h3>🏠 হোম ডেলিভারি <span style="font-weight:600;font-size:12px;color:var(--text2);">— বাসায় পৌঁছে দেওয়া</span></h3>
+    <h3><i class=gi-home></i> হোম ডেলিভারি <span style="font-weight:600;font-size:12px;color:var(--text2);">— বাসায় পৌঁছে দেওয়া</span></h3>
     <div class="info-row"><span>ঢাকা সিটির ভেতরে</span><span>৳৬০</span></div>
     <div class="info-row"><span>ঢাকার আশেপাশে (সাভার, আশুলিয়া, কেরানীগঞ্জ, ধামরাই, দোহার, নবাবগঞ্জ, হেমায়েতপুর)</span><span>৳৮০</span></div>
     <div class="info-row"><span>ঢাকার বাইরে সারা দেশে</span><span>৳৯০</span></div>
@@ -74,7 +75,7 @@
     <div class="info-row"><span>পেমেন্ট</span><span>ক্যাশ অন ডেলিভারি বা বিকাশ</span></div>
   </div>
   <div class="info-card">
-    <h3>🏢 অফিস ডেলিভারি <span style="font-weight:600;font-size:12px;color:var(--text2);">— কুরিয়ার অফিস থেকে নিজে নেবেন</span></h3>
+    <h3><i class=gi-building></i> অফিস ডেলিভারি <span style="font-weight:600;font-size:12px;color:var(--text2);">— কুরিয়ার অফিস থেকে নিজে নেবেন</span></h3>
     <div class="info-row"><span>যেকোনো জেলা</span><span>৳৫০</span></div>
     <div class="info-row"><span>কুরিয়ার</span><span>সুন্দরবন কুরিয়ার</span></div>
     <div class="info-row"><span>পেমেন্ট</span><span>শুধু বিকাশে অগ্রিম</span></div>
@@ -93,12 +94,12 @@
     <h3>ডেলিভারি পদ্ধতি</h3>
     <div class="grid2" style="margin-bottom:0;">
       <div class="grid-card">
-        <div class="icon">💵</div>
+        <div class="icon"><i class=gi-money></i></div>
         <div class="title">ক্যাশ অন ডেলিভারি</div>
         <div class="sub">হোম ডেলিভারিতে বই পাওয়ার পর টাকা দিন</div>
       </div>
       <div class="grid-card">
-        <div class="icon">📦</div>
+        <div class="icon"><i class=gi-package></i></div>
         <div class="title">কুরিয়ার সার্ভিস</div>
         <div class="sub">স্টেডফাস্ট, রেডএক্স, পাঠাও ও সুন্দরবন</div>
       </div>
@@ -106,7 +107,7 @@
   </div>
 
   <div class="note">
-    ⚠️ <strong>লক্ষ্য রাখুন:</strong> শুক্রবার ও সরকারি ছুটির দিন ডেলিভারি কার্যক্রম বন্ধ থাকে। সেক্ষেত্রে পরবর্তী কার্যদিবসে ডেলিভারি হবে। যেকোনো সমস্যায় আমাদের হেল্পলাইনে যোগাযোগ করুন: <strong>01516595762</strong>
+    <i class=gi-warn></i> <strong>লক্ষ্য রাখুন:</strong> শুক্রবার ও সরকারি ছুটির দিন ডেলিভারি কার্যক্রম বন্ধ থাকে। সেক্ষেত্রে পরবর্তী কার্যদিবসে ডেলিভারি হবে। যেকোনো সমস্যায় আমাদের হেল্পলাইনে যোগাযোগ করুন: <strong>01516595762</strong>
   </div>
 </div>
 

@@ -24,7 +24,8 @@
     <title>অর্ডার ট্র্যাক — গ্রন্থকানন</title>
     <meta name="theme-color" content="#ffffff">
     <meta name="description" content="আপনার গ্রন্থকানন অর্ডার ট্র্যাক করুন — অর্ডার ID বা মোবাইল নম্বর দিয়ে অর্ডারের সর্বশেষ অবস্থা দেখুন।">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
@@ -69,6 +70,9 @@
         .tl-sub{font-size:11px;color:var(--text2);margin-top:2px;}
         .track-error{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:14px;color:#dc2626;font-size:13px;text-align:center;display:none;margin-bottom:14px;}
         .loading-spinner{text-align:center;padding:20px;color:var(--text2);font-size:13px;}
+        .reorder-btn{width:100%;margin-top:14px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(217,119,6,.32);display:flex;align-items:center;justify-content:center;gap:8px;}
+        .reorder-btn .gi{color:#fff;}
+        .reorder-sub{text-align:center;font-size:11.5px;color:var(--text2);margin-top:6px;}
     </style>
 </head>
 <body class="gk-info">
@@ -84,8 +88,8 @@
 <div class="page-wrap">
 
     <div class="track-tabs">
-        <button class="ttab active" id="tab1" onclick="switchTab('id')"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> ID দিয়ে খুঁজুন</button>
-        <button class="ttab" id="tab2" onclick="switchTab('phone')"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> আমার অর্ডারসমূহ</button>
+        <button class="ttab active" id="tab1" onclick="trackTab('id')"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> ID দিয়ে খুঁজুন</button>
+        <button class="ttab" id="tab2" onclick="trackTab('phone')"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> আমার অর্ডারসমূহ</button>
     </div>
 
     <!-- Search by Order ID -->
@@ -93,7 +97,7 @@
         <div class="track-search">
             <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21,8 21,21 3,21 3,8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg> অর্ডার খুঁজুন</h3>
             <div class="track-input-row">
-                <input class="track-input" id="trackInput" placeholder="যেমন: GK-ABC123" oninput="this.value=this.value.toUpperCase()">
+                <input class="track-input" id="trackInput" placeholder="যেমন: GK-ABC123" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')searchOrder()">
                 <button class="track-btn" onclick="searchOrder()">খুঁজুন</button>
             </div>
         </div>
@@ -105,6 +109,7 @@
                 <div class="timeline-title">অর্ডার অবস্থান</div>
                 <div id="timelineSteps"></div>
             </div>
+            <div id="reorderBox"></div>
         </div>
         <div id="lastOrderHint" style="text-align:center;padding:10px;font-size:12px;color:var(--text2);"></div>
     </div>
@@ -114,7 +119,7 @@
         <div class="track-search">
             <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> আমার সব অর্ডার</h3>
             <div class="track-input-row">
-                <input class="track-input" id="phoneInput" placeholder="01XXXXXXXXX" type="tel" maxlength="11">
+                <input class="track-input" id="phoneInput" placeholder="01XXXXXXXXX" type="tel" inputmode="numeric" maxlength="11" onkeydown="if(event.key==='Enter')searchByPhone()">
                 <button class="track-btn" onclick="searchByPhone()">দেখুন</button>
             </div>
         </div>
@@ -150,7 +155,7 @@ const STATUSES=[
 const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
 const STATUS_COLORS={pending:'background:#fef3c7;color:#92400e;',confirmed:'background:#dbeafe;color:#1e40af;',processing:'background:#ede9fe;color:#5b21b6;',shipped:'background:#fff7ed;color:#9a3412;',delivered:'background:#ecfdf5;color:#065f46;'};
 
-function switchTab(tab){
+function trackTab(tab){  /* আগে নাম ছিল switchTab — লগইন বক্সের ট্যাবের সাথে নাম মিলে যেত, ফলে এই পেজে লগইন/রেজিস্টার ট্যাব কাজ করত না */
     const isId=tab==='id';
     document.getElementById('panelId').style.display=isId?'block':'none';
     document.getElementById('panelPhone').style.display=isId?'none':'block';
@@ -229,7 +234,7 @@ function renderMyOrders(orders){
 }
 
 function viewOrder(id){
-    switchTab('id');
+    trackTab('id');
     document.getElementById('trackInput').value=id;
     searchOrder();
 }
@@ -266,7 +271,22 @@ function renderOrder(o){
         </div>`;
     });
     document.getElementById('timelineSteps').innerHTML=html;
+    /* একই বইগুলো আবার অর্ডার — এক চাপে কার্টে বসে চেকআউটে যায় (দাম চেকআউটে আজকের দামে যাচাই হয়) */
+    const items=Array.isArray(o.items)?o.items.filter(i=>i&&i.name):[];
+    window.__gkReorderItems=items;
+    document.getElementById('reorderBox').innerHTML=items.length
+        ?`<button class="reorder-btn" onclick="gkReorder()"><i class="gi gi-refresh"></i> এই বইগুলো আবার অর্ডার করুন</button><div class="reorder-sub">${String(items.length).replace(/[0-9]/g,d=>'০১২৩৪৫৬৭৮৯'[d])}টি বই কার্টে যোগ হবে — দাম আজকের দাম অনুযায়ী</div>`
+        :'';
     document.getElementById('orderCard').style.display='block';
+}
+function gkReorder(){
+    const items=window.__gkReorderItems||[];
+    if(!items.length) return;
+    let cart=[];
+    try{ cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[]; }catch(e){}
+    items.forEach(i=>cart.push({name:String(i.name),price:Number(i.price)||0,img:i.img||''}));
+    localStorage.setItem('gronthokanon_cart',JSON.stringify(cart));
+    window.location.href='checkout.html';
 }
 
 window.onload=function(){

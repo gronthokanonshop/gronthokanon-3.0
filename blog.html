@@ -27,7 +27,8 @@
 <meta name="description" content="বই, পাঠ ও ইসলামি জ্ঞান নিয়ে গ্রন্থকাননের ব্লগ — বই পড়ার উপকারিতা, লেখক পরিচিতি ও পাঠ-পরামর্শ।" id="metaDesc">
 <meta name="theme-color" content="#059669">
 <link rel="canonical" href="https://gronthokanon.com/blog.html" id="canonicalLink">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
@@ -88,7 +89,7 @@ textarea.sub-input{min-height:180px;resize:vertical;line-height:1.8;}
   <div class="navbar-top">
     <button class="back-btn" onclick="history.back()">‹</button>
     <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">ব্লগ</span>
-    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn"><i class=gi-moon></i></button>
   </div>
 </nav>
 
@@ -114,7 +115,7 @@ const POSTS = [
       </ul>
       <p>শুরুটা ছোট করে করুন — প্রতিদিন মাত্র ১০-১৫ মিনিট। একটি বিষয়ভিত্তিক বই বেছে নিন, যেটি আপনার জীবনে কাজে লাগবে। ধীরে ধীরে এটি একটি সুন্দর অভ্যাসে পরিণত হবে ইন শা আল্লাহ।</p>
     `,
-    cta:{text:'📚 পড়ার জন্য বই বেছে নিন', link:'index.html'}
+    cta:{text:'<i class=gi-books></i> পড়ার জন্য বই বেছে নিন', link:'index.html'}
   },
   {
     slug:'notun-pathok-boi',
@@ -132,7 +133,7 @@ const POSTS = [
       </ul>
       <p>গ্রন্থকাননে এই প্রতিটি বিষয়ের সাশ্রয়ী মূল্যের বই রয়েছে। ক্যাটাগরি থেকে সহজেই আপনার পছন্দের বিষয় বেছে নিতে পারবেন।</p>
     `,
-    cta:{text:'☪️ ইসলামি বই দেখুন', link:'filter.html?type=cat&value=ইসলামি বই'}
+    cta:{text:'<i class=gi-moon-star></i> ইসলামি বই দেখুন', link:'filter.html?type=cat&value=ইসলামি বই'}
   },
   {
     slug:'boi-upohar',
@@ -150,11 +151,11 @@ const POSTS = [
       </ul>
       <p>গ্রন্থকানন থেকে সহজেই উপহারের বই অর্ডার করতে পারেন — সারা বাংলাদেশে ক্যাশ অন ডেলিভারিতে পৌঁছে যাবে।</p>
     `,
-    cta:{text:'🎁 উপহারের বই খুঁজুন', link:'index.html'}
+    cta:{text:'<i class=gi-gift></i> উপহারের বই খুঁজুন', link:'index.html'}
   }
 ];
 
-const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const esc=s=>(window.gkStripEmoji?gkStripEmoji(s||''):String(s||'')).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const SITE='https://gronthokanon.com';
 const DBURL='https://gronthokanon-8573e-default-rtdb.firebaseio.com';
 
@@ -163,13 +164,13 @@ function renderList(){
   document.getElementById('blogWrap').innerHTML=
     '<div class="blog-hero"><h1>গ্রন্থকানন ব্লগ</h1><p>বই, পাঠ ও ইসলামি জ্ঞান নিয়ে লেখা — আমাদের এবং আপনাদের</p></div>'+
     `<div class="comp-card">
-        <h2>🏆 মাসিক ব্লগ প্রতিযোগিতা</h2>
-        <p id="compTopicLine" style="margin-bottom:8px;display:none;"><span style="display:inline-block;font-size:11px;font-weight:800;color:#b45309;background:rgba(251,191,36,0.22);padding:4px 12px;border-radius:20px;">📌 এ মাসের বিষয়: <span id="compTopicText"></span></span></p>
-        <p>বই, পাঠ বা ইসলামি বিষয়ে আপনার নিজের লেখা জমা দিন।<br>নির্বাচিত সেরা লেখাগুলো এখানে প্রকাশিত হবে এবং লেখকরা পাবেন <b>🎁 আকর্ষণীয় হাদিয়া!</b></p>
-        <button onclick="openSubmitForm()">✍️ আপনার লেখা জমা দিন</button>
+        <h2><i class=gi-trophy></i> মাসিক ব্লগ প্রতিযোগিতা</h2>
+        <p id="compTopicLine" style="margin-bottom:8px;display:none;"><span style="display:inline-block;font-size:11px;font-weight:800;color:#b45309;background:rgba(251,191,36,0.22);padding:4px 12px;border-radius:20px;"><i class=gi-pushpin></i> এ মাসের বিষয়: <span id="compTopicText"></span></span></p>
+        <p>বই, পাঠ বা ইসলামি বিষয়ে আপনার নিজের লেখা জমা দিন।<br>নির্বাচিত সেরা লেখাগুলো এখানে প্রকাশিত হবে এবং লেখকরা পাবেন <b><i class=gi-gift></i> আকর্ষণীয় হাদিয়া!</b></p>
+        <button onclick="openSubmitForm()"><i class=gi-pen></i> আপনার লেখা জমা দিন</button>
     </div>`+
     '<div id="readerBlogs"></div>'+
-    '<div class="sec-label">📖 গ্রন্থকাননের লেখা</div>'+
+    '<div class="sec-label"><i class=gi-book-open></i> গ্রন্থকাননের লেখা</div>'+
     POSTS.map(p=>`<a class="blog-card" href="blog.html?post=${encodeURIComponent(p.slug)}">
         <span class="tag">${esc(p.tag)}</span>
         <h2>${esc(p.title)}</h2>
@@ -198,12 +199,12 @@ function loadReaderBlogs(){
     const list=Object.entries(data).map(([id,b])=>({id,...b})).filter(b=>b&&b.title&&b.content);
     if(!list.length)return;
     list.sort((a,b)=>(b.publishedAt||0)-(a.publishedAt||0));
-    box.innerHTML='<div class="sec-label">🏆 পাঠকদের নির্বাচিত লেখা</div>'+
+    box.innerHTML='<div class="sec-label"><i class=gi-trophy></i> পাঠকদের নির্বাচিত লেখা</div>'+
       list.map(b=>`<a class="blog-card" href="blog.html?pb=${encodeURIComponent(b.id)}">
-        <span class="tag">পাঠকের লেখা</span><span class="reader-badge">🏆 প্রতিযোগিতা বিজয়ী</span>
+        <span class="tag">পাঠকের লেখা</span><span class="reader-badge"><i class=gi-trophy></i> প্রতিযোগিতা বিজয়ী</span>
         <h2>${esc(b.title)}</h2>
         <p>${esc(String(b.content).slice(0,140))}${String(b.content).length>140?'…':''}</p>
-        <div class="meta">✍️ ${esc(b.author||'পাঠক')} ${b.publishedAt?'· '+new Date(b.publishedAt).toLocaleDateString('bn-BD'):''}</div>
+        <div class="meta"><i class=gi-pen></i> ${esc(b.author||'পাঠক')} ${b.publishedAt?'· '+new Date(b.publishedAt).toLocaleDateString('bn-BD'):''}</div>
         <span class="more">পড়ুন →</span>
       </a>`).join('');
   }).catch(()=>{});
@@ -216,16 +217,16 @@ function renderReaderPost(id){
     document.title=b.title+' — গ্রন্থকানন ব্লগ';
     const md=document.getElementById('metaDesc'); if(md)md.setAttribute('content',String(b.content).slice(0,150));
     const paras=String(b.content).split(/\n+/).filter(x=>x.trim()).map(x=>'<p>'+esc(x)+'</p>').join('');
-    const rawMeta='✍️ '+(b.author||'পাঠক')+(b.publishedAt?' · '+new Date(b.publishedAt).toLocaleDateString('bn-BD'):'');
+    const rawMeta='<i class=gi-pen></i> '+esc(b.author||'পাঠক')+(b.publishedAt?' · '+new Date(b.publishedAt).toLocaleDateString('bn-BD'):'');
     document.getElementById('blogWrap').innerHTML=
       '<a class="back-to-blog" href="blog.html">‹ সব লেখা</a>'+
       `<div class="article">
-        <span class="tag">পাঠকের লেখা</span><span class="reader-badge">🏆 প্রতিযোগিতা বিজয়ী</span>
+        <span class="tag">পাঠকের লেখা</span><span class="reader-badge"><i class=gi-trophy></i> প্রতিযোগিতা বিজয়ী</span>
         <h1>${esc(b.title)}</h1>
-        <p style="font-size:12.5px;color:var(--text2);">${esc(rawMeta)}</p>
+        <p style="font-size:12.5px;color:var(--text2);">${rawMeta}</p>
         ${paras}
-        <button class="pdf-dl-btn" onclick="downloadBlogPDF(${JSON.stringify(b.title)},${JSON.stringify(rawMeta)},this)">📥 PDF ডাউনলোড</button>
-        <div class="article-cta"><a href="blog.html" onclick="event.preventDefault();location.href='blog.html';setTimeout(openSubmitForm,600);">✍️ আপনিও লিখুন — হাদিয়া জিতুন</a></div>
+        <button class="pdf-dl-btn" data-t="${String(b.title||'').replace(/"/g,'&quot;')}" onclick="downloadBlogPDF(this.dataset.t,'',this)"><i class=gi-download></i> PDF ডাউনলোড</button>
+        <div class="article-cta"><a href="blog.html" onclick="event.preventDefault();location.href='blog.html';setTimeout(openSubmitForm,600);"><i class=gi-pen></i> আপনিও লিখুন — হাদিয়া জিতুন</a></div>
       </div>`;
   }).catch(()=>renderList());
 }
@@ -254,10 +255,10 @@ function submitBlog(){
   const content=(document.getElementById('sbContent').value||'').trim();
   const msg=document.getElementById('sbMsg');
   function err(t){msg.style.display='block';msg.style.color='#dc2626';msg.innerText=t;}
-  if(name.length<2)return err('⚠️ আপনার নাম লিখুন');
-  if(!/^01[3-9]\d{8}$/.test(phone))return err('⚠️ সঠিক মোবাইল নম্বর দিন (হাদিয়া পাঠাতে লাগবে)');
-  if(title.length<5)return err('⚠️ লেখার শিরোনাম দিন (কমপক্ষে ৫ অক্ষর)');
-  if(!content)return err('⚠️ আপনার লেখাটি লিখুন');
+  if(name.length<2)return err('<i class=gi-warn></i> আপনার নাম লিখুন');
+  if(!/^01[3-9]\d{8}$/.test(phone))return err('<i class=gi-warn></i> সঠিক মোবাইল নম্বর দিন (হাদিয়া পাঠাতে লাগবে)');
+  if(title.length<5)return err('<i class=gi-warn></i> লেখার শিরোনাম দিন (কমপক্ষে ৫ অক্ষর)');
+  if(!content)return err('<i class=gi-warn></i> আপনার লেখাটি লিখুন');
   sbSending=true;
   const btn=document.getElementById('sbSend');btn.disabled=true;btn.innerText='পাঠানো হচ্ছে...';
   fetch(DBURL+'/blogSubmissions.json',{
@@ -266,13 +267,13 @@ function submitBlog(){
   }).then(r=>{
     if(!r.ok)throw new Error();
     document.querySelector('.sub-box').innerHTML=
-      '<div style="text-align:center;padding:24px 10px;"><div style="font-size:46px;margin-bottom:12px;">🎉</div>'+
+      '<div style="text-align:center;padding:24px 10px;"><div style="font-size:46px;margin-bottom:12px;"><i class=gi-party></i></div>'+
       '<h3 style="margin-bottom:8px;">লেখা জমা হয়েছে!</h3>'+
-      '<p style="font-size:13px;color:var(--text2);line-height:1.9;">আপনার লেখাটি আমরা পেয়েছি। নির্বাচিত হলে এখানে প্রকাশ করা হবে এবং আপনার নম্বরে যোগাযোগ করে হাদিয়া পাঠানো হবে ইন শা আল্লাহ। ✨</p>'+
+      '<p style="font-size:13px;color:var(--text2);line-height:1.9;">আপনার লেখাটি আমরা পেয়েছি। নির্বাচিত হলে এখানে প্রকাশ করা হবে এবং আপনার নম্বরে যোগাযোগ করে হাদিয়া পাঠানো হবে ইন শা আল্লাহ। <i class=gi-sparkles></i></p>'+
       '<button class="sub-send" style="margin-top:14px;padding:12px 30px;border:none;border-radius:10px;font-family:\'Hind Siliguri\',Arial,sans-serif;font-weight:700;cursor:pointer;" onclick="closeSubmitForm()">ঠিক আছে</button></div>';
   }).catch(()=>{
-    sbSending=false;btn.disabled=false;btn.innerText='📨 জমা দিন';
-    err('❌ পাঠানো যায়নি — ইন্টারনেট চেক করে আবার চেষ্টা করুন');
+    sbSending=false;btn.disabled=false;btn.innerHTML='<i class=gi-send></i> জমা দিন';
+    err('<i class=gi-no></i> পাঠানো যায়নি — ইন্টারনেট চেক করে আবার চেষ্টা করুন');
   });
 }
 
@@ -286,8 +287,8 @@ function renderPost(post){
   document.getElementById('blogWrap').innerHTML=
     '<a class="back-to-blog" href="blog.html">‹ সব লেখা</a>'+
     `<div class="article"><span class="tag">${esc(post.tag)}</span><h1>${esc(post.title)}</h1>${post.body}
-      <button class="pdf-dl-btn" onclick="downloadBlogPDF(${JSON.stringify(post.title)},'',this)">📥 PDF ডাউনলোড</button>
-      <div class="article-cta"><a href="${esc(post.cta.link)}">${esc(post.cta.text)}</a></div>
+      <button class="pdf-dl-btn" data-t="${String(post.title||'').replace(/"/g,'&quot;')}" onclick="downloadBlogPDF(this.dataset.t,'',this)"><i class=gi-download></i> PDF ডাউনলোড</button>
+      <div class="article-cta"><a href="${esc(post.cta.link)}">${post.cta.text}</a></div>
     </div>`;
 }
 
@@ -296,9 +297,9 @@ async function downloadBlogPDF(title, meta, btnEl){
   try{ await gkLoadPdfLibs(); }catch(e){ if(typeof showToast==='function')showToast('PDF লাইব্রেরি লোড হয়নি — নেট চেক করুন','#dc2626'); return; }
   const articleEl=btnEl.closest('.article');
   if(!articleEl) return;
-  const orig=btnEl.innerText; btnEl.disabled=true; btnEl.innerText='তৈরি হচ্ছে...';
+  const orig=btnEl.innerHTML; btnEl.disabled=true; btnEl.innerText='তৈরি হচ্ছে...';
   const clone=articleEl.cloneNode(true);
-  clone.querySelectorAll('.pdf-dl-btn, .article-cta, .tag, .reader-badge').forEach(el=>el.remove());
+  clone.querySelectorAll('.pdf-dl-btn, .article-cta, .tag, .reader-badge, .gi, [class^="gi-"]').forEach(el=>el.remove());  /* SVG-মাস্ক আইকন PDF-এ আঁকা যায় না */
   const wrap=document.createElement('div');
   wrap.style.cssText='position:fixed;left:-9999px;top:0;width:650px;background:#fff;z-index:-1;padding:30px;font-family:"Hind Siliguri",Arial,sans-serif;color:#111;';
   wrap.innerHTML='<div style="text-align:center;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid #059669;"><strong style="font-size:18px;color:#059669;">গ্রন্থকানন</strong><div style="font-size:11px;color:#666;margin-top:2px;">gronthokanon.com</div></div>'+clone.outerHTML;
@@ -348,9 +349,9 @@ async function downloadBlogPDF(title, meta, btnEl){
     }
     const safeTitle=String(title).replace(/[^ঀ-৿a-zA-Z0-9]+/g,'-').slice(0,50);
     pdf.save('গ্রন্থকানন-'+safeTitle+'.pdf');
-  }catch(e){ if(typeof showToast==='function')showToast('❌ PDF তৈরি হয়নি, আবার চেষ্টা করুন','#dc2626'); }
+  }catch(e){ if(typeof showToast==='function')showToast('<i class=gi-no></i> PDF তৈরি হয়নি, আবার চেষ্টা করুন','#dc2626'); }
   document.body.removeChild(wrap);
-  btnEl.disabled=false; btnEl.innerText=orig;
+  btnEl.disabled=false; btnEl.innerHTML=orig;
 }
 
 (function(){
@@ -368,17 +369,17 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSubmitForm();})
 <div id="submitOverlay" onclick="closeSubmitForm()"></div>
 <div id="submitModal">
   <div class="sub-box" onclick="event.stopPropagation()">
-    <h3>✍️ আপনার লেখা জমা দিন</h3>
-    <p class="hint">বই, পাঠাভ্যাস বা ইসলামি বিষয়ে নিজের ভাষায় লিখুন। নির্বাচিত লেখা সাইটে প্রকাশিত হবে এবং সেই লেখক পাবেন 🎁 হাদিয়া। (নম্বরটি শুধু হাদিয়া পাঠাতে ব্যবহৃত হবে — সাইটে দেখানো হবে না।)</p>
+    <h3><i class=gi-pen></i> আপনার লেখা জমা দিন</h3>
+    <p class="hint">বই, পাঠাভ্যাস বা ইসলামি বিষয়ে নিজের ভাষায় লিখুন। নির্বাচিত লেখা সাইটে প্রকাশিত হবে এবং সেই লেখক পাবেন <i class=gi-gift></i> হাদিয়া। (নম্বরটি শুধু হাদিয়া পাঠাতে ব্যবহৃত হবে — সাইটে দেখানো হবে না।)</p>
     <p id="sbMsg" style="display:none;font-size:12px;font-weight:700;margin-bottom:10px;"></p>
     <input class="sub-input" id="sbName" placeholder="আপনার নাম *" maxlength="60">
     <input class="sub-input" id="sbPhone" type="tel" placeholder="মোবাইল নম্বর (01XXXXXXXXX) *" maxlength="11">
     <input class="sub-input" id="sbTitle" placeholder="লেখার শিরোনাম *" maxlength="120">
-    <textarea class="sub-input" id="sbContent" placeholder="আপনার লেখা এখানে লিখুন... ✍️" maxlength="20000" oninput="updateCount()"></textarea>
+    <textarea class="sub-input" id="sbContent" placeholder="আপনার লেখা এখানে লিখুন... " maxlength="20000" oninput="updateCount()"></textarea>
     <div class="sub-count" id="sbCount">০ অক্ষর</div>
     <div class="sub-actions">
       <button class="sub-cancel" onclick="closeSubmitForm()">বাতিল</button>
-      <button class="sub-send" id="sbSend" onclick="submitBlog()">📨 জমা দিন</button>
+      <button class="sub-send" id="sbSend" onclick="submitBlog()"><i class=gi-send></i> জমা দিন</button>
     </div>
   </div>
 </div>

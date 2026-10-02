@@ -1026,6 +1026,121 @@
             .quick-action-btn{flex-direction:row;justify-content:flex-start;padding:11px 12px;gap:10px;text-align:left;font-size:13px;}
             .quick-action-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;}
         }
+
+/* ═══════════════════════════════════════════════════════════════
+   গ্রন্থকানন SVG আইকন — সাইটে কোথাও সাধারণ ইমোজি নেই, সব এখান থেকে।
+   ব্যবহার: <i class="gi gi-ok"></i>  (নাম নিচের তালিকা থেকে)
+   আইকন লেখার রঙ নেয় (currentColor); কয়েকটা আইকনের নিজস্ব উজ্জ্বল রং আছে
+   (সবুজ টিক, লাল ক্রস, হলুদ তারা ইত্যাদি)। রঙিন বোতাম/টোস্টের ভেতরে সাদা দেখাতে
+   gi-w ক্লাস যোগ করুন। admin-gk09x43.html-এও এই একই ব্লক আছে।
+═══════════════════════════════════════════════════════════════ */
+.gi,[class^="gi-"],[class*=" gi-"]{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.2em;flex-shrink:0;background-color:currentColor;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat;font-style:normal;}
+.gi-lg{width:1.6em;height:1.6em;}
+.gi-xl{width:2.6em;height:2.6em;}
+.gi-w{color:inherit!important;}
+.gi-ok{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><mask id='m'><rect width='24' height='24' fill='white'/><path d='M7 12.5l3.2 3.2L17 9' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/></mask></defs><circle cx='12' cy='12' r='11' mask='url(%23m)'/></svg>");color:#16a34a;}
+.gi-no{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><mask id='m'><rect width='24' height='24' fill='white'/><path d='M8.2 8.2l7.6 7.6M15.8 8.2l-7.6 7.6' stroke='black' stroke-width='2.6' stroke-linecap='round'/></mask></defs><circle cx='12' cy='12' r='11' mask='url(%23m)'/></svg>");color:#dc2626;}
+.gi-warn{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><mask id='m'><rect width='24' height='24' fill='white'/><path d='M12 9v4.6M12 17.4h.01' stroke='black' stroke-width='2.6' stroke-linecap='round'/></mask></defs><path d='M10.3 3.2L1.6 18.1A2 2 0 0 0 3.3 21h17.4a2 2 0 0 0 1.7-2.9L13.7 3.2a2 2 0 0 0-3.4 0z' mask='url(%23m)'/></svg>");color:#f59e0b;}
+.gi-info{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><mask id='m'><rect width='24' height='24' fill='white'/><path d='M12 11v6M12 7.3h.01' stroke='black' stroke-width='2.6' stroke-linecap='round'/></mask></defs><circle cx='12' cy='12' r='11' mask='url(%23m)'/></svg>");color:#0284c7;}
+.gi-help{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><mask id='m'><rect width='24' height='24' fill='white'/><path d='M9.2 9a3 3 0 0 1 5.8 1c0 2-3 2.6-3 4.2M12 17.6h.01' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/></mask></defs><circle cx='12' cy='12' r='11' mask='url(%23m)'/></svg>");color:#7c3aed;}
+.gi-check{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");}
+.gi-x{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.8' stroke-linecap='round'><path d='M18 6L6 18M6 6l12 12'/></svg>");}
+.gi-plus{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.8' stroke-linecap='round'><path d='M12 5v14M5 12h14'/></svg>");}
+.gi-up{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 19V5M5 12l7-7 7 7'/></svg>");}
+.gi-down{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5v14M19 12l-7 7-7-7'/></svg>");}
+.gi-dot{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='7'/></svg>");}
+.gi-dot-o{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5'><circle cx='12' cy='12' r='7'/></svg>");}
+.gi-heart{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/></svg>");color:#e11d48;}
+.gi-heart-o{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'/></svg>");}
+.gi-star{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><polygon points='12 1.8 15.2 8.3 22.3 9.3 17.1 14.3 18.4 21.4 12 18 5.6 21.4 6.9 14.3 1.7 9.3 8.8 8.3'/></svg>");color:#f59e0b;}
+.gi-star-o{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'><polygon points='12 2.5 15 8.7 21.8 9.6 16.9 14.4 18.1 21.1 12 17.9 5.9 21.1 7.1 14.4 2.2 9.6 9 8.7'/></svg>");color:#f59e0b;}
+.gi-gift{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 12 20 22 4 22 4 12'/><rect x='2' y='7' width='20' height='5'/><line x1='12' y1='22' x2='12' y2='7'/><path d='M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z'/><path d='M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z'/></svg>");color:#e11d48;}
+.gi-party{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5.8 11.3L2 22l10.7-3.8'/><path d='M4 3h.01M22 8h.01M15 2h.01M22 20h.01'/><path d='M22 2l-2.2.8a2.9 2.9 0 0 0-2 3.1c.1.9-.6 1.6-1.4 1.6h-.4c-.9 0-1.6.6-1.8 1.4L14 10'/><path d='M22 13l-.8-.3c-.9-.3-1.8.2-2 1.1-.1.7-.7 1.2-1.4 1.2H17'/><path d='M11 2l.3.8c.3.9-.2 1.8-1.1 2C9.5 4.9 9 5.5 9 6.2V7'/><path d='M11 13c1.9 1.9 2.8 4.2 2 5-.8.8-3.1-.1-5-2s-2.8-4.2-2-5c.8-.8 3.1.1 5 2z'/></svg>");color:#f59e0b;}
+.gi-sparkles{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M10 2.5l1.9 5.6L17.5 10l-5.6 1.9L10 17.5l-1.9-5.6L2.5 10l5.6-1.9z'/><path d='M18.5 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z'/></svg>");color:#f59e0b;}
+.gi-trophy{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.7V17c0 .6-.5 1-1 1.2C7.9 18.8 7 20.2 7 22M14 14.7V17c0 .6.5 1 1 1.2 1.1.6 2 2 2 3.8'/><path d='M18 2H6v7a6 6 0 0 0 12 0z'/></svg>");color:#d97706;}
+.gi-flame{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 22a7 7 0 0 1-7-7c0-2 .9-3.7 2.2-5 .3 1.4 1.1 2.4 2.3 2.8C9 9 11 5.5 14 2c.4 3 2 5 3.5 6.6A8.4 8.4 0 0 1 19 15a7 7 0 0 1-7 7zm0-2.2a3 3 0 0 0 3-3c0-1.3-.8-2.4-1.8-3.4-.4 1-1 1.7-2 2a2.6 2.6 0 0 1-1.6-1.3A3.4 3.4 0 0 0 9 16.8a3 3 0 0 0 3 3z' fill-rule='evenodd'/></svg>");color:#f97316;}
+.gi-leaf{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z'/><path d='M2 21c0-3 1.9-5.4 5.1-6C9.5 14.5 12 13 13 12'/></svg>");color:#16a34a;}
+.gi-award{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='6.5'/><polyline points='8.2 13.9 7 23 12 20 17 23 15.8 13.9'/></svg>");color:#7c3aed;}
+.gi-trash{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='3 6 5 6 21 6'/><path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6'/></svg>");}
+.gi-moon{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z'/></svg>");}
+.gi-sun{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='12' cy='12' r='4.5' fill='black'/><path d='M12 1.5v2.2M12 20.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M1.5 12h2.2M20.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6'/></svg>");color:#f59e0b;}
+.gi-moon-star{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M11.5 3a7.5 7.5 0 0 0 9.5 9.5A9 9 0 1 1 11.5 3z'/><path d='M18 2l.9 2.1 2.1.9-2.1.9L18 8l-.9-2.1L15 5l2.1-.9z'/></svg>");color:#059669;}
+.gi-books{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20'/><path d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'/><path d='M9 7h7M9 11h5'/></svg>");}
+.gi-book-open{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/></svg>");}
+.gi-bookmark{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'><path d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'/></svg>");}
+.gi-pen{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20h9'/><path d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z'/></svg>");}
+.gi-note{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/><path d='M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z'/></svg>");}
+.gi-building{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='2' width='16' height='20' rx='2'/><path d='M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01'/></svg>");}
+.gi-tag{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z'/><circle cx='7' cy='7' r='1.3' fill='black'/></svg>");}
+.gi-folder{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'><path d='M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z'/></svg>");}
+.gi-money{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><rect x='2' y='6' width='20' height='12' rx='2'/><circle cx='12' cy='12' r='2.5'/><path d='M6 12h.01M18 12h.01'/></svg>");color:#16a34a;}
+.gi-gem{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'><path d='M6 3h12l4 6-10 13L2 9z'/><path d='M11 3L8 9l4 13 4-13-3-6M2 9h20'/></svg>");}
+.gi-az{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 16l4 4 4-4M7 20V4M15 10V6.5a2.5 2.5 0 0 1 5 0V10M15 8h5M15 14h5l-5 6h5'/></svg>");}
+.gi-shuffle{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='16 3 21 3 21 8'/><line x1='4' y1='20' x2='21' y2='3'/><polyline points='21 16 21 21 16 21'/><line x1='15' y1='15' x2='21' y2='21'/><line x1='4' y1='4' x2='9' y2='9'/></svg>");}
+.gi-refresh{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='23 4 23 10 17 10'/><polyline points='1 20 1 14 7 14'/><path d='M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15'/></svg>");}
+.gi-package{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M16.5 9.4l-9-5.2M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z'/><polyline points='3.3 7 12 12 20.7 7'/><line x1='12' y1='22' x2='12' y2='12'/></svg>");color:#b45309;}
+.gi-truck{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='3' width='15' height='13'/><polygon points='16 8 20 8 23 11 23 16 16 16 16 8'/><circle cx='5.5' cy='18.5' r='2.5'/><circle cx='18.5' cy='18.5' r='2.5'/></svg>");}
+.gi-home{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/><polyline points='9 22 9 12 15 12 15 22'/></svg>");}
+.gi-phone{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z'/></svg>");color:#059669;}
+.gi-chat{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z'/></svg>");}
+.gi-mail{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='4' width='20' height='16' rx='2'/><polyline points='22 6 12 13 2 6'/></svg>");}
+.gi-send{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><line x1='22' y1='2' x2='11' y2='13'/><polygon points='22 2 15 22 11 13 2 9 22 2'/></svg>");}
+.gi-clock{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='12' cy='12' r='10'/><polyline points='12 6 12 12 16 14'/></svg>");}
+.gi-hourglass{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 22h14M5 2h14M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2'/></svg>");}
+.gi-pin{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 1.5a8 8 0 0 0-8 8c0 5.6 8 13 8 13s8-7.4 8-13a8 8 0 0 0-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z' fill-rule='evenodd'/></svg>");color:#ef4444;}
+.gi-pushpin{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><line x1='12' y1='17' x2='12' y2='22'/><path d='M5 17h14v-1.8a2 2 0 0 0-1.1-1.8l-1.8-.9A2 2 0 0 1 15 10.8V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.8a2 2 0 0 1-1.1 1.8l-1.8.9A2 2 0 0 0 5 15.2z'/></svg>");color:#ef4444;}
+.gi-lock{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><rect x='3' y='11' width='18' height='11' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/></svg>");}
+.gi-doc{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><path d='M16 13H8M16 17H8M10 9H8'/></svg>");}
+.gi-clipboard{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2'/><rect x='8' y='2' width='8' height='4' rx='1'/></svg>");}
+.gi-receipt{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 2v20l2.7-2 2.6 2 2.7-2 2.7 2 2.6-2 2.7 2V2l-2.7 2-2.6-2-2.7 2-2.7-2-2.6 2z'/><path d='M8 9h8M8 13h8M8 17h5'/></svg>");}
+.gi-thumb{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.3a2 2 0 0 0 2-1.7l1.4-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3'/></svg>");}
+.gi-bell{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9z'/><path d='M13.7 21a2 2 0 0 1-3.4 0' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'/></svg>");color:#f59e0b;}
+.gi-hash{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><path d='M4 9h16M4 15h16M10 3L8 21M16 3l-2 18'/></svg>");}
+.gi-link{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7'/><path d='M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7'/></svg>");}
+.gi-user{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>");}
+.gi-users{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><path d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8'/></svg>");}
+.gi-card{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><rect x='1' y='4' width='22' height='16' rx='2'/><line x1='1' y1='10' x2='23' y2='10'/><path d='M5 15h4'/></svg>");}
+.gi-cart{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='21' r='1'/><circle cx='20' cy='21' r='1'/><path d='M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6'/></svg>");}
+.gi-bag{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z'/><line x1='3' y1='6' x2='21' y2='6'/><path d='M16 10a4 4 0 0 1-8 0'/></svg>");}
+.gi-search{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'><circle cx='11' cy='11' r='7.5'/><line x1='21' y1='21' x2='16.6' y2='16.6'/></svg>");}
+.gi-mobile{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><rect x='5' y='2' width='14' height='20' rx='2'/><line x1='12' y1='18' x2='12.01' y2='18'/></svg>");}
+.gi-monitor{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><rect x='2' y='3' width='20' height='14' rx='2'/><path d='M8 21h8M12 17v4'/></svg>");}
+.gi-tool{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z'/></svg>");}
+.gi-briefcase{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='7' width='20' height='14' rx='2'/><path d='M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16'/></svg>");}
+.gi-quote{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 21c3 0 7-1 7-8V5c0-1.3-.8-2-2-2H4c-1.3 0-2 .8-2 2v6c0 1.3.8 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 0-1 1v2c0 1 0 1 1 1zM15 21c3 0 7-1 7-8V5c0-1.3-.8-2-2-2h-4c-1.3 0-2 .8-2 2v6c0 1.3.8 2 2 2h.8c0 2.2.2 4-2.8 4v3c0 1 0 1 1 1z'/></svg>");}
+.gi-fb{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z'/></svg>");color:#1877f2;}
+.gi-wa{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2a9.9 9.9 0 0 0-8.5 15L2 22l5.2-1.4A9.9 9.9 0 1 0 12 2zm5.8 14.1c-.2.7-1.4 1.3-2 1.4-.5 0-1.1.1-1.8-.1l-1.7-.6c-2.9-1.3-4.8-4.2-4.9-4.4-.1-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.3-.3.6-.4.8-.4h.5c.2 0 .4-.1.6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1.1.9 2 1.2 2.2 1.4.3.1.4.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.1 1.4z'/></svg>");color:#25d366;}
+.gi-wave{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8'/><path d='M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.3l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15'/></svg>");color:#f59e0b;}
+.gi-smile{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='12' cy='12' r='10'/><path d='M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01'/></svg>");color:#f59e0b;}
+.gi-frown{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='12' cy='12' r='10'/><path d='M16 16s-1.5-2-4-2-4 2-4 2M9 9h.01M15 9h.01'/></svg>");color:#94a3b8;}
+.gi-eye{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/><circle cx='12' cy='12' r='3'/></svg>");}
+.gi-download{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' y1='15' x2='12' y2='3'/></svg>");}
+.gi-upload{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='17 8 12 3 7 8'/><line x1='12' y1='3' x2='12' y2='15'/></svg>");}
+.gi-printer{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 6 2 18 2 18 9'/><path d='M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2'/><rect x='6' y='14' width='12' height='8'/></svg>");}
+.gi-save{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z'/><polyline points='17 21 17 13 7 13 7 21'/><polyline points='7 3 7 8 15 8'/></svg>");}
+.gi-image{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='2'/><circle cx='8.5' cy='8.5' r='1.5'/><polyline points='21 15 16 10 5 21'/></svg>");}
+.gi-camera{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'/><circle cx='12' cy='13' r='4'/></svg>");}
+.gi-film{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><rect x='2' y='2' width='20' height='20' rx='2.2'/><path d='M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5'/></svg>");}
+.gi-target{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2'><circle cx='12' cy='12' r='10'/><circle cx='12' cy='12' r='6'/><circle cx='12' cy='12' r='2' fill='black'/></svg>");color:#dc2626;}
+.gi-ticket{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 9a3 3 0 0 0 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 0 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z'/><path d='M13 5v2M13 17v2M13 11v2'/></svg>");}
+.gi-broom{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M19.4 2.6L13 9M9.5 9.5l5 5M4 15c2.5-2.5 4-4.5 6.5-4.5L13.5 13.5c0 2.5-2 4-4.5 6.5zM4 15l5 5'/></svg>");}
+.gi-rocket{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'><path d='M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z'/><path d='M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z'/><path d='M9 12H4s.6-3 2-4c1.6-1.1 5 0 5 0M12 15v5s3-.6 4-2c1.1-1.6 0-5 0-5'/></svg>");}
+.gi-chart{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'><path d='M3 21h18M6 17v-5M11 17V7M16 17v-8M21 17V4'/></svg>");}
+.gi-ruler{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0z'/><path d='M14.5 12.5l2-2M11.5 9.5l2-2M8.5 6.5l2-2M17.5 15.5l2-2'/></svg>");}
+.gi-bulb{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 14c.2-1 .7-1.7 1.5-2.5A5.9 5.9 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5M9 18h6M10 22h4'/></svg>");color:#eab308;}
+.gi-scissors{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><circle cx='6' cy='6' r='3'/><circle cx='6' cy='18' r='3'/><path d='M20 4L8.1 15.9M14.5 14.5L20 20M8.1 8.1L12 12'/></svg>");}
+.gi-globe{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='12' cy='12' r='10'/><path d='M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'/></svg>");}
+.gi-flag{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7'/></svg>");color:#dc2626;}
+.gi-chev{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 5 16 12 9 19'/></svg>");}
+.gi-play{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M7 4.5v15a1 1 0 0 0 1.5.9l12-7.5a1 1 0 0 0 0-1.8l-12-7.5A1 1 0 0 0 7 4.5z'/></svg>");}
+.gi-ext{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3'/></svg>");}
+.gi-return{--i:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 14 4 9 9 4'/><path d='M20 20v-7a4 4 0 0 0-4-4H4'/></svg>");}
+/* ঘোরানো তীর (মেনু খোলা/বন্ধ) */
+.gk-arr{display:inline-flex;transition:transform .2s;}
+.gk-arr.open{transform:rotate(90deg);}
+/* অ্যাডমিনে বোতাম/টোস্টের ভেতরে আইকন লেখার রঙে */
+:is(.btn,.toast,.chip) :is([class^="gi-"],[class*=" gi-"]){color:inherit!important;}
+
     </style>
 </head>
 <body>
@@ -1069,7 +1184,7 @@
                     <div id="modalAddress" style="margin-top:4px;"></div>
                 </div>
                 <div class="m-info" style="margin-top:10px;display:none;background:#fff7e6;border:1px solid #fde68a;border-radius:8px;padding:8px 11px;" id="modalCustNoteWrap">
-                    <div class="text-xs" style="color:#92400e;font-weight:700;">💬 কাস্টমারের নোট</div>
+                    <div class="text-xs" style="color:#92400e;font-weight:700;"><i class=gi-chat></i> কাস্টমারের নোট</div>
                     <div id="modalCustNote" style="margin-top:4px;font-weight:600;color:#92400e;white-space:pre-wrap;word-break:break-word;"></div>
                 </div>
             </div>
@@ -1124,33 +1239,33 @@
 
             <!-- মোট টাকা বদলানো -->
             <div class="m-section">
-                <div class="notes-label" style="margin-bottom:8px;">💰 মোট টাকা বদলান <span style="font-size:10px;color:var(--text-muted);font-weight:400;">(বিশেষ ছাড়/সমঝোতা হলে)</span></div>
+                <div class="notes-label" style="margin-bottom:8px;"><i class=gi-money></i> মোট টাকা বদলান <span style="font-size:10px;color:var(--text-muted);font-weight:400;">(বিশেষ ছাড়/সমঝোতা হলে)</span></div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
                     <input class="form-input" id="editTotalInput" type="number" min="0" placeholder="নতুন মোট (৳)" style="flex:1;min-width:120px;">
                     <button class="btn btn-primary" onclick="saveOrderTotal()" style="flex-shrink:0;">সেভ</button>
                 </div>
-                <div id="totalSavedMsg" style="display:none;margin-top:6px;font-size:12px;font-weight:700;color:#059669;">✓ মোট টাকা আপডেট হয়েছে!</div>
+                <div id="totalSavedMsg" style="display:none;margin-top:6px;font-size:12px;font-weight:700;color:#059669;"><i class=gi-check></i> মোট টাকা আপডেট হয়েছে!</div>
             </div>
 
             <!-- INVOICE PRINT / PDF -->
             <div class="m-section">
                 <button class="modal-update-btn" onclick="printInvoice()" style="background:#fdf8e8;color:#1c1c1c;border:1px solid #f3e6b8;">
-                    🖨️ Invoice / Delivery Slip Print
+                    <i class=gi-printer></i> Invoice / Delivery Slip Print
                 </button>
                 <button class="modal-update-btn" onclick="downloadInvoicePDF()" style="background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;margin-top:8px;">
-                    📄 স্লিপ PDF ডাউনলোড (ফোনেও চলে)
+                    <i class=gi-doc></i> স্লিপ PDF ডাউনলোড (ফোনেও চলে)
                 </button>
             </div>
 
             <!-- ADMIN NOTES -->
             <div class="m-section notes-section">
                 <div class="notes-label">
-                    📝 Admin Notes
+                    <i class=gi-note></i> Admin Notes
                     <span style="font-size:10px;color:var(--text-muted);font-weight:400;">(শুধু admin দেখবে)</span>
                 </div>
                 <textarea class="note-input" id="modalNoteInput" placeholder="এই অর্ডার সম্পর্কে private note লিখুন... যেমন: ঠিকানা confirm করতে হবে, আগেও অর্ডার করেছে ইত্যাদি"></textarea>
-                <button class="note-save-btn" onclick="saveAdminNote()">💾 নোট সেভ করুন</button>
-                <div class="note-saved-msg" id="noteSavedMsg">✓ নোট সেভ হয়েছে!</div>
+                <button class="note-save-btn" onclick="saveAdminNote()"><i class=gi-save></i> নোট সেভ করুন</button>
+                <div class="note-saved-msg" id="noteSavedMsg"><i class=gi-check></i> নোট সেভ হয়েছে!</div>
             </div>
 
         </div>
@@ -1246,19 +1361,19 @@
                     টুলস
                 </button>
                 <div class="nav-subgroup open" id="toolsSubgroup">
-                    <button class="nav-sub-item tool-cat-item active" data-cat="all" onclick="switchTool('all',this)">🧰 সব টুলস</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="banner" onclick="switchTool('banner',this)">🖼️ ব্যানার</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="offerPopup" onclick="switchTool('offerPopup',this)">🎯 অফার পোস্টার</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="coupon" onclick="switchTool('coupon',this)">🎟️ কুপন</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="homeChips" onclick="switchTool('homeChips',this)">🏠 হোমপেজ চিপ</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="tags" onclick="switchTool('tags',this)">🔖 ক্যাটাগরি-ট্যাগ তালিকা</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="cleanup" onclick="switchTool('cleanup',this)">🧹 লেখক/প্রকাশনী ঠিক</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="blog" onclick="switchTool('blog',this)">📝 ব্লগ</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="landing" onclick="switchTool('landing',this)">🚀 ল্যান্ডিং পেজ</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="imgPixel" onclick="switchTool('imgPixel',this)">📸 ছবি ও Pixel</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="moderator" onclick="switchTool('moderator',this)">👥 মডারেটর</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="courier" onclick="switchTool('courier',this)">🚚 কুরিয়ার</button>
-                    <button class="nav-sub-item tool-cat-item" data-cat="misc" onclick="switchTool('misc',this)">📦 ডাউনলোড ও অন্যান্য</button>
+                    <button class="nav-sub-item tool-cat-item active" data-cat="all" onclick="switchTool('all',this)"><i class=gi-briefcase></i> সব টুলস</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="banner" onclick="switchTool('banner',this)"><i class=gi-image></i> ব্যানার</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="offerPopup" onclick="switchTool('offerPopup',this)"><i class=gi-target></i> অফার পোস্টার</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="coupon" onclick="switchTool('coupon',this)"><i class=gi-ticket></i> কুপন</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="homeChips" onclick="switchTool('homeChips',this)"><i class=gi-home></i> হোমপেজ চিপ</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="tags" onclick="switchTool('tags',this)"><i class=gi-bookmark></i> ক্যাটাগরি-ট্যাগ তালিকা</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="cleanup" onclick="switchTool('cleanup',this)"><i class=gi-broom></i> লেখক/প্রকাশনী ঠিক</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="blog" onclick="switchTool('blog',this)"><i class=gi-note></i> ব্লগ</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="landing" onclick="switchTool('landing',this)"><i class=gi-rocket></i> ল্যান্ডিং পেজ</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="imgPixel" onclick="switchTool('imgPixel',this)"><i class=gi-camera></i> ছবি ও Pixel</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="moderator" onclick="switchTool('moderator',this)"><i class=gi-users></i> মডারেটর</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="courier" onclick="switchTool('courier',this)"><i class=gi-truck></i> কুরিয়ার</button>
+                    <button class="nav-sub-item tool-cat-item" data-cat="misc" onclick="switchTool('misc',this)"><i class=gi-package></i> ডাউনলোড ও অন্যান্য</button>
                 </div>
             </div>
         </nav>
@@ -1302,12 +1417,12 @@
                     </button>
                     <div class="notif-panel" id="notifPanel">
                         <div class="notif-panel-head">
-                            <span class="notif-panel-title">🔔 নোটিফিকেশন</span>
+                            <span class="notif-panel-title"><i class=gi-bell></i> নোটিফিকেশন</span>
                             <button class="notif-panel-markall" onclick="markAllNotifsSeen()">সব পঠিত করুন</button>
                         </div>
                         <div class="notif-panel-list" id="notifPanelList"></div>
                         <div class="notif-panel-foot" id="notifBrowserFoot" style="display:none;">
-                            <button class="notif-browser-btn" onclick="requestBrowserNotifPermission()">🔔 ব্রাউজার Notification চালু করুন (ঐচ্ছিক)</button>
+                            <button class="notif-browser-btn" onclick="requestBrowserNotifPermission()"><i class=gi-bell></i> ব্রাউজার Notification চালু করুন (ঐচ্ছিক)</button>
                         </div>
                     </div>
                 </div>
@@ -1556,8 +1671,8 @@
 
                 <!-- প্রকাশনী বেছে বই দেখা -->
                 <div style="display:flex;gap:8px;align-items:center;margin:-6px 0 10px;">
-                    <select class="form-input" id="bePubSel" onchange="bePubChange(this.value)" style="flex:1;min-width:0;font-weight:600;"><option value="">🏢 সব প্রকাশনী</option></select>
-                    <button class="btn btn-sm btn-ghost" id="bePubClear" onclick="document.getElementById('bePubSel').value='';bePubChange('')" style="display:none;white-space:nowrap;">✕ সব দেখান</button>
+                    <select class="form-input" id="bePubSel" onchange="bePubChange(this.value)" style="flex:1;min-width:0;font-weight:600;"><option value="">সব প্রকাশনী</option></select>
+                    <button class="btn btn-sm btn-ghost" id="bePubClear" onclick="document.getElementById('bePubSel').value='';bePubChange('')" style="display:none;white-space:nowrap;"><i class=gi-x></i> সব দেখান</button>
                 </div>
                 <div id="bePubInfo" style="display:none;margin-bottom:16px;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--primary);font-size:13px;line-height:1.7;"></div>
 
@@ -1571,8 +1686,8 @@
                     <div class="editor-grid">
                         <div class="form-group editor-full"><label class="be-label">প্রোডাক্ট টাইপ *</label>
                             <select class="form-input" id="fa_type" onchange="faOnTypeChange()">
-                                <option value="বই">📚 বই</option>
-                                <option value="প্রোডাক্ট">🛍️ সাধারণ প্রোডাক্ট (Stationery/খাবার/Sunnah Item ইত্যাদি)</option>
+                                <option value="বই">বই</option>
+                                <option value="প্রোডাক্ট">সাধারণ প্রোডাক্ট (Stationery/খাবার/Sunnah Item ইত্যাদি)</option>
                             </select>
                         </div>
                         <div class="editor-full form-group"><label class="be-label" id="fa_nameLabel">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="বইয়ের নাম"></div>
@@ -1614,21 +1729,21 @@
                             <div id="gk_tagbox_add"></div>
                         </div>
                         <div class="form-group editor-full" style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:10px;padding:10px 12px;">
-                            <label class="be-label" style="color:#92400e;">🎁 হাদিয়া (ঐচ্ছিক) — এই বই/প্যাকেজের সাথে ফ্রি কিছু থাকলে লিখুন</label>
+                            <label class="be-label" style="color:#92400e;"><i class=gi-gift></i> হাদিয়া (ঐচ্ছিক) — এই বই/প্যাকেজের সাথে ফ্রি কিছু থাকলে লিখুন</label>
                             <input class="form-input" id="fa_hadiya" placeholder="যেমন: সাথে ফ্রি বুকমার্ক ও টুপি">
                         </div>
                         <div class="form-group editor-full" style="background:#fff7ed;border:1.5px solid #fdba74;border-radius:10px;padding:10px 12px;">
-                            <label class="be-label" style="color:#9a3412;">📦 প্রি-অর্ডার প্রকাশের সম্ভাব্য তারিখ (ঐচ্ছিক) — দিলে বই পেজে হাইলাইট করে দেখাবে</label>
+                            <label class="be-label" style="color:#9a3412;"><i class=gi-package></i> প্রি-অর্ডার প্রকাশের সম্ভাব্য তারিখ (ঐচ্ছিক) — দিলে বই পেজে হাইলাইট করে দেখাবে</label>
                             <input class="form-input" id="fa_preorderdate" type="date">
                         </div>
                         <div class="form-group editor-full" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;">
-                            <label class="be-label" style="color:#15803d;">📄 শর্ট PDF লিংক (ঐচ্ছিক) — Google Drive লিংক দিন, বই পেজে "একটু পড়ুন" বাটন দেখাবে</label>
+                            <label class="be-label" style="color:#15803d;"><i class=gi-doc></i> শর্ট PDF লিংক (ঐচ্ছিক) — Google Drive লিংক দিন, বই পেজে "একটু পড়ুন" বাটন দেখাবে</label>
                             <input class="form-input" id="fa_pdflink" placeholder="https://drive.google.com/file/d/.../view">
                         </div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label>
                             <div style="display:flex;gap:8px;">
                                 <input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;min-width:0;">
-                                <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('fa_imgfile').click()">📤 আপলোড</button>
+                                <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('fa_imgfile').click()"><i class=gi-upload></i> আপলোড</button>
                                 <input type="file" id="fa_imgfile" accept="image/*" style="display:none;" onchange="faUploadImg(this)">
                             </div>
                         </div>
@@ -1688,22 +1803,22 @@
 
             <!-- ═══ ANALYTICS TAB ═══ -->
             <div id="tabPanelAnalytics" style="display:none;">
-                <div class="sec-title" style="margin-bottom:16px;">📊 বিস্তারিত Analytics</div>
+                <div class="sec-title" style="margin-bottom:16px;"><i class=gi-chart></i> বিস্তারিত Analytics</div>
                 <div class="analytics-grid">
                     <div class="analytics-panel">
-                        <div class="analytics-head">🏆 বেস্টসেলার বই</div>
+                        <div class="analytics-head"><i class=gi-trophy></i> বেস্টসেলার বই</div>
                         <div class="analytics-body" id="analyticsBestseller"><div class="loading-spin">লোড হচ্ছে...</div></div>
                     </div>
                     <div class="analytics-panel">
-                        <div class="analytics-head">📍 এলাকা ভিত্তিক অর্ডার</div>
+                        <div class="analytics-head"><i class=gi-pin></i> এলাকা ভিত্তিক অর্ডার</div>
                         <div class="analytics-body" id="analyticsArea"><div class="loading-spin">লোড হচ্ছে...</div></div>
                     </div>
                     <div class="analytics-panel">
-                        <div class="analytics-head">💳 পেমেন্ট পদ্ধতি</div>
+                        <div class="analytics-head"><i class=gi-card></i> পেমেন্ট পদ্ধতি</div>
                         <div class="analytics-body" id="analyticsPayment"><div class="loading-spin">লোড হচ্ছে...</div></div>
                     </div>
                     <div class="analytics-panel">
-                        <div class="analytics-head">📦 Status বিভাজন</div>
+                        <div class="analytics-head"><i class=gi-package></i> Status বিভাজন</div>
                         <div class="analytics-body" id="analyticsStatus"><div class="loading-spin">লোড হচ্ছে...</div></div>
                     </div>
                 </div>
@@ -1750,10 +1865,10 @@
                 <div class="tool-card" id="toolCard_bulkUpload" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><polyline points="9 15 12 12 15 15"></polyline></svg> এক্সেল/CSV দিয়ে বাল্ক বই আপলোড</h3>
                     <p style="margin-bottom:12px;">একসাথে অনেক বই/প্রোডাক্ট যোগ করতে চাইলে — প্রথমে টেমপ্লেট ডাউনলোড করে এক্সেলে পূরণ করুন (ছবি আগে imgbb.com বা অন্য কোথাও আপলোড করে লিংক বসাবেন), তারপর এখানে আপলোড করুন। আপলোডের আগে প্রিভিউ দেখাবে — কোনো সারিতে সমস্যা থাকলে লাল দেখাবে, সেগুলো বাদ দিয়ে শুধু ঠিক সারিগুলোই যোগ হবে।</p>
-                    <button class="btn btn-ghost" type="button" onclick="downloadBulkTemplate()" style="margin-bottom:12px;">📥 টেমপ্লেট ডাউনলোড করুন (Excel)</button>
+                    <button class="btn btn-ghost" type="button" onclick="downloadBulkTemplate()" style="margin-bottom:12px;"><i class=gi-download></i> টেমপ্লেট ডাউনলোড করুন (Excel)</button>
                     <div>
                         <input type="file" id="bulkFileInput" accept=".xlsx,.xls,.csv" onchange="handleBulkFile(this)" style="display:none;">
-                        <button class="btn btn-primary" type="button" onclick="document.getElementById('bulkFileInput').click()">📤 পূরণ করা এক্সেল/CSV ফাইল বাছুন</button>
+                        <button class="btn btn-primary" type="button" onclick="document.getElementById('bulkFileInput').click()"><i class=gi-upload></i> পূরণ করা এক্সেল/CSV ফাইল বাছুন</button>
                     </div>
                     <div id="bulkPreviewBox" style="display:none;margin-top:16px;"></div>
                 </div>
@@ -1765,7 +1880,7 @@
                     <div style="font-weight:800;font-size:13.5px;margin-bottom:10px;">বিভাগ ও উপ-বিভাগ</div>
                     <div id="catTreeBox" style="margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:rgba(0,0,0,0.02);">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন বিভাগ</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;"><i class=gi-plus></i> নতুন বিভাগ</div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <input class="form-input" id="newCatNameInput" placeholder="বিভাগের নাম (যেমন: শিশুতোষ বই)" style="flex:1;min-width:150px;">
                             <button class="btn btn-ghost" type="button" onclick="addCatTreeCategory()" style="flex-shrink:0;">＋ যোগ</button>
@@ -1778,7 +1893,7 @@
                     <div style="font-weight:800;font-size:13.5px;margin-bottom:10px;">ট্যাগ তালিকা</div>
                     <div id="tagListBox" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ট্যাগ</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;"><i class=gi-plus></i> নতুন ট্যাগ</div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <input class="form-input" id="tagNameInput" placeholder="ট্যাগের নাম (যেমন: ঈদ স্পেশাল)" style="flex:1;min-width:150px;">
                             <button class="btn btn-ghost" type="button" onclick="addTag()" style="flex-shrink:0;">＋ যোগ</button>
@@ -1802,8 +1917,8 @@
                     </div>
                     <input class="form-input" id="apFixNewName" placeholder="সঠিক / নতুন নাম লিখুন" style="margin-bottom:14px;">
                     <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                        <button class="btn btn-primary" type="button" onclick="apFixRename()">✅ নাম বদলে দিন (সব বইয়ে)</button>
-                        <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="apFixDelete()">🗑️ মুছে দিন (ফাঁকা হবে)</button>
+                        <button class="btn btn-primary" type="button" onclick="apFixRename()"><i class=gi-ok></i> নাম বদলে দিন (সব বইয়ে)</button>
+                        <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="apFixDelete()"><i class=gi-trash></i> মুছে দিন (ফাঁকা হবে)</button>
                     </div>
                 </div>
 
@@ -1812,14 +1927,14 @@
                     <p style="margin-bottom:12px;">হোমপেজের উপরে চলমান রঙিন ক্যাটাগরি চিপগুলো এখান থেকে নিয়ন্ত্রণ করুন। <b>নাম</b> অবশ্যই বইয়ের বিভাগের সাথে হুবহু মিলতে হবে (যেমন: ইসলামি বই)। রঙ আপনাআপনি বসে। সেভ করলেই হোমপেজে লাইভ। (কিছু না থাকলে ডিফল্ট তালিকা দেখাবে।)</p>
                     <div id="homeCatList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ক্যাটাগরি চিপ</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;"><i class=gi-plus></i> নতুন ক্যাটাগরি চিপ</div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
                             <input class="form-input" id="hcName" placeholder="ক্যাটাগরির নাম (বইয়ের বিভাগের সাথে মিলতে হবে)" style="flex:3;min-width:150px;">
                             <button class="btn btn-ghost" type="button" onclick="addHomeCat()" style="flex-shrink:0;">＋ যোগ</button>
                         </div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <input class="form-input" id="hcImg" placeholder="ছবির লিংক (URL) — ঐচ্ছিক, পরে ছবিসহ দেখাবে" style="flex:1;min-width:150px;">
-                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('hcImgFile').click()" style="flex-shrink:0;white-space:nowrap;">📤 ছবি আপলোড</button>
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('hcImgFile').click()" style="flex-shrink:0;white-space:nowrap;"><i class=gi-upload></i> ছবি আপলোড</button>
                             <input type="file" id="hcImgFile" accept="image/*" style="display:none;" onchange="hcUploadAddImg(this)">
                         </div>
                         <input type="hidden" id="hcEmoji" value="">
@@ -1848,7 +1963,7 @@
                     <p style="margin-bottom:12px;">হোমপেজে ক্যাটাগরি চিপের নিচে প্রকাশনীর লোগো/নাম চিপ দেখানোর জন্য এখান থেকে নিয়ন্ত্রণ করুন। নাম বাছার সময় বইয়ের ডেটা থেকে অটোকমপ্লিট সাজেশন আসবে (টাইপো এড়াতে)। সেভ করলেই হোমপেজে লাইভ। কিছু না থাকলে সেকশনটা হোমপেজে দেখাবে না।</p>
                     <div id="homePubList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন প্রকাশনী চিপ</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;"><i class=gi-plus></i> নতুন প্রকাশনী চিপ</div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
                             <input class="form-input" id="hpName" list="pubNameDatalist" placeholder="প্রকাশনীর নাম (ড্রপডাউন থেকে বাছুন বা টাইপ করুন)" style="flex:3;min-width:150px;">
                             <datalist id="pubNameDatalist"></datalist>
@@ -1856,7 +1971,7 @@
                         </div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <input class="form-input" id="hpImg" placeholder="লোগোর লিংক (URL) — ঐচ্ছিক" style="flex:1;min-width:150px;">
-                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('hpImgFile').click()" style="flex-shrink:0;white-space:nowrap;">📤 ছবি আপলোড</button>
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('hpImgFile').click()" style="flex-shrink:0;white-space:nowrap;"><i class=gi-upload></i> ছবি আপলোড</button>
                             <input type="file" id="hpImgFile" accept="image/*" style="display:none;" onchange="hpUploadAddImg(this)">
                         </div>
                         <div class="be-img-preview" id="hpImgPrev" style="margin-top:8px;"></div>
@@ -1869,7 +1984,7 @@
                     <p style="margin-bottom:12px;">হোমপেজে লেখকের ছবি/নাম চিপ দেখানোর জন্য এখান থেকে নিয়ন্ত্রণ করুন। নাম বাছার সময় বইয়ের ডেটা থেকে অটোকমপ্লিট সাজেশন আসবে (টাইপো এড়াতে)। সেভ করলেই হোমপেজে লাইভ। কিছু না থাকলে সেকশনটা হোমপেজে দেখাবে না।</p>
                     <div id="homeAuthorList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন লেখক চিপ</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;"><i class=gi-plus></i> নতুন লেখক চিপ</div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
                             <input class="form-input" id="haName" list="authorNameDatalist" placeholder="লেখকের নাম (ড্রপডাউন থেকে বাছুন বা টাইপ করুন)" style="flex:3;min-width:150px;">
                             <datalist id="authorNameDatalist"></datalist>
@@ -1877,7 +1992,7 @@
                         </div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <input class="form-input" id="haImg" placeholder="লেখকের ছবির লিংক (URL) — ঐচ্ছিক" style="flex:1;min-width:150px;">
-                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('haImgFile').click()" style="flex-shrink:0;white-space:nowrap;">📤 ছবি আপলোড</button>
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('haImgFile').click()" style="flex-shrink:0;white-space:nowrap;"><i class=gi-upload></i> ছবি আপলোড</button>
                             <input type="file" id="haImgFile" accept="image/*" style="display:none;" onchange="haUploadAddImg(this)">
                         </div>
                         <div class="be-img-preview" id="haImgPrev" style="margin-top:8px;"></div>
@@ -1889,14 +2004,14 @@
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg> হোমপেজ ব্যানার / অফার</h3>
                     <p style="margin-bottom:12px;">হোমপেজের স্লাইডার ব্যানার এখান থেকেই বদলান। ছবির লিংক (URL) দিন, অথবা ছবি ছাড়া শুধু অফারের লেখা দিন। সেভ করলেই সাইটে লাইভ হবে। (কিছু না থাকলে সাইটে ডিফল্ট ব্যানার দেখাবে।)</p>
                     <div style="display:flex;align-items:center;gap:8px;background:rgba(5,150,105,0.08);border:1px solid rgba(5,150,105,0.25);border-radius:8px;padding:9px 12px;margin-bottom:14px;font-size:12px;color:var(--text-main);line-height:1.6;">
-                        📐 <div><b>সেরা ছবির সাইজ: ১২০০ × ৬০০ পিক্সেল</b> (অনুপাত ২ঃ১, অর্থাৎ চওড়া দ্বিগুণ)। JPG ফরম্যাট, ৫০০ KB-এর নিচে রাখলে সাইট দ্রুত লোড হবে। ছবি এই মাপে বানিয়ে <b>imgbb.com</b>-এ আপলোড করে লিংকটি নিচে বসান।</div>
+                        <i class=gi-ruler></i> <div><b>সেরা ছবির সাইজ: ১২০০ × ৬০০ পিক্সেল</b> (অনুপাত ২ঃ১, অর্থাৎ চওড়া দ্বিগুণ)। JPG ফরম্যাট, ৫০০ KB-এর নিচে রাখলে সাইট দ্রুত লোড হবে। ছবি এই মাপে বানিয়ে <b>imgbb.com</b>-এ আপলোড করে লিংকটি নিচে বসান।</div>
                     </div>
                     <div id="bannerList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ব্যানার যোগ করুন</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;"><i class=gi-plus></i> নতুন ব্যানার যোগ করুন</div>
                         <div style="display:flex;gap:8px;margin-bottom:8px;">
                             <input class="form-input" id="bnImg" placeholder="ছবির লিংক / URL (১২০০×৬০০px) — ঐচ্ছিক" style="flex:1;min-width:0;">
-                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('bn_imgfile').click()">📤 আপলোড</button>
+                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('bn_imgfile').click()"><i class=gi-upload></i> আপলোড</button>
                             <input type="file" id="bn_imgfile" accept="image/*" style="display:none;" onchange="bnUploadImg(this)">
                         </div>
                         <input class="form-input" id="bnTitle" placeholder="বড় লেখা (যেমন: ঈদ অফার — ৩০% ছাড়)" style="margin-bottom:8px;">
@@ -1920,12 +2035,12 @@
                     <div id="ofPopList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
 
                     <div id="ofPopAddBox" style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;background:rgba(0,0,0,0.02);margin-bottom:14px;">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন পোস্টার যোগ করুন (সর্বোচ্চ ৩ টা)</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;"><i class=gi-plus></i> নতুন পোস্টার যোগ করুন (সর্বোচ্চ ৩ টা)</div>
                         <div style="margin-bottom:10px;">
                             <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">পোস্টার ছবির URL</label>
                             <div style="display:flex;gap:8px;flex-wrap:wrap;">
                                 <input class="form-input" id="ofPopImg" placeholder="https://i.ibb.co/..." style="flex:1;min-width:200px;">
-                                <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('ofPopImgFile').click()">📤 imgbb আপলোড</button>
+                                <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('ofPopImgFile').click()"><i class=gi-upload></i> imgbb আপলোড</button>
                                 <input type="file" id="ofPopImgFile" accept="image/*" style="display:none;" onchange="ofPopUploadImg(this)">
                             </div>
                             <div id="ofPopImgPrev" style="margin-top:8px;"></div>
@@ -1947,14 +2062,14 @@
                     <p style="margin-bottom:12px;">নতুন কুপন কোড ও ছাড়ের হার (%) যোগ করুন — সেভ করলেই সাইটে কাজ করবে। (বিল্ট-ইন <b>FIRSTORDER</b> — ৫% সবসময় চালু থাকে।)</p>
                     <div id="couponList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;background:rgba(0,0,0,0.02);">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন কুপন</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;"><i class=gi-plus></i> নতুন কুপন</div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <input class="form-input" id="cpnCode" placeholder="কোড (যেমন: EID25)" style="flex:2;min-width:130px;text-transform:uppercase;">
                             <select class="form-input" id="cpnType" onchange="cpnTypeChanged()" style="flex:1.4;min-width:130px;">
                                 <option value="percent">% ছাড়</option>
                                 <option value="taka">৳ টাকা ছাড়</option>
-                                <option value="delivery">🚚 ফ্রি ডেলিভারি</option>
-                                <option value="delivery_fixed">🚚 নির্দিষ্ট ডেলিভারি চার্জ</option>
+                                <option value="delivery">ফ্রি ডেলিভারি</option>
+                                <option value="delivery_fixed">নির্দিষ্ট ডেলিভারি চার্জ</option>
                             </select>
                             <input class="form-input" id="cpnPct" type="number" min="1" placeholder="ছাড় %" style="flex:1;min-width:80px;">
                             <button class="btn btn-primary" onclick="addCoupon()" style="flex-shrink:0;">যোগ করুন</button>
@@ -1964,25 +2079,25 @@
 
                 <div class="tool-card" id="toolCard_blog" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> পাঠকদের ব্লগ (মাসিক প্রতিযোগিতা)</h3>
-                    <p style="margin-bottom:12px;">কাস্টমারদের জমা দেওয়া লেখা এখানে আসবে। পড়ে পছন্দ হলে <b>"প্রকাশ করুন"</b> চাপুন — সাইটের ব্লগ ও হোমপেজে লাইভ হবে। লেখকের ফোন নম্বরে যোগাযোগ করে 🎁 হাদিয়া পাঠাবেন।</p>
+                    <p style="margin-bottom:12px;">কাস্টমারদের জমা দেওয়া লেখা এখানে আসবে। পড়ে পছন্দ হলে <b>"প্রকাশ করুন"</b> চাপুন — সাইটের ব্লগ ও হোমপেজে লাইভ হবে। লেখকের ফোন নম্বরে যোগাযোগ করে <i class=gi-gift></i> হাদিয়া পাঠাবেন।</p>
                     <div style="border:1.5px dashed #f59e0b;border-radius:10px;padding:12px;margin-bottom:16px;background:rgba(251,191,36,0.06);">
-                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">🏆 এ মাসের প্রতিযোগিতার বিষয়</div>
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;"><i class=gi-trophy></i> এ মাসের প্রতিযোগিতার বিষয়</div>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <input class="form-input" id="blogTopicInput" placeholder="যেমন: রমজান ও আমার প্রিয় বই" style="flex:1;min-width:180px;">
                             <button class="btn btn-primary" onclick="saveBlogTopic()" style="flex-shrink:0;">সেভ করুন</button>
                         </div>
                         <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">সেভ করলেই ব্লগ পেজ ও হোমপেজে নতুন বিষয় দেখাবে। খালি রেখে সেভ করলে বিষয় ছাড়া সাধারণ আহ্বান দেখাবে।</div>
                     </div>
-                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">📥 জমা পড়া লেখা <span id="subCount" style="background:#fee2e2;color:#dc2626;padding:1px 8px;border-radius:12px;font-size:11px;"></span></div>
+                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;"><i class=gi-download></i> জমা পড়া লেখা <span id="subCount" style="background:#fee2e2;color:#dc2626;padding:1px 8px;border-radius:12px;font-size:11px;"></span></div>
                     <div id="blogSubList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
-                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">✅ প্রকাশিত লেখা</div>
+                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;"><i class=gi-ok></i> প্রকাশিত লেখা</div>
                     <div id="blogPubList" style="display:flex;flex-direction:column;gap:8px;"></div>
                 </div>
 
                 <div class="tool-card" id="toolCard_landing" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg> ল্যান্ডিং পেজ (Facebook Ad-এর জন্য)</h3>
                     <p style="margin-bottom:12px;">নির্দিষ্ট একটা বই/অফারের জন্য আলাদা একটা প্রমোশন পেজ বানান — বড় ছবি, নিজের লেখা হেডলাইন ও পয়েন্টসহ। বানানোর পর লিংক কপি করে আপনি নিজে Facebook Page-এ পোস্ট বা Ad-এ ব্যবহার করবেন।</p>
-                    <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#1e40af;">💡 নিচের সব ঘরে <b>উদাহরণ হিসেবে লেখা ভরা আছে</b> — শুধু বুঝিয়ে দেওয়ার জন্য, কোথায় কী লিখতে হয়। আপনি শুধু ঘরের লেখা মুছে/এডিট করে নিজের আসল তথ্য বসিয়ে দিন। শুধু <b>"বই বাছাই করুন"</b> ড্রপডাউনটা নিজে বেছে নিতে হবে।</div>
+                    <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#1e40af;"><i class=gi-bulb></i> নিচের সব ঘরে <b>উদাহরণ হিসেবে লেখা ভরা আছে</b> — শুধু বুঝিয়ে দেওয়ার জন্য, কোথায় কী লিখতে হয়। আপনি শুধু ঘরের লেখা মুছে/এডিট করে নিজের আসল তথ্য বসিয়ে দিন। শুধু <b>"বই বাছাই করুন"</b> ড্রপডাউনটা নিজে বেছে নিতে হবে।</div>
                     <div class="form-group"><label class="be-label">বই বাছাই করুন *</label>
                         <select class="form-input" id="lp_book"></select>
                     </div>
@@ -2001,45 +2116,45 @@
                     <div class="form-group"><label class="be-label">বাটনের লেখা</label>
                         <input class="form-input" id="lp_cta" placeholder="এখনই অর্ডার করুন">
                     </div>
-                    <div class="form-group"><label class="be-label">🏷️ ছোট ব্যাজ (ঐচ্ছিক) — হেডলাইনের উপরে দেখাবে</label>
-                        <input class="form-input" id="lp_badge" placeholder="যেমন: ✓ সরাসরি প্রকাশনী থেকে">
+                    <div class="form-group"><label class="be-label"><i class=gi-tag></i> ছোট ব্যাজ (ঐচ্ছিক) — হেডলাইনের উপরে দেখাবে</label>
+                        <input class="form-input" id="lp_badge" placeholder="যেমন: সরাসরি প্রকাশনী থেকে">
                     </div>
-                    <div class="form-group"><label class="be-label">⭐ রেটিং (ঐচ্ছিক)</label>
+                    <div class="form-group"><label class="be-label"><i class=gi-star></i> রেটিং (ঐচ্ছিক)</label>
                         <input class="form-input" id="lp_rating" placeholder="যেমন: 4.9">
                     </div>
-                    <div class="form-group"><label class="be-label">🧾 বিক্রির সংখ্যা (ঐচ্ছিক)</label>
+                    <div class="form-group"><label class="be-label"><i class=gi-receipt></i> বিক্রির সংখ্যা (ঐচ্ছিক)</label>
                         <input class="form-input" id="lp_soldcount" placeholder="যেমন: ৫৯,০০০+ কাস্টমার">
                     </div>
                     <div class="form-group" style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:10px 12px;">
-                        <label class="be-label" style="color:#991b1b;">⏰ অফার শেষ হওয়ার সময় (ঐচ্ছিক) — দিলে কাউন্টডাউন টাইমার দেখাবে</label>
+                        <label class="be-label" style="color:#991b1b;"><i class=gi-clock></i> অফার শেষ হওয়ার সময় (ঐচ্ছিক) — দিলে কাউন্টডাউন টাইমার দেখাবে</label>
                         <input class="form-input" id="lp_deadline" type="datetime-local">
                     </div>
-                    <div class="form-group editor-full"><label class="be-label">✅ কেন কিনবেন (ঐচ্ছিক) — প্রতি লাইনে: শিরোনাম | বিবরণ</label>
+                    <div class="form-group editor-full"><label class="be-label"><i class=gi-ok></i> কেন কিনবেন (ঐচ্ছিক) — প্রতি লাইনে: শিরোনাম | বিবরণ</label>
                         <textarea class="form-input" id="lp_why" rows="3" placeholder="১০০% অরিজিনাল বই | সম্পূর্ণ যাচাইকৃত প্রকাশনী থেকে সংগ্রহ করা&#10;দ্রুত ডেলিভারি | সারাদেশে ১-৩ দিনে পৌঁছে যায়&#10;ক্যাশ অন ডেলিভারি | বই হাতে পেয়ে টাকা দিন"></textarea>
                     </div>
                     <div class="form-group editor-full"><label class="be-label">🆚 কেন আমরা অন্য সবার থেকে আলাদা (ঐচ্ছিক) — প্রতি লাইনে একটা পয়েন্ট</label>
                         <textarea class="form-input" id="lp_different" rows="3" placeholder="আমাদের বইগুলো সম্পূর্ণ অরিজিনাল ও যাচাইকৃত&#10;সরাসরি প্রকাশনী থেকে সংগ্রহ করা হয়&#10;মান নিয়ে কোনো আপোষ করি না"></textarea>
                     </div>
-                    <div class="form-group editor-full"><label class="be-label">🔢 উপকারিতা / বৈশিষ্ট্য (ঐচ্ছিক) — প্রতি লাইনে একটা, নম্বর দিয়ে দেখাবে</label>
+                    <div class="form-group editor-full"><label class="be-label"><i class=gi-hash></i> উপকারিতা / বৈশিষ্ট্য (ঐচ্ছিক) — প্রতি লাইনে একটা, নম্বর দিয়ে দেখাবে</label>
                         <textarea class="form-input" id="lp_benefits" rows="3" placeholder="সহজ ও প্রাঞ্জল ভাষায় লেখা&#10;নতুন পাঠকদের জন্য উপযুক্ত&#10;জীবন গঠনে সহায়ক"></textarea>
                     </div>
-                    <div class="form-group"><label class="be-label">🎬 ইউটিউব ভিডিও আইডি (ঐচ্ছিক)</label>
+                    <div class="form-group"><label class="be-label"><i class=gi-film></i> ইউটিউব ভিডিও আইডি (ঐচ্ছিক)</label>
                         <input class="form-input" id="lp_youtube" placeholder="যেমন: dQw4w9WgXcQ (ইউটিউব লিংকের শেষ অংশ)">
                     </div>
-                    <div class="form-group editor-full"><label class="be-label">❓ সচরাচর জিজ্ঞাসা / FAQ (ঐচ্ছিক) — প্রতি লাইনে: প্রশ্ন | উত্তর</label>
+                    <div class="form-group editor-full"><label class="be-label"><i class=gi-help></i> সচরাচর জিজ্ঞাসা / FAQ (ঐচ্ছিক) — প্রতি লাইনে: প্রশ্ন | উত্তর</label>
                         <textarea class="form-input" id="lp_faq" rows="3" placeholder="ডেলিভারি চার্জ কত? | ঢাকার ভেতরে ৬০৳, বাইরে ১২০৳&#10;টাকা কখন দিতে হবে? | বই হাতে পাওয়ার পর ক্যাশ অন ডেলিভারিতে দিতে পারবেন"></textarea>
                     </div>
-                    <div class="form-group editor-full"><label class="be-label">⭐ কাস্টমার রিভিউ (ঐচ্ছিক) — প্রতি লাইনে: নাম | রেটিং(১-৫) | মন্তব্য | ছবিলিংক(ঐচ্ছিক)</label>
+                    <div class="form-group editor-full"><label class="be-label"><i class=gi-star></i> কাস্টমার রিভিউ (ঐচ্ছিক) — প্রতি লাইনে: নাম | রেটিং(১-৫) | মন্তব্য | ছবিলিংক(ঐচ্ছিক)</label>
                         <textarea class="form-input" id="lp_reviews" rows="3" placeholder="মোঃ নজরুল ইসলাম | 5 | বইটা সত্যিই অসাধারণ, দ্রুত ডেলিভারিও পেয়েছি | &#10;সালমা আক্তার | 4 | ভালো মানের বই, প্যাকেজিং সুন্দর ছিল |"></textarea>
                     </div>
-                    <div class="form-group editor-full"><label class="be-label">📸 গ্যালারিতে নির্দিষ্ট বই (ঐচ্ছিক) — প্রতি লাইনে একটা বইয়ের নাম (হুবহু বইয়ের তালিকার নামের মতো লিখুন)</label>
+                    <div class="form-group editor-full"><label class="be-label"><i class=gi-camera></i> গ্যালারিতে নির্দিষ্ট বই (ঐচ্ছিক) — প্রতি লাইনে একটা বইয়ের নাম (হুবহু বইয়ের তালিকার নামের মতো লিখুন)</label>
                         <textarea class="form-input" id="lp_gallery" rows="2" placeholder="খালি রাখলে এই বইয়ের সাথে একই বিভাগের বইগুলো স্বয়ংক্রিয়ভাবেই দেখাবে। নির্দিষ্ট বই দেখাতে চাইলে এখানে নাম লিখুন — যেমন:&#10;প্যারাডক্সিকেল সাজিদ ২&#10;হায়াতের দিন ফুরোলে"></textarea>
                     </div>
-                    <p style="font-size:11px;color:var(--text-muted);margin:-8px 0 4px;">📞 শেষের কুইক-অ্যাকশন (কল/হোয়াটসঅ্যাপ/ফেসবুক/ট্র্যাক) স্বয়ংক্রিয়ভাবেই পেজে যোগ হয়ে যাবে, আলাদা কিছু লিখতে হবে না।</p>
+                    <p style="font-size:11px;color:var(--text-muted);margin:-8px 0 4px;"><i class=gi-phone></i> শেষের কুইক-অ্যাকশন (কল/হোয়াটসঅ্যাপ/ফেসবুক/ট্র্যাক) স্বয়ংক্রিয়ভাবেই পেজে যোগ হয়ে যাবে, আলাদা কিছু লিখতে হবে না।</p>
                     <div class="flex gap-2" style="margin-bottom:18px;">
-                        <button class="btn btn-primary" onclick="saveLandingPage()">🚀 ল্যান্ডিং পেজ তৈরি করুন</button>
+                        <button class="btn btn-primary" onclick="saveLandingPage()"><i class=gi-rocket></i> ল্যান্ডিং পেজ তৈরি করুন</button>
                     </div>
-                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;">📄 তৈরি করা ল্যান্ডিং পেজসমূহ</div>
+                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;letter-spacing:.5px;"><i class=gi-doc></i> তৈরি করা ল্যান্ডিং পেজসমূহ</div>
                     <div id="landingList" style="display:flex;flex-direction:column;gap:8px;"></div>
                 </div>
 
@@ -2071,22 +2186,22 @@
                 <div class="tool-card" id="driveFolderCard">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে ছবি + PDF + বিবরণ আনো</h3>
                     <p style="margin-bottom:12px;">Publisher-এর Drive folder-এর লিংক দিন (প্রতিটা বইয়ের আলাদা sub-folder থাকতে হবে)। দোকানে <strong>আগে থেকে থাকা</strong> বই নাম মিলিয়ে খুঁজে — যেটায় যা নেই, সেটা বসায়:<br>
-                    🖼️ <strong>ছবি</strong> — folder-এর সব ছবির মাপ দেখে <em>লম্বা front-page</em>-টা বাছে (বর্গাকার promo, ফোনে তোলা ছবি বাদ)। শুধু চওড়া full-cover থাকলে তার থেকে front অংশ কেটে নেয়। imgbb-তে আপলোড করে বসায়<br>
-                    📄 <strong>PDF</strong> — শর্ট PDF-এর Drive লিংক<br>
-                    📝 <strong>বিবরণ</strong> — folder-এ Google Doc, .docx বা .txt থাকলে (উপরের "নাম/লেখক/মূল্য:" লাইনগুলো বাদ দিয়ে)<br>
+                    <i class=gi-image></i> <strong>ছবি</strong> — folder-এর সব ছবির মাপ দেখে <em>লম্বা front-page</em>-টা বাছে (বর্গাকার promo, ফোনে তোলা ছবি বাদ)। শুধু চওড়া full-cover থাকলে তার থেকে front অংশ কেটে নেয়। imgbb-তে আপলোড করে বসায়<br>
+                    <i class=gi-doc></i> <strong>PDF</strong> — শর্ট PDF-এর Drive লিংক<br>
+                    <i class=gi-note></i> <strong>বিবরণ</strong> — folder-এ Google Doc, .docx বা .txt থাকলে (উপরের "নাম/লেখক/মূল্য:" লাইনগুলো বাদ দিয়ে)<br>
                     দাম/ক্যাটাগরি/লেখক ছোঁয় না, নতুন বইও বানায় না (মেলেনি এমন folder শেষে দেখাবে)।</p>
                     <input class="form-input" id="driveFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:12px;">
                     <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:8px;">
                         <input type="checkbox" id="driveCropSpread" checked style="accent-color:#059669;">
-                        ✂️ আলাদা front না থাকলে full-cover থেকে front কেটে নাও (spine-এর ডান পাশ = front ধরে; কাটা ছবিগুলো পরে একবার দেখে নিন)
+                        <i class=gi-scissors></i> আলাদা front না থাকলে full-cover থেকে front কেটে নাও (spine-এর ডান পাশ = front ধরে; কাটা ছবিগুলো পরে একবার দেখে নিন)
                     </label>
                     <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:12px;color:#dc2626;">
                         <input type="checkbox" id="driveForceReplace" style="accent-color:#dc2626;">
-                        ♻️ আগে থেকে ছবি/PDF/বিবরণ থাকলেও Drive-এরটা দিয়ে বদলে দাও (Replace)
+                        <i class=gi-refresh></i> আগে থেকে ছবি/PDF/বিবরণ থাকলেও Drive-এরটা দিয়ে বদলে দাও (Replace)
                     </label>
                     <button class="btn btn-primary" onclick="importFromDriveFolder()" id="driveFolderBtn">
                         <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                        📥 ছবি + PDF + বিবরণ আনো
+                        <i class=gi-download></i> ছবি + PDF + বিবরণ আনো
                     </button>
                     <div id="driveFolderStatus" style="margin-top:10px;font-size:12px;"></div>
                 </div>
@@ -2099,11 +2214,11 @@
                     </select>
                     <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
                         <input class="form-input" id="pubOfferPct" type="number" min="0" max="90" step="1" placeholder="ছাড় % (যেমন 50)" style="max-width:170px;" oninput="previewPubOffer()">
-                        <button class="btn btn-primary" onclick="applyPubOffer()" id="pubOfferBtn">🏷️ অফার দাও</button>
+                        <button class="btn btn-primary" onclick="applyPubOffer()" id="pubOfferBtn"><i class=gi-tag></i> অফার দাও</button>
                     </div>
                     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-                        <button class="btn btn-ghost btn-sm" onclick="restorePubOffer('prev')">↩️ আগের দামে ফেরাও</button>
-                        <button class="btn btn-ghost btn-sm" onclick="restorePubOffer('mrp')">🧾 MRP-তে ফেরাও (ছাড় নেই)</button>
+                        <button class="btn btn-ghost btn-sm" onclick="restorePubOffer('prev')"><i class=gi-return></i> আগের দামে ফেরাও</button>
+                        <button class="btn btn-ghost btn-sm" onclick="restorePubOffer('mrp')"><i class=gi-receipt></i> MRP-তে ফেরাও (ছাড় নেই)</button>
                     </div>
                     <div id="pubOfferPreview" style="font-size:12px;color:var(--text-muted);"></div>
                     <div id="pubOfferStatus" style="margin-top:8px;font-size:12px;"></div>
@@ -2271,7 +2386,7 @@ async function adminForgotPass(e){
     try{
         await auth.sendPasswordResetEmail(email);
         err.style.color='#34d399';
-        err.innerText='✅ '+email+'-এ রিসেট লিংক পাঠানো হয়েছে। Gmail খুলে (Spam-ও দেখুন) ১ ঘণ্টার মধ্যে নতুন লিংকে ক্লিক করে পাসওয়ার্ড দিন।';
+        err.innerText=''+email+'-এ রিসেট লিংক পাঠানো হয়েছে। Gmail খুলে (Spam-ও দেখুন) ১ ঘণ্টার মধ্যে নতুন লিংকে ক্লিক করে পাসওয়ার্ড দিন।';
     }catch(ex){
         if(ex.code==='auth/user-not-found')err.innerText='এই ইমেইলে কোনো অ্যাকাউন্ট নেই — বানান ঠিক আছে কিনা দেখুন';
         else if(ex.code==='auth/invalid-email')err.innerText='ইমেইলটা ঠিকমতো লিখুন';
@@ -2491,23 +2606,23 @@ async function loadDriveFolderFiles(idx){
         let html='<div style="font-size:12px;display:flex;flex-direction:column;gap:6px;">';
 
         if(images.length){
-            html+='<div style="font-weight:600;color:#1d4ed8;margin-top:4px;">🖼️ ছবি — কোনটা Cover? (সবচেয়ে আগে upload হওয়াটা ★ চিহ্নিত, সাধারণত front cover)</div>';
+            html+='<div style="font-weight:600;color:#1d4ed8;margin-top:4px;"><i class=gi-image></i> ছবি — কোনটা Cover? (সবচেয়ে আগে upload হওয়াটা <i class=gi-star></i> চিহ্নিত, সাধারণত front cover)</div>';
             images.forEach((f,fi)=>{
                 const viewUrl=`https://drive.google.com/uc?export=view&id=${f.id}`;
                 html+=`<div style="display:flex;align-items:center;gap:8px;padding:6px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;">
                     <img src="${viewUrl}" style="width:40px;height:50px;object-fit:cover;border-radius:4px;" onerror="this.style.display='none'">
-                    <span style="flex:1;color:#374151;">${fi===0?'★ ':''}${f.name}</span>
+                    <span style="flex:1;color:#374151;">${fi===0?'<i class=gi-star></i> ':''}${f.name}</span>
                     <button onclick="setDriveImg(${idx},'${viewUrl}')" style="background:#059669;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">Cover সেট</button>
                 </div>`;
             });
         }
 
         if(pdfs.length){
-            html+='<div style="font-weight:600;color:#1d4ed8;margin-top:6px;">📄 PDF</div>';
+            html+='<div style="font-weight:600;color:#1d4ed8;margin-top:6px;"><i class=gi-doc></i> PDF</div>';
             pdfs.forEach(f=>{
                 const pdfUrl=`https://drive.google.com/file/d/${f.id}/view`;
                 html+=`<div style="display:flex;align-items:center;gap:8px;padding:6px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;">
-                    <span style="flex:1;color:#374151;">📄 ${f.name}</span>
+                    <span style="flex:1;color:#374151;"><i class=gi-doc></i> ${f.name}</span>
                     <button onclick="setDrivePdf(${idx},'${pdfUrl}')" style="background:#1d4ed8;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">PDF সেট</button>
                 </div>`;
             });
@@ -2543,11 +2658,11 @@ async function loadDriveApiKey(){
         const st=document.getElementById('driveApiKeyStatus');
         if(st){
             st.style.display='block';
-            st.innerHTML=DRIVE_API_KEY?'✅ Drive API key সেভ করা আছে':'⚠️ key সেভ করা নেই';
+            st.innerHTML=DRIVE_API_KEY?'<i class=gi-ok></i> Drive API key সেভ করা আছে':'<i class=gi-warn></i> key সেভ করা নেই';
         }
         if(DRIVE_API_KEY){
             const inp=document.getElementById('driveApiKeyInput');
-            if(inp) inp.placeholder='✅ সেভ করা আছে (পরিবর্তন করতে নতুন key দিন)';
+            if(inp) inp.placeholder='সেভ করা আছে (পরিবর্তন করতে নতুন key দিন)';
         }
     }catch(e){}
 }
@@ -2559,9 +2674,9 @@ async function saveDriveApiKey(){
         await db.ref('driveApiKey').set(v);
         DRIVE_API_KEY=v;
         document.getElementById('driveApiKeyInput').value='';
-        document.getElementById('driveApiKeyInput').placeholder='✅ সেভ করা আছে';
+        document.getElementById('driveApiKeyInput').placeholder='সেভ করা আছে';
         const st=document.getElementById('driveApiKeyStatus');
-        if(st){st.style.display='block';st.innerHTML='✅ Drive API key সেভ হয়েছে';}
+        if(st){st.style.display='block';st.innerHTML='<i class=gi-ok></i> Drive API key সেভ হয়েছে';}
         showToast('Drive API key সেভ হলো','#0B6E4F');
     }catch(e){showToast('সেভ ব্যর্থ: '+e.message,'#dc2626');}
 }
@@ -2813,13 +2928,13 @@ async function importFromDriveFolder(){
     if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
     const mainFolderId=m[1];
 
-    const BTN_LABEL='📥 ছবি + PDF + বিবরণ আনো';
+    const BTN_LABEL='<i class=gi-download></i> ছবি + PDF + বিবরণ আনো';
     const btn=document.getElementById('driveFolderBtn');
     const status=document.getElementById('driveFolderStatus');
     const forceReplace=document.getElementById('driveForceReplace')?.checked||false;
     const allowCrop=document.getElementById('driveCropSpread')?.checked!==false;
     btn.disabled=true; btn.textContent='চলছে...';
-    status.innerHTML='<span style="color:#059669">📂 Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
+    status.innerHTML='<span style="color:#059669"><i class=gi-folder></i> Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
     if(!IMGBB_KEY) showToast('imgbb key নেই — ছবি বাদ দিয়ে শুধু PDF/বিবরণ আনা হবে','#d97706');
 
     try{
@@ -2849,7 +2964,7 @@ async function importFromDriveFolder(){
             done++;
             const folderName=folder.name;
             const folderNorm=normalize(folderName);
-            status.innerHTML=`<span style="color:#059669">📂 ${done}/${subFolders.length} — ${escapeHTML(folderName)}</span><br><span style="color:#6b7280">ছবি ${nImg} (কাটা ${nCrop}) · PDF ${nPdf} · বিবরণ ${nDesc}</span>`;
+            status.innerHTML=`<span style="color:#059669"><i class=gi-folder></i> ${done}/${subFolders.length} — ${escapeHTML(folderName)}</span><br><span style="color:#6b7280">ছবি ${nImg} (কাটা ${nCrop}) · PDF ${nPdf} · বিবরণ ${nDesc}</span>`;
 
             /* ১. হুবহু / containment  ২. শব্দ মিল 60%+  ৩. ৪-অক্ষর সাদৃশ্য 0.72+ */
             let bookIdx=-1, bestScore=0;
@@ -2932,17 +3047,17 @@ async function importFromDriveFolder(){
         beUpdateStats();
         beRenderList();
 
-        let resultHtml=`<span style="color:#059669;font-weight:700">✅ সম্পন্ন — ছবি ${nImg}টি (তার মধ্যে full-cover থেকে কাটা ${nCrop}টি) · PDF ${nPdf}টি · বিবরণ ${nDesc}টি বসেছে</span>`;
-        if(cropLog.length) resultHtml+=`<br><span style="color:#d97706">✂️ কাটা ছবিগুলো একবার বই-এডিটরে দেখে নিন (flap/spine ঢুকে গেলে ম্যানুয়াল ছবি দিন): ${escapeHTML(cropLog.join(', '))}</span>`;
-        if(imgIssues.length) resultHtml+=`<br><span style="color:#d97706">🖼️ ছবি বসেনি ${imgIssues.length}টিতে:</span><br><span style="color:#6b7280">${imgIssues.map(escapeHTML).join('<br>')}</span>`;
-        if(docxFail.length) resultHtml+=`<br><span style="color:#d97706">📝 ${docxFail.length}টিতে docx/doc ছিল কিন্তু বিবরণ পড়া যায়নি (পুরনো .doc বা খালি ফাইল?): ${escapeHTML(docxFail.slice(0,8).join(', '))}${docxFail.length>8?'...':''}</span>`;
-        if(notFound.length) resultHtml+=`<br><span style="color:#dc2626">⚠️ ${notFound.length}টি folder দোকানের কোনো বইয়ের সাথে মেলেনি (নতুন বই হলে আগে যোগ করুন): ${escapeHTML(notFound.join(', '))}</span>`;
+        let resultHtml=`<span style="color:#059669;font-weight:700"><i class=gi-ok></i> সম্পন্ন — ছবি ${nImg}টি (তার মধ্যে full-cover থেকে কাটা ${nCrop}টি) · PDF ${nPdf}টি · বিবরণ ${nDesc}টি বসেছে</span>`;
+        if(cropLog.length) resultHtml+=`<br><span style="color:#d97706"><i class=gi-scissors></i> কাটা ছবিগুলো একবার বই-এডিটরে দেখে নিন (flap/spine ঢুকে গেলে ম্যানুয়াল ছবি দিন): ${escapeHTML(cropLog.join(', '))}</span>`;
+        if(imgIssues.length) resultHtml+=`<br><span style="color:#d97706"><i class=gi-image></i> ছবি বসেনি ${imgIssues.length}টিতে:</span><br><span style="color:#6b7280">${imgIssues.map(escapeHTML).join('<br>')}</span>`;
+        if(docxFail.length) resultHtml+=`<br><span style="color:#d97706"><i class=gi-note></i> ${docxFail.length}টিতে docx/doc ছিল কিন্তু বিবরণ পড়া যায়নি (পুরনো .doc বা খালি ফাইল?): ${escapeHTML(docxFail.slice(0,8).join(', '))}${docxFail.length>8?'...':''}</span>`;
+        if(notFound.length) resultHtml+=`<br><span style="color:#dc2626"><i class=gi-warn></i> ${notFound.length}টি folder দোকানের কোনো বইয়ের সাথে মেলেনি (নতুন বই হলে আগে যোগ করুন): ${escapeHTML(notFound.join(', '))}</span>`;
         if(log.length) resultHtml+=`<details style="margin-top:8px"><summary style="cursor:pointer;color:#6b7280">কোন বইয়ে কোন ছবি বসল (${log.length})</summary><div style="color:#6b7280;font-size:11px">${log.map(escapeHTML).join('<br>')}</div></details>`;
         status.innerHTML=resultHtml;
         showToast(`ছবি ${nImg} · PDF ${nPdf} · বিবরণ ${nDesc} বসেছে`,'#0B6E4F');
 
     }catch(e){
-        status.innerHTML=`<span style="color:#dc2626">❌ Error: ${escapeHTML(e.message)}</span>`;
+        status.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> Error: ${escapeHTML(e.message)}</span>`;
         showToast('Drive import ব্যর্থ: '+e.message,'#dc2626');
     }
     btn.disabled=false; btn.textContent=BTN_LABEL;
@@ -2968,7 +3083,7 @@ function buildPubOfferSelect(){
     const m=pubOfferPubMap();
     const pubs=Object.keys(m).sort((a,b)=>a.localeCompare(b,'bn'));
     let html='<option value="">— প্রকাশনী বাছুন —</option>';
-    html+=`<option value="${PUB_OFFER_ALL}">🌐 সব বই (${(localBooks||[]).length}টি)</option>`;
+    html+=`<option value="${PUB_OFFER_ALL}">সব বই (${(localBooks||[]).length}টি)</option>`;
     pubs.forEach(p=>{ html+=`<option value="${escapeHTML(p)}">${escapeHTML(p)} (${m[p]}টি)</option>`; });
     if(sel.innerHTML!==html){ sel.innerHTML=html; sel.value=cur; }
 }
@@ -2995,7 +3110,7 @@ function previewPubOffer(){
     idxs.forEach(i=>{ const b=localBooks[i]; const o=Number(b.original_price), p=Number(b.price)||o; sumDisc+=(1-p/o)*100; });
     const avg=Math.round(sumDisc/idxs.length);
     const ex=localBooks[idxs[0]];
-    let s=`📚 ${idxs.length}টি বই · এখন গড় ছাড় ${avg}%`;
+    let s=`<i class=gi-books></i> ${idxs.length}টি বই · এখন গড় ছাড় ${avg}%`;
     if(pct>0&&pct<=90) s+=` · ${pct}% দিলে উদাহরণ: <b>${escapeHTML(ex.name)}</b> ৳${ex.original_price} → <b>৳${Math.round(ex.original_price*(1-pct/100))}</b>`;
     el.innerHTML=s;
 }
@@ -3010,7 +3125,7 @@ async function applyPubOffer(){
     const label=sel.value===PUB_OFFER_ALL?'সব বই':sel.value;
     if(!confirm(`${label} — ${idxs.length}টি বইয়ে ${pct}% ছাড় বসবে (MRP-এর উপর)। এগিয়ে যাবেন?`)) return;
     const btn=document.getElementById('pubOfferBtn'); btn.disabled=true;
-    st.innerHTML='<span style="color:#059669">⏳ দাম বসানো হচ্ছে...</span>';
+    st.innerHTML='<span style="color:#059669"><i class=gi-hourglass></i> দাম বসানো হচ্ছে...</span>';
     try{
         await ensureBookIdsAndMigrate(localBooks);
         const bk=(await db.ref('priceBackup').once('value')).val()||{};
@@ -3025,10 +3140,10 @@ async function applyPubOffer(){
         await db.ref().update(updates);
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
         beUpdateStats(); beRenderList(); previewPubOffer();
-        st.innerHTML=`<span style="color:#059669;font-weight:700">✅ ${idxs.length}টি বইয়ে ${pct}% ছাড় বসেছে — সাইটে লাইভ।</span><br><span style="color:var(--text-muted)">book.js ফাইলেও নতুন দাম রাখতে চাইলে নিচে "book.js ডাউনলোড করুন" দিয়ে GitHub-এ আপলোড করুন।</span>`;
+        st.innerHTML=`<span style="color:#059669;font-weight:700"><i class=gi-ok></i> ${idxs.length}টি বইয়ে ${pct}% ছাড় বসেছে — সাইটে লাইভ।</span><br><span style="color:var(--text-muted)">book.js ফাইলেও নতুন দাম রাখতে চাইলে নিচে "book.js ডাউনলোড করুন" দিয়ে GitHub-এ আপলোড করুন।</span>`;
         showToast(`${idxs.length}টি বইয়ে ${pct}% ছাড় বসেছে`,'#0B6E4F');
     }catch(e){
-        st.innerHTML=`<span style="color:#dc2626">❌ ব্যর্থ: ${escapeHTML(e.message)}</span>`;
+        st.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> ব্যর্থ: ${escapeHTML(e.message)}</span>`;
         showToast('অফার বসানো ব্যর্থ: '+e.message,'#dc2626');
     }
     btn.disabled=false;
@@ -3043,7 +3158,7 @@ async function restorePubOffer(mode){
     const label=sel.value===PUB_OFFER_ALL?'সব বই':sel.value;
     const what=mode==='prev'?'অফারের আগের দামে':'MRP-তে (ছাড় ছাড়া)';
     if(!confirm(`${label} — ${idxs.length}টি বই ${what} ফেরানো হবে। এগিয়ে যাবেন?`)) return;
-    st.innerHTML='<span style="color:#059669">⏳ দাম ফেরানো হচ্ছে...</span>';
+    st.innerHTML='<span style="color:#059669"><i class=gi-hourglass></i> দাম ফেরানো হচ্ছে...</span>';
     try{
         await ensureBookIdsAndMigrate(localBooks);
         const bk=(await db.ref('priceBackup').once('value')).val()||{};
@@ -3064,12 +3179,12 @@ async function restorePubOffer(mode){
         if(n) await db.ref().update(updates);
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
         beUpdateStats(); beRenderList(); previewPubOffer();
-        let msg=`<span style="color:#059669;font-weight:700">✅ ${n}টি বই ${what} ফিরেছে।</span>`;
+        let msg=`<span style="color:#059669;font-weight:700"><i class=gi-ok></i> ${n}টি বই ${what} ফিরেছে।</span>`;
         if(noBackup) msg+=`<br><span style="color:#d97706">${noBackup}টি বইয়ে আগের দামের রেকর্ড ছিল না (এই টুল দিয়ে অফার দেওয়া হয়নি) — সেগুলো যেমন ছিল তেমনই আছে। দরকার হলে "MRP-তে ফেরাও" ব্যবহার করুন।</span>`;
         st.innerHTML=msg;
         showToast(`${n}টি বইয়ের দাম ফিরেছে`,'#0B6E4F');
     }catch(e){
-        st.innerHTML=`<span style="color:#dc2626">❌ ব্যর্থ: ${escapeHTML(e.message)}</span>`;
+        st.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> ব্যর্থ: ${escapeHTML(e.message)}</span>`;
         showToast('দাম ফেরানো ব্যর্থ: '+e.message,'#dc2626');
     }
 }
@@ -3081,7 +3196,7 @@ async function loadImgbbKey(){
         const st=document.getElementById('imgbbKeyStatus');
         if(st){
             st.style.display='block';
-            st.innerHTML=IMGBB_KEY?'✅ imgbb key সেভ করা আছে — ছবি আপলোড চালু':'⚠️ key সেভ করা নেই — imgbb.com থেকে key নিয়ে সেভ করুন';
+            st.innerHTML=IMGBB_KEY?'<i class=gi-ok></i> imgbb key সেভ করা আছে — ছবি আপলোড চালু':'<i class=gi-warn></i> key সেভ করা নেই — imgbb.com থেকে key নিয়ে সেভ করুন';
         }
     }catch(e){}
 }
@@ -3122,7 +3237,7 @@ async function uploadToImgbb(file,cb,maxW){
     if(!file)return;
     if(!IMGBB_KEY){showToast('আগে টুলস ট্যাবে imgbb API key সেভ করুন','#dc2626');return;}
     if(!file.type||!file.type.startsWith('image/')){showToast('ছবির ফাইল বাছুন','#dc2626');return;}
-    showToast('ছবি আপলোড হচ্ছে... ⏳','#0369a1');
+    showToast('ছবি আপলোড হচ্ছে... ','#0369a1');
     try{
         const small=await new Promise(res=>gkCompressImg(file,maxW||900,res));
         const fd=new FormData();
@@ -3131,7 +3246,7 @@ async function uploadToImgbb(file,cb,maxW){
         const j=await res.json();
         if(j&&j.success&&j.data&&j.data.url){
             cb(j.data.url);
-            showToast('ছবি আপলোড হয়েছে ✅','#0B6E4F');
+            showToast('ছবি আপলোড হয়েছে ','#0B6E4F');
         }else{
             showToast('আপলোড ব্যর্থ — API key ঠিক আছে কিনা দেখুন','#dc2626');
         }
@@ -3163,7 +3278,7 @@ async function loadPixelId(){
         const st=document.getElementById('pixelStatus');
         if(st){
             st.style.display='block';
-            st.innerHTML=v?'✅ Pixel চালু আছে — ID: '+escapeHTML(String(v)):'⚠️ Pixel ID সেট করা নেই';
+            st.innerHTML=v?'<i class=gi-ok></i> Pixel চালু আছে — ID: '+escapeHTML(String(v)):'<i class=gi-warn></i> Pixel ID সেট করা নেই';
         }
     }catch(e){}
 }
@@ -3175,7 +3290,7 @@ async function savePixelId(){
         await db.ref('siteConfig/metaPixelId').set(v||null);
         inp.value='';
         loadPixelId();
-        showToast(v?'Pixel ID সেভ হলো — সাইটে চালু ✅':'Pixel বন্ধ করা হলো','#0B6E4F');
+        showToast(v?'Pixel ID সেভ হলো — সাইটে চালু ':'Pixel বন্ধ করা হলো','#0B6E4F');
     }catch(e){showToast('সেভ ব্যর্থ হলো','#dc2626');}
 }
 
@@ -3267,15 +3382,15 @@ async function loadReviewsAdmin(){
         if(!rows.length){el.innerHTML='<div class="empty-state">এখনো কোনো রিভিউ আসেনি</div>';return;}
         el.innerHTML='<p class="text-sm text-muted" style="margin-bottom:12px;">মোট রিভিউ: '+rows.length+'টি</p>'+rows.map(r=>{
             const rt=Math.max(0,Math.min(5,Math.round(r.rating)));
-            const stars='★'.repeat(rt)+'☆'.repeat(5-rt);
+            const stars='<i class=gi-star></i>'.repeat(rt)+'<i class=gi-star-o></i>'.repeat(5-rt);
             const d=r.createdAt?new Date(r.createdAt).toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'}):'';
             return '<div class="tool-card" style="margin-bottom:10px;">'
                 +'<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;">'
                 +'<div style="min-width:0;flex:1;">'
                 +'<div style="font-weight:700;">'+escapeHTML(r.name)+' <span style="color:#f59e0b;letter-spacing:2px;">'+stars+'</span></div>'
-                +'<a href="book.html?id='+encodeURIComponent(r.bid)+'" target="_blank" rel="noopener" class="text-sm" style="color:#0369a1;text-decoration:none;">📖 '+escapeHTML(bookNameById(r.bid))+'</a>'
+                +'<a href="book.html?id='+encodeURIComponent(r.bid)+'" target="_blank" rel="noopener" class="text-sm" style="color:#0369a1;text-decoration:none;">'+escapeHTML(bookNameById(r.bid))+'</a>'
                 +'<div class="text-sm" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;">'+escapeHTML(r.comment)+'</div>'
-                +(d?'<div class="text-sm text-muted" style="margin-top:4px;">🕒 '+d+'</div>':'')
+                +(d?'<div class="text-sm text-muted" style="margin-top:4px;"><i class=gi-clock></i> '+d+'</div>':'')
                 +'</div>'
                 +'<button class="btn" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="deleteReviewAdmin(\''+r.bid+'\',\''+r.rid+'\')">মুছুন</button>'
                 +'</div></div>';
@@ -3406,7 +3521,7 @@ async function quickConfirm(orderId){
     if(o){
         const mismatch=checkOrderPriceMismatch(o);
         if(mismatch.length){
-            const msg='⚠️ এই অর্ডারে দামের গরমিল পাওয়া গেছে (হয়তো checkout বাইপাস করে বসানো হয়েছে):\n\n'+mismatch.join('\n')+'\n\nএরপরও কনফার্ম করতে চান?';
+            const msg='<i class=gi-warn></i> এই অর্ডারে দামের গরমিল পাওয়া গেছে (হয়তো checkout বাইপাস করে বসানো হয়েছে):\n\n'+mismatch.join('\n')+'\n\nএরপরও কনফার্ম করতে চান?';
             if(!confirm(msg)) return;
         }
     }
@@ -3556,7 +3671,7 @@ function renderBookList(list){
         const idx=books.indexOf(b);
         const inStock=stockData[idx]!==false;
         const notifyCount=stockNotifyData[idx]?Object.keys(stockNotifyData[idx]).length:0;
-        const notifyBadge=notifyCount?`<button class="btn btn-sm" style="background:#fef3c7;color:#92400e;border:none;flex-shrink:0;" onclick="showStockNotifyList(${idx})" title="স্টক নোটিফিকেশন রিকোয়েস্ট">🔔 ${notifyCount}</button>`:'';
+        const notifyBadge=notifyCount?`<button class="btn btn-sm" style="background:#fef3c7;color:#92400e;border:none;flex-shrink:0;" onclick="showStockNotifyList(${idx})" title="স্টক নোটিফিকেশন রিকোয়েস্ট"><i class=gi-bell></i> ${notifyCount}</button>`:'';
         return `<div class="book-item">
             <div class="book-manage-name">${escapeHTML(b.name)}</div>
             ${notifyBadge}
@@ -3581,7 +3696,7 @@ function showStockNotifyList(idx){
         const waText=encodeURIComponent('আসসালামু আলাইকুম! আপনি "'+(b?b.name:e.bookName||'')+'" বইটার জন্য স্টক নোটিফিকেশন চেয়েছিলেন — বইটা এখন স্টকে এসেছে! অর্ডার করতে চাইলে: '+bookLink);
         return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
             <span style="flex:1;font-size:13px;font-weight:600;">${escapeHTML(e.phone||'')}</span>
-            <a href="https://wa.me/${waPhone}?text=${waText}" target="_blank" rel="noopener" style="background:#25D366;color:white;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;flex-shrink:0;">💬 WhatsApp</a>
+            <a href="https://wa.me/${waPhone}?text=${waText}" target="_blank" rel="noopener" style="background:#25D366;color:white;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;flex-shrink:0;">WhatsApp</a>
         </div>`;
     }).join('');
     const old=document.getElementById('stockNotifyOverlay'); if(old)old.remove();
@@ -3589,12 +3704,12 @@ function showStockNotifyList(idx){
     overlay.id='stockNotifyOverlay';
     overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
     overlay.innerHTML=`<div style="background:var(--surface);border-radius:14px;padding:20px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto;">
-        <div style="font-weight:800;font-size:15px;margin-bottom:4px;color:var(--text-main);">🔔 ${escapeHTML(b?b.name:'')}</div>
+        <div style="font-weight:800;font-size:15px;margin-bottom:4px;color:var(--text-main);"><i class=gi-bell></i> ${escapeHTML(b?b.name:'')}</div>
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">${entries.length}জন স্টক নোটিফিকেশন চেয়েছেন — WhatsApp-এ ক্লিক করে সরাসরি মেসেজ পাঠান (আগে থেকেই লেখা থাকবে)</div>
         ${rows}
         <div style="display:flex;gap:8px;margin-top:14px;">
             <button class="btn btn-ghost" style="flex:1;" onclick="document.getElementById('stockNotifyOverlay').remove()">বন্ধ করুন</button>
-            <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;flex:1;" onclick="clearStockNotify(${idx})">✕ সব ক্লিয়ার করুন</button>
+            <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;flex:1;" onclick="clearStockNotify(${idx})"><i class=gi-x></i> সব ক্লিয়ার করুন</button>
         </div>
     </div>`;
     overlay.onclick=(e)=>{ if(e.target===overlay) overlay.remove(); };
@@ -3605,10 +3720,10 @@ async function clearStockNotify(idx){
     try{
         await db.ref('stockNotify/'+idx).remove();
         delete stockNotifyData[idx];
-        showToast('✅ তালিকা ক্লিয়ার হয়েছে','#059669');
+        showToast('তালিকা ক্লিয়ার হয়েছে','#059669');
         const ov=document.getElementById('stockNotifyOverlay'); if(ov)ov.remove();
         renderBookList(books);
-    }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
+    }catch(e){ showToast('ব্যর্থ','#dc2626'); }
 }
 
 function filterBookManage(){
@@ -3742,11 +3857,11 @@ function gkCheckMissingBooks(){
     const bar=document.createElement('div');
     bar.id='gkMissingBar';
     bar.style.cssText='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;max-width:560px;width:calc(100% - 24px);background:#fff7ed;border:2px solid #f97316;color:#7c2d12;padding:14px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-family:inherit;font-size:13.5px;line-height:1.6;';
-    bar.innerHTML=`<b>⚠️ ${missing.length}টি বই শুধু book.js-এ আছে, Firebase-এ নেই।</b><br>এগুলো অ্যাডমিন প্যানেলে দেখা যায় না, আর সাইটে লাইভ লিস্ট এলে হারিয়ে যায়। একবার "Firebase-এ তুলুন" চাপলেই ঠিক হয়ে যাবে।
-        <div style="display:flex;gap:8px;margin-top:10px;"><button id="gkMissingBtn" class="btn btn-primary" style="flex:2;">⬆️ ${missing.length}টি বই Firebase-এ তুলুন</button><button class="btn" style="flex:1;" onclick="this.closest('#gkMissingBar').remove()">পরে</button></div>`;
+    bar.innerHTML=`<b><i class=gi-warn></i> ${missing.length}টি বই শুধু book.js-এ আছে, Firebase-এ নেই।</b><br>এগুলো অ্যাডমিন প্যানেলে দেখা যায় না, আর সাইটে লাইভ লিস্ট এলে হারিয়ে যায়। একবার "Firebase-এ তুলুন" চাপলেই ঠিক হয়ে যাবে।
+        <div style="display:flex;gap:8px;margin-top:10px;"><button id="gkMissingBtn" class="btn btn-primary" style="flex:2;"><i class=gi-up></i> ${missing.length}টি বই Firebase-এ তুলুন</button><button class="btn" style="flex:1;" onclick="this.closest('#gkMissingBar').remove()">পরে</button></div>`;
     document.body.appendChild(bar);
     document.getElementById('gkMissingBtn').onclick=async function(){
-        this.disabled=true; this.textContent='⏳ তোলা হচ্ছে...';
+        this.disabled=true; this.textContent='তোলা হচ্ছে...';
         try{
             const start=localBooks.length, updates={};
             missing.forEach((b,i)=>{
@@ -3758,10 +3873,10 @@ function gkCheckMissingBooks(){
             await db.ref().update(updates);
             bar.remove();
             beUpdateStats(); if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
-            showToast(`✅ ${missing.length}টি বই Firebase-এ উঠেছে — এখন Tools থেকে book.js ডাউনলোড করে আপলোড করুন`,'#059669');
+            showToast(`${missing.length}টি বই Firebase-এ উঠেছে — এখন Tools থেকে book.js ডাউনলোড করে আপলোড করুন`,'#059669');
         }catch(e){
             this.disabled=false; this.textContent='আবার চেষ্টা করুন';
-            showToast('❌ ব্যর্থ: '+e.message,'#dc2626');
+            showToast('ব্যর্থ: '+e.message,'#dc2626');
         }
     };
 }
@@ -3840,7 +3955,7 @@ function bePopulatePubs(){
     localBooks.forEach(b=>{ if(!b)return; const p=bePubOf(b); m[p]=(m[p]||0)+1; });
     const list=Object.entries(m).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'bn'));
     if(bePub && !m[bePub]) bePub='';
-    sel.innerHTML=`<option value="">🏢 সব প্রকাশনী (${list.length}টি)</option>`+
+    sel.innerHTML=`<option value="">সব প্রকাশনী (${list.length}টি)</option>`+
         list.map(([p,n])=>`<option value="${escapeHTML(p)}"${p===bePub?' selected':''}>${escapeHTML(p)} — ${n}টি বই</option>`).join('');
     bePubInfo();
 }
@@ -3854,7 +3969,7 @@ function bePubInfo(){
     const disc=bs.filter(b=>Number(b.original_price)>Number(b.price)).length;
     box.style.display='';
     box.innerHTML=`<b>${escapeHTML(bePub)}</b> — মোট <b>${bs.length}</b>টি বই · ছবি নেই <b style="color:${noImg?'#dc2626':'inherit'}">${noImg}</b>টি · ছাড় আছে <b>${disc}</b>টিতে`+
-        (bePub!==BE_NO_PUB?` · <a href="filter.html?type=pub&value=${encodeURIComponent(bePub)}" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;">সাইটে দেখুন ↗</a>`:'');
+        (bePub!==BE_NO_PUB?` · <a href="filter.html?type=pub&value=${encodeURIComponent(bePub)}" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;">সাইটে দেখুন <i class=gi-ext></i></a>`:'');
 }
 function bePubChange(v){
     bePub=v||'';
@@ -4128,8 +4243,8 @@ async function beToggleStock(idx){
     try{
         await db.ref('stock/'+idx).set(next);
         stockData[idx]=next;
-        if(btn){ btn.className='btn btn-sm '+(next?'stock-in-btn':'stock-out-btn'); btn.innerHTML=next?'✅ স্টকে আছে':'❌ স্টক শেষ'; }
-        showToast(next?'স্টকে ফেরানো হলো ✅':'স্টক শেষ চিহ্নিত হলো','#0B6E4F');
+        if(btn){ btn.className='btn btn-sm '+(next?'stock-in-btn':'stock-out-btn'); btn.innerHTML=next?'<i class=gi-ok></i> স্টকে আছে':'<i class=gi-no></i> স্টক শেষ'; }
+        showToast(next?'স্টকে ফেরানো হলো ':'স্টক শেষ চিহ্নিত হলো','#0B6E4F');
     }catch(e){showToast('স্টক আপডেট ব্যর্থ','#dc2626');}
 }
 
@@ -4138,15 +4253,15 @@ function beEditorBody(b,i,imgPrevHtml){
     const type=b.type||'বই';
     const isBook=type==='বই';
     return `<div class="be-stock-row">
-                    <span class="lbl">📦 স্টক অবস্থা:</span>
-                    <button type="button" id="beStockBtn_${i}" class="btn btn-sm ${(stockData[i]!==false)?'stock-in-btn':'stock-out-btn'}" onclick="beToggleStock(${i})">${(stockData[i]!==false)?'✅ স্টকে আছে':'❌ স্টক শেষ'}</button>
+                    <span class="lbl"><i class=gi-package></i> স্টক অবস্থা:</span>
+                    <button type="button" id="beStockBtn_${i}" class="btn btn-sm ${(stockData[i]!==false)?'stock-in-btn':'stock-out-btn'}" onclick="beToggleStock(${i})">${(stockData[i]!==false)?'<i class=gi-ok></i> স্টকে আছে':'<i class=gi-no></i> স্টক শেষ'}</button>
                     <span class="be-stock-hint">ক্লিক করে বদলান — সাথে সাথে সাইটে লাইভ</span>
                 </div>
                 <div class="editor-grid">
                     <div class="form-group editor-full"><label class="be-label">প্রোডাক্ট টাইপ</label>
                         <select class="form-input" id="be_type_${i}" onchange="beOnTypeChange(${i})">
-                            <option value="বই"${isBook?' selected':''}>📚 বই</option>
-                            <option value="প্রোডাক্ট"${!isBook?' selected':''}>🛍️ সাধারণ প্রোডাক্ট</option>
+                            <option value="বই"${isBook?' selected':''}>বই</option>
+                            <option value="প্রোডাক্ট"${!isBook?' selected':''}>সাধারণ প্রোডাক্ট</option>
                         </select>
                     </div>
                     <div class="form-group"><label class="be-label">নাম</label><input class="form-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
@@ -4190,30 +4305,30 @@ function beEditorBody(b,i,imgPrevHtml){
                         ${gkTagChecksHtml(i, bookTags(b))}
                     </div>
                     <div class="form-group editor-full" style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:10px;padding:10px 12px;">
-                        <label class="be-label" style="color:#92400e;">🎁 হাদিয়া (ঐচ্ছিক) — এই বই/প্যাকেজের সাথে ফ্রি কিছু থাকলে লিখুন</label>
+                        <label class="be-label" style="color:#92400e;"><i class=gi-gift></i> হাদিয়া (ঐচ্ছিক) — এই বই/প্যাকেজের সাথে ফ্রি কিছু থাকলে লিখুন</label>
                         <input class="form-input" id="be_hadiya_${i}" value="${escapeHTML(b.hadiya||'')}" placeholder="যেমন: সাথে ফ্রি বুকমার্ক ও টুপি">
                     </div>
                     <div class="form-group editor-full" style="background:#fff7ed;border:1.5px solid #fdba74;border-radius:10px;padding:10px 12px;">
-                        <label class="be-label" style="color:#9a3412;">📦 প্রি-অর্ডার প্রকাশের সম্ভাব্য তারিখ (ঐচ্ছিক) — দিলে বই পেজে হাইলাইট করে দেখাবে</label>
+                        <label class="be-label" style="color:#9a3412;"><i class=gi-package></i> প্রি-অর্ডার প্রকাশের সম্ভাব্য তারিখ (ঐচ্ছিক) — দিলে বই পেজে হাইলাইট করে দেখাবে</label>
                         <input class="form-input" id="be_preorderdate_${i}" type="date" value="${escapeHTML(b.preorderDate||'')}">
                     </div>
                     <div class="form-group editor-full" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;">
-                        <label class="be-label" style="color:#15803d;">📄 শর্ট PDF লিংক (ঐচ্ছিক)</label>
+                        <label class="be-label" style="color:#15803d;"><i class=gi-doc></i> শর্ট PDF লিংক (ঐচ্ছিক)</label>
                         <input class="form-input" id="be_pdflink_${i}" value="${escapeHTML(b.pdfLink||'')}" placeholder="https://drive.google.com/file/d/.../view">
                     </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
                         <div style="display:flex;gap:8px;">
                             <input class="form-input" id="be_img_${i}" value="${escapeHTML(b.img||'')}" oninput="beUpdateImgPreview(${i})" style="flex:1;min-width:0;">
-                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('be_imgfile_${i}').click()">📤 আপলোড</button>
+                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('be_imgfile_${i}').click()"><i class=gi-upload></i> আপলোড</button>
                             <input type="file" id="be_imgfile_${i}" accept="image/*" style="display:none;" onchange="beUploadImg(${i},this)">
                         </div>
                         <div class="be-img-preview" id="beImgPrev_${i}">${imgPrevHtml}</div>
                     </div>
                     <div class="form-group editor-full">
-                        <label class="be-label">🖼️ অতিরিক্ত ছবি (গ্যালারি — ঐচ্ছিক, একাধিক দেওয়া যাবে)</label>
+                        <label class="be-label"><i class=gi-image></i> অতিরিক্ত ছবি (গ্যালারি — ঐচ্ছিক, একাধিক দেওয়া যাবে)</label>
                         <div class="be-gal-thumbs" id="beGalThumbs_${i}">${beImagesMarkup(i)}</div>
-                        <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('beGalFile_${i}').click()">📤 গ্যালারিতে ছবি যোগ করুন</button>
+                        <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('beGalFile_${i}').click()"><i class=gi-upload></i> গ্যালারিতে ছবি যোগ করুন</button>
                         <input type="file" id="beGalFile_${i}" accept="image/*" style="display:none;" onchange="beImagesUpload(${i},this)">
                     </div>
                     <div class="form-group editor-full">
@@ -4363,13 +4478,13 @@ function renderCatTreeAdmin(){
         const usedSubs=gkAllSubcats(c.name);
         const orphanSubs=usedSubs.filter(s=>!treeSubs.includes(s));
         gkOrphanSubsMap[i]=orphanSubs;
-        const officialChips=treeSubs.map((s,j)=>`<span class="cattree-chip">${escapeHTML(s)} <span onclick="removeCatTreeSub(${i},${j})" title="তালিকা থেকে মুছুন">✕</span></span>`).join('');
-        const orphanChips=orphanSubs.map((s,k)=>`<span class="cattree-chip cattree-chip-orphan" title="বই এডিটরে সরাসরি লেখা হয়েছে, তালিকায় নেই">${escapeHTML(s)} <span onclick="promoteOrphanSubcat(${i},${k})" title="তালিকায় যোগ করুন">✅</span><span onclick="removeOrphanSubcat(${i},${k})" title="বই থেকে মুছুন">✕</span></span>`).join('');
+        const officialChips=treeSubs.map((s,j)=>`<span class="cattree-chip">${escapeHTML(s)} <span onclick="removeCatTreeSub(${i},${j})" title="তালিকা থেকে মুছুন"><i class=gi-x></i></span></span>`).join('');
+        const orphanChips=orphanSubs.map((s,k)=>`<span class="cattree-chip cattree-chip-orphan" title="বই এডিটরে সরাসরি লেখা হয়েছে, তালিকায় নেই">${escapeHTML(s)} <span onclick="promoteOrphanSubcat(${i},${k})" title="তালিকায় যোগ করুন"><i class=gi-ok></i></span><span onclick="removeOrphanSubcat(${i},${k})" title="বই থেকে মুছুন"><i class=gi-x></i></span></span>`).join('');
         const chipsHtml=officialChips+orphanChips;
         return `<div class="cattree-card">
             <div class="cattree-head">
                 <b>${escapeHTML(c.name)}</b>
-                <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeCatTreeCategory(${i})">✕ বিভাগ মুছুন</button>
+                <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeCatTreeCategory(${i})"><i class=gi-x></i> বিভাগ মুছুন</button>
             </div>
             <div class="cattree-chips">
                 ${chipsHtml || '<span class="text-sm text-muted">কোনো উপ-বিভাগ নেই</span>'}
@@ -4390,8 +4505,8 @@ function renderCatTreeAdmin(){
                     <b>${escapeHTML(cn)}</b> <span class="text-sm text-muted">(${cnt}টা বইয়ে)</span>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                    <button class="btn btn-sm" type="button" onclick="promoteOrphanCat(${oi})">✅ তালিকায় যোগ করুন</button>
-                    <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeOrphanCat(${oi})">✕ মুছুন (বই থেকেও)</button>
+                    <button class="btn btn-sm" type="button" onclick="promoteOrphanCat(${oi})"><i class=gi-ok></i> তালিকায় যোগ করুন</button>
+                    <button class="btn btn-sm" type="button" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeOrphanCat(${oi})"><i class=gi-x></i> মুছুন (বই থেকেও)</button>
                 </div>
             </div>`;
         }).join('');
@@ -4423,8 +4538,8 @@ async function removeOrphanCat(oi){
     showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
     try{
         for(const idx of affected){ await saveBookToFirebase(idx); }
-        showToast('✅ মুছে ফেলা হয়েছে ('+affected.length+'টা বই)','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
+        showToast('মুছে ফেলা হয়েছে ('+affected.length+'টা বই)','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
     beUpdateStats(); beRenderList(); renderCatTreeAdmin();
 }
 function promoteOrphanSubcat(catIdx,subIdx){
@@ -4444,8 +4559,8 @@ async function removeOrphanSubcat(catIdx,subIdx){
     showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
     try{
         for(const idx of affected){ await saveBookToFirebase(idx); }
-        showToast('✅ মুছে ফেলা হয়েছে ('+affected.length+'টা বই)','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
+        showToast('মুছে ফেলা হয়েছে ('+affected.length+'টা বই)','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
     beUpdateStats(); beRenderList(); renderCatTreeAdmin();
 }
 function addCatTreeSub(i){
@@ -4471,8 +4586,8 @@ async function saveCatTree(){
     try{
         await db.ref('siteConfig/categoryTree').set(siteCatTreeData);
         GK_CAT_TREE=siteCatTreeData;
-        showToast('✅ বিভাগ তালিকা সেভ হয়েছে — সাইটে লাইভ!','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); }
+        showToast('বিভাগ তালিকা সেভ হয়েছে — সাইটে লাইভ!','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ: '+e.message,'#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════
@@ -4496,8 +4611,8 @@ async function apFixApply(newValue){
     showToast(affected.length+'টা বই আপডেট হচ্ছে...','#0369a1');
     try{
         for(const idx of affected){ await saveBookToFirebase(idx); }
-        showToast('✅ হয়ে গেছে ('+affected.length+'টা বই আপডেট হলো)','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
+        showToast('হয়ে গেছে ('+affected.length+'টা বই আপডেট হলো)','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ: '+e.message,'#dc2626'); return; }
     beUpdateStats(); beRenderList();
     document.getElementById('apFixNewName').value='';
     apFixTypeChanged();
@@ -4536,9 +4651,9 @@ function renderTagList(){
     box.innerHTML=siteTagsData.map(function(name,i){
         return `<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
             <span style="flex:1;font-weight:700;">${escapeHTML(name)}</span>
-            <button class="btn btn-ghost btn-sm" type="button" onclick="moveTag(${i},-1)" ${i===0?'disabled':''}>▲</button>
-            <button class="btn btn-ghost btn-sm" type="button" onclick="moveTag(${i},1)" ${i===siteTagsData.length-1?'disabled':''}>▼</button>
-            <button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" type="button" onclick="removeTag(${i})">✕</button>
+            <button class="btn btn-ghost btn-sm" type="button" onclick="moveTag(${i},-1)" ${i===0?'disabled':''}><i class=gi-up></i></button>
+            <button class="btn btn-ghost btn-sm" type="button" onclick="moveTag(${i},1)" ${i===siteTagsData.length-1?'disabled':''}><i class=gi-down></i></button>
+            <button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" type="button" onclick="removeTag(${i})"><i class=gi-x></i></button>
         </div>`;
     }).join('');
 }
@@ -4560,8 +4675,8 @@ async function saveTags(){
         GK_TAGS = siteTagsData.map(name=>({name}));
         gkRebuildTagNames();
         renderCleanupLists();
-        showToast('✅ ট্যাগ তালিকা সেভ হয়েছে — সাইটে লাইভ!','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+        showToast('ট্যাগ তালিকা সেভ হয়েছে — সাইটে লাইভ!','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ','#dc2626'); }
 }
 
 function beRenderList(){
@@ -4609,15 +4724,15 @@ function beRenderList(){
             <div class="be-head" onclick="beToggleBook(${i})">
                 <div class="be-thumb">${coverHtml}</div>
                 <div class="be-details">
-                    <div class="be-title">${escapeHTML(b.name)}${b.hadiya?` <span style="background:#fef3c7;color:#92400e;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;white-space:nowrap;">🎁 হাদিয়া</span>`:''}${b.preorderDate?` <span style="background:#ffedd5;color:#9a3412;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;white-space:nowrap;">📦 প্রি-অর্ডার</span>`:''}</div>
+                    <div class="be-title">${escapeHTML(b.name)}${b.hadiya?` <span style="background:#fef3c7;color:#92400e;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;white-space:nowrap;"><i class=gi-gift></i> হাদিয়া</span>`:''}${b.preorderDate?` <span style="background:#ffedd5;color:#9a3412;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;white-space:nowrap;"><i class=gi-package></i> প্রি-অর্ডার</span>`:''}</div>
                     <div class="be-meta">${escapeHTML(b.author||'')} · ${escapeHTML(b.pub||'')} · ৳${b.price}</div>
                     <div class="be-status ${hasImg?'ok':'miss'}">${hasImg?'ছবি আছে':'ছবি নেই'}</div>
                 </div>
-                <div class="be-arrow ${isOpen?'open':''}">▼</div>
+                <div class="be-arrow ${isOpen?'open':''}"><i class=gi-down></i></div>
             </div>
             <div class="be-body ${isOpen?'open':''}">${isOpen?beEditorBody(b,i,imgPrevHtml):''}</div>
         </div>`;
-    }).join('') + (remaining>0?`<button class="btn btn-ghost w-full" style="margin-top:10px;" onclick="beShowMore()">⬇️ আরও ${Math.min(remaining,BE_PAGE_SIZE)}টা দেখান (বাকি ${remaining}টা)</button>`:'');
+    }).join('') + (remaining>0?`<button class="btn btn-ghost w-full" style="margin-top:10px;" onclick="beShowMore()"><i class=gi-down></i> আরও ${Math.min(remaining,BE_PAGE_SIZE)}টা দেখান (বাকি ${remaining}টা)</button>`:'');
 }
 
 /* ── FIREBASE SYNC ──
@@ -4698,8 +4813,8 @@ async function migrateDescsToFirebase(){
             db.ref('bookList').set(cleanBooks)
         ]);
 
-        showToast(descCount+'টা বইয়ের desc migrate হয়েছে ✅','#0B6E4F');
-        if(btn){btn.style.background='rgba(0,150,0,0.7)';btn.textContent='✅ Done';}
+        showToast(descCount+'টা বইয়ের desc migrate হয়েছে ','#0B6E4F');
+        if(btn){btn.style.background='rgba(0,150,0,0.7)';btn.textContent='Done';}
 
     }catch(e){
         console.error('Migration error:',e);
@@ -4755,16 +4870,16 @@ function renderHomeCatList(){
     box.innerHTML=homeCatsData.map(function(c,i){
         const thumb=(c.img||'').trim()
             ? '<div style="width:40px;height:40px;border-radius:9px;overflow:hidden;flex-shrink:0;background:#ecfdf5;"><img src="'+escapeHTML(c.img)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'"></div>'
-            : '<div style="width:40px;height:40px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;">🖼️</div>';
+            : '<div style="width:40px;height:40px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;"></div>';
         return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;">'
             +thumb
             +'<span style="flex:1;font-weight:700;min-width:80px;word-break:break-word;">'+escapeHTML(c.name)+'</span>'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeCat('+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeCat('+i+',1)" '+(i===homeCatsData.length-1?'disabled':'')+'>▼</button>'
-            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomeCat('+i+')">✕</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeCat('+i+',-1)" '+(i===0?'disabled':'')+'><i class=gi-up></i></button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeCat('+i+',1)" '+(i===homeCatsData.length-1?'disabled':'')+'><i class=gi-down></i></button>'
+            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomeCat('+i+')"><i class=gi-x></i></button>'
             +'<div style="display:flex;gap:6px;width:100%;margin-top:2px;">'
             +'<input class="form-input" placeholder="ছবির লিংক (URL)" value="'+escapeHTML(c.img||'')+'" oninput="setHomeCatImg('+i+',this.value)" style="flex:1;min-width:0;font-size:12px;">'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'hcRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;">📤</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'hcRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;"><i class=gi-upload></i></button>'
             +'<input type="file" id="hcRowFile_'+i+'" accept="image/*" style="display:none;" onchange="hcUploadRowImg('+i+',this)">'
             +'</div>'
             +'</div>';
@@ -4788,8 +4903,8 @@ function moveHomeCat(i,dir){ const j=i+dir; if(j<0||j>=homeCatsData.length)retur
 async function saveHomeCats(){
     try{
         await db.ref('siteConfig/homeCats').set(homeCatsData);
-        showToast('✅ হোমপেজ ক্যাটাগরি সেভ হয়েছে — লাইভ!','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+        showToast('হোমপেজ ক্যাটাগরি সেভ হয়েছে — লাইভ!','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ','#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════
@@ -4829,7 +4944,7 @@ function renderCatCardsAdmin(){
             const bk=ccBookThumb(s.bid);
             const thumb=bk&&bk.img
                 ? '<img src="'+escapeHTML(bk.img)+'" style="width:100%;height:100%;object-fit:contain;">'
-                : '<span style="font-size:18px;">📖</span>';
+                : '<span style="font-size:18px;"><i class=gi-book-open></i></span>';
             const pickedName=bk?bk.name:'';
             /* বিষয় এখন ড্রপডাউন থেকে বাছতে হবে (বিদ্যমান তালিকা থেকে) —
                ফ্রি-টেক্সট লিখলে বানান/টাইপো ভিন্ন হয়ে ফিল্টার কাজ করত না */
@@ -4850,9 +4965,9 @@ function renderCatCardsAdmin(){
                 +'<input class="form-input" style="font-size:12px;" placeholder="'+(pickedName?escapeHTML(pickedName):'কভারের জন্য একটা বই খুঁজুন...')+'" oninput="ccSearchBooks('+ci+','+si+',this.value)" onfocus="ccSearchBooks('+ci+','+si+',this.value)" onblur="ccHideRes('+ci+','+si+')">'
                 +'<div class="cc-search-res" id="ccRes_'+ci+'_'+si+'" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--card,#fff);border:1px solid var(--border);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.15);max-height:220px;overflow-y:auto;z-index:20;"></div>'
                 +'</div>'
-                +(s.bid?'<button class="btn btn-ghost btn-sm" type="button" onclick="ccClearBid('+ci+','+si+')" title="বাদ দিন">✕</button>':'')
-                +'<button class="btn btn-sm" type="button" style="background:#ecfdf5;color:#059669;border:1px solid #a7f3d0;white-space:nowrap;" onclick="ccJumpToSubTag('+ci+','+si+')" title="এই বিষয়ে একসাথে অনেক বই ট্যাগ করুন">🏷️ বই ট্যাগ করুন</button>'
-                +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" type="button" onclick="ccRemoveTile('+ci+','+si+')" title="টাইল মুছুন">🗑️</button>'
+                +(s.bid?'<button class="btn btn-ghost btn-sm" type="button" onclick="ccClearBid('+ci+','+si+')" title="বাদ দিন"><i class=gi-x></i></button>':'')
+                +'<button class="btn btn-sm" type="button" style="background:#ecfdf5;color:#059669;border:1px solid #a7f3d0;white-space:nowrap;" onclick="ccJumpToSubTag('+ci+','+si+')" title="এই বিষয়ে একসাথে অনেক বই ট্যাগ করুন"><i class=gi-tag></i> বই ট্যাগ করুন</button>'
+                +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" type="button" onclick="ccRemoveTile('+ci+','+si+')" title="টাইল মুছুন"><i class=gi-trash></i></button>'
                 +'</div>';
         }).join('');
         return '<div style="border:1.5px dashed var(--border);border-radius:10px;padding:12px;margin-bottom:12px;">'
@@ -4877,7 +4992,7 @@ function ccOnLabelSelect(ci,si,val){
 function ccAddTile(ci){ if(catCardsData[ci]&&catCardsData[ci].subs.length<4){ catCardsData[ci].subs.push({label:'',bid:''}); renderCatCardsAdmin(); } }
 function ccRemoveTile(ci,si){ if(catCardsData[ci]){ catCardsData[ci].subs.splice(si,1); renderCatCardsAdmin(); } }
 function ccClearBid(ci,si){ if(catCardsData[ci]&&catCardsData[ci].subs[si]){ catCardsData[ci].subs[si].bid=''; renderCatCardsAdmin(); } }
-/* "🏷️ বই ট্যাগ করুন" বাটন — নিচের "বিষয় অনুযায়ী বই ট্যাগ করুন" টুলে
+/* "<i class=gi-tag></i> বই ট্যাগ করুন" বাটন — নিচের "বিষয় অনুযায়ী বই ট্যাগ করুন" টুলে
    এই বিভাগ+বিষয় আগে থেকেই বাছাই করে সরাসরি নিয়ে যায়, যাতে আলাদা করে
    আবার বিভাগ/বিষয় খুঁজে বাছতে না হয় */
 function ccJumpToSubTag(ci,si){
@@ -4903,7 +5018,7 @@ function ccSearchBooks(ci,si,q){
     const matches=(localBooks||[]).filter(function(b){ return b&&b.name&&b.name.normalize('NFC').toLowerCase().includes(q); }).slice(0,8);
     if(!matches.length){ box.innerHTML='<div style="padding:8px;font-size:12px;color:var(--text-muted);">কিছু পাওয়া যায়নি</div>'; box.style.display='block'; return; }
     box.innerHTML=matches.map(function(b){
-        const thumb=b.img?'<img src="'+escapeHTML(b.img)+'" style="width:28px;height:28px;object-fit:cover;border-radius:5px;">':'<span style="font-size:14px;">📖</span>';
+        const thumb=b.img?'<img src="'+escapeHTML(b.img)+'" style="width:28px;height:28px;object-fit:cover;border-radius:5px;">':'<span style="font-size:14px;"><i class=gi-book-open></i></span>';
         return '<div style="display:flex;align-items:center;gap:8px;padding:7px 9px;cursor:pointer;border-bottom:1px solid var(--border);font-size:12px;" onmousedown="ccPickBook('+ci+','+si+',\''+b.bid.replace(/'/g,"\\'")+'\')">'+thumb+'<span style="flex:1;">'+escapeHTML(b.name)+'</span></div>';
     }).join('');
     box.style.display='block';
@@ -4915,8 +5030,8 @@ function ccPickBook(ci,si,bid){
 async function saveCatCards(){
     try{
         await db.ref('siteConfig/catCards').set(catCardsData);
-        showToast('✅ ক্যাটাগরি কার্ড সেভ হয়েছে — লাইভ!','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+        showToast('ক্যাটাগরি কার্ড সেভ হয়েছে — লাইভ!','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ','#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════
@@ -4953,9 +5068,9 @@ function renderSubTagPanel(){
         +'</select>'
         +'<input class="form-input" placeholder="অথবা নতুন বিষয় লিখুন" style="flex:1;min-width:150px;" oninput="subTagNewSub(this.value)">'
         +'</div>'
-        +'<input class="form-input" placeholder="🔍 এই বিভাগে বই খুঁজুন..." style="margin-bottom:10px;" oninput="subTagSearch(this.value)">'
+        +'<input class="form-input" placeholder="এই বিভাগে বই খুঁজুন..." style="margin-bottom:10px;" oninput="subTagSearch(this.value)">'
         +'<div id="subTagBookList" style="max-height:340px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;"></div>'
-        +'<button class="btn btn-primary w-full" style="margin-top:10px;" type="button" onclick="subTagApply()">✅ বাছাই করা বইগুলোতে এই বিষয় বসান</button>';
+        +'<button class="btn btn-primary w-full" style="margin-top:10px;" type="button" onclick="subTagApply()"><i class=gi-ok></i> বাছাই করা বইগুলোতে এই বিষয় বসান</button>';
     renderSubTagBookList();
 }
 function renderSubTagBookList(){
@@ -4987,7 +5102,7 @@ function subTagApply(){
         else { if(localBooks[idx].subject===subTagSub){ localBooks[idx].subject=''; n++; } }
     });
     if(typeof beUpdateStats==='function') beUpdateStats();
-    showToast('✅ '+n+'টি বইয়ে বিষয় বসানো হয়েছে — এখন নিচে "Firebase Sync"-এ "সব সেভ করুন" চাপুন','#059669');
+    showToast(''+n+'টি বইয়ে বিষয় বসানো হয়েছে — এখন নিচে "Firebase Sync"-এ "সব সেভ করুন" চাপুন','#059669');
     renderSubTagBookList();
 }
 
@@ -5018,16 +5133,16 @@ function renderHomePubList(){
     box.innerHTML=homePubsData.map(function(p,i){
         const thumb=(p.img||'').trim()
             ? '<div style="width:40px;height:40px;border-radius:9px;overflow:hidden;flex-shrink:0;background:#ecfdf5;"><img src="'+escapeHTML(p.img)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'"></div>'
-            : '<div style="width:40px;height:40px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;">🏢</div>';
+            : '<div style="width:40px;height:40px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;"></div>';
         return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;">'
             +thumb
             +'<span style="flex:1;font-weight:700;min-width:80px;word-break:break-word;">'+escapeHTML(p.name)+'</span>'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomePub('+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomePub('+i+',1)" '+(i===homePubsData.length-1?'disabled':'')+'>▼</button>'
-            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomePub('+i+')">✕</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomePub('+i+',-1)" '+(i===0?'disabled':'')+'><i class=gi-up></i></button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomePub('+i+',1)" '+(i===homePubsData.length-1?'disabled':'')+'><i class=gi-down></i></button>'
+            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomePub('+i+')"><i class=gi-x></i></button>'
             +'<div style="display:flex;gap:6px;width:100%;margin-top:2px;">'
             +'<input class="form-input" placeholder="লোগোর লিংক (URL)" value="'+escapeHTML(p.img||'')+'" oninput="setHomePubImg('+i+',this.value)" style="flex:1;min-width:0;font-size:12px;">'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'hpRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;">📤</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'hpRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;"><i class=gi-upload></i></button>'
             +'<input type="file" id="hpRowFile_'+i+'" accept="image/*" style="display:none;" onchange="hpUploadRowImg('+i+',this)">'
             +'</div>'
             +'</div>';
@@ -5051,8 +5166,8 @@ function moveHomePub(i,dir){ const j=i+dir; if(j<0||j>=homePubsData.length)retur
 async function saveHomePubs(){
     try{
         await db.ref('siteConfig/homePubs').set(homePubsData);
-        showToast('✅ হোমপেজ প্রকাশনী চিপ সেভ হয়েছে — লাইভ!','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+        showToast('হোমপেজ প্রকাশনী চিপ সেভ হয়েছে — লাইভ!','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ','#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════
@@ -5073,16 +5188,16 @@ function renderHomeAuthorList(){
     box.innerHTML=homeAuthorsData.map(function(a,i){
         const thumb=(a.img||'').trim()
             ? '<div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#ecfdf5;"><img src="'+escapeHTML(a.img)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'"></div>'
-            : '<div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;">✍️</div>';
+            : '<div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;"></div>';
         return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;">'
             +thumb
             +'<span style="flex:1;font-weight:700;min-width:80px;word-break:break-word;">'+escapeHTML(a.name)+'</span>'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeAuthor('+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeAuthor('+i+',1)" '+(i===homeAuthorsData.length-1?'disabled':'')+'>▼</button>'
-            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomeAuthor('+i+')">✕</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeAuthor('+i+',-1)" '+(i===0?'disabled':'')+'><i class=gi-up></i></button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeAuthor('+i+',1)" '+(i===homeAuthorsData.length-1?'disabled':'')+'><i class=gi-down></i></button>'
+            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomeAuthor('+i+')"><i class=gi-x></i></button>'
             +'<div style="display:flex;gap:6px;width:100%;margin-top:2px;">'
             +'<input class="form-input" placeholder="লেখকের ছবির লিংক (URL)" value="'+escapeHTML(a.img||'')+'" oninput="setHomeAuthorImg('+i+',this.value)" style="flex:1;min-width:0;font-size:12px;">'
-            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'haRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;">📤</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'haRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;"><i class=gi-upload></i></button>'
             +'<input type="file" id="haRowFile_'+i+'" accept="image/*" style="display:none;" onchange="haUploadRowImg('+i+',this)">'
             +'</div>'
             +'</div>';
@@ -5106,8 +5221,8 @@ function moveHomeAuthor(i,dir){ const j=i+dir; if(j<0||j>=homeAuthorsData.length
 async function saveHomeAuthors(){
     try{
         await db.ref('siteConfig/homeAuthors').set(homeAuthorsData);
-        showToast('✅ হোমপেজ লেখক চিপ সেভ হয়েছে — লাইভ!','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+        showToast('হোমপেজ লেখক চিপ সেভ হয়েছে — লাইভ!','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ','#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════
@@ -5144,9 +5259,9 @@ function renderBannerList(){
                 <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(b.subtitle||b.img||'')}</div>
             </div>
             <div style="display:flex;gap:4px;flex-shrink:0;">
-                <button class="btn btn-sm btn-ghost" onclick="moveBanner(${i},-1)" ${i===0?'disabled':''} title="উপরে">▲</button>
-                <button class="btn btn-sm btn-ghost" onclick="moveBanner(${i},1)" ${i===bannerData.length-1?'disabled':''} title="নিচে">▼</button>
-                <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="removeBanner(${i})" title="মুছুন">✕</button>
+                <button class="btn btn-sm btn-ghost" onclick="moveBanner(${i},-1)" ${i===0?'disabled':''} title="উপরে"><i class=gi-up></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="moveBanner(${i},1)" ${i===bannerData.length-1?'disabled':''} title="নিচে"><i class=gi-down></i></button>
+                <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="removeBanner(${i})" title="মুছুন"><i class=gi-x></i></button>
             </div>
         </div>`).join('');
 }
@@ -5174,9 +5289,9 @@ async function saveBanners(){
         /* খালি array Firebase-এ থাকে না — তাই সব মুছলে {none:true} sentinel সেভ হয়,
            সাইট তখন ব্যানার সেকশন লুকিয়ে রাখে (ডিফল্টে ফিরে যায় না) */
         await db.ref('banners').set(bannerData.length ? bannerData : {none:true});
-        showToast(bannerData.length ? '✅ ব্যানার সেভ হয়েছে — হোমপেজে লাইভ!' : '✅ সেভ হয়েছে — সাইটে ব্যানার সেকশন লুকানো থাকবে','#059669');
+        showToast(bannerData.length ? 'ব্যানার সেভ হয়েছে — হোমপেজে লাইভ!' : 'সেভ হয়েছে — সাইটে ব্যানার সেকশন লুকানো থাকবে','#059669');
     }catch(e){
-        showToast('❌ সেভ ব্যর্থ — আবার চেষ্টা করুন','#dc2626');
+        showToast('সেভ ব্যর্থ — আবার চেষ্টা করুন','#dc2626');
     }
 }
 
@@ -5193,8 +5308,8 @@ function loadCouponsAdmin(){
 function couponAdminLabel(c){
     /* পুরনো {discount:N} = % ছাড়; নতুন {type,value} */
     if(typeof c.discount==='number') return c.discount+'% ছাড়';
-    if(c.type==='delivery') return '🚚 ফ্রি ডেলিভারি';
-    if(c.type==='delivery_fixed') return '🚚 ডেলিভারি ৳'+(c.value||0);
+    if(c.type==='delivery') return '<i class=gi-truck></i> ফ্রি ডেলিভারি';
+    if(c.type==='delivery_fixed') return '<i class=gi-truck></i> ডেলিভারি ৳'+(c.value||0);
     if(c.type==='taka') return '৳'+(c.value||0)+' ছাড়';
     return (c.value||0)+'% ছাড়';
 }
@@ -5217,8 +5332,8 @@ function renderCouponList(){
         return `<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface);flex-wrap:wrap;">
             <b style="flex:1;min-width:90px;">${escapeHTML(code)}</b>
             <span style="font-weight:700;color:#059669;">${couponAdminLabel(c)}</span>
-            <button class="btn btn-sm btn-ghost" onclick="toggleCoupon('${escapeHTML(code)}')" title="চালু/বন্ধ">${active?'🟢 চালু':'⚪ বন্ধ'}</button>
-            <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteCoupon('${escapeHTML(code)}')" title="মুছুন">✕</button>
+            <button class="btn btn-sm btn-ghost" onclick="toggleCoupon('${escapeHTML(code)}')" title="চালু/বন্ধ">${active?'<i class=gi-dot></i> চালু':'<i class=gi-dot-o></i> বন্ধ'}</button>
+            <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteCoupon('${escapeHTML(code)}')" title="মুছুন"><i class=gi-x></i></button>
         </div>`;
     }).join('');
     box.innerHTML=html;
@@ -5238,16 +5353,16 @@ async function addCoupon(){
         couponData[code]=data;
         document.getElementById('cpnCode').value='';document.getElementById('cpnPct').value='';
         renderCouponList();
-        showToast('✅ কুপন যোগ হয়েছে — সাইটে লাইভ!','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+        showToast('কুপন যোগ হয়েছে — সাইটে লাইভ!','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ','#dc2626'); }
 }
 async function toggleCoupon(code){
     const c=couponData[code]||{}; const na=!(c.active!==false);
-    try{ await db.ref('coupons/'+code+'/active').set(na); couponData[code].active=na; renderCouponList(); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
+    try{ await db.ref('coupons/'+code+'/active').set(na); couponData[code].active=na; renderCouponList(); }catch(e){ showToast('ব্যর্থ','#dc2626'); }
 }
 async function deleteCoupon(code){
     if(!confirm(code+' কুপনটি মুছবেন?'))return;
-    try{ await db.ref('coupons/'+code).remove(); delete couponData[code]; renderCouponList(); showToast('🗑️ কুপন মুছে ফেলা হয়েছে','#6b7280'); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
+    try{ await db.ref('coupons/'+code).remove(); delete couponData[code]; renderCouponList(); showToast('কুপন মুছে ফেলা হয়েছে','#6b7280'); }catch(e){ showToast('ব্যর্থ','#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════
@@ -5288,9 +5403,9 @@ function renderOfferPopupList(){
                     <input class="form-input" style="font-size:12px;padding:6px 8px;" placeholder="লিংক (ঐচ্ছিক) — ক্লিক করলে কোথায় যাবে" value="${escapeHTML(p.link||'')}" oninput="updateOfferPopupField(${i},'link',this.value)">
                 </div>
                 <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
-                    <button class="btn btn-sm btn-ghost" onclick="moveOfferPopup(${i},-1)" ${i===0?'disabled':''} title="উপরে">▲</button>
-                    <button class="btn btn-sm btn-ghost" onclick="moveOfferPopup(${i},1)" ${i===list.length-1?'disabled':''} title="নিচে">▼</button>
-                    <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="removeOfferPopup(${i})" title="মুছুন">✕</button>
+                    <button class="btn btn-sm btn-ghost" onclick="moveOfferPopup(${i},-1)" ${i===0?'disabled':''} title="উপরে"><i class=gi-up></i></button>
+                    <button class="btn btn-sm btn-ghost" onclick="moveOfferPopup(${i},1)" ${i===list.length-1?'disabled':''} title="নিচে"><i class=gi-down></i></button>
+                    <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="removeOfferPopup(${i})" title="মুছুন"><i class=gi-x></i></button>
                 </div>
             </div>`).join('');
     }
@@ -5331,8 +5446,8 @@ async function saveOfferPopup(){
     const data={ enabled, posters: offerPopupData.posters };
     try{
         await db.ref('siteConfig/offerPopups').set(data);
-        showToast('✅ অফার পোস্টার সেভ হয়েছে — সাইটে লাইভ!','#059669');
-    }catch(e){showToast('❌ সেভ ব্যর্থ','#dc2626');}
+        showToast('অফার পোস্টার সেভ হয়েছে — সাইটে লাইভ!','#059669');
+    }catch(e){showToast('সেভ ব্যর্থ','#dc2626');}
 }
 function ofPopUploadImg(inp){
     const f=inp.files[0]; inp.value='';
@@ -5362,8 +5477,8 @@ async function saveBlogTopic(){
     const topic=(document.getElementById('blogTopicInput').value||'').trim();
     try{
         await db.ref('siteConfig/blogTopic').set(topic);
-        showToast(topic?'✅ বিষয় সেভ হয়েছে — সাইটে লাইভ!':'✅ বিষয় মুছে ফেলা হয়েছে','#059669');
-    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+        showToast(topic?'বিষয় সেভ হয়েছে — সাইটে লাইভ!':'বিষয় মুছে ফেলা হয়েছে','#059669');
+    }catch(e){ showToast('সেভ ব্যর্থ','#dc2626'); }
 }
 function renderBlogSubs(){
     const box=document.getElementById('blogSubList'); if(!box)return;
@@ -5376,13 +5491,13 @@ function renderBlogSubs(){
             <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;flex-wrap:wrap;">
                 <div style="flex:1;min-width:150px;">
                     <div style="font-size:13px;font-weight:700;color:var(--text-main);">${escapeHTML(s.title||'(শিরোনামহীন)')}</div>
-                    <div style="font-size:11px;color:var(--text-muted);">✍️ ${escapeHTML(s.name||'')} · 📱 ${escapeHTML(s.phone||'—')} · ${s.createdAt?new Date(s.createdAt).toLocaleDateString('bn-BD'):''}</div>
+                    <div style="font-size:11px;color:var(--text-muted);"><i class=gi-pen></i> ${escapeHTML(s.name||'')} · <i class=gi-mobile></i> ${escapeHTML(s.phone||'—')} · ${s.createdAt?new Date(s.createdAt).toLocaleDateString('bn-BD'):''}</div>
                 </div>
                 <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;">
-                    <button class="btn btn-sm btn-ghost" onclick="toggleSubView('${id}')">👁️ পড়ুন</button>
-                    <button class="btn btn-sm btn-ghost" onclick="downloadBlogPDFAdmin('sub','${id}',this)">📥 PDF</button>
-                    <button class="btn btn-sm" style="background:#d1fae5;color:#065f46;" onclick="publishBlog('${id}')">✅ প্রকাশ করুন</button>
-                    <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteSubmission('${id}')">✕</button>
+                    <button class="btn btn-sm btn-ghost" onclick="toggleSubView('${id}')"><i class=gi-eye></i> পড়ুন</button>
+                    <button class="btn btn-sm btn-ghost" onclick="downloadBlogPDFAdmin('sub','${id}',this)"><i class=gi-download></i> PDF</button>
+                    <button class="btn btn-sm" style="background:#d1fae5;color:#065f46;" onclick="publishBlog('${id}')"><i class=gi-ok></i> প্রকাশ করুন</button>
+                    <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteSubmission('${id}')"><i class=gi-x></i></button>
                 </div>
             </div>
             <div id="subview-${id}" style="display:none;padding:12px 14px;border-top:1px dashed var(--border);font-size:13px;line-height:1.9;color:var(--text-main);white-space:pre-wrap;background:var(--bg-body);">${escapeHTML(s.content||'')}</div>
@@ -5401,12 +5516,12 @@ function renderBlogPubs(){
         const p=blogPubs[id]||{};
         return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);flex-wrap:wrap;">
             <div style="flex:1;min-width:150px;">
-                <div style="font-size:13px;font-weight:700;color:var(--text-main);">🏆 ${escapeHTML(p.title||'')}</div>
-                <div style="font-size:11px;color:var(--text-muted);">✍️ ${escapeHTML(p.author||'')} · ${p.publishedAt?new Date(p.publishedAt).toLocaleDateString('bn-BD'):''}</div>
+                <div style="font-size:13px;font-weight:700;color:var(--text-main);"><i class=gi-trophy></i> ${escapeHTML(p.title||'')}</div>
+                <div style="font-size:11px;color:var(--text-muted);"><i class=gi-pen></i> ${escapeHTML(p.author||'')} · ${p.publishedAt?new Date(p.publishedAt).toLocaleDateString('bn-BD'):''}</div>
             </div>
             <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;">
-                <button class="btn btn-sm btn-ghost" onclick="downloadBlogPDFAdmin('pub','${id}',this)">📥 PDF</button>
-                <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deletePublished('${id}')">✕ সরান</button>
+                <button class="btn btn-sm btn-ghost" onclick="downloadBlogPDFAdmin('pub','${id}',this)"><i class=gi-download></i> PDF</button>
+                <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deletePublished('${id}')"><i class=gi-x></i> সরান</button>
             </div>
         </div>`;
     }).join('');
@@ -5418,8 +5533,8 @@ async function downloadBlogPDFAdmin(source, id, btnEl){
     if(typeof html2canvas==='undefined'||!window.jspdf){ showToast('PDF লাইব্রেরি লোড হয়নি — নেট চেক করুন','#dc2626'); return; }
     const orig=btnEl?btnEl.innerHTML:''; if(btnEl){btnEl.disabled=true;btnEl.innerHTML='...';}
     const meta = source==='pub'
-        ? '✍️ '+(data.author||'পাঠক')+(data.publishedAt?' · '+new Date(data.publishedAt).toLocaleDateString('bn-BD'):'')
-        : '✍️ '+(data.name||'পাঠক')+(data.createdAt?' · '+new Date(data.createdAt).toLocaleDateString('bn-BD'):'');
+        ? '<i class=gi-pen></i> '+(data.author||'পাঠক')+(data.publishedAt?' · '+new Date(data.publishedAt).toLocaleDateString('bn-BD'):'')
+        : '<i class=gi-pen></i> '+(data.name||'পাঠক')+(data.createdAt?' · '+new Date(data.createdAt).toLocaleDateString('bn-BD'):'');
     const paras=String(data.content||'').split(/\n+/).filter(x=>x.trim()).map(x=>'<p style="margin-bottom:12px;line-height:1.9;font-size:14px;color:#111;">'+escapeHTML(x)+'</p>').join('');
     const wrap=document.createElement('div');
     wrap.style.cssText='position:fixed;left:-9999px;top:0;width:650px;background:#fff;z-index:-1;padding:30px;font-family:"Hind Siliguri",Arial,sans-serif;color:#111;';
@@ -5477,7 +5592,7 @@ async function downloadBlogPDFAdmin(source, id, btnEl){
         }
         const safeTitle=String(data.title||'blog').replace(/[^ঀ-৿a-zA-Z0-9]+/g,'-').slice(0,50);
         pdf.save('গ্রন্থকানন-'+safeTitle+'.pdf');
-    }catch(e){ showToast('❌ PDF তৈরি হয়নি','#dc2626'); }
+    }catch(e){ showToast('PDF তৈরি হয়নি','#dc2626'); }
     document.body.removeChild(wrap);
     if(btnEl){btnEl.disabled=false;btnEl.innerHTML=orig;}
 }
@@ -5490,16 +5605,16 @@ async function publishBlog(id){
         delete blogSubs[id];
         blogPubs[id]={title:s.title,content:s.content,author:s.name,publishedAt:Date.now()};
         renderBlogSubs();renderBlogPubs();
-        showToast('✅ প্রকাশিত হয়েছে — সাইটে লাইভ! লেখকের নম্বরে হাদিয়ার জন্য যোগাযোগ করুন: '+(s.phone||''),'#059669');
-    }catch(e){ showToast('❌ প্রকাশ ব্যর্থ','#dc2626'); }
+        showToast('প্রকাশিত হয়েছে — সাইটে লাইভ! লেখকের নম্বরে হাদিয়ার জন্য যোগাযোগ করুন: '+(s.phone||''),'#059669');
+    }catch(e){ showToast('প্রকাশ ব্যর্থ','#dc2626'); }
 }
 async function deleteSubmission(id){
     if(!confirm('এই জমা লেখাটি মুছবেন?'))return;
-    try{ await db.ref('blogSubmissions/'+id).remove(); delete blogSubs[id]; renderBlogSubs(); showToast('🗑️ মুছে ফেলা হয়েছে','#6b7280'); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
+    try{ await db.ref('blogSubmissions/'+id).remove(); delete blogSubs[id]; renderBlogSubs(); showToast('মুছে ফেলা হয়েছে','#6b7280'); }catch(e){ showToast('ব্যর্থ','#dc2626'); }
 }
 async function deletePublished(id){
     if(!confirm('প্রকাশিত লেখাটি সাইট থেকে সরাবেন?'))return;
-    try{ await db.ref('publishedBlogs/'+id).remove(); delete blogPubs[id]; renderBlogPubs(); showToast('🗑️ সরানো হয়েছে','#6b7280'); }catch(e){ showToast('❌ ব্যর্থ','#dc2626'); }
+    try{ await db.ref('publishedBlogs/'+id).remove(); delete blogPubs[id]; renderBlogPubs(); showToast('সরানো হয়েছে','#6b7280'); }catch(e){ showToast('ব্যর্থ','#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════
@@ -5522,7 +5637,7 @@ const LP_TEMPLATE_DEFAULTS={
     lp_sub:'সীমিত সময়ের জন্য বইটি বিশেষ ছাড়ে পাচ্ছেন। আজই অর্ডার করে সংগ্রহ করুন, শেষ হয়ে গেলে আর পাবেন না।',
     lp_bullets:'১০০% অরিজিনাল বই\nক্যাশ অন ডেলিভারি সুবিধা\nসারাদেশে হোম ডেলিভারি',
     lp_cta:'এখনই অর্ডার করুন',
-    lp_badge:'✓ সরাসরি প্রকাশনী থেকে সংগ্রহকৃত',
+    lp_badge:'<i class=gi-check></i> সরাসরি প্রকাশনী থেকে সংগ্রহকৃত',
     lp_rating:'4.9',
     lp_soldcount:'৫,০০০+ কাস্টমার সন্তুষ্ট',
     lp_why:'১০০% অরিজিনাল বই | সম্পূর্ণ যাচাইকৃত প্রকাশনী থেকে সংগ্রহ করা হয়\nদ্রুত ডেলিভারি | সারাদেশে ১-৩ কার্যদিবসে পৌঁছে যায়\nক্যাশ অন ডেলিভারি | বই হাতে পেয়ে টাকা দিন, আগে টাকা লাগবে না',
@@ -5562,20 +5677,20 @@ function renderLandingList(){
         const link=SITE_BASE_URL+'/landing.html?slug='+encodeURIComponent(slug);
         return `<div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;">
             <div style="font-weight:700;font-size:13px;margin-bottom:2px;">${escapeHTML(lp.headline||slug)}</div>
-            <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:8px;">📖 ${escapeHTML(lp.bookName||'')}</div>
+            <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:8px;"><i class=gi-book-open></i> ${escapeHTML(lp.bookName||'')}</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
                 <input class="form-input" readonly value="${escapeHTML(link)}" style="flex:1;min-width:160px;font-size:12px;" onclick="this.select()">
-                <button class="btn btn-ghost btn-sm" type="button" onclick="copyLandingLink('${escapeHTML(link)}',this)">📋 কপি</button>
-                <button class="btn btn-ghost btn-sm" type="button" onclick="window.open('${escapeHTML(link)}','_blank')">👁️ দেখুন</button>
-                <button class="btn btn-ghost btn-sm" type="button" style="color:#dc2626;" onclick="deleteLandingPage('${escapeHTML(slug)}')">🗑️ মুছুন</button>
+                <button class="btn btn-ghost btn-sm" type="button" onclick="copyLandingLink('${escapeHTML(link)}',this)"><i class=gi-clipboard></i> কপি</button>
+                <button class="btn btn-ghost btn-sm" type="button" onclick="window.open('${escapeHTML(link)}','_blank')"><i class=gi-eye></i> দেখুন</button>
+                <button class="btn btn-ghost btn-sm" type="button" style="color:#dc2626;" onclick="deleteLandingPage('${escapeHTML(slug)}')"><i class=gi-trash></i> মুছুন</button>
             </div>
         </div>`;
     }).join('');
 }
 function copyLandingLink(link,btnEl){
     navigator.clipboard.writeText(link).then(()=>{
-        showToast('✅ লিংক কপি হয়েছে!','#059669');
-    }).catch(()=>{ showToast('❌ কপি করা যায়নি, নিজে সিলেক্ট করে কপি করুন','#dc2626'); });
+        showToast('লিংক কপি হয়েছে!','#059669');
+    }).catch(()=>{ showToast('কপি করা যায়নি, নিজে সিলেক্ট করে কপি করুন','#dc2626'); });
 }
 /* "অংশ | অংশ | অংশ" — প্রতি লাইনে পাইপ (|) দিয়ে আলাদা করা তথ্য থেকে অবজেক্ট বানায় */
 function parsePipeLines(text, fields){
@@ -5621,8 +5736,8 @@ async function saveLandingPage(){
         renderLandingList();
         ['lp_headline','lp_sub','lp_img','lp_bullets','lp_deadline','lp_why','lp_faq','lp_reviews','lp_badge','lp_rating','lp_soldcount','lp_youtube','lp_different','lp_benefits','lp_gallery'].forEach(id=>{const el=g(id);if(el)el.value='';});
         lpFillTemplateDefaults(); /* পরের বার নতুন পেজ বানাতে গেলে ফর্মটা আবার উদাহরণ ভরা থাকবে */
-        showToast('✅ ল্যান্ডিং পেজ তৈরি হয়েছে! লিংক কপি করে ব্যবহার করুন।','#059669');
-    }catch(e){ showToast('❌ সেভ করা যায়নি: '+e.message,'#dc2626'); }
+        showToast('ল্যান্ডিং পেজ তৈরি হয়েছে! লিংক কপি করে ব্যবহার করুন।','#059669');
+    }catch(e){ showToast('সেভ করা যায়নি: '+e.message,'#dc2626'); }
 }
 async function deleteLandingPage(slug){
     if(!confirm('এই ল্যান্ডিং পেজটি মুছে ফেলবেন?')) return;
@@ -5630,8 +5745,8 @@ async function deleteLandingPage(slug){
         await db.ref('siteConfig/landingPages/'+slug).remove();
         delete landingPages[slug];
         renderLandingList();
-        showToast('🗑️ মুছে ফেলা হয়েছে','#6b7280');
-    }catch(e){ showToast('❌ মুছা যায়নি: '+e.message,'#dc2626'); }
+        showToast('মুছে ফেলা হয়েছে','#6b7280');
+    }catch(e){ showToast('মুছা যায়নি: '+e.message,'#dc2626'); }
 }
 
 /* ── DOWNLOAD sitemap.xml ── */
@@ -5700,12 +5815,6 @@ function downloadBookJs(){
     const verLine=`/* bookList ভার্সন — অ্যাডমিন প্যানেল থেকে আপনাআপনি বসে, হাতে বদলাবেন না */\nvar GK_BOOKS_VER = ${JSON.stringify(GK_ADMIN_BOOKVER)};\n`;
     const bookJsCode=verLine+`const books = [\n${lines.join(',\n')}\n];`+fallback;
 
-    /* ── book-desc.js (শুধু desc, bid key দিয়ে) ── */
-    const descLines=src
-        .filter(b=>b.desc&&b.desc.trim())
-        .map(b=>`  "${esc(b.bid||b.name)}": "${esc(b.desc)}"`);
-    const descJsCode=`/* গ্রন্থকানন — বইয়ের বিবরণ\n   শুধু book.html (ডিটেইল পেজ) লোড করে */\nconst bookDescs = {\n${descLines.join(',\n')}\n};\n`;
-
     /* ── দুটো ফাইল download ── */
     function dlBlob(code, filename){
         const blob=new Blob([code],{type:'text/javascript;charset=utf-8'});
@@ -5715,8 +5824,38 @@ function downloadBookJs(){
         setTimeout(()=>URL.revokeObjectURL(url), 1000);
     }
     dlBlob(bookJsCode,'book.js');
-    setTimeout(()=>dlBlob(descJsCode,'book-desc.js'), 500);
-    showToast('book.js + book-desc.js ডাউনলোড হচ্ছে...','#0B6E4F');
+    showToast('book.js ডাউনলোড হচ্ছে... বিবরণ (book-desc.js) জোড়া হচ্ছে','#0B6E4F');
+
+    /* ── book-desc.js — বইয়ের বিবরণ বই-তালিকায় থাকে না (আলাদা রাখা হয়), তাই আগে শুধু তালিকা
+       থেকে বানাতে গিয়ে ফাইলটা পুরো খালি আসত। এখন তিন জায়গা মিলিয়ে বানাই:
+       ১) সাইটে এখন যে book-desc.js আছে  ২) Firebase-এ পরে লেখা/বদলানো বিবরণ  ৩) এই পেজে খোলা বইয়ের বিবরণ
+       (পরেরটা আগেরটার উপর বসে)। কিছুই না পেলে খালি ফাইল দিই না — পুরনো ফাইলই রেখে দিতে বলি। ── */
+    (async ()=>{
+        const PH='শীঘ্রই আপডেট করা হবে';
+        const map={};
+        let fromSite=0, fromFb=0, fromPage=0, siteOk=false;
+        try{
+            const t=await (await fetch('book-desc.js?nc='+Date.now(),{cache:'no-store'})).text();
+            const old=new Function(t+'\n;return (typeof bookDescs!=="undefined")?bookDescs:{};')();
+            Object.keys(old||{}).forEach(k=>{ const v=old[k]; if(v&&String(v).trim()&&v!==PH){ map[k]=String(v); fromSite++; } });
+            siteOk=true;
+        }catch(e){ console.warn('পুরনো book-desc.js পড়া যায়নি',e); }
+        try{
+            const snap=await db.ref('bookDescs').once('value');
+            const fb=snap.val()||{};
+            Object.keys(fb).forEach(k=>{ const v=fb[k]; if(typeof v==='string'&&v.trim()&&v!==PH){ map[k]=v; fromFb++; } });
+        }catch(e){ console.warn('Firebase bookDescs পড়া যায়নি',e); }
+        src.forEach(b=>{ if(b&&b.desc&&String(b.desc).trim()&&b.desc!==PH){ map[b.bid||b.name]=String(b.desc); fromPage++; } });
+        const keys=Object.keys(map);
+        if(!keys.length||!siteOk){
+            alert('বইয়ের বিবরণ (book-desc.js) ঠিকমতো জোড়া যায়নি — নতুন book-desc.js ডাউনলোড করা হলো না।\n\nসাইটের পুরনো book-desc.js যেমন আছে তেমনই রেখে দিন, শুধু book.js আপলোড করুন।');
+            return;
+        }
+        const descLines=keys.map(k=>`  "${esc(k)}": "${esc(map[k])}"`);
+        const descJsCode=`/* গ্রন্থকানন — বইয়ের বিবরণ\n   শুধু book.html (ডিটেইল পেজ) লোড করে */\nconst bookDescs = {\n${descLines.join(',\n')}\n};\n`;
+        dlBlob(descJsCode,'book-desc.js');
+        showToast(`book-desc.js ডাউনলোড হচ্ছে — ${keys.length}টি বইয়ের বিবরণ`,'#0B6E4F');
+    })();
 }
 
 /* ══════════════════════════════════════════════
@@ -5746,7 +5885,7 @@ function handleBulkFile(inputEl){
             const ws=wb.Sheets[wb.SheetNames[0]];
             const rows=XLSX.utils.sheet_to_json(ws,{defval:''});
             parseBulkRows(rows);
-        }catch(err){ showToast('❌ ফাইল পড়া যায়নি — টেমপ্লেট ফরম্যাট মিলিয়ে দেখুন','#dc2626'); }
+        }catch(err){ showToast('ফাইল পড়া যায়নি — টেমপ্লেট ফরম্যাট মিলিয়ে দেখুন','#dc2626'); }
     };
     reader.readAsArrayBuffer(file);
 }
@@ -5800,18 +5939,18 @@ function renderBulkPreview(){
               <td style="padding:6px 8px;">${r.rowNum}</td>
               <td style="padding:6px 8px;">${escapeHTML(r.book.name||'(খালি)')}</td>
               <td style="padding:6px 8px;">৳${r.book.price||0}</td>
-              <td style="padding:6px 8px;${r.errors.length?'color:#dc2626;':'color:#059669;'}">${r.errors.length?'❌ '+r.errors.join(', '):'✅ ঠিক আছে'}</td>
+              <td style="padding:6px 8px;${r.errors.length?'color:#dc2626;':'color:#059669;'}">${r.errors.length?'<i class=gi-no></i> '+r.errors.join(', '):'<i class=gi-ok></i> ঠিক আছে'}</td>
             </tr>`).join('')}</tbody>
         </table>
       </div>
-      <button class="btn btn-primary w-full" style="margin-top:12px;" onclick="confirmBulkUpload()" ${validCount?'':'disabled'}>⬆️ ${validCount}টা বই আপলোড করুন</button>
+      <button class="btn btn-primary w-full" style="margin-top:12px;" onclick="confirmBulkUpload()" ${validCount?'':'disabled'}><i class=gi-up></i> ${validCount}টা বই আপলোড করুন</button>
     `;
 }
 async function confirmBulkUpload(){
     const validRows=bulkUploadRows.filter(r=>!r.errors.length);
     if(!validRows.length) return;
     if(!confirm(validRows.length+'টা বই একসাথে Firebase-এ যোগ করবেন?')) return;
-    showToast('⏳ আপলোড হচ্ছে... ('+validRows.length+'টা বই)','#0369a1');
+    showToast('আপলোড হচ্ছে... ('+validRows.length+'টা বই)','#0369a1');
     const startIdx=localBooks.length;
     validRows.forEach((r,i)=>{ localBooks[startIdx+i]=r.book; });
     try{
@@ -5819,12 +5958,12 @@ async function confirmBulkUpload(){
         const updates={};
         validRows.forEach((r,i)=>{ updates['bookList/'+(startIdx+i)]=localBooks[startIdx+i]; });
         await db.ref().update(updates); // একবারেই সব বই — একাধিক আলাদা রাইট না করে
-        showToast('✅ '+validRows.length+'টা বই সফলভাবে যোগ হয়েছে!','#059669');
+        showToast(''+validRows.length+'টা বই সফলভাবে যোগ হয়েছে!','#059669');
         bulkUploadRows=[];
         const box=document.getElementById('bulkPreviewBox'); if(box){box.style.display='none';box.innerHTML='';}
         const inp=document.getElementById('bulkFileInput'); if(inp)inp.value='';
         beUpdateStats(); beRenderList();
-    }catch(e){ showToast('❌ আপলোড ব্যর্থ: '+e.message,'#dc2626'); }
+    }catch(e){ showToast('আপলোড ব্যর্থ: '+e.message,'#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════
@@ -5879,7 +6018,7 @@ function openModal(orderId){
         const problems=checkOrderPriceMismatch(o);
         if(problems.length){
             pwEl.style.display='block';
-            pwEl.innerHTML='⚠️ <strong>টাকার হিসাবে গরমিল পাওয়া গেছে:</strong><br>'+problems.map(p=>'• '+escapeHTML(p)).join('<br>');
+            pwEl.innerHTML='<i class=gi-warn></i> <strong>টাকার হিসাবে গরমিল পাওয়া গেছে:</strong><br>'+problems.map(p=>'• '+escapeHTML(p)).join('<br>');
         }else{
             pwEl.style.display='none';pwEl.innerHTML='';
         }
@@ -5921,7 +6060,7 @@ async function updateStatusFromModal(){
     if(o&&o.status==='pending'&&status!=='pending'){
         const mismatch=checkOrderPriceMismatch(o);
         if(mismatch.length){
-            const msg='⚠️ এই অর্ডারে দামের গরমিল পাওয়া গেছে:\n\n'+mismatch.join('\n')+'\n\nএরপরও এগোতে চান?';
+            const msg='<i class=gi-warn></i> এই অর্ডারে দামের গরমিল পাওয়া গেছে:\n\n'+mismatch.join('\n')+'\n\nএরপরও এগোতে চান?';
             if(!confirm(msg)) return;
         }
     }
@@ -5969,7 +6108,7 @@ function checkFraudPhone(){
     const raw=inputEl.value.trim();
     if(!raw){showToast('একটা ফোন নম্বর লিখুন','#dc2626');return;}
     const target=normalizePhoneDigits(raw);
-    if(target.length<7){resultEl.innerHTML='<div class="fraud-flag">⚠️ সঠিক ফোন নম্বর দিন</div>';return;}
+    if(target.length<7){resultEl.innerHTML='<div class="fraud-flag"><i class=gi-warn></i> সঠিক ফোন নম্বর দিন</div>';return;}
 
     const matches=allOrders.filter(o=>normalizePhoneDigits(o.phone)===target);
 
@@ -6016,7 +6155,7 @@ function checkFraudPhone(){
             <div class="fraud-stat"><div class="fraud-stat-val" style="color:#d97706;">${pending}</div><div class="fraud-stat-lbl">পেন্ডিং</div></div>
             <div class="fraud-stat"><div class="fraud-stat-val">${completionRate}%</div><div class="fraud-stat-lbl">সম্পন্নের হার</div></div>
         </div>
-        ${flags.length?flags.map(f=>`<div class="fraud-flag">🚩 ${escapeHTML(f)}</div>`).join(''):'<div class="fraud-ok"><svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> কোনো সন্দেহজনক প্যাটার্ন পাওয়া যায়নি।</div>'}
+        ${flags.length?flags.map(f=>`<div class="fraud-flag"><i class=gi-flag></i> ${escapeHTML(f)}</div>`).join(''):'<div class="fraud-ok"><svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> কোনো সন্দেহজনক প্যাটার্ন পাওয়া যায়নি।</div>'}
         <div style="margin-top:12px;">
             <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">অর্ডার করা বইসমূহ (${uniqueBooks.length} ধরনের):</div>
             <div class="nop-books" style="margin:0 0 12px 0;">${escapeHTML(uniqueBooks.join(' · ')||'—')}</div>
@@ -6443,9 +6582,9 @@ function updateCourierTick(sfOk, rdxOk){
     if(!el)return;
     if(!sfOk && !rdxOk){ el.style.display='none'; return; }
     el.style.display='block';
-    el.innerHTML=(sfOk?'<span style="color:#059669;font-weight:700;">✅ Steadfast key সেভ করা আছে</span>':'<span style="color:#b45309;">⚠️ Steadfast key নেই</span>')
+    el.innerHTML=(sfOk?'<span style="color:#059669;font-weight:700;"><i class=gi-ok></i> Steadfast key সেভ করা আছে</span>':'<span style="color:#b45309;"><i class=gi-warn></i> Steadfast key নেই</span>')
         +' &nbsp;·&nbsp; '
-        +(rdxOk?'<span style="color:#059669;font-weight:700;">✅ RedX token সেভ করা আছে</span>':'<span style="color:#b45309;">⚠️ RedX token নেই</span>');
+        +(rdxOk?'<span style="color:#059669;font-weight:700;"><i class=gi-ok></i> RedX token সেভ করা আছে</span>':'<span style="color:#b45309;"><i class=gi-warn></i> RedX token নেই</span>');
 }
 async function loadCourierApiKeys(showUI=false){
     try{
@@ -6675,7 +6814,7 @@ function renderKanban(){
             if(o&&o.status==='pending'&&newStatus!=='pending'){
                 const mismatch=checkOrderPriceMismatch(o);
                 if(mismatch.length){
-                    const msg='⚠️ এই অর্ডারে দামের গরমিল পাওয়া গেছে:\n\n'+mismatch.join('\n')+'\n\nএরপরও এগোতে চান?';
+                    const msg='<i class=gi-warn></i> এই অর্ডারে দামের গরমিল পাওয়া গেছে:\n\n'+mismatch.join('\n')+'\n\nএরপরও এগোতে চান?';
                     if(!confirm(msg)){ kanbanDragId=null; return; }
                 }
             }
@@ -6742,9 +6881,9 @@ function buildInvoiceHTML(o){
                 <div class="invoice-sec-title">গ্রাহক তথ্য</div>
                 <div class="invoice-info-box">
                     <strong>${escapeHTML(o.name)}</strong><br>
-                    📞 ${escapeHTML(o.phone)}<br>
-                    📍 ${escapeHTML(o.address)}
-                    ${o.customerNote?'<br>💬 <strong>নোট:</strong> '+escapeHTML(o.customerNote):''}
+                    <i class=gi-phone></i> ${escapeHTML(o.phone)}<br>
+                    <i class=gi-pin></i> ${escapeHTML(o.address)}
+                    ${o.customerNote?'<br><i class=gi-chat></i> <strong>নোট:</strong> '+escapeHTML(o.customerNote):''}
                 </div>
             </div>
             <div>
@@ -6758,12 +6897,12 @@ function buildInvoiceHTML(o){
         </div>
         <div class="invoice-sec-title">বইয়ের তালিকা</div>
         <div style="margin-bottom:12px;">${renderBookItemsTable(o)}</div>
-        ${o.offers&&o.offers.length?`<div class="invoice-info-box" style="margin-bottom:12px;">🎁 ${o.offers.map(f=>escapeHTML(f.label)).join(', ')}</div>`:''}
+        ${o.offers&&o.offers.length?`<div class="invoice-info-box" style="margin-bottom:12px;"><i class=gi-gift></i> ${o.offers.map(f=>escapeHTML(f.label)).join(', ')}</div>`:''}
         <div class="invoice-total-box">
             <span>মোট পরিমাণ</span>
             <span>${escapeHTML(o.total)}</span>
         </div>
-        ${(o.steadfast&&o.steadfast.trackingCode)||(o.redx&&o.redx.parcelId)?'<div class="invoice-info-box" style="margin-top:12px;text-align:center;font-size:14px;">📦 কুরিয়ার ট্র্যাকিং ('+((o.steadfast&&o.steadfast.trackingCode)?'Steadfast CN#':'RedX Parcel#')+'): <strong>'+escapeHTML((o.steadfast&&o.steadfast.trackingCode)||(o.redx&&o.redx.parcelId))+'</strong></div>':''}<div class="invoice-footer">ধন্যবাদ আপনার ক্রয়ের জন্য · গ্রন্থকানন</div>
+        ${(o.steadfast&&o.steadfast.trackingCode)||(o.redx&&o.redx.parcelId)?'<div class="invoice-info-box" style="margin-top:12px;text-align:center;font-size:14px;"><i class=gi-package></i> কুরিয়ার ট্র্যাকিং ('+((o.steadfast&&o.steadfast.trackingCode)?'Steadfast CN#':'RedX Parcel#')+'): <strong>'+escapeHTML((o.steadfast&&o.steadfast.trackingCode)||(o.redx&&o.redx.parcelId))+'</strong></div>':''}<div class="invoice-footer">ধন্যবাদ আপনার ক্রয়ের জন্য · গ্রন্থকানন</div>
         </div>
     </div>`;
 }
@@ -6784,7 +6923,7 @@ async function downloadInvoicePDF(){
     const o=allOrders.find(x=>x.orderId===modalOrderId);
     if(!o)return;
     if(typeof html2canvas==='undefined'||!window.jspdf){showToast('PDF লাইব্রেরি লোড হয়নি — নেট চেক করুন','#dc2626');return;}
-    showToast('📄 PDF তৈরি হচ্ছে...','#059669');
+    showToast('PDF তৈরি হচ্ছে...','#059669');
     const wrap=document.createElement('div');
     wrap.style.cssText='position:fixed;left:-9999px;top:0;width:620px;background:#fff;z-index:-1;padding:10px;';
     wrap.innerHTML=buildInvoiceHTML(o);
@@ -6797,7 +6936,7 @@ async function downloadInvoicePDF(){
         const W=210, H=Math.min(297,(canvas.height/canvas.width)*210);
         pdf.addImage(imgData,'PNG',0,0,W,H);
         pdf.save('GK-slip-'+o.orderId+'.pdf');
-    }catch(e){showToast('❌ PDF তৈরি হয়নি','#dc2626');}
+    }catch(e){showToast('PDF তৈরি হয়নি','#dc2626');}
     document.body.removeChild(wrap);
 }
 
@@ -6816,7 +6955,7 @@ async function saveOrderTotal(){
         const msg=document.getElementById('totalSavedMsg');
         if(msg){msg.style.display='block';setTimeout(()=>msg.style.display='none',2500);}
         renderOrders();
-    }catch(e){showToast('❌ আপডেট ব্যর্থ','#dc2626');}
+    }catch(e){showToast('আপডেট ব্যর্থ','#dc2626');}
 }
 
 /* ══════════════════════════════════════════════
@@ -6960,8 +7099,8 @@ async function markAllNotifsSeen(){
         await db.ref().update(updates);
         updateNotifBadge(allOrders);
         renderNotifPanel(allOrders);
-        showToast('✅ সব নোটিফিকেশন পঠিত হলো','#0B6E4F');
-    }catch(e){showToast('❌ ব্যর্থ হলো','#dc2626');}
+        showToast('সব নোটিফিকেশন পঠিত হলো','#0B6E4F');
+    }catch(e){showToast('ব্যর্থ হলো','#dc2626');}
 }
 
 async function requestBrowserNotifPermission(){
@@ -6969,7 +7108,7 @@ async function requestBrowserNotifPermission(){
     try{
         const perm=await Notification.requestPermission();
         if(perm==='granted'){
-            showToast('🔔 ব্রাউজার Notification চালু হলো','#0B6E4F');
+            showToast('ব্রাউজার Notification চালু হলো','#0B6E4F');
             const foot=document.getElementById('notifBrowserFoot');
             if(foot)foot.style.display='none';
         }else{
@@ -7024,10 +7163,10 @@ function showNewOrderPopup(o){
                 <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
             </div>
             <div style="flex:1;">
-                <div class="nop-title">🎉 নতুন অর্ডার এসেছে!</div>
+                <div class="nop-title"><i class=gi-party></i> নতুন অর্ডার এসেছে!</div>
                 <div class="nop-sub">${escapeHTML(o.orderId||'')}</div>
             </div>
-            <button class="nop-close" onclick="closeOrderPopup('${id}')">✕</button>
+            <button class="nop-close" onclick="closeOrderPopup('${id}')"><i class=gi-x></i></button>
         </div>
         <div class="nop-body">
             <div class="nop-name">${escapeHTML(o.name||'')}</div>

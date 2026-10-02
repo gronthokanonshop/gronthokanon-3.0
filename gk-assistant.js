@@ -25,26 +25,26 @@
     /* ── প্রশ্নের উত্তর (সাইটের FAQ / ডেলিভারি / রিটার্ন পেজ অনুযায়ী) ── */
     var FAQ = [
         { k: ['ডেলিভারি চার্জ', 'ডেলিভারি খরচ', 'delivery charge', 'shipping', 'charge koto', 'চার্জ কত', 'ডেলিভারি কত'],
-          a: '🚚 <b>ডেলিভারি চার্জ</b><br>• ঢাকার ভেতরে: ৳৬০<br>• ঢাকার আশপাশ (সাভার, আশুলিয়া, কেরানীগঞ্জ ইত্যাদি): ৳৮০<br>• ঢাকার বাইরে সারা দেশে: ৳৯০<br>• অফিস ডেলিভারি (সুন্দরবন কুরিয়ার অফিস থেকে নিলে): মাত্র ৳৫০' },
+          a: '<i class=gi-truck></i> <b>ডেলিভারি চার্জ</b><br>• ঢাকার ভেতরে: ৳৬০<br>• ঢাকার আশপাশ (সাভার, আশুলিয়া, কেরানীগঞ্জ ইত্যাদি): ৳৮০<br>• ঢাকার বাইরে সারা দেশে: ৳৯০<br>• অফিস ডেলিভারি (সুন্দরবন কুরিয়ার অফিস থেকে নিলে): মাত্র ৳৫০' },
         { k: ['কতদিন', 'কত দিন', 'কবে পাব', 'কবে পাবো', 'সময় লাগে', 'কত সময়', 'how long', 'koto din', 'kobe pabo', 'delivery time', 'কয়দিন'],
-          a: '⏱️ <b>ডেলিভারির সময়</b><br>• ঢাকার ভেতরে: ১–২ কার্যদিবস<br>• ঢাকার বাইরে: ৩–৫ কার্যদিবস' },
+          a: '<i class=gi-clock></i> <b>ডেলিভারির সময়</b><br>• ঢাকার ভেতরে: ১–২ কার্যদিবস<br>• ঢাকার বাইরে: ৩–৫ কার্যদিবস' },
         { k: ['রিটার্ন', 'ফেরত', 'বদল', 'এক্সচেঞ্জ', 'return', 'exchange', 'refund', 'ছেঁড়া', 'ভুল বই'],
-          a: '↩️ <b>রিটার্ন নীতি</b><br>• ডেলিভারির ৭ দিনের মধ্যে জানাতে হবে<br>• ভুল বই বা ছাপা/পাতা ত্রুটি থাকলে বিনামূল্যে বদলে দেওয়া হয়<br>• পড়া/ব্যবহৃত বই ফেরত নেওয়া হয় না<br><a href="return.html">বিস্তারিত নীতি →</a>' },
+          a: '<i class=gi-return></i> <b>রিটার্ন নীতি</b><br>• ডেলিভারির ৭ দিনের মধ্যে জানাতে হবে<br>• ভুল বই বা ছাপা/পাতা ত্রুটি থাকলে বিনামূল্যে বদলে দেওয়া হয়<br>• পড়া/ব্যবহৃত বই ফেরত নেওয়া হয় না<br><a href="return.html">বিস্তারিত নীতি →</a>' },
         { k: ['ক্যাশ অন', 'cash on', 'cod', 'পেমেন্ট', 'payment', 'বিকাশ', 'bkash', 'নগদ', 'টাকা কিভাবে', 'টাকা কীভাবে'],
-          a: '💳 <b>পেমেন্ট</b><br>• হোম ডেলিভারিতে <b>ক্যাশ অন ডেলিভারি</b> — বই হাতে পেয়ে টাকা দিন<br>• অফিস ডেলিভারিতে (সুন্দরবন কুরিয়ার) আগে বিকাশে পেমেন্ট করতে হয়' },
+          a: '<i class=gi-card></i> <b>পেমেন্ট</b><br>• হোম ডেলিভারিতে <b>ক্যাশ অন ডেলিভারি</b> — বই হাতে পেয়ে টাকা দিন<br>• অফিস ডেলিভারিতে (সুন্দরবন কুরিয়ার) আগে বিকাশে পেমেন্ট করতে হয়' },
         { k: ['কুপন', 'coupon', 'coupon code', 'promo', 'promo code', 'voucher', 'প্রোমো', 'অফার', 'offer', 'offers', 'ছাড়', 'discount', 'ডিসকাউন্ট', 'উপহার', 'গিফট', 'gift', 'হাদিয়া', 'hadiya'],
           a: function () {
               var t = window.GK_GIFT_THRESHOLD || 1000;
-              return '🎁 <b>অফার</b><br>• প্রথম অর্ডারে কুপন <b>FIRSTORDER</b> দিলে ৫% ছাড়<br>• ৳' + bn(t) + ' বা তার বেশি অর্ডারে উপহার<br>• প্রায় সব বইয়েই মুদ্রিত দামের চেয়ে কম দাম';
+              return '<i class=gi-gift></i> <b>অফার</b><br>• প্রথম অর্ডারে কুপন <b>FIRSTORDER</b> দিলে ৫% ছাড়<br>• ৳' + bn(t) + ' বা তার বেশি অর্ডারে উপহার<br>• প্রায় সব বইয়েই মুদ্রিত দামের চেয়ে কম দাম';
           } },
         { k: ['অরিজিনাল', 'original', 'আসল বই', 'ফটোকপি', 'nokol', 'নকল'],
-          a: '✅ আমরা <b>১০০% অরিজিনাল</b> বই দিই — সরাসরি প্রকাশনী থেকে সংগ্রহ করা।' },
+          a: '<i class=gi-ok></i> আমরা <b>১০০% অরিজিনাল</b> বই দিই — সরাসরি প্রকাশনী থেকে সংগ্রহ করা।' },
         { k: ['কিভাবে অর্ডার', 'কীভাবে অর্ডার', 'অর্ডার করব', 'অর্ডার করবো', 'how to order', 'order korbo', 'কিনব কিভাবে'],
-          a: '🛒 <b>অর্ডার করা খুব সহজ</b><br>১. বই খুঁজে "কার্টে যোগ করুন"<br>২. কার্ট থেকে "অর্ডার করুন"<br>৩. নাম, মোবাইল, ঠিকানা দিয়ে নিশ্চিত করুন<br>চাইলে এখানেই বইয়ের নাম লিখুন, খুঁজে দিচ্ছি।' },
+          a: '<i class=gi-cart></i> <b>অর্ডার করা খুব সহজ</b><br>১. বই খুঁজে "কার্টে যোগ করুন"<br>২. কার্ট থেকে "অর্ডার করুন"<br>৩. নাম, মোবাইল, ঠিকানা দিয়ে নিশ্চিত করুন<br>চাইলে এখানেই বইয়ের নাম লিখুন, খুঁজে দিচ্ছি।' },
         { k: ['দোকান', 'ঠিকানা কোথায়', 'অফিস', 'location', 'কোথায় আপনারা', 'shop'],
-          a: '📍 আমরা অনলাইন বুকশপ (ঢাকা, বাংলাদেশ) — সারা দেশে হোম ডেলিভারি দিই।' },
+          a: '<i class=gi-pin></i> আমরা অনলাইন বুকশপ (ঢাকা, বাংলাদেশ) — সারা দেশে হোম ডেলিভারি দিই।' },
         { k: ['সময়সূচি', 'খোলা', 'কখন খোলা', 'open', 'অফিস টাইম', 'কয়টা'],
-          a: '⏰ শনি–বৃহস্পতি সকাল ৯টা – রাত ১০টা, শুক্রবার বিকাল ৪টা – রাত ১০টা আমরা উত্তর দিই। অর্ডার দেওয়া যায় ২৪ ঘণ্টা।' }
+          a: '<i class=gi-clock></i> শনি–বৃহস্পতি সকাল ৯টা – রাত ১০টা, শুক্রবার বিকাল ৪টা – রাত ১০টা আমরা উত্তর দিই। অর্ডার দেওয়া যায় ২৪ ঘণ্টা।' }
     ];
     var GREET = ['সালাম', 'আসসালামু', 'আস্সালামু', 'assalam', 'assalamu', 'assalamualaikum', 'asalamualaikum', 'aslamualaikum', 'asslamualaikum', 'salam', 'slm', 'alaikum', 'হ্যালো', 'hello', 'hlw', 'hi', 'হাই', 'hey'];
     var THANKS = ['ধন্যবাদ', 'thanks', 'thank you', 'জাযাকাল্লাহ', 'jazakallah', 'শুকরিয়া'];
@@ -129,7 +129,7 @@
         try { if (typeof updateCartUI === 'function') updateCartUI(); } catch (e) {}
         try { if (typeof updateCartCount === 'function') updateCartCount(); } catch (e) {}
         try { if (window.gkCartUpdateUI) gkCartUpdateUI(); } catch (e) {}
-        reply('✅ <b>' + esc(b.name) + '</b> কার্টে যোগ হয়েছে। <a href="checkout.html">অর্ডার করুন →</a>', 250);
+        reply('<i class=gi-ok></i> <b>' + esc(b.name) + '</b> কার্টে যোগ হয়েছে। <a href="checkout.html">অর্ডার করুন →</a>', 250);
     }
 
     function searchBooks(q) {
@@ -141,12 +141,12 @@
     }
     function showBooks(q, found) {
         if (!found.length) {
-            return reply('দুঃখিত, "<b>' + esc(q) + '</b>" নামে কোনো বই পাইনি 😔<br>জানালে আমরা বইটি এনে দিতে পারি।' + humanBox('আসসালামু আলাইকুম, আমি এই বইটি খুঁজছি: ' + q, 'বইটি চেয়ে WhatsApp করুন'));
+            return reply('দুঃখিত, "<b>' + esc(q) + '</b>" নামে কোনো বই পাইনি <i class=gi-frown></i><br>জানালে আমরা বইটি এনে দিতে পারি।' + humanBox('আসসালামু আলাইকুম, আমি এই বইটি খুঁজছি: ' + q, 'বইটি চেয়ে WhatsApp করুন'));
         }
         lastResults = found;
         var top = found.slice(0, 4);
         var more = found.length > 4 ? '<a class="gka-more" href="filter.html?q=' + encodeURIComponent(q) + '" data-q="' + esc(q) + '">আরও ' + bn(found.length - 4) + 'টি বই দেখুন →</a>' : '';
-        return reply('📚 "<b>' + esc(q) + '</b>" — ' + bn(found.length) + 'টি বই পেয়েছি:' + top.map(bookCard).join('') + more, 600);
+        return reply('<i class=gi-books></i> "<b>' + esc(q) + '</b>" — ' + bn(found.length) + 'টি বই পেয়েছি:' + top.map(bookCard).join('') + more, 600);
     }
 
     function fbGet(path) { return fetch(DB + path + '.json').then(function (r) { return r.ok ? r.json() : null; }); }
@@ -161,7 +161,7 @@
         return fbGet('/orders/' + encodeURIComponent(id)).then(function (o) {
             t.remove();
             if (!o) return addMsg('এই ID-তে (<b>' + esc(id) + '</b>) কোনো অর্ডার পাইনি। ID-টা আরেকবার দেখে লিখুন, অথবা অর্ডারের মোবাইল নম্বর দিন।', 'bot');
-            return addMsg('📦 আপনার অর্ডার:' + orderLine(o) + '<a href="track.html">বিস্তারিত ট্র্যাক করুন →</a>', 'bot');
+            return addMsg('<i class=gi-package></i> আপনার অর্ডার:' + orderLine(o) + '<a href="track.html">বিস্তারিত ট্র্যাক করুন →</a>', 'bot');
         }).catch(function () { t.remove(); addMsg('সংযোগে সমস্যা হচ্ছে, একটু পর আবার চেষ্টা করুন।', 'bot'); });
     }
     function trackByPhone(phone) {
@@ -173,7 +173,7 @@
                 t.remove();
                 list = list.filter(Boolean).sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
                 if (!list.length) return addMsg('এই নম্বরে কোনো অর্ডার পাইনি।', 'bot');
-                addMsg('📦 এই নম্বরে ' + bn(list.length) + 'টি অর্ডার' + (list.length > 3 ? ' (সাম্প্রতিক ৩টি)' : '') + ':' + list.slice(0, 3).map(orderLine).join('') + '<a href="track.html">সব অর্ডার দেখুন →</a>', 'bot');
+                addMsg('<i class=gi-package></i> এই নম্বরে ' + bn(list.length) + 'টি অর্ডার' + (list.length > 3 ? ' (সাম্প্রতিক ৩টি)' : '') + ':' + list.slice(0, 3).map(orderLine).join('') + '<a href="track.html">সব অর্ডার দেখুন →</a>', 'bot');
             });
         }).catch(function () { t.remove(); addMsg('সংযোগে সমস্যা হচ্ছে, একটু পর আবার চেষ্টা করুন।', 'bot'); });
     }
@@ -195,7 +195,7 @@
             if (/^[\s\d+\-a-z]{4,}$/i.test(qe) && /\d{3,}/.test(qe)) { awaiting = 'order'; return reply('নম্বরটি ঠিক মনে হচ্ছে না। অর্ডার ID (যেমন <b>GK-AB12CD</b>) অথবা ১১ ডিজিটের মোবাইল নম্বর লিখুন।'); }
         }
 
-        if (has(q, TRACK)) { awaiting = 'order'; return reply('📦 অর্ডার ID (যেমন <b>GK-AB12CD</b>) বা অর্ডারের মোবাইল নম্বর লিখুন — খুঁজে দিচ্ছি।'); }
+        if (has(q, TRACK)) { awaiting = 'order'; return reply('<i class=gi-package></i> অর্ডার ID (যেমন <b>GK-AB12CD</b>) বা অর্ডারের মোবাইল নম্বর লিখুন — খুঁজে দিচ্ছি।'); }
         if (has(q, HUMAN)) return reply('আমাদের টিমের সাথে সরাসরি কথা বলুন:' + humanBox());
         for (var i = 0; i < FAQ.length; i++) {
             if (has(q, FAQ[i].k)) { var a = FAQ[i].a; return reply(typeof a === 'function' ? a() : a); }
@@ -204,8 +204,8 @@
            সালাম বাদ দিয়ে বাকিটা দিয়ে খুঁজি */
         var noGreet = text.replace(/(^|\s)(আস্?সালামু|আসসালামু|আলাইকুম|ওয়া|রাহমাতুল্লাহ|ওয়াবারাকাতুহ|বারাকাতুহ|সালাম|হ্যালো|হাই|a+s+a?lamu?|assalamualaikum|asalamualaikum|aslamualaikum|asslamualaikum|alaikum|wa|rahmatullah|wabarakatuh|barakatuh|salam|slm|hello|hlw|hi|hey|bhai|ভাই|ভাইয়া|apu|আপু)(?=[\s,!।.?]|$)/gi, ' ').replace(/[\s,!।.?]+/g, ' ').trim();
         if (has(q, GREET) && noGreet) text = noGreet;
-        else if (has(q, GREET)) return reply('ওয়ালাইকুমুস সালাম 😊 বলুন, কীভাবে সাহায্য করতে পারি? বইয়ের নাম বা লেখকের নাম লিখলেই খুঁজে দেব।');
-        if (has(q, THANKS)) return reply('আপনাকেও ধন্যবাদ 🌿 আর কিছু লাগলে জানাবেন।');
+        else if (has(q, GREET)) return reply('ওয়ালাইকুমুস সালাম <i class=gi-smile></i> বলুন, কীভাবে সাহায্য করতে পারি? বইয়ের নাম বা লেখকের নাম লিখলেই খুঁজে দেব।');
+        if (has(q, THANKS)) return reply('আপনাকেও ধন্যবাদ <i class=gi-leaf></i> আর কিছু লাগলে জানাবেন।');
 
         /* বাকি সব — বই খোঁজা ("বই" / "chai" / "আছে?" ইত্যাদি বাড়তি শব্দ বাদ দিয়ে) */
         var bq = text.replace(/[?？!।,]+/g, ' ')
@@ -217,12 +217,12 @@
     }
 
     var CHIPS = [
-        ['📚 বই খুঁজুন', function () { awaiting = ''; reply('বইয়ের নাম, লেখক বা বিষয় লিখুন — যেমন <b>আরিফ আজাদ</b>, <b>সীরাত</b>, <b>বেলা ফুরাবার আগে</b>।'); input.focus(); }],
-        ['📦 আমার অর্ডার', function () { handle('আমার অর্ডার'); }],
-        ['🚚 ডেলিভারি চার্জ', function () { handle('ডেলিভারি চার্জ'); }],
-        ['⏱️ কতদিনে পাব', function () { handle('কতদিনে পাব'); }],
-        ['🎁 অফার', function () { handle('অফার'); }],
-        ['↩️ রিটার্ন', function () { handle('রিটার্ন'); }]
+        ['<i class=gi-books></i> বই খুঁজুন', function () { awaiting = ''; reply('বইয়ের নাম, লেখক বা বিষয় লিখুন — যেমন <b>আরিফ আজাদ</b>, <b>সীরাত</b>, <b>বেলা ফুরাবার আগে</b>।'); input.focus(); }],
+        ['<i class=gi-package></i> আমার অর্ডার', function () { handle('আমার অর্ডার'); }],
+        ['<i class=gi-truck></i> ডেলিভারি চার্জ', function () { handle('ডেলিভারি চার্জ'); }],
+        ['<i class=gi-clock></i> কতদিনে পাব', function () { handle('কতদিনে পাব'); }],
+        ['<i class=gi-gift></i> অফার', function () { handle('অফার'); }],
+        ['<i class=gi-return></i> রিটার্ন', function () { handle('রিটার্ন'); }]
     ];
 
     function mount() {
@@ -254,7 +254,7 @@
         chipsBox = wrap.querySelector('.gka-chips');
         CHIPS.forEach(function (c) {
             var b = document.createElement('button');
-            b.type = 'button'; b.className = 'gka-chip'; b.textContent = c[0];
+            b.type = 'button'; b.className = 'gka-chip'; b.innerHTML = c[0];
             b.addEventListener('click', function (e) { e.stopPropagation(); c[1](); });
             chipsBox.appendChild(b);
         });
@@ -274,7 +274,7 @@
                 var si = document.getElementById('searchInput'); si.value = more.dataset.q; si.dispatchEvent(new Event('input'));
             }
         });
-        addMsg('আসসালামু আলাইকুম 👋 আমি <b>গ্রন্থকানন সহকারী</b>।<br>বই খুঁজে দিতে, অর্ডারের খবর জানাতে বা যেকোনো প্রশ্নের উত্তর দিতে পারি।', 'bot');
+        addMsg('আসসালামু আলাইকুম <i class=gi-wave></i> আমি <b>গ্রন্থকানন সহকারী</b>।<br>বই খুঁজে দিতে, অর্ডারের খবর জানাতে বা যেকোনো প্রশ্নের উত্তর দিতে পারি।', 'bot');
         return true;
     }
     function tryMount(n) { if (!mount() && n > 0) setTimeout(function () { tryMount(n - 1); }, 300); }
