@@ -511,7 +511,7 @@ function updateCounts() {
 updateCounts();
 
 function discPct(b) { return b.original_price > b.price ? Math.round((b.original_price - b.price) / b.original_price * 100) : 0; }
-function getImg(b) { return (typeof bookImgs !== 'undefined' && bookImgs[b.name]) || b.img || ''; }
+function getImg(b) { const u = (typeof bookImgs !== 'undefined' && bookImgs[b.name]) || b.img || ''; return window.gkImg ? gkImg(u, 300) : u; }
 function isWL(name) { return wishlist.includes(name); }
 function escapeHTML(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
@@ -532,7 +532,7 @@ function toggleWL(e, name) {
     if (b) openWLModal(adding, b);
 }
 function openWLModal(added, b) {
-    const bImg = (typeof bookImgs !== 'undefined' && bookImgs[b.name]) || b.img || '';
+    const bImg = (window.gkImg || (u => u))((typeof bookImgs !== 'undefined' && bookImgs[b.name]) || b.img || '', 300);
     const inner = document.getElementById('wlModalInner');
     inner.innerHTML = `
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">

@@ -1030,7 +1030,7 @@ function toggleWL(e, name){
 function openWLModal(added, b){
     b=b||curBook;
     if(!b) return;
-    const bImg=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
+    const bImg=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'',200);
     const inner=document.getElementById('wlModalInner');
     inner.innerHTML=`
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
@@ -1089,7 +1089,7 @@ function changeQty(d){
     if(mq.addEventListener)mq.addEventListener('change',place);else if(mq.addListener)mq.addListener(place);
 })();
 function onImgLoad(){document.getElementById('imgSkel').style.display='none';document.getElementById('bookImg').style.display='block';}
-function openImgModal(){const s=document.getElementById('bookImg').src;document.getElementById('modalImg').src=s;document.getElementById('imgModal').classList.add('open');}
+function openImgModal(){const s=document.getElementById('bookImg').src.replace(/(wsrv\.nl\/\?url=[^&]+&w=)600/,'$11000');document.getElementById('modalImg').src=s;document.getElementById('imgModal').classList.add('open');}
 
 /* মাল্টি-ইমেজ গ্যালারি — b.images থাকলেই থাম্বনেইল রো দেখায়, নাহলে আগের মতো একটাই ছবি */
 function gkRenderImgThumbs(b, coverImg){
@@ -1098,12 +1098,12 @@ function gkRenderImgThumbs(b, coverImg){
     const extra=Array.isArray(b.images)?b.images.filter(u=>u&&u.trim()):[];
     const all=[coverImg,...extra].filter((u,i,arr)=>u&&arr.indexOf(u)===i);
     if(all.length<2){ wrap.style.display='none'; wrap.innerHTML=''; return; }
-    wrap.innerHTML=all.map((url,i)=>`<div class="img-thumb${i===0?' active':''}" onclick="gkSetBookImg('${escapeHTML(url).replace(/'/g,"\\'")}',this)"><img src="${escapeHTML(url)}" loading="lazy" onerror="this.style.display='none'"></div>`).join('');
+    wrap.innerHTML=all.map((url,i)=>`<div class="img-thumb${i===0?' active':''}" onclick="gkSetBookImg('${escapeHTML(url).replace(/'/g,"\\'")}',this)"><img src="${escapeHTML(window.gkImg?gkImg(url,160):url)}" loading="lazy" onerror="this.style.display='none'"></div>`).join('');
     wrap.style.display='flex';
 }
 function gkSetBookImg(url, el){
     const img=document.getElementById('bookImg');
-    if(img) img.src=url;
+    if(img) img.src=window.gkImg?gkImg(url,600):url;
     document.querySelectorAll('#imgThumbs .img-thumb').forEach(t=>t.classList.remove('active'));
     if(el) el.classList.add('active');
 }
@@ -1220,7 +1220,7 @@ function openPdfModal(){
             frame.style.display='none'; frame.src='';
             const total=Number(b.previewTotal)||0;
             pvEl.innerHTML='<div class="pv-head">'+(total>pv.length?'নমুনা — প্রথম '+toBN(pv.length)+' পাতা':toBN(pv.length)+' পাতা')+'</div>'+
-                pv.map((p,k)=>'<div class="pv-page"><img src="'+escapeHTML(/^https?:/.test(p)?p:'https://i.ibb.co/'+p)+'" alt="পাতা '+toBN(k+1)+'" loading="'+(k<2?'eager':'lazy')+'" draggable="false"><span class="pv-no">'+toBN(k+1)+'</span></div>').join('')+
+                pv.map((p,k)=>'<div class="pv-page"><img src="'+escapeHTML((window.gkImg||(u=>u))(/^https?:/.test(p)?p:'https://i.ibb.co/'+p,1000))+'" alt="পাতা '+toBN(k+1)+'" loading="'+(k<2?'eager':'lazy')+'" draggable="false"><span class="pv-no">'+toBN(k+1)+'</span></div>').join('')+
                 '<div class="pv-end"><b>নমুনা এখানেই শেষ</b><span>পুরো বইটা পড়তে অর্ডার করুন</span><button type="button" onclick="closePdfModal();addToCartShow()">কার্টে যোগ করুন</button></div>';
             pvEl.scrollTop=0; pvEl.style.display='';
         }else{
@@ -1341,7 +1341,7 @@ function gkRenderPackage(b){
     if(!list.length){ sec.style.display='none'; return; }
     document.getElementById('pkgTitle').innerHTML=PKG_IC+' '+escapeHTML(title);
     document.getElementById('pkgBooks').innerHTML=list.map(x=>{
-        const xi=books.indexOf(x), img=(typeof bookImgs!=='undefined'&&bookImgs[x.name])||x.img||'';
+        const xi=books.indexOf(x), img=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[x.name])||x.img||'',240);
         return `<a class="rel-book" href="book.html?id=${encodeURIComponent(x.bid||xi)}"><img src="${escapeHTML(img)}" alt="${escapeHTML(x.name)}" loading="lazy"><div class="rel-name">${escapeHTML(x.name)}</div>${x.author?`<div class="rel-author">${escapeHTML(x.author)}</div>`:''}<div class="rel-price">৳ ${Number(x.price)||0}</div></a>`;
     }).join('');
     const sv=document.getElementById('pkgSave'); sv.innerHTML=save; sv.style.display=save?'':'none';
@@ -1355,7 +1355,7 @@ function gkRenderAlsoBought(b){
         .filter(x=>x&&x!==b&&Number(x.price)>0&&!(typeof gkIsHiddenBook==='function'&&gkIsHiddenBook(x))).slice(0,8);
     if(!list.length){ sec.style.display='none'; return; }
     document.getElementById('alsoBooks').innerHTML=list.map(x=>{
-        const xi=books.indexOf(x), img=(typeof bookImgs!=='undefined'&&bookImgs[x.name])||x.img||'';
+        const xi=books.indexOf(x), img=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[x.name])||x.img||'',240);
         return `<a class="rel-book" href="book.html?id=${encodeURIComponent(x.bid||xi)}" style="text-decoration:none;color:inherit;"><img src="${escapeHTML(img)}" alt="${escapeHTML(x.name)}" loading="lazy"><div class="rel-name">${escapeHTML(x.name)}</div><div class="rel-price">৳ ${Number(x.price)||0}</div></a>`;
     }).join('');
     sec.style.display='';
@@ -1369,7 +1369,7 @@ function loadRecent(){
     document.getElementById('recentSection').style.display='block';
     document.getElementById('recentBooks').innerHTML=r.map(ri=>{
         const rb=books[ri];if(!rb)return '';
-        const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';
+        const rImg=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'',240);
         return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'">
             <img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy">
             <div class="rel-name">${escapeHTML(rb.name)}</div>
@@ -1433,7 +1433,7 @@ function loadBook(){
     document.getElementById('imgSkel').style.display='block';
     document.getElementById('bookImg').style.display='none';
     const bookImg=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
-    document.getElementById('bookImg').src=bookImg;
+    document.getElementById('bookImg').src=window.gkImg?gkImg(bookImg,600):bookImg;
     gkRenderImgThumbs(b, bookImg);
     document.getElementById('bookTitle').innerText=b.name;
     const isBook=(b.type||'বই')==='বই';
@@ -1647,7 +1647,7 @@ function loadBook(){
     try{ gkRenderPackage(b); }catch(e){}
     try{ gkRenderAlsoBought(b); }catch(e){}
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
-    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy"><div class="rel-name">${escapeHTML(rb.name)}</div><div class="rel-price">৳ ${Number(rb.price)||0}</div></div>`;}).join('');}
+    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'',240);return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy"><div class="rel-name">${escapeHTML(rb.name)}</div><div class="rel-price">৳ ${Number(rb.price)||0}</div></div>`;}).join('');}
 
     loadRecent();updateCartCount();
 
@@ -1772,7 +1772,7 @@ function bkRunSearch(){
     if(!found.length){body.innerHTML='<div class="bks-hint"><i class=gi-books></i> এই নামে কোনো বই পাওয়া যায়নি</div>';return;}
     body.innerHTML=`<div class="bks-count"><i class=gi-search></i> ${found.length}টি বই</div>`+found.slice(0,40).map(b=>{
         const idx=books.indexOf(b);
-        const img=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
+        const img=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'',200);
         return `<div class="bks-item" onclick="window.location.href='book.html?id=${encodeURIComponent(b.bid||idx)}'">
             <img src="${escapeHTML(img)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='book-placeholder.svg'">
             <div style="flex:1;min-width:0;">
@@ -1983,7 +1983,7 @@ function renderAISuggest(){
     const picks=pool.slice(0,8);
     if(!picks.length){document.getElementById('aiResultArea').innerHTML='<div class="ai-loading">এই বিষয়ে আরো বই শীঘ্রই আসছে</div>';return;}
     document.getElementById('aiResultArea').innerHTML=`<div class="ai-result-row">${picks.map(({b,i,why})=>{
-        const img=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
+        const img=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'',200);
         return `<div class="ai-book" onclick="window.location.href='book.html?id=${encodeURIComponent(b.bid||i)}'">
             <img src="${escapeHTML(img)}" alt="${escapeHTML(b.name)}" loading="lazy">
             <div class="ai-book-name">${escapeHTML(b.name)}</div>

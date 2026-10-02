@@ -3,6 +3,24 @@
    সব page এ shared হয় এই JS
 ═══════════════════════════════════════ */
 
+/* ═══ ছবি দ্রুত দেখানো — imgbb (i.ibb.co) এখান থেকে খুব ধীর (মাপা হয়েছে: ১০–৩০ KB-এর কভারেও ২–৭ সেকেন্ড,
+   ব্যানারে ১০–২২ সেকেন্ড; GitHub/Wafilife-এর ছবি ০.২–০.৭ সেকেন্ড)। তাই imgbb-এর ছবি wsrv.nl দিয়ে দেখাই
+   (বিনামূল্যের ছবি-সার্ভিস, Cloudflare-এ চলে) — দরকারি মাপে ছোট করে WebP-তে (ব্যানার ২৬০ KB → ৫০ KB),
+   একবার আনা হলে পরের সবাই ক্যাশ থেকে ~০.১ সেকেন্ডে পায়। সার্ভিসটা কখনো ছবি না দিলে নিচের error-ধরা কোড
+   সাথে সাথে আসল imgbb লিংকে ফিরে যায় — ছবি হারায় না। অন্য জায়গার ছবি (Wafilife, নিজের সাইট) যেমন আছে তেমন। ═══ */
+window.gkImg = function (u, w) {
+    u = String(u || '');
+    if (!/^https:\/\/i\.ibb\.co(\.com)?\//.test(u)) return u;
+    return 'https://wsrv.nl/?url=' + encodeURIComponent(u) + '&w=' + (w || 400) + '&we&output=webp&q=80';
+};
+document.addEventListener('error', function (e) {
+    var t = e.target;
+    if (!t || t.tagName !== 'IMG' || !/^https:\/\/wsrv\.nl\/\?url=/.test(t.src || '')) return;
+    var m = t.src.match(/[?&]url=([^&]+)/); if (!m) return;
+    e.stopPropagation();   /* ছবির নিজের onerror (কভার-টেমপ্লেট বসানো) তখনই না চলুক — আগে আসল লিংক চেষ্টা */
+    t.src = decodeURIComponent(m[1]);
+}, true);
+
 /* ═══ HTML ESCAPE — সব শেয়ার্ড রেন্ডারিং (কার্ট/উইশলিস্ট ড্রয়ার) এখান
    থেকেই escape করে, যেন বইয়ের নাম/ছবির URL-এ থাকা < > " ' & কখনো
    HTML/attribute ভেঙে না দেয়। top-level এ রাখা হলো যেন নিচের সব IIFE
@@ -399,7 +417,7 @@ window.gkToggleContact = function () {
                 var link = b ? 'book.html?id=' + encodeURIComponent(b.bid || books.indexOf(b)) : '';
                 return '<div class="gkcb-item">' +
                     (link ? '<a href="' + link + '" class="gkcb-img">' : '<span class="gkcb-img">') +
-                        '<img src="' + escapeHTML(item.img || 'book-placeholder.svg') + '" alt="" loading="lazy" onerror="this.src=\'book-placeholder.svg\'">' +
+                        '<img src="' + escapeHTML(window.gkImg(item.img || 'book-placeholder.svg', 200)) + '" alt="" loading="lazy" onerror="this.src=\'book-placeholder.svg\'">' +
                     (link ? '</a>' : '</span>') +
                     '<div class="gkcb-info">' +
                         (link ? '<a href="' + link + '" class="gkcb-name">' + safe + '</a>' : '<span class="gkcb-name">' + safe + '</span>') +
@@ -610,7 +628,7 @@ window.gkToggleContact = function () {
         overlay.innerHTML =
             '<div class="gk-offer-poster-box">' +
                 '<button type="button" class="gk-offer-poster-close" aria-label="বন্ধ করুন"><i class=gi-x></i></button>' +
-                (config.img ? '<img src="' + escapeHTML(config.img) + '" alt="অফার" class="gk-offer-poster-img" style="' + (config.link ? 'cursor:pointer;' : '') + '" />' : '') +
+                (config.img ? '<img src="' + escapeHTML(window.gkImg(config.img, 900)) + '" alt="অফার" class="gk-offer-poster-img" style="' + (config.link ? 'cursor:pointer;' : '') + '" />' : '') +
                 (config.title ? '<div class="gk-offer-poster-title">' + escapeHTML(config.title) + '</div>' : '') +
                 (config.sub ? '<div class="gk-offer-poster-sub">' + escapeHTML(config.sub) + '</div>' : '') +
             '</div>';
@@ -981,7 +999,7 @@ window.gkToggleContact = function () {
             /* getImg/goToBook সব পেজে থাকে না (যেমন book.html) — না থাকলে নিজেই ছবি বের করে
                আর বইয়ের পেজে নিয়ে যায়, যাতে সব পেজে হোমের মতো ছবিসহ পূর্ণ তালিকা দেখায় */
             var imgOf = typeof getImg === 'function' ? getImg : function (bk) {
-                return (typeof bookImgs !== 'undefined' && bookImgs[bk.name]) || bk.img || 'book-placeholder.svg';
+                return window.gkImg((typeof bookImgs !== 'undefined' && bookImgs[bk.name]) || bk.img || 'book-placeholder.svg', 200);
             };
             window.gkWLOpen = window.gkWLOpen || function (idx) {
                 if (typeof goToBook === 'function') return goToBook(idx);
@@ -1241,7 +1259,7 @@ window.gkBsCardHtml = function (g, max, anchor, moreHref) {
         if (!b || !(Number(b.price) > 0) || (window.gkIsHiddenBook && gkIsHiddenBook(b))) return;
         rank++;
         var mrp = Number(b.original_price) || 0, p = Number(b.price) || 0, pct = mrp > p ? Math.round((mrp - p) / mrp * 100) : 0;
-        var img = /^https?:\/\//.test(String(b.img || '')) ? b.img : 'book-placeholder.svg';
+        var img = /^https?:\/\//.test(String(b.img || '')) ? gkImg(b.img, 160) : 'book-placeholder.svg';
         rows.push('<a class="gk-bs-row" href="book.html?id=' + encodeURIComponent(b.bid || i) + '">' +
             '<span class="gk-bs-cv"><img src="' + esc(img) + '" alt="" loading="lazy" onerror="this.src=\'book-placeholder.svg\'"><b class="gk-bs-rank">' + gkBsBn(rank) + '</b></span>' +
             '<span class="gk-bs-tx"><span class="gk-bs-nm">' + esc(b.name) + '</span>' +
