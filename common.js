@@ -1220,6 +1220,97 @@ window.gkToggleContact = function () {
    ডেটা মুছে না, বইয়ের নম্বরও (index) পাল্টায় না — তাই Firebase-এর
    স্টকের তথ্য ঠিক থাকে। অ্যাডমিন প্যানেলে দাম বসালেই আবার দেখাবে।
 ═══════════════════════════════════════════════════════════════ */
+/* ═══ মাসিক বেস্টসেলার — অ্যাডমিনে আসল অর্ডার থেকে হিসাব করে প্রকাশ করা তালিকা।
+   Firebase: siteConfig/bestsellerNow (হোমপেজের জন্য) আর siteConfig/bestsellers/{YYYY-MM} (সব মাস)।
+   প্রতিটা ভাগ: {name, ids:[bid…]} — নাম/দাম/কভার book.js থেকে, তাই সবসময় এখনকার দাম দেখায়।
+   হোমপেজে #gkBsHome থাকলে সেখানে ঘুরিয়ে দেখার মতো কার্ড, bestseller.html-এ পুরো তালিকা। ═══ */
+window.GK_BS_URL = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com/siteConfig/';
+window.gkBsBn = function (n) { return String(n).replace(/\d/g, function (d) { return '০১২৩৪৫৬৭৮৯'[d]; }); };
+window.gkBsCardHtml = function (g, max, anchor, moreHref) {
+    if (!g || !Array.isArray(g.ids) || typeof books === 'undefined') return '';
+    if (!window.__gkBsIdx || window.__gkBsIdx.n !== books.length) {
+        var m = { n: books.length, map: {} };
+        books.forEach(function (b, i) { if (b && b.bid && m.map[b.bid] == null) m.map[b.bid] = i; });
+        window.__gkBsIdx = m;
+    }
+    var map = window.__gkBsIdx.map, esc = typeof escapeHTML === 'function' ? escapeHTML : function (s) { return String(s || ''); };
+    var rows = [], rank = 0;
+    g.ids.forEach(function (id) {
+        if (rows.length >= max) return;
+        var i = map[id], b = i == null ? null : books[i];
+        if (!b || !(Number(b.price) > 0) || (window.gkIsHiddenBook && gkIsHiddenBook(b))) return;
+        rank++;
+        var mrp = Number(b.original_price) || 0, p = Number(b.price) || 0, pct = mrp > p ? Math.round((mrp - p) / mrp * 100) : 0;
+        var img = /^https?:\/\//.test(String(b.img || '')) ? b.img : 'book-placeholder.svg';
+        rows.push('<a class="gk-bs-row" href="book.html?id=' + encodeURIComponent(b.bid || i) + '">' +
+            '<span class="gk-bs-cv"><img src="' + esc(img) + '" alt="" loading="lazy" onerror="this.src=\'book-placeholder.svg\'"><b class="gk-bs-rank">' + gkBsBn(rank) + '</b></span>' +
+            '<span class="gk-bs-tx"><span class="gk-bs-nm">' + esc(b.name) + '</span>' +
+            ((b.author && (b.type || 'বই') === 'বই') ? '<span class="gk-bs-au">' + esc(b.author) + '</span>' : '') +
+            '<span class="gk-bs-pr"><b>' + gkBsBn(p) + '৳</b>' + (pct ? '<s>' + gkBsBn(mrp) + '৳</s><em>(' + gkBsBn(pct) + '% ছাড়ে)</em>' : '') + '</span></span></a>');
+    });
+    if (rows.length < 2) return '';
+    var TREND = '<svg class="gk-bs-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="7 14.5 10.5 11 13 13.5 17 9.5"/><polyline points="14 9.5 17 9.5 17 12.5"/></svg>';
+    return '<div class="gk-bs-card"' + (anchor ? ' id="' + anchor + '"' : '') + '>' +
+        '<div class="gk-bs-hd">' + TREND + '<span>' + esc(g.name) + '</span></div>' +
+        '<div class="gk-bs-list">' + rows.join('') + '</div>' +
+        (moreHref ? '<a class="gk-bs-more" href="' + moreHref + '"><span>সব দেখুন</span><i class="gi-chev gi-w"></i></a>' : '') + '</div>';
+};
+/* হোমপেজ: এই মাসের বেস্টসেলার (প্রকাশ করা থাকলে তবেই) */
+(function () {
+    function render(d) {
+        var box = document.getElementById('gkBsHome');
+        if (!box || !d || !Array.isArray(d.groups) || typeof books === 'undefined' || !books.length) return;
+        /* শুধু ৩টা বিষয়, প্রতিটায় সেরা ১০টা — কার্ডের ভেতরে স্ক্রল করে দেখা যায় */
+        var cards = d.groups.slice(0, 3).map(function (g, k) { return gkBsCardHtml(g, 10, '', 'bestseller.html?m=' + encodeURIComponent(d.m) + '#g' + k); }).filter(Boolean);
+        if (!cards.length) { box.style.display = 'none'; return; }
+        box.innerHTML = '<div class="gk-bs-title"><span class="gk-bs-badge"><img src="logo.png" alt="গ্রন্থকানন"><b>বেস্টসেলার</b></span><span class="gk-bs-sep"></span>' +
+            '<span class="gk-bs-ttx">মাসের বেস্টসেলার' + (d.label ? ' <em>' + (typeof escapeHTML === 'function' ? escapeHTML(d.label) : d.label) + '</em>' : '') + '</span></div>' +
+            '<div class="gk-bs-slider"><button type="button" class="gk-bs-nav prev" aria-label="আগের"><i class="gi-chev gi-w"></i></button>' +
+            '<div class="gk-bs-scroll">' + cards.join('') + '</div>' +
+            '<button type="button" class="gk-bs-nav next" aria-label="পরের"><i class="gi-chev gi-w"></i></button></div>';
+        box.style.display = '';
+        slider(box);
+    }
+    /* বাঁ থেকে ডানে স্লাইড — মোবাইলে আঙুলে টেনে, ল্যাপটপে ‹ › বোতামে; ৪.৫ সেকেন্ড পরপর নিজে থেকেও
+       এক কার্ড সরে (শেষে গেলে আবার শুরুতে)। হাত/মাউস রাখলে বা স্ক্রল করলে কিছুক্ষণ থেমে থাকে। */
+    function slider(box) {
+        var sc = box.querySelector('.gk-bs-scroll'); if (!sc) return;
+        clearInterval(box.__gkBsTimer);
+        var pausedUntil = 0, hover = false;
+        function step(dir) {
+            var card = sc.querySelector('.gk-bs-card'); if (!card) return;
+            var w = card.getBoundingClientRect().width + parseFloat(getComputedStyle(sc).columnGap || getComputedStyle(sc).gap || 16);
+            var max = sc.scrollWidth - sc.clientWidth, cur = sc.scrollLeft;
+            if (max < 4) return;
+            /* শেষ মাথায় থাকলে আবার শুরুতে (বা উল্টো), নইলে এক কার্ড — শেষ সীমা পার না করে */
+            var x = dir > 0 ? (cur >= max - 4 ? 0 : Math.min(cur + w, max)) : (cur <= 4 ? max : Math.max(cur - w, 0));
+            sc.scrollTo({ left: x, behavior: 'smooth' });
+        }
+        function hold(ms) { pausedUntil = Date.now() + (ms || 8000); }
+        box.querySelector('.gk-bs-nav.prev').onclick = function () { hold(); step(-1); };
+        box.querySelector('.gk-bs-nav.next').onclick = function () { hold(); step(1); };
+        sc.addEventListener('pointerenter', function () { hover = true; });
+        sc.addEventListener('pointerleave', function () { hover = false; hold(3000); });
+        sc.addEventListener('touchstart', function () { hold(); }, { passive: true });
+        sc.addEventListener('wheel', function () { hold(); }, { passive: true });
+        box.__gkBsTimer = setInterval(function () {
+            if (hover || Date.now() < pausedUntil || document.visibilityState !== 'visible') return;
+            var r = box.getBoundingClientRect();
+            if (r.bottom < 0 || r.top > window.innerHeight) return;   /* পর্দায় না থাকলে সরায় না */
+            step(1);
+        }, 4500);
+    }
+    window.gkBsRenderHome = render;
+    function start() {
+        if (!document.getElementById('gkBsHome')) return;
+        fetch(GK_BS_URL + 'bestsellerNow.json').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+            if (!d) return;
+            window.__gkBsNow = d; render(d);
+            if (window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(function (ok) { if (ok) render(d); });
+        }).catch(function () {});
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
 function gkIsHiddenBook(b) {
     return !b || Number(b.price) === 0;
 }

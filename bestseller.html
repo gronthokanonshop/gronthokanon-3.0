@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="logo.png" type="image/png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<title>মাসের বেস্টসেলার — গ্রন্থকানন</title>
+<meta name="theme-color" content="#059669">
+<meta name="description" content="গ্রন্থকাননে প্রতি মাসে সবচেয়ে বেশি বিক্রি হওয়া বইয়ের তালিকা — বিষয় অনুযায়ী। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
+<link rel="canonical" href="https://gronthokanon.com/bestseller.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://gronthokanon-8573e-default-rtdb.firebaseio.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+.bs-wrap{max-width:1240px;margin:0 auto;padding:16px 14px 110px;}
+.bs-wrap .gk-bs-title{margin:6px 0 14px;}
+.bs-wrap h1.gk-bs-ttx{margin:0;}
+
+.bs-months{display:flex;justify-content:center;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;scrollbar-width:thin;}
+.bs-month{flex-shrink:0;padding:8px 15px;border:1.5px solid var(--border2);background:var(--card-solid);color:var(--text);font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border-radius:20px;}
+.bs-month.on{background:#8a1c34;border-color:#8a1c34;color:#fff;}
+.bs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;align-items:start;}
+.bs-empty{text-align:center;padding:60px 10px;color:var(--text2);font-family:'Hind Siliguri',sans-serif;}
+.bs-note{margin-top:18px;font-size:12px;color:var(--text2);text-align:center;font-family:'Hind Siliguri',sans-serif;}
+@media(max-width:480px){.bs-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-top">
+    <button class="back-btn" onclick="history.length>1?history.back():location.href='index.html'">‹</button>
+    <a href="index.html" style="flex:1;display:flex;justify-content:center;"><img src="logo.png" alt="গ্রন্থকানন" style="height:34px;width:auto;"></a>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn"><i class=gi-moon></i></button>
+  </div>
+</nav>
+<div id="gkMenuBar"></div>
+
+<div class="bs-wrap">
+  <div class="gk-bs-title"><span class="gk-bs-badge"><img src="logo.png" alt="গ্রন্থকানন"><b>বেস্টসেলার</b></span><span class="gk-bs-sep"></span><h1 class="gk-bs-ttx" id="bsTitle">মাসের বেস্টসেলার</h1></div>
+  <div class="bs-months" id="bsMonths"></div>
+  <div class="bs-grid" id="bsGrid"><div class="bs-empty" style="grid-column:1/-1">লোড হচ্ছে…</div></div>
+  <div class="bs-note">দাম ও ছাড় এখনকার — মাস শেষে তালিকা হালনাগাদ হয়।</div>
+</div>
+
+<script src="book.js" defer></script>
+<script src="gkbooks-live.js" defer></script>
+<script>
+/* মাসের বেস্টসেলার — অ্যাডমিন প্রকাশ করা siteConfig/bestsellers/{YYYY-MM}; কার্ড বানায় common.js-এর gkBsCardHtml */
+let BS = {}, bsCur = '';
+function bsShow(m){
+    const d = BS[m];
+    bsCur = m;
+    document.querySelectorAll('.bs-month').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+    const grid = document.getElementById('bsGrid');
+    if(!d || !Array.isArray(d.groups)){ grid.innerHTML = '<div class="bs-empty" style="grid-column:1/-1">এই মাসের তালিকা এখনো প্রকাশ হয়নি</div>'; return; }
+    document.getElementById('bsTitle').innerHTML = 'মাসের বেস্টসেলার' + (d.label ? ' <em>' + (window.escapeHTML ? escapeHTML(d.label) : d.label) + '</em>' : '');
+    document.title = 'বেস্টসেলার' + (d.label ? ' ' + d.label : '') + ' — গ্রন্থকানন';
+    const cards = d.groups.slice(0, 3).map((g, k) => gkBsCardHtml(g, 10, 'g' + k, '')).filter(Boolean);
+    grid.innerHTML = cards.length ? cards.join('') : '<div class="bs-empty" style="grid-column:1/-1">এই মাসের তালিকায় এখন দেখানোর মতো বই নেই</div>';
+    try{ const u = new URL(location.href); u.searchParams.set('m', m); history.replaceState(history.state, '', u.pathname + u.search + location.hash); }catch(e){}
+    if(location.hash){ const el = document.querySelector(location.hash); if(el) setTimeout(() => el.scrollIntoView({behavior:'smooth', block:'start'}), 150); }
+}
+function bsStart(){
+    fetch(GK_BS_URL + 'bestsellers.json').then(r => r.ok ? r.json() : null).then(all => {
+        BS = all || {};
+        const months = Object.keys(BS).filter(k => /^\d{4}-\d{2}$/.test(k)).sort().reverse();
+        if(!months.length){ document.getElementById('bsGrid').innerHTML = '<div class="bs-empty" style="grid-column:1/-1">শিগগিরই আসছে — মাস শেষে প্রথম তালিকা প্রকাশ হবে</div>'; return; }
+        document.getElementById('bsMonths').innerHTML = months.map(m => '<button type="button" class="bs-month" data-m="' + m + '" onclick="bsShow(\'' + m + '\')">' + (window.escapeHTML ? escapeHTML(BS[m].label || m) : (BS[m].label || m)) + '</button>').join('');
+        const want = new URLSearchParams(location.search).get('m');
+        bsShow(months.includes(want) ? want : months[0]);
+        if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(ok => { if(ok) bsShow(bsCur); });
+    }).catch(() => { document.getElementById('bsGrid').innerHTML = '<div class="bs-empty" style="grid-column:1/-1">তালিকা আনা যায়নি — ইন্টারনেট দেখে আবার চেষ্টা করুন</div>'; });
+}
+document.addEventListener('DOMContentLoaded', bsStart);
+</script>
+<script src="common.js"></script>
+</body>
+</html>

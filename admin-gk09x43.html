@@ -1243,6 +1243,16 @@
         .pk-chip small{font-weight:600;opacity:.8;}
         .pk-chip button{width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.08);color:inherit;cursor:pointer;font-size:13px;line-height:1;}
         .pk-sum{font-size:12px;font-weight:700;margin-top:6px;} .pk-sum.ok{color:#047857;} .pk-sum.warn{color:#b45309;}
+        /* তথ্যের স্বাস্থ্য */
+        .dh-chips{display:flex;flex-wrap:wrap;gap:8px;}
+        .dh-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-main);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+        .dh-chip b{font-size:14px;}
+        .dh-chip.red{border-color:#fca5a5;background:#fef2f2;color:#b91c1c;}
+        .dh-chip.amber{border-color:#fcd34d;background:#fffbeb;color:#92400e;}
+        .dh-chip.gray{color:var(--text-muted);}
+        .dh-chip.on{box-shadow:0 0 0 3px var(--primary-light);border-color:var(--primary);}
+        [data-theme="dark"] .dh-chip.red{background:rgba(220,38,38,.15);color:#fca5a5;}
+        [data-theme="dark"] .dh-chip.amber{background:rgba(245,158,11,.12);color:#fcd34d;}
         .drv-empty{font-size:12px;color:var(--text-muted);padding:8px;}
         .drv-empty.big{grid-column:1/-1;text-align:center;padding:40px;font-size:14px;}
         .drv-orphan{grid-column:1/-1;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:12px;padding:12px;font-size:12.5px;line-height:1.7;}
@@ -2245,7 +2255,7 @@
                     <div class="form-group editor-full"><label class="be-label"><i class=gi-ok></i> কেন কিনবেন (ঐচ্ছিক) — প্রতি লাইনে: শিরোনাম | বিবরণ</label>
                         <textarea class="form-input" id="lp_why" rows="3" placeholder="১০০% অরিজিনাল বই | সম্পূর্ণ যাচাইকৃত প্রকাশনী থেকে সংগ্রহ করা&#10;দ্রুত ডেলিভারি | সারাদেশে ১-৩ দিনে পৌঁছে যায়&#10;ক্যাশ অন ডেলিভারি | বই হাতে পেয়ে টাকা দিন"></textarea>
                     </div>
-                    <div class="form-group editor-full"><label class="be-label">🆚 কেন আমরা অন্য সবার থেকে আলাদা (ঐচ্ছিক) — প্রতি লাইনে একটা পয়েন্ট</label>
+                    <div class="form-group editor-full"><label class="be-label"><i class=gi-award></i> কেন আমরা অন্য সবার থেকে আলাদা (ঐচ্ছিক) — প্রতি লাইনে একটা পয়েন্ট</label>
                         <textarea class="form-input" id="lp_different" rows="3" placeholder="আমাদের বইগুলো সম্পূর্ণ অরিজিনাল ও যাচাইকৃত&#10;সরাসরি প্রকাশনী থেকে সংগ্রহ করা হয়&#10;মান নিয়ে কোনো আপোষ করি না"></textarea>
                     </div>
                     <div class="form-group editor-full"><label class="be-label"><i class=gi-hash></i> উপকারিতা / বৈশিষ্ট্য (ঐচ্ছিক) — প্রতি লাইনে একটা, নম্বর দিয়ে দেখাবে</label>
@@ -2309,6 +2319,63 @@
                     <div class="drv-step" style="margin-top:16px;border-top:1px dashed var(--border);padding-top:14px;"><i class=gi-search></i> ভুল শর্ট PDF খুঁজুন <small>(উপরে প্রকাশনী বাছলে শুধু সেটার, না বাছলে সব বইয়ের)</small></div>
                     <button class="btn btn-ghost" type="button" onclick="pdcRun()" id="pdcBtn"><i class=gi-doc></i> দোকানে বসানো PDF-গুলো যাচাই করুন</button>
                     <div id="pdcBox" class="pdc-box"></div>
+                </div>
+
+                <div class="tool-card" id="pvCard">
+                    <h3><i class=gi-doc></i> শর্ট PDF → পাতা কমানো + লোগো</h3>
+                    <p style="margin-bottom:12px;">Drive-এর শর্ট PDF থেকে প্রথম কয়েকটা পাতা নিয়ে (শেষের অংশ বাদ), প্রতিটা পাতায় গ্রন্থকাননের লোগো বসিয়ে ছবি বানায় (imgbb-এ রাখে)। সাইটে তখন Drive-এর বদলে নিজের রিডারে এই পাতাগুলো দেখায় — পুরো PDF খোলার লিংক থাকে না। একবার বানালে আর বানাতে হয় না; বইয়ের PDF লিংক বদলালে সাইট নিজে থেকে আবার Drive দেখায়, তখন এখানে আবার চালান।</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+                        <select class="form-input" id="pvPubSel" onfocus="pvFillPubs()" style="flex:1;min-width:200px;"><option value="">সব প্রকাশনী</option></select>
+                        <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;white-space:nowrap;">শেষের <input class="form-input" id="pvCut" type="number" min="0" max="90" step="5" value="25" style="width:72px;"> % পাতা বাদ</label>
+                    </div>
+                    <label style="display:flex;align-items:center;gap:7px;font-size:13px;margin-bottom:10px;cursor:pointer;"><input type="checkbox" id="pvRedo"> আগে বানানো বইগুলোও আবার বানাও</label>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button class="btn btn-ghost" type="button" onclick="pvSample()" id="pvSampleBtn"><i class=gi-eye></i> একটা পাতা দেখুন</button>
+                        <button class="btn btn-primary" type="button" onclick="pvRun()" id="pvBtn"><i class=gi-rocket></i> শুরু করুন</button>
+                        <button class="btn btn-danger" type="button" onclick="PV.stop=true" id="pvStop" style="display:none;"><i class=gi-x></i> থামান</button>
+                    </div>
+                    <div id="pvBox" class="pdc-box"></div>
+                </div>
+
+                <div class="tool-card" id="bsCard">
+                    <h3><i class=gi-trophy></i> মাসিক বেস্টসেলার</h3>
+                    <p style="margin-bottom:12px;">একটা মাস বাছুন — সেই মাসের আসল অর্ডার থেকে বিষয় অনুযায়ী সবচেয়ে বেশি বিক্রি হওয়া বইয়ের তালিকা বানায় — সাইটে সবচেয়ে বেশি বিক্রির ৩টা বিষয় দেখায় (চাইলে টিক দিয়ে বিষয় বদলান)। আগে দেখে নিন, দরকার হলে কোনো বই বাদ দিন, তারপর "প্রকাশ করুন"। হোমপেজে আর <b>bestseller.html</b> পাতায় দেখাবে; আগের মাসগুলোও পাতায় থেকে যায়। বিক্রির সংখ্যা সাইটে দেখায় না — শুধু ক্রম।</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;">
+                        <select class="form-input" id="bsMonthSel" onfocus="bsFillMonths()" style="flex:1;min-width:180px;"><option value="">— মাস বাছুন —</option></select>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button class="btn btn-primary" type="button" onclick="bsCompute()"><i class=gi-chart></i> হিসাব করে দেখান</button>
+                        <button class="btn btn-ghost" type="button" onclick="bsUnpublishHome()"><i class=gi-x></i> হোমপেজ থেকে সরান</button>
+                    </div>
+                    <div id="bsBox" class="pdc-box"></div>
+                </div>
+
+                <div class="tool-card" id="dhCard">
+                    <h3><i class=gi-clipboard></i> তথ্যের স্বাস্থ্য — বইয়ের তথ্যে কী কী সমস্যা</h3>
+                    <p style="margin-bottom:12px;">এক চাপে সব বই দেখে সমস্যাগুলো ভাগ করে দেখায় — দাম নেই, কভার নেই, বিবরণ নেই, লেখকের নামের বানান আলাদা, একই বই দুবার ইত্যাদি। যেকোনো ঘরে চাপলে তালিকা খোলে, প্রতিটা বইয়ের পাশে "এডিট" চাপলে সরাসরি সেই বই এডিটে খোলে।</p>
+                    <button class="btn btn-primary" type="button" onclick="dhRun()" id="dhBtn"><i class=gi-search></i> তথ্য যাচাই করুন</button>
+                    <div id="dhBox" class="pdc-box"></div>
+                </div>
+
+                <div class="tool-card" id="abCard">
+                    <h3><i class=gi-cart></i> একসাথে কেনা বই — "যাঁরা এই বইটি কিনেছেন, তাঁরা আরও কিনেছেন"</h3>
+                    <p style="margin-bottom:12px;">আপনার আসল অর্ডারগুলো দেখে হিসাব করে কোন বই কোন বইয়ের সাথে একসাথে কেনা হয়েছে। "সাইটে বসান" চাপলে বইয়ের পাতায় দাম-বাটনের নিচে সেই বইগুলো দেখায়। নতুন অর্ডার জমলে মাঝে মাঝে (যেমন মাসে একবার) আবার চালান। অনেক বইয়ের বড় অর্ডার (১২টার বেশি আলাদা বই) হিসাবে ধরা হয় না — নইলে সব বই সবার সাথে "একসাথে কেনা" হয়ে যেত।</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                        <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;">কমপক্ষে <select class="form-input" id="abMin" style="width:auto;"><option value="1">১ বার</option><option value="2" selected>২ বার</option><option value="3">৩ বার</option></select> একসাথে কেনা হলে দেখাবে</label>
+                        <button class="btn btn-primary" type="button" onclick="abCompute()" id="abBtn"><i class=gi-chart></i> অর্ডার থেকে হিসাব করুন</button>
+                    </div>
+                    <div id="abBox" class="pdc-box"></div>
+                </div>
+
+                <div class="tool-card" id="ciCard">
+                    <h3><i class=gi-image></i> বড় কভার ছোট করুন (সাইট দ্রুত করতে)</h3>
+                    <p style="margin-bottom:12px;">কিছু বইয়ের কভার ছবি অনেক বড় (১–৮ MB) — মোবাইলে পাতা ধীরে খোলে, ডেটাও বেশি খরচ হয়। <strong>"বড় কভার খুঁজুন"</strong> চাপলে imgbb-এ রাখা সব কভারের মাপ দেখে ৩০০ KB-এর বেশিগুলোর তালিকা দেয়। <strong>"সব ছোট করুন"</strong> চাপলে প্রতিটা ছবি ৮০০px চওড়া করে নতুন করে তুলে বইয়ে বসায় — দেখতে একই থাকে, শুধু হালকা হয়। পুরনো ছবি মোছে না।</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button class="btn btn-ghost" type="button" onclick="ciScan()" id="ciScanBtn"><i class=gi-search></i> বড় কভার খুঁজুন</button>
+                        <button class="btn btn-primary" type="button" onclick="ciRun()" id="ciRunBtn" style="display:none;"><i class=gi-rocket></i> সব ছোট করুন</button>
+                        <button class="btn btn-danger" type="button" onclick="CI.stop=true" id="ciStop" style="display:none;"><i class=gi-x></i> থামান</button>
+                    </div>
+                    <div id="ciBox" class="pdc-box"></div>
                 </div>
 
                 <div class="tool-card" id="pkCard">
@@ -3707,6 +3774,436 @@ function pdcKeep(k){
     const m=pdcOkMap(); m[r.id]=String(b.bid||r.i);
     try{ localStorage.setItem('gk_pdf_ok',JSON.stringify(m)); }catch(e){}
     r.lvl='ok'; r.nameIssue=false; r.msg='আপনি "ঠিক আছে" বলেছেন — আর দেখাবে না'; pdcRender();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   শর্ট PDF → পাতা কমানো + লোগো। Drive-এর PDF (API key দিয়ে) PDF.js-এ খুলে প্রথম ~৭৫% পাতা
+   ১০০০px চওড়া ছবি বানাই, প্রতিটায় মাঝখানে হালকা লোগো + "gronthokanon.com" আর নিচে ডানে ছোট
+   লোগো-লেখা, তারপর imgbb-এ তুলি। বইয়ে রাখি: previewPages (imgbb পথ, "https://i.ibb.co/" বাদ দিয়ে —
+   book.js ছোট রাখতে), previewSrc (কোন PDF থেকে — লিংক বদলালে সাইট আবার Drive দেখায়),
+   previewTotal (PDF-এ মোট পাতা), previewCut (কত % বাদ)।
+══════════════════════════════════════════════════════════════ */
+const PV={stop:false,busy:false,logo:null};
+const PV_JS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+function pvLoadPdfJs(){
+    if(window.pdfjsLib) return Promise.resolve();
+    return new Promise((res,rej)=>{
+        const s=document.createElement('script'); s.src=PV_JS+'pdf.min.js';
+        s.onload=()=>{ try{ pdfjsLib.GlobalWorkerOptions.workerSrc=PV_JS+'pdf.worker.min.js'; res(); }catch(e){ rej(e); } };
+        s.onerror=()=>rej(new Error('PDF.js লোড হয়নি — ইন্টারনেট দেখুন'));
+        document.head.appendChild(s);
+    });
+}
+function pvLogo(){
+    if(PV.logo) return Promise.resolve(PV.logo);
+    return new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>{ PV.logo=im; res(im); }; im.onerror=()=>rej(new Error('logo.png পাওয়া যায়নি')); im.src='logo.png?v=1'; });
+}
+/* পাতার উপর লোগো — শুধু ছোট, হালকা লোগো, উপরে ডান কোণে (মালিকের কথামতো, লেখা নেই) */
+function pvStamp(cv,logo){
+    const c=cv.getContext('2d'), W=cv.width;
+    const sw=W*0.06, sh=sw*logo.naturalHeight/logo.naturalWidth, pad=W*0.022;
+    c.save();
+    c.globalAlpha=0.4; c.drawImage(logo,W-pad-sw,pad,sw,sh);
+    c.restore();
+}
+async function pvRenderPage(doc,n,logo){
+    const pg=await doc.getPage(n);
+    const v1=pg.getViewport({scale:1});
+    const scale=Math.min(2.5,1000/v1.width);
+    const vp=pg.getViewport({scale});
+    const cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height);
+    const c=cv.getContext('2d'); c.fillStyle='#fff'; c.fillRect(0,0,cv.width,cv.height);
+    /* intent:'print' — সাধারণ মোডে PDF.js স্ক্রিন-রিফ্রেশের অপেক্ষা করে, তাই ট্যাব পেছনে গেলে কাজ থেমে
+       যেত; print মোডে পেছনে থাকলেও চলতে থাকে (লম্বা কাজের সময় অন্য ট্যাবে যেতে পারবেন) */
+    await pg.render({canvasContext:c,viewport:vp,intent:'print'}).promise;
+    pvStamp(cv,logo);
+    pg.cleanup&&pg.cleanup();
+    return cv;
+}
+async function pvOpenPdf(id){
+    await pvLoadPdfJs();
+    const buf=await (await gkDriveFetchBlob(id)).arrayBuffer();
+    return await pdfjsLib.getDocument({data:buf,standardFontDataUrl:PV_JS+'standard_fonts/',cMapUrl:PV_JS+'cmaps/',cMapPacked:true}).promise;
+}
+async function pvUpload(cv,name){
+    const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.8));
+    const fd=new FormData(); fd.append('image',blob,name+'.jpg'); fd.append('name',name);
+    const res=await fetch('https://api.imgbb.com/1/upload?key='+encodeURIComponent(IMGBB_KEY),{method:'POST',body:fd});
+    const j=await res.json().catch(()=>null);
+    if(!(j&&j.success&&j.data&&j.data.url)) throw new Error('imgbb আপলোড ব্যর্থ');
+    return String(j.data.url).replace(/^https:\/\/i\.ibb\.co\//,'');
+}
+function pvKeep(total,cut){ return Math.max(1,Math.min(total,Math.round(total*(100-cut)/100))); }
+function pvCutVal(){ const v=Math.round(Number(document.getElementById('pvCut')?.value)); return isFinite(v)?Math.max(0,Math.min(90,v)):25; }
+function pvFillPubs(){
+    const sel=document.getElementById('pvPubSel'); if(!sel||!(localBooks||[]).length) return;
+    const cur=sel.value, m={};
+    localBooks.forEach(b=>{ if(b&&drvDriveId(b.pdfLink)&&b.pub) m[b.pub]=(m[b.pub]||0)+1; });
+    sel.innerHTML='<option value="">সব প্রকাশনী</option>'+Object.keys(m).sort((a,b)=>a.localeCompare(b,'bn')).map(p=>`<option value="${escapeHTML(p)}"${p===cur?' selected':''}>${escapeHTML(p)} — PDF ${drvBn(m[p])}টা</option>`).join('');
+}
+function pvList(){
+    const pub=document.getElementById('pvPubSel')?.value||'', redo=!!document.getElementById('pvRedo')?.checked, cut=pvCutVal();
+    return localBooks.map((b,i)=>[b,i]).filter(([b])=>{
+        const id=b&&drvDriveId(b.pdfLink); if(!id) return false;
+        if(pub&&b.pub!==pub) return false;
+        return redo||!(Array.isArray(b.previewPages)&&b.previewPages.length&&b.previewSrc===id&&Number(b.previewCut)===cut);
+    });
+}
+/* আগে একটা পাতা বানিয়ে দেখায় — কিছু আপলোড/সেভ হয় না */
+async function pvSample(){
+    if(!DRIVE_API_KEY){ showToast('আগে উপরে Drive API key সেভ করুন','#dc2626'); return; }
+    const pub=document.getElementById('pvPubSel')?.value||'';
+    const it=localBooks.map((b,i)=>[b,i]).find(([b])=>b&&drvDriveId(b.pdfLink)&&(!pub||b.pub===pub));
+    const box=document.getElementById('pvBox');
+    if(!it){ box.innerHTML='<div class="pdc-sum">এই প্রকাশনীর কোনো বইয়ে শর্ট PDF নেই</div>'; return; }
+    const btn=document.getElementById('pvSampleBtn'); btn.disabled=true;
+    box.innerHTML='<div class="pdc-sum"><i class=gi-hourglass></i> "'+escapeHTML(it[0].name)+'"-এর PDF খোলা হচ্ছে…</div>';
+    try{
+        const [doc,logo]=await Promise.all([pvOpenPdf(drvDriveId(it[0].pdfLink)),pvLogo()]);
+        const cv=await pvRenderPage(doc,Math.min(2,doc.numPages),logo);
+        const keep=pvKeep(doc.numPages,pvCutVal());
+        box.innerHTML=`<div class="pdc-sum"><b>${escapeHTML(it[0].name)}</b> — PDF-এ ${drvBn(doc.numPages)} পাতা, সাইটে দেখাবে প্রথম ${drvBn(keep)} পাতা</div><img src="${cv.toDataURL('image/jpeg',0.8)}" alt="" style="max-width:100%;max-height:520px;border:1px solid var(--border);border-radius:10px;align-self:center;">`;
+        doc.destroy&&doc.destroy();
+    }catch(e){ box.innerHTML='<div class="pdc-sum" style="color:#b91c1c"><i class=gi-warn></i> '+escapeHTML(e.message)+'</div>'; }
+    btn.disabled=false;
+}
+async function pvRun(){
+    if(PV.busy) return;
+    if(!DRIVE_API_KEY){ showToast('আগে উপরে Drive API key সেভ করুন','#dc2626'); return; }
+    if(!IMGBB_KEY){ showToast('আগে "ছবি আপলোড সেটিংস"-এ imgbb key সেভ করুন','#dc2626'); return; }
+    const list=pvList(), cut=pvCutVal(), box=document.getElementById('pvBox');
+    if(!list.length){ box.innerHTML='<div class="pdc-sum" style="color:#047857"><i class="gi-ok gi-w"></i> সব বইয়ের পাতা আগেই বানানো আছে</div>'; return; }
+    if(!confirm(drvBn(list.length)+'টা বইয়ের PDF থেকে পাতা বানানো হবে (শেষের '+drvBn(cut)+'% বাদ, লোগোসহ)। প্রতিটা বইয়ে আধা থেকে এক মিনিট লাগতে পারে — পেজটা খোলা রাখুন। শুরু করবেন?')) return;
+    PV.busy=true; PV.stop=false;
+    const btn=document.getElementById('pvBtn'), stopB=document.getElementById('pvStop');
+    btn.disabled=true; stopB.style.display='';
+    const log=[]; let ok=0;
+    const show=cur=>{ box.innerHTML=`<div class="pdc-sum"><span>${drvBn(ok)}/${drvBn(list.length)}টা হয়েছে</span>${cur?`<span>${cur}</span>`:''}</div>`+log.slice(-40).reverse().join(''); };
+    try{ await Promise.all([pvLoadPdfJs(),pvLogo()]); await ensureBookIdsAndMigrate(localBooks); }
+    catch(e){ box.innerHTML='<div class="pdc-sum" style="color:#b91c1c"><i class=gi-warn></i> '+escapeHTML(e.message)+'</div>'; PV.busy=false; btn.disabled=false; stopB.style.display='none'; return; }
+    for(let k=0;k<list.length&&!PV.stop;k++){
+        const [b,i]=list[k], id=drvDriveId(b.pdfLink);
+        try{
+            show('<i class=gi-hourglass></i> "'+escapeHTML(b.name)+'" — PDF খোলা হচ্ছে');
+            const doc=await pvOpenPdf(id);
+            const total=doc.numPages, keep=pvKeep(total,cut), pages=[];
+            for(let n=1;n<=keep;n++){
+                if(PV.stop) throw new Error('থামানো হয়েছে');
+                show('<i class=gi-hourglass></i> "'+escapeHTML(b.name)+'" — পাতা '+drvBn(n)+'/'+drvBn(keep));
+                const cv=await pvRenderPage(doc,n,PV.logo);
+                /* ছোট ইংরেজি নাম — বাংলা নাম লিংকে অনেক লম্বা হয়ে book.js বড় করত */
+                pages.push(await pvUpload(cv,'gk'+i+'p'+n));
+            }
+            doc.destroy&&doc.destroy();
+            b.previewPages=pages; b.previewSrc=id; b.previewTotal=total; b.previewCut=cut;
+            await saveBookToFirebase(i);
+            ok++;
+            log.push(`<div class="pdc-row ok"><div class="t">${escapeHTML(b.name)} <small>· ${escapeHTML(b.pub||'')}</small></div><div class="m"><i class="gi-ok gi-w"></i> ${drvBn(total)} পাতার মধ্যে প্রথম ${drvBn(keep)} পাতা, লোগোসহ</div></div>`);
+        }catch(e){
+            log.push(`<div class="pdc-row red"><div class="t">${escapeHTML(b.name)} <small>· ${escapeHTML(b.pub||'')}</small></div><div class="m"><i class="gi-warn gi-w"></i> হয়নি: ${escapeHTML(e.message)}${/40[34]/.test(e.message)?' — PDF-টা কি "Anyone with the link" শেয়ার করা?':''}</div></div>`);
+        }
+    }
+    show(PV.stop?'<i class=gi-info></i> থামানো হয়েছে — আবার "শুরু করুন" চাপলে বাকিগুলো থেকে চলবে':'<i class="gi-ok gi-w"></i> শেষ — book.js ডাউনলোড করে আপলোড করুন');
+    PV.busy=false; btn.disabled=false; stopB.style.display='none';
+    if(ok) showToast(drvBn(ok)+'টা বইয়ের পাতা তৈরি হয়েছে — কাজ শেষে book.js ডাউনলোড করে আপলোড করুন','#059669');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   মাসিক বেস্টসেলার — একটা মাসের আসল অর্ডার থেকে কোন বই কত কপি বিক্রি হলো (বাতিল/ফেরত বাদ),
+   বিষয় (না থাকলে বিভাগ) অনুযায়ী ভাগ, প্রতি ভাগে সেরা N। প্রকাশ: siteConfig/bestsellers/{YYYY-MM}
+   (সব মাস, bestseller.html) আর siteConfig/bestsellerNow (হোমপেজ)। সাইটে শুধু ক্রম — বিক্রির সংখ্যা নয়।
+══════════════════════════════════════════════════════════════ */
+const BSA={orders:null,res:null};
+const BS_MONTHS=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+const bsKey=t=>{ const d=new Date(t); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); };
+const bsLabel=m=>{ const [y,mm]=m.split('-'); return BS_MONTHS[Number(mm)-1]+' '+drvBn(y); };
+async function bsOrders(){
+    if(allOrders&&allOrders.length) return allOrders;
+    if(BSA.orders) return BSA.orders;
+    const s=await db.ref('orders').once('value'); const o=[]; s.forEach(c=>{ const v=c.val(); if(v&&v.orderId) o.push(v); });
+    return BSA.orders=o;
+}
+async function bsFillMonths(){
+    const sel=document.getElementById('bsMonthSel'); if(!sel||sel.dataset.done) return;
+    let o=[]; try{ o=await bsOrders(); }catch(e){ showToast('অর্ডার পড়া যায়নি: '+e.message,'#dc2626'); return; }
+    const m={}; o.forEach(x=>{ if(x.createdAt) { const k=bsKey(x.createdAt); m[k]=(m[k]||0)+1; } });
+    const keys=Object.keys(m).sort().reverse();
+    sel.innerHTML='<option value="">— মাস বাছুন —</option>'+keys.map(k=>`<option value="${k}">${bsLabel(k)} — ${drvBn(m[k])}টা অর্ডার</option>`).join('');
+    sel.dataset.done='1';
+}
+async function bsCompute(){
+    const m=document.getElementById('bsMonthSel').value, box=document.getElementById('bsBox');
+    if(!m){ await bsFillMonths(); showToast('আগে একটা মাস বাছুন','#dc2626'); return; }
+    const topN=10; /* প্রতি বিষয়ে সেরা ১০টা (৩ বিষয় × ১০ = ৩০টা বই) */
+    let orders=[]; try{ orders=await bsOrders(); }catch(e){ showToast('অর্ডার পড়া যায়নি: '+e.message,'#dc2626'); return; }
+    const nameIdx=new Map(); localBooks.forEach((b,i)=>{ if(b&&b.name){ const k=normalize(b.name); if(!nameIdx.has(k)) nameIdx.set(k,i); } });
+    const units=new Map(), ordersOf=new Map(); let used=0;
+    orders.forEach(o=>{
+        if(!o.createdAt||bsKey(o.createdAt)!==m) return;
+        if(/cancel|reject|return|বাতিল|ফেরত/i.test(String(o.status||''))) return;
+        used++;
+        const seen=new Set(), add=(name,q)=>{ const i=nameIdx.get(normalize(String(name).trim())); if(i==null) return; units.set(i,(units.get(i)||0)+q); if(!seen.has(i)){ seen.add(i); ordersOf.set(i,(ordersOf.get(i)||0)+1); } };
+        const it=o.items, arr=Array.isArray(it)?it:(it&&typeof it==='object'?Object.values(it):[]);
+        if(arr.length) arr.forEach(x=>{ if(x&&x.name) add(x.name,Number(x.qty)>0?Number(x.qty):1); });
+        else if(o.books) String(o.books).split(/,\s*/).forEach(s=>{ const mm=s.match(/^(.*?)\s*\(([০-৯\d]+)টি\)\s*$/); if(mm) add(mm[1],pkN(mm[2])||1); else if(s.trim()&&!/^…|মোট [০-৯\d]+টি বই/.test(s.trim())) add(s,1); });
+    });
+    const groupOf=b=>String(b.subject||'').trim()||String(b.cat||'').trim()||'অন্যান্য';
+    const rank=list=>list.sort((a,b)=>units.get(b)-units.get(a)||(ordersOf.get(b)||0)-(ordersOf.get(a)||0)||String(localBooks[a].name).localeCompare(localBooks[b].name,'bn'));
+    const sold=[...units.keys()].filter(i=>{ const b=localBooks[i]; return b&&(b.type||'বই')==='বই'&&b.bid; });
+    /* সাইটে শুধু ৩টা বিষয় দেখায় — সবচেয়ে বেশি বিক্রির ৩টা আগে থেকে টিক দেওয়া, চাইলে বদলানো যায় */
+    const groups=[];
+    const by=new Map(); sold.forEach(i=>{ const g=groupOf(localBooks[i]); if(!by.has(g)) by.set(g,[]); by.get(g).push(i); });
+    [...by.entries()].map(([g,l])=>({name:g,items:rank(l).slice(0,topN),total:l.reduce((s,i)=>s+units.get(i),0)}))
+        .filter(g=>g.items.length>=3).sort((a,b)=>b.total-a.total).forEach((g,k)=>groups.push({name:g.name,items:g.items,on:k<3}));
+    BSA.res={m,topN,used,groups,units};
+    bsRender();
+}
+function bsRender(){
+    const R=BSA.res, box=document.getElementById('bsBox'); if(!R) return;
+    const live=R.groups.filter(g=>g.on&&g.items.length>=2).length;
+    box.innerHTML=`<div class="pdc-sum"><span><b>${bsLabel(R.m)}</b> — ${drvBn(R.used)}টা অর্ডার</span><span><b class="g">${drvBn(live)}</b>টা ভাগ প্রকাশ হবে</span>`+
+        (live?`<label style="display:inline-flex;align-items:center;gap:5px;"><input type="checkbox" id="bsHome" checked> হোমপেজেও দেখাও</label><button class="btn btn-primary btn-sm" type="button" onclick="bsPublish()" style="margin-left:auto"><i class=gi-upload></i> প্রকাশ করুন</button>`:'')+`</div>`+
+        (R.used?'':'<div class="pdc-sum">এই মাসে কোনো অর্ডার নেই।</div>')+
+        (R.groups.length>3?'<div class="pdc-sum">সাইটে সর্বোচ্চ ৩টা বিষয় দেখাবে — যেগুলো চান সেগুলোয় টিক দিন</div>':'')+
+        R.groups.map((g,k)=>`<div class="pdc-row ${g.on?'ok':''}" style="${g.on?'':'opacity:.55'}"><div class="t"><input type="checkbox" ${g.on?'checked':''} onchange="bsToggle(${k},this)" style="width:18px;height:18px;accent-color:var(--primary)"> ${escapeHTML(g.name)} <small>· ${drvBn(g.items.length)}টা বই</small></div>`+
+            (g.items.length?'<div>'+g.items.map((i,j)=>`<div class="pdc-acts" style="align-items:center"><span style="flex:1">${drvBn(j+1)}. ${escapeHTML(localBooks[i].name)} <small>(${drvBn(R.units.get(i))} কপি)</small></span><button type="button" title="বাদ দিন" onclick="BSA.res.groups[${k}].items.splice(${j},1);bsRender()"><i class=gi-x></i></button></div>`).join('')+'</div>':'<div class="m">এই ভাগে কোনো বই নেই</div>')+`</div>`).join('');
+}
+function bsToggle(k,el){
+    const g=BSA.res.groups[k];
+    if(el.checked&&BSA.res.groups.filter(x=>x.on).length>=3){ el.checked=false; showToast('সর্বোচ্চ ৩টা বিষয় — আগে অন্য একটার টিক তুলুন','#dc2626'); return; }
+    g.on=el.checked; bsRender();
+}
+async function bsPublish(){
+    const R=BSA.res; if(!R) return;
+    const groups=R.groups.filter(g=>g.on&&g.items.length>=2).slice(0,3).map(g=>({name:g.name,ids:g.items.map(i=>localBooks[i].bid).filter(Boolean)}));
+    if(!groups.length) return;
+    const home=!!document.getElementById('bsHome')?.checked;
+    if(!confirm(bsLabel(R.m)+'-এর বেস্টসেলার ('+drvBn(groups.length)+'টা ভাগ) প্রকাশ হবে'+(home?' — হোমপেজেও দেখাবে':'')+'। চালিয়ে যাবেন?')) return;
+    const data={m:R.m,label:bsLabel(R.m),at:Date.now(),groups};
+    try{
+        await db.ref('siteConfig/bestsellers/'+R.m).set(data);
+        if(home) await db.ref('siteConfig/bestsellerNow').set(data);
+        showToast('প্রকাশ হয়েছে — সাইটে সাথে সাথে দেখাবে','#059669');
+    }catch(e){ showToast('প্রকাশ হয়নি: '+e.message,'#dc2626'); }
+}
+async function bsUnpublishHome(){
+    if(!confirm('হোমপেজ থেকে বেস্টসেলার অংশটা সরাবেন? (bestseller.html পাতায় আগের মাসগুলো থেকে যাবে)')) return;
+    try{ await db.ref('siteConfig/bestsellerNow').remove(); showToast('হোমপেজ থেকে সরানো হয়েছে','#059669'); }
+    catch(e){ showToast('হয়নি: '+e.message,'#dc2626'); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   একসাথে কেনা বই — আসল অর্ডার থেকে কোন বই কোন বইয়ের সাথে একসাথে কেনা হয়েছে। বইয়ে রাখি
+   `alsoBought` = সর্বোচ্চ ৮টা bid (বেশিবার একসাথে কেনাটা আগে)। সাইটের বইয়ের পাতা শুধু এটা দেখায় —
+   বানানো কিছু না। বাতিল/ফেরত অর্ডার আর ১২টার বেশি আলাদা বইয়ের বড় অর্ডার বাদ।
+══════════════════════════════════════════════════════════════ */
+const AB={res:null};
+function abOrderIdxs(o,nameIdx){
+    const names=new Set(), it=o.items;
+    const arr=Array.isArray(it)?it:(it&&typeof it==='object'?Object.values(it):[]);
+    if(arr.length) arr.forEach(x=>{ if(x&&x.name) names.add(String(x.name).trim()); });
+    else if(o.books) String(o.books).split(/,\s*/).forEach(s=>{ const n=s.replace(/\s*\([০-৯\d]+টি\)\s*$/,'').trim(); if(n&&!/^…|মোট [০-৯\d]+টি বই/.test(n)) names.add(n); });
+    const out=new Set();
+    names.forEach(n=>{ const i=nameIdx.get(normalize(n)); if(i!=null) out.add(i); });
+    return [...out];
+}
+async function abCompute(){
+    if(!(localBooks||[]).length){ showToast('বইয়ের তালিকা এখনো লোড হয়নি','#dc2626'); return; }
+    const box=document.getElementById('abBox'), btn=document.getElementById('abBtn');
+    btn.disabled=true; box.innerHTML='<div class="pdc-sum"><i class=gi-hourglass></i> অর্ডারগুলো দেখা হচ্ছে…</div>';
+    let orders=allOrders;
+    if(!orders||!orders.length){
+        try{ const s=await db.ref('orders').once('value'); orders=[]; s.forEach(c=>{ const v=c.val(); if(v&&v.orderId) orders.push(v); }); }
+        catch(e){ box.innerHTML='<div class="pdc-sum" style="color:#b91c1c"><i class=gi-warn></i> অর্ডার পড়া যায়নি: '+escapeHTML(e.message)+'</div>'; btn.disabled=false; return; }
+    }
+    const min=Number(document.getElementById('abMin').value)||2;
+    const nameIdx=new Map();
+    localBooks.forEach((b,i)=>{ if(b&&b.name){ const k=normalize(b.name); if(!nameIdx.has(k)) nameIdx.set(k,i); } });
+    const co=new Map(), sold=new Map(); let used=0, big=0, skipped=0;
+    orders.forEach(o=>{
+        if(/cancel|reject|return|বাতিল|ফেরত/i.test(String(o.status||''))){ skipped++; return; }
+        const ids=abOrderIdxs(o,nameIdx);
+        ids.forEach(i=>sold.set(i,(sold.get(i)||0)+1));
+        if(ids.length<2) return;
+        if(ids.length>12){ big++; return; }
+        used++;
+        for(const a of ids) for(const b of ids) if(a!==b){ let m=co.get(a); if(!m) co.set(a,m=new Map()); m.set(b,(m.get(b)||0)+1); }
+    });
+    const res=new Map();
+    co.forEach((m,a)=>{
+        const list=[...m.entries()].filter(([b,c])=>c>=min&&localBooks[b]).sort((x,y)=>y[1]-x[1]||(sold.get(y[0])||0)-(sold.get(x[0])||0)).slice(0,8);
+        if(list.length) res.set(a,list);
+    });
+    AB.res={res,orders:orders.length,used,big,skipped,min};
+    btn.disabled=false;
+    abRender();
+}
+function abRender(){
+    const R=AB.res, box=document.getElementById('abBox'); if(!R) return;
+    const had=localBooks.filter(b=>b&&Array.isArray(b.alsoBought)&&b.alsoBought.length).length;
+    const top=[...R.res.entries()].sort((a,b)=>b[1].reduce((s,x)=>s+x[1],0)-a[1].reduce((s,x)=>s+x[1],0)).slice(0,12);
+    box.innerHTML=`<div class="pdc-sum"><span>${drvBn(R.orders)}টা অর্ডার দেখা হলো — ${drvBn(R.used)}টায় একাধিক বই ছিল${R.big?` (${drvBn(R.big)}টা বড় অর্ডার বাদ)`:''}</span><span><b class="g">${drvBn(R.res.size)}</b>টা বইয়ের পাতায় "আরও কিনেছেন" দেখাবে</span>${had?`<span>এখন দেখাচ্ছে ${drvBn(had)}টায়</span>`:''}${R.res.size||had?`<button class="btn btn-primary btn-sm" type="button" onclick="abSave()" style="margin-left:auto"><i class=gi-save></i> সাইটে বসান</button>`:''}</div>`+
+        (R.res.size?'':`<div class="pdc-sum">এখনো ${drvBn(R.min)} বার একসাথে কেনা হয়েছে এমন বই নেই — "কমপক্ষে" কমিয়ে দেখুন, বা আরও অর্ডার জমলে আবার চালান।</div>`)+
+        top.map(([a,list])=>`<div class="pdc-row ok"><div class="t">${escapeHTML(localBooks[a].name)} <small>· ${escapeHTML(localBooks[a].pub||'')}</small></div><div class="f">সাথে কেনা: ${list.map(([b,c])=>escapeHTML(localBooks[b].name)+' <small>('+drvBn(c)+' বার)</small>').join(' · ')}</div></div>`).join('');
+}
+async function abSave(){
+    const R=AB.res; if(!R) return;
+    await ensureBookIdsAndMigrate(localBooks);
+    const upd={}; let set=0, clear=0;
+    localBooks.forEach((b,i)=>{
+        if(!b) return;
+        const l=R.res.get(i), want=l?l.map(([x])=>localBooks[x].bid).filter(Boolean):[];
+        const cur=Array.isArray(b.alsoBought)?b.alsoBought:[];
+        if(want.length){ if(JSON.stringify(cur)!==JSON.stringify(want)){ b.alsoBought=want; upd[i]=bookWithoutDesc(b); set++; } }
+        else if(cur.length){ delete b.alsoBought; upd[i]=bookWithoutDesc(b); clear++; }
+    });
+    if(!set&&!clear){ showToast('কোনো বদল নেই — সাইটে আগে থেকেই এটাই আছে','#059669'); return; }
+    if(!confirm(drvBn(set)+'টা বইয়ে "আরও কিনেছেন" বসবে'+(clear?', '+drvBn(clear)+'টা থেকে পুরনোটা সরবে':'')+'। চালিয়ে যাবেন?')) return;
+    try{ await db.ref('bookList').update(upd); showToast('সাইটে বসানো হয়েছে — কাজ শেষে book.js ডাউনলোড করে আপলোড করুন','#059669'); abRender(); }
+    catch(e){ showToast('সেভ হয়নি: '+e.message,'#dc2626'); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   তথ্যের স্বাস্থ্য — সব বই দেখে তথ্যের সমস্যা ভাগ করে দেখায়; প্রতিটা বই থেকে এক চাপে এডিটে
+══════════════════════════════════════════════════════════════ */
+const DH={data:null,cat:''};
+const DH_CATS=[
+    ['noprice','দাম নেই — সাইটে লুকানো','amber'],['overmrp','বিক্রয়মূল্য মুদ্রিত দামের বেশি','red'],['dup','একই বই দুবার','red'],
+    ['nocover','কভার নেই','amber'],['nodesc','আসল বিবরণ নেই','amber'],['noauthor','লেখক নেই','amber'],['nopub','প্রকাশনী নেই','amber'],
+    ['nomrp','মুদ্রিত দাম নেই','amber'],['authors','লেখকের নামের বানান আলাদা','amber'],['bigcover','পুরনো Drive-ইমপোর্টের কভার (বড় হতে পারে)','amber'],
+    ['nopkg','প্যাকেজের ভেতরের বই বাছা হয়নি','gray'],['nosubject','বিষয় বসানো নেই','gray']
+];
+async function dhRun(){
+    if(!(localBooks||[]).length){ showToast('বইয়ের তালিকা এখনো লোড হয়নি','#dc2626'); return; }
+    const box=document.getElementById('dhBox'), btn=document.getElementById('dhBtn');
+    btn.disabled=true; box.innerHTML='<div class="pdc-sum"><i class=gi-hourglass></i> বইগুলো দেখা হচ্ছে…</div>';
+    try{ await drvLoadDescs(true); }catch(e){}
+    const L=localBooks, isBk=b=>(b.type||'বই')==='বই', C={};
+    DH_CATS.forEach(([k])=>C[k]=[]);
+    L.forEach((b,i)=>{
+        if(!b) return;
+        if(!(Number(b.price)>0)){ C.noprice.push(i); return; }
+        if(Number(b.original_price)&&Number(b.price)>Number(b.original_price)) C.overmrp.push(i);
+        if(!Number(b.original_price)) C.nomrp.push(i);
+        if(!isRealUrl(b.img)) C.nocover.push(i);
+        if(/uc-export/.test(String(b.img||''))) C.bigcover.push(i);
+        if(isBk(b)&&!String(b.author||'').trim()) C.noauthor.push(i);
+        if(isBk(b)&&!String(b.pub||'').trim()) C.nopub.push(i);
+        const d=drvBookDesc(b,i).trim(); if(!d||d==='শীঘ্রই আপডেট করা হবে'||drvIsAutoDesc(d)) C.nodesc.push(i);
+        if(isBk(b)&&!String(b.subject||'').trim()) C.nosubject.push(i);
+        if(pkIsPack(b)&&!(Array.isArray(b.pkgItems)&&b.pkgItems.length)) C.nopkg.push(i);
+    });
+    /* একই নাম + একই প্রকাশনী, দুটোই সাইটে দেখায় */
+    const dup=new Map();
+    L.forEach((b,i)=>{ if(b&&Number(b.price)>0){ const k=normalize(b.name)+'|'+normalize(b.pub||''); if(!dup.has(k)) dup.set(k,[]); dup.get(k).push(i); } });
+    dup.forEach(v=>{ if(v.length>1) C.dup.push(v); });
+    /* লেখকের নাম — মুফতি/ড./রহ. বাদ দিয়ে, শুধু ব্যঞ্জনবর্ণে এক কিন্তু লেখায় আলাদা */
+    const ag=new Map();
+    L.forEach(b=>{ if(!b||!isBk(b)||!String(b.author||'').trim()) return; const ppl=drvPeople(b.author); if(!ppl.length) return;
+        const k=ppl.map(drvCons).sort().join('|'); if(k.replace(/\|/g,'').length<3) return;
+        if(!ag.has(k)) ag.set(k,new Map()); const g=ag.get(k), raw=String(b.author).trim(); g.set(raw,(g.get(raw)||0)+1); });
+    ag.forEach(g=>{ if(g.size>1) C.authors.push([...g.entries()].sort((a,b)=>b[1]-a[1])); });
+    DH.data=C; DH.cat=DH.cat&&C[DH.cat]&&C[DH.cat].length?DH.cat:'';
+    btn.disabled=false;
+    dhRender();
+}
+function dhRender(){
+    const C=DH.data, box=document.getElementById('dhBox'); if(!C) return;
+    const chips=DH_CATS.map(([k,l,s])=>{ const n=C[k].length; if(!n) return ''; return `<button type="button" class="dh-chip ${s}${DH.cat===k?' on':''}" onclick="DH.cat=DH.cat==='${k}'?'':'${k}';dhRender()"><b>${drvBn(n)}</b> ${l}</button>`; }).join('');
+    const okAll=DH_CATS.every(([k])=>!C[k].length);
+    let list='';
+    const row=i=>{ const b=localBooks[i]||{}; return `<div class="pdc-row"><div class="t">${escapeHTML(b.name||'')} <small>· ${escapeHTML(b.author||'')} · ${escapeHTML(b.pub||'')} · ৳${drvBn(b.price||0)}</small></div><div class="pdc-acts"><button type="button" onclick="dhEdit(${i})"><i class=gi-pen></i> এডিট</button></div></div>`; };
+    if(DH.cat==='dup') list=C.dup.slice(0,60).map(g=>`<div class="pdc-sum" style="flex-direction:column;align-items:stretch">${g.map(row).join('')}</div>`).join('');
+    else if(DH.cat==='authors') list=C.authors.slice(0,80).map(g=>`<div class="pdc-row amber"><div class="m">একই লেখক মনে হচ্ছে — বানান মিলিয়ে নিন</div>${g.map(([nm,n])=>`<div class="pdc-acts" style="align-items:center"><span style="flex:1">${escapeHTML(nm)} <small>(${drvBn(n)}টা বই)</small></span><button type="button" onclick="dhSearch(${escapeHTML(JSON.stringify(nm))})"><i class=gi-search></i> বইগুলো দেখুন</button></div>`).join('')}</div>`).join('');
+    else if(DH.cat) list=(DH.cat==='bigcover'?'<div class="pdc-sum">এগুলো টুলস → "বড় কভার ছোট করুন" দিয়ে এক চাপে ঠিক করা যায়।</div>':'')+C[DH.cat].slice(0,100).map(row).join('')+(C[DH.cat].length>100?`<div class="pdc-sum">আরও ${drvBn(C[DH.cat].length-100)}টা — আগে এগুলো ঠিক করে আবার "তথ্য যাচাই করুন" চাপুন</div>`:'');
+    box.innerHTML=(okAll?'<div class="pdc-sum" style="color:#047857;font-weight:700"><i class="gi-ok gi-w"></i> কোনো সমস্যা পাওয়া যায়নি</div>':`<div class="dh-chips">${chips}</div>`)+list;
+}
+function dhOpenEditor(fn){
+    switchTab('editor',document.getElementById('navEditor'));
+    setTimeout(()=>{ fn(); beShownCount=BE_PAGE_SIZE; beRenderList(); document.getElementById('beBookList')?.scrollIntoView({behavior:'smooth',block:'start'}); },250);
+}
+function dhEdit(i){ const b=localBooks[i]; if(!b) return; dhOpenEditor(()=>{ const s=document.getElementById('beSearch'); if(s) s.value=b.name; beOpenIdx=i; }); }
+function dhSearch(name){ dhOpenEditor(()=>{ const s=document.getElementById('beSearch'); if(s) s.value=name; beOpenIdx=null; }); }
+
+/* ══════════════════════════════════════════════════════════════
+   বড় কভার ছোট করা — আগের অটো-ইমপোর্ট Drive-এর লিংক সরাসরি imgbb-কে দিত, ফলে ছবি পুরো মাপে
+   উঠেছিল (নামে "uc-export…", একেকটা ১–৮ MB)। এখানে imgbb-এর কভারগুলোর মাপ (HEAD) দেখে ৩০০ KB-এর
+   বেশিগুলো ৮০০px JPEG বানিয়ে নতুন করে তুলি, বইয়ে নতুন লিংক বসাই। পুরনো লিংক এই ব্রাউজারে
+   (localStorage gk_cover_backup) রেখে দিই — দরকার হলে ফেরানো যায়।
+══════════════════════════════════════════════════════════════ */
+const CI={rows:[],busy:false,stop:false,LIMIT:300*1024};
+const ciIsImgbb=u=>/^https:\/\/i\.ibb\.co(\.com)?\//.test(String(u||''));
+const ciMB=n=>drvBn((n/1048576).toFixed(n>=10485760?0:1));
+const ciKB=n=>n>=1048576?ciMB(n)+' MB':drvBn(Math.round(n/1024))+' KB';
+async function ciSize(u){ try{ const r=await fetch(u,{method:'HEAD',cache:'no-store'}); if(!r.ok) return -1; return Number(r.headers.get('content-length'))||-1; }catch(e){ return -1; } }
+async function ciScan(){
+    if(CI.busy) return;
+    if(!(localBooks||[]).length){ showToast('বইয়ের তালিকা এখনো লোড হয়নি','#dc2626'); return; }
+    const list=localBooks.map((b,i)=>[b,i]).filter(([b])=>b&&ciIsImgbb(b.img));
+    const box=document.getElementById('ciBox'), btn=document.getElementById('ciScanBtn');
+    CI.busy=true; btn.disabled=true; document.getElementById('ciRunBtn').style.display='none';
+    const sizes=new Array(list.length); let next=0, done=0;
+    const say=()=>{ box.innerHTML='<div class="pdc-sum"><i class=gi-hourglass></i> কভারের মাপ দেখা হচ্ছে… '+drvBn(done)+'/'+drvBn(list.length)+'</div>'; };
+    say();
+    await Promise.all(Array.from({length:16},async()=>{ while(next<list.length){ const j=next++; sizes[j]=await ciSize(list[j][0].img); done++; if(done%25===0) say(); } }));
+    /* নেটের ক্ষণিকের সমস্যায় যেগুলোর মাপ আসেনি, সেগুলো আরেকবার ধীরে দেখি */
+    const again=sizes.map((s,j)=>s<0?j:-1).filter(j=>j>-1); let n2=0;
+    await Promise.all(Array.from({length:4},async()=>{ while(n2<again.length){ const j=again[n2++]; sizes[j]=await ciSize(list[j][0].img); } }));
+    CI.rows=list.map(([b,i],j)=>({i,size:sizes[j],old:b.img})).filter(r=>r.size>CI.LIMIT).sort((a,b)=>b.size-a.size);
+    CI.busy=false; btn.disabled=false;
+    ciRender(list.length,sizes.filter(s=>s<0).length);
+}
+function ciRender(total,failed){
+    const box=document.getElementById('ciBox'), R=CI.rows;
+    const left=R.filter(r=>!r.done&&!r.err), sum=left.reduce((s,r)=>s+r.size,0);
+    let head=`<div class="pdc-sum">`+(total!=null?`<span>${drvBn(total)}টা imgbb কভার মাপা হলো${failed?` (${drvBn(failed)}টার মাপ পাওয়া যায়নি)`:''}</span>`:'')+
+        `<span><b class="r">${drvBn(left.length)}</b>টা বড় কভার বাকি${left.length?` — মোট ${ciKB(sum)}`:''}</span>`+
+        (R.some(r=>r.done)?`<span><b class="g">${drvBn(R.filter(r=>r.done).length)}</b>টা ছোট করা হয়েছে</span>`:'')+`</div>`;
+    if(!R.length) head=`<div class="pdc-sum" style="color:#047857;font-weight:700"><i class="gi-ok gi-w"></i> ${total!=null?drvBn(total)+'টা কভার মাপা হলো — ':''}৩০০ KB-এর বড় কোনো কভার নেই</div>`;
+    const rows=R.slice(0,150).map(r=>{ const b=localBooks[r.i]||{};
+        return `<div class="pdc-row ${r.done?'ok':r.err?'amber':'red'}"><div class="t">${escapeHTML(b.name||'')} <small>· ${escapeHTML(b.pub||'')}</small></div><div class="m">${r.done?`<i class="gi-ok gi-w"></i> ${ciKB(r.size)} → ${ciKB(r.newSize)}`:r.err?`<i class="gi-info gi-w"></i> ${ciKB(r.size)} — ${escapeHTML(r.err)}`:`<i class="gi-warn gi-w"></i> ${ciKB(r.size)}`}</div></div>`;
+    }).join('')+(R.length>150?`<div class="pdc-sum">আরও ${drvBn(R.length-150)}টা…</div>`:'');
+    box.innerHTML=head+rows;
+    document.getElementById('ciRunBtn').style.display=left.length?'':'none';
+}
+async function ciRun(){
+    if(CI.busy) return;
+    if(!IMGBB_KEY){ showToast('আগে "ছবি আপলোড সেটিংস"-এ imgbb key সেভ করুন','#dc2626'); return; }
+    const todo=CI.rows.filter(r=>!r.done&&!r.err);
+    if(!todo.length) return;
+    if(!confirm(drvBn(todo.length)+'টা কভার ছোট করে নতুন করে তোলা হবে (দেখতে একই থাকবে)। প্রতিটায় কয়েক সেকেন্ড লাগে — পেজটা খোলা রাখুন। শুরু করবেন?')) return;
+    CI.busy=true; CI.stop=false;
+    const runB=document.getElementById('ciRunBtn'), stopB=document.getElementById('ciStop');
+    runB.disabled=true; stopB.style.display='';
+    let backup={}; try{ backup=JSON.parse(localStorage.getItem('gk_cover_backup')||'{}')||{}; }catch(e){}
+    try{ await ensureBookIdsAndMigrate(localBooks); }catch(e){}
+    let k=0;
+    for(const r of todo){
+        if(CI.stop) break;
+        k++; const b=localBooks[r.i];
+        document.querySelector('#ciBox .pdc-sum').innerHTML='<i class=gi-hourglass></i> '+drvBn(k)+'/'+drvBn(todo.length)+' — "'+escapeHTML(b.name)+'"';
+        try{
+            if(b.img!==r.old) throw new Error('এর মধ্যে কভার বদলানো হয়েছে — বাদ দিলাম');
+            const res=await fetch(r.old,{cache:'no-store'}); if(!res.ok) throw new Error('ছবি নামানো যায়নি ('+res.status+')');
+            const blob=await res.blob();
+            const small=await new Promise(ok=>gkCompressImg(blob,800,ok));
+            if(!small||small.size>blob.size*0.8) throw new Error('এর চেয়ে ছোট করা গেল না');
+            const fd=new FormData(); fd.append('image',small,'cover.jpg');
+            const up=await fetch('https://api.imgbb.com/1/upload?key='+encodeURIComponent(IMGBB_KEY),{method:'POST',body:fd});
+            const j=await up.json().catch(()=>null);
+            if(!(j&&j.success&&j.data&&j.data.url)) throw new Error('imgbb আপলোড ব্যর্থ');
+            backup[b.bid||String(r.i)]=r.old;
+            try{ localStorage.setItem('gk_cover_backup',JSON.stringify(backup)); }catch(e){}
+            b.img=j.data.url; await saveBookToFirebase(r.i);
+            r.done=true; r.newSize=small.size;
+        }catch(e){ r.err=e.message; }
+        ciRender();
+        document.getElementById('ciRunBtn').style.display='none';
+    }
+    CI.busy=false; runB.disabled=false; stopB.style.display='none';
+    ciRender();
+    const n=CI.rows.filter(r=>r.done).length;
+    if(n) showToast(drvBn(n)+'টা কভার ছোট করা হয়েছে — কাজ শেষে book.js ডাউনলোড করে আপলোড করুন','#059669');
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -6591,7 +7088,7 @@ async function deleteLandingPage(slug){
 const SITE_BASE_URL='https://gronthokanon.com';
 function downloadSitemap(){
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
-    const staticPages=['','all.html?type=pub','all.html?type=author','track.html','about.html','faq.html','blog.html','blog.html?post=keno-boi-porbo','blog.html?post=notun-pathok-boi','blog.html?post=boi-upohar','contact.html','delivery.html','return.html','terms.html','privacy.html'];
+    const staticPages=['','bestseller.html','all.html?type=pub','all.html?type=author','track.html','about.html','faq.html','blog.html','blog.html?post=keno-boi-porbo','blog.html?post=notun-pathok-boi','blog.html?post=boi-upohar','contact.html','delivery.html','return.html','terms.html','privacy.html'];
     const today=new Date().toISOString().slice(0,10);
     const xmlEsc=s=>String(s).replace(/&/g,'&amp;');
     const u=(loc,freq,pri)=>'  <url><loc>'+xmlEsc(SITE_BASE_URL+'/'+loc)+'</loc><lastmod>'+today+'</lastmod><changefreq>'+freq+'</changefreq>'+(pri?'<priority>'+pri+'</priority>':'')+'</url>\n';
@@ -6614,6 +7111,71 @@ function downloadSitemap(){
 }
 
 /* ── DOWNLOAD book.js + book-desc.js (একসাথে দুটো) ── */
+/* ══ book.js ছোট আকারে (সাইট দ্রুত খোলার জন্য) ══
+   প্রতিটা বই এক লাইনে একটা ছোট array: প্রকাশনী/লেখক/বিভাগ/বিষয়/কভার ইত্যাদি বারবার না লিখে একটা
+   তালিকার নম্বর, ছবির লিংকের সাধারণ শুরুটা (যেমন wafilife-এর uploads/) একবারই, নামের সাথে হুবহু
+   মেলে এমন bid আর খালি ঘর বাদ। book.js-এর ভেতরের ছোট ফাংশন সাইট খোলার সময় আগের মতো পূর্ণ
+   books তালিকা বানায় — তাই সাইটের বাকি কোড কিছুই বদলায় না। ফাইল ২.৪ MB থেকে ~০.৮ MB।
+   downloadBookJs() দুই রকমই বানিয়ে মিলিয়ে দেখে — হুবহু এক না হলে পুরনো পূর্ণ রূপটাই দেয়। */
+const GK_PACK_UNPACKER=`(function (H, R) {
+    var D = H.d, P = H.p, T = H.t;
+    function slug(s) { return (s || '').toString().trim().replace(/[।,.!?;:'"()\\[\\]{}\\/\\\\]/g, '').replace(/\\s+/g, '-').toLowerCase().slice(0, 60) || 'boi'; }
+    function v(k, i) { return D[k][i || 0]; }
+    return R.map(function (r) {
+        var b = {}, im = r[5] || '', pdf = r[14], x = r[17], k;
+        b.bid = r[0] === 0 ? slug(r[1]) : r[0];
+        b.type = v('type', r[12]); b.name = r[1]; b.author = v('author', r[2]);
+        b.price = r[3] || 0; b.original_price = r[4] || 0;
+        b.cat = v('cat', r[7]); b.subcat = v('subcat', r[9]); b.subject = v('subject', r[8]);
+        b.cover = v('cover', r[10]); b.pub = v('pub', r[6]); b.pages = v('pages', r[11]); b.brand = v('brand', r[13]);
+        if (im.charAt(0) === '~') im = P[im.charCodeAt(1) - 48] + im.slice(2);
+        b.img = im; b.desc = '';
+        b.tags = (r[15] || []).map(function (i) { return T[i]; });
+        b.attributes = r[16] || [];
+        if (pdf !== null) { pdf = pdf || ''; if (pdf.charAt(0) === '#') pdf = 'https://drive.google.com/file/d/' + pdf.slice(1) + '/view'; b.pdfLink = pdf; }
+        if (x) for (k in x) b[k] = x[k];
+        return b;
+    });
+})`;
+function gkPackBooksCode(src){
+    const norm=s=>String(s).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+    const slug=s=>(s||'').toString().trim().replace(/[।,.!?;:'"()\[\]{}\/\\]/g,'').replace(/\s+/g,'-').toLowerCase().slice(0,60)||'boi';
+    const DK=['type','author','cat','subcat','subject','cover','pub','pages','brand'];
+    const val=(b,k)=>k==='type'?norm(b.type||'বই'):norm(b[k]??'');
+    /* প্রতিটা ঘরের মান → নম্বর (বেশি ব্যবহৃতটা ০, যাতে শেষের ০ বাদ দেওয়া যায়) */
+    const D={}, I={};
+    DK.forEach(k=>{ const m=new Map(); src.forEach(b=>{ const x=val(b,k); m.set(x,(m.get(x)||0)+1); }); D[k]=[...m.entries()].sort((a,b)=>b[1]-a[1]).map(e=>e[0]); I[k]=new Map(D[k].map((x,i)=>[x,i])); });
+    const tagsOf=b=>(Array.isArray(b.tags)?b.tags:bookTags(b)).map(norm);
+    const T=[...new Set(src.flatMap(tagsOf))], TI=new Map(T.map((t,i)=>[t,i]));
+    /* ছবির লিংকের সবচেয়ে বেশি ব্যবহৃত শুরুগুলো (সর্বোচ্চ ১০টা) */
+    const pc=new Map();
+    src.forEach(b=>{ const m=norm(b.img??'').match(/^https?:\/\/[^/]+\/(?:[^/?#]+\/)?/); if(m) pc.set(m[0],(pc.get(m[0])||0)+1); });
+    const P=[...pc.entries()].filter(e=>e[1]>=20).sort((a,b)=>b[0].length-a[0].length||b[1]-a[1]).slice(0,10).map(e=>e[0]);
+    const done=new Set(['bid','type','name','author','price','original_price','cat','subcat','subject','cover','pub','pages','brand','img','desc','tags','attributes']);
+    const rows=src.map(b=>{
+        const name=norm(b.name??''), bid=norm(b.bid??'');
+        let im=norm(b.img??'');
+        if(!/^https?:\/\//.test(im)) im=''; /* placeholder ("1" ইত্যাদি) — নিচের IMAGE FALLBACK এমনিতেই কভার-টেমপ্লেট বসায় */
+        else{ const p=P.findIndex(x=>im.startsWith(x)); if(p>-1) im='~'+String.fromCharCode(48+p)+im.slice(P[p].length); }
+        const ek=Object.keys(b).filter(k=>!done.has(k)&&b[k]!==undefined);
+        let pdf=null; const extra={};
+        const pl=b.pdfLink;
+        if(ek[0]==='pdfLink'&&typeof pl==='string'&&!/^[#~]/.test(pl)){
+            const m=pl.match(/^https:\/\/drive\.google\.com\/file\/d\/([\w-]+)\/view$/);
+            pdf=m?'#'+m[1]:pl; ek.shift();
+        }
+        ek.forEach(k=>{ extra[k]=JSON.parse(JSON.stringify(b[k])); });
+        const attrs=Array.isArray(b.attributes)?b.attributes.filter(a=>a&&a.label).map(a=>({label:norm(a.label),value:norm(a.value||'')})):[];
+        const r=[bid===slug(name)?0:bid, name, I.author.get(val(b,'author')), Number(b.price)||0, Number(b.original_price)||0, im,
+            I.pub.get(val(b,'pub')), I.cat.get(val(b,'cat')), I.subject.get(val(b,'subject')), I.subcat.get(val(b,'subcat')),
+            I.cover.get(val(b,'cover')), I.pages.get(val(b,'pages')), I.type.get(val(b,'type')), I.brand.get(val(b,'brand')),
+            pdf, tagsOf(b).map(t=>TI.get(t)), attrs.length?attrs:0, ek.length?extra:0];
+        while(r.length&&(r[r.length-1]===0||r[r.length-1]===''||(Array.isArray(r[r.length-1])&&!r[r.length-1].length))) r.pop();
+        return JSON.stringify(r);
+    });
+    return `/* বইয়ের তালিকা ছোট আকারে লেখা — নিচের ছোট ফাংশন সাইট খোলার সময় পূর্ণ তালিকা বানায়। হাতে বদলাবেন না, অ্যাডমিন প্যানেল থেকে ডাউনলোড করুন। */\nconst books = ${GK_PACK_UNPACKER}(${JSON.stringify({d:D,p:P,t:T})}, [\n${rows.join(',\n')}\n]);`;
+}
+
 function downloadBookJs(){
     if(gkForeignBookEdit){
         alert('অন্য কোনো ডিভাইস/মডারেটর থেকে বই বদলানো হয়েছে — এই পেজের লিস্ট পুরনো।\n\nপেজটা রিফ্রেশ করে তারপর book.js ডাউনলোড করুন।');
@@ -6650,7 +7212,14 @@ function downloadBookJs(){
     const fallback=`\n\n/* ═══ IMAGE FALLBACK ═══\n   যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —\n   সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */\nbooks.forEach(function(b){\n    if(!b.img || !/^https?:\\/\\//.test(b.img)) b.img = 'book-placeholder.svg';\n});`;
     /* Firebase-এর bookListVer এই ফাইলে বসে — সাইট মিলিয়ে দেখে, মিললে বাড়তি ডাউনলোড নেই */
     const verLine=`/* bookList ভার্সন — অ্যাডমিন প্যানেল থেকে আপনাআপনি বসে, হাতে বদলাবেন না */\nvar GK_BOOKS_VER = ${JSON.stringify(GK_ADMIN_BOOKVER)};\n`;
-    const bookJsCode=verLine+`const books = [\n${lines.join(',\n')}\n];`+fallback;
+    let bookJsCode=verLine+`const books = [\n${lines.join(',\n')}\n];`+fallback;
+    /* ছোট রূপ — দুটো চালিয়ে হুবহু একই তালিকা এলে তবেই সেটা দিই, নইলে পুরনো পূর্ণ রূপ */
+    try{
+        const packed=verLine+gkPackBooksCode(src)+fallback;
+        const a=new Function(bookJsCode+'\n;return books;')(), p=new Function(packed+'\n;return books;')();
+        if(a.length===p.length&&JSON.stringify(a)===JSON.stringify(p)) bookJsCode=packed;
+        else console.warn('book.js ছোট রূপ পূর্ণ রূপের সাথে মেলেনি — পূর্ণ রূপ দেওয়া হলো');
+    }catch(e){ console.warn('book.js ছোট রূপ বানানো যায়নি — পূর্ণ রূপ দেওয়া হলো',e); }
 
     /* ── দুটো ফাইল download ── */
     function dlBlob(code, filename){
