@@ -1141,6 +1141,105 @@
 /* অ্যাডমিনে বোতাম/টোস্টের ভেতরে আইকন লেখার রঙে */
 :is(.btn,.toast,.chip) :is([class^="gi-"],[class*=" gi-"]){color:inherit!important;}
 
+        /* ── Drive রিভিউ প্যানেল (আগে দেখে, তারপর সেভ) ── */
+        .drv-panel{position:fixed;inset:0;z-index:3000;background:var(--bg);display:none;flex-direction:column;font-family:var(--font-main);color:var(--text-main);}
+        .drv-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;background:linear-gradient(135deg,#064e3b,#0B6E4F);color:#fff;}
+        .drv-title{font-size:16px;font-weight:800;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+        .drv-title span{font-weight:600;opacity:.85;}
+        .drv-sub{font-size:12px;opacity:.85;margin-top:2px;}
+        .drv-x{width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:16px;cursor:pointer;flex-shrink:0;}
+        .drv-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--border);}
+        .drv-publbl{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;}
+        .drv-publbl select{padding:7px 9px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text-main);font-family:inherit;font-size:13px;max-width:210px;}
+        .drv-filters{display:flex;gap:6px;flex-wrap:wrap;}
+        .drv-filters button,.drv-tool{padding:6px 11px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--text-main);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
+        .drv-filters button b{background:var(--primary-light);color:var(--primary);border-radius:10px;padding:0 7px;font-size:11.5px;}
+        .drv-filters button.on{background:var(--primary);border-color:var(--primary);color:#fff;}
+        .drv-filters button.on b{background:rgba(255,255,255,.25);color:#fff;}
+        .drv-tool{background:#fff7ed;border-color:#fdba74;color:#9a3412;}
+        .drv-list{flex:1;overflow-y:auto;padding:12px 12px 90px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:12px;align-content:start;}
+        .drv-row{background:var(--surface);min-width:0;border:1.5px solid var(--border);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:9px;box-shadow:var(--shadow-sm);}
+        .drv-row.warn{border-color:#fcd34d;}
+        .drv-row.bad{border-color:#fca5a5;background:linear-gradient(180deg,#fff5f5,var(--surface) 60px);}
+        .drv-row.sel{box-shadow:0 0 0 2px var(--primary);}
+        .drv-head{display:flex;align-items:flex-start;gap:9px;}
+        .drv-pick input{width:20px;height:20px;accent-color:var(--primary);margin-top:2px;cursor:pointer;}
+        .drv-names{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+        .drv-names b{font-size:14.5px;line-height:1.35;}
+        .drv-names small{font-size:11.5px;color:var(--text-muted);}
+        .drv-none{color:#dc2626;}
+        .drv-fold{display:inline-flex;align-items:center;gap:4px;}
+        .drv-mini{flex-shrink:0;padding:5px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--primary);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;}
+        .drv-warns{display:flex;flex-direction:column;gap:5px;}
+        .drv-w{display:flex;align-items:flex-start;gap:6px;font-size:12px;font-weight:600;line-height:1.45;padding:6px 9px;border-radius:8px;}
+        .drv-w .gi,.drv-w [class^="gi-"]{margin-top:2px;}
+        .drv-w.red{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;}
+        .drv-w.amber{background:#fffbeb;color:#92400e;border:1px solid #fde68a;}
+        .drv-w.ok{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;}
+        .drv-sec{display:flex;flex-direction:column;gap:6px;border-top:1px dashed var(--border);padding-top:8px;}
+        .drv-lbl{font-size:12.5px;font-weight:800;}
+        .drv-lbl small{font-weight:500;color:var(--text-muted);margin-left:6px;}
+        .drv-imgs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+        .drv-img{flex:0 0 auto;width:86px;border:2px solid var(--border);border-radius:10px;background:var(--bg);padding:4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit;}
+        .drv-img img{width:76px;height:100px;object-fit:contain;border-radius:6px;background:#fff;}
+        .drv-img span{font-size:10.5px;font-weight:600;color:var(--text-muted);text-align:center;line-height:1.25;}
+        .drv-img.on{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light);}
+        .drv-img.on span{color:var(--primary);}
+        .drv-img.cur{border-style:dashed;}
+        .drv-chk2{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;cursor:pointer;flex-wrap:wrap;}
+        .drv-chk2 input{width:17px;height:17px;accent-color:var(--primary);}
+        .drv-chk2 a{color:#1d4ed8;word-break:break-all;}
+        .drv-chk2 em{font-style:normal;color:var(--text-muted);font-weight:500;}
+        .drv-chk2.dis{opacity:.55;cursor:default;}
+        .drv-desc summary{font-size:12px;color:var(--primary);cursor:pointer;font-weight:700;}
+        .drv-desc div{font-size:12px;line-height:1.6;color:var(--text-muted);white-space:pre-wrap;max-height:160px;overflow:auto;margin-top:5px;}
+        .drv-subj{padding:8px 11px!important;font-size:13px!important;}
+        .drv-sugg{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11.5px;color:var(--text-muted);}
+        .drv-sugg button{padding:4px 10px;border-radius:16px;border:1px solid #fdba74;background:#fff7ed;color:#9a3412;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;}
+        .drv-chk2 em.ok{color:#047857;font-weight:700;}
+        .drv-chk2 em.new{color:#b45309;font-weight:700;}
+        .drv-desc.old summary{color:#64748b;}
+        .drv-meta{font-size:11.5px;color:var(--primary);font-weight:600;margin-top:6px;}
+        .drv-step{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;margin:4px 0 6px;}
+        .drv-step b{width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;}
+        .drv-step small{font-weight:500;color:var(--text-muted);}
+        .drv-pubinfo{font-size:12.5px;line-height:1.75;background:var(--primary-light);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:12px;}
+        .drv-pubinfo .ok{color:#047857;font-weight:700;} .drv-pubinfo .warn{color:#b45309;font-weight:700;}
+        .drv-pubwarn{grid-column:1/-1;background:#fef2f2;border:1.5px solid #fca5a5;color:#b91c1c;border-radius:12px;padding:11px 13px;font-size:13px;font-weight:700;display:flex;gap:7px;align-items:flex-start;}
+        .drv-will{font-size:12px;background:var(--primary-light);color:var(--primary);padding:6px 9px;border-radius:8px;}
+        /* শর্ট PDF যাচাই */
+        .pdc-box{margin-top:12px;display:flex;flex-direction:column;gap:8px;}
+        .pdc-sum{font-size:12.5px;line-height:1.7;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 12px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;}
+        .pdc-sum b.r{color:#b91c1c;} .pdc-sum b.a{color:#b45309;} .pdc-sum b.g{color:#047857;}
+        .pdc-sum label{display:inline-flex;align-items:center;gap:5px;font-weight:600;cursor:pointer;margin-left:auto;}
+        .pdc-row{display:flex;flex-direction:column;gap:5px;border:1.5px solid var(--border);border-radius:11px;padding:9px 11px;background:var(--surface);font-size:12.5px;}
+        .pdc-row.red{border-color:#fca5a5;background:linear-gradient(180deg,#fff5f5,var(--surface) 46px);}
+        .pdc-row.amber{border-color:#fcd34d;}
+        .pdc-row .t{font-weight:800;font-size:13.5px;line-height:1.35;}
+        .pdc-row .t small{font-weight:500;color:var(--text-muted);font-size:11.5px;}
+        .pdc-row .f{color:var(--text-muted);word-break:break-all;}
+        .pdc-row .f a{color:#1d4ed8;font-weight:600;}
+        .pdc-row .m{font-weight:700;}
+        .pdc-row.red .m{color:#b91c1c;} .pdc-row.amber .m{color:#92400e;} .pdc-row.ok .m{color:#047857;}
+        .pdc-acts{display:flex;flex-wrap:wrap;gap:6px;}
+        .pdc-acts button{padding:5px 11px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text-main);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
+        .pdc-acts button.del{border-color:#fca5a5;color:#b91c1c;background:#fef2f2;}
+        .pdc-acts button.mv{border-color:#86efac;color:#047857;background:#ecfdf5;}
+        .pdc-acts button:disabled{opacity:.5;cursor:default;}
+        [data-theme="dark"] .pdc-row.red{background:var(--surface);}
+        [data-theme="dark"] .pdc-acts button.del{background:rgba(220,38,38,.15);color:#fca5a5;}
+        [data-theme="dark"] .pdc-acts button.mv{background:rgba(16,185,129,.12);color:#6ee7b7;}
+        .drv-empty{font-size:12px;color:var(--text-muted);padding:8px;}
+        .drv-empty.big{grid-column:1/-1;text-align:center;padding:40px;font-size:14px;}
+        .drv-orphan{grid-column:1/-1;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:12px;padding:12px;font-size:12.5px;line-height:1.7;}
+        .drv-foot{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:var(--surface);border-top:1px solid var(--border);box-shadow:0 -6px 20px rgba(0,0,0,.08);font-size:13px;z-index:3001;}
+        .drv-foot .btn{white-space:nowrap;}
+        [data-theme="dark"] .drv-row.bad{background:var(--surface);}
+        [data-theme="dark"] .drv-w.red{background:rgba(220,38,38,.15);color:#fca5a5;border-color:rgba(220,38,38,.35);}
+        [data-theme="dark"] .drv-w.amber{background:rgba(245,158,11,.12);color:#fcd34d;border-color:rgba(245,158,11,.3);}
+        [data-theme="dark"] .drv-w.ok{background:rgba(16,185,129,.12);color:#6ee7b7;border-color:rgba(16,185,129,.3);}
+        @media(max-width:600px){.drv-list{grid-template-columns:minmax(0,1fr);padding:10px 10px 90px;}.drv-publbl select{max-width:150px;}}
+
     </style>
 </head>
 <body>
@@ -2184,26 +2283,18 @@
                 </div>
 
                 <div class="tool-card" id="driveFolderCard">
-                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Publisher Drive Folder থেকে ছবি + PDF + বিবরণ আনো</h3>
-                    <p style="margin-bottom:12px;">Publisher-এর Drive folder-এর লিংক দিন (প্রতিটা বইয়ের আলাদা sub-folder থাকতে হবে)। দোকানে <strong>আগে থেকে থাকা</strong> বই নাম মিলিয়ে খুঁজে — যেটায় যা নেই, সেটা বসায়:<br>
-                    <i class=gi-image></i> <strong>ছবি</strong> — folder-এর সব ছবির মাপ দেখে <em>লম্বা front-page</em>-টা বাছে (বর্গাকার promo, ফোনে তোলা ছবি বাদ)। শুধু চওড়া full-cover থাকলে তার থেকে front অংশ কেটে নেয়। imgbb-তে আপলোড করে বসায়<br>
-                    <i class=gi-doc></i> <strong>PDF</strong> — শর্ট PDF-এর Drive লিংক<br>
-                    <i class=gi-note></i> <strong>বিবরণ</strong> — folder-এ Google Doc, .docx বা .txt থাকলে (উপরের "নাম/লেখক/মূল্য:" লাইনগুলো বাদ দিয়ে)<br>
-                    দাম/ক্যাটাগরি/লেখক ছোঁয় না, নতুন বইও বানায় না (মেলেনি এমন folder শেষে দেখাবে)।</p>
+                    <h3><i class=gi-folder></i> প্রকাশনীর Drive থেকে কভার + শর্ট PDF + বিবরণ</h3>
+                    <p style="margin-bottom:12px;">প্রথমে প্রকাশনী বাছুন, তারপর সেই প্রকাশনীর Drive ফোল্ডারের লিংক দিন (প্রতিটা বইয়ের আলাদা sub-folder, শেয়ার "Anyone with the link")। <strong>স্ক্যান</strong> চাপলে সেই প্রকাশনীর প্রতিটা বইয়ের একটা তালিকা আসবে — কভার, শর্ট PDF, "বই সম্পর্কে" ফাইলের বিবরণ, আর যেখানে তথ্য মেলে না সেখানে <span style="color:#dc2626;font-weight:700">লাল</span>/<span style="color:#b45309;font-weight:700">হলুদ</span> সতর্কতা। দেখে ঠিক করে <strong>"বাছাই করা সব সেভ করুন"</strong> চাপলে তবেই বসবে।</p>
+                    <div class="drv-step"><b>১</b> প্রকাশনী বাছুন</div>
+                    <select class="form-input" id="drvPubSel" onfocus="drvFillPubSelect()" onchange="drvPubChosen()" style="margin-bottom:8px;"><option value="">— প্রকাশনী বাছুন —</option></select>
+                    <div id="drvPubInfo" class="drv-pubinfo" style="display:none"></div>
+                    <div class="drv-step"><b>২</b> এই প্রকাশনীর Drive ফোল্ডারের লিংক <small>(একবার দিলে মনে থাকবে)</small></div>
                     <input class="form-input" id="driveFolderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-bottom:12px;">
-                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:8px;">
-                        <input type="checkbox" id="driveCropSpread" checked style="accent-color:#059669;">
-                        <i class=gi-scissors></i> আলাদা front না থাকলে full-cover থেকে front কেটে নাও (spine-এর ডান পাশ = front ধরে; কাটা ছবিগুলো পরে একবার দেখে নিন)
-                    </label>
-                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;margin-bottom:12px;color:#dc2626;">
-                        <input type="checkbox" id="driveForceReplace" style="accent-color:#dc2626;">
-                        <i class=gi-refresh></i> আগে থেকে ছবি/PDF/বিবরণ থাকলেও Drive-এরটা দিয়ে বদলে দাও (Replace)
-                    </label>
-                    <button class="btn btn-primary" onclick="importFromDriveFolder()" id="driveFolderBtn">
-                        <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                        <i class=gi-download></i> ছবি + PDF + বিবরণ আনো
-                    </button>
+                    <button class="btn btn-primary" onclick="importFromDriveFolder()" id="driveFolderBtn"><i class=gi-search></i> <b>৩</b>&nbsp;স্ক্যান করে তালিকা দেখাও</button>
                     <div id="driveFolderStatus" style="margin-top:10px;font-size:12px;"></div>
+                    <div class="drv-step" style="margin-top:16px;border-top:1px dashed var(--border);padding-top:14px;"><i class=gi-search></i> ভুল শর্ট PDF খুঁজুন <small>(উপরে প্রকাশনী বাছলে শুধু সেটার, না বাছলে সব বইয়ের)</small></div>
+                    <button class="btn btn-ghost" type="button" onclick="pdcRun()" id="pdcBtn"><i class=gi-doc></i> দোকানে বসানো PDF-গুলো যাচাই করুন</button>
+                    <div id="pdcBox" class="pdc-box"></div>
                 </div>
 
                 <div class="tool-card" id="pubOfferCard">
@@ -2712,7 +2803,7 @@ function normalize(str){
 }
 
 async function driveList(folderId){
-    const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType,createdTime,shortcutDetails)&orderBy=createdTime&key=${DRIVE_API_KEY}&pageSize=200`;
+    const url=`https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents&fields=files(id,name,mimeType,createdTime,shortcutDetails,imageMediaMetadata(width,height,rotation))&orderBy=createdTime&key=${DRIVE_API_KEY}&pageSize=200`;
     const r=await fetch(url);
     if(!r.ok) throw new Error('Drive API error: '+r.status);
     const d=await r.json();
@@ -2919,148 +3010,680 @@ function gkGramSim(a,b){
     return (2*c)/(ga.size+gb.size);
 }
 
-async function importFromDriveFolder(){
-    if(!DRIVE_API_KEY){showToast('আগে Drive API key সেভ করুন','#dc2626');return;}
-    const folderUrl=(document.getElementById('driveFolderInput')?.value||'').trim();
-    if(!folderUrl){showToast('Drive folder link দিন','#dc2626');return;}
+/* ══════════════════════════════════════════════════════════════
+   Drive রিভিউ — আগে দেখে, তারপর সেভ (২০২৬-১০)
+   প্রকাশনীর Drive folder দিলে প্রতিটা বইয়ের sub-folder স্ক্যান করে একটা তালিকা দেখায়:
+   কোন বইয়ের সাথে মিলল, এখনকার কভার + Drive-এর সব ছবি, শর্ট PDF, আর "বই সম্পর্কে"
+   ফাইলের বিবরণ (Google Doc / Word .docx / .txt); যেখানে তথ্য মেলে না সেখানে লাল/হলুদ
+   সতর্কতা। কিছুই সেভ হয় না যতক্ষণ না "বাছাই করা সব সেভ করুন" চাপা হয়।
+   (আগের এক-চাপের অটো-ইমপোর্ট নাম মেলাতে প্রথম "ভেতরে-আছে" বইটাই নিত — ফলে
+   "যিলহজ্জের আমল ডায়েরি"-র ছবি অন্য প্রকাশনীর "ডায়েরি" বইয়ে বসতে পারত। এখানে হুবহু
+   মিল আগে, আর একই প্রকাশনীর বই অগ্রাধিকার পায়।)
+══════════════════════════════════════════════════════════════ */
+const DRV={rows:[],folderName:'',pub:'',descs:{},filter:'all',saving:false};
+const drvBn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const drvRaw=s=>String(s||'').normalize('NFC').replace(/[​-‏‪-‮﻿]/g,'').replace(/[\s।,.!?'"‘’“”«»()\[\]{}\-–—_:ঃ]+/g,'').toLowerCase();
+const DRV_DESC_MAX=6000;
 
-    const m=folderUrl.match(/folders\/([a-zA-Z0-9_-]+)/);
-    if(!m){showToast('সঠিক Drive folder link দিন','#dc2626');return;}
-    const mainFolderId=m[1];
+/* ── আগে প্রকাশনী বাছাই, তারপর সেই প্রকাশনীর Drive লিংক ──
+   লিংকগুলো প্রকাশনীর নামে মনে রাখা হয় — শুধু অ্যাডমিন/মডারেটর পড়তে পারে এমন জায়গায়
+   (adminNotes/_driveFolders; সাইটের সাধারণ ভিজিটর দেখতে পায় না), সাথে এই ব্রাউজারেও। */
+DRV.links=null; DRV.chosenPub=''; DRV.pubWarn='';
+const drvLinkKey=p=>encodeURIComponent(String(p||'').trim()).replace(/\./g,'%2E');
+async function drvLoadLinks(){
+    if(DRV.links) return DRV.links;
+    const L={};
+    try{ const s=await db.ref('adminNotes/_driveFolders').once('value'); const v=s.val()||{}; Object.keys(v).forEach(k=>{ if(v[k]&&v[k].name&&v[k].url) L[v[k].name]=v[k].url; }); }catch(e){}
+    try{ const l=JSON.parse(localStorage.getItem('gk_drive_links')||'{}'); Object.keys(l).forEach(n=>{ if(!L[n]) L[n]=l[n]; }); }catch(e){}
+    DRV.links=L;
+    return L;
+}
+async function drvSaveLink(pub,url){
+    if(!pub||!url) return;
+    await drvLoadLinks();
+    if(DRV.links[pub]===url) return;
+    DRV.links[pub]=url;
+    try{ const l=JSON.parse(localStorage.getItem('gk_drive_links')||'{}'); l[pub]=url; localStorage.setItem('gk_drive_links',JSON.stringify(l)); }catch(e){}
+    try{ await db.ref('adminNotes/_driveFolders/'+drvLinkKey(pub)).set({name:pub,url:url,at:Date.now()}); }catch(e){}
+    drvFillPubSelect();
+}
+function drvPubStats(){
+    const st={};
+    (localBooks||[]).forEach(b=>{ if(!b) return; const p=String(b.pub||'').trim(); if(!p) return; const e=st[p]||(st[p]={n:0,pdf:0}); e.n++; if(/^https?:\/\//.test(String(b.pdfLink||'').trim())) e.pdf++; });
+    return st;
+}
+async function drvFillPubSelect(){
+    const sel=document.getElementById('drvPubSel'); if(!sel||!(localBooks||[]).length) return;
+    const links=await drvLoadLinks(), st=drvPubStats();
+    const cur=sel.value||DRV.chosenPub;
+    const list=Object.keys(st).sort((a,b)=>a.localeCompare(b,'bn'));
+    sel.innerHTML='<option value="">— প্রকাশনী বাছুন ('+drvBn(list.length)+'টা) —</option>'+list.map(p=>`<option value="${escapeHTML(p)}"${p===cur?' selected':''}>${escapeHTML(p)} — ${drvBn(st[p].n)}টা বই · PDF ${drvBn(st[p].pdf)}${links[p]?' · Drive লিংক আছে':''}</option>`).join('');
+}
+/* দোকানের এখনকার বিবরণ (সাইটের book-desc.js + Firebase) — একবার এনে রাখা */
+async function drvLoadDescs(force){
+    if(DRV.descsLoaded&&!force) return;
+    DRV.descs={};
+    try{ const t=await (await fetch('book-desc.js?nc='+Date.now(),{cache:'no-store'})).text(); Object.assign(DRV.descs,new Function(t+'\n;return (typeof bookDescs!=="undefined")?bookDescs:{};')()||{}); }catch(e){}
+    try{ const s=await db.ref('bookDescs').once('value'); Object.assign(DRV.descs,s.val()||{}); }catch(e){}
+    DRV.descsLoaded=true;
+}
+/* প্রকাশনী বাছলে: সেভ করা Drive লিংক বসে যায়, আর এই প্রকাশনীর কী আছে / কী বাকি — এক লাইনে */
+async function drvPubChosen(){
+    const p=document.getElementById('drvPubSel').value; DRV.chosenPub=p;
+    const info=document.getElementById('drvPubInfo'), inp=document.getElementById('driveFolderInput');
+    if(!PDC.busy){ PDC.rows=[]; const pb=document.getElementById('pdcBox'); if(pb) pb.innerHTML=''; }
+    if(!p){ info.style.display='none'; return; }
+    const links=await drvLoadLinks();
+    inp.value=links[p]||'';
+    const bs=(localBooks||[]).map((b,i)=>[b,i]).filter(([b])=>b&&String(b.pub||'').trim()===p);
+    const vis=bs.filter(([b])=>Number(b.price)>0).length, cover=bs.filter(([b])=>drvHasCover(b)).length, pdf=bs.filter(([b])=>/^https?:\/\//.test(String(b.pdfLink||'').trim())).length;
+    info.style.display='block';
+    info.innerHTML=`<b>${escapeHTML(p)}</b> — মোট ${drvBn(bs.length)}টা বই (সাইটে দেখায় ${drvBn(vis)}টা)<br>কভার আছে <b>${drvBn(cover)}</b> · শর্ট PDF আছে <b>${drvBn(pdf)}</b> · <span id="drvPubDesc">বিবরণ গোনা হচ্ছে…</span>`+
+        (links[p]?'<br><span class="ok"><i class="gi-ok gi-w"></i> Drive লিংক সেভ করা আছে — সরাসরি স্ক্যান করতে পারেন</span>':'<br><span class="warn"><i class="gi-info gi-w"></i> এই প্রকাশনীর Drive লিংক এখনো দেওয়া হয়নি — নিচে দিন</span>');
+    await drvLoadDescs();
+    const d=bs.filter(([b,i])=>{ const t=drvBookDesc(b,i).trim(); return t&&!drvIsAutoDesc(t); }).length;
+    const el=document.getElementById('drvPubDesc'); if(el&&DRV.chosenPub===p) el.innerHTML='আসল বিবরণ আছে <b>'+drvBn(d)+'</b>টায়';
+}
 
-    const BTN_LABEL='<i class=gi-download></i> ছবি + PDF + বিবরণ আনো';
-    const btn=document.getElementById('driveFolderBtn');
-    const status=document.getElementById('driveFolderStatus');
-    const forceReplace=document.getElementById('driveForceReplace')?.checked||false;
-    const allowCrop=document.getElementById('driveCropSpread')?.checked!==false;
-    btn.disabled=true; btn.textContent='চলছে...';
-    status.innerHTML='<span style="color:#059669"><i class=gi-folder></i> Main folder থেকে বইয়ের list আনা হচ্ছে...</span>';
-    if(!IMGBB_KEY) showToast('imgbb key নেই — ছবি বাদ দিয়ে শুধু PDF/বিবরণ আনা হবে','#d97706');
+function drvHasCover(b){ const u=String((b&&b.img)||''); return /^https?:\/\//.test(u)&&!/placeholder|drive\.google\.com\/thumbnail/.test(u); }
+function drvBookDesc(b,idx){ const k=(b&&b.bid)||String(idx); return String(DRV.descs[k]||DRV.descs[b&&b.name]||(b&&b.desc)||''); }
 
-    try{
-        const allFiles=await driveList(mainFolderId);
-        const subFolders=allFiles.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
-
-        if(!subFolders.length){
-            status.innerHTML='<span style="color:#dc2626">কোনো sub-folder পাওয়া যায়নি — প্রতিটা বইয়ের আলাদা folder থাকতে হবে।</span>';
-            btn.disabled=false; btn.textContent=BTN_LABEL;
-            return;
+/* নাম মেলানো — হুবহু > জায়গা-ছাড়া হুবহু > শুরুতে মিল > শব্দের মিল; একই প্রকাশনী +৩০, অন্য প্রকাশনী −৪০ */
+function drvWordScore(a,b){ const wa=a.split(' ').filter(w=>w.length>1), wb=b.split(' ').filter(w=>w.length>1); if(!wa.length||!wb.length) return 0; return wa.filter(w=>wb.includes(w)).length/Math.min(wa.length,wb.length); }
+function drvMatch(folderName,pub){
+    const f=normalize(folderName), fc=f.replace(/\s+/g,''), np=pub?normalize(pub):'';
+    let best=null, second=null;
+    (localBooks||[]).forEach((b,i)=>{
+        if(!b||!b.name) return;
+        const bn=normalize(b.name), bc=bn.replace(/\s+/g,'');
+        let s=0;
+        if(bn===f) s=100;
+        else if(bc===fc) s=96;
+        else if(f.length>=3&&(bn.startsWith(f+' ')||bc.startsWith(fc))) s=82;
+        else if(bc.length>=5&&fc.startsWith(bc)) s=70;
+        else{
+            const w=drvWordScore(f,bn);
+            if(w>=0.6) s=48+w*20;
+            else{ const g=gkGramSim(fc,bc); if(g>=0.72) s=44+g*20; }
         }
+        if(!s) return;
+        const samePub=!!np&&normalize(b.pub||'')===np;
+        if(np) s+= samePub?30:(s>=100?-15:-40);
+        if(s<55) return;
+        const cand={i,s,samePub};
+        if(!best||s>best.s){ second=best; best=cand; } else if(!second||s>second.s) second=cand;
+    });
+    if(best) best.close=!!(second&&best.s-second.s<8);
+    return best;
+}
 
-        let nPdf=0,nImg=0,nCrop=0,nDesc=0,done=0;
-        const notFound=[],imgIssues=[],docxFail=[],log=[],cropLog=[];
-
-        function wordScore(a,b){
-            const wa=a.split(' ').filter(w=>w.length>1);
-            const wb=b.split(' ').filter(w=>w.length>1);
-            if(!wa.length||!wb.length) return 0;
-            const common=wa.filter(w=>wb.includes(w)).length;
-            return common/Math.min(wa.length,wb.length);
+/* ── "বই সম্পর্কে" ফাইল থেকে বিবরণ ──
+   কোন ফাইল আগে: নাম "বই সম্পর্কে / পরিচিতি / বিবরণ" > নামহীন (Untitled) > অন্যগুলো > "রিভিউ"।
+   শর্ট PDF-এর লেখা / নমুনা অধ্যায় (short, sample, শর্ট, অধ্যায়) কখনো বিবরণ ধরা হয় না।
+   খালি ফাইল বাদ দিয়ে পরেরটা দেখে। পুরনো .doc (Word 97-2003) ব্রাউজারে পড়া যায় না — জানিয়ে দেয়। */
+function drvDocRank(f){
+    const n=drvRaw((f.name||'')+' '+(f._parentFolder||''));
+    if(/short|sample|শর্ট|নমুনা|অধ্যায়|chapter|pdf/.test(n)) return 9;
+    if(/সম্প.?র?্?কে|সম্পকে|পরিচিতি|বিবরণ|description|about|intro|summary|সারসংক্ষেপ|ফ্ল্যাপ|flap|ব্যাককভার|backcover/.test(n)) return 0;
+    if(/untitled|নামহীন/.test(n)) return 1;
+    if(/রিভিউ|review|পাঠপ্রতিক্রিয়া/.test(n)) return 3;
+    return 2;
+}
+/* "বই সম্পর্কে" ফাইলের শেষে (কখনো শুরুতে) থাকা তথ্যের লাইন — "লেখক: … / পৃষ্ঠা সংখ্যা: … / মুদ্রিত মূল্য: …"
+   এগুলো আলাদা করে পড়ি (দোকানের তথ্যের সাথে মেলাতে) আর বিবরণ থেকে বাদ দিই */
+const DRV_META_KEYS=[
+    ['name',/^(বই|বইয়ের নাম|বইয়ের নাম|গ্রন্থ|গ্রন্থের নাম|নাম|book|book name|title)$/],
+    ['author',/^(লেখক|লেখিকা|মূল লেখক|লেখক ও সংকলক|সংকলক|সংকলন|সংকলনে|রচনা|রচয়িতা|author|writer|compiler)$/],
+    ['translator',/^(অনুবাদ|অনুবাদক|অনুবাদে|ভাষান্তর|translator)$/],
+    ['editor',/^(সম্পাদনা|সম্পাদক|সম্পাদনায়|নিরীক্ষা|নিরীক্ষক|editor)$/],
+    ['pub',/^(প্রকাশক|প্রকাশনী|প্রকাশনায়|প্রকাশনা|পরিবেশক|publisher|publication|published by)$/],
+    ['price',/^(মূল্য|মুদ্রিত মূল্য|প্রচ্ছদ মূল্য|গায়ের মূল্য|নির্ধারিত মূল্য|দাম|মুদ্রিত দাম|price|listed price|mrp|cover price)$/],
+    ['pages',/^(পৃষ্ঠা|পৃষ্ঠা সংখ্যা|পৃষ্ঠাসংখ্যা|বইয়ের পৃষ্ঠা সংখ্যা|বইয়ের পৃষ্ঠা সংখ্যা|মোট পৃষ্ঠা|pages|page|page count)$/],
+    ['other',/^(বিষয়|বিষয়|ধরন|ধরণ|ক্যাটাগরি|বাইন্ডিং|বাঁধাই|কভার|প্রচ্ছদ|প্রচ্ছদ শিল্পী|প্রচ্ছদশিল্পী|প্রচ্ছদ ও অলংকরণ|isbn|সংস্করণ|প্রথম প্রকাশ|প্রকাশকাল|ভাষা|ছাড় মূল্য|বিক্রয় মূল্য|অফার মূল্য|বয়স|binding|edition|language|category|genre)$/]
+];
+function drvSplitDoc(raw){
+    const meta={}, keep=[];
+    String(raw||'').replace(/\r/g,'').replace(/﻿/g,'').split('\n').forEach(l=>{
+        const t=l.trim().normalize('NFC').replace(/[​-‏]/g,'');
+        const m=t.match(/^([^:：]{1,32}?)\s*[:：]\s*(.{0,140})$/);
+        if(m){
+            const key=m[1].trim().toLowerCase().replace(/\s+/g,' ');
+            const hit=DRV_META_KEYS.find(x=>x[1].test(key));
+            if(hit){ const v=m[2].trim(); if(hit[0]!=='other'&&v&&!meta[hit[0]]) meta[hit[0]]=v; return; }
         }
-        const normBooks=localBooks.map(b=>(b&&b.name)?normalize(b.name):'');
-        const compact=s=>s.replace(/\s+/g,'');
-
-        for(const folder of subFolders){
-            done++;
-            const folderName=folder.name;
-            const folderNorm=normalize(folderName);
-            status.innerHTML=`<span style="color:#059669"><i class=gi-folder></i> ${done}/${subFolders.length} — ${escapeHTML(folderName)}</span><br><span style="color:#6b7280">ছবি ${nImg} (কাটা ${nCrop}) · PDF ${nPdf} · বিবরণ ${nDesc}</span>`;
-
-            /* ১. হুবহু / containment  ২. শব্দ মিল 60%+  ৩. ৪-অক্ষর সাদৃশ্য 0.72+ */
-            let bookIdx=-1, bestScore=0;
-            normBooks.forEach((bn,i)=>{
-                if(!bn) return;
-                if(bn===folderNorm||bn.includes(folderNorm)||folderNorm.includes(bn)){
-                    if(bestScore<1){ bookIdx=i; bestScore=1; }
-                    return;
-                }
-                const score=wordScore(folderNorm,bn);
-                if(score>=0.6&&score>bestScore){ bookIdx=i; bestScore=score; }
-            });
-            if(bookIdx===-1){
-                const fc=compact(folderNorm); let bs=0;
-                normBooks.forEach((bn,i)=>{ if(!bn) return; const s=gkGramSim(fc,compact(bn)); if(s>bs){bs=s;bookIdx=i;} });
-                if(bs<0.72) bookIdx=-1;
-            }
-            if(bookIdx===-1){ notFound.push(folderName); continue; }
-
-            const b=localBooks[bookIdx];
-            const files=await driveListDeep(folder.id,1);
-            let changed=false;
-
-            /* ── ১. PDF ── */
-            const pdfs=files.filter(f=>f.mimeType==='application/pdf');
-            if(pdfs.length&&(forceReplace||!(b.pdfLink||'').trim())){
-                const preferred=pdfs.find(f=>/পিডিএফ|pdf|short|sample|শর্ট/i.test(f._parentFolder||'')||/পিডিএফ|pdf|short|sample|শর্ট/i.test(f.name));
-                b.pdfLink='https://drive.google.com/file/d/'+(preferred||pdfs[0]).id+'/view';
-                nPdf++; changed=true;
-            }
-
-            /* ── ২. ছবি ── (নেই / Drive-এর অস্থায়ী লিংক / Replace টিক থাকলে) */
-            const needImg=forceReplace||!/^https?:\/\//.test(b.img||'')||/drive\.google\.com\/thumbnail/.test(b.img||'');
-            if(needImg&&IMGBB_KEY){
-                const imgs=files.filter(f=>/^image\//.test(f.mimeType||''));
-                if(imgs.length){
-                    const {pick,crop,reason}=await gkDrivePickFront(imgs,allowCrop);
-                    if(pick){
-                        try{
-                            let url;
-                            if(crop){
-                                /* কাটতে হলে আসল ফাইল লাগবেই (thumbnail দিয়ে canvas কাজ করে না) */
-                                const blob=await gkDriveFetchBlob(pick.id);
-                                const front=await gkCropFrontFromSpread(blob);
-                                url=await uploadToImgbbAsync(front,800);
-                                nCrop++; cropLog.push(folderName);
-                            }else{
-                                try{
-                                    const blob=await gkDriveFetchBlob(pick.id);
-                                    url=await uploadToImgbbAsync(blob,800);
-                                }catch(e1){
-                                    url=await uploadToImgbbAsync('https://drive.google.com/thumbnail?id='+pick.id+'&sz=w1000');
-                                }
-                            }
-                            b.img=url; nImg++; changed=true;
-                            log.push(folderName+' ← '+pick.name+' ('+reason+')');
-                        }catch(e2){ imgIssues.push(folderName+': আপলোড ব্যর্থ — '+e2.message); }
-                    }else{
-                        imgIssues.push(folderName+': '+reason);
-                    }
-                }
-            }
-
-            /* ── ৩. বিবরণ ── (Firebase-এ bookDescs/{bid} খালি হলে বা Replace টিক থাকলে) */
-            const bid=b.bid||String(bookIdx);
-            let hasDesc=false;
-            if(!forceReplace){
-                try{ const ds=await db.ref('bookDescs/'+bid).once('value'); hasDesc=!!(ds.val()&&String(ds.val()).trim()); }catch(e){}
-            }
-            if(!hasDesc){
-                const d=await gkDriveFetchDesc(files);
-                if(d){ b.desc=d.text; nDesc++; changed=true; }
-                else if(files.some(f=>/wordprocessingml|msword/.test(f.mimeType||'')||/\.docx?$/i.test(f.name||''))) docxFail.push(folderName);
-            }
-
-            if(changed) await saveBookToFirebase(bookIdx);
-        }
-
-        try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
-        beUpdateStats();
-        beRenderList();
-
-        let resultHtml=`<span style="color:#059669;font-weight:700"><i class=gi-ok></i> সম্পন্ন — ছবি ${nImg}টি (তার মধ্যে full-cover থেকে কাটা ${nCrop}টি) · PDF ${nPdf}টি · বিবরণ ${nDesc}টি বসেছে</span>`;
-        if(cropLog.length) resultHtml+=`<br><span style="color:#d97706"><i class=gi-scissors></i> কাটা ছবিগুলো একবার বই-এডিটরে দেখে নিন (flap/spine ঢুকে গেলে ম্যানুয়াল ছবি দিন): ${escapeHTML(cropLog.join(', '))}</span>`;
-        if(imgIssues.length) resultHtml+=`<br><span style="color:#d97706"><i class=gi-image></i> ছবি বসেনি ${imgIssues.length}টিতে:</span><br><span style="color:#6b7280">${imgIssues.map(escapeHTML).join('<br>')}</span>`;
-        if(docxFail.length) resultHtml+=`<br><span style="color:#d97706"><i class=gi-note></i> ${docxFail.length}টিতে docx/doc ছিল কিন্তু বিবরণ পড়া যায়নি (পুরনো .doc বা খালি ফাইল?): ${escapeHTML(docxFail.slice(0,8).join(', '))}${docxFail.length>8?'...':''}</span>`;
-        if(notFound.length) resultHtml+=`<br><span style="color:#dc2626"><i class=gi-warn></i> ${notFound.length}টি folder দোকানের কোনো বইয়ের সাথে মেলেনি (নতুন বই হলে আগে যোগ করুন): ${escapeHTML(notFound.join(', '))}</span>`;
-        if(log.length) resultHtml+=`<details style="margin-top:8px"><summary style="cursor:pointer;color:#6b7280">কোন বইয়ে কোন ছবি বসল (${log.length})</summary><div style="color:#6b7280;font-size:11px">${log.map(escapeHTML).join('<br>')}</div></details>`;
-        status.innerHTML=resultHtml;
-        showToast(`ছবি ${nImg} · PDF ${nPdf} · বিবরণ ${nDesc} বসেছে`,'#0B6E4F');
-
-    }catch(e){
-        status.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> Error: ${escapeHTML(e.message)}</span>`;
-        showToast('Drive import ব্যর্থ: '+e.message,'#dc2626');
+        keep.push(l);
+    });
+    return {meta,body:keep.join('\n')};
+}
+/* উপরের "Book Description:", "বই সম্পর্কে", "রিভিউ" জাতীয় শিরোনাম-লাইন, শেষের তথ্যের লাইন আর
+   শুধু-বইয়ের-নাম লেখা লাইন বাদ দিয়ে পরিষ্কার বিবরণ */
+function drvCleanDesc(raw,names){
+    const isHead=l=>/^(book\s*description|description|about\s*the\s*book|বই\s*সম্প.{0,3}কে|বইয়ের\s*বিবরণ|বিবরণ|সংক্ষিপ্ত\s*(বিবরণ|পরিচিতি)|বই\s*পরিচিতি|পরিচিতি|রিভিউ|ফ্ল্যাপ|ব্যাক\s*কভার)\s*[:：\-–]?\s*$/i.test(l.trim().normalize('NFC').replace(/[​-‏]/g,''));
+    const nm=(names||[]).map(drvRaw).filter(Boolean);
+    const isTitle=l=>{ const x=drvRaw(l); return !!x&&nm.some(n=>n===x||(x.length>=4&&n.startsWith(x))); };
+    const lines=drvSplitDoc(raw).body.split('\n');
+    while(lines.length&&(!lines[0].trim()||isHead(lines[0])||isTitle(lines[0]))) lines.shift();
+    while(lines.length&&(!lines[lines.length-1].trim()||isTitle(lines[lines.length-1]))) lines.pop();
+    let s=lines.join('\n').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+    if(s.length>DRV_DESC_MAX){ const cut=s.slice(0,DRV_DESC_MAX); const p=Math.max(cut.lastIndexOf('।'),cut.lastIndexOf('. '),cut.lastIndexOf('\n')); s=(p>DRV_DESC_MAX*0.6?cut.slice(0,p+1):cut).trim()+' …'; }
+    return s;
+}
+/* দোকানের স্বয়ংক্রিয় ছোট বিবরণ ("… রচিত। … গ্রন্থকানন থেকে সংগ্রহ করুন — ক্যাশ অন ডেলিভারি") — আসল বিবরণ নয় */
+function drvIsAutoDesc(s){ s=String(s||''); return s.length<500&&/গ্রন্থকানন থেকে (সংগ্রহ|অর্ডার)|ক্যাশ অন ডেলিভারি|শীঘ্রই আপডেট/.test(s); }
+/* নাম মেলানো (লেখক/প্রকাশনী) — মুফতি/মাওলানা/ড./রহ. ইত্যাদি বাদ, একাধিক লেখকের যেকোনো একজন মিললেই হবে */
+const DRV_HONOR=/(^|\s)(মুফতি|মুফতী|মাওলানা|মওলানা|শাইখ|শায়খ|শায়খ|শেখ|ড|ডা|ডক্টর|প্রফেসর|অধ্যাপক|হাফেজ|হাফিজ|হাফেয|ইমাম|আল্লামা|রহ|রাহ|রাহি|রহিমাহুল্লাহ|হাফি|হাফিজাহুল্লাহ|সা|রা|dr|prof|mufti|maulana|shaykh|sheikh)(?=\s|$)/gi;
+function drvPeople(s){
+    return String(s||'').normalize('NFC').replace(/[​-‏]/g,'').replace(/[()\[\]{}"'‘’“”]/g,' ')
+        .split(/\s*(?:,|،|;|\/|&|\s+ও\s+|\s+এবং\s+|\s+and\s+)\s*/i)
+        .map(p=>p.replace(/\./g,' ').replace(DRV_HONOR,' ').replace(/[\-–—]/g,' ').replace(/\s+/g,' ').trim()).filter(Boolean);
+}
+const drvSkel=s=>drvRaw(s).replace(/্য|্/g,'');
+/* বানানের ছোটখাটো পার্থক্য (আলি/আলী, শাযিলী/শাযলী, সাইয়্যিদ/সাইয়েদ) বাদ দিতে শব্দের শুধু ব্যঞ্জনগুলো মেলাই */
+const drvCons=s=>drvRaw(s).replace(/[া-ৌ়্ঁৗ]/g,'').replace(/(.)\1+/g,'$1');
+function drvLev(a,b){ if(a===b) return 0; const m=a.length,n=b.length; if(!m||!n) return m||n; let p=Array.from({length:n+1},(_,j)=>j); for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+function drvWordEq(a,b){ const x=drvCons(a), y=drvCons(b); return x===y||(Math.min(x.length,y.length)>=3&&drvLev(x,y)<=1); }
+/* বইয়ের নাম — বন্ধনীর উপশিরোনাম বাদ, একটা আরেকটার শুরু হলেও মিল */
+function drvTitleMatch(a,b){ const t=s=>drvCons(normalize(String(s).replace(/\(.*?\)|\[.*?\]/g,' '))); const x=t(a), y=t(b); if(!x||!y) return true; return x===y||x.startsWith(y)||y.startsWith(x)||drvLev(x,y)<=Math.max(1,Math.floor(Math.min(x.length,y.length)/8)); }
+function drvSamePerson(a,b){ const ta=a.split(' ').filter(Boolean), tb=b.split(' ').filter(Boolean); if(!ta.length||!tb.length) return false; const [s,l]=ta.length<=tb.length?[ta,tb]:[tb,ta]; return s.every(w=>l.some(x=>drvWordEq(w,x))); }
+function drvPeopleMatch(a,b){ const A=drvPeople(a), B=drvPeople(b); return A.some(x=>B.some(y=>drvSamePerson(x,y))); }
+const drvLatin=s=>/[A-Za-z]/.test(s)&&!/[ঀ-৿]/.test(s);
+/* বইয়ের নামের মূল শব্দ — ক্রমিক নম্বর, বন্ধনীর অংশ, উপশিরোনাম (":" / " - " / "—"-এর পরে), সংখ্যা/খণ্ড আর
+   ফাইলের নামের "short pdf / শর্ট পিডিএফ / final / আপডেট" জাতীয় বাড়তি শব্দ বাদ */
+const DRV_FILE_JUNK=/^(sample|final|update|updated|new|copy|compressed|edited|f+|s|up|part|vol|version|preview|demo|শট|সর্ট|সট|পি|ডি|এফ|ফাইনাল|আপডেট|নতুন|সম্পাদিত|কপি|নমুনা|সংস্করণ|খণ্ড|খন্ড|পর্ব|ভলিউম|ভার্সন|কিছু|অংশ|প্রিভিউ)$/i;
+function drvTitleWords(s,isFile,keepSub){
+    let t=String(s||'').normalize('NFC').replace(/&#39;/g,"'").replace(/&amp;/g,'&').replace(/ﷺ/g,' ');
+    if(isFile){
+        /* ফাইলের নামে [ ] / ( ) -এর ভেতরেও বইয়ের নাম থাকে ("Short Pdf [বইয়ের নাম]") — তাই শুধু চিহ্নগুলো সরাই */
+        t=t.replace(/\.(pdf|docx?|txt)$/i,'').replace(/short|shot|pdf|শর্ট|পিডিএফ/gi,' ').replace(/\((\d+|[০-৯]+)\)/g,' ');
+    }else{
+        t=t.replace(/^\s*[০-৯0-9]+\s*[.)]\s*/,'').replace(/\(.*?\)|\[.*?\]|\{.*?\}/g,' ');
+        if(!keepSub) t=t.split(/\s[-–—:]\s|\s?[:—–]\s?|-\s/)[0];
     }
-    btn.disabled=false; btn.textContent=BTN_LABEL;
+    return normalize(t).replace(/[()\[\]{}.,:;!?'"‘’“”&#]/g,' ').replace(/[০-৯0-9]+\s*(ম|য়|য়|র্থ|ষ্ঠ|তম|st|nd|rd|th)?/g,' ')
+        .split(/[\s_]+/).filter(w=>w.length>1&&!DRV_FILE_JUNK.test(w));
+}
+/* দুটো নামের সম্পর্ক — same: একই (বানানের ছোট পার্থক্যসহ) · near: বেশিরভাগ শব্দ মেলে ·
+   part: প্রথমটা দ্বিতীয়টার ছোট রূপ · more: প্রথমটায় বাড়তি শব্দ (আলাদা, আরও নির্দিষ্ট বই হতে পারে —
+   যেমন "গল্পে আঁকা চল্লিশ হাদিস" বনাম "চল্লিশ হাদিস") · diff: আলাদা · ?: বোঝা যায় না (ইংরেজি বনাম বাংলা / নাম নেই) */
+function drvNameRel(a,b,aIsFile,keepSub,once){
+    /* ফাইল/ফোল্ডারের নামে উপশিরোনামও থাকতে পারে ("ফিলিস্তিন : এক পবিত্র নগরের গল্প") — তখন পুরো নামের সাথে আবার মেলাই */
+    if(!once&&/[-–—:]/.test(String(b))){
+        const r1=drvNameRel(a,b,aIsFile,false,true); if(r1!=='more'&&r1!=='diff') return r1;
+        const r2=drvNameRel(a,b,aIsFile,true,true); return (r2==='more'||r2==='diff'||r2==='?')?r1:r2;
+    }
+    const A=drvTitleWords(a,aIsFile), B=drvTitleWords(b,false,keepSub);
+    if(!A.length||!B.length) return '?';
+    const bn=W=>W.some(w=>/[ঀ-৿]/.test(w));
+    if(bn(A)!==bn(B)) return '?';
+    const x=drvCons(A.join('')), y=drvCons(B.join(''));
+    if(x===y||drvLev(x,y)<=Math.max(1,Math.floor(Math.min(x.length,y.length)/8))) return 'same';
+    const inA=A.filter(w=>B.some(v=>drvWordEq(w,v))).length, inB=B.filter(w=>A.some(v=>drvWordEq(w,v))).length;
+    /* "গানবাজনা" বনাম "গান-বাজনা" — শব্দ জোড়া/ভাঙা হলেও পুরো অক্ষরমালায় ধরা পড়ে */
+    if(inA===A.length||(x.length>=4&&y.includes(x))) return 'part';
+    if(inB===B.length||(y.length>=4&&x.includes(y))) return 'more';
+    if(inA/A.length>=0.6&&inB/B.length>=0.6) return 'near';
+    return 'diff';
+}
+function drvDriveId(u){ u=String(u||'').trim(); const m=u.match(/\/d\/([\w-]{20,})/)||u.match(/[?&]id=([\w-]{20,})/); return m?m[1]:''; }
+function drvPubMatch(a,b){ const strip=s=>drvSkel(String(s).replace(/প্রকাশনী|প্রকাশন|প্রকাশনা|পাবলিকেশন্স|পাবলিকেশন|পাবলিশার্স|পাবলিশিং|লাইব্রেরি|publications?|publishers?|prokashon[i]?|prokashoni|library/gi,'')); const x=strip(a), y=strip(b); return !x||!y||x===y||x.includes(y)||y.includes(x)||gkGramSim(x,y)>=0.6; }
+async function drvFetchDoc(files,names){
+    const isGdoc=f=>f.mimeType==='application/vnd.google-apps.document';
+    const isDocx=f=>/wordprocessingml/.test(f.mimeType||'')||/\.docx$/i.test(f.name||'');
+    const isOldDoc=f=>f.mimeType==='application/msword'||/\.doc$/i.test(f.name||'');
+    const isTxt=f=>f.mimeType==='text/plain'||/\.txt$/i.test(f.name||'');
+    const all=files.filter(f=>isGdoc(f)||isDocx(f)||isTxt(f)||isOldDoc(f)).map(f=>({f,rank:drvDocRank(f)})).filter(x=>x.rank<9).sort((a,b)=>a.rank-b.rank);
+    const info={empty:[],oldDoc:[],long:false};
+    for(const {f,rank} of all){
+        if(isOldDoc(f)){ info.oldDoc.push(f.name); continue; }
+        try{
+            let t='';
+            if(isGdoc(f)){
+                const r=await fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'/export?mimeType=text/plain&key='+DRIVE_API_KEY);
+                if(!r.ok) continue; t=await r.text();
+            }else if(isDocx(f)) t=await gkDocxText(await gkDriveFetchBlob(f.id));
+            else{ const r=await fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(f.id)+'?alt=media&key='+DRIVE_API_KEY); if(!r.ok) continue; t=await r.text(); }
+            const clean=drvCleanDesc(t,names);
+            if(clean.length<40){ info.empty.push(f.name); continue; }
+            const sp=drvSplitDoc(t);
+            return {raw:t,text:clean,meta:sp.meta,name:f.name,fromReview:rank===3,full:sp.body.trim().length,info};
+        }catch(e){}
+    }
+    return all.length||info.oldDoc.length?{none:true,info}:null;
+}
+const drvNum=s=>{ const t=String(s||'').replace(/[০-৯]/g,d=>'০১২৩৪৫৬৭৮৯'.indexOf(d)).match(/\d+/); return t?Number(t[0]):0; };
+/* দোকানের বিবরণ আর Drive-এর বিবরণ একই কিনা (জায়গা/যতিচিহ্ন বাদে) */
+function drvSameDesc(a,b){ const x=drvRaw(drvCleanDesc(a)), y=drvRaw(drvCleanDesc(b)); if(!x||!y) return false; return x===y||x.startsWith(y.slice(0,300))||y.startsWith(x.slice(0,300)); }
+
+/* ── ১. স্ক্যান ── */
+async function importFromDriveFolder(){
+    if(!DRIVE_API_KEY){ showToast('আগে উপরে Drive API key সেভ করুন','#dc2626'); return; }
+    if(!(localBooks||[]).length){ showToast('বইয়ের তালিকা এখনো লোড হয়নি — একটু পরে চেষ্টা করুন','#dc2626'); return; }
+    const chosen=(document.getElementById('drvPubSel')?.value||'').trim();
+    if(!chosen){ showToast('আগে ১ নম্বরে প্রকাশনী বাছুন','#dc2626'); document.getElementById('drvPubSel')?.focus(); return; }
+    DRV.chosenPub=chosen;
+    const url=(document.getElementById('driveFolderInput')?.value||'').trim();
+    const m=url.match(/folders\/([a-zA-Z0-9_-]+)/);
+    if(!m){ showToast('এই প্রকাশনীর সঠিক Drive folder লিংক দিন','#dc2626'); return; }
+    const btn=document.getElementById('driveFolderBtn'), status=document.getElementById('driveFolderStatus');
+    btn.disabled=true;
+    const say=h=>{ status.innerHTML='<span style="color:#059669">'+h+'</span>'; };
+    try{
+        say('<i class=gi-folder></i> ফোল্ডার খোলা হচ্ছে...');
+        /* folder-এর নিজের নাম (সাধারণত প্রকাশনীর নাম) */
+        try{ const r=await fetch('https://www.googleapis.com/drive/v3/files/'+m[1]+'?fields=name&key='+DRIVE_API_KEY); DRV.folderName=r.ok?((await r.json()).name||''):''; }catch(e){ DRV.folderName=''; }
+        const top=await driveList(m[1]);
+        const subs=top.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
+        if(!subs.length){ status.innerHTML='<span style="color:#dc2626"><i class=gi-warn></i> এই ফোল্ডারে বইয়ের আলাদা sub-folder নেই।</span>'; btn.disabled=false; return; }
+
+        /* দোকানে এখন যেসব বিবরণ আছে (সাইটের book-desc.js + Firebase) — কোন বইয়ে বিবরণ নেই বুঝতে */
+        say('<i class=gi-doc></i> দোকানের বিবরণগুলো মেলানো হচ্ছে...');
+        await drvLoadDescs(true);
+
+        /* প্রতিটা বইয়ের folder — একসাথে ৪টা করে */
+        const rows=new Array(subs.length); let done=0;
+        const work=subs.map((folder,k)=>async()=>{
+            let files=[]; try{ files=await driveListDeep(folder.id,1); }catch(e){}
+            const imgs=files.filter(f=>/^image\//.test(f.mimeType||''));
+            for(const im of imgs){
+                const md=im.imageMediaMetadata;
+                let w=md&&md.width, h=md&&md.height;
+                if(md&&(md.rotation===1||md.rotation===3)){ const t=w; w=h; h=t; }
+                if(!w||!h){ const d=await gkDriveImgDims(im.id); if(d){ w=d.w; h=d.h; } }
+                im.w=w||0; im.h=h||0;
+                im.kind=(w&&h)?gkDriveImgKind(w,h):'unknown';
+                im.score=gkDriveImgScore(im.name,(w&&h)?h/w:1.45)+(im.kind==='portrait'?20:im.kind==='landscape'&&w/h>=1.3&&!gkIsPhonePhotoName(im.name)?6:-10);
+            }
+            imgs.sort((a,b)=>b.score-a.score);
+            const pdfs=files.filter(f=>f.mimeType==='application/pdf'||/\.?pdf$/i.test(f.name||''));
+            const pdf=pdfs.find(f=>/পিডিএফ|pdf|short|sample|শর্ট/i.test((f._parentFolder||'')+' '+f.name))||pdfs[0]||null;
+            const doc=await drvFetchDoc(files,[folder.name]);
+            rows[k]={folder,files,imgs,pdf,doc:doc&&!doc.none?doc:null,docInfo:doc?doc.info:null};
+            done++; say(`<i class=gi-folder></i> ${drvBn(done)}/${drvBn(subs.length)} — ${escapeHTML(folder.name)}`);
+        });
+        let next=0;
+        await Promise.all([0,1,2,3].map(async()=>{ while(next<work.length){ const j=next++; await work[j](); } }));
+        DRV.rows=rows.filter(Boolean).sort((a,b)=>a.folder.name.localeCompare(b.folder.name,'bn'));
+
+        /* বাছাই করা প্রকাশনীই চলবে; তবে ফোল্ডারের বইগুলো অন্য কোনো প্রকাশনীর সাথে বেশি মিললে
+           (ভুল ফোল্ডারের লিংক দিলে) সাবধান করি, আর তখন লিংকটা এই প্রকাশনীর নামে সেভ করি না */
+        const votes={};
+        DRV.rows.forEach(r=>{ const b=drvMatch(r.folder.name,''); if(b&&b.s>=96){ const p=localBooks[b.i].pub||''; if(p) votes[p]=(votes[p]||0)+1; } });
+        const guess=Object.keys(votes).sort((a,b)=>votes[b]-votes[a])[0]||'';
+        DRV.pub=chosen;
+        DRV.pubWarn=(guess&&guess!==chosen&&(votes[guess]||0)>=3&&(votes[guess]||0)>(votes[chosen]||0)*2)
+            ?`এই ফোল্ডারের বেশিরভাগ বই "${guess}"-এর বইয়ের সাথে মেলে, "${chosen}"-এর সাথে নয় — ঠিক প্রকাশনীর ফোল্ডার দিয়েছেন তো? (উপরের প্রকাশনী ঘর থেকে বদলাতে পারেন)`:'';
+        if(!DRV.pubWarn) drvSaveLink(chosen,url);
+        drvRematch();
+        drvOpenPanel();
+        status.innerHTML=`<span style="color:#059669"><i class=gi-ok></i> ${drvBn(DRV.rows.length)}টা বইয়ের ফোল্ডার পাওয়া গেছে — তালিকাটা দেখে সেভ করুন</span> <button class="btn btn-ghost btn-sm" type="button" onclick="drvOpenPanel()">তালিকা আবার খুলুন</button>`;
+    }catch(e){
+        status.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> সমস্যা: ${escapeHTML(e.message)} — folder কি "Anyone with the link" দিয়ে শেয়ার করা?</span>`;
+    }
+    btn.disabled=false;
+}
+
+/* ── ২. প্রতিটা ফোল্ডারকে বইয়ের সাথে মেলানো + ডিফল্ট বাছাই + সতর্কতা ── */
+function drvRematch(){
+    DRV.rows.forEach(r=>{
+        const best=drvMatch(r.folder.name,DRV.pub);
+        r.idx=best?best.i:-1; r.close=!!(best&&best.close); r.samePub=!!(best&&best.samePub);
+        drvDefaults(r);
+    });
+    drvChecks();
+    DRV.rows.forEach(drvAutoSel);
+}
+/* ডিফল্ট বাছাই: কিছু বদলাবে আর লাল সমস্যা নেই — লাল থাকলে আপনি নিজে টিক দেবেন */
+function drvAutoSel(r){ r.sel=r.idx>-1&&drvChanges(r).length>0&&!(r.warns||[]).some(w=>w[0]==='red'); }
+function drvDefaults(r){
+    const b=r.idx>-1?localBooks[r.idx]:null;
+    r.pick='keep'; r.crop=false; r.usePdf=false; r.useDesc=false;
+    r.pdfUrl=r.pdf?'https://drive.google.com/file/d/'+r.pdf.id+'/view':'';
+    if(!b){ r.sel=false; return; }
+    const best=r.imgs.find(im=>im.kind==='portrait')||r.imgs.find(im=>im.kind==='landscape'&&im.w/im.h>=1.3&&!gkIsPhonePhotoName(im.name));
+    if(!drvHasCover(b)&&best){ r.pick=best.id; r.crop=best.kind==='landscape'; }
+    /* ফোল্ডারের PDF-এর নাম ফোল্ডার আর বই — দুটোর কোনোটার সাথেই না মিললে নিজে থেকে টিক দিই না */
+    r.pdfOdd=!!(r.pdf&&drvNameRel(r.pdf.name,r.folder.name,true)==='diff'&&drvNameRel(r.pdf.name,b.name,true)==='diff');
+    r.usePdf=!!(r.pdf&&!(b.pdfLink||'').trim()&&!r.pdfOdd);
+    r.curDesc=drvBookDesc(b,r.idx).trim();
+    /* দোকানের বিবরণের অবস্থা: none = নেই · auto = অটো-লেখা ছোট লেখা · same = একই · junk = একই কিন্তু
+       উপরে/নিচে বাড়তি লাইন (শিরোনাম, লেখক/দামের লাইন) সহ · other = আলাদা বিবরণ */
+    r.descState='none';
+    if(r.doc&&r.curDesc){
+        if(drvIsAutoDesc(r.curDesc)) r.descState='auto';
+        else if(drvSameDesc(r.curDesc,r.doc.text)) r.descState=drvRaw(r.curDesc)===drvRaw(r.doc.text)?'same':'junk';
+        else r.descState='other';
+    }
+    /* নেই / অটো-লেখা / বাড়তি-লাইনসহ হলে নিজে থেকে টিক; আলাদা বিবরণ থাকলে টিক থাকে না — আপনি দুটো পড়ে ঠিক করবেন */
+    r.useDesc=!!(r.doc&&(!r.curDesc||r.descState==='auto'||r.descState==='junk'));
+}
+function drvChanges(r){
+    const b=r.idx>-1?localBooks[r.idx]:null; if(!b) return [];
+    const c=[];
+    if(r.pick!=='keep') c.push('কভার');
+    if(r.usePdf) c.push('PDF');
+    if(r.useDesc) c.push('বিবরণ');
+    return c;
+}
+/* যা মেলে না / যা নেই — লাল (সমস্যা) আর হলুদ (দেখে নিন) */
+function drvChecks(){
+    const used={};
+    DRV.rows.forEach(r=>{ if(r.idx>-1) (used[r.idx]=used[r.idx]||[]).push(r.folder.name); });
+    DRV.rows.forEach(r=>{
+        const W=[]; const b=r.idx>-1?localBooks[r.idx]:null;
+        if(!b){ W.push(['red','দোকানে এই নামের বই নেই — আগে book.js-এ বইটা যোগ করুন, তারপর আবার স্ক্যান করুন']); r.warns=W; return; }
+        if(DRV.pub&&!r.samePub) W.push(['red','অন্য প্রকাশনীর বইয়ের সাথে মিলেছে ('+(b.pub||'প্রকাশনী নেই')+') — ঠিক বই কিনা নিশ্চিত হয়ে নিন']);
+        if(used[r.idx].length>1) W.push(['red','আরেকটা ফোল্ডারও এই বইয়ে মিলেছে: '+used[r.idx].filter(n=>n!==r.folder.name).join(', ')]);
+        if(r.close) W.push(['amber','কাছাকাছি নামের আরেকটা বইও আছে — মিলটা ঠিক কিনা দেখে নিন']);
+        /* Drive-এর নামে বাড়তি শব্দ বা একেবারে আলাদা নাম — আগের অটো-ইমপোর্টে এভাবেই "গল্পে আঁকা চল্লিশ হাদিস"-এর
+           PDF "চল্লিশ হাদিস"-এ বসেছিল; তাই এটা লাল (নিজে থেকে টিক থাকে না) */
+        const nrel=drvRaw(r.folder.name)===drvRaw(b.name)?'same':drvNameRel(r.folder.name,b.name,false);
+        if(nrel==='more') W.push(['red','Drive-এর নামে বাড়তি শব্দ — Drive: "'+r.folder.name.trim()+'" · দোকানে: "'+b.name+'"। এটা আলাদা বই হতে পারে — একই বই না হলে "বই বদলান" চাপুন']);
+        else if(nrel==='diff') W.push(['red','নাম মেলেনি — Drive: "'+r.folder.name.trim()+'" · দোকানে: "'+b.name+'"। একই বই না হলে "বই বদলান" চাপুন']);
+        else if(drvRaw(r.folder.name)!==drvRaw(b.name)&&!drvRaw(b.name).startsWith(drvRaw(r.folder.name))) W.push(['amber','নামের বানান আলাদা — Drive: "'+r.folder.name.trim()+'" · দোকানে: "'+b.name+'"']);
+        /* "বই সম্পর্কে" ফাইলে লেখা তথ্য আর দোকানের তথ্য */
+        const meta=(r.doc&&r.doc.meta)||{};
+        if(meta.name&&drvLatin(meta.name)===drvLatin(b.name)&&!drvTitleMatch(meta.name,b.name)) W.push(['red','বিবরণ-ফাইলে অন্য বইয়ের নাম — ফাইলে: "'+meta.name+'" · দোকানে: "'+b.name+'"']);
+        if(meta.author&&b.author&&drvLatin(meta.author)===drvLatin(b.author)&&!drvPeopleMatch(meta.author,b.author)) W.push(['red','লেখকের নাম মেলেনি — ফাইলে: "'+meta.author+'" · দোকানে: "'+b.author+'" (কোনটা ঠিক দেখে বই এডিটে ঠিক করুন)']);
+        if(meta.pub&&b.pub&&drvLatin(meta.pub)===drvLatin(b.pub)&&!drvPubMatch(meta.pub,b.pub)) W.push(['red','প্রকাশনী মেলেনি — ফাইলে: "'+meta.pub+'" · দোকানে: "'+b.pub+'"']);
+        if(meta.price&&drvNum(meta.price)&&Number(b.original_price)&&drvNum(meta.price)!==Number(b.original_price)) W.push(['amber','মুদ্রিত দাম আলাদা — ফাইলে: ৳'+drvBn(drvNum(meta.price))+' · দোকানে: ৳'+drvBn(b.original_price)+' (নতুন মুদ্রণে দাম বদলেছে কিনা দেখুন)']);
+        if(meta.pages&&drvNum(meta.pages)&&drvNum(b.pages)&&drvNum(meta.pages)!==drvNum(b.pages)) W.push(['amber','পৃষ্ঠা সংখ্যা আলাদা — ফাইলে: '+drvBn(drvNum(meta.pages))+' · দোকানে: '+drvBn(drvNum(b.pages))]);
+        /* দোকানের বইয়ের তথ্য — যা নেই সেটা ফাইলে থাকলে সাথে দেখাই, যাতে বই এডিটে বসাতে পারেন */
+        if(!(Number(b.price)>0)) W.push(['red','বিক্রয়মূল্য বসানো নেই — সাইটে বইটা দেখাবে না']);
+        else if(Number(b.original_price)&&Number(b.price)>Number(b.original_price)) W.push(['red','বিক্রয়মূল্য (৳'+drvBn(b.price)+') মুদ্রিত দামের (৳'+drvBn(b.original_price)+') চেয়ে বেশি']);
+        const miss=[];
+        if((b.type||'বই')==='বই'&&!String(b.author||'').trim()) miss.push('লেখক'+(meta.author?' (ফাইলে আছে: '+meta.author+')':''));
+        if(!Number(b.original_price)) miss.push('মুদ্রিত দাম'+(drvNum(meta.price)?' (ফাইলে আছে: ৳'+drvBn(drvNum(meta.price))+')':''));
+        if((b.type||'বই')==='বই'&&!String(b.pages||'').trim()) miss.push('পৃষ্ঠা'+(drvNum(meta.pages)?' (ফাইলে আছে: '+drvBn(drvNum(meta.pages))+')':''));
+        if(miss.length) W.push(['amber','দোকানে বইয়ের তথ্য অসম্পূর্ণ — নেই: '+miss.join(', ')]);
+        /* Drive ফোল্ডারে কী নেই */
+        if(!r.pdf) W.push(['amber','ফোল্ডারে শর্ট PDF নেই']);
+        else if(r.pdfOdd) W.push(['amber','PDF ফাইলের নাম এই বইয়ের মতো নয়: "'+r.pdf.name+'" — খুলে দেখে ঠিক হলে "শর্ট PDF" টিক দিন']);
+        const curPdf=drvDriveId(b.pdfLink);
+        if(r.pdf&&curPdf&&curPdf!==r.pdf.id) W.push(['amber','দোকানে এখন অন্য একটা PDF বসানো — সেটা ভুল হতে পারে। এই ফোল্ডারেরটাই ঠিক হলে "শর্ট PDF" টিক দিন (পুরনোটা বদলে যাবে)']);
+        const di=r.docInfo||{empty:[],oldDoc:[]};
+        if(!r.doc){
+            if(di.oldDoc.length) W.push(['amber','বিবরণ পুরনো Word (.doc) ফাইলে — পড়া যায় না। Word-এ খুলে "Save As → .docx" করে Drive-এ রাখুন: '+di.oldDoc.join(', ')]);
+            else if(di.empty.length) W.push(['amber','"বই সম্পর্কে" ফাইল আছে কিন্তু খালি: '+di.empty.join(', ')]);
+            else W.push(['amber','ফোল্ডারে "বই সম্পর্কে" (বিবরণের) ফাইল নেই']);
+            if(!r.curDesc) W.push(['amber','দোকানেও এই বইয়ের বিবরণ নেই — সাইটে "শীঘ্রই আপডেট হবে" দেখাবে']);
+        }else{
+            if(r.doc.fromReview) W.push(['amber','বিবরণ নেওয়া হয়েছে "রিভিউ" ফাইল থেকে — বইয়ের পরিচিতি কিনা পড়ে দেখুন']);
+            if(r.doc.full>DRV_DESC_MAX) W.push(['amber','বিবরণ খুব লম্বা ('+drvBn(r.doc.full)+' অক্ষর) — প্রথম '+drvBn(DRV_DESC_MAX)+' অক্ষর নেওয়া হবে; বইয়ের অংশ ঢুকে গেছে কিনা দেখুন']);
+            if(r.descState==='other') W.push(['amber','দোকানে আগে অন্য বিবরণ আছে — দুটো পড়ে দেখে, Drive-এরটা চাইলে "বিবরণ" টিক দিন']);
+        }
+        if(r.imgs.length&&r.imgs.every(im=>im.kind==='unknown')) W.push(['amber','ছবির মাপ পড়া যায়নি — কোনটা সামনের কভার, নিজে দেখে বাছুন']);
+        else if(!r.imgs.some(im=>im.kind==='portrait')) W.push(['amber',r.imgs.length?'আলাদা সামনের কভার নেই — পুরো কভার থেকে কাটতে হবে বা নিজে ছবি দিন':'ফোল্ডারে কোনো ছবি নেই']);
+        r.warns=W;
+    });
+}
+
+/* ── ৩. তালিকা দেখানো ── */
+function drvOpenPanel(){
+    let p=document.getElementById('drvPanel');
+    if(!p){
+        p=document.createElement('div'); p.id='drvPanel'; p.className='drv-panel';
+        p.innerHTML=`<div class="drv-top"><div><div class="drv-title"><i class=gi-folder></i> Drive রিভিউ <span id="drvFolderLbl"></span></div><div class="drv-sub" id="drvCounts"></div></div><button class="drv-x" type="button" onclick="drvClose()" aria-label="বন্ধ করুন"><i class=gi-x></i></button></div>
+            <div class="drv-bar">
+                <label class="drv-publbl">প্রকাশনী <select id="drvPub" onchange="DRV.pub=this.value;DRV.pubWarn='';drvRematch();drvRender()"></select></label>
+                <div class="drv-filters" id="drvFilters"></div>
+            </div>
+            <div class="drv-list" id="drvList"></div>
+            <div class="drv-foot"><span id="drvSelInfo"></span><button type="button" class="btn btn-primary" id="drvSaveBtn" onclick="drvSaveAll()"><i class=gi-save></i> বাছাই করা সব সেভ করুন</button></div>
+            <datalist id="drvBookList"></datalist>`;
+        document.body.appendChild(p);
+    }
+    const pubs=[...new Set((localBooks||[]).map(b=>b&&b.pub).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'bn'));
+    document.getElementById('drvPub').innerHTML='<option value="">— সব প্রকাশনী —</option>'+pubs.map(x=>`<option value="${escapeHTML(x)}"${x===DRV.pub?' selected':''}>${escapeHTML(x)}</option>`).join('');
+    document.getElementById('drvFolderLbl').textContent=DRV.folderName?'· '+DRV.folderName:'';
+    p.style.display='flex'; document.body.style.overflow='hidden';
+    drvRender();
+}
+function drvClose(){ const p=document.getElementById('drvPanel'); if(p) p.style.display='none'; document.body.style.overflow=''; }
+function drvRow(r,k){
+    const b=r.idx>-1?localBooks[r.idx]:null;
+    const red=r.warns.filter(w=>w[0]==='red').length, amb=r.warns.length-red;
+    const thumb=id=>'https://drive.google.com/thumbnail?id='+encodeURIComponent(id)+'&sz=w220';
+    const kindTxt=im=>im.kind==='portrait'?'সামনের কভার':im.kind==='landscape'?(im.w/im.h>=1.3&&!gkIsPhonePhotoName(im.name)?'পুরো কভার':'চওড়া ছবি'):im.kind==='square'?'বর্গাকার':'?';
+    const best=r.imgs.find(im=>im.kind==='portrait');
+    const imgs=r.imgs.map(im=>`<button type="button" class="drv-img${r.pick===im.id?' on':''}" onclick="drvPick(${k},'${im.id}')" title="${escapeHTML(im.name)}"><img src="${thumb(im.id)}" loading="lazy" alt=""><span>${best&&best.id===im.id?'<i class=gi-star></i> ':''}${kindTxt(im)}</span></button>`).join('');
+    const cur=b?`<button type="button" class="drv-img cur${r.pick==='keep'?' on':''}" onclick="drvPick(${k},'keep')"><img src="${escapeHTML(drvHasCover(b)?b.img:'book-placeholder.svg')}" alt="" onerror="this.src='book-placeholder.svg'"><span>${drvHasCover(b)?'এখনকার কভার রাখুন':'কভার নেই'}</span></button>`:'';
+    const pickIm=r.imgs.find(im=>im.id===r.pick);
+    const cropRow=pickIm&&pickIm.kind==='landscape'?`<label class="drv-chk2"><input type="checkbox" ${r.crop?'checked':''} onchange="DRV.rows[${k}].crop=this.checked"> <i class=gi-scissors></i> পুরো কভার থেকে ডান পাশের সামনের অংশ কেটে নাও</label>`:'';
+    const ch=drvChanges(r);
+    let descNote='';
+    const DN={none:'<em class="new">(দোকানে বিবরণ নেই — এটা বসবে)</em>',auto:'<em class="new">(দোকানে শুধু অটো-লেখা ছোট বিবরণ — Drive-এর আসল বিবরণ বসবে)</em>',same:'<em class="ok">(দোকানেও এই বিবরণই আছে)</em>',junk:'<em class="new">(একই বিবরণ — বাড়তি লাইন সরিয়ে পরিষ্কার করে বসবে)</em>',other:'<em>(দোকানে আগে অন্য বিবরণ আছে)</em>'};
+    if(b&&r.doc) descNote=' '+(DN[r.descState]||'');
+    const metaTxt=r.doc&&r.doc.meta?['author','pub','pages','price'].filter(x=>r.doc.meta[x]).map(x=>({author:'লেখক',pub:'প্রকাশনী',pages:'পৃষ্ঠা',price:'মূল্য'})[x]+': '+r.doc.meta[x]).join(' · '):'';
+    const descBlock=b&&r.doc?`<details class="drv-desc"><summary>Drive-এর বিবরণ পড়ুন — "${escapeHTML(r.doc.name)}" ফাইল থেকে</summary><div>${escapeHTML(r.doc.text)}</div>${metaTxt?`<p class="drv-meta">ফাইলে লেখা তথ্য: ${escapeHTML(metaTxt)}</p>`:''}</details>
+        ${r.curDesc&&r.descState!=='same'?`<details class="drv-desc old"><summary>দোকানের এখনকার বিবরণ পড়ুন</summary><div>${escapeHTML(r.curDesc.slice(0,3000))}${r.curDesc.length>3000?'…':''}</div></details>`:''}`:'';
+    return `<div class="drv-row${red?' bad':amb?' warn':''}${r.sel?' sel':''}" id="drvRow${k}">
+        <div class="drv-head">
+            <label class="drv-pick"><input type="checkbox" ${r.sel?'checked':''} ${b?'':'disabled'} onchange="DRV.rows[${k}].sel=this.checked;drvRender()"></label>
+            <div class="drv-names">${b?`<b>${escapeHTML(b.name)}</b><small>${escapeHTML(b.author||'লেখক নেই')} · ${escapeHTML(b.pub||'প্রকাশনী নেই')} · ৳${drvBn(b.price||0)}</small>`:'<b class="drv-none">দোকানে মেলেনি</b>'}<small class="drv-fold"><i class=gi-folder></i> ${escapeHTML(r.folder.name)}</small></div>
+            <button type="button" class="drv-mini" onclick="drvChangeBook(${k})">${b?'বই বদলান':'বই বাছুন'}</button>
+        </div>
+        <div class="drv-change" id="drvChg${k}" style="display:none"><input class="form-input" list="drvBookList" placeholder="বইয়ের নাম লিখে বাছুন..." onchange="drvSetBook(${k},this.value)"></div>
+        ${r.warns.length?`<div class="drv-warns">${r.warns.map(w=>`<span class="drv-w ${w[0]}"><i class="${w[0]==='red'?'gi-warn':'gi-info'} gi-w"></i> ${escapeHTML(w[1])}</span>`).join('')}</div>`:'<div class="drv-warns"><span class="drv-w ok"><i class="gi-ok gi-w"></i> সব ঠিক আছে</span></div>'}
+        ${b?`<div class="drv-sec"><div class="drv-lbl">কভার <small>যেটা বসাতে চান সেটায় চাপুন</small></div><div class="drv-imgs">${cur}${imgs||'<span class="drv-empty">Drive-এ ছবি নেই</span>'}</div>${cropRow}</div>
+        <div class="drv-sec drv-two">
+            <label class="drv-chk2${r.pdf?'':' dis'}"><input type="checkbox" ${r.usePdf?'checked':''} ${r.pdf?'':'disabled'} onchange="DRV.rows[${k}].usePdf=this.checked;drvTouch(${k})"> <i class=gi-doc></i> শর্ট PDF ${r.pdf?`<a href="${escapeHTML(r.pdfUrl)}" target="_blank" rel="noopener">${escapeHTML(r.pdf.name)}</a>`:'নেই'}${(b.pdfLink||'').trim()?' <em>(দোকানে আগে থেকে PDF আছে)</em>':''}</label>
+        </div>
+        <div class="drv-sec">
+            <label class="drv-chk2${r.doc?'':' dis'}"><input type="checkbox" ${r.useDesc?'checked':''} ${r.doc?'':'disabled'} onchange="DRV.rows[${k}].useDesc=this.checked;drvTouch(${k})"> <i class=gi-note></i> বিবরণ (বই সম্পর্কে) ${r.doc?drvBn(r.doc.text.length)+' অক্ষর':'পাওয়া যায়নি'}${descNote}</label>
+            ${descBlock}
+        </div>
+        ${ch.length?`<div class="drv-will">সেভ করলে বদলাবে: <b>${ch.join(', ')}</b></div>`:''}`:''}
+    </div>`;
+}
+function drvRender(){
+    const list=document.getElementById('drvList'); if(!list) return;
+    const R=DRV.rows;
+    const cnt={all:R.length,red:R.filter(r=>r.warns.some(w=>w[0]==='red')).length,warn:R.filter(r=>r.warns.length).length,change:R.filter(r=>drvChanges(r).length).length,nodesc:R.filter(r=>r.idx>-1&&!r.curDesc&&!r.useDesc).length,none:R.filter(r=>r.idx<0).length};
+    const F=[['all','সব'],['red','সমস্যা'],['warn','দেখে নিন'],['change','বদল হবে'],['nodesc','বিবরণ নেই'],['none','দোকানে নেই']];
+    document.getElementById('drvFilters').innerHTML=F.map(([k,l])=>`<button type="button" class="${DRV.filter===k?'on':''}" onclick="DRV.filter='${k}';drvRender()">${l} <b>${drvBn(cnt[k])}</b></button>`).join('');
+    const shown=R.map((r,k)=>[r,k]).filter(([r])=>DRV.filter==='all'||(DRV.filter==='red'&&r.warns.some(w=>w[0]==='red'))||(DRV.filter==='warn'&&r.warns.length)||(DRV.filter==='change'&&drvChanges(r).length)||(DRV.filter==='nodesc'&&r.idx>-1&&!r.curDesc&&!r.useDesc)||(DRV.filter==='none'&&r.idx<0));
+    /* এই প্রকাশনীর যেসব বই দোকানে আছে কিন্তু Drive-এ ফোল্ডার নেই */
+    let extra='';
+    if(DRV.pub&&DRV.filter==='all'){
+        const used=new Set(R.map(r=>r.idx));
+        const orphan=(localBooks||[]).map((b,i)=>[b,i]).filter(([b,i])=>b&&b.pub===DRV.pub&&!used.has(i));
+        if(orphan.length) extra=`<div class="drv-orphan"><b><i class="gi-info gi-w"></i> ${escapeHTML(DRV.pub)}-এর ${drvBn(orphan.length)}টা বই দোকানে আছে কিন্তু এই Drive ফোল্ডারে তাদের ফোল্ডার নেই:</b><div>${orphan.map(([b])=>escapeHTML(b.name)).join(' · ')}</div></div>`;
+    }
+    list.innerHTML=(DRV.pubWarn?`<div class="drv-pubwarn"><i class="gi-warn gi-w"></i> ${escapeHTML(DRV.pubWarn)}</div>`:'')+(shown.length?shown.map(([r,k])=>drvRow(r,k)).join(''):'<div class="drv-empty big">এই ভাগে কিছু নেই</div>')+extra;
+    const sel=R.filter(r=>r.sel&&drvChanges(r).length);
+    document.getElementById('drvCounts').textContent=`${drvBn(R.length)}টা ফোল্ডার · ${drvBn(R.length-cnt.none)}টা বই মিলেছে · ${drvBn(cnt.red)}টায় সমস্যা`;
+    document.getElementById('drvSelInfo').innerHTML=`<b>${drvBn(sel.length)}</b>টা বই সেভের জন্য বাছাই করা`;
+    document.getElementById('drvSaveBtn').disabled=!sel.length||DRV.saving;
+}
+/* PDF/বিবরণে টিক দিলে কার্ডটাও সেভের জন্য বাছাই হয়ে যায় */
+function drvTouch(k){ const r=DRV.rows[k]; if(r.idx>-1&&drvChanges(r).length) r.sel=true; drvRender(); }
+function drvPick(k,id){ const r=DRV.rows[k]; r.pick=id; const im=r.imgs.find(x=>x.id===id); r.crop=!!(im&&im.kind==='landscape'); if(id!=='keep') r.sel=true; drvRender(); }
+function drvChangeBook(k){
+    const box=document.getElementById('drvChg'+k); if(!box) return;
+    const dl=document.getElementById('drvBookList');
+    const pref=(localBooks||[]).filter(b=>b&&b.name&&(!DRV.pub||b.pub===DRV.pub));
+    const rest=(localBooks||[]).filter(b=>b&&b.name&&DRV.pub&&b.pub!==DRV.pub);
+    dl.innerHTML=[...pref,...rest].slice(0,3000).map(b=>`<option value="${escapeHTML(b.name+' — '+(b.pub||''))}">`).join('');
+    box.style.display=box.style.display==='none'?'block':'none';
+    const inp=box.querySelector('input'); if(inp){ inp.value=''; inp.focus(); }
+}
+function drvSetBook(k,val){
+    const v=String(val||''); const i=(localBooks||[]).findIndex(b=>b&&(b.name+' — '+(b.pub||''))===v);
+    if(i<0){ showToast('তালিকা থেকে একটা বই বাছুন','#dc2626'); return; }
+    const r=DRV.rows[k]; r.idx=i; r.samePub=!DRV.pub||localBooks[i].pub===DRV.pub; r.close=false;
+    drvDefaults(r); drvChecks(); drvAutoSel(r); drvRender();
+}
+
+/* ── ৪. সেভ ── */
+async function drvSaveAll(){
+    const todo=DRV.rows.filter(r=>r.sel&&r.idx>-1&&drvChanges(r).length);
+    if(!todo.length) return;
+    if(todo.some(r=>r.pick!=='keep')&&!IMGBB_KEY){ alert('কভার বসাতে imgbb key লাগে — Tools-এ imgbb key সেভ করুন, অথবা কভার "এখনকার কভার রাখুন" করে দিন।'); return; }
+    if(!confirm(drvBn(todo.length)+'টা বইয়ে বদল সেভ হবে। চালিয়ে যাবেন?')) return;
+    DRV.saving=true;
+    const btn=document.getElementById('drvSaveBtn'), info=document.getElementById('drvSelInfo');
+    btn.disabled=true;
+    const fail=[]; let ok=0;
+    await ensureBookIdsAndMigrate(localBooks);
+    for(let j=0;j<todo.length;j++){
+        const r=todo[j], b=localBooks[r.idx];
+        info.innerHTML=`<i class=gi-hourglass></i> ${drvBn(j+1)}/${drvBn(todo.length)} — ${escapeHTML(b.name)}`;
+        try{
+            if(r.pick!=='keep'){
+                const blob=await gkDriveFetchBlob(r.pick);
+                b.img=await uploadToImgbbAsync(r.crop?await gkCropFrontFromSpread(blob):blob,800);
+            }
+            if(r.usePdf&&r.pdfUrl) b.pdfLink=r.pdfUrl;
+            if(r.useDesc&&r.doc){ b.desc=r.doc.text; DRV.descs[b.bid||String(r.idx)]=r.doc.text; }
+            await saveBookToFirebase(r.idx);
+            ok++; drvDefaults(r); r.sel=false;
+        }catch(e){ fail.push(b.name+': '+e.message); }
+    }
+    DRV.saving=false;
+    drvChecks(); drvRender();
+    try{ beUpdateStats(); beRenderList(); }catch(e){}
+    info.innerHTML=`<i class=gi-ok></i> ${drvBn(ok)}টা বই সেভ হয়েছে`+(fail.length?` · <span style="color:#dc2626">${drvBn(fail.length)}টা হয়নি</span>`:'');
+    if(fail.length) alert('এগুলো সেভ হয়নি:\n\n'+fail.join('\n'));
+    showToast(drvBn(ok)+'টা বই সেভ হয়েছে — কাজ শেষে Tools থেকে book.js ডাউনলোড করে আপলোড করুন','#059669');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   শর্ট PDF যাচাই — দোকানে বসানো প্রতিটা PDF লিংকের ফাইলের নাম Drive থেকে এনে বইয়ের নামের সাথে মেলায়।
+   (আগের অটো-ইমপোর্টে পথিকের "চল্লিশ হাদিস"-এ মাকতাবাতুল আসলাফের "গল্পে আঁকা চল্লিশ হাদিস"-এর PDF,
+   আর সত্যায়নের "ফী আমানিল্লাহ"-য় অন্য "রুকইয়াহ" বইয়ের PDF বসে গিয়েছিল — এমন ভুল ধরতে।)
+   ভুল হলে এখান থেকেই লিংক সরানো যায়, বা PDF-টা যে বইয়ের সেই বইয়ে সরানো যায়। Drive-এর ফাইল কিছুই মোছে না।
+══════════════════════════════════════════════════════════════ */
+const PDC={rows:[],all:false,busy:false};
+const PDC_PACK=/প্যাকেজ|সিরিজ|সেট|কম্বো|package|series|combo/i;
+function pdcOkMap(){ try{ return JSON.parse(localStorage.getItem('gk_pdf_ok')||'{}')||{}; }catch(e){ return {}; } }
+async function pdcRun(){
+    if(PDC.busy) return;
+    if(!DRIVE_API_KEY){ showToast('আগে উপরে Drive API key সেভ করুন','#dc2626'); return; }
+    if(!(localBooks||[]).length){ showToast('বইয়ের তালিকা এখনো লোড হয়নি — একটু পরে চেষ্টা করুন','#dc2626'); return; }
+    const pub=(document.getElementById('drvPubSel')?.value||'').trim();
+    const box=document.getElementById('pdcBox'), btn=document.getElementById('pdcBtn');
+    const list=localBooks.map((b,i)=>[b,i]).filter(([b])=>b&&/^https?:\/\//.test(String(b.pdfLink||'').trim())&&(!pub||String(b.pub||'').trim()===pub));
+    if(!list.length){ PDC.rows=[]; box.innerHTML='<div class="pdc-sum">'+(pub?escapeHTML(pub)+'-এর কোনো বইয়ে':'কোনো বইয়ে')+' শর্ট PDF বসানো নেই।</div>'; return; }
+    PDC.busy=true; btn.disabled=true;
+    /* একই PDF একাধিক বইয়ে বসানো কিনা — দোকানের সব বই দেখে */
+    const byId={};
+    localBooks.forEach((b,i)=>{ const id=b&&drvDriveId(b.pdfLink); if(id) (byId[id]=byId[id]||[]).push(i); });
+    /* PDF-টা আসলে কোন বইয়ের — নামের মূল অংশ দিয়ে খোঁজার সূচি */
+    const keyOf=(s,f)=>drvCons(drvTitleWords(s,f).join(''));
+    const byKey={};
+    localBooks.forEach((b,i)=>{ if(!b||!b.name) return; const k=keyOf(b.name,false); if(k.length>=4) (byKey[k]=byKey[k]||[]).push(i); });
+    const okMap=pdcOkMap();
+    const rows=new Array(list.length); let done=0, next=0;
+    const say=()=>{ box.innerHTML='<div class="pdc-sum"><i class=gi-hourglass></i> যাচাই হচ্ছে… '+drvBn(done)+'/'+drvBn(list.length)+'</div>'; };
+    say();
+    const one=async([b,i])=>{
+        const link=String(b.pdfLink).trim(), id=drvDriveId(link);
+        const r={i,link,id,name:'',lvl:'ok',msg:'',sug:-1,nameIssue:false};
+        if(!id){
+            if(/drive\.google\.com\/drive\/(u\/\d+\/)?folders\//.test(link)){ r.lvl='red'; r.msg='এটা PDF নয় — একটা ফোল্ডারের লিংক'; }
+            else{ r.lvl='gray'; r.msg='Drive-এর বাইরের লিংক — যাচাই করা যায়নি'; }
+            return r;
+        }
+        try{
+            const res=await fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(id)+'?fields=name,mimeType,trashed&supportsAllDrives=true&key='+DRIVE_API_KEY);
+            if(res.status===404){ r.lvl='red'; r.msg='লিংক কাজ করে না — ফাইলটা মুছে গেছে বা শেয়ার বন্ধ'; return r; }
+            if(!res.ok){ r.lvl='amber'; r.msg='ফাইলটা দেখা যাচ্ছে না ('+res.status+') — শেয়ার "Anyone with the link" কিনা দেখুন'; return r; }
+            const f=await res.json(); r.name=f.name||'';
+            if(f.trashed){ r.lvl='red'; r.msg='ফাইলটা Drive-এর ট্র্যাশে — লিংক কাজ করবে না'; return r; }
+            if(f.mimeType&&f.mimeType!=='application/pdf'){ r.lvl='amber'; r.msg='এটা PDF ফাইল নয় ('+f.mimeType.split('/').pop()+') — খুলে দেখুন'; return r; }
+        }catch(e){ r.lvl='amber'; r.msg='ফাইলের তথ্য আনা যায়নি — ইন্টারনেট দেখে আবার যাচাই করুন'; return r; }
+        const rel=drvNameRel(r.name,b.name,true);
+        const other=(byKey[keyOf(r.name,true)]||[]).filter(x=>x!==i);
+        if(rel==='same'||rel==='near'||rel==='part'){ r.msg='নাম মিলেছে'; }
+        else if(rel==='?'){
+            if(drvTitleWords(r.name,true).length){ r.lvl='gray'; r.msg='ফাইলের নাম ইংরেজিতে — নিজে থেকে মেলানো যায়নি'; }
+            else{ r.lvl='amber'; r.nameIssue=true; r.msg='ফাইলের নামে বইয়ের নাম নেই — একবার খুলে দেখুন ঠিক বইয়ের PDF কিনা'; }
+        }
+        else if(PDC_PACK.test(b.name)){ r.lvl='amber'; r.nameIssue=true; r.msg='প্যাকেজ/সিরিজের একটা বইয়ের PDF ("'+drvTitleWords(r.name,true).join(' ')+'") — ঠিক থাকলে রেখে দিন'; }
+        else if(other.length){ const o=localBooks[other[0]]; r.lvl='red'; r.nameIssue=true; r.sug=other[0]; r.msg='এটা অন্য বইয়ের PDF মনে হচ্ছে — "'+o.name+'" ('+(o.pub||'প্রকাশনী নেই')+')'; }
+        else if(rel==='more'){ r.lvl='amber'; r.nameIssue=true; r.msg='PDF-এর নামে বাড়তি শব্দ আছে — একই বই কিনা খুলে দেখুন'; }
+        else{ r.lvl='red'; r.nameIssue=true; r.msg='বইয়ের নামের সাথে PDF-এর নাম মেলেনি — অন্য বইয়ের PDF মনে হচ্ছে'; }
+        if(r.nameIssue&&okMap[id]===String(b.bid||i)){ r.lvl='ok'; r.nameIssue=false; r.msg='আপনি আগে "ঠিক আছে" বলেছেন'; }
+        return r;
+    };
+    await Promise.all([0,1,2,3,4,5].map(async()=>{ while(next<list.length){ const j=next++; try{ rows[j]=await one(list[j]); }catch(e){ rows[j]={i:list[j][1],link:list[j][0].pdfLink,id:'',name:'',lvl:'amber',msg:'যাচাই করা যায়নি'}; } done++; if(done%5===0) say(); } }));
+    /* যে বইয়ের PDF বলে মনে হচ্ছে, সেই বইয়েও যদি একই নামের ফাইল থাকে — সরানোর কিছু নেই, এই বইয়ের নিজের PDF দরকার */
+    rows.forEach(r=>{
+        if(r.sug<0) return;
+        const tr=rows.find(x=>x.i===r.sug);
+        if(tr&&tr.name&&drvRaw(tr.name)===drvRaw(r.name)){ r.sameAsTarget=true; r.msg='এটা "'+localBooks[r.sug].name+'" বইয়ের PDF — ওই বইয়েও এই একই ফাইল আছে। এই বইয়ের নিজের শর্ট PDF বসান, নইলে লিংকটা সরান'; }
+    });
+    /* একই PDF আরও বইয়ে */
+    rows.forEach(r=>{
+        const dup=(byId[r.id]||[]).filter(x=>x!==r.i);
+        if(!dup.length) return;
+        r.msg+=' · একই PDF আরও বসানো: '+dup.map(x=>'"'+localBooks[x].name+'"').join(', ');
+        if(r.lvl==='ok'||r.lvl==='gray') r.lvl='amber';
+    });
+    PDC.rows=rows; PDC.pub=pub; PDC.busy=false; btn.disabled=false;
+    pdcRender();
+}
+function pdcRender(){
+    const box=document.getElementById('pdcBox'); if(!box) return;
+    const R=PDC.rows, c={red:0,amber:0,ok:0,gray:0,done:0};
+    R.forEach(r=>{ c[r.done?'done':r.lvl]++; });
+    const order={red:0,amber:1,gray:2,ok:3};
+    /* আগে সমস্যা, তারপর দেখে-নিন; একই ভাগে সাইটে দেখানো (দাম আছে এমন) বই আগে */
+    const rank=r=>(r.done?-1:order[r.lvl])*2+(Number((localBooks[r.i]||{}).price)>0?0:1);
+    const show=R.map((r,k)=>[r,k]).filter(([r])=>PDC.all||r.done||r.lvl==='red'||r.lvl==='amber').sort((a,b)=>rank(a[0])-rank(b[0]));
+    const icon={red:'gi-warn',amber:'gi-info',ok:'gi-ok',gray:'gi-help'};
+    const sum=`<div class="pdc-sum"><span><b>${escapeHTML(PDC.pub||'সব প্রকাশনী')}</b> — ${drvBn(R.length)}টা PDF:</span><span><b class="r">${drvBn(c.red)}</b> ভুল মনে হচ্ছে</span><span><b class="a">${drvBn(c.amber)}</b> দেখে নিন</span><span><b class="g">${drvBn(c.ok)}</b> ঠিক</span>${c.gray?`<span><b>${drvBn(c.gray)}</b> ইংরেজি নাম (মেলানো যায়নি)</span>`:''}${c.done?`<span><b class="g">${drvBn(c.done)}</b> ঠিক করা হয়েছে</span>`:''}<label><input type="checkbox" ${PDC.all?'checked':''} onchange="PDC.all=this.checked;pdcRender()"> সবগুলো দেখান</label></div>`;
+    const rowsHtml=show.map(([r,k])=>{
+        const b=localBooks[r.i]||{}, lvl=r.done?'ok':r.lvl;
+        const t=r.sug>-1?localBooks[r.sug]:null, tHas=t&&String(t.pdfLink||'').trim();
+        let acts='';
+        if(!r.done&&(r.lvl==='red'||r.lvl==='amber')){
+            if(t&&!r.sameAsTarget) acts+=`<button type="button" class="mv" onclick="pdcMove(${k})" ${r.busy?'disabled':''}><i class=gi-shuffle></i> "${escapeHTML(t.name)}"-এ সরান${tHas?' (ওটার এখনকার PDF বদলাবে)':''}</button>`;
+            acts+=`<button type="button" class="del" onclick="pdcRemove(${k})" ${r.busy?'disabled':''}><i class=gi-trash></i> এই বই থেকে লিংক সরান</button>`;
+            if(r.nameIssue) acts+=`<button type="button" onclick="pdcKeep(${k})"><i class=gi-ok></i> ঠিক আছে, রাখুন</button>`;
+        }
+        const tPdf=tHas?(PDC.rows.find(x=>x.i===r.sug)||{}).name:'';
+        const note=t&&tHas&&!r.done&&!r.sameAsTarget?' (ওই বইয়ে এখন আছে: "'+(tPdf||'আরেকটা PDF')+'")':'';
+        return `<div class="pdc-row ${lvl}">
+            <div class="t">${escapeHTML(b.name||'')} <small>· ${escapeHTML(b.pub||'')} · ${Number(b.price)>0?'৳'+drvBn(b.price):'দাম নেই — সাইটে দেখায় না'}</small></div>
+            <div class="f"><i class=gi-doc></i> PDF: <a href="${escapeHTML(r.link)}" target="_blank" rel="noopener">${escapeHTML(r.name||r.link)}</a></div>
+            <div class="m"><i class="${r.done?'gi-ok':icon[r.lvl]} gi-w"></i> ${escapeHTML(r.done||(r.msg+note))}</div>
+            ${acts?`<div class="pdc-acts">${acts}</div>`:''}
+        </div>`;
+    }).join('');
+    box.innerHTML=sum+(rowsHtml||'<div class="pdc-sum" style="color:#047857;font-weight:700"><i class="gi-ok gi-w"></i> ভুল মনে হওয়ার মতো কোনো PDF পাওয়া যায়নি</div>');
+}
+async function pdcSave(idxs){
+    await ensureBookIdsAndMigrate(localBooks);
+    for(const i of idxs) await saveBookToFirebase(i);
+    try{ beUpdateStats(); beRenderList(); }catch(e){}
+}
+async function pdcRemove(k){
+    const r=PDC.rows[k], b=localBooks[r.i]; if(!b||r.busy) return;
+    if(!confirm('"'+b.name+'" বই থেকে শর্ট PDF লিংকটা সরাবেন?\n\nPDF: '+(r.name||r.link)+'\n\n(Drive-এর ফাইল মুছবে না — শুধু দোকান থেকে লিংকটা সরবে। ঠিক PDF পরে Drive টুল বা বই এডিট থেকে বসাতে পারবেন।)')) return;
+    r.busy=true; pdcRender();
+    const old=b.pdfLink;
+    try{ b.pdfLink=''; await pdcSave([r.i]); r.done='লিংক সরানো হয়েছে'; showToast('PDF লিংক সরানো হয়েছে — কাজ শেষে book.js ডাউনলোড করে আপলোড করুন','#059669'); }
+    catch(e){ b.pdfLink=old; showToast('সেভ হয়নি: '+e.message,'#dc2626'); }
+    r.busy=false; pdcRender();
+}
+async function pdcMove(k){
+    const r=PDC.rows[k], b=localBooks[r.i], t=localBooks[r.sug]; if(!b||!t||r.busy) return;
+    const tCur=String(t.pdfLink||'').trim();
+    if(!confirm('PDF "'+(r.name||r.link)+'"\n\n"'+b.name+'" ('+(b.pub||'')+') থেকে সরিয়ে\n"'+t.name+'" ('+(t.pub||'')+')-এ বসাবেন?'+(tCur?'\n\nসাবধান: "'+t.name+'"-এ এখন যে PDF আছে ("'+((PDC.rows.find(x=>x.i===r.sug)||{}).name||tCur)+'") সেটা বদলে যাবে।':''))) return;
+    r.busy=true; pdcRender();
+    const oldB=b.pdfLink, oldT=t.pdfLink;
+    try{
+        t.pdfLink=r.link; b.pdfLink=''; await pdcSave([r.i,r.sug]); r.done='সরানো হয়েছে — এখন "'+t.name+'"-এ বসানো';
+        const tr=PDC.rows.find(x=>x.i===r.sug&&x!==r); if(tr) tr.done='এখন এখানে ঠিক PDF বসানো হয়েছে: "'+(r.name||r.link)+'"'; showToast('PDF ঠিক বইয়ে সরানো হয়েছে — কাজ শেষে book.js ডাউনলোড করে আপলোড করুন','#059669'); }
+    catch(e){ b.pdfLink=oldB; t.pdfLink=oldT; showToast('সেভ হয়নি: '+e.message,'#dc2626'); }
+    r.busy=false; pdcRender();
+}
+function pdcKeep(k){
+    const r=PDC.rows[k], b=localBooks[r.i]; if(!b) return;
+    const m=pdcOkMap(); m[r.id]=String(b.bid||r.i);
+    try{ localStorage.setItem('gk_pdf_ok',JSON.stringify(m)); }catch(e){}
+    r.lvl='ok'; r.nameIssue=false; r.msg='আপনি "ঠিক আছে" বলেছেন — আর দেখাবে না'; pdcRender();
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -3893,7 +4516,7 @@ function loadBooksFromFirebase(){
             }
             if(arr&&arr.length){
                 localBooks=arr;
-                gkCheckMissingBooks();
+                gkCheckMissingBooks(); try{ drvFillPubSelect(); }catch(e){}
                 beUpdateStats();
                 if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
                 return;
