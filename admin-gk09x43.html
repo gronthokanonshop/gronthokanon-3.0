@@ -1229,6 +1229,20 @@
         [data-theme="dark"] .pdc-row.red{background:var(--surface);}
         [data-theme="dark"] .pdc-acts button.del{background:rgba(220,38,38,.15);color:#fca5a5;}
         [data-theme="dark"] .pdc-acts button.mv{background:rgba(16,185,129,.12);color:#6ee7b7;}
+        /* প্যাকেজের ভেতরের বই */
+        .pk-row{display:flex;flex-direction:column;gap:6px;border:1.5px solid var(--border);border-radius:11px;padding:10px 12px;background:var(--surface);font-size:12.5px;}
+        .pk-row.ok{border-color:#86efac;} .pk-row.amber{border-color:#fcd34d;} .pk-row.has{border-color:#bfdbfe;}
+        .pk-row .t{font-weight:800;font-size:13.5px;line-height:1.35;display:flex;gap:8px;align-items:flex-start;}
+        .pk-row .t small{font-weight:500;color:var(--text-muted);font-size:11.5px;}
+        .pk-row .t input{width:18px;height:18px;accent-color:var(--primary);flex-shrink:0;margin-top:1px;}
+        .pk-row .m{font-weight:700;} .pk-row.ok .m{color:#047857;} .pk-row.amber .m{color:#92400e;} .pk-row.gray .m{color:var(--text-muted);} .pk-row.has .m{color:#1d4ed8;}
+        .pk-opt{display:flex;gap:7px;align-items:flex-start;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:7px 9px;cursor:pointer;line-height:1.6;}
+        .pk-opt input{margin-top:4px;accent-color:var(--primary);}
+        .pk-chips{display:flex;flex-wrap:wrap;gap:6px;}
+        .pk-chip{display:inline-flex;align-items:center;gap:6px;background:var(--primary-light);color:var(--primary);border:1px solid var(--border);border-radius:20px;padding:4px 6px 4px 11px;font-size:12px;font-weight:700;}
+        .pk-chip small{font-weight:600;opacity:.8;}
+        .pk-chip button{width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.08);color:inherit;cursor:pointer;font-size:13px;line-height:1;}
+        .pk-sum{font-size:12px;font-weight:700;margin-top:6px;} .pk-sum.ok{color:#047857;} .pk-sum.warn{color:#b45309;}
         .drv-empty{font-size:12px;color:var(--text-muted);padding:8px;}
         .drv-empty.big{grid-column:1/-1;text-align:center;padding:40px;font-size:14px;}
         .drv-orphan{grid-column:1/-1;background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:12px;padding:12px;font-size:12.5px;line-height:1.7;}
@@ -2295,6 +2309,15 @@
                     <div class="drv-step" style="margin-top:16px;border-top:1px dashed var(--border);padding-top:14px;"><i class=gi-search></i> ভুল শর্ট PDF খুঁজুন <small>(উপরে প্রকাশনী বাছলে শুধু সেটার, না বাছলে সব বইয়ের)</small></div>
                     <button class="btn btn-ghost" type="button" onclick="pdcRun()" id="pdcBtn"><i class=gi-doc></i> দোকানে বসানো PDF-গুলো যাচাই করুন</button>
                     <div id="pdcBox" class="pdc-box"></div>
+                </div>
+
+                <div class="tool-card" id="pkCard">
+                    <h3><i class=gi-package></i> প্যাকেজের ভেতরের বই</h3>
+                    <p style="margin-bottom:12px;">প্যাকেজ বইয়ের পাতায় ভেতরের বইগুলো আলাদা করে দেখানোর জন্য। <strong>অটো-খোঁজা</strong> শুধু তখনই "মিলে গেছে" বলে যখন — একই প্রকাশনী, প্যাকেজের লেখকদের বই, আর বইগুলোর <strong>মুদ্রিত দামের যোগফল হুবহু প্যাকেজের মুদ্রিত দামের সমান</strong> (যেমন "মৃত্যু প্যাকেজ" ৳৪৮৭ = ৳১৬৩ + ৳৩২৪)। আপনি টিক দিয়ে সেভ করলে তবেই সাইটে দেখাবে। না মিললে বই এডিটে গিয়ে নিজে বাছুন।</p>
+                    <select class="form-input" id="pkPubSel" onfocus="pkFillPubs()" style="margin-bottom:10px;"><option value="">সব প্রকাশনী</option></select>
+                    <button class="btn btn-primary" type="button" onclick="pkRunAll()" id="pkBtn"><i class=gi-search></i> প্যাকেজগুলোর বই খুঁজুন</button>
+                    <div id="pkBox" class="pdc-box"></div>
+                    <datalist id="bePkgList"></datalist>
                 </div>
 
                 <div class="tool-card" id="pubOfferCard">
@@ -3687,6 +3710,184 @@ function pdcKeep(k){
 }
 
 /* ══════════════════════════════════════════════════════════════
+   প্যাকেজের ভেতরের বই — প্যাকেজ বইয়ে `pkgItems` = ভেতরের বইগুলোর bid-এর তালিকা।
+   সাইটে প্যাকেজের পাতায় ভেতরের বইগুলো দেখায়, আর ভেতরের কোনো বইয়ের পাতায় "প্যাকেজেও পাওয়া যায়"।
+   অটো-খোঁজা (ভুল এড়াতে কড়া নিয়ম): একই প্রকাশনী + প্যাকেজের লেখকদের বই (বা নামে প্যাকেজের মূল শব্দ),
+   আর সেই বইগুলোর মুদ্রিত দামের যোগফল হুবহু প্যাকেজের মুদ্রিত দাম; প্যাকেজে যতজন লেখক, প্রত্যেকের
+   অন্তত একটা বই; নামে "৩টি বই" / "(৬ খণ্ড)" থাকলে ঠিক ততটা। ঠিক একটা মিল পেলেই "মিলে গেছে"।
+   (যেমন "মৃত্যু প্যাকেজ" ৳৪৮৭ = "খারাপ মৃত্যু" ৳১৬৩ + "শেষ বিদায়" ৳৩২৪।) সেভ হয় শুধু টিক দিলে।
+══════════════════════════════════════════════════════════════ */
+const PK_RE=/প্যাকেজ|package|কম্বো|combo|(^|[\s(])সেট($|[\s)])|[০-৯\d]+\s*টি\s*বই|একত্রে|[০-৯\d]+\s*[-–]\s*[০-৯\d]+\s*খণ্ড|[০-৯\d]+\s*খণ্ড\s*[)\]]/i;
+function pkIsPack(b){ return !!(b&&b.name&&PK_RE.test(b.name)); }
+const pkN=s=>Number(String(s).replace(/[০-৯]/g,d=>'০১২৩৪৫৬৭৮৯'.indexOf(d)));
+const pkPub=s=>normalize(String(s||'').replace(/প্রকাশনী|প্রকাশন|পাবলিকেশন্স|পাবলিকেশন|publications?/gi,''));
+function pkCore(name){ return normalize(String(name||'').replace(/\(.*?\)|\[.*?\]/g,' ').replace(/প্যাকেজ|package|কম্বো|combo|সিরিজ|সেট|একত্রে|নতুন|বইমেলা|খণ্ড|টি\s*বই|[০-৯\d]+/gi,' ')).replace(/\s+/g,' ').trim(); }
+function pkCount(name){
+    const s=String(name||''); let m;
+    if((m=s.match(/([০-৯\d]+)\s*টি\s*বই/))) return pkN(m[1]);
+    if((m=s.match(/([০-৯\d]+)\s*[-–]\s*([০-৯\d]+)\s*খণ্ড/))) return pkN(m[2])-pkN(m[1])+1;
+    if((m=s.match(/([০-৯\d]+)\s*খণ্ড\s*[)\]]/))) return pkN(m[1]);
+    return 0;
+}
+const pkMrp=b=>Math.round(Number(b&&b.original_price)||0);
+const pkByBid=bid=>(localBooks||[]).findIndex(b=>b&&b.bid===bid);
+let PK_PUBGROUPS=null;
+function pkGroups(){
+    if(PK_PUBGROUPS&&PK_PUBGROUPS.n===localBooks.length) return PK_PUBGROUPS;
+    const g={n:localBooks.length};
+    localBooks.forEach((b,i)=>{ if(!b) return; const k=pkPub(b.pub); if(k) (g[k]=g[k]||[]).push(i); });
+    return PK_PUBGROUPS=g;
+}
+function pkSolve(pi,targetOverride){
+    const p=localBooks[pi], target=Math.round(Number(targetOverride!=null?targetOverride:p.original_price)||0);
+    if(!target) return {status:'noprice',sols:[],cands:[],target:0};
+    const pa=drvPeople(p.author), core=pkCore(p.name), nWant=pkCount(p.name);
+    let cands=[];
+    (pkGroups()[pkPub(p.pub)]||[]).forEach(i=>{
+        const b=localBooks[i];
+        if(i===pi||pkIsPack(b)) return;
+        const m=pkMrp(b); if(!m||m>=target) return;
+        const byAuth=!!(pa.length&&b.author&&drvPeopleMatch(b.author,p.author));
+        const byName=core.length>=3&&normalize(b.name).includes(core);
+        if(byAuth||byName) cands.push({i,m,byAuth});
+    });
+    const authSet=new Set(cands.filter(c=>c.byAuth).map(c=>c.i));
+    cands.sort((a,b)=>b.m-a.m); cands=cands.slice(0,28);
+    const suffix=[]; for(let k=cands.length-1,s=0;k>=0;k--){ s+=cands[k].m; suffix[k]=s; }
+    const sols=[], pick=[]; let steps=0;
+    (function dfs(k,sum){
+        if(sols.length>4||++steps>400000) return;
+        if(sum===target){ if(pick.length>=2&&(!nWant||pick.length===nWant)) sols.push(pick.slice()); return; }
+        if(k>=cands.length||sum+suffix[k]<target) return;
+        if(sum+cands[k].m<=target){ pick.push(cands[k].i); dfs(k+1,sum+cands[k].m); pick.pop(); }
+        dfs(k+1,sum);
+    })(0,0);
+    /* প্যাকেজে যতজন লেখকের নাম, প্রত্যেকের অন্তত একটা বই থাকতে হবে */
+    const covers=sol=>!pa.length||pa.every(a=>sol.some(i=>drvPeople(localBooks[i].author).some(x=>drvSamePerson(a,x))));
+    const ok=sols.filter(covers);
+    /* নিশ্চিত = প্রতিটা বই প্যাকেজে লেখা লেখকদেরই; নইলে (নাম দেখে আনা বই, বা প্যাকেজে লেখক নেই) "দেখে নিন" */
+    const sure=ok.filter(s=>pa.length&&s.every(i=>authSet.has(i)));
+    if(sure.length===1) return {status:'exact',sols:sure,cands:cands.map(c=>c.i),target};
+    return {status:ok.length===1?'check':ok.length>1?'many':'none',sols:ok,cands:cands.map(c=>c.i),target};
+}
+function pkItemsLine(idxs){ return idxs.map(i=>escapeHTML(localBooks[i].name)+' <small>৳'+drvBn(pkMrp(localBooks[i]))+'</small>').join(' · '); }
+
+/* ── সব প্যাকেজ একসাথে (টুলস কার্ড) ── */
+const PK={rows:[]};
+function pkFillPubs(){
+    const sel=document.getElementById('pkPubSel'); if(!sel||!(localBooks||[]).length) return;
+    const cur=sel.value, m={};
+    localBooks.forEach(b=>{ if(pkIsPack(b)&&b.pub) m[b.pub]=(m[b.pub]||0)+1; });
+    sel.innerHTML='<option value="">সব প্রকাশনী</option>'+Object.keys(m).sort((a,b)=>a.localeCompare(b,'bn')).map(p=>`<option value="${escapeHTML(p)}"${p===cur?' selected':''}>${escapeHTML(p)} — ${drvBn(m[p])}টা প্যাকেজ</option>`).join('');
+}
+function pkRunAll(){
+    if(!(localBooks||[]).length){ showToast('বইয়ের তালিকা এখনো লোড হয়নি','#dc2626'); return; }
+    const pub=document.getElementById('pkPubSel')?.value||'';
+    const box=document.getElementById('pkBox');
+    box.innerHTML='<div class="pdc-sum"><i class=gi-hourglass></i> খোঁজা হচ্ছে…</div>';
+    setTimeout(()=>{
+        PK.rows=localBooks.map((b,i)=>[b,i]).filter(([b])=>pkIsPack(b)&&(!pub||b.pub===pub)).map(([b,i])=>{
+            const has=Array.isArray(b.pkgItems)&&b.pkgItems.length>0;
+            const r=pkSolve(i);
+            return Object.assign(r,{pi:i,has,choice:(r.status==='exact'||r.status==='check')?0:-1,sel:r.status==='exact'&&!has});
+        });
+        pkRender();
+    },30);
+}
+function pkRender(){
+    const box=document.getElementById('pkBox'); if(!box) return;
+    const R=PK.rows, ord=r=>r.has?5:r.status==='exact'?0:r.status==='check'?1:r.status==='many'?2:r.status==='none'?3:4;
+    const c={exact:0,check:0,many:0,none:0,has:0}; R.forEach(r=>{ if(r.has) c.has++; else if(c[r.status]!=null) c[r.status]++; else c.none++; });
+    const nSel=R.filter(r=>r.sel&&r.choice>-1&&!r.has).length;
+    const sum=`<div class="pdc-sum"><span>${drvBn(R.length)}টা প্যাকেজ:</span><span><b class="g">${drvBn(c.exact)}</b> নিশ্চিত মিল</span><span><b class="a">${drvBn(c.check+c.many)}</b> দেখে নিন</span><span><b>${drvBn(c.none)}</b> পাওয়া যায়নি</span><span><b style="color:#1d4ed8">${drvBn(c.has)}</b> আগেই সেট করা</span><button class="btn btn-primary btn-sm" type="button" onclick="pkSaveSel()" style="margin-left:auto" ${nSel?'':'disabled'}><i class=gi-save></i> বাছাই করা ${drvBn(nSel)}টা সেভ করুন</button></div>`;
+    const rows=R.map((r,k)=>[r,k]).sort((a,b)=>ord(a[0])-ord(b[0])).map(([r,k])=>{
+        const b=localBooks[r.pi]; let cls,body='';
+        const head=t=>`<div class="t">${t}<span>${escapeHTML(b.name)} <small>· ${escapeHTML(b.pub||'')} · মুদ্রিত ৳${drvBn(pkMrp(b))}</small></span></div>`;
+        if(r.has){
+            cls='has';
+            const ids=b.pkgItems.map(pkByBid).filter(x=>x>-1);
+            body=`<div class="m"><i class="gi-ok gi-w"></i> সেট করা আছে (${drvBn(ids.length)}টা বই)</div><div>${pkItemsLine(ids)}</div>`;
+            return `<div class="pk-row ${cls}">${head('')}${body}</div>`;
+        }
+        if(r.status==='exact'){
+            cls='ok';
+            body=`<div class="m"><i class="gi-ok gi-w"></i> নিশ্চিত মিল — প্যাকেজের লেখকদের বই, দাম ${r.sols[0].map(i=>'৳'+drvBn(pkMrp(localBooks[i]))).join(' + ')} = ৳${drvBn(r.target)}</div><div>${pkItemsLine(r.sols[0])}</div>`;
+        }else if(r.status==='check'){
+            cls='amber';
+            body=`<div class="m"><i class="gi-info gi-w"></i> দামের যোগফল মিলেছে (৳${drvBn(r.target)}), কিন্তু ${drvPeople(b.author).length?'সব বই প্যাকেজের লেখকদের নয়':'প্যাকেজে লেখকের নাম নেই'} — ঠিক হলে টিক দিন</div><div>${r.sols[0].map(i=>escapeHTML(localBooks[i].name)+' <small>('+escapeHTML(localBooks[i].author||'লেখক নেই')+') ৳'+drvBn(pkMrp(localBooks[i]))+'</small>').join(' · ')}</div>`;
+        }else if(r.status==='many'){
+            cls='amber';
+            body=`<div class="m"><i class="gi-info gi-w"></i> ${drvBn(r.sols.length)}টা মিল পাওয়া গেছে — ঠিকটা বাছুন</div>`+r.sols.map((s,j)=>`<label class="pk-opt"><input type="radio" name="pkOpt${k}" ${r.choice===j?'checked':''} onchange="PK.rows[${k}].choice=${j};PK.rows[${k}].sel=true;pkRender()"><span>${pkItemsLine(s)}</span></label>`).join('');
+        }else{
+            cls='gray';
+            body=`<div class="m"><i class="gi-help gi-w"></i> ${r.status==='noprice'?'মুদ্রিত দাম নেই — নিজে থেকে মেলানো যায়নি':'নিজে থেকে মেলানো যায়নি'} — বই এডিটে গিয়ে "প্যাকেজের ভেতরের বই" থেকে নিজে বাছুন</div>`+(r.cands.length?`<div style="color:var(--text-muted)">সম্ভাব্য বই: ${pkItemsLine(r.cands.slice(0,8))}</div>`:'');
+            return `<div class="pk-row ${cls}">${head('')}${body}</div>`;
+        }
+        return `<div class="pk-row ${cls}">${head(`<input type="checkbox" ${r.sel?'checked':''} ${r.choice<0?'disabled':''} onchange="PK.rows[${k}].sel=this.checked;pkRender()">`)}${body}</div>`;
+    }).join('');
+    box.innerHTML=sum+(rows||'<div class="pdc-sum">কোনো প্যাকেজ পাওয়া যায়নি</div>');
+}
+async function pkSaveSel(){
+    const todo=PK.rows.filter(r=>r.sel&&r.choice>-1&&!r.has);
+    if(!todo.length) return;
+    if(!confirm(drvBn(todo.length)+'টা প্যাকেজে ভেতরের বইয়ের তালিকা সেভ হবে। চালিয়ে যাবেন?')) return;
+    let ok=0; const fail=[];
+    await ensureBookIdsAndMigrate(localBooks);
+    for(const r of todo){
+        const b=localBooks[r.pi];
+        try{ b.pkgItems=r.sols[r.choice].map(i=>localBooks[i].bid).filter(Boolean); await saveBookToFirebase(r.pi); r.has=true; r.sel=false; ok++; }
+        catch(e){ delete b.pkgItems; fail.push(b.name+': '+e.message); }
+    }
+    pkRender();
+    if(fail.length) alert('এগুলো সেভ হয়নি:\n\n'+fail.join('\n'));
+    showToast(drvBn(ok)+'টা প্যাকেজ সেভ হয়েছে — কাজ শেষে book.js ডাউনলোড করে আপলোড করুন','#059669');
+}
+
+/* ── বই এডিটে একটা প্যাকেজের ভেতরের বই নিজে বাছা ── */
+let bePkgSel={}, PK_DL={n:-1,map:{}};
+function bePkgFillList(){
+    if(PK_DL.n===localBooks.length) return;
+    const dl=document.getElementById('bePkgList'); if(!dl) return;
+    PK_DL={n:localBooks.length,map:{}};
+    dl.innerHTML=localBooks.map((b,i)=>{ if(!b||!b.name) return ''; const v=b.name+' — '+(b.pub||''); PK_DL.map[v]=i; return `<option value="${escapeHTML(v)}">`; }).join('');
+}
+function bePkgChipsHtml(i){
+    const ids=(bePkgSel[i]||[]).map(pkByBid);
+    if(!ids.length) return '<span style="font-size:12px;color:var(--text-muted)">এখনো কোনো বই বাছা হয়নি</span>';
+    return ids.map((x,k)=>x<0?'':`<span class="pk-chip">${escapeHTML(localBooks[x].name)} <small>৳${drvBn(pkMrp(localBooks[x]))}</small><button type="button" title="সরান" onclick="bePkgDel(${i},${k})"><i class=gi-x></i></button></span>`).join('');
+}
+function bePkgSumHtml(i){
+    const ids=(bePkgSel[i]||[]).map(pkByBid).filter(x=>x>-1);
+    if(!ids.length) return '';
+    const s=ids.reduce((a,x)=>a+pkMrp(localBooks[x]),0);
+    const t=Math.round(Number(document.getElementById('be_original_price_'+i)?.value)||pkMrp(localBooks[i]));
+    return s===t?`<span class="pk-sum ok"><i class="gi-ok gi-w"></i> বইগুলোর মুদ্রিত দামের যোগফল ৳${drvBn(s)} — প্যাকেজের মুদ্রিত দামের সাথে মিলেছে</span>`
+        :`<span class="pk-sum warn"><i class="gi-info gi-w"></i> বইগুলোর মুদ্রিত দামের যোগফল ৳${drvBn(s)}, প্যাকেজের মুদ্রিত দাম ৳${drvBn(t)} — মেলেনি, সব বই ঠিক আছে কিনা দেখুন</span>`;
+}
+function bePkgRefresh(i){
+    const c=document.getElementById('bePkgChips_'+i), s=document.getElementById('bePkgSum_'+i);
+    if(c) c.innerHTML=bePkgChipsHtml(i); if(s) s.innerHTML=bePkgSumHtml(i);
+}
+function bePkgAdd(i,inp){
+    const x=PK_DL.map[inp.value]; inp.value='';
+    if(x==null){ showToast('তালিকা থেকে একটা বই বাছুন','#dc2626'); return; }
+    if(x===i){ showToast('প্যাকেজের ভেতরে নিজেকেই দেওয়া যায় না','#dc2626'); return; }
+    const bid=localBooks[x].bid; if(!bid){ showToast('এই বইয়ের bid নেই — Tools থেকে একবার "Firebase-এ তুলুন" চালান','#dc2626'); return; }
+    const a=bePkgSel[i]=bePkgSel[i]||[]; if(!a.includes(bid)) a.push(bid);
+    bePkgRefresh(i);
+}
+function bePkgDel(i,k){ (bePkgSel[i]||[]).splice(k,1); bePkgRefresh(i); }
+function bePkgAuto(i){
+    const r=pkSolve(i,document.getElementById('be_original_price_'+i)?.value);
+    const s=document.getElementById('bePkgSum_'+i);
+    if(r.status==='exact'||r.status==='check'){ bePkgSel[i]=r.sols[0].map(x=>localBooks[x].bid).filter(Boolean); bePkgRefresh(i); showToast(r.status==='exact'?'নিশ্চিত মিল পাওয়া গেছে — দেখে নিয়ে "সেভ ও আপলোড" চাপুন':'দামের যোগফল মিলেছে, তবে সব বই প্যাকেজের লেখকদের নয় — ভালো করে দেখে নিন','#'+(r.status==='exact'?'059669':'b45309')); return; }
+    if(r.status==='many'&&s){ PK.edit={i,sols:r.sols}; s.innerHTML='<div class="pk-sum warn">'+drvBn(r.sols.length)+'টা মিল পাওয়া গেছে — ঠিকটা বাছুন:</div>'+r.sols.map((sol,j)=>`<label class="pk-opt" onclick="bePkgPick(${i},${j})"><span>${pkItemsLine(sol)}</span></label>`).join(''); return; }
+    showToast(r.status==='noprice'?'মুদ্রিত দাম নেই — আগে মুদ্রিত দাম দিন, বা নিচে নাম লিখে বই বাছুন':'নিজে থেকে মেলানো যায়নি — নাম লিখে বই বাছুন','#b45309');
+}
+function bePkgPick(i,j){ const e=PK.edit; if(!e||e.i!==i) return; bePkgSel[i]=e.sols[j].map(x=>localBooks[x].bid).filter(Boolean); bePkgRefresh(i); }
+function bePkgShow(i){ const w=document.getElementById('bePkgWrap_'+i), t=document.getElementById('bePkgOpen_'+i); if(w) w.style.display=''; if(t) t.style.display='none'; }
+
+/* ══════════════════════════════════════════════════════════════
    প্রকাশনী-ভিত্তিক অফার — এক ক্লিকে কোনো প্রকাশনীর (বা সব) বইয়ে ছাড়
    • price = round(original_price × (1 − %/100)); original_price (MRP) অপরিবর্তিত
    • অফার দেওয়ার আগে তখনকার price Firebase-এর priceBackup/{idx}-এ রাখা হয়
@@ -4751,6 +4952,8 @@ function beSaveBook(idx){
     b.hadiya=(g('be_hadiya_'+idx)?.value||'').trim();
     b.preorderDate=(g('be_preorderdate_'+idx)?.value||'').trim();
     b.pdfLink=(g('be_pdflink_'+idx)?.value||'').trim();
+    const pkg=(bePkgSel[idx]||[]).filter(Boolean);
+    if(pkg.length) b.pkgItems=pkg; else delete b.pkgItems;
     const gal=(beImagesSel[idx]||[]).filter(u=>u&&u.trim());
     if(gal.length)b.images=gal; else delete b.images;
     delete b.cats; /* পুরনো multi-cat field সরানো */
@@ -4938,6 +5141,16 @@ function beEditorBody(b,i,imgPrevHtml){
                     <div class="form-group editor-full" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:10px 12px;">
                         <label class="be-label" style="color:#15803d;"><i class=gi-doc></i> শর্ট PDF লিংক (ঐচ্ছিক)</label>
                         <input class="form-input" id="be_pdflink_${i}" value="${escapeHTML(b.pdfLink||'')}" placeholder="https://drive.google.com/file/d/.../view">
+                    </div>
+                    ${(pkIsPack(b)||(bePkgSel[i]||[]).length)?'':`<div class="form-group editor-full" id="bePkgOpen_${i}"><button class="btn btn-ghost btn-sm" type="button" onclick="bePkgShow(${i})"><i class=gi-package></i> এটা প্যাকেজ? ভেতরের বই যোগ করুন</button></div>`}
+                    <div class="form-group editor-full" id="bePkgWrap_${i}" style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:10px 12px;${(pkIsPack(b)||(bePkgSel[i]||[]).length)?'':'display:none;'}">
+                        <label class="be-label" style="color:#1e40af;"><i class=gi-package></i> প্যাকেজের ভেতরের বই — সাইটে প্যাকেজের পাতায় আলাদা করে দেখাবে</label>
+                        <div class="pk-chips" id="bePkgChips_${i}">${bePkgChipsHtml(i)}</div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+                            <input class="form-input" list="bePkgList" id="bePkgAdd_${i}" placeholder="বইয়ের নাম লিখে বাছুন..." onfocus="bePkgFillList()" onchange="bePkgAdd(${i},this)" style="flex:1;min-width:180px;">
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="bePkgAuto(${i})"><i class=gi-search></i> অটো খুঁজুন</button>
+                        </div>
+                        <div id="bePkgSum_${i}">${bePkgSumHtml(i)}</div>
                     </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
@@ -5338,6 +5551,7 @@ function beRenderList(){
         beCatSel[i]=beBookCats(b);
         beAttrSel[i]=Array.isArray(b.attributes)?b.attributes.map(a=>({...a})):[];
         beImagesSel[i]=Array.isArray(b.images)?b.images.slice():[];
+        bePkgSel[i]=Array.isArray(b.pkgItems)?b.pkgItems.slice():[];
         const hasImg=isRealUrl(b.img);
         const isOpen=beOpenIdx===i;
         const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" loading="lazy" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
