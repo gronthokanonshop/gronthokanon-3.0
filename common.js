@@ -172,6 +172,70 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     });
 }
 
+/* ═══ "গ্রন্থকানন অ্যাপ — ইনস্টল" ব্যানার (হোম স্ক্রিনে দোকান) ═══
+   Chrome / Edge / Android: ব্রাউজার যখন জানায় সাইটটা ইনস্টল করা যায় (beforeinstallprompt), ৬ সেকেন্ড পর
+   নিচে ব্যানার; "ইনস্টল" চাপলে ব্রাউজারের নিজের ইনস্টল-বাক্স আসে। iPhone/iPad-এ সেই সুবিধা নেই, তাই
+   "শেয়ার → Add to Home Screen" দেখিয়ে দিই। × চাপলে ৭ দিন আর দেখায় না; ইনস্টল হয়ে গেলে বা অ্যাপের
+   ভেতর থেকে খুললে কখনো না। চেকআউটে দেখায় না (অর্ডারের সময় বিরক্ত না করতে)। */
+(function () {
+    var KEY = 'gk_ib_hide', DAY = 864e5;
+    function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
+    var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+    if (standalone || /checkout\.html/i.test(location.pathname)) return;
+    var ua = navigator.userAgent || '';
+    var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var mobile = isIOS || /Android|Mobile/i.test(ua);
+    var deferred = null, timer = null;
+    function blocked() { if (ls('gk_app_installed')) return true; var t = Number(ls(KEY) || 0); return !!t && Date.now() < t; }
+    var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
+    var SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
+    function close(days) {
+        var el = document.getElementById('gkInstall');
+        if (el) { el.classList.remove('show'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 350); }
+        document.body.classList.remove('gk-ib-on');
+        if (days) ls(KEY, String(Date.now() + days * DAY));
+    }
+    function build(ios) {
+        if (blocked() || document.getElementById('gkInstall') || !document.body) return;
+        /* মোবাইলের নিচের মেনুর ঠিক উপরে বসে */
+        var nav = document.querySelector('.bottom-nav');
+        var off = (nav && nav.offsetHeight && getComputedStyle(nav).display !== 'none') ? nav.offsetHeight + 10 : 18;
+        var el = document.createElement('div');
+        el.id = 'gkInstall'; el.className = 'gk-ib';
+        el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'গ্রন্থকানন অ্যাপ ইনস্টল');
+        el.style.bottom = 'calc(' + off + 'px + env(safe-area-inset-bottom, 0px))';
+        el.innerHTML = '<img src="icon-192.png" alt="" class="gk-ib-ic" width="46" height="46">' +
+            '<div class="gk-ib-tx"><b>গ্রন্থকানন অ্যাপ</b><span>' +
+            (ios ? 'ব্রাউজারের শেয়ার ' + SHARE + ' চাপুন, তারপর "Add to Home Screen"'
+                 : (mobile ? 'ফোনের হোম স্ক্রিনে রাখুন — এক চাপেই দোকানে' : 'কম্পিউটারে রাখুন — এক ক্লিকেই দোকানে')) +
+            '</span></div>' +
+            (ios ? '' : '<button type="button" class="gk-ib-go">ইনস্টল</button>') +
+            '<button type="button" class="gk-ib-x" aria-label="বন্ধ করুন">' + X + '</button>';
+        document.body.appendChild(el);
+        el.querySelector('.gk-ib-x').onclick = function () { close(7); };
+        var go = el.querySelector('.gk-ib-go');
+        if (go) go.onclick = function () {
+            var d = deferred; deferred = null;
+            if (!d) { close(0); return; }
+            d.prompt();
+            Promise.resolve(d.userChoice).then(function (c) {
+                if (c && c.outcome === 'accepted') { ls('gk_app_installed', '1'); close(0); } else close(3);
+            }).catch(function () { close(3); });
+        };
+        document.body.classList.add('gk-ib-on');
+        requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('show'); }); });
+    }
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault(); deferred = e;
+        if (blocked()) return;
+        clearTimeout(timer); timer = setTimeout(function () { build(false); }, 6000);
+    });
+    window.addEventListener('appinstalled', function () { ls('gk_app_installed', '1'); close(0); });
+    if (isIOS && !blocked()) setTimeout(function () { build(true); }, 8000);
+    /* অন্য কোথাও থেকে ডাকতে (পরীক্ষা / ভবিষ্যতে মেনুর লিংক) */
+    window.gkShowInstall = function (ios) { ls(KEY, null); build(ios === undefined ? isIOS : !!ios); };
+})();
+
 /* ═══ ভাসমান "Contact us" — চাপলে যোগাযোগের কার্ড (WhatsApp / Messenger / কল), সব পেজে ═══ */
 (function () {
     var PHONE = '01516-595762', TEL = '+8801516595762';
