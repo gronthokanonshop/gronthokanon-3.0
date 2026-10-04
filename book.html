@@ -167,12 +167,17 @@
            ফুটে ওঠে — আগের সাধারণ ফ্লিপের বদলে এটা অনেকটা "বই হাতে নিয়ে খোলার" মতো লাগে */
         .pdf-book3d{width:240px;height:330px;perspective:1100px;transform-style:preserve-3d;position:relative;opacity:0;transform-origin:center bottom;animation:pdfBookFloatIn 0.5s cubic-bezier(.34,1.56,.64,1) forwards;}
         @keyframes pdfBookFloatIn{0%{opacity:0;transform:translateY(36px) scale(0.82) rotateX(14deg)}70%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1) rotateX(0)}}
-        /* "উড়ে এসে খোলা" (মালিকের বাছাই, ২০২৬-১০-০২): পাতার কভারটা নিজের জায়গা থেকে উঠে, একটু বাঁক
-           আর হেলে মাঝখানে বড় হয়ে আসে, তারপর মলাট খোলে। --fx/--fy/--fs বসায় openPdfModal() */
-        .pdf-book3d.fly{transform-origin:center center;animation:pdfBookFly .72s cubic-bezier(.2,.8,.3,1) forwards;}
-        @keyframes pdfBookFly{0%{opacity:1;transform:translate(var(--fx,0px),var(--fy,40px)) scale(var(--fs,.6)) rotate(0deg)}55%{opacity:1;transform:translate(calc(var(--fx,0px) * .12),calc(var(--fy,40px) * .12 - 22px)) scale(1.06) rotate(-3deg)}100%{opacity:1;transform:none}}
-        /* কভার উড়ে যাওয়ার সময় পাতায় তার জায়গাটা ফাঁকা — বন্ধ করলে ফিরে আসে */
-        .book-img-wrap.lifted img{opacity:0;}
+        /* "কোণা উল্টে খোলা" (মালিকের বাছাই, ২০২৬-১০-০৪; আগে ছিল "উড়ে এসে খোলা"): বই উঠে আসার পর
+           মলাটের নিচের ডান কোণাটা ভাঁজ হয়ে উঠে আসে (.curl), তারপর পুরো মলাট উল্টে যায় (.opening)।
+           কোণা কাটা পড়ে শুধু ছবিতে — নিচে মলাটের কাগজ-রং দেখায়, যেন ভেতরের পাতা; ভাঁজটা .pdf-b-fold */
+        .pdf-b-fold{position:absolute;right:0;bottom:0;width:0;height:0;z-index:2;pointer-events:none;filter:drop-shadow(-3px -3px 4px rgba(0,0,0,.28));}
+        .pdf-b-fold::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#fffdf8 0%,#f3ede1 30%,#ddd3c0 50%);clip-path:polygon(0 0,100% 0,0 100%);}
+        .pdf-book3d.curl .pdf-b-cover img{animation:pdfCornerCut .45s cubic-bezier(.3,.7,.4,1) forwards;}
+        .pdf-book3d.curl .pdf-b-fold{animation:pdfFoldGrow .45s cubic-bezier(.3,.7,.4,1) forwards;}
+        .pdf-book3d.curl.opening .pdf-b-cover img{animation:pdfCornerCut 1ms forwards,pdfCoverFace .75s linear forwards;}
+        .pdf-book3d.curl.opening .pdf-b-fold{animation:pdfFoldGrow 1ms forwards,pdfCoverFace .75s linear forwards;}
+        @keyframes pdfCornerCut{0%{clip-path:polygon(0 0,100% 0,100% 100%,100% 100%,0 100%)}70%{clip-path:polygon(0 0,100% 0,100% calc(100% - 74px),calc(100% - 74px) 100%,0 100%)}100%{clip-path:polygon(0 0,100% 0,100% calc(100% - 64px),calc(100% - 64px) 100%,0 100%)}}
+        @keyframes pdfFoldGrow{0%{width:0;height:0}70%{width:74px;height:74px}100%{width:64px;height:64px}}
         /* আগে পিঠ (spine) আর পেছনের বোর্ড গাঢ় সবুজ ছিল — মলাট খোলার মুহূর্তে বড় সবুজ চৌকো দেখা যেত।
            এখন পিঠে বইয়ের নিজের কভারের বাঁ কিনারা (একটু গাঢ় করে, JS বসায়), আর ভেতরে সব কাগজের রং */
         .pdf-b-spine{position:absolute;left:-14px;top:4px;width:14px;height:322px;background:#57534e no-repeat left center/auto 100%;filter:brightness(.62);border-radius:3px 0 0 3px;}
@@ -250,7 +255,7 @@
         .cover-wm{position:absolute;right:6px;top:6px;width:16%;z-index:3;pointer-events:none;line-height:0;opacity:.5;transition:opacity .2s;}
         .cover-wm img{display:block;width:100% !important;height:auto !important;box-shadow:none !important;border-radius:0 !important;transform:none !important;margin:0 !important;filter:drop-shadow(0 0 1px rgba(255,255,255,.8));}
         .cover-wm-lg{right:10px;top:10px;width:12%;max-width:70px;}
-        .book-img-wrap.peek .cover-wm,.book-img-wrap.lifted .cover-wm{opacity:0;}
+        .book-img-wrap.peek .cover-wm{opacity:0;}
         @media(hover:hover){.book-img-wrap.has-pdf:hover .cover-wm{opacity:0;}}
         .img-modal-in{position:relative;display:inline-block;line-height:0;}
 
@@ -587,6 +592,7 @@
             </div>
             <div class="pdf-b-cover">
                 <img id="pdfBookCoverAnim" src="" alt="">
+                <span class="pdf-b-fold"></span>
             </div>
         </div>
 
@@ -1185,30 +1191,22 @@ function openPdfModal(){
     document.getElementById('pdfCartPopup').classList.remove('show');
     pdfTimers.forEach(clearTimeout); pdfTimers=[];
 
-    /* "উড়ে এসে খোলা": পাতার কভারটা যেখানে আছে সেখান থেকে উঠে মাঝখানে আসে (--fx/--fy = কভারের মাঝখান
-       থেকে পর্দার মাঝখানের দূরত্ব, --fs = মাপ), তারপর মলাট খোলে। কভার দেখা না গেলে আগের মতো নিচ থেকে ওঠে।
+    /* "কোণা উল্টে খোলা": বই নিচ থেকে উঠে আসে (০.৫ সে.), কোণা ভাঁজ হয় (.curl), তারপর মলাট খোলে (.opening)।
        যাঁরা ফোনে "কম অ্যানিমেশন" চালু রেখেছেন, তাঁদের সরাসরি PDF দেখাই। */
     const reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    const r=bookImg?bookImg.getBoundingClientRect():null;
-    const fly=!!(r&&r.width>20&&r.bottom>0&&r.top<window.innerHeight);
-    book.classList.remove('opening','fly');
-    if(fly){
-        book.style.setProperty('--fx',Math.round(r.left+r.width/2-window.innerWidth/2)+'px');
-        book.style.setProperty('--fy',Math.round(r.top+r.height/2-window.innerHeight/2)+'px');
-        book.style.setProperty('--fs',(r.width/240).toFixed(3));
-        void book.offsetWidth;
-        book.classList.add('fly');
-        document.getElementById('bookImgWrap').classList.add('lifted');
-    }
+    book.classList.remove('opening','curl');
     book.style.display=reduce?'none':'block';
 
     /* Animation শুরু */
-    if(!reduce) pdfTimers.push(setTimeout(function(){ book.classList.add('opening'); }, fly?700:80));
+    if(!reduce){
+        pdfTimers.push(setTimeout(function(){ book.classList.add('curl'); }, 450));
+        pdfTimers.push(setTimeout(function(){ book.classList.add('opening'); }, 950));
+    }
 
     /* Animation শেষে PDF দেখাও */
     pdfTimers.push(setTimeout(function(){
         book.style.display='none';
-        book.classList.remove('opening','fly');
+        book.classList.remove('opening','curl');
         /* অ্যাডমিনে এই PDF থেকেই পাতা-ছবি বানানো থাকলে নিজের রিডার (পাতা কমানো, লোগোসহ, পুরো PDF-এর
            লিংক ছাড়া); না থাকলে বা PDF লিংক বদলে গেলে আগের মতো Drive */
         const frame=document.getElementById('pdfFrame'), pvEl=document.getElementById('pvPages');
@@ -1237,17 +1235,16 @@ function openPdfModal(){
         document.getElementById('pdfCartOrig').innerText=(b.original_price>b.price)?'৳ '+b.original_price:'';
         document.getElementById('pdfCartCurrent').innerText='৳ '+b.price;
         document.getElementById('pdfCartPopup').classList.add('show');
-    }, reduce?0:(fly?1400:1100)));
+    }, reduce?0:1750));
 }
 var pdfTimers=[];
 function closePdfModal(){
     const modal=document.getElementById('pdfModal');
     modal.classList.remove('active');
     pdfTimers.forEach(clearTimeout); pdfTimers=[];
-    document.getElementById('bookImgWrap').classList.remove('lifted');
     setTimeout(function(){
         document.getElementById('pdfBook3d').style.display='none';
-        document.getElementById('pdfBook3d').classList.remove('opening','fly');
+        document.getElementById('pdfBook3d').classList.remove('opening','curl');
         document.getElementById('pdfModalBox').classList.remove('show');
         document.getElementById('pdfFrame').src='';
         document.getElementById('pvPages').innerHTML='';
@@ -2075,6 +2072,8 @@ function syncLiveBookData(){
                    দাম/ছবি বসে যেত — তাই bid মিললেই তবে লাইভ তথ্য বসাই */
                 if(live&&typeof live==='object'&&(!live.bid||!books[idx].bid||live.bid===books[idx].bid)){
                     books[idx]=Object.assign({},books[idx],live);
+                    /* Firebase-এ ছবির ঘরে ভুল লেখা (যেমন "b2") থাকলে ভাঙা ছবি না দেখিয়ে কভার-টেমপ্লেট */
+                    if(!books[idx].img||!/^https?:\/\//.test(books[idx].img)) books[idx].img='book-placeholder.svg';
                 }
             }
         }).catch(function(e){ console.warn('Live book sync ব্যর্থ:',e); });
