@@ -2608,7 +2608,14 @@ async function adminLogin(){
         await auth.signOut();
         if(reqSnap&&reqSnap.exists())err.innerText='আপনার আবেদন এখনো অনুমোদনের অপেক্ষায় আছে — মালিককে জানান';
         else err.innerText='Admin access নেই';
-    }catch(e){err.innerText='ইমেইল বা পাসওয়ার্ড ভুল';}
+    }catch(e){
+        /* আগে সব ভুলেই "পাসওয়ার্ড ভুল" দেখাত — নেট সমস্যা/বারবার চেষ্টায় ব্লকও আলাদা করে জানাই */
+        const c=e&&e.code||'';
+        if(c==='auth/network-request-failed')err.innerText='ইন্টারনেট সংযোগ নেই — নেট চেক করে আবার চেষ্টা করুন';
+        else if(c==='auth/too-many-requests')err.innerText='বারবার ভুল চেষ্টায় সাময়িক ব্লক — কিছুক্ষণ পর আবার চেষ্টা করুন';
+        else if(c==='auth/user-disabled')err.innerText='এই অ্যাকাউন্ট বন্ধ করা হয়েছে';
+        else err.innerText='ইমেইল বা পাসওয়ার্ড ভুল';
+    }
 }
 
 function showDashboard(){
@@ -8524,19 +8531,25 @@ async function requestBrowserNotifPermission(){
 }
 
 /* ── Global AudioContext — ব্রাউজার autoplay restriction এড়াতে ──
-   প্রথম click/keydown-এ একবার resume() করা হয়; তারপর সব সময় বাজবে। */
-const _gkAudioCtx=(function(){
-    try{return new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
-})();
+   পেজ লোডেই AudioContext বানালে ব্রাউজার কনসোলে "AudioContext was not allowed to start"
+   সতর্কতা দেখায়। তাই প্রথম click/keydown/touch-এ তবেই বানাই (তখন ব্রাউজার চালু করতে দেয়);
+   তারপর থেকে নতুন অর্ডারের শব্দ সবসময় বাজবে। */
+let _gkAudioCtx=null;
 (function(){
-    function _resumeCtx(){if(_gkAudioCtx&&_gkAudioCtx.state==='suspended'){_gkAudioCtx.resume().catch(()=>{});}}
-    document.addEventListener('click',_resumeCtx,{once:true});
-    document.addEventListener('keydown',_resumeCtx,{once:true});
+    const evs=['click','keydown','touchstart'];
+    function _initCtx(){
+        try{
+            if(!_gkAudioCtx){const AC=window.AudioContext||window.webkitAudioContext; if(AC)_gkAudioCtx=new AC();}
+            if(_gkAudioCtx&&_gkAudioCtx.state==='suspended')_gkAudioCtx.resume().catch(()=>{});
+        }catch(e){}
+        if(_gkAudioCtx&&_gkAudioCtx.state!=='suspended')evs.forEach(ev=>document.removeEventListener(ev,_initCtx,true));
+    }
+    evs.forEach(ev=>document.addEventListener(ev,_initCtx,true));
 })();
 
 function playBeep(){
     try{
-        if(!_gkAudioCtx)return;
+        if(!_gkAudioCtx)return;   /* এখনো কোনো ক্লিক হয়নি — ব্রাউজার শব্দ বাজাতে দেবে না */
         const ctx=_gkAudioCtx;
         const doPlay=function(){
             [880,1175].forEach((freq,i)=>{
