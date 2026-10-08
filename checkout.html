@@ -497,7 +497,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
             </div>
             <div class="field">
               <label class="bng">মোবাইল নম্বর <span class="req">*</span></label>
-              <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span><input type="tel" id="custPhone" class="bng" placeholder="০১XXXXXXXXX" maxlength="11"></div>
+              <div class="input-wrap"><span class="input-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span><input type="tel" id="custPhone" class="bng" inputmode="tel" placeholder="০১XXXXXXXXX" maxlength="16"></div>
             </div>
           </div>
           <div class="two-col">
@@ -1036,16 +1036,25 @@ function fallbackCopy(){
 /* ══════════════════════════════════
    PRICING
 ══════════════════════════════════ */
-function getVerifiedPrice(itemName){
-  const real = (typeof books !== 'undefined') ? books.find(b => b.name === itemName) : null;
+/* একই নামে একাধিক বই (আলাদা দাম) থাকতে পারে — তাই কার্ট-আইটেমের bid দিয়ে আসল বই খুঁজি (না থাকলে নাম দিয়ে) */
+function cartKey(i){ return window.gkCartKey ? gkCartKey(i) : 'nm:' + i.name; }
+function findCatalogBook(item){
+  if(typeof books === 'undefined') return null;
+  if(typeof item === 'string') item = {name:item};
+  if(window.gkFindBook) return gkFindBook(item);
+  return books.find(b => b && b.name === item.name) || null;
+}
+function getVerifiedPrice(item){
+  const real = findCatalogBook(item);
   return real ? real.price : null;
 }
 function getSubtotal(){
   const g = {};
   cart.forEach(i => {
-    const price = getVerifiedPrice(i.name);
+    const price = getVerifiedPrice(i);
     if(price === null) return; /* ক্যাটালগে নেই এমন আইটেমের (client-controlled) দাম কখনোই টোটালে ধরা হবে না */
-    g[i.name] = g[i.name] ? {price, qty:g[i.name].qty+1} : {price, qty:1};
+    const k = cartKey(i);
+    g[k] = g[k] ? {price, qty:g[k].qty+1} : {price, qty:1};
   });
   return Object.values(g).reduce((s,i) => s + i.price * i.qty, 0);
 }
@@ -1103,28 +1112,32 @@ function renderSummary(){
   }
   const g = {};
   cart.forEach(i => {
-    if(g[i.name]) g[i.name].qty++;
-    else g[i.name] = {price:i.price, qty:1, img:i.img||''};
+    const k = cartKey(i);
+    if(g[k]) g[k].qty++;
+    else g[k] = {name:i.name, bid:i.bid, price:i.price, qty:1, img:i.img||''};
   });
   /* প্রতিটা বইয়ের পাশে − + আর মুছে ফেলার বোতাম — চেকআউট থেকেই পরিমাণ বদলানো যায় */
-  box.innerHTML = Object.entries(g).map(([name,item]) => {
-    const n = escapeHTML(name);
+  box.innerHTML = Object.entries(g).map(([key,item]) => {
+    const n = escapeHTML(item.name), k = escapeHTML(key);
+    const cb = findCatalogBook(item);
+    /* একই নামের অন্য বই থাকলে লেখকের নামও দেখাই, যেন কোনটা কিনছেন বোঝা যায় */
+    const who = cb && (cb.author || cb.brand) ? escapeHTML(cb.author || cb.brand) + ' · ' : '';
     /* কার্টে যোগ করার পর দাম বদলালে আগে লাইনে পুরনো দাম আর মোটে নতুন দাম দেখাত — এখন দুটোই আজকের দাম */
-    const vp = getVerifiedPrice(name);
+    const vp = getVerifiedPrice(item);
     if(vp !== null) item.price = vp;
     return `
     <div class="co-item">
       <img src="${escapeHTML(item.img||'book-placeholder.svg')}" class="os-img-real" onerror="this.src='book-placeholder.svg'" alt="">
       <div class="co-i-info">
         <div class="os-name bng">${n}</div>
-        <div class="os-auth bng">৳${coBn(item.price)} প্রতিটি</div>
+        <div class="os-auth bng">${who}৳${coBn(item.price)} প্রতিটি</div>
         <div class="co-i-row">
           <div class="co-qty">
-            <button type="button" data-name="${n}" onclick="coQty(this.dataset.name,-1)" aria-label="কমান">−</button>
+            <button type="button" data-key="${k}" onclick="coQty(this.dataset.key,-1)" aria-label="কমান">−</button>
             <span>${coBn(item.qty)}</span>
-            <button type="button" data-name="${n}" onclick="coQty(this.dataset.name,1)" aria-label="বাড়ান">+</button>
+            <button type="button" data-key="${k}" onclick="coQty(this.dataset.key,1)" aria-label="বাড়ান">+</button>
           </div>
-          <button type="button" class="co-del" data-name="${n}" onclick="coQty(this.dataset.name,0)" aria-label="সরান"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
+          <button type="button" class="co-del" data-key="${k}" onclick="coQty(this.dataset.key,0)" aria-label="সরান"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
         </div>
       </div>
       <div class="os-price bng">৳${coBn(item.price * item.qty)}</div>
@@ -1134,10 +1147,11 @@ function renderSummary(){
   updateTotal();
 }
 /* delta: +1 বাড়াও, -1 কমাও, 0 = বইটা পুরো সরাও */
-function coQty(name, delta){
-  if(delta === 1){ const it = cart.find(i => i.name === name); if(it) cart.push({...it}); }
-  else if(delta === -1){ for(let j = cart.length - 1; j >= 0; j--){ if(cart[j].name === name){ cart.splice(j, 1); break; } } }
-  else cart = cart.filter(i => i.name !== name);
+function coQty(key, delta){
+  const m = i => cartKey(i) === key;
+  if(delta === 1){ const it = cart.find(m); if(it) cart.push({...it}); }
+  else if(delta === -1){ for(let j = cart.length - 1; j >= 0; j--){ if(m(cart[j])){ cart.splice(j, 1); break; } } }
+  else cart = cart.filter(i => !m(i));
   localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
   renderSummary();
 }
@@ -1196,7 +1210,7 @@ async function confirmOrder(){
   isSubmitting = true;
   const btn = document.getElementById('confirmBtn');
   const name     = document.getElementById('custName').value.trim();
-  const phone    = document.getElementById('custPhone').value.trim();
+  const phone    = window.gkNormPhone ? gkNormPhone(document.getElementById('custPhone').value) : document.getElementById('custPhone').value.trim();
   const district = document.getElementById('district').value;
   const thana    = document.getElementById('thana').value;
   const address  = document.getElementById('custAddress').value.trim();
@@ -1214,7 +1228,7 @@ async function confirmOrder(){
   if(!cart.length){ isSubmitting=false; return showToast('<i class=gi-warn></i> কার্ট খালি!'); }
   /* কার্টে থাকা কোনো বই এর মধ্যে স্টক শেষ হয়ে গেলে অর্ডার আটকাও */
   if(window.gkIsOut && typeof books!=='undefined'){
-    const outItem = cart.find(it=>{ const bi=books.findIndex(x=>x&&x.name===it.name); return bi>-1 && window.gkIsOut(bi); });
+    const outItem = cart.find(it=>{ const fb=findCatalogBook(it); const bi=fb?books.indexOf(fb):-1; return bi>-1 && window.gkIsOut(bi); });
     if(outItem){ isSubmitting=false; return showToast('<i class=gi-warn></i> "'+outItem.name+'" এখন স্টকে নেই — কার্ট থেকে সরিয়ে আবার চেষ্টা করুন','#dc2626'); }
   }
 
@@ -1226,9 +1240,9 @@ async function confirmOrder(){
     isSubmitting=false;
     return showToast('<i class=gi-warn></i> দাম যাচাই করা যাচ্ছে না, একটু পর আবার চেষ্টা করুন','#dc2626');
   }
-  const unverified = cart.filter(i => getVerifiedPrice(i.name) === null);
+  const unverified = cart.filter(i => getVerifiedPrice(i) === null);
   if(unverified.length){
-    cart = cart.filter(i => getVerifiedPrice(i.name) !== null);
+    cart = cart.filter(i => getVerifiedPrice(i) !== null);
     localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
     renderSummary();
     isSubmitting=false;
@@ -1240,7 +1254,7 @@ async function confirmOrder(){
      অর্ডার না হয়েও ওই নম্বরে FIRSTORDER আর কখনো চলত না */
   let txId = '';
   if(payMethod === 'bKash'){
-    txId = document.getElementById('transactionId').value.trim().toUpperCase();
+    txId = (window.gkAsciiDigits ? gkAsciiDigits(document.getElementById('transactionId').value) : document.getElementById('transactionId').value).replace(/\s+/g,'').toUpperCase();
     if(!txId){ isSubmitting=false; return showToast('<i class=gi-warn></i> Transaction ID লিখুন!'); }
     if(!/^[A-Z0-9]{8,12}$/.test(txId)){ isSubmitting=false; return showToast('<i class=gi-warn></i> সঠিক Transaction ID দিন!'); }
   }
@@ -1260,9 +1274,14 @@ async function confirmOrder(){
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>অর্ডার পাঠানো হচ্ছে...';
 
-  const g = {};
-  cart.forEach(i => { g[i.name] = (g[i.name]||0)+1; });
-  let bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
+  /* একই নামের একাধিক বই থাকলে লেখক/ব্র্যান্ডসহ লিখি — অ্যাডমিন যেন বোঝে কোন বইটা পাঠাতে হবে */
+  const g = {}, nameCount = {};
+  if(typeof books !== 'undefined') books.forEach(b => { if(b) nameCount[b.name] = (nameCount[b.name]||0) + 1; });
+  cart.forEach(i => { const k = cartKey(i); if(g[k]) g[k].n++; else g[k] = {item:i, n:1}; });
+  let bookList = Object.values(g).map(({item,n}) => {
+    const cb = findCatalogBook(item), who = cb && (cb.author || cb.brand);
+    return `${item.name}${nameCount[item.name] > 1 && who ? ' — ' + who : ''} (${n}টি)`;
+  }).join(', ');
   /* Firebase নিয়মে এই ঘর ৩০০০ অক্ষরের বেশি নিতে পারে না — অনেক বইয়ের বড় অর্ডারে অর্ডারই আটকে যেত।
      পুরো তালিকা items-এ থাকেই, এখানে শুধু ছোট করে লিখি */
   if(bookList.length > 3000) bookList = bookList.slice(0, 2960) + ' … মোট ' + cart.length + 'টি বই';
@@ -1280,7 +1299,8 @@ async function confirmOrder(){
   const orderData = {
     orderId, name, phone,
     address: fullAddr,
-    items: cart.map(i => ({...i, price: getVerifiedPrice(i.name)})).filter(i => i.price !== null),
+    /* অর্ডারে আগের মতোই শুধু name/price/img (bid কার্টের ভেতরের জিনিস) — দাম bid মিলিয়ে আসল বইয়ের */
+    items: cart.map(i => { const {bid, ...rest} = i; return {...rest, price:getVerifiedPrice(i)}; }).filter(i => i.price !== null),
     books: bookList,
     payment: payMethod + (txId ? ` (TxID: ${txId})` : ''),
     delivery: (coupon && cType === 'delivery') ? '৳0 (ফ্রি ডেলিভারি কুপন)' : (coupon && cType === 'delivery_fixed') ? '৳' + delivCharge + ' (কুপন — নির্দিষ্ট চার্জ)' : delivLabel,
@@ -1297,7 +1317,10 @@ async function confirmOrder(){
 
   try{
     await firebase.database().ref('orders/' + orderId).set(orderData);
-    await firebase.database().ref('phoneIndex/' + orderData.phone + '/' + orderId).set(true);
+    /* অর্ডার সেভ হয়ে গেছে — "আমার অর্ডার" ইনডেক্স না লিখতে পারলেও অর্ডারকে ব্যর্থ বলি না
+       (আগে বলত, ফলে কাস্টমার আবার চাপলে একই অর্ডার দুবার যেত) */
+    try{ await firebase.database().ref('phoneIndex/' + orderData.phone + '/' + orderId).set(true); }
+    catch(e){ console.warn('phoneIndex write failed:', e); }
     localStorage.setItem('gronthokanon_lastorder', orderId);
     try{
       if(document.getElementById('saveInfo')?.checked){
@@ -1311,6 +1334,8 @@ async function confirmOrder(){
     if(window.fbq){try{fbq('track','Purchase',{value:grand,currency:'BDT',num_items:cart.length});}catch(e){}}
   }catch(e){
     console.error('Firebase error:', e);
+    /* অর্ডার সেভ না হলে FIRSTORDER-এর "ব্যবহৃত" চিহ্ন মুছে দিই — নাহলে আবার চেষ্টা করলে "আগেই ব্যবহার হয়েছে" বলত */
+    if(coupon === 'FIRSTORDER'){ try{ firebase.database().ref('usedCoupons/FIRSTORDER/'+phone.replace(/\+/g,'_')).remove().catch(()=>{}); }catch(_){} }
     btn.disabled = false; btn.innerHTML = '<i class=gi-ok></i> অর্ডার নিশ্চিত করুন';
     isSubmitting = false;
     showToast('<i class=gi-no></i> অর্ডার সেভ হয়নি! ইন্টারনেট চেক করুন।','#dc2626');
@@ -1401,12 +1426,14 @@ let lastOrderData = null;
 
 function buildInvoiceHTML(o){
   const grouped = {};
+  /* নাম+দাম মিলিয়ে গুনি — একই নামের দুটো আলাদা বই (আলাদা দাম) এক লাইনে মিশে যেত না */
   o.items.forEach(i => {
-    if(!grouped[i.name]) grouped[i.name] = {qty:0, price:i.price, img:i.img||''};
-    grouped[i.name].qty++;
+    const k = i.name + '\u0000' + i.price;
+    if(!grouped[k]) grouped[k] = {name:i.name, qty:0, price:i.price, img:i.img||''};
+    grouped[k].qty++;
   });
   let subtotal = 0;
-  const rows = Object.entries(grouped).map(([name,e],idx) => {
+  const rows = Object.values(grouped).map((e,idx) => { const name = e.name;
     const lt = e.price * e.qty; subtotal += lt;
     const imgCell = e.img
       ? `<img src="${escapeHTML(e.img)}" style="width:38px;height:52px;object-fit:cover;border-radius:5px;border:1px solid #d1fae5;display:block;" crossorigin="anonymous">`

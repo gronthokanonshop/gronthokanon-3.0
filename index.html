@@ -1987,7 +1987,7 @@ function makeCard(b){
             ${out
                 ? `<div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
                    <button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('<i class=gi-no></i> এই আইটেমটি এখন স্টকে নেই');">${GK_NOSTOCK_SVG}<span>স্টক শেষ</span></button>`
-                : `<div class="bc-foot"><div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div><button class="bc-btn bc-icon"data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" title="কার্টে যোগ করুন" aria-label="কার্টে যোগ করুন" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">${GK_CART_SVG}</button></div>`}
+                : `<div class="bc-foot"><div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div><button class="bc-btn bc-icon" data-name="${escapeHTML(b.name)}" data-bid="${escapeHTML(b.bid==null?'':b.bid)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" title="কার্টে যোগ করুন" aria-label="কার্টে যোগ করুন" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img,this.dataset.bid)">${GK_CART_SVG}</button></div>`}
         </div></div>`;
 }
 function goToBook(idx){
@@ -2280,13 +2280,16 @@ function updateAuthUI(user){
 function closeWishlist(){document.getElementById('wishlistBox').style.display='none';}
 
 /* CART */
-function addToCart(name,price,img){
-    /* স্টক শেষ বইয়ে বাধা (নাম দিয়ে বইয়ের নম্বর বের করে স্টক চেক) */
+function addToCart(name,price,img,bid){
+    /* স্টক শেষ বইয়ে বাধা (bid/নাম দিয়ে বইয়ের নম্বর বের করে স্টক চেক) */
+    const item={name:name.trim(),price:Number(price),img};
+    if(bid!=null&&bid!=='')item.bid=bid;
     if(typeof books!=='undefined'&&window.gkIsOut){
-        const bi=books.findIndex(x=>x&&x.name===name.trim());
+        const fb=window.gkFindBook?gkFindBook(item):books.find(x=>x&&x.name===item.name);
+        const bi=fb?books.indexOf(fb):-1;
         if(bi>-1&&window.gkIsOut(bi)){if(window.showToast)showToast('<i class=gi-no></i> এই বইটি এখন স্টকে নেই');return;}
     }
-    cart.push({name:name.trim(),price:Number(price),img});
+    cart.push(item);
     saveCart();updateCartUI();
     const w=document.getElementById('cartWrap');
     w.classList.remove('bounce');void w.offsetWidth;w.classList.add('bounce');
@@ -2332,8 +2335,9 @@ function gkMarkInCart(){
     }).observe(document.documentElement,{childList:true,subtree:true});
 })();
 function changeQty(name,delta){
-    if(delta===1){const item=cart.find(i=>i.name===name);if(item)cart.push({...item});}
-    else{let i=-1;for(let j=cart.length-1;j>=0;j--){if(cart[j].name===name){i=j;break;}}if(i!==-1)cart.splice(i,1);}
+    const m=i=>window.gkCartMatch?gkCartMatch(i,name):i.name===name;
+    if(delta===1){const item=cart.find(m);if(item)cart.push({...item});}
+    else{let i=-1;for(let j=cart.length-1;j>=0;j--){if(m(cart[j])){i=j;break;}}if(i!==-1)cart.splice(i,1);}
     saveCart();updateCartUI();
 }
 function renderCouponSection(){
@@ -2741,7 +2745,10 @@ function loadBanners(){
         if(gkBannerSet)return;
         gkBannerSet=true;
         const small=window.innerWidth<=900;
-        document.querySelectorAll('#mainSlider img[data-src-m]').forEach(im=>{ im.src=small?im.dataset.srcM:im.dataset.src; });
+        document.querySelectorAll('#mainSlider img[data-src-m]').forEach(im=>{
+            if(small) im.addEventListener('error',()=>{ if(im.getAttribute('src')!==im.dataset.src) im.src=im.dataset.src; },{once:true});
+            im.src=small?im.dataset.srcM:im.dataset.src;
+        });
     }
     setTimeout(useStaticBanners,5000);
 

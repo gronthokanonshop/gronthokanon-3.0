@@ -250,11 +250,11 @@ let sbSending=false;
 function submitBlog(){
   if(sbSending)return;
   const name=(document.getElementById('sbName').value||'').trim();
-  const phone=(document.getElementById('sbPhone').value||'').trim();
+  const phone=window.gkNormPhone?gkNormPhone(document.getElementById('sbPhone').value):(document.getElementById('sbPhone').value||'').trim();
   const title=(document.getElementById('sbTitle').value||'').trim();
   const content=(document.getElementById('sbContent').value||'').trim();
   const msg=document.getElementById('sbMsg');
-  function err(t){msg.style.display='block';msg.style.color='#dc2626';msg.innerText=t;}
+  function err(t){msg.style.display='block';msg.style.color='#dc2626';msg.innerHTML=window.gkIconText?gkIconText(t):t;}
   if(name.length<2)return err('<i class=gi-warn></i> আপনার নাম লিখুন');
   if(!/^01[3-9]\d{8}$/.test(phone))return err('<i class=gi-warn></i> সঠিক মোবাইল নম্বর দিন (হাদিয়া পাঠাতে লাগবে)');
   if(title.length<5)return err('<i class=gi-warn></i> লেখার শিরোনাম দিন (কমপক্ষে ৫ অক্ষর)');
@@ -373,7 +373,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSubmitForm();})
     <p class="hint">বই, পাঠাভ্যাস বা ইসলামি বিষয়ে নিজের ভাষায় লিখুন। নির্বাচিত লেখা সাইটে প্রকাশিত হবে এবং সেই লেখক পাবেন <i class=gi-gift></i> হাদিয়া। (নম্বরটি শুধু হাদিয়া পাঠাতে ব্যবহৃত হবে — সাইটে দেখানো হবে না।)</p>
     <p id="sbMsg" style="display:none;font-size:12px;font-weight:700;margin-bottom:10px;"></p>
     <input class="sub-input" id="sbName" placeholder="আপনার নাম *" maxlength="60">
-    <input class="sub-input" id="sbPhone" type="tel" placeholder="মোবাইল নম্বর (01XXXXXXXXX) *" maxlength="11">
+    <input class="sub-input" id="sbPhone" type="tel" inputmode="tel" placeholder="মোবাইল নম্বর (01XXXXXXXXX) *" maxlength="16">
     <input class="sub-input" id="sbTitle" placeholder="লেখার শিরোনাম *" maxlength="120">
     <textarea class="sub-input" id="sbContent" placeholder="আপনার লেখা এখানে লিখুন... " maxlength="20000" oninput="updateCount()"></textarea>
     <div class="sub-count" id="sbCount">০ অক্ষর</div>

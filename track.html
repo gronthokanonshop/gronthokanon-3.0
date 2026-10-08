@@ -121,7 +121,7 @@
         <div class="track-search">
             <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> আমার সব অর্ডার</h3>
             <div class="track-input-row">
-                <input class="track-input" id="phoneInput" placeholder="01XXXXXXXXX" type="tel" inputmode="numeric" maxlength="11" onkeydown="if(event.key==='Enter')searchByPhone()">
+                <input class="track-input" id="phoneInput" placeholder="01XXXXXXXXX" type="tel" inputmode="tel" maxlength="16" onkeydown="if(event.key==='Enter')searchByPhone()">
                 <button class="track-btn" onclick="searchByPhone()">দেখুন</button>
             </div>
         </div>
@@ -181,7 +181,7 @@ async function searchOrder(){
 }
 
 async function searchByPhone(){
-    const phone=document.getElementById('phoneInput').value.trim();
+    const phone=window.gkNormPhone?gkNormPhone(document.getElementById('phoneInput').value):document.getElementById('phoneInput').value.trim();
     if(!phone||!/^01[3-9]\d{8}$/.test(phone)){
         showToast('সঠিক মোবাইল নম্বর দিন!','#dc2626');return;
     }
