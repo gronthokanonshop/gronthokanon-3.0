@@ -582,7 +582,7 @@ function makeCard(b, delay) {
             </div>
             ${out
                 ? `<button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('<i class=gi-no></i> এই বইটি এখন স্টকে নেই');">স্টক শেষ</button>`
-                : `<button class="bc-btn ${inCart ? 'added' : ''}" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img,this)">
+                : `<button class="bc-btn ${inCart ? 'added' : ''}" data-name="${escapeHTML(b.name)}" data-bid="${escapeHTML(b.bid == null ? '' : b.bid)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img,this)">
                 ${inCart ? '<i class=gi-ok></i> যোগ হয়েছে' : 'কার্টে যোগ করুন'}
             </button>`}
         </div>
@@ -817,14 +817,17 @@ function gkSweepStock() {
 window.gkOnStockReady = gkSweepStock;
 
 function addToCart(name, price, img, btn) {
+    const item = { name: name.trim(), price: Number(price), img };
+    if (btn && btn.dataset && btn.dataset.bid) item.bid = btn.dataset.bid;
     /* স্টক শেষ বইয়ে বাধা */
     if (typeof books !== 'undefined' && window.gkIsOut) {
-        const bi = books.findIndex(x => x && x.name === name.trim());
+        const fb = window.gkFindBook ? gkFindBook(item) : books.find(x => x && x.name === item.name);
+        const bi = fb ? books.indexOf(fb) : -1;
         if (bi > -1 && window.gkIsOut(bi)) { showToast('<i class=gi-no></i> এই বইটি এখন স্টকে নেই'); return; }
     }
     // ড্রয়ার থেকে কার্ট বদলাতে পারে — তাই আগে localStorage থেকে টাটকা কপি নাও
     cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || [];
-    cart.push({ name: name.trim(), price: Number(price), img });
+    cart.push(item);
     localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
     updateCounts();
     if (btn) { btn.classList.add('added'); btn.innerHTML = '<i class=gi-ok></i> যোগ হয়েছে'; }

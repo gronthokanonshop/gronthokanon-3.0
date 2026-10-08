@@ -308,7 +308,7 @@ let lpBook=null;
 function lpOrder(){
     if(!lpBook) return;
     let cart=JSON.parse(localStorage.getItem('gronthokanon_cart'))||[];
-    cart.push({name:lpBook.name, price:lpBook.price, img:lpBook.img});
+    cart.push(lpBook.bid!=null?{name:lpBook.name, price:lpBook.price, img:lpBook.img, bid:lpBook.bid}:{name:lpBook.name, price:lpBook.price, img:lpBook.img});
     localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
     if(window.fbq){ try{ fbq('track','AddToCart',{content_name:lpBook.name,value:lpBook.price,currency:'BDT'}); }catch(e){} }
     window.location.href='checkout.html';

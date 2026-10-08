@@ -121,9 +121,11 @@
     }
     function addToCart(i) {
         var b = books[i]; if (!b) return;
-        var cart = []; try { cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || []; } catch (e) {}
-        cart.push({ name: b.name, price: b.price, img: img(b) });
-        localStorage.setItem('gronthokanon_cart', JSON.stringify(cart));
+        /* লোকাল নাম c — আগে "var cart" পেজের নিজস্ব cart-কে ঢেকে দিত, ফলে নিচের সিঙ্ক কাজ করত না
+           আর পরে পেজের "কার্টে যোগ" চাপলে এখান থেকে যোগ করা বই মুছে যেত */
+        var c = []; try { c = JSON.parse(localStorage.getItem('gronthokanon_cart')) || []; } catch (e) {}
+        c.push(b.bid != null ? { name: b.name, price: b.price, img: img(b), bid: b.bid } : { name: b.name, price: b.price, img: img(b) });
+        localStorage.setItem('gronthokanon_cart', JSON.stringify(c));
         /* পেজের নিজস্ব cart ভেরিয়েবলও মিলিয়ে রাখি — নাহলে পরের "কার্টে যোগ" এই বইটা মুছে লিখে ফেলত */
         try { if (typeof cart !== 'undefined') cart = JSON.parse(localStorage.getItem('gronthokanon_cart')) || []; } catch (e) {}
         try { if (typeof updateCartUI === 'function') updateCartUI(); } catch (e) {}

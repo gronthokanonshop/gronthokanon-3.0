@@ -31,6 +31,18 @@ function escapeHTML(s) {
     });
 }
 
+/* ═══ মোবাইল নম্বর ঠিক করা — বাংলা কিবোর্ডে লেখা "০১৭১২…", "+৮৮০১৭…", স্পেস/ড্যাশ সহ নম্বর
+   সবই 01XXXXXXXXX বানিয়ে দেয় (আগে এগুলো "সঠিক নম্বর দিন" বলে আটকে যেত) ═══ */
+window.gkNormPhone = function (s) {
+    s = String(s == null ? '' : s).replace(/[০-৯]/g, function (d) { return '০১২৩৪৫৬৭৮৯'.indexOf(d); }).replace(/[^\d]/g, '');
+    if (/^8801\d{9}$/.test(s)) s = s.slice(2);
+    return s;
+};
+/* বাংলা অঙ্ক → ইংরেজি অঙ্ক (Transaction ID ইত্যাদির জন্য) */
+window.gkAsciiDigits = function (s) {
+    return String(s == null ? '' : s).replace(/[০-৯]/g, function (d) { return '০১২৩৪৫৬৭৮৯'.indexOf(d); });
+};
+
 /* ═══ স্টক অবস্থা — সব পেজে (হোম, ফিল্টার, সার্চ, বই) ═══
    Firebase-এর stock নোড: stock/{বইয়ের নম্বর} === false মানে স্টক শেষ।
    পেজ লোডের সাথে সাথে একবার আনা হয়, এলে gkOnStockReady() ডাকে যেন কার্ড রিফ্রেশ হয়। */
@@ -336,6 +348,28 @@ window.gkToggleContact = function () {
    সেখানে এই ফাংশনগুলো ওভাররাইট করে না — শুধু যেসব পেজে এগুলো
    নেই (book/filter/checkout) সেখানে fallback হিসেবে কাজ করে।
 ═══════════════════════════════════════════════════════════════ */
+/* ═══ কার্টের বই চেনা — একই নামে একাধিক বই আছে (আলাদা লেখক/দাম, যেমন "দরুদ ও সালাম" ৳১৯২ ও ৳৫৫)।
+   তাই কার্টে বইয়ের bid-ও রাখি, আর দাম/তথ্য bid দিয়ে খুঁজি; bid ছাড়া পুরনো কার্ট-আইটেম আগের মতো নাম দিয়ে ═══ */
+window.gkFindBook = function (item) {
+    if (typeof books === 'undefined' || !books || !item) return null;
+    if (typeof item === 'string') item = { name: item };
+    var i;
+    if (item.bid != null && item.bid !== '') {
+        var id = String(item.bid);
+        for (i = 0; i < books.length; i++) if (books[i] && String(books[i].bid) === id) return books[i];
+    }
+    for (i = 0; i < books.length; i++) if (books[i] && books[i].name === item.name) return books[i];
+    return null;
+};
+/* কার্টে একই বই একসাথে গোনার চাবি — bid থাকলে bid, নাহলে নাম */
+window.gkCartKey = function (item) {
+    return (item && item.bid != null && item.bid !== '') ? 'id:' + item.bid : 'nm:' + (item ? item.name : '');
+};
+/* key (gkCartKey) বা পুরনো নিয়মে শুধু নাম — দুটোই মেলে */
+window.gkCartMatch = function (item, key) {
+    return !!item && (window.gkCartKey(item) === key || (key.indexOf('id:') !== 0 && key.indexOf('nm:') !== 0 && item.name === key));
+};
+
 (function () {
     var LS_CART = 'gronthokanon_cart';
     function readCart() {
@@ -384,11 +418,7 @@ window.gkToggleContact = function () {
     function onCheckoutPage() {
         return location.pathname.indexOf('checkout.html') !== -1;
     }
-    function bookInfo(name) {
-        if (typeof books === 'undefined' || !books) return null;
-        for (var i = 0; i < books.length; i++) if (books[i] && books[i].name === name) return books[i];
-        return null;
-    }
+    function bookInfo(item) { return window.gkFindBook(item); }
 
     window.gkCartUpdateUI = function () {
         ensureCartBox();
@@ -405,15 +435,16 @@ window.gkToggleContact = function () {
             if (foot) foot.style.display = '';
             var grouped = {}, order = [];
             c.forEach(function (item) {
-                if (grouped[item.name]) grouped[item.name].qty++;
-                else { grouped[item.name] = { price: Number(item.price) || 0, qty: 1, img: item.img || '' }; order.push(item.name); }
+                var k = window.gkCartKey(item);
+                if (grouped[k]) grouped[k].qty++;
+                else { grouped[k] = { name: item.name, bid: item.bid, price: Number(item.price) || 0, qty: 1, img: item.img || '' }; order.push(k); }
             });
-            box.innerHTML = order.map(function (name) {
-                var item = grouped[name], b = bookInfo(name);
+            box.innerHTML = order.map(function (key) {
+                var item = grouped[key], name = item.name, b = bookInfo(item);
                 var orig = b && Number(b.original_price) > item.price ? Number(b.original_price) : 0;
                 subtotal += item.price * item.qty;
                 mrp += (orig || item.price) * item.qty;
-                var safe = escapeHTML(name);
+                var safe = escapeHTML(name), safeKey = escapeHTML(key);
                 var link = b ? 'book.html?id=' + encodeURIComponent(b.bid || books.indexOf(b)) : '';
                 return '<div class="gkcb-item">' +
                     (link ? '<a href="' + link + '" class="gkcb-img">' : '<span class="gkcb-img">') +
@@ -425,12 +456,12 @@ window.gkToggleContact = function () {
                         '<div class="gkcb-price">৳' + bnNum(item.price) + (orig ? ' <s>৳' + bnNum(orig) + '</s>' : '') + '</div>' +
                         '<div class="gkcb-actions">' +
                             '<div class="gkcb-qty">' +
-                                '<button type="button" data-name="' + safe + '" onclick="gkCartQty(this.dataset.name,-1)" aria-label="কমান">−</button>' +
+                                '<button type="button" data-key="' + safeKey + '" onclick="gkCartQty(this.dataset.key,-1)" aria-label="কমান">−</button>' +
                                 '<span>' + bnNum(item.qty) + '</span>' +
-                                '<button type="button" data-name="' + safe + '" onclick="gkCartQty(this.dataset.name,1)" aria-label="বাড়ান">+</button>' +
+                                '<button type="button" data-key="' + safeKey + '" onclick="gkCartQty(this.dataset.key,1)" aria-label="বাড়ান">+</button>' +
                             '</div>' +
                             '<b class="gkcb-line">৳' + bnNum(item.price * item.qty) + '</b>' +
-                            '<button type="button" class="gkcb-del" data-name="' + safe + '" onclick="gkCartRemove(this.dataset.name)" aria-label="সরান">' + IC_TRASH + '</button>' +
+                            '<button type="button" class="gkcb-del" data-key="' + safeKey + '" onclick="gkCartRemove(this.dataset.key)" aria-label="সরান">' + IC_TRASH + '</button>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -450,8 +481,8 @@ window.gkToggleContact = function () {
             ob.style.display = giftHtml ? 'block' : 'none';
         }
     };
-    window.gkCartRemove = function (name) {
-        writeCart(readCart().filter(function (i) { return i.name !== name; }));
+    window.gkCartRemove = function (key) {
+        writeCart(readCart().filter(function (i) { return !window.gkCartMatch(i, key); }));
         if (typeof updateCartUI === 'function') updateCartUI(); else window.gkCartUpdateUI();
     };
 
@@ -498,14 +529,14 @@ window.gkToggleContact = function () {
         }
     };
     /* আলাদা নাম — book.html-এর নিজস্ব changeQty(d) (পেজের পরিমাণ বক্স) এটাকে ঢেকে দিত, ফলে কার্টে +/- কাজ করত না */
-    window.gkCartQty = function (name, delta) {
+    window.gkCartQty = function (key, delta) {
         var c = readCart();
         if (delta === 1) {
-            var item = c.find(function (i) { return i.name === name; });
-            if (item) c.push({ name: item.name, price: item.price, img: item.img });
+            var item = c.find(function (i) { return window.gkCartMatch(i, key); });
+            if (item) c.push(item.bid != null ? { name: item.name, price: item.price, img: item.img, bid: item.bid } : { name: item.name, price: item.price, img: item.img });
         } else {
             var idx = -1;
-            for (var j = c.length - 1; j >= 0; j--) { if (c[j].name === name) { idx = j; break; } }
+            for (var j = c.length - 1; j >= 0; j--) { if (window.gkCartMatch(c[j], key)) { idx = j; break; } }
             if (idx !== -1) c.splice(idx, 1);
         }
         writeCart(c);
