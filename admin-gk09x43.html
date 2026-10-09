@@ -3477,39 +3477,10 @@ function drvChecks(){
         if(nrel==='more') W.push(['red','Drive-এর নামে বাড়তি শব্দ — Drive: "'+r.folder.name.trim()+'" · দোকানে: "'+b.name+'"। এটা আলাদা বই হতে পারে — একই বই না হলে "বই বদলান" চাপুন']);
         else if(nrel==='diff') W.push(['red','নাম মেলেনি — Drive: "'+r.folder.name.trim()+'" · দোকানে: "'+b.name+'"। একই বই না হলে "বই বদলান" চাপুন']);
         else if(drvRaw(r.folder.name)!==drvRaw(b.name)&&!drvRaw(b.name).startsWith(drvRaw(r.folder.name))) W.push(['amber','নামের বানান আলাদা — Drive: "'+r.folder.name.trim()+'" · দোকানে: "'+b.name+'"']);
-        /* "বই সম্পর্কে" ফাইলে লেখা তথ্য আর দোকানের তথ্য */
-        const meta=(r.doc&&r.doc.meta)||{};
-        if(meta.name&&drvLatin(meta.name)===drvLatin(b.name)&&!drvTitleMatch(meta.name,b.name)) W.push(['red','বিবরণ-ফাইলে অন্য বইয়ের নাম — ফাইলে: "'+meta.name+'" · দোকানে: "'+b.name+'"']);
-        if(meta.author&&b.author&&drvLatin(meta.author)===drvLatin(b.author)&&!drvPeopleMatch(meta.author,b.author)) W.push(['red','লেখকের নাম মেলেনি — ফাইলে: "'+meta.author+'" · দোকানে: "'+b.author+'" (কোনটা ঠিক দেখে বই এডিটে ঠিক করুন)']);
-        if(meta.pub&&b.pub&&drvLatin(meta.pub)===drvLatin(b.pub)&&!drvPubMatch(meta.pub,b.pub)) W.push(['red','প্রকাশনী মেলেনি — ফাইলে: "'+meta.pub+'" · দোকানে: "'+b.pub+'"']);
-        if(meta.price&&drvNum(meta.price)&&Number(b.original_price)&&drvNum(meta.price)!==Number(b.original_price)) W.push(['amber','মুদ্রিত দাম আলাদা — ফাইলে: ৳'+drvBn(drvNum(meta.price))+' · দোকানে: ৳'+drvBn(b.original_price)+' (নতুন মুদ্রণে দাম বদলেছে কিনা দেখুন)']);
-        if(meta.pages&&drvNum(meta.pages)&&drvNum(b.pages)&&drvNum(meta.pages)!==drvNum(b.pages)) W.push(['amber','পৃষ্ঠা সংখ্যা আলাদা — ফাইলে: '+drvBn(drvNum(meta.pages))+' · দোকানে: '+drvBn(drvNum(b.pages))]);
-        /* দোকানের বইয়ের তথ্য — যা নেই সেটা ফাইলে থাকলে সাথে দেখাই, যাতে বই এডিটে বসাতে পারেন */
-        if(!(Number(b.price)>0)) W.push(['red','বিক্রয়মূল্য বসানো নেই — সাইটে বইটা দেখাবে না']);
-        else if(Number(b.original_price)&&Number(b.price)>Number(b.original_price)) W.push(['red','বিক্রয়মূল্য (৳'+drvBn(b.price)+') মুদ্রিত দামের (৳'+drvBn(b.original_price)+') চেয়ে বেশি']);
-        const miss=[];
-        if((b.type||'বই')==='বই'&&!String(b.author||'').trim()) miss.push('লেখক'+(meta.author?' (ফাইলে আছে: '+meta.author+')':''));
-        if(!Number(b.original_price)) miss.push('মুদ্রিত দাম'+(drvNum(meta.price)?' (ফাইলে আছে: ৳'+drvBn(drvNum(meta.price))+')':''));
-        if((b.type||'বই')==='বই'&&!String(b.pages||'').trim()) miss.push('পৃষ্ঠা'+(drvNum(meta.pages)?' (ফাইলে আছে: '+drvBn(drvNum(meta.pages))+')':''));
-        if(miss.length) W.push(['amber','দোকানে বইয়ের তথ্য অসম্পূর্ণ — নেই: '+miss.join(', ')]);
-        /* Drive ফোল্ডারে কী নেই */
-        if(!r.pdf) W.push(['amber','ফোল্ডারে শর্ট PDF নেই']);
-        else if(r.pdfOdd) W.push(['amber','PDF ফাইলের নাম এই বইয়ের মতো নয়: "'+r.pdf.name+'" — খুলে দেখে ঠিক হলে "শর্ট PDF" টিক দিন']);
-        const curPdf=drvDriveId(b.pdfLink);
-        if(r.pdf&&curPdf&&curPdf!==r.pdf.id) W.push(['amber','দোকানে এখন অন্য একটা PDF বসানো — সেটা ভুল হতে পারে। এই ফোল্ডারেরটাই ঠিক হলে "শর্ট PDF" টিক দিন (পুরনোটা বদলে যাবে)']);
-        const di=r.docInfo||{empty:[],oldDoc:[]};
-        if(!r.doc){
-            if(di.oldDoc.length) W.push(['amber','বিবরণ পুরনো Word (.doc) ফাইলে — পড়া যায় না। Word-এ খুলে "Save As → .docx" করে Drive-এ রাখুন: '+di.oldDoc.join(', ')]);
-            else if(di.empty.length) W.push(['amber','"বই সম্পর্কে" ফাইল আছে কিন্তু খালি: '+di.empty.join(', ')]);
-            else W.push(['amber','ফোল্ডারে "বই সম্পর্কে" (বিবরণের) ফাইল নেই']);
-            if(!r.curDesc) W.push(['amber','দোকানেও এই বইয়ের বিবরণ নেই — সাইটে "শীঘ্রই আপডেট হবে" দেখাবে']);
-        }else{
-            if(r.doc.fromReview) W.push(['amber','বিবরণ নেওয়া হয়েছে "রিভিউ" ফাইল থেকে — বইয়ের পরিচিতি কিনা পড়ে দেখুন']);
-            if(r.doc.full>DRV_DESC_MAX) W.push(['amber','বিবরণ খুব লম্বা ('+drvBn(r.doc.full)+' অক্ষর) — প্রথম '+drvBn(DRV_DESC_MAX)+' অক্ষর নেওয়া হবে; বইয়ের অংশ ঢুকে গেছে কিনা দেখুন']);
-            if(r.descState==='other') W.push(['amber','দোকানে আগে অন্য বিবরণ আছে — দুটো পড়ে দেখে, Drive-এরটা চাইলে "বিবরণ" টিক দিন']);
-        }
-        if(r.imgs.length&&r.imgs.every(im=>im.kind==='unknown')) W.push(['amber','ছবির মাপ পড়া যায়নি — কোনটা সামনের কভার, নিজে দেখে বাছুন']);
-        else if(!r.imgs.some(im=>im.kind==='portrait')) W.push(['amber',r.imgs.length?'আলাদা সামনের কভার নেই — পুরো কভার থেকে কাটতে হবে বা নিজে ছবি দিন':'ফোল্ডারে কোনো ছবি নেই']);
+        /* মালিকের নিয়ম (২০২৬-১০-০৯): Drive-এর সাথে শুধু বইয়ের নাম মেলানো হবে — লেখক/দাম/পৃষ্ঠা/প্রকাশনী
+           বা ফোল্ডারে কী আছে-নেই নিয়ে আর কোনো সতর্কতা নয়। শুধু PDF ফাইলের নাম বইয়ের সাথে না মিললে জানাই,
+           কারণ সেই PDF নিজে থেকে টিক হয় না (নামের ব্যাপার)। */
+        if(r.pdfOdd) W.push(['amber','PDF ফাইলের নাম এই বইয়ের মতো নয়: "'+r.pdf.name+'" — খুলে দেখে ঠিক হলে "শর্ট PDF" টিক দিন']);
         r.warns=W;
     });
 }
@@ -8573,8 +8544,11 @@ async function requestBrowserNotifPermission(){
    তারপর থেকে নতুন অর্ডারের শব্দ সবসময় বাজবে। */
 let _gkAudioCtx=null;
 (function(){
-    const evs=['click','keydown','touchstart'];
+    const evs=['click','keydown','touchend'];
     function _initCtx(){
+        /* Ctrl/Shift চাপা বা touchstart-কে ব্রাউজার "আসল ক্লিক" ধরে না — তখন চালু করতে গেলেই
+           সেই সতর্কতা আসে। তাই ব্রাউজার যখন সত্যিই অনুমতি দেয়, শুধু তখনই চেষ্টা করি */
+        if(navigator.userActivation&&!navigator.userActivation.isActive) return;
         try{
             if(!_gkAudioCtx){const AC=window.AudioContext||window.webkitAudioContext; if(AC)_gkAudioCtx=new AC();}
             if(_gkAudioCtx&&_gkAudioCtx.state==='suspended')_gkAudioCtx.resume().catch(()=>{});
