@@ -4666,6 +4666,29 @@ const books = (function (H, R) {
 ["banglar-hasi","বাংলার হাসি",1752,150,300,"",28]
 ]);
 
+/* ═══ নতুন বই (২০২৬-১০-০৯, রাইয়্যান প্রকাশন — ওয়াফিলাইফ থেকে) ═══
+   অ্যাডমিনে "Firebase-এ তুলুন" চাপার পর অ্যাডমিন থেকে নতুন book.js ডাউনলোড করলে এগুলো মূল তালিকায় ঢুকে যাবে। */
+[
+ ["জান্নাতের স্বপ্ন দুআয় বুনি","শারিন সফি অদ্রিতা",15,"","https://wafilife-media-v2.wafilife.com/uploads/2026/09/cover-115037-250x375.jpg"],
+ ["জান্নাতে দেখা হবে (ইন শা আল্লাহ)","শারিন সফি অদ্রিতা",340,"224 পৃষ্ঠা","https://wafilife-media-v2.wafilife.com/uploads/2026/09/cover-115256-250x375.jpg"],
+ ["শাইখ মাহমুদ আফেন্দি ও তুর্কি দরবেশদের ইসলাম পুনর্জারণ","আইনুল হক কাসিমী",350,"224 পৃষ্ঠা","https://wafilife-media-v2.wafilife.com/uploads/2026/09/cover-115258-250x375.jpg"],
+ ["দাইয়্যুস (সমাজের নীরব মহামারী)","আব্দুল্লাহ আল মামুন",230,"152 পৃষ্ঠা","https://wafilife-media-v2.wafilife.com/uploads/2026/09/cover-114872-250x375.jpg"],
+ ["হায়া : মুমিন নারীর অলংকার","মাহমুদ বিন নূর",330,"224 পৃষ্ঠা","https://wafilife-media-v2.wafilife.com/uploads/2026/09/cover-114873-250x375.jpg"],
+ ["Dhul Hijjah Kids Activity Book","শারিন সফি অদ্রিতা",20,"20 পৃষ্ঠা","https://wafilife-media-v2.wafilife.com/uploads/2026/05/gift-boi-77584-250x375.jpg"],
+ ["আসমাউল হুসনা দিয়ে হৃদয়ছোঁয়া দোয়ার সংকলন","শারিন সফি অদ্রিতা",10,"","https://wafilife-media-v2.wafilife.com/uploads/2026/01/WhatsApp-Image-2026-01-18-at-7.53.30-PM.jpeg"],
+ ["রমাদান ডায়েরি ও অদেখা আমি একত্রে","নাইমা বি. রবার্ট, শারিন সফি অদ্রিতা",510,"","https://wafilife-media-v2.wafilife.com/uploads/2026/01/New-Project-9.jpg"],
+ ["রাইয়ান প্রকাশনের নতুন প্রকাশিত বইসমূহ","আবু সুফিয়ান বিন আব্বাস, আইনুল হক কাসিমী",935,"","https://wafilife-media-v2.wafilife.com/uploads/2025/02/raiyan-pkg-cover.jpg"],
+ ["আত্মশুদ্ধি প্যাকেজ","মুহাম্মাদ শাকিল হোসাইন, মাহমুদ বিন নূর",800,"","https://wafilife-media-v2.wafilife.com/uploads/2024/02/Untitled-1-copy-192x254.jpg"],
+ ["রমাদান তাক্বওয়ার পাঠশালা","হুসাইন আল মাহমুদ",120,"80 পৃষ্ঠা","https://wafilife-media-v2.wafilife.com/uploads/2023/03/romadan-taqwar-pathshala-192x254.png"],
+ ["লড়াই সিরিজ","মাহমুদ বিন নূর",990,"431 পৃষ্ঠা","https://wafilife-media-v2.wafilife.com/uploads/2026/06/lorai-package-13695-250x375.jpg"]
+].forEach(function (r) {
+    var bid = r[0].trim().replace(/[।,.!?;:'"()\[\]{}\/\\]/g, '').replace(/\s+/g, '-').toLowerCase().slice(0, 60);
+    if (books.some(function (b) { return b && (b.bid === bid || b.name === r[0]); })) return;
+    books.push({ bid: bid, type: 'বই', name: r[0], author: r[1], price: Math.round(r[2] * 0.65), original_price: r[2],
+        cat: 'ইসলামি বই', subcat: '', subject: 'ইসলামি বই', cover: 'Paperback', pub: 'রাইয়্যান প্রকাশন', pages: r[3], brand: '',
+        img: r[4], desc: '', pdfLink: '' });
+});
+
 /* ═══ IMAGE FALLBACK ═══
    যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —
    সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */
