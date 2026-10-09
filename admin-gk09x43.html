@@ -4394,12 +4394,19 @@ function bePkgShow(i){ const w=document.getElementById('bePkgWrap_'+i), t=docume
 /* ══════════════════════════════════════════════════════════════
    প্রকাশনী-ভিত্তিক অফার — এক ক্লিকে কোনো প্রকাশনীর (বা সব) বইয়ে ছাড়
    • price = round(original_price × (1 − %/100)); original_price (MRP) অপরিবর্তিত
-   • অফার দেওয়ার আগে তখনকার price Firebase-এর priceBackup/{idx}-এ রাখা হয়
-     (একবারই — নতুন অফারে পুরনো backup overwrite হয় না), যাতে "আগের দামে ফেরাও" কাজ করে
+   • অফার দেওয়ার আগে তখনকার price রাখা হয় adminNotes/_priceBackup/{bid}-এ
+     (একবারই — নতুন অফারে পুরনো backup overwrite হয় না), যাতে "আগের দামে ফেরাও" কাজ করে।
+     আগে রাখা হতো priceBackup/{idx}-এ — কিন্তু (১) Firebase নিয়মে ঐ জায়গার অনুমতি ছিল না,
+     তাই অফার দিলেই "ব্যর্থ" হতো, (২) কোনো বই মুছলে idx সরে যায়, ফলে অন্য বইয়ের দাম ফিরত।
+     adminNotes-এ মালিক/মডারেটরের অনুমতি আগে থেকেই আছে, আর bid কখনো সরে না।
    • Firebase-এ পুরো বই-অবজেক্ট লেখা হয় (শুধু price না) — যাতে যে বই এখনো
      Firebase-এ নেই সেটা অর্ধেক-অবজেক্ট হয়ে না যায়
+   • Firebase-এ সেভ সফল হলে তবেই এই পেজের দাম বদলায় (ব্যর্থ হলে আগের মতোই থাকে)
 ══════════════════════════════════════════════════════════════ */
 const PUB_OFFER_ALL='__ALL__';
+const PUB_BK_PATH='adminNotes/_priceBackup';
+/* Firebase key-তে . # $ [ ] / চলে না — bid-এ থাকলে %XX বানাই */
+const pubBkKey=b=>String(b.bid).replace(/[.#$\[\]\/%]/g,c=>'%'+c.charCodeAt(0).toString(16).toUpperCase());
 function pubOfferPubMap(){
     const m={};
     (localBooks||[]).forEach(b=>{ if(!b) return; const p=(b.pub||'').trim()||'(প্রকাশনী নেই)'; m[p]=(m[p]||0)+1; });
@@ -4415,16 +4422,16 @@ function buildPubOfferSelect(){
     pubs.forEach(p=>{ html+=`<option value="${escapeHTML(p)}">${escapeHTML(p)} (${m[p]}টি)</option>`; });
     if(sel.innerHTML!==html){ sel.innerHTML=html; sel.value=cur; }
 }
-/* যেসব বইয়ে অফার লাগবে — index তালিকা (MRP > 0 না হলে বাদ) */
+/* যেসব বইয়ে অফার লাগবে — index তালিকা; MRP নেই এমন বই বাদ (skipped-এ গোনা) */
 function pubOfferTargets(){
     const v=document.getElementById('pubOfferSelect')?.value||'';
-    if(!v) return [];
-    const out=[];
+    const out=[]; out.skipped=0;
+    if(!v) return out;
     (localBooks||[]).forEach((b,i)=>{
         if(!b) return;
         const p=(b.pub||'').trim()||'(প্রকাশনী নেই)';
         if(v!==PUB_OFFER_ALL && p!==v) return;
-        if(!(Number(b.original_price)>0)) return;
+        if(!(Number(b.original_price)>0)){ out.skipped++; return; }
         out.push(i);
     });
     return out;
@@ -4433,46 +4440,72 @@ function previewPubOffer(){
     const el=document.getElementById('pubOfferPreview'); if(!el) return;
     const idxs=pubOfferTargets();
     const pct=Number(document.getElementById('pubOfferPct')?.value||0);
-    if(!idxs.length){ el.innerHTML=''; return; }
+    if(!idxs.length){ el.innerHTML=idxs.skipped?`<span style="color:#d97706">এই প্রকাশনীর কোনো বইয়ে MRP নেই — অফার বসানো যাবে না।</span>`:''; return; }
     let sumDisc=0;
     idxs.forEach(i=>{ const b=localBooks[i]; const o=Number(b.original_price), p=Number(b.price)||o; sumDisc+=(1-p/o)*100; });
     const avg=Math.round(sumDisc/idxs.length);
     const ex=localBooks[idxs[0]];
     let s=`<i class=gi-books></i> ${idxs.length}টি বই · এখন গড় ছাড় ${avg}%`;
     if(pct>0&&pct<=90) s+=` · ${pct}% দিলে উদাহরণ: <b>${escapeHTML(ex.name)}</b> ৳${ex.original_price} → <b>৳${Math.round(ex.original_price*(1-pct/100))}</b>`;
+    if(idxs.skipped) s+=`<br><span style="color:#d97706">${idxs.skipped}টি বইয়ে MRP নেই — সেগুলো বাদ থাকবে (বই এডিটরে MRP বসালে তবেই অফার পাবে)।</span>`;
     el.innerHTML=s;
+}
+/* আগের দামের রেকর্ড আনা — নতুন জায়গা + (থাকলে) পুরনো priceBackup/{idx} */
+async function pubOfferLoadBackup(){
+    const bk=(await db.ref(PUB_BK_PATH).once('value')).val()||{};
+    const migrate={};
+    let legacy=null;
+    try{ legacy=(await db.ref('priceBackup').once('value')).val(); }catch(e){ /* অনুমতি নেই — পুরনো রেকর্ড নেই ধরে নিই */ }
+    if(legacy&&typeof legacy==='object'){
+        Object.keys(legacy).forEach(i=>{
+            const b=localBooks[i]; if(!b||!b.bid||legacy[i]==null) return;
+            const k=pubBkKey(b);
+            if(bk[k]==null){ bk[k]=Number(legacy[i]); migrate[PUB_BK_PATH+'/'+k]=Number(legacy[i]); }
+        });
+    }
+    return {bk,migrate,hasLegacy:!!legacy};
+}
+function pubOfferErr(e){
+    const m=String(e&&(e.code||e.message)||e);
+    if(/permission/i.test(m)) return 'Firebase অনুমতি দিচ্ছে না — মালিক বা মডারেটরের অ্যাকাউন্টে লগইন আছেন তো? লগআউট করে আবার লগইন করে চেষ্টা করুন।';
+    if(/network|offline|disconnect/i.test(m)) return 'ইন্টারনেট সংযোগ নেই — নেট চেক করে আবার চেষ্টা করুন।';
+    return m;
 }
 async function applyPubOffer(){
     const sel=document.getElementById('pubOfferSelect');
     const pct=Number(document.getElementById('pubOfferPct')?.value);
     const st=document.getElementById('pubOfferStatus');
     if(!sel?.value){ showToast('আগে প্রকাশনী বাছুন','#dc2626'); return; }
-    if(!(pct>=0&&pct<=90)){ showToast('ছাড় ০ থেকে ৯০%-এর মধ্যে দিন','#dc2626'); return; }
+    if(document.getElementById('pubOfferPct')?.value===''||!(pct>=0&&pct<=90)){ showToast('ছাড় ০ থেকে ৯০%-এর মধ্যে দিন','#dc2626'); return; }
     const idxs=pubOfferTargets();
-    if(!idxs.length){ showToast('এই বাছাইয়ে কোনো বই নেই','#dc2626'); return; }
+    if(!idxs.length){ showToast(idxs.skipped?'এই বাছাইয়ের কোনো বইয়ে MRP নেই':'এই বাছাইয়ে কোনো বই নেই','#dc2626'); return; }
     const label=sel.value===PUB_OFFER_ALL?'সব বই':sel.value;
-    if(!confirm(`${label} — ${idxs.length}টি বইয়ে ${pct}% ছাড় বসবে (MRP-এর উপর)। এগিয়ে যাবেন?`)) return;
+    if(!confirm(`${label} — ${idxs.length}টি বইয়ে ${pct}% ছাড় বসবে (MRP-এর উপর)।${idxs.skipped?`\n(${idxs.skipped}টি বইয়ে MRP নেই — সেগুলো বাদ।)`:''} এগিয়ে যাবেন?`)) return;
     const btn=document.getElementById('pubOfferBtn'); btn.disabled=true;
     st.innerHTML='<span style="color:#059669"><i class=gi-hourglass></i> দাম বসানো হচ্ছে...</span>';
     try{
         await ensureBookIdsAndMigrate(localBooks);
-        const bk=(await db.ref('priceBackup').once('value')).val()||{};
-        const updates={};
+        const {bk,migrate,hasLegacy}=await pubOfferLoadBackup();
+        const updates={...migrate}, newPrice={};
         idxs.forEach(i=>{
             const b=localBooks[i];
             const o=Number(b.original_price);
-            if(bk[i]==null) updates['priceBackup/'+i]=Number(b.price)||o;   /* প্রথমবারই মনে রাখা */
-            b.price=Math.round(o*(1-pct/100));
-            updates['bookList/'+i]=bookWithoutDesc(b);
+            const k=pubBkKey(b);
+            if(bk[k]==null) updates[PUB_BK_PATH+'/'+k]=Number(b.price)||o;   /* প্রথমবারই মনে রাখা */
+            newPrice[i]=Math.round(o*(1-pct/100));
+            updates['bookList/'+i]=bookWithoutDesc({...b,price:newPrice[i]});
         });
         await db.ref().update(updates);
+        idxs.forEach(i=>{ localBooks[i].price=newPrice[i]; });   /* সেভ সফল — এখন পেজেও বদলাই */
+        if(hasLegacy) db.ref('priceBackup').remove().catch(()=>{});
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
         beUpdateStats(); beRenderList(); previewPubOffer();
         st.innerHTML=`<span style="color:#059669;font-weight:700"><i class=gi-ok></i> ${idxs.length}টি বইয়ে ${pct}% ছাড় বসেছে — সাইটে লাইভ।</span><br><span style="color:var(--text-muted)">book.js ফাইলেও নতুন দাম রাখতে চাইলে নিচে "book.js ডাউনলোড করুন" দিয়ে GitHub-এ আপলোড করুন।</span>`;
         showToast(`${idxs.length}টি বইয়ে ${pct}% ছাড় বসেছে`,'#0B6E4F');
     }catch(e){
-        st.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> ব্যর্থ: ${escapeHTML(e.message)}</span>`;
-        showToast('অফার বসানো ব্যর্থ: '+e.message,'#dc2626');
+        const m=pubOfferErr(e);
+        st.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> ব্যর্থ — কোনো দাম বদলায়নি। ${escapeHTML(m)}</span>`;
+        showToast('অফার বসানো ব্যর্থ: '+m,'#dc2626');
     }
     btn.disabled=false;
 }
@@ -4489,22 +4522,25 @@ async function restorePubOffer(mode){
     st.innerHTML='<span style="color:#059669"><i class=gi-hourglass></i> দাম ফেরানো হচ্ছে...</span>';
     try{
         await ensureBookIdsAndMigrate(localBooks);
-        const bk=(await db.ref('priceBackup').once('value')).val()||{};
-        const updates={}; let n=0, noBackup=0;
+        const {bk,migrate,hasLegacy}=await pubOfferLoadBackup();
+        const updates={...migrate}, newPrice={}; let n=0, noBackup=0;
         idxs.forEach(i=>{
             const b=localBooks[i];
             const o=Number(b.original_price);
+            const k=pubBkKey(b);
             if(mode==='prev'){
-                if(bk[i]==null){ noBackup++; return; }   /* এই বইয়ে কখনো অফার দেওয়া হয়নি — ছোঁয়া হলো না */
-                b.price=Number(bk[i]);
+                if(bk[k]==null){ noBackup++; return; }   /* এই বইয়ে কখনো অফার দেওয়া হয়নি — ছোঁয়া হলো না */
+                newPrice[i]=Number(bk[k]);
             }else{
-                b.price=o;
+                newPrice[i]=o;
             }
-            updates['priceBackup/'+i]=null;
-            updates['bookList/'+i]=bookWithoutDesc(b);
+            updates[PUB_BK_PATH+'/'+k]=null;
+            updates['bookList/'+i]=bookWithoutDesc({...b,price:newPrice[i]});
             n++;
         });
         if(n) await db.ref().update(updates);
+        Object.keys(newPrice).forEach(i=>{ localBooks[i].price=newPrice[i]; });
+        if(n&&hasLegacy) db.ref('priceBackup').remove().catch(()=>{});
         try{ localStorage.removeItem('gk_booklist_cache_v2'); }catch(e){}
         beUpdateStats(); beRenderList(); previewPubOffer();
         let msg=`<span style="color:#059669;font-weight:700"><i class=gi-ok></i> ${n}টি বই ${what} ফিরেছে।</span>`;
@@ -4512,8 +4548,9 @@ async function restorePubOffer(mode){
         st.innerHTML=msg;
         showToast(`${n}টি বইয়ের দাম ফিরেছে`,'#0B6E4F');
     }catch(e){
-        st.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> ব্যর্থ: ${escapeHTML(e.message)}</span>`;
-        showToast('দাম ফেরানো ব্যর্থ: '+e.message,'#dc2626');
+        const m=pubOfferErr(e);
+        st.innerHTML=`<span style="color:#dc2626"><i class=gi-no></i> ব্যর্থ — কোনো দাম বদলায়নি। ${escapeHTML(m)}</span>`;
+        showToast('দাম ফেরানো ব্যর্থ: '+m,'#dc2626');
     }
 }
 
@@ -8418,7 +8455,7 @@ function runNotifPopupQueue(){
             try{
                 new Notification('গ্রন্থকানন — নতুন অর্ডার!',{
                     body:`${o.name||''} — ${o.total||''}`,
-                    icon:'https://cdn.jsdelivr.net/npm/twemoji@14/assets/72x72/1f4da.png'
+                    icon:'icon-192.png'
                 });
             }catch(e){}
         }
