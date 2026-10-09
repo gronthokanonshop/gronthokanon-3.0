@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>মোবাইল ভিউ প্রিভিউ — গ্রন্থকানন</title>
+<title>মোবাইল ভিউ প্রিভিউ — OurDedication</title>
 <style>
 *{box-sizing:border-box;}
 html,body{margin:0;height:100%;background:#e5e7eb;font-family:'Hind Siliguri','Segoe UI',Arial,sans-serif;}
@@ -15,7 +15,7 @@ body{display:flex;flex-direction:column;}
 }
 .mv-topbar span{font-size:0.88rem;font-weight:600;}
 .mv-back{
-  background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;
+  background:linear-gradient(135deg,#CB2527,#a91d1f);color:#fff;border:none;
   padding:9px 18px;border-radius:20px;font-weight:700;font-size:0.85rem;
   cursor:pointer;font-family:inherit;white-space:nowrap;
 }
@@ -32,8 +32,8 @@ body{display:flex;flex-direction:column;}
 </head>
 <body>
   <div class="mv-topbar">
-    <span><i class=gi-mobile></i> মোবাইল ভিউ প্রিভিউ দেখছেন</span>
-    <button class="mv-back" onclick="backToDesktop()"><i class=gi-monitor></i> ডেস্কটপে ফিরুন</button>
+    <span>📱 মোবাইল ভিউ প্রিভিউ দেখছেন</span>
+    <button class="mv-back" onclick="backToDesktop()">🖥️ ডেস্কটপে ফিরুন</button>
   </div>
   <div class="mv-frame-wrap">
     <div class="mv-phone">
@@ -44,7 +44,7 @@ body{display:flex;flex-direction:column;}
 function getTargetPage(){
   var params = new URLSearchParams(location.search);
   var p = params.get('page') || '';
-  if(/^[a-zA-Z0-9_-]+\.html(\?[a-zA-Z0-9_&=%.\-]*)?$/.test(p)) return p;
+  if(/^[a-zA-Z0-9_-]+\.html(\?[a-zA-Z0-9_&=%.+,\-]*)?$/.test(p)) return p;
   return 'index.html';
 }
 function backToDesktop(){

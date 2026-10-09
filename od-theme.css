@@ -1,0 +1,153 @@
+/* ═══════════════════════════════════════════════════════
+   OurDedication — Fresh theme
+   সব কাস্টমার পেজের <head>-এর একদম শেষে লোড হয়, তাই পেজের
+   নিজস্ব স্টাইলের ওপরে বসে পুরো সাইটে একই রকম পরিষ্কার লুক দেয়।
+   রং: সাদা/হালকা ধূসর ব্যাকগ্রাউন্ড, লেখা প্রায়-কালো, লাল শুধু অ্যাকসেন্টে।
+═══════════════════════════════════════════════════════ */
+:root{
+  --od-red:#CB2527; --od-red-d:#A81E20; --od-red-50:#FDF1F1; --od-red-100:#F8D9DA;
+  --od-ink:#16181D; --od-ink-2:#454B57; --od-muted:#767C88;
+  --od-line:#ECEDF0; --od-soft:#F6F7F9;
+  --od-shadow-sm:0 1px 2px rgba(16,24,40,.05);
+  --od-shadow:0 10px 30px rgba(16,24,40,.08);
+
+  /* পেজগুলোর পুরনো টোকেন — কালো→লাল গ্রেডিয়েন্টগুলো এখন একই লাল পরিবারে */
+  --indigo:var(--od-red); --indigo2:var(--od-red-d);
+  --amber:var(--od-red); --amber2:var(--od-red-d);
+  --chrome-text:var(--od-ink); --chrome-text-soft:var(--od-muted);
+  --text:var(--od-ink); --text2:var(--od-muted); --muted:var(--od-muted);
+  --border:var(--od-line); --bg:var(--od-soft); --indigo-l:var(--od-soft);
+}
+body{color:var(--od-ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+::selection{background:var(--od-red-100);}
+
+/* ── নেভবার ── */
+.nav{background:rgba(255,255,255,.97);border-bottom:1px solid var(--od-line);box-shadow:0 1px 0 rgba(16,24,40,.02);}
+.nav-btn,.back-btn{
+  background:var(--od-soft);color:var(--od-ink);border:1px solid var(--od-line);border-radius:12px;
+  transition:background .2s,color .2s,border-color .2s;
+}
+.nav-btn:hover,.back-btn:hover{background:var(--od-red-50);color:var(--od-red);border-color:var(--od-red-100);filter:none;}
+.nav-badge,.bn-badge{background:var(--od-red);box-shadow:0 0 0 2px #fff;}
+.nav-title{font-family:var(--font-bn);color:var(--od-ink);}
+.nav-search,.search-wrap{background:var(--od-soft);border:1px solid var(--od-line);border-radius:999px;}
+.nav-search:focus-within,.search-wrap:focus-within{background:#fff;border-color:var(--od-red);box-shadow:0 0 0 4px rgba(203,37,39,.08);}
+.nav-search input,.search-wrap input{padding-left:18px;}
+.nav-search button,.search-wrap button{background:var(--od-red);border-radius:999px;margin:3px;}
+.nav-search button:hover,.search-wrap button:hover{background:var(--od-red-d);filter:none;}
+.search-suggest{border:1px solid var(--od-line);border-radius:16px;box-shadow:var(--od-shadow);}
+.ss-price{color:var(--od-red);}
+.ss-more{color:var(--od-red);}
+
+/* ── ব্যানার স্লাইডার ── */
+.banner-viewport{border:0;box-shadow:0 12px 32px rgba(16,24,40,.10);}
+.banner-dot{background:rgba(255,255,255,.6);}
+.banner-dot.active{background:#fff;}
+.banner-arrow,.chip-strip-next,.cat-grid-next{
+  background:#fff;color:var(--od-ink);border:1px solid var(--od-line);border-radius:50%;
+  box-shadow:0 4px 14px rgba(16,24,40,.12);
+}
+.banner-arrow:hover,.chip-strip-next:hover,.cat-grid-next:hover{color:var(--od-red);filter:none;}
+
+/* ── ক্যাটাগরি কার্ড ── */
+.cat-grid{align-items:flex-start;}
+.cat-grid-card{border:1px solid var(--od-line);border-radius:18px;box-shadow:var(--od-shadow-sm);}
+.cgc-title{font-family:var(--font-bn);font-size:1.02rem;font-weight:700;color:var(--od-ink);}
+.cgc-tile-img{background:var(--od-soft);border-color:var(--od-line);border-radius:12px;}
+.cgc-tile-label{color:var(--od-ink-2);}
+.cgc-seeall{color:var(--od-red);}
+
+/* ── লেখক / প্রকাশনী চিপ ── */
+.chip-strip-title{font-size:.95rem;color:var(--od-ink);font-weight:700;}
+.chip-card-img{
+  background:var(--od-soft) !important;color:var(--od-red);border:1px solid var(--od-line);
+  box-shadow:none;font-family:var(--font-bn);
+}
+.chip-card-label{color:var(--od-ink-2);}
+
+/* ── সেকশন হেডিং ── */
+.section-head h2{font-family:var(--font-bn);font-weight:700;color:var(--od-ink);position:relative;padding-left:14px;}
+.section-head h2::before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:4px;border-radius:4px;background:var(--od-red);}
+.section-head h2 span{color:var(--od-red);}
+.see-all{font-family:var(--font-bn);color:var(--od-red);background:var(--od-red-50);padding:6px 14px;border-radius:999px;}
+.see-all:hover{color:#fff;background:var(--od-red);}
+.section-dark{background:var(--od-soft);}
+.flash-title{color:var(--od-ink);}
+.countdown{background:#fff;border:1px solid var(--od-red-100);}
+.cd-num,.cd-sep{color:var(--od-red);}
+
+/* ── ট্রাস্ট বার ── */
+.trust-wrap{background:#fff;border-color:var(--od-line);}
+.trust-item{font-family:var(--font-bn);color:var(--od-ink-2);}
+.trust-item span{color:var(--od-red);}
+
+/* ── হাইলাইট কার্ড (শিক্ষামূলক / গিফট / ডেলিভারি) ── */
+.b-card,.b-card-1,.b-card-2,.b-card-3{background:#fff;border:1px solid var(--od-line);box-shadow:var(--od-shadow-sm);}
+.b-card:hover{border-color:var(--od-red-100);box-shadow:var(--od-shadow);}
+.b-emoji{width:54px;height:54px;border-radius:16px;background:var(--od-red-50);display:flex;align-items:center;justify-content:center;font-size:1.7rem;}
+.b-text h3{font-family:var(--font-bn);color:var(--od-ink);}
+.b-text p{color:var(--od-muted);}
+
+/* ── প্রোডাক্ট কার্ড ── */
+.p-card{border:1px solid var(--od-line);border-radius:16px;box-shadow:var(--od-shadow-sm);}
+.p-card:hover{transform:translateY(-3px);border-color:#E2E4E8;box-shadow:var(--od-shadow);}
+.p-img{background:var(--od-soft);}
+.p-wish{background:rgba(255,255,255,.96);color:var(--od-ink-2);border-radius:50%;box-shadow:0 2px 8px rgba(16,24,40,.10);}
+.p-wish:hover{color:var(--od-red);filter:none;}
+.p-wish.active{color:var(--od-red);}
+.badge-sale,.badge{border-radius:999px;}
+.badge-sale{background:var(--od-red);}
+.p-cat{color:var(--od-red);}
+.p-name,.p-price{color:var(--od-ink);}
+.p-price .cur{color:var(--od-ink-2);}
+.p-cart{background:var(--od-ink);border-radius:50%;}
+.p-cart:hover{background:var(--od-red);filter:none;}
+
+/* ── প্রোডাক্ট পেজের বাটন: কার্ট = সাদা আউটলাইন, এখনই কিনুন = লাল ── */
+.btn-cart{background:#fff;color:var(--od-red);border:1.5px solid var(--od-red);box-shadow:none;}
+.btn-cart:hover{background:var(--od-red-50);box-shadow:none;}
+.btn-cart.added{background:#ECFDF5;color:#059669;border-color:#059669;}
+.btn-buy{background:var(--od-red);box-shadow:0 8px 20px rgba(203,37,39,.25);}
+.btn-buy:hover{background:var(--od-red-d);}
+.view-toggle-fab{background:var(--od-ink);}
+
+/* ── প্রোডাক্ট পেজের "আরও দেখুন" কার্ড ── */
+.rel-card{border-color:var(--od-line);border-radius:14px;}
+.rel-price{color:var(--od-ink);}
+
+/* ── কার্ট / পছন্দ ড্রয়ার ── */
+.cd-head h3{font-family:var(--font-bn);color:var(--od-ink);}
+.cd-head-badge{background:var(--od-red-50);color:var(--od-red);}
+.cd-item-price,.cd-total-row.grand span:last-child{color:var(--od-red);}
+.cd-checkout-btn{background:var(--od-red);box-shadow:0 8px 20px rgba(203,37,39,.25);}
+.cd-checkout-btn:hover{background:var(--od-red-d);}
+.wl-price{color:var(--od-red);}
+
+/* ── মেনু ড্রয়ার ── */
+.md-link{color:var(--od-ink);}
+.md-link:hover{background:var(--od-red-50);color:var(--od-red);}
+
+/* ── নিচের ন্যাভ ── */
+.bottom-nav{border-top-color:var(--od-line);}
+.bn-item{color:var(--od-muted);}
+.bn-item.active,.bn-item:hover{color:var(--od-red);}
+
+/* ── টোস্ট ── */
+.toast-item,.toast{background:var(--od-ink);border:0;border-radius:999px;box-shadow:0 10px 30px rgba(16,24,40,.25);}
+
+/* ── তথ্য পেজের হেডার (আমাদের সম্পর্কে, FAQ ইত্যাদি) ── */
+.page-hero{background:linear-gradient(180deg,#fff 0%,var(--od-soft) 100%);border-bottom:1px solid var(--od-line);}
+.page-hero h1{font-family:var(--font-bn);color:var(--od-ink);}
+
+/* ── ফর্ম / বাটন (চেকআউট, ট্র্যাক, অ্যাকাউন্ট) ── */
+.f-input:focus,.track-input:focus{border-color:var(--od-red);box-shadow:0 0 0 4px rgba(203,37,39,.08);}
+.place-order-btn,.track-btn,.auth-submit{background:var(--od-red);}
+.place-order-btn:hover,.track-btn:hover,.auth-submit:hover{background:var(--od-red-d);}
+
+/* ── ফুটার ── */
+.site-footer{background:#14161B;color:#C9CDD4;}
+.footer-brand p,.footer-col a{color:#A3A9B4;}
+.footer-col a:hover{color:#fff;}
+.footer-col h4{font-family:var(--font-bn);color:#fff;font-size:.95rem;}
+.footer-bottom{color:#7F8692;border-top-color:rgba(255,255,255,.08);}
+.footer-bottom a{color:#A3A9B4 !important;}

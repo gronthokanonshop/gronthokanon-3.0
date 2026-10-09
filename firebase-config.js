@@ -1,16 +1,17 @@
 /* ═══════════════════════════════════════
-   গ্রন্থকানন — Firebase Config
+   OurDedication — Firebase Config
+   প্রজেক্ট: ourdedication-2a2d5
 ═══════════════════════════════════════ */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBQMZ3x2d-2ELopI-3w78EFrcWnfIh2xg0",
-    authDomain: "gronthokanon-8573e.firebaseapp.com",
-    databaseURL: "https://gronthokanon-8573e-default-rtdb.firebaseio.com",
-    projectId: "gronthokanon-8573e",
-    storageBucket: "gronthokanon-8573e.firebasestorage.app",
-    messagingSenderId: "192907327925",
-    appId: "1:192907327925:web:1c469a312aa02bf2fe81fc",
-    measurementId: "G-KFQF4ND0KF"
+    apiKey: "AIzaSyDlX6M5hjDzRw7s7pjkQnWgPLx7IrFKR9M",
+    authDomain: "ourdedication-2a2d5.firebaseapp.com",
+    databaseURL: "https://ourdedication-2a2d5-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "ourdedication-2a2d5",
+    storageBucket: "ourdedication-2a2d5.firebasestorage.app",
+    messagingSenderId: "620500408191",
+    appId: "1:620500408191:web:36d62348fda845e36dec4a",
+    measurementId: "G-9NKSGHD7XQ"
 };
 
 if (!firebase.apps.length) {
@@ -20,7 +21,5 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db   = firebase.database();
 
-// Firestore — শুধু book.html এ load হবে
-if (typeof firebase.firestore === 'function') {
-    window.fsdb = firebase.firestore();
-}
+// books-live.js এই URL ব্যবহার করে Firebase থেকে সরাসরি (SDK ছাড়া) বইয়ের লিস্ট আনে
+window.OD_DB_URL = firebaseConfig.databaseURL;
