@@ -52,7 +52,7 @@
   "description": "সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।",
   "telephone": "+8801516595762",
   "email": "gronthokanon4309@gmail.com",
-  "address": {"@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD"},
+  "address": {"@type": "PostalAddress", "streetAddress": "Qawmi Market (First Floor, Shop 01), Paridas Road, Bangla Bazar", "addressLocality": "Dhaka", "postalCode": "1100", "addressCountry": "BD"},
   "sameAs": ["https://facebook.com/gronthokanon0943"]
 }
 </script>
@@ -64,7 +64,7 @@
   "url": "https://gronthokanon.com/"
 }
 </script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
@@ -89,9 +89,9 @@
         }
         [data-theme="dark"] body {
             background:
-                radial-gradient(ellipse at 15% 20%, rgba(5,150,105,0.13) 0%, transparent 55%),
-                radial-gradient(ellipse at 85% 10%, rgba(16,185,129,0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(4,120,87,0.09) 0%, transparent 60%),
+                radial-gradient(ellipse at 15% 20%, rgba(72, 76, 83, 0.13) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 10%, rgba(255, 255, 255, 0.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(58, 61, 66, 0.09) 0%, transparent 60%),
                 var(--bg);
             background-attachment: fixed;
         }
@@ -118,8 +118,8 @@
             margin-bottom:16px;
         }
         [data-theme="dark"] .cat-section {
-            background:rgba(17,24,39,0.62);
-            border:1px solid rgba(5,150,105,0.13);
+            background:rgba(26, 27, 30, 0.62);
+            border:1px solid rgba(72, 76, 83, 0.13);
         }
 
         .navbar-brand { display:flex; flex-direction:column; justify-content:center; flex-shrink:0; cursor:pointer; }
@@ -129,6 +129,9 @@
 
         /* ═══ navbar ornament — লোগোর দুই পাশের রয়্যাল ডেকোরেশন ═══ */
         .nb-ornament { flex:1; display:flex; align-items:center; gap:6px; min-width:0; overflow:hidden; }
+        /* ২০২৬-১০-১০: লোগোর দুপাশের সাজ (লাইন/তারা/বিন্দু) সরানো — হেডার পরিষ্কার, লোগো একটু বড় */
+        .nb-ornament { display: none !important; }
+        .navbar-brand img { height: 46px !important; }
         .nb-orn-line {
             flex:1; height:2.5px; border-radius:3px; min-width:10px; position:relative; overflow:hidden;
             background: linear-gradient(90deg, transparent, rgba(5,150,105,0.35) 45%, rgba(5,150,105,0.6));
@@ -285,6 +288,9 @@
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background: #059669; color: white; }
         .sidebar-item { padding: 13px 20px; cursor: pointer; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--text); transition: 0.2s; }
         .sidebar-item:hover { background: var(--search-bg); color: var(--green); }
+        /* আইকনের পাশেই লেখা, তীর/সংখ্যা ডানে (আগে লেখা মাঝখানে বা ডানে ভেসে থাকত) */
+        .sidebar-item { justify-content: flex-start; gap: 12px; }
+        .sidebar-item > :last-child:not(svg) { margin-left: auto; }
         .sidebar-sub { display: none; background: var(--search-bg); }
         .sidebar-sub-item { padding: 11px 20px 11px 34px; cursor: pointer; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--dark); font-weight: 600; transition: 0.2s; }
         [data-theme="dark"] .sidebar-sub-item { color: var(--text2); }
@@ -579,7 +585,7 @@
         .sections { max-width: 1100px; margin: 0 auto; padding: 0 14px 30px; }
         .cat-section { margin-bottom: 28px; }
         .cat-section-title { font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 10px; padding-left: 10px; border-left: 4px solid #059669; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.3px; }
-        [data-theme="dark"] .cat-section-title { color: #ecfdf5; border-left-color: #059669; }
+        [data-theme="dark"] .cat-section-title { color: #f4f4f5; border-left-color: #484c53; }
         /* ── PRODUCT GRID — আগে horizontal-scroll ক্যারোজেল ছিল (.book-row),
            এখন OurDedication-এর প্যাটার্নে wrapping grid, স্ক্রিন সাইজ অনুযায়ী
            কলাম সংখ্যা বাঁধা ── */
@@ -588,11 +594,13 @@
         @media(min-width: 701px) and (max-width: 999px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
         @media(min-width: 1000px) and (max-width: 1299px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
         @media(min-width: 1300px) { .products-grid { grid-template-columns: repeat(6, 1fr); } }
-        /* মোবাইলে হোমপেজের প্রতিটা শেলফে ২ সারি × ৩ কলাম (৬টা বই) — বাকিগুলো "সবগুলো দেখুন"-এ */
+        /* মোবাইলে হোমপেজের প্রতিটা শেলফ এক সারি — আঙুলে ডানে-বাঁয়ে সরিয়ে বাকি বই (২০২৬-১০-১০; আগে ২ সারি × ৩,
+           তাতে প্রতিটা শেলফ প্রায় এক স্ক্রিন লম্বা হতো)। পরের বইয়ের কিনারা একটু দেখা যায়, তাই বোঝা যায় সরানো যায় */
         .cat-more-m { display: none; }
         @media(max-width: 700px) {
-            #sectionsWrapper .products-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-            #sectionsWrapper .products-grid > :nth-child(n+7) { display: none; }
+            #sectionsWrapper .products-grid { display: flex; grid-template-columns: none; gap: 10px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 2px 2px 10px; }
+            #sectionsWrapper .products-grid::-webkit-scrollbar { display: none; }
+            #sectionsWrapper .products-grid > * { flex: 0 0 30%; min-width: 0; scroll-snap-align: start; }
             .cat-more-m { display: inline; }
             .cat-more-d { display: none; }
         }
@@ -616,7 +624,7 @@
             border-color: rgba(5,150,105,0.4);
         }
         [data-theme="dark"] .book-card:hover {
-            box-shadow: 0 14px 30px rgba(5,150,105,0.28);
+            box-shadow: 0 14px 30px rgba(72, 76, 83, 0.28);
             border-color: rgba(52,211,153,0.45);
         }
         .book-card .bc-img-box { width: 100%; aspect-ratio: 145/195; height: auto; overflow: hidden; position: relative; background: linear-gradient(135deg,#f0fdf4,#ecfdf5); }
@@ -625,7 +633,7 @@
         .book-card.in-cart .bc-img-box::after { content: 'কার্টে আছে'; position: absolute; left: 6px; bottom: 6px; z-index: 3; padding: 3px 9px; border-radius: 20px; background: rgba(5,150,105,.94); color: #fff; font-size: 10.5px; font-weight: 700; font-family: 'Hind Siliguri', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
         .bc-btn.bc-icon { position: relative; }
         .bc-qty { position: absolute; top: -7px; right: -7px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: #f59e0b; color: #fff; font-size: 11.5px; font-weight: 800; line-height: 1; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-family: 'Hind Siliguri', sans-serif; }
-        [data-theme="dark"] .book-card .bc-img-box { background: linear-gradient(135deg,#0f2a1e,#132d20); }
+        [data-theme="dark"] .book-card .bc-img-box { background: linear-gradient(135deg,#1b1c1e,#1e1f22); }
         .book-card img { width: 100%; height: 100%; object-fit: contain; padding: 9px; box-sizing: border-box; display: block; transition: transform 0.45s ease; }
         .book-card:hover img { transform: scale(1.07); }
 
@@ -695,8 +703,12 @@
         .bc-foot .price-row { flex-direction: column; align-items: flex-start; gap: 0; margin-bottom: 0; min-width: 0; }
         .bc-foot .price-sell { font-size: 14px; line-height: 1.2; }
         .bc-foot .price-orig { font-size: 10px; }
-        .bc-btn.bc-icon { width: 34px; height: 34px; padding: 0; flex-shrink: 0; border-radius: 10px; opacity: 1; pointer-events: auto; }
-        .bc-btn.bc-icon svg { width: 17px; height: 17px; }
+        /* মালিকের পছন্দ (২০২৬-১০-১০): সবুজ বক্স নয় — শুধু সবুজ রঙের কার্ট-আইকন */
+        .bc-btn.bc-icon { width: 34px; height: 34px; padding: 0; flex-shrink: 0; border-radius: 10px; opacity: 1; pointer-events: auto; background: none; box-shadow: none; color: #059669; }
+        .bc-btn.bc-icon svg { width: 24px; height: 24px; }
+        .bc-btn.bc-icon:hover { background: none; box-shadow: none; color: #047857; transform: scale(1.12); }
+        [data-theme="dark"] .bc-btn.bc-icon { color: #34d399; }
+        [data-theme="dark"] .bc-btn.bc-icon:hover { color: #6ee7b7; }
         .book-card:hover .bc-btn:not(.bc-out) { opacity: 1; pointer-events: auto; }
         @media (hover: none) {
             .bc-btn:not(.bc-out) { opacity: 1; pointer-events: auto; }
@@ -719,16 +731,16 @@
         .skeleton-card { width: 100%; background: var(--card); border-radius: 0; overflow: hidden; border: 1px solid var(--border); }
         [data-theme="dark"] .skeleton-card { border-color: rgba(255,255,255,0.09); }
         .skel-img { width: 100%; aspect-ratio: 145/195; height: auto; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        [data-theme="dark"] .skel-img { background: linear-gradient(90deg, #132d20 25%, #1a4731 50%, #132d20 75%); background-size: 200% 100%; }
+        [data-theme="dark"] .skel-img { background: linear-gradient(90deg, #1e1f22 25%, #2d2f34 50%, #1e1f22 75%); background-size: 200% 100%; }
         .skel-line { height: 11px; margin: 9px; border-radius: 0; background: linear-gradient(90deg, #e8f5ee 25%, #f0fdf4 50%, #e8f5ee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        [data-theme="dark"] .skel-line { background: linear-gradient(90deg, #132d20 25%, #1a4731 50%, #132d20 75%); background-size: 200% 100%; }
+        [data-theme="dark"] .skel-line { background: linear-gradient(90deg, #1e1f22 25%, #2d2f34 50%, #1e1f22 75%); background-size: 200% 100%; }
         .skel-line.short { width: 55%; }
         @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
         /* ═══════ RECENTLY VIEWED ═══════ */
         .recently { max-width: 1100px; margin: 0 auto; padding: 0 14px 16px; }
         .recently-title { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 12px; padding-left: 12px; border-left: 4px solid #d97706; }
-        [data-theme="dark"] .recently-title { color: #ecfdf5; }
+        [data-theme="dark"] .recently-title { color: #f4f4f5; }
 
         /* ═══════ CART MODAL — GLASSY DRAWER ═══════ */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.48); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 10000; justify-content: flex-end; }
@@ -742,7 +754,7 @@
             border-radius: 24px 0 0 24px;
         }
         [data-theme="dark"] .modal-content {
-            background: rgba(17,24,39,0.92);
+            background: rgba(26, 27, 30, 0.92);
             border-left-color: rgba(255,255,255,0.08);
         }
         @keyframes slideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
@@ -760,7 +772,7 @@
             display: flex; flex-direction: column; animation: slideIn 0.35s cubic-bezier(0.2,0.8,0.2,1);
             overflow-y: auto; border-radius: 24px 0 0 24px;
         }
-        [data-theme="dark"] .wl-content { background: rgba(17,24,39,0.92); border-left-color: rgba(255,255,255,0.08); }
+        [data-theme="dark"] .wl-content { background: rgba(26, 27, 30, 0.92); border-left-color: rgba(255,255,255,0.08); }
 
         /* ═══════ WHATSAPP ═══════ */
         .wa-float { position: fixed; bottom: 100px; right: 16px; z-index: 997; }
@@ -783,7 +795,7 @@
             padding: 6px 4px 10px; z-index: 998;
         }
         [data-theme="dark"] .bottom-nav {
-            background: rgba(17, 24, 39, 0.97);
+            background: rgba(26, 27, 30, 0.97);
             border-top-color: rgba(255,255,255,0.07);
         }
         @media (min-width: 768px) {
@@ -876,7 +888,7 @@
         <p style="color:#059669;font-weight:bold;margin-bottom:5px;"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> হটলাইন: 01516595762</p>
         <p style="margin-bottom:5px;color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 3"/><path d="M5 3L2 6M22 6l-3-3"/></svg> শনি–বৃহস্পতি সকাল ৯টা, শুক্রবার বিকাল ৪টা — রাত ১০টা</p>
         <p style="margin-bottom:5px;color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> সারা বাংলাদেশে ডেলিভারি</p>
-        <p style="color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ঢাকা, বাংলাদেশ</p>
+        <p style="color:var(--text2);"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> কওমি মার্কেট (১ম তলা, ১ নং দোকান), প্যারিদাস রোড, বাংলাবাজার, ঢাকা-১১০০</p>
     </div>
 </div>
 
@@ -986,12 +998,13 @@
 }
 .catcard-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 10px; }
 .catcard-tile { cursor: pointer; text-align: center; }
+.catcard-tile:hover .catcard-tile-img { border-color: rgba(5,150,105,.45); box-shadow: 0 4px 12px rgba(5,150,105,.16); transform: translateY(-2px); }
 .catcard-tile-img {
     width: 100%; aspect-ratio: 1/1; border-radius: 9px; overflow: hidden;
-    background: #fff; border: 1.5px solid #bfdbfe;
+    background: #f6fbf8; border: 1px solid rgba(5,150,105,.16);
     display: flex; align-items: center; justify-content: center;
     font-size: 20px; padding: 8px; box-sizing: border-box;
-    box-shadow: 0 1px 4px rgba(59,130,246,.08);
+    box-shadow: 0 1px 4px rgba(5,150,105,.08); transition: border-color .2s, box-shadow .2s, transform .2s;
 }
 .catcard-tile-img img { width: 100%; height: 100%; object-fit: contain !important; display: block; }
 .catcard-tile-img .cc-ph {
@@ -1026,9 +1039,21 @@
     .cat-strip-prev svg, .cat-strip-next svg { width: 23px; height: 23px; }
     .cat-strip-prev { left: 4px; } .cat-strip-next { right: 4px; }
 }
-[data-theme="dark"] .catcard { background: #132018; border-color: rgba(255,255,255,.08); }
-[data-theme="dark"] .catcard-tile-img { background: #0f2a1e; border-color: #1e4d3a; }
-[data-theme="dark"] .catcard-tile-img .cc-ph { background: #0f2a1e; color: #34d399; }
+/* ২০২৬-১০-১০: বড় সবুজ তীর কার্ডের লেখা ঢেকে দিত — এখন ছোট সাদা বোতাম, "ক্যাটাগরি" লেখার সারিতে ডানে */
+.cat-strip-prev, .cat-strip-next, .cat-strip-prev:active, .cat-strip-next:active {
+    top: -40px; transform: none; width: 32px !important; height: 32px !important;
+    background: var(--card-solid, #fff); color: #059669;
+    border: 1.5px solid rgba(5,150,105,.25); box-shadow: 0 2px 8px rgba(5,150,105,.12);
+}
+.cat-strip-prev svg, .cat-strip-next svg { width: 16px !important; height: 16px !important; }
+.cat-strip-prev:hover, .cat-strip-next:hover { background: #059669; color: #fff; }
+.cat-strip-prev:active, .cat-strip-next:active { transform: scale(.92); }
+.cat-strip-prev { left: auto !important; right: 54px !important; }
+.cat-strip-next { right: 14px !important; }
+[data-theme="dark"] .cat-strip-prev, [data-theme="dark"] .cat-strip-next { color: #34d399; border-color: rgba(52,211,153,.3); }
+[data-theme="dark"] .catcard { background: #18191b; border-color: rgba(255,255,255,.08); }
+[data-theme="dark"] .catcard-tile-img { background: #1b1c1e; border-color: #323439; }
+[data-theme="dark"] .catcard-tile-img .cc-ph { background: #1b1c1e; color: #34d399; }
 </style>
 
 <!-- ═══════ BANNER ═══════ -->
@@ -1171,7 +1196,7 @@ function renderHomeCatChips(){
                 +'</div>';
         }).join('');
         return '<div class="catcard">'
-            +'<div class="catcard-title">'+name.replace(/</g,'&lt;')+'</div>'
+            +'<div class="catcard-title">'+(window.gkCatLabel?gkCatLabel(name):name).replace(/</g,'&lt;')+'</div>'
             +'<div class="catcard-grid">'+tilesHtml+'</div>'
             +'<div class="catcard-more" onclick="event.stopPropagation();if(!this.closest(\'.cat-strip\').__gkMoved)window.location.href=\'filter.html?type=cat&value='+encodeURIComponent(name)+'\'">সব দেখুন <span style="font-size:14px;">›</span></div>'
             +'</div>';
@@ -1284,11 +1309,11 @@ renderHomeCatChips();
 }
 @media (min-width: 768px) { .pub-strip-next, .author-strip-next { display: flex; } }
 [data-theme="dark"] .pub-card-img, [data-theme="dark"] .author-card-img {
-    background: linear-gradient(135deg,#132d20,#0f2a1e);
+    background: linear-gradient(135deg,#1e1f22,#1b1c1e);
     border-color: rgba(255,255,255,.06);
     box-shadow: 0 2px 10px rgba(0,0,0,.35);
 }
-[data-theme="dark"] .pub-strip-next, [data-theme="dark"] .author-strip-next { background: #1f2937; color: #e5e7eb; border-color: rgba(255,255,255,.12); }
+[data-theme="dark"] .pub-strip-next, [data-theme="dark"] .author-strip-next { background: #282a2e; color: #e5e7eb; border-color: rgba(255,255,255,.12); }
 </style>
 <script>
 window.GK_HOME_PUBS = [];
@@ -1419,7 +1444,7 @@ function loadHomeAuthors(){
 <style>
 .rvs-section { max-width: 1100px; margin: 0 auto; padding: 6px 14px 18px; display: none; }
 .rvs-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 12px; padding-left: 12px; border-left: 4px solid #d97706; display: flex; align-items: center; gap: 8px; }
-[data-theme="dark"] .rvs-title { color: #ecfdf5; }
+[data-theme="dark"] .rvs-title { color: #f4f4f5; }
 .rvs-row { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 10px; scroll-snap-type: x mandatory; }
 .rvs-row::-webkit-scrollbar { display: none; }
 .rvs-card {
@@ -1451,7 +1476,7 @@ function loadHomeAuthors(){
 <style>
 .hblog-section { max-width: 1100px; margin: 0 auto; padding: 6px 14px 20px; }
 .hblog-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 12px; padding-left: 12px; border-left: 4px solid #f59e0b; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-[data-theme="dark"] .hblog-title { color: #ecfdf5; }
+[data-theme="dark"] .hblog-title { color: #f4f4f5; }
 .hblog-title a { font-size: 12.5px; color: #059669; font-weight: 700; text-decoration: none; }
 .hblog-row { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 10px; scroll-snap-type: x mandatory; }
 .hblog-row::-webkit-scrollbar { display: none; }
@@ -1517,8 +1542,8 @@ footer {
     border-top: 1px solid rgba(5,150,105,0.15);
 }
 [data-theme="dark"] footer {
-    background: linear-gradient(135deg, #011f16 0%, #013d2b 60%, #025939 100%);
-    color: #c8e8de;
+    background: linear-gradient(135deg, #0f1011 0%, #1d1e21 60%, #2a2c31 100%);
+    color: #d5d7db;
     border-top: none;
 }
 .footer-inner {
@@ -1528,12 +1553,12 @@ footer {
 /* Brand top */
 .footer-brand-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
 .footer-logo-icon { width: 32px; height: 32px; background: var(--green, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
-.footer-brand-name { font-family: 'Playfair Display', Georgia, serif; font-size: 18px; font-weight: 700; color: #064e3b; }
+.footer-brand-name { font-family: 'Hind Siliguri', Georgia, serif; font-size: 18px; font-weight: 700; color: #064e3b; }
 .footer-brand-name span { color: #059669; }
 [data-theme="dark"] .footer-brand-name { color: #ffffff; }
 [data-theme="dark"] .footer-brand-name span { color: #34d399; }
 .footer-tagline { text-align: center; font-size: 11.5px; color: #6b7280; margin-bottom: 20px; letter-spacing: 0.3px; }
-[data-theme="dark"] .footer-tagline { color: #6fada0; }
+[data-theme="dark"] .footer-tagline { color: #868b96; }
 
 /* 3-column grid */
 .footer-grid {
@@ -1556,12 +1581,12 @@ footer {
 
 /* Social & payment */
 .footer-divider { border: 0; border-top: 1px solid rgba(5,150,105,0.15); margin: 16px 0; }
-[data-theme="dark"] .footer-divider { border-top-color: rgba(52,211,153,0.12); }
+[data-theme="dark"] .footer-divider { border-top-color: rgba(255, 255, 255, 0.084); }
 .footer-social { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 14px; }
 .footer-social a img { width: 34px; height: 34px; object-fit: contain; border-radius: 8px; }
 .footer-payment { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; }
 .footer-payment img { width: 40px; border-radius: 6px; border: 1px solid rgba(5,150,105,0.25); }
-[data-theme="dark"] .footer-payment img { border-color: rgba(52,211,153,0.2); }
+[data-theme="dark"] .footer-payment img { border-color: rgba(255, 255, 255, 0.14); }
 .footer-copy { font-size: 11px; color: #9ca3af; text-align: center; }
 .footer-copy strong { color: #059669; font-weight: 600; }
 [data-theme="dark"] .footer-copy { color: #4b5563; }
@@ -1580,6 +1605,12 @@ a.gk-why-c:hover{background:rgba(255,255,255,.18);}
 .gk-why-c b{display:block;font-size:22px;font-weight:800;line-height:1.1;}
 .gk-why-c span{font-size:11.5px;opacity:.9;}
 @media(max-width:640px){.gk-why-grid{grid-template-columns:repeat(2,1fr);}.gk-why h2{font-size:17px;}.gk-why-c b{font-size:19px;}}
+/* ডার্ক মোডে বড় সবুজ ব্লক নয় — চারকোল কার্ড, শুধু সংখ্যা সবুজ (২০২৬-১০-১০) */
+[data-theme="dark"] .gk-why-in{background:var(--card-solid,#1b1e23);border:1px solid var(--border,rgba(255,255,255,.08));box-shadow:0 14px 34px -18px rgba(0,0,0,.6);}
+[data-theme="dark"] .gk-why-in::after{background:rgba(255,255,255,.03);}
+[data-theme="dark"] .gk-why-c{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);}
+[data-theme="dark"] a.gk-why-c:hover{background:rgba(255,255,255,.08);}
+[data-theme="dark"] .gk-why-c b{color:#34d399;}
 </style>
 <section class="gk-why" id="gkWhy" style="display:none;">
   <div class="gk-why-in">
@@ -1643,14 +1674,14 @@ document.addEventListener('DOMContentLoaded',function(){ gkRenderWhy(); if(windo
             <a href="filter.html?type=cat&amp;value=ইসলামি বই" class="footer-link">ইসলামি বই</a>
             <a href="filter.html?type=cat&amp;value=একাডেমিক বই" class="footer-link">একাডেমিক বই</a>
             <a href="filter.html?type=cat&amp;value=মাদ্রাসার বই" class="footer-link">মাদ্রাসার বই</a>
-            <a href="filter.html?type=cat&amp;value=Sunnah Item" class="footer-link">Sunnah Item</a>
+            <a href="filter.html?type=cat&amp;value=Sunnah Item" class="footer-link">সুন্নাহ আইটেম</a>
         </div>
         <div class="footer-col">
             <div class="footer-col-title">যোগাযোগ</div>
             <a href="tel:+8801516595762" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01516595762</a>
             <a href="https://wa.me/8801516595762" target="_blank" rel="noopener" class="footer-link"><i class="gi-wa"></i> WhatsApp</a>
             <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener" class="footer-link"><i class="gi-fb"></i> Facebook</a>
-            <span class="footer-link" style="cursor:default;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ঢাকা, বাংলাদেশ</span>
+            <span class="footer-link" style="cursor:default;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> কওমি মার্কেট (১ম তলা, ১ নং দোকান), প্যারিদাস রোড, বাংলাবাজার, ঢাকা-১১০০</span>
         </div>
     </div>
 
@@ -1663,10 +1694,23 @@ document.addEventListener('DOMContentLoaded',function(){ gkRenderWhy(); if(windo
     </div>
 
     <!-- Payment -->
-    <div class="footer-payment">
-        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash" loading="lazy" decoding="async" width="40" height="40">
-        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" alt="Nagad" loading="lazy" decoding="async" width="40" height="40">
+    <div class="footer-payment gk-pay">
+        <div class="gk-pay-row">
+            <span class="gk-pay-lbl">পেমেন্ট</span>
+            <span class="gk-pay-chip" title="Visa"><svg class="gk-visa" viewBox="0 0 64 22" role="img" aria-label="Visa"><text x="32" y="17" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="900" font-style="italic" fill="#1a1f71" letter-spacing="1">VISA</text></svg></span>
+            <span class="gk-pay-chip" title="বিকাশ"><img src="https://wsrv.nl/?url=https%3A%2F%2Fi.ibb.co.com%2FksGJHftT%2Fbkash-logo.jpg&amp;w=160&amp;we&amp;output=webp&amp;q=85" alt="বিকাশ" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip" title="নগদ"><img src="https://wsrv.nl/?url=https%3A%2F%2Fi.ibb.co.com%2F0pvLZ3b8%2F1725618513nagad-logo.png&amp;w=160&amp;we&amp;output=webp&amp;q=85" alt="নগদ" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip gk-cod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>ক্যাশ অন ডেলিভারি</span>
+        </div>
+        <div class="gk-pay-row">
+            <span class="gk-pay-lbl">ডেলিভারি</span>
+            <span class="gk-pay-chip" title="Steadfast"><img src="img/courier-steadfast.jpg" alt="Steadfast" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip" title="RedX"><img src="img/courier-redx.png" alt="RedX" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip" title="Pathao"><img src="img/courier-pathao.png" alt="Pathao" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip" title="সুন্দরবন কুরিয়ার"><img src="img/courier-sundarban.jpg" alt="সুন্দরবন কুরিয়ার" loading="lazy" decoding="async"></span>
+        </div>
     </div>
+
 
     <hr class="footer-divider">
     <p class="footer-copy">&copy; ২০২৬ <strong>গ্রন্থকানন</strong> — সর্বস্বত্ব সংরক্ষিত</p>
@@ -1829,7 +1873,7 @@ function runSearch(){
                 <div class="si-name">${escapeHTML(b.name)}</div>
                 <div class="si-author"><i class=gi-pen></i> ${escapeHTML(b.author||'')}</div>
                 <div class="si-pub"><i class=gi-building></i> ${escapeHTML(b.pub||'')}</div>
-                <div><span class="si-price">৳${b.price}</span>${b.original_price>b.price?`<span class="si-orig">৳${b.original_price}</span>`:''} ${out?`<span class="si-badge" style="background:#dc2626;">স্টক শেষ</span>`:(pct>0?`<span class="si-badge">${pct}% ছাড়</span>`:'')}</div>
+                <div><span class="si-price">৳${(window.gkBn||String)(b.price)}</span>${b.original_price>b.price?`<span class="si-orig">৳${(window.gkBn||String)(b.original_price)}</span>`:''} ${out?`<span class="si-badge" style="background:#dc2626;">স্টক শেষ</span>`:(pct>0?`<span class="si-badge">${(window.gkBn||String)(pct)}% ছাড়</span>`:'')}</div>
             </div></div>`;
     }).join('');
 }
@@ -1977,7 +2021,7 @@ function makeCard(b){
     const out=window.gkIsOut&&window.gkIsOut(idx);
     return `<div class="book-card${out?' gk-out':''}" data-bookidx="${idx}" onclick="goToBook(${idx})">
         <div class="bc-img-box">
-        ${out?`<div class="gk-out-badge">স্টক শেষ</div>`:(pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:'')}
+        ${out?`<div class="gk-out-badge">স্টক শেষ</div>`:(pct>0?`<div class="disc-badge">${(window.gkBn||String)(pct)}% ছাড়</div>`:'')}
         <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'<i class=gi-heart></i>':'<i class=gi-heart-o></i>'}</button>
         <img src="${escapeHTML(getImg(b))}" alt="${escapeHTML(b.name)}" loading="lazy">
         </div>
@@ -1985,9 +2029,9 @@ function makeCard(b){
             <div class="bc-name">${escapeHTML(b.name)}</div>
             <div class="bc-author">${bookType(b)==='প্রোডাক্ট'?escapeHTML(b.brand||''):escapeHTML(b.author||'')}</div>
             ${out
-                ? `<div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
+                ? `<div class="price-row"><span class="price-sell">৳${(window.gkBn||String)(b.price)}</span>${b.original_price>b.price?`<span class="price-orig">৳${(window.gkBn||String)(b.original_price)}</span>`:''}</div>
                    <button class="bc-btn bc-out" onclick="event.stopPropagation();showToast&&showToast('<i class=gi-no></i> এই আইটেমটি এখন স্টকে নেই');">${GK_NOSTOCK_SVG}<span>স্টক শেষ</span></button>`
-                : `<div class="bc-foot"><div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div><button class="bc-btn bc-icon" data-name="${escapeHTML(b.name)}" data-bid="${escapeHTML(b.bid==null?'':b.bid)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" title="কার্টে যোগ করুন" aria-label="কার্টে যোগ করুন" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img,this.dataset.bid)">${GK_CART_SVG}</button></div>`}
+                : `<div class="bc-foot"><div class="price-row"><span class="price-sell">৳${(window.gkBn||String)(b.price)}</span>${b.original_price>b.price?`<span class="price-orig">৳${(window.gkBn||String)(b.original_price)}</span>`:''}</div><button class="bc-btn bc-icon" data-name="${escapeHTML(b.name)}" data-bid="${escapeHTML(b.bid==null?'':b.bid)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" title="কার্টে যোগ করুন" aria-label="কার্টে যোগ করুন" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img,this.dataset.bid)">${GK_CART_SVG}</button></div>`}
         </div></div>`;
 }
 function goToBook(idx){
@@ -2061,7 +2105,7 @@ function renderSections(list){
     const prodCats=[...new Set(products.map(p=>p.cat).filter(c=>c && !(window.GK_TAG_NAMES&&window.GK_TAG_NAMES.has(c))))];
     prodCats.forEach(cat=>{
         const items=products.filter(p=>p.cat===cat);
-        if(items.length) html+=gkSectionHtml(cat, 'prodcat-'+cat, {type:'cat',value:cat}, items);
+        if(items.length) html+=gkSectionHtml(window.gkCatLabel?gkCatLabel(cat):cat, 'prodcat-'+cat, {type:'cat',value:cat}, items);
     });
     w.innerHTML=html||'<div style="text-align:center;padding:60px;color:var(--text2);">কোনো আইটেম পাওয়া যায়নি</div>';
 }
@@ -2084,7 +2128,7 @@ function buildCatSidebar(){
         const rowId='catRow'+i, listId='catSubList'+i;
         const subsHtml=hasSubs?cat.subs.map(s=>`<div class="subcat-item" onclick="navigateToFilter('subcat','${s.replace(/'/g,"\\'")}');closeDrawer()">${s}</div>`).join(''):'';
         return `<div class="cat-row">
-            <div class="sidebar-sub-item" onclick="navigateToFilter('cat','${cat.name.replace(/'/g,"\\'")}');closeDrawer()">${cat.name}</div>
+            <div class="sidebar-sub-item" onclick="navigateToFilter('cat','${cat.name.replace(/'/g,"\\'")}');closeDrawer()">${window.gkCatLabel?gkCatLabel(cat.name):cat.name}</div>
             ${hasSubs?`<div class="cat-row-toggle" id="${rowId}" onclick="event.stopPropagation();toggleCatSubList('${rowId}','${listId}')"><i class=gi-chev></i></div>`:''}
         </div>
         ${hasSubs?`<div class="subcat-list" id="${listId}">${subsHtml}</div>`:''}`;
@@ -2105,7 +2149,7 @@ function buildCatDrawerList(){
         const rowId='dCatRow'+i, listId='dCatSubList'+i;
         const subsHtml=hasSubs?cat.subs.map(s=>`<div class="drawer-subcat-item" onclick="navigateToFilter('subcat','${s.replace(/'/g,"\\'")}');closeDrawer()">${s}</div>`).join(''):'';
         return `<div class="drawer-cat-row">
-            <div class="drawer-item" onclick="navigateToFilter('cat','${cat.name.replace(/'/g,"\\'")}');closeDrawer()">${cat.name}</div>
+            <div class="drawer-item" onclick="navigateToFilter('cat','${cat.name.replace(/'/g,"\\'")}');closeDrawer()">${window.gkCatLabel?gkCatLabel(cat.name):cat.name}</div>
             ${hasSubs?`<div class="drawer-row-toggle" id="${rowId}" onclick="event.stopPropagation();toggleDrawerCatSubList('${rowId}','${listId}')"><i class=gi-chev></i></div>`:''}
         </div>
         ${hasSubs?`<div class="drawer-subcat-list" id="${listId}">${subsHtml}</div>`:''}`;
@@ -2141,7 +2185,7 @@ function showWishlist(msg){
     else{box.innerHTML=msgHtml+wishlist.map(name=>{const b=books.find(bk=>bk.name===name);if(!b)return '';const idx=books.indexOf(b);
         return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="goToBook(${idx})">
             <img src="${escapeHTML(getImg(b))}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">
-            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${escapeHTML(b.name)}</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳${b.price}</div></div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${escapeHTML(b.name)}</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳${(window.gkBn||String)(b.price)}</div></div>
             <button data-name="${escapeHTML(b.name)}" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()"><i class=gi-no></i></button>
         </div>`;
     }).join('');}
@@ -2894,7 +2938,7 @@ function loadBanners(){
     display:flex; align-items:center; justify-content:center; padding:7px; box-sizing:border-box;
 }
 .auth-header-logo img{ width:100%; height:100%; object-fit:contain; }
-.auth-header-title{ font-family:'Playfair Display',Georgia,serif; font-size:19px; font-weight:700; color:var(--text); }
+.auth-header-title{ font-family:'Hind Siliguri',Georgia,serif; font-size:19px; font-weight:700; color:var(--text); }
 .auth-header-sub{ font-size:12.5px; color:var(--text2); margin-top:3px; }
 .auth-tabs{
     display:flex; position:relative; gap:0; margin:18px 24px 0;
@@ -2919,7 +2963,7 @@ function loadBanners(){
 .auth-error.show{ display:flex; }
 .auth-error.ok{ color:#059669; background:#ecfdf5; border-color:#a7f3d0; }
 [data-theme="dark"] .auth-error{ background:rgba(220,38,38,0.12); border-color:rgba(220,38,38,0.3); }
-[data-theme="dark"] .auth-error.ok{ background:rgba(5,150,105,0.14); border-color:rgba(52,211,153,0.3); }
+[data-theme="dark"] .auth-error.ok{ background:rgba(72, 76, 83, 0.14); border-color:rgba(52,211,153,0.3); }
 .auth-input-wrap{ position:relative; margin-bottom:11px; }
 .auth-input-icon{
     position:absolute; left:13px; top:50%; transform:translateY(-50%);

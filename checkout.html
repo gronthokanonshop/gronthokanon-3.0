@@ -29,7 +29,7 @@
 <title>চেকআউট — গ্রন্থকানন</title>
 <meta name="theme-color" content="#059669">
 <meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
@@ -52,10 +52,11 @@
   --shadow-lg:0 6px 16px rgba(0,0,0,.08);
 }
 [data-theme="dark"]{
-  --bg-body:#0a1f17;
-  --bg-card:#0f2a1e;
-  --text-main:#ecfdf5;
-  --text-muted:#6ee7b7;
+  --bg-body:#111316;
+  --bg-card:#1b1e23;
+  --text-main:#f1f3f5;
+  --text-muted:#a3a9b2;
+  --primary-xlight:rgba(52,211,153,.10);
   --border:#ffffff22;
   --border-dark:#ffffff33;
 }
@@ -267,8 +268,8 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
    পুরো অংশটা মুছে দিলে আগের চেহারা ফিরবে।
 ═══════════════════════════════════════════════════════════════ */
 :root{--radius:18px;}
-html:not([data-theme="dark"]){--bg-body:#f4f6f5;--border:#e6eaee;--text-muted:#64748b;}
-html:not([data-theme="dark"]) body{background:linear-gradient(180deg,#eefaf4 0,#f4f6f5 320px);}
+html:not([data-theme="dark"]){--bg-body:#f4f5f6;--border:#e6eaee;--text-muted:#64748b;}
+html:not([data-theme="dark"]) body{background:linear-gradient(180deg,#f3f4f5 0,#f4f5f6 320px);}
 .ni{border-radius:12px;}
 
 /* ধাপ (কার্ট → শিপিং → সম্পন্ন) */
@@ -303,8 +304,8 @@ input:focus,select:focus,textarea:focus{box-shadow:0 0 0 4px rgba(16,185,129,.14
 .os-price{color:#0f172a;font-weight:800;}
 .total-row{font-size:14.5px;}
 /* সর্বমোট — গাঢ় বক্সের বদলে উজ্জ্বল হালকা সবুজ */
-html:not([data-theme="dark"]) .total-row.grand{background:#ecfdf5;color:#065f46;border:1.5px solid #a7f3d0;}
-html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;font-size:21px;}
+html:not([data-theme="dark"]) .total-row.grand{background:#f4f4f5;color:#2f3136;border:1.5px solid #a7f3d0;}
+html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#3a3d42;font-size:21px;}
 .total-row.grand{border-radius:14px;padding:16px 18px;font-size:17px;align-items:center;}
 
 /* পেমেন্ট */
@@ -328,7 +329,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
 .co-help:hover{border-color:#10b981;}
 .co-help svg{width:30px;height:30px;padding:7px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);color:#fff;flex-shrink:0;}
 .co-help small{display:block;font-size:10.5px;font-weight:600;color:var(--text-muted);}
-[data-theme="dark"] .co-secure{background:rgba(16,185,129,.12);color:#6ee7b7;}
+[data-theme="dark"] .co-secure{background:rgba(255, 255, 255, 0.084);color:#6ee7b7;}
 
 .co-hero{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:30px 0 6px;}
 .co-title{font-size:32px;font-weight:800;color:var(--text-main);line-height:1.1;letter-spacing:.2px;}
@@ -377,7 +378,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
 .co-trust span{display:inline-flex;align-items:center;gap:5px;}
 .co-trust svg{width:14px;height:14px;color:#10b981;}
 [data-theme="dark"] .co-coupon summary,[data-theme="dark"] .co-qty button,[data-theme="dark"] .co-empty a{color:#6ee7b7;}
-[data-theme="dark"] .co-qty button:hover{background:rgba(16,185,129,.12);}
+[data-theme="dark"] .co-qty button:hover{background:rgba(255, 255, 255, 0.084);}
 [data-theme="dark"] .co-del{background:rgba(220,38,38,.15);color:#fca5a5;}
 
 @media(max-width:899px){
@@ -413,7 +414,7 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
 .dl-courier{display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 6px;border-radius:24px;background:var(--bg-card);border:1.5px solid color-mix(in srgb,var(--c) 35%,transparent);font-size:13px;font-weight:700;color:var(--c);box-shadow:0 1px 3px color-mix(in srgb,var(--c) 18%,transparent);animation:dlPop .25s ease;}
 .dl-courier i{width:22px;height:22px;border-radius:50%;background:var(--c);color:#fff;font-style:normal;font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;}
 @keyframes dlPop{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:none;}}
-[data-theme="dark"] .dl-opt.selected{background:rgba(16,185,129,.12);}
+[data-theme="dark"] .dl-opt.selected{background:rgba(255, 255, 255, 0.084);}
 [data-theme="dark"] .dl-ic{background:rgba(255,255,255,.07);color:#cbd5e1;}
 [data-theme="dark"] .dl-courier{color:#e2e8f0;}
 /* কুরিয়ার লোগো কার্ড */
@@ -425,6 +426,9 @@ html:not([data-theme="dark"]) .total-row.grand span:last-child{color:#047857;fon
 .dl-office .dl-logo img{height:48px;width:48px;border-radius:50%;}
 .dl-logo b{font-size:14.5px;color:#0f172a;}
 [data-theme="dark"] .dl-logo{border-color:rgba(255,255,255,.1);}
+/* ডার্ক মোডে গাঢ় লেখা পড়া যেত না (২০২৬-১০-১০) */
+[data-theme="dark"] .field label,[data-theme="dark"] .trust-label{color:#c3c8cf;}
+[data-theme="dark"] .os-price,[data-theme="dark"] .dl-logo b{color:#eef0f2;}
 </style>
 </head>
 <body>

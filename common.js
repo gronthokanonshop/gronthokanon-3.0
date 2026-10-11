@@ -31,6 +31,10 @@ function escapeHTML(s) {
     });
 }
 
+/* সংখ্যা → বাংলা অঙ্ক (দাম, ছাড়ের % ইত্যাদি দেখানোর জন্য) */
+window.gkBn = function (n) {
+    return String(n == null ? '' : n).replace(/\d/g, function (d) { return '০১২৩৪৫৬৭৮৯'[d]; });
+};
 /* ═══ মোবাইল নম্বর ঠিক করা — বাংলা কিবোর্ডে লেখা "০১৭১২…", "+৮৮০১৭…", স্পেস/ড্যাশ সহ নম্বর
    সবই 01XXXXXXXXX বানিয়ে দেয় (আগে এগুলো "সঠিক নম্বর দিন" বলে আটকে যেত) ═══ */
 window.gkNormPhone = function (s) {
@@ -266,7 +270,7 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     window.gkShowInstall = function (ios) { ls(KEY, null); build(ios === undefined ? isIOS : !!ios); };
 })();
 
-/* ═══ ভাসমান "Contact us" — চাপলে যোগাযোগের কার্ড (WhatsApp / Messenger / কল), সব পেজে ═══ */
+/* ═══ ভাসমান যোগাযোগ বোতাম — চাপলে যোগাযোগের কার্ড (WhatsApp / Messenger / কল), সব পেজে ═══ */
 (function () {
     var PHONE = '01516-595762', TEL = '+8801516595762';
     var WA = 'https://wa.me/8801516595762?text=' + encodeURIComponent('আসসালামু আলাইকুম, গ্রন্থকানন থেকে একটা বিষয়ে জানতে চাই।');
@@ -309,12 +313,12 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
                 '</div>' +
                 '<div class="gkc-foot"><i class=gi-clock></i> শনি–বৃহস্পতি সকাল ৯টা · শুক্রবার বিকাল ৪টা — রাত ১০টা</div>' +
             '</div>' +
-            '<button type="button" class="gkc-fab" aria-label="Contact us" onclick="gkToggleContact()">' +
+            '<button type="button" class="gkc-fab" aria-label="যোগাযোগ" title="যোগাযোগ" onclick="gkToggleContact()">' +
                 '<span class="gkc-fab-ic">' +
                     '<svg class="ic-chat" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' +
                     '<svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>' +
                 '</span>' +
-                '<span class="gkc-fab-txt">Contact us</span>' +
+                '<span class="gkc-fab-txt">যোগাযোগ</span>' +
                 (on ? '<span class="gkc-dot"></span>' : '') +
             '</button>';
         document.body.appendChild(d);
@@ -573,6 +577,58 @@ window.gkCartMatch = function (item, key) {
     };
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && typeof closeCart === 'function') closeCart(); });
 })();
+
+/* ═══ কার্টের সংখ্যা-ব্যাজ "0" হলে লুকাই (খালি কার্টে লাল "0" ভুলের মতো দেখায়) — পেজ যখনই সংখ্যা বদলায়, এটা দেখে নেয় ═══ */
+(function () {
+    function sync(el) { var t = (el.textContent || '').trim(); el.classList.toggle('gk-zero', !t || t === '0' || t === '০'); }
+    function init() {
+        ['cartCount', 'bnavBadge', 'wishCount'].forEach(function (id) {
+            var el = document.getElementById(id); if (!el) return;
+            sync(el);
+            try { new MutationObserver(function () { sync(el); }).observe(el, { childList: true, characterData: true, subtree: true }); } catch (e) {}
+        });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
+/* ═══ ভাসমান কার্ট — ডান পাশে মাঝখানে: ব্যাগ + কয়টি বই + মোট দাম; চাপলে ব্যাগ খোলে (স্টাইল common.css-এর .gk-fc) ═══
+   পেজগুলো নিজেরাই localStorage-এ কার্ট লেখে, তাই gronthokanon_cart লেখা হলেই এটা নিজে থেকে আপডেট হয়।
+   কার্ট খালি হলে, চেকআউট পেজে আর ব্যাগ খোলা থাকলে দেখায় না। */
+(function () {
+    if (location.pathname.indexOf('checkout.html') !== -1) return;
+    var KEY = 'gronthokanon_cart', el = null, last = '';
+    var IC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>';
+    function bn(n) { return String(n).replace(/\d/g, function (d) { return '০১২৩৪৫৬৭৮৯'[d]; }); }
+    function money(n) { return bn(Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')); }
+    function render() {
+        if (!document.body) return;
+        var c = [];
+        try { c = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) {}
+        if (!el) {
+            el = document.createElement('button');
+            el.type = 'button'; el.id = 'gkFloatCart'; el.className = 'gk-fc';
+            el.setAttribute('aria-label', 'আপনার ব্যাগ দেখুন');
+            el.onclick = function () { if (typeof window.showCart === 'function') window.showCart(); else window.gkOpenCart(); };
+            document.body.appendChild(el);
+        }
+        var n = c.length, t = 0;
+        c.forEach(function (i) { t += Number(i && i.price) || 0; });
+        el.classList.toggle('show', n > 0);
+        var sig = n + '|' + t;
+        if (sig === last) return;
+        el.innerHTML = '<span class="gk-fc-top">' + IC + '<b>' + bn(n) + 'টি বই</b></span><span class="gk-fc-sum">৳' + money(t) + '</span>';
+        if (last && n) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+        last = sig;
+    }
+    try {
+        var S = Storage.prototype, set = S.setItem, rem = S.removeItem;
+        S.setItem = function (k) { set.apply(this, arguments); if (k === KEY) setTimeout(render, 0); };
+        S.removeItem = function (k) { rem.apply(this, arguments); if (k === KEY) setTimeout(render, 0); };
+    } catch (e) {}
+    window.addEventListener('storage', function (e) { if (e.key === KEY) render(); });
+    window.addEventListener('pageshow', render);
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render); else render();
+})();
 /* ══ Meta Pixel — অ্যাডমিন প্যানেল থেকে ID সেট করা যায় (siteConfig/metaPixelId) ══ */
 (function () {
     try {
@@ -739,7 +795,7 @@ window.gkCartMatch = function (item, key) {
             'backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(0,0,0,0.08);' +
             'border-radius:0;box-shadow:0 -2px 16px rgba(0,0,0,0.08);display:flex;justify-content:space-around;' +
             'align-items:center;padding:6px 4px 10px;z-index:998;}' +
-            '[data-theme="dark"] .bottom-nav{background:rgba(17,24,39,0.97);border-top-color:rgba(255,255,255,0.07);}' +
+            '[data-theme="dark"] .bottom-nav{background:rgba(26, 27, 30, 0.97);border-top-color:rgba(255,255,255,0.07);}' +
             '@media (min-width:768px){.bottom-nav{left:50%;transform:translateX(-50%);width:580px;right:auto;border-radius:0;}}' +
             '.bnav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 14px;' +
             'border-radius:40px;transition:all 0.25s cubic-bezier(0.2,0.8,0.2,1);position:relative;-webkit-tap-highlight-color:transparent;}' +
@@ -772,7 +828,7 @@ window.gkCartMatch = function (item, key) {
             'border-left:1px solid rgba(255,255,255,0.5);box-shadow:-8px 0 40px rgba(0,0,0,0.12);width:330px;max-width:92%;' +
             'height:100%;display:flex;flex-direction:column;animation:gkWlSlideIn 0.35s cubic-bezier(0.2,0.8,0.2,1);' +
             'overflow-y:auto;border-radius:24px 0 0 24px;}' +
-            '[data-theme="dark"] .wl-content{background:rgba(17,24,39,0.92);border-left-color:rgba(255,255,255,0.08);}' +
+            '[data-theme="dark"] .wl-content{background:rgba(26, 27, 30, 0.92);border-left-color:rgba(255,255,255,0.08);}' +
             '@keyframes gkWlSlideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}' +
             /* ── অথ মোডাল ── */
             '.auth-card{background:var(--card);width:100%;max-width:440px;border-radius:24px 24px 0 0;' +
@@ -790,7 +846,7 @@ window.gkCartMatch = function (item, key) {
             'box-shadow:0 4px 16px rgba(5,150,105,0.18),0 0 0 1px rgba(5,150,105,0.1);display:flex;align-items:center;' +
             'justify-content:center;padding:7px;box-sizing:border-box;}' +
             '.auth-header-logo img{width:100%;height:100%;object-fit:contain;}' +
-            '.auth-header-title{font-family:"Playfair Display",Georgia,serif;font-size:19px;font-weight:700;color:var(--text);}' +
+            '.auth-header-title{font-family:"Hind Siliguri",Arial,sans-serif;font-size:19px;font-weight:700;color:var(--text);}' +
             '.auth-header-sub{font-size:12.5px;color:var(--text2);margin-top:3px;}' +
             '.auth-tabs{display:flex;position:relative;gap:0;margin:18px 24px 0;background:var(--bg);border-radius:14px;padding:4px;}' +
             '.auth-tab{flex:1;padding:10px 0;background:transparent;border:none;border-radius:11px;' +
@@ -806,7 +862,7 @@ window.gkCartMatch = function (item, key) {
             '.auth-error.show{display:flex;}' +
             '.auth-error.ok{color:#059669;background:#ecfdf5;border-color:#a7f3d0;}' +
             '[data-theme="dark"] .auth-error{background:rgba(220,38,38,0.12);border-color:rgba(220,38,38,0.3);}' +
-            '[data-theme="dark"] .auth-error.ok{background:rgba(5,150,105,0.14);border-color:rgba(52,211,153,0.3);}' +
+            '[data-theme="dark"] .auth-error.ok{background:rgba(72, 76, 83, 0.14);border-color:rgba(52,211,153,0.3);}' +
             '.auth-input-wrap{position:relative;margin-bottom:11px;}' +
             '.auth-input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;' +
             'color:var(--text2);pointer-events:none;}' +
@@ -1044,7 +1100,7 @@ window.gkCartMatch = function (item, key) {
                 var safeName = escapeHTML(name);
                 return '<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="gkWLOpen(' + idx + ')">' +
                     '<img src="' + escapeHTML(imgOf(b)) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
-                    '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">' + safeName + '</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳' + (Number(b.price) || 0) + '</div></div>' +
+                    '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">' + safeName + '</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳' + window.gkBn(Number(b.price) || 0) + '</div></div>' +
                     '<button data-name="' + safeName + '" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()"><i class=gi-no></i></button></div>';
             }).join('');
         } else {
@@ -1467,6 +1523,7 @@ window.gkBookSubject = function (b) {
     ];
     /* ইংরেজি নামের বাংলা লেবেল (লিংকে আসল নামই যায়) */
     var LABEL = { 'Pre Order': 'প্রি-অর্ডার', 'Sunnah Item': 'সুন্নাহ আইটেম', 'Stationery': 'স্টেশনারি' };
+    window.gkCatLabel = function (c) { return LABEL[c] || c; };
     var CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
     function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     function norm(list) {

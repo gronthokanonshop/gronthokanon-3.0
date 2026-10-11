@@ -30,7 +30,7 @@
     <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বই। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।" id="metaDesc">
     <link rel="canonical" href="https://gronthokanon.com/book.html" id="canonicalLink">
     <meta name="theme-color" content="#ffffff">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
@@ -261,7 +261,7 @@
 
         /* BOOK INFO CARD */
         .info-card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 4px 20px var(--shadow);}
-        .book-title{font-family:'Playfair Display',serif;font-size:23px;font-weight:700;color:var(--dark);margin:0 0 6px;line-height:1.4;}
+        .book-title{font-family:'Hind Siliguri',serif;font-size:23px;font-weight:700;color:var(--dark);margin:0 0 6px;line-height:1.4;}
         .book-crumb{max-width:1100px;margin:10px auto 0;padding:0 16px;font-size:12.5px;color:var(--text2);display:flex;flex-wrap:wrap;align-items:center;gap:7px;font-family:'Hind Siliguri',Arial,sans-serif;}
         .book-crumb a{color:var(--text2);text-decoration:none;}
         .book-crumb a:hover{color:#059669;}
@@ -278,7 +278,7 @@
         .stock-dot{width:8px;height:8px;border-radius:50%;background:#15803D;flex-shrink:0;display:inline-block;}
         .b-out .stock-dot{background:#dc2626;}
         .img-card-title-block{margin-top:14px;text-align:center;}
-        .img-card-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);line-height:1.4;}
+        .img-card-title{font-family:'Hind Siliguri',serif;font-size:17px;font-weight:700;color:var(--dark);line-height:1.4;}
         .img-card-author{font-size:13px;color:#059669;font-weight:600;margin-top:3px;}
 
         /* TRUST MINI LIST (Al Aziz style) */
@@ -286,7 +286,8 @@
         .trust-mini .row{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--text2);}
         .trust-mini svg{width:16px;height:16px;color:#059669;flex-shrink:0;}
         /* মোবাইলে কভারের ঠিক পরেই বইয়ের নাম — স্টক-ব্যাজ দামের নিচে, ট্রাস্ট লাইন বাটনের নিচে সরে যায় */
-        #mBadgeSlot .badges{margin:0 0 12px;}
+        #mBadgeSlot .badges{margin:0 0 12px;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px;}   /* মোবাইলে ব্যাজ পাশাপাশি ছোট চিপ (আগে পুরো চওড়া পট্টি) */
+        #mBadgeSlot .badge{display:inline-flex;align-items:center;gap:6px;width:auto;}
         /* বইয়ের তথ্য — ইনফো-কার্ডের ভেতরে, দামের নিচে কমপ্যাক্ট বক্স */
         .info-card #bookDetailsCard{background:var(--bg);box-shadow:none;border-radius:12px;padding:12px 14px 4px;margin:0 0 14px;}
         .info-card #bookDetailsCard h3{font-size:14px;margin-bottom:4px;padding-bottom:8px;}
@@ -302,7 +303,7 @@
         .b-ok{background:var(--green-bg);color:#059669;border:1px solid var(--green-border);}
         .b-low{background:#fff3e0;color:#f39c12;border:1px solid #fcd9a8;}
         .b-out{background:#fdecea;color:#e74c3c;border:1px solid #f8c4bd;}
-        [data-theme="dark"] .b-cat,[data-theme="dark"] .b-ok{background:#0a2e1a;}
+        [data-theme="dark"] .b-cat,[data-theme="dark"] .b-ok{background:#1a1b1e;}
         [data-theme="dark"] .b-low{background:#2e1e0a;}
         [data-theme="dark"] .b-out{background:#2e0a0a;}
 
@@ -332,7 +333,7 @@
 
         /* DELIVERY CARD */
         .delivery-card{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border:1px solid var(--green-border);border-radius:16px;padding:14px 18px;margin-bottom:16px;}
-        [data-theme="dark"] .delivery-card{background:linear-gradient(135deg,#0a2e1a,#0d3d22);border-color:#065f46;}
+        [data-theme="dark"] .delivery-card{background:linear-gradient(135deg,#1a1b1e,#222428);border-color:#2f3136;}
         .d-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
         .d-row:last-child{margin-bottom:0;}
         .d-icon{font-size:18px;width:26px;text-align:center;}
@@ -379,7 +380,7 @@
         /* DESC */
         .desc-card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 4px 20px var(--shadow);}
         .desc-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-        [data-theme="dark"] .desc-card h3{color:#ecfdf5;}
+        [data-theme="dark"] .desc-card h3{color:#f4f4f5;}
         .desc-text{font-size:14px;color:var(--text2);line-height:1.8;}
         .desc-toggle{display:inline-block;margin-top:8px;color:#059669;font-size:13px;font-weight:700;cursor:pointer;}
 
@@ -396,7 +397,7 @@
         .pkg-save b{color:#dc2626;}
         @media(max-width:500px){.pkg-grid{grid-template-columns:repeat(3,1fr);gap:12px 8px;}}
         .related-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-        [data-theme="dark"] .related-card h3{color:#ecfdf5;}
+        [data-theme="dark"] .related-card h3{color:#f4f4f5;}
         .rel-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
         .rel-row::-webkit-scrollbar{height:4px;}
         .rel-row::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
@@ -489,7 +490,7 @@
         .lb-sub{font-size:10px;color:var(--text2);}
         .lb-books{font-size:14px;font-weight:800;color:#059669;white-space:nowrap;}
         .lb-you{background:var(--green-bg);border-radius:12px;padding-left:8px;padding-right:8px;}
-        [data-theme="dark"] .lb-you{background:#0a2e1a;}
+        [data-theme="dark"] .lb-you{background:#1a1b1e;}
         .lb-my-progress{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:10px 14px;margin-top:10px;}
         .prog-bar-outer{height:7px;background:var(--border);border-radius:20px;margin:6px 0;overflow:hidden;}
         .prog-bar-inner{height:100%;background:linear-gradient(90deg,#059669,#10b981);border-radius:20px;transition:width 0.8s ease;}
@@ -741,7 +742,7 @@
 
     <!-- পাঠকদের মতামত (রিভিউ ফর্ম + তালিকা) — আগে ফুটারের কাছে আলাদা ছিল, এখন রিভিউ ট্যাবে একত্র করা হলো -->
     <div style="background:var(--card);border-radius:18px;padding:18px;border:1px solid var(--border);border-left:4px solid var(--gold);box-shadow:0 4px 20px var(--shadow);">
-        <h3 style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;"><svg class="eico" viewBox="0 0 24 24" fill="#d97706" width="17" height="17"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg> পাঠকদের মতামত</h3>
+        <h3 style="font-family:'Hind Siliguri',serif;font-size:17px;font-weight:700;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;"><svg class="eico" viewBox="0 0 24 24" fill="#d97706" width="17" height="17"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg> পাঠকদের মতামত</h3>
         <div id="reviewForm" style="margin-bottom:20px;padding:14px;background:var(--bg);border-radius:0;border:1px solid #111;">
             <div style="font-size:13px;font-weight:600;margin-bottom:10px;">আপনার রিভিউ লিখুন</div>
             <div style="display:flex;gap:6px;margin-bottom:10px;">
@@ -810,8 +811,8 @@ footer {
     border-top: 1px solid rgba(5,150,105,0.15);
 }
 [data-theme="dark"] footer {
-    background: linear-gradient(135deg, #011f16 0%, #013d2b 60%, #025939 100%);
-    color: #c8e8de;
+    background: linear-gradient(135deg, #0f1011 0%, #1d1e21 60%, #2a2c31 100%);
+    color: #d5d7db;
     border-top: none;
 }
 .footer-inner {
@@ -821,12 +822,12 @@ footer {
 /* Brand top */
 .footer-brand-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
 .footer-logo-icon { width: 32px; height: 32px; background: var(--green, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
-.footer-brand-name { font-family: 'Playfair Display', Georgia, serif; font-size: 18px; font-weight: 700; color: #064e3b; }
+.footer-brand-name { font-family: 'Hind Siliguri', Georgia, serif; font-size: 18px; font-weight: 700; color: #064e3b; }
 .footer-brand-name span { color: #059669; }
 [data-theme="dark"] .footer-brand-name { color: #ffffff; }
 [data-theme="dark"] .footer-brand-name span { color: #34d399; }
 .footer-tagline { text-align: center; font-size: 11.5px; color: #6b7280; margin-bottom: 20px; letter-spacing: 0.3px; }
-[data-theme="dark"] .footer-tagline { color: #6fada0; }
+[data-theme="dark"] .footer-tagline { color: #868b96; }
 
 /* 3-column grid */
 .footer-grid {
@@ -849,12 +850,12 @@ footer {
 
 /* Social & payment */
 .footer-divider { border: 0; border-top: 1px solid rgba(5,150,105,0.15); margin: 16px 0; }
-[data-theme="dark"] .footer-divider { border-top-color: rgba(52,211,153,0.12); }
+[data-theme="dark"] .footer-divider { border-top-color: rgba(255, 255, 255, 0.084); }
 .footer-social { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 14px; }
 .footer-social a img { width: 34px; height: 34px; object-fit: contain; border-radius: 8px; }
 .footer-payment { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; }
 .footer-payment img { width: 40px; border-radius: 6px; border: 1px solid rgba(5,150,105,0.25); }
-[data-theme="dark"] .footer-payment img { border-color: rgba(52,211,153,0.2); }
+[data-theme="dark"] .footer-payment img { border-color: rgba(255, 255, 255, 0.14); }
 .footer-copy { font-size: 11px; color: #9ca3af; text-align: center; }
 .footer-copy strong { color: #059669; font-weight: 600; }
 [data-theme="dark"] .footer-copy { color: #4b5563; }
@@ -892,14 +893,14 @@ footer {
             <a href="filter.html?type=cat&value=ইসলামি বই" class="footer-link">ইসলামি বই</a>
             <a href="filter.html?type=cat&value=একাডেমিক বই" class="footer-link">একাডেমিক বই</a>
             <a href="filter.html?type=cat&value=মাদ্রাসার বই" class="footer-link">মাদ্রাসার বই</a>
-            <a href="filter.html?type=cat&value=Sunnah Item" class="footer-link">Sunnah Item</a>
+            <a href="filter.html?type=cat&value=Sunnah Item" class="footer-link">সুন্নাহ আইটেম</a>
         </div>
         <div class="footer-col">
             <div class="footer-col-title">যোগাযোগ</div>
             <a href="tel:+8801516595762" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01516595762</a>
             <a href="https://wa.me/8801516595762" target="_blank" rel="noopener" class="footer-link"><i class="gi-wa"></i> WhatsApp</a>
             <a href="https://facebook.com/gronthokanon0943" target="_blank" rel="noopener" class="footer-link"><i class="gi-fb"></i> Facebook</a>
-            <span class="footer-link" style="cursor:default;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ঢাকা, বাংলাদেশ</span>
+            <span class="footer-link" style="cursor:default;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> কওমি মার্কেট (১ম তলা, ১ নং দোকান), প্যারিদাস রোড, বাংলাবাজার, ঢাকা-১১০০</span>
         </div>
     </div>
 
@@ -912,10 +913,23 @@ footer {
     </div>
 
     <!-- Payment -->
-    <div class="footer-payment">
-        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash" loading="lazy" decoding="async" width="40" height="40">
-        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" alt="Nagad" loading="lazy" decoding="async" width="40" height="40">
+    <div class="footer-payment gk-pay">
+        <div class="gk-pay-row">
+            <span class="gk-pay-lbl">পেমেন্ট</span>
+            <span class="gk-pay-chip" title="Visa"><svg class="gk-visa" viewBox="0 0 64 22" role="img" aria-label="Visa"><text x="32" y="17" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="900" font-style="italic" fill="#1a1f71" letter-spacing="1">VISA</text></svg></span>
+            <span class="gk-pay-chip" title="বিকাশ"><img src="https://wsrv.nl/?url=https%3A%2F%2Fi.ibb.co.com%2FksGJHftT%2Fbkash-logo.jpg&amp;w=160&amp;we&amp;output=webp&amp;q=85" alt="বিকাশ" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip" title="নগদ"><img src="https://wsrv.nl/?url=https%3A%2F%2Fi.ibb.co.com%2F0pvLZ3b8%2F1725618513nagad-logo.png&amp;w=160&amp;we&amp;output=webp&amp;q=85" alt="নগদ" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip gk-cod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>ক্যাশ অন ডেলিভারি</span>
+        </div>
+        <div class="gk-pay-row">
+            <span class="gk-pay-lbl">ডেলিভারি</span>
+            <span class="gk-pay-chip" title="Steadfast"><img src="img/courier-steadfast.jpg" alt="Steadfast" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip" title="RedX"><img src="img/courier-redx.png" alt="RedX" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip" title="Pathao"><img src="img/courier-pathao.png" alt="Pathao" loading="lazy" decoding="async"></span>
+            <span class="gk-pay-chip" title="সুন্দরবন কুরিয়ার"><img src="img/courier-sundarban.jpg" alt="সুন্দরবন কুরিয়ার" loading="lazy" decoding="async"></span>
+        </div>
     </div>
+
 
     <hr class="footer-divider">
     <p class="footer-copy">&copy; ২০২৬ <strong>গ্রন্থকানন</strong> — সর্বস্বত্ব সংরক্ষিত</p>
@@ -1072,7 +1086,7 @@ function changeQty(d){
     qty=Math.max(1,Math.min(10,qty+d));
     document.getElementById('qtyNum').innerText=toBN(qty);
     document.getElementById('stickyQtyNum').innerText=toBN(qty);
-    if(curBook)document.getElementById('stickyPrice').innerText='৳ '+(curBook.price*qty);
+    if(curBook)document.getElementById('stickyPrice').innerText='৳'+(window.gkBn||String)(curBook.price*qty);
 }
 
 /* IMAGE */
@@ -1232,8 +1246,8 @@ function openPdfModal(){
         var bImg=document.getElementById('bookImg');
         document.getElementById('pdfCartImg').src=bImg?bImg.src:'';
         document.getElementById('pdfCartName').innerText=b.name||'';
-        document.getElementById('pdfCartOrig').innerText=(b.original_price>b.price)?'৳ '+b.original_price:'';
-        document.getElementById('pdfCartCurrent').innerText='৳ '+b.price;
+        document.getElementById('pdfCartOrig').innerText=(b.original_price>b.price)?'৳'+(window.gkBn||String)(b.original_price):'';
+        document.getElementById('pdfCartCurrent').innerText='৳'+(window.gkBn||String)(b.price);
         document.getElementById('pdfCartPopup').classList.add('show');
     }, reduce?0:1750));
 }
@@ -1339,7 +1353,7 @@ function gkRenderPackage(b){
     document.getElementById('pkgTitle').innerHTML=PKG_IC+' '+escapeHTML(title);
     document.getElementById('pkgBooks').innerHTML=list.map(x=>{
         const xi=books.indexOf(x), img=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[x.name])||x.img||'',240);
-        return `<a class="rel-book" href="book.html?id=${encodeURIComponent(x.bid||xi)}"><img src="${escapeHTML(img)}" alt="${escapeHTML(x.name)}" loading="lazy"><div class="rel-name">${escapeHTML(x.name)}</div>${x.author?`<div class="rel-author">${escapeHTML(x.author)}</div>`:''}<div class="rel-price">৳ ${Number(x.price)||0}</div></a>`;
+        return `<a class="rel-book" href="book.html?id=${encodeURIComponent(x.bid||xi)}"><img src="${escapeHTML(img)}" alt="${escapeHTML(x.name)}" loading="lazy"><div class="rel-name">${escapeHTML(x.name)}</div>${x.author?`<div class="rel-author">${escapeHTML(x.author)}</div>`:''}<div class="rel-price">৳${(window.gkBn||String)(Number(x.price)||0)}</div></a>`;
     }).join('');
     const sv=document.getElementById('pkgSave'); sv.innerHTML=save; sv.style.display=save?'':'none';
     sec.style.display='';
@@ -1353,7 +1367,7 @@ function gkRenderAlsoBought(b){
     if(!list.length){ sec.style.display='none'; return; }
     document.getElementById('alsoBooks').innerHTML=list.map(x=>{
         const xi=books.indexOf(x), img=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[x.name])||x.img||'',240);
-        return `<a class="rel-book" href="book.html?id=${encodeURIComponent(x.bid||xi)}" style="text-decoration:none;color:inherit;"><img src="${escapeHTML(img)}" alt="${escapeHTML(x.name)}" loading="lazy"><div class="rel-name">${escapeHTML(x.name)}</div><div class="rel-price">৳ ${Number(x.price)||0}</div></a>`;
+        return `<a class="rel-book" href="book.html?id=${encodeURIComponent(x.bid||xi)}" style="text-decoration:none;color:inherit;"><img src="${escapeHTML(img)}" alt="${escapeHTML(x.name)}" loading="lazy"><div class="rel-name">${escapeHTML(x.name)}</div><div class="rel-price">৳${(window.gkBn||String)(Number(x.price)||0)}</div></a>`;
     }).join('');
     sec.style.display='';
 }
@@ -1370,7 +1384,7 @@ function loadRecent(){
         return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'">
             <img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy">
             <div class="rel-name">${escapeHTML(rb.name)}</div>
-            <div class="rel-price">৳ ${Number(rb.price)||0}</div></div>`;
+            <div class="rel-price">৳${(window.gkBn||String)(Number(rb.price)||0)}</div></div>`;
     }).join('');
 }
 
@@ -1447,8 +1461,8 @@ function loadBook(){
     } else {
         authorEl.style.display='none';
     }
-    document.getElementById('bookPrice').innerText='৳ '+b.price;
-    document.getElementById('stickyPrice').innerText='৳ '+b.price;
+    document.getElementById('bookPrice').innerText='৳'+(window.gkBn||String)(b.price);
+    document.getElementById('stickyPrice').innerText='৳'+(window.gkBn||String)(b.price);
     /* PDF preview বাটন */
     const pdfBtnWrap=document.getElementById('pdfReadBtnWrap');
     const hasPdf=!!(b.pdfLink&&b.pdfLink.trim());
@@ -1490,7 +1504,7 @@ function loadBook(){
     if(isBook){
         if(b.author)rows+=`<tr><td class="info-label">লেখক</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=author&value=${encodeURIComponent(b.author)}'">${escapeHTML(b.author)}</td></tr>`;
         if(b.pub)rows+=`<tr><td class="info-label">প্রকাশনী</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=pub&value=${encodeURIComponent(b.pub)}'">${escapeHTML(b.pub)}</td></tr>`;
-        if(b.pages)rows+=`<tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val">${escapeHTML(b.pages)}</td></tr>`;
+        if(b.pages)rows+=`<tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val">${escapeHTML((window.gkBn||String)(b.pages))}</td></tr>`;
         if(b.cover)rows+=`<tr><td class="info-label">কভার</td><td class="info-val">${escapeHTML(b.cover)}</td></tr>`;
         if(sc)rows+=`<tr><td class="info-label">বিষয়</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=subcat&value=${encodeURIComponent(sc)}'">${escapeHTML(sc)}</td></tr>`;
     } else {
@@ -1505,8 +1519,8 @@ function loadBook(){
     const crEl=document.getElementById('bookCrumb');
     if(crEl){
         let ch=`<a href="index.html">হোম</a> <span class="sep">›</span> <a href="filter.html">বিষয়</a>`;
-        if(mc && GK_TAXO_CATS.has(mc)) ch+=` <span class="sep">›</span> <a href="filter.html?type=cat&value=${encodeURIComponent(mc)}">${escapeHTML(mc)}</a>`;
-        if(b.subject) ch+=` <span class="sep">›</span> <span class="cur">${escapeHTML(b.subject)}</span>`;
+        if(mc && GK_TAXO_CATS.has(mc)) ch+=` <span class="sep">›</span> <a href="filter.html?type=cat&value=${encodeURIComponent(mc)}">${escapeHTML(window.gkCatLabel?gkCatLabel(mc):mc)}</a>`;
+        if(b.subject && String(b.subject).trim()!==String(mc||'').trim()) ch+=` <span class="sep">›</span> <span class="cur">${escapeHTML(b.subject)}</span>`;   /* বিষয় আর বিভাগ একই নাম হলে দুবার দেখাই না */
         crEl.innerHTML=ch;
     }
 
@@ -1565,13 +1579,13 @@ function loadBook(){
     }
 
     const origEl=document.getElementById('bookOrigPrice');
-    if(b.original_price>b.price)origEl.innerText='৳ '+b.original_price;else origEl.style.display='none';
+    if(b.original_price>b.price)origEl.innerText='৳'+(window.gkBn||String)(b.original_price);else origEl.style.display='none';
     const discEl=document.getElementById('bookDisc');
-    if(pct>0)discEl.innerText=pct+'% ছাড়';else discEl.style.display='none';
+    if(pct>0)discEl.innerText=(window.gkBn||String)(pct)+'% ছাড়';else discEl.style.display='none';
 
     /* Ribbon discount badge on image */
     if(pct>0){
-        document.getElementById('discRibbonText').innerHTML=pct+'%<small>ছাড়</small>';
+        document.getElementById('discRibbonText').innerHTML=(window.gkBn||String)(pct)+'%<small>ছাড়</small>';
         document.getElementById('discRibbon').style.display='block';
     }
 
@@ -1580,7 +1594,7 @@ function loadBook(){
         document.getElementById('offerTagWrap').style.display='block';
         const saved=b.original_price-b.price;
         document.getElementById('savingsLabel').style.display='block';
-        document.getElementById('savingsText').innerText=pct+'% ডিসকাউন্টে ৳'+saved+' সাশ্রয়';
+        document.getElementById('savingsText').innerText=(window.gkBn||String)(pct)+'% ডিসকাউন্টে ৳'+(window.gkBn||String)(saved)+' সাশ্রয়';
     }
 
     const badges=document.getElementById('bookBadges');
@@ -1588,7 +1602,7 @@ function loadBook(){
         if(typeof db==='undefined'||!db){setTimeout(doStock,200);return;}
         db.ref('stock/'+idx).once('value').then(snap=>{
             const inStock=snap.val()!==false;
-            const catTxt=bookMainCat(b); const catBadge=(catTxt&&GK_TAXO_CATS.has(catTxt))?`<span class="badge b-cat">${escapeHTML(catTxt)}</span>`:'';
+            const catTxt=bookMainCat(b); const catBadge=(catTxt&&GK_TAXO_CATS.has(catTxt))?`<span class="badge b-cat">${escapeHTML(window.gkCatLabel?gkCatLabel(catTxt):catTxt)}</span>`:'';
             badges.innerHTML=catBadge+`<span class="${inStock?'badge b-ok':'badge b-out'}"><span class="stock-dot"></span>${inStock?'স্টকে আছে':'স্টক শেষ'}</span>`;
             if(!inStock){
                 gkLdPatch(ld=>{ ld.offers.availability='https://schema.org/OutOfStock'; });
@@ -1644,7 +1658,7 @@ function loadBook(){
     try{ gkRenderPackage(b); }catch(e){}
     try{ gkRenderAlsoBought(b); }catch(e){}
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
-    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'',240);return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy"><div class="rel-name">${escapeHTML(rb.name)}</div><div class="rel-price">৳ ${Number(rb.price)||0}</div></div>`;}).join('');}
+    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'',240);return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy"><div class="rel-name">${escapeHTML(rb.name)}</div><div class="rel-price">৳${(window.gkBn||String)(Number(rb.price)||0)}</div></div>`;}).join('');}
 
     loadRecent();updateCartCount();
 
@@ -1775,7 +1789,7 @@ function bkRunSearch(){
             <div style="flex:1;min-width:0;">
                 <div class="bks-name">${escapeHTML(b.name)}</div>
                 ${(b.type||'বই')==='বই' ? `<div class="bks-auth"><i class=gi-pen></i> ${escapeHTML(b.author||'')}</div>` : (b.brand ? `<div class="bks-auth"><i class=gi-tag></i> ${escapeHTML(b.brand)}</div>` : '')}
-                <div class="bks-price">৳ ${b.price}</div>
+                <div class="bks-price">৳${(window.gkBn||String)(b.price)}</div>
             </div></div>`;
     }).join('');
 }
@@ -1954,7 +1968,7 @@ function loadAISuggest(b){
     const more=[...new Set(books.map(bookMainCat).filter(Boolean))].slice(0,5);
     more.forEach(c=>{if(!tags.includes(c))tags.push(c);});
     const uniqueTags=[...new Set(tags)].slice(0,5);
-    document.getElementById('aiTagRow').innerHTML=uniqueTags.map(t=>`<div class="ai-tag${own.includes(t)?' sel':''}" onclick="toggleAiTag(this,'${escapeHTML(t)}')">${escapeHTML(t)}</div>`).join('');
+    document.getElementById('aiTagRow').innerHTML=uniqueTags.map(t=>`<div class="ai-tag${own.includes(t)?' sel':''}" onclick="toggleAiTag(this,'${escapeHTML(t)}')">${escapeHTML(window.gkCatLabel?gkCatLabel(t):t)}</div>`).join('');
     selectedTags=own.length?own.slice():(mc?[mc]:[]);
     renderAISuggest();
 }
@@ -1984,7 +1998,7 @@ function renderAISuggest(){
         return `<div class="ai-book" onclick="window.location.href='book.html?id=${encodeURIComponent(b.bid||i)}'">
             <img src="${escapeHTML(img)}" alt="${escapeHTML(b.name)}" loading="lazy">
             <div class="ai-book-name">${escapeHTML(b.name)}</div>
-            <div class="ai-book-price">৳ ${b.price}</div>
+            <div class="ai-book-price">৳${(window.gkBn||String)(b.price)}</div>
             ${why?`<span class="ai-match">${why}</span>`:''}
         </div>`;
     }).join('')}</div>`;

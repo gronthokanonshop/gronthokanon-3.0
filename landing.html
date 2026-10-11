@@ -28,7 +28,7 @@
 
     <title>গ্রন্থকানন — বিশেষ অফার</title>
     <meta name="robots" content="noindex">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="common.css">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
@@ -51,7 +51,7 @@
         .lp-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:16px;font-weight:800;cursor:pointer;text-align:center;box-shadow:0 6px 20px rgba(220,38,38,0.28);}
         .lp-cta:active{transform:scale(0.98);}
         .lp-wa{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;margin-top:10px;background:#f0fdf4;color:#059669;border:1.5px solid rgba(5,150,105,0.25);border-radius:0;font-size:13.5px;font-weight:700;cursor:pointer;text-decoration:none;}
-        [data-theme="dark"] .lp-wa{background:rgba(5,150,105,0.08);}
+        [data-theme="dark"] .lp-wa{background:rgba(72, 76, 83, 0.08);}
         .lp-trust{display:flex;justify-content:space-between;gap:8px;margin-top:20px;padding-top:16px;border-top:1px dashed var(--border);}
         .lp-trust div{flex:1;text-align:center;font-size:10.5px;color:var(--text2);font-weight:600;line-height:1.5;}
         .lp-trust svg{width:22px;height:22px;color:#059669;margin-bottom:4px;}
@@ -134,6 +134,8 @@
 
 <script>
 function escapeHTML(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+/* দাম বাংলা অঙ্কে (এই পেজে common.js নেই) */
+window.gkBn=window.gkBn||function(n){return String(n==null?'':n).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d];});};
 
 /* Meta Pixel — অ্যাডমিন প্যানেল থেকে সেট করা siteConfig/metaPixelId দিয়ে চালিত, common.js-এর মতোই */
 (function () {
@@ -236,7 +238,7 @@ function lpRender(lp, book){
             return `<div class="lp-gallery-card" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'">
                 <img src="${escapeHTML(rb.img||'')}" alt="${escapeHTML(rb.name)}" loading="lazy">
                 <div class="lp-gallery-name">${escapeHTML(rb.name)}</div>
-                <div class="lp-gallery-price">৳${Number(rb.price)||0}</div>
+                <div class="lp-gallery-price">৳${(window.gkBn||String)(Number(rb.price)||0)}</div>
             </div>`;
         }).join('')}</div>`:'';
     const waNum='8801516595762';
@@ -248,8 +250,8 @@ function lpRender(lp, book){
         ${socialHtml}
         ${countdownHtml}
         <div class="lp-price-row">
-            <span class="lp-price">৳${price}</span>
-            ${oprice>price?`<span class="lp-oprice">৳${oprice}</span><span class="lp-disc">${pct}% ছাড়ে</span>`:''}
+            <span class="lp-price">৳${(window.gkBn||String)(price)}</span>
+            ${oprice>price?`<span class="lp-oprice">৳${(window.gkBn||String)(oprice)}</span><span class="lp-disc">${(window.gkBn||String)(pct)}% ছাড়ে</span>`:''}
         </div>
         <ul class="lp-bullets">${bulletsHtml}</ul>
         ${whyHtml}
@@ -276,7 +278,7 @@ function lpRender(lp, book){
                 <a class="lp-quickbtn lp-qb-track" href="track.html"><i class=gi-search></i> অর্ডার ট্র্যাক</a>
             </div>
         </div>
-        <div class="lp-sticky"><div class="lp-sticky-inner"><button class="lp-cta" onclick="lpOrder()"><i class=gi-cart></i> ${escapeHTML(lp.cta||'এখনই অর্ডার করুন')} — ৳${price}</button></div></div>
+        <div class="lp-sticky"><div class="lp-sticky-inner"><button class="lp-cta" onclick="lpOrder()"><i class=gi-cart></i> ${escapeHTML(lp.cta||'এখনই অর্ডার করুন')} — ৳${(window.gkBn||String)(price)}</button></div></div>
     `;
     document.title=lp.headline+' — গ্রন্থকানন';
     if(lp.deadline) lpStartCountdown(lp.deadline);

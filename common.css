@@ -85,58 +85,58 @@
 
 /* ═══ DARK MODE ═══ */
 [data-theme="dark"] {
-    --bg:            #060e0b;
-    --bg2:           #0a1610;
-    --card:          rgba(10, 24, 18, 0.88);
-    --card-solid:    #0a1812;
-    --text:          #e4f2ec;
-    --text2:         #6fada0;
-    --text3:         #3a6558;
-    --border:        rgba(52, 211, 153, 0.11);
-    --border2:       rgba(52, 211, 153, 0.24);
+    --bg:            #121315;
+    --bg2:           #18191b;
+    --card:          rgba(29, 30, 33, 0.94);
+    --card-solid:    #1d1e21;
+    --text:          #e8eaed;
+    --text2:         #a3a9b2;
+    --text3:         #6f757e;
+    --border:        rgba(255, 255, 255, 0.077);
+    --border2:       rgba(255, 255, 255, 0.168);
 
     --green:         #34d399;
     --green-light:   #6ee7b7;
-    --green-glow:    rgba(52, 211, 153, 0.24);
-    --green-glow2:   rgba(52, 211, 153, 0.08);
-    --green-bg:      rgba(52, 211, 153, 0.08);
-    --green-bg2:     rgba(110, 231, 183, 0.04);
-    --dark:          #e4f2ec;
+    --green-glow:    rgba(255, 255, 255, 0.168);
+    --green-glow2:   rgba(255, 255, 255, 0.056);
+    --green-bg:      rgba(255, 255, 255, 0.056);
+    --green-bg2:     rgba(255, 255, 255, 0.028);
+    --dark:          #f1f3f5;
 
     --red:           #f87171;
     --red-bg:        rgba(248, 113, 113, 0.10);
     --gold:          #fbbf24;
     --gold-bg:       rgba(251, 191, 36, 0.10);
 
-    --glass:         rgba(10, 24, 18, 0.78);
-    --glass-border:  rgba(52, 211, 153, 0.14);
+    --glass:         rgba(29, 30, 33, 0.82);
+    --glass-border:  rgba(255, 255, 255, 0.098);
     --glass-shadow:  0 8px 32px rgba(0,0,0,0.50), 0 2px 10px rgba(0,0,0,0.35);
     --glass-blur:    blur(20px);
 
     /* Nav dark — properly themed */
-    --nav-bg:        rgba(6, 14, 11, 0.97);
-    --nav-border:    rgba(52, 211, 153, 0.10);
-    --nav-icon-bg:   rgba(18, 40, 30, 0.85);
-    --nav-icon-border: rgba(52, 211, 153, 0.18);
-    --nav-icon-hover: rgba(52, 211, 153, 0.09);
-    --nav-text:      #a0d4c0;
-    --nav-shadow:    0 1px 0 rgba(52,211,153,0.07), 0 4px 24px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.40);
+    --nav-bg:        rgba(21, 22, 25, 0.97);
+    --nav-border:    rgba(255, 255, 255, 0.07);
+    --nav-icon-bg:   rgba(38, 42, 48, 0.9);
+    --nav-icon-border: rgba(255, 255, 255, 0.126);
+    --nav-icon-hover: rgba(255, 255, 255, 0.063);
+    --nav-text:      #b5b8bf;
+    --nav-shadow:    0 1px 0 rgba(255, 255, 255, 0.049), 0 4px 24px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.40);
 
-    --search-input-bg:     rgba(10, 24, 18, 0.85);
-    --search-input-border: rgba(52, 211, 153, 0.16);
-    --input-bg:      rgba(10, 24, 18, 0.90);
+    --search-input-bg:     rgba(30, 33, 38, 0.92);
+    --search-input-border: rgba(255, 255, 255, 0.112);
+    --input-bg:      rgba(30, 33, 38, 0.95);
 
-    --price-bg:      rgba(52, 211, 153, 0.05);
+    --price-bg:      rgba(255, 255, 255, 0.035);
     --shadow:        rgba(0, 0, 0, 0.45);
     --shadow2:       rgba(0, 0, 0, 0.32);
-    --sidebar-bg:    rgba(6, 14, 11, 0.98);
-    --search-bg:     rgba(52, 211, 153, 0.06);
+    --sidebar-bg:    rgba(21, 22, 25, 0.98);
+    --search-bg:     rgba(255, 255, 255, 0.042);
 
-    --muted:         #527d6e;
-    --label:         #88c0ae;
-    --total-bg:      rgba(52, 211, 153, 0.06);
-    --green-border:  rgba(52, 211, 153, 0.22);
-    --green-light-bg: rgba(52, 211, 153, 0.08);
+    --muted:         #8a9099;
+    --label:         #bcc1c8;
+    --total-bg:      rgba(255, 255, 255, 0.042);
+    --green-border:  rgba(255, 255, 255, 0.154);
+    --green-light-bg: rgba(255, 255, 255, 0.056);
 }
 
 /* ═══ RESET ═══ */
@@ -171,10 +171,10 @@ body {
 /* ═══ DARK MODE BG ═══ */
 [data-theme="dark"] body {
     background:
-        radial-gradient(ellipse at 8%  15%, rgba(52,211,153,0.08) 0%, transparent 52%),
-        radial-gradient(ellipse at 90%  8%, rgba(16,185,129,0.06) 0%, transparent 48%),
-        radial-gradient(ellipse at 45% 88%, rgba(5,150,105,0.07)  0%, transparent 55%),
-        radial-gradient(ellipse at 75% 55%, rgba(52,211,153,0.04) 0%, transparent 40%),
+        radial-gradient(ellipse at 8%  15%, rgba(255, 255, 255, 0.056) 0%, transparent 52%),
+        radial-gradient(ellipse at 90%  8%, rgba(255, 255, 255, 0.042) 0%, transparent 48%),
+        radial-gradient(ellipse at 45% 88%, rgba(72, 76, 83, 0.07)  0%, transparent 55%),
+        radial-gradient(ellipse at 75% 55%, rgba(255, 255, 255, 0.028) 0%, transparent 40%),
         var(--bg);
     background-attachment: fixed;
 }
@@ -226,7 +226,7 @@ body::after {
 
 [data-theme="dark"] .navbar {
     box-shadow:
-        0 1px 0 rgba(52,211,153,0.06),
+        0 1px 0 rgba(255, 255, 255, 0.042),
         0 4px 30px rgba(0,0,0,0.50),
         0 2px 12px rgba(0,0,0,0.35);
 }
@@ -410,9 +410,9 @@ body::after {
     letter-spacing: 0.2px;
 }
 
-/* ═══ CAT SECTION TITLE — Playfair Display ═══ */
+/* ═══ CAT SECTION TITLE — Hind Siliguri (একটাই ফন্ট, ২০২৬-১০-১০) ═══ */
 .cat-section-title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Hind Siliguri', Georgia, serif;
     font-size: 18px;
     font-weight: 700;
     color: var(--dark);
@@ -507,7 +507,7 @@ body::after {
 }
 [data-theme="dark"] .search-trigger:hover,
 [data-theme="dark"] .search-box:focus-within {
-    background: rgba(12, 28, 22, 0.90);
+    background: rgba(19, 20, 21, 0.90);
 }
 
 .search-pill-icon, .search-icon-box {
@@ -646,9 +646,9 @@ body::after {
 }
 [data-theme="dark"] .delivery-card {
     background: linear-gradient(135deg,
-        rgba(52,211,153,0.07) 0%,
-        rgba(16,185,129,0.04) 100%);
-    border-color: rgba(52,211,153,0.14);
+        rgba(255, 255, 255, 0.049) 0%,
+        rgba(255, 255, 255, 0.028) 100%);
+    border-color: rgba(255, 255, 255, 0.098);
 }
 
 /* ═══ BADGE CHIPS ═══ */
@@ -666,8 +666,8 @@ body::after {
     border: 1px solid rgba(5,150,105,0.20);
 }
 [data-theme="dark"] .b-cat, [data-theme="dark"] .b-ok {
-    background: rgba(52,211,153,0.08);
-    border-color: rgba(52,211,153,0.18);
+    background: rgba(255, 255, 255, 0.056);
+    border-color: rgba(255, 255, 255, 0.126);
 }
 .b-low {
     background: var(--gold-bg);
@@ -760,9 +760,9 @@ body::after {
 [data-theme="dark"] .skel-line {
     background: linear-gradient(
         90deg,
-        rgba(52,211,153,0.05) 25%,
-        rgba(52,211,153,0.12) 50%,
-        rgba(52,211,153,0.05) 75%
+        rgba(255, 255, 255, 0.035) 25%,
+        rgba(255, 255, 255, 0.084) 50%,
+        rgba(255, 255, 255, 0.035) 75%
     );
     background-size: 200% 100%;
 }
@@ -888,8 +888,8 @@ select {
 }
 [data-theme="dark"] select,
 [data-theme="dark"] select option {
-    background: #0a1c14;
-    color: #e8f5f0;
+    background: #121314;
+    color: #edeef0;
 }
 @supports (-webkit-touch-callout: none) {
     .input-wrap select {
@@ -983,7 +983,7 @@ select {
     box-shadow: 0 2px 8px rgba(0,0,0,0.14);
     transition: transform 0.20s, background 0.20s;
 }
-[data-theme="dark"] .wl-btn { background: rgba(12, 28, 22, 0.85); }
+[data-theme="dark"] .wl-btn { background: rgba(19, 20, 21, 0.85); }
 .wl-btn:hover  { transform: scale(1.22); }
 .wl-btn.active { background: #ffe4e4; }
 
@@ -1227,11 +1227,11 @@ select {
 .gkc-go { width: 18px; height: 18px; color: #94a3b8; flex-shrink: 0; }
 .gkc-foot { padding: 10px 14px 14px; text-align: center; font-size: 12px; color: #64748b; }
 
-[data-theme="dark"] .gkc-card { background: #111b18; }
-[data-theme="dark"] .gkc-row { background: #16231f; border-color: rgba(255,255,255,0.07); color: #e7efec; }
-[data-theme="dark"] .gkc-row:hover { background: #1b2b26; }
-[data-theme="dark"] .gkc-hello { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); color: #bbf7d0; }
-[data-theme="dark"] .gkc-txt small, [data-theme="dark"] .gkc-foot { color: #94a9a1; }
+[data-theme="dark"] .gkc-card { background: #141518; }
+[data-theme="dark"] .gkc-row { background: #1b1c1e; border-color: rgba(255,255,255,0.07); color: #eaebec; }
+[data-theme="dark"] .gkc-row:hover { background: #212225; }
+[data-theme="dark"] .gkc-hello { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.14); color: #d6d8dc; }
+[data-theme="dark"] .gkc-txt small, [data-theme="dark"] .gkc-foot { color: #989ca5; }
 
 /* ফোনে: নিচের মেনুর উপরে; বোতাম একটু ছোট */
 @media (max-width: 600px) {
@@ -1304,7 +1304,7 @@ select {
     box-shadow: 0 6px 20px var(--green-glow);
 }
 .gk-offer-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Hind Siliguri', serif;
     font-size: 19px; font-weight: 700; color: var(--text);
     margin-bottom: 6px;
 }
@@ -1406,13 +1406,13 @@ select {
 .gka-contacts .gkc-txt small, .gka-contacts .gkc-go { display: none; }
 .gka-contacts .gkc-txt b { font-size: 11px; font-weight: 600; color: #475569; }
 .gka-on .gkc-foot { padding: 4px 14px 10px; font-size: 11px; }
-[data-theme="dark"] .gka-body { background: #0d1613; }
-[data-theme="dark"] .gka-bot, [data-theme="dark"] .gka-book, [data-theme="dark"] .gka-order { background: #16231f; border-color: rgba(255,255,255,0.07); color: #e7efec; }
-[data-theme="dark"] .gka-bname { color: #e7efec !important; }
-[data-theme="dark"] .gka-chips, [data-theme="dark"] .gka-form { background: #111b18; border-color: rgba(255,255,255,0.07); }
-[data-theme="dark"] .gka-chip { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.25); color: #6ee7b7; }
-[data-theme="dark"] .gka-input { background: #16231f; border-color: rgba(255,255,255,0.1); color: #e7efec; }
-[data-theme="dark"] .gka-contacts .gkc-txt b { color: #94a9a1; }
+[data-theme="dark"] .gka-body { background: #101113; }
+[data-theme="dark"] .gka-bot, [data-theme="dark"] .gka-book, [data-theme="dark"] .gka-order { background: #1b1c1e; border-color: rgba(255,255,255,0.07); color: #eaebec; }
+[data-theme="dark"] .gka-bname { color: #eaebec !important; }
+[data-theme="dark"] .gka-chips, [data-theme="dark"] .gka-form { background: #141518; border-color: rgba(255,255,255,0.07); }
+[data-theme="dark"] .gka-chip { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.175); color: #6ee7b7; }
+[data-theme="dark"] .gka-input { background: #1b1c1e; border-color: rgba(255,255,255,0.1); color: #eaebec; }
+[data-theme="dark"] .gka-contacts .gkc-txt b { color: #989ca5; }
 @media (max-width: 600px) {
     .gkc-card.gka-on { width: calc(100vw - 24px); max-height: calc(100vh - 160px); }
     .gka-body { max-height: none; }
@@ -1467,13 +1467,13 @@ a.gkcb-name:hover { color: #047857; }
 .gkcb-empty-ic svg { width: 36px; height: 36px; }
 .gkcb-empty b { font-size: 16px; color: #0f172a; }
 .gkcb-empty button { padding: 10px 26px; border: none; border-radius: 24px; background: linear-gradient(135deg,#10b981,#059669); color: #fff; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
-[data-theme="dark"] .gkcb-content { background: #0b1411; }
-[data-theme="dark"] .gkcb-head, [data-theme="dark"] .gkcb-foot, [data-theme="dark"] .gkcb-item { background: #111b18; border-color: rgba(255,255,255,0.07); }
-[data-theme="dark"] .gkcb-title b, [data-theme="dark"] .gkcb-name, [data-theme="dark"] .gkcb-line, [data-theme="dark"] .gkcb-qty span, [data-theme="dark"] .gkcb-row b, [data-theme="dark"] .gkcb-empty b { color: #e7efec; }
-[data-theme="dark"] .gkcb-row { color: #94a9a1; }
-[data-theme="dark"] .gkcb-qty { background: #16231f; border-color: rgba(255,255,255,0.1); }
-[data-theme="dark"] .gkcb-close { background: #16231f; color: #e7efec; }
-[data-theme="dark"] .gkcb-save { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+[data-theme="dark"] .gkcb-content { background: #0e0f11; }
+[data-theme="dark"] .gkcb-head, [data-theme="dark"] .gkcb-foot, [data-theme="dark"] .gkcb-item { background: #141518; border-color: rgba(255,255,255,0.07); }
+[data-theme="dark"] .gkcb-title b, [data-theme="dark"] .gkcb-name, [data-theme="dark"] .gkcb-line, [data-theme="dark"] .gkcb-qty span, [data-theme="dark"] .gkcb-row b, [data-theme="dark"] .gkcb-empty b { color: #eaebec; }
+[data-theme="dark"] .gkcb-row { color: #989ca5; }
+[data-theme="dark"] .gkcb-qty { background: #1b1c1e; border-color: rgba(255,255,255,0.1); }
+[data-theme="dark"] .gkcb-close { background: #1b1c1e; color: #eaebec; }
+[data-theme="dark"] .gkcb-save { background: rgba(255, 255, 255, 0.084); color: #6ee7b7; }
 @media (max-width: 480px) {
     .gkcb-content { width: 100%; }
     .gkcb-img { width: 56px; height: 78px; }
@@ -1486,7 +1486,7 @@ a.gkcb-name:hover { color: #047857; }
 
 /* ═══ তথ্য পেজ (আমাদের সম্পর্কে / FAQ / ডেলিভারি / রিটার্ন / যোগাযোগ / ট্র্যাক) — এক রকম প্রিমিয়াম লুক ═══ */
 body.gk-info { background: linear-gradient(180deg, #ecfdf5 0, var(--bg, #f8fafc) 260px); }
-[data-theme="dark"] body.gk-info { background: linear-gradient(180deg, #06231a 0, var(--bg, #0b1411) 260px); }
+[data-theme="dark"] body.gk-info { background: linear-gradient(180deg, #131416 0, var(--bg, #0e0f11) 260px); }
 body.gk-info .page-wrap { max-width: 620px; }
 body.gk-info .hero-banner, body.gk-info .hero-card {
     background: linear-gradient(135deg, #064e3b, #047857 55%, #059669) !important;
@@ -1638,15 +1638,13 @@ body.gk-info .wa-big { border-radius: 18px !important; box-shadow: 0 10px 24px -
    উজ্জ্বল রঙের লেয়ার (২০২৬-১০) — দাম, ছাড়, শিরোনাম, বোতাম যেন চোখে পড়ে।
    পুরোটা মুছে দিলে আগের চেহারায় ফিরে যাবে।
 ═══════════════════════════════════════════════════════════════ */
-/* দামের নিচে হলুদ মার্কারের দাগ — দাম সবার আগে চোখে পড়ে */
-.price-sell,.si-price,.rel-price,.ai-book-price,.bks-price,.gkcb-price{background:linear-gradient(transparent 60%,rgba(250,204,21,.5) 60%);padding:0 3px;border-radius:2px;}
-[data-theme="dark"] .price-sell,[data-theme="dark"] .si-price,[data-theme="dark"] .rel-price,[data-theme="dark"] .ai-book-price,[data-theme="dark"] .bks-price,[data-theme="dark"] .gkcb-price{background:linear-gradient(transparent 60%,rgba(250,204,21,.22) 60%);}
+/* দামের নিচের হলুদ মার্কারের দাগ সরানো হয়েছে (২০২৬-১০-১০) — দাম লাল রঙেই চোখে পড়ে
 /* ছাড়ের ব্যাজ — কমলা-লাল, একটু বড় ও উজ্জ্বল */
 .disc-badge{background:linear-gradient(135deg,#f97316,#dc2626)!important;font-size:9.5px!important;padding:3px 9px 3px 7px!important;box-shadow:0 3px 10px rgba(234,88,12,.45)!important;}
 /* সেকশনের শিরোনাম — সবুজ থেকে সোনালি রঙের মোটা দাগ, গাঢ় সবুজ লেখা */
 .cat-section-title,.rvs-title,.hblog-title{position:relative;border-left:0!important;padding-left:14px!important;color:#064e3b!important;}
 .cat-section-title::before,.rvs-title::before,.hblog-title::before{content:'';position:absolute;left:0;top:3px;bottom:3px;width:5px;border-radius:4px;background:linear-gradient(180deg,#10b981,#f59e0b);}
-[data-theme="dark"] .cat-section-title,[data-theme="dark"] .rvs-title,[data-theme="dark"] .hblog-title{color:#ecfdf5!important;}
+[data-theme="dark"] .cat-section-title,[data-theme="dark"] .rvs-title,[data-theme="dark"] .hblog-title{color:#f4f4f5!important;}
 .cat-section-title a{background:rgba(5,150,105,.1);padding:4px 11px;border-radius:20px;}
 /* উপরের ক্যাটাগরি মেনুর বাছাই করা ঘর — সবুজ পিল */
 .gk-mb-item.active{background:rgba(5,150,105,.1);border-radius:10px 10px 0 0;}
@@ -1656,7 +1654,7 @@ body.gk-info .wa-big { border-radius: 18px !important; box-shadow: 0 10px 24px -
 [data-theme="dark"] .d-date{background:rgba(245,158,11,.2);color:#fcd34d;}
 .rv-helpful.done{color:#059669;font-weight:700;}
 /* চেকআউটের সর্বমোট */
-#grandTotal{color:#059669;font-weight:900;background:linear-gradient(transparent 60%,rgba(250,204,21,.5) 60%);padding:0 4px;}
+#grandTotal{color:#059669;font-weight:900;}
 /* ট্রাস্ট-স্ট্রিপের আইকন রঙিন গোল চাকতিতে */
 .trust-item .ic-icon,.trust-item .trust-icon{color:#fff!important;background:linear-gradient(135deg,#10b981,#047857)!important;border-radius:50%!important;box-shadow:0 4px 12px rgba(5,150,105,.3);}
 .trust-item:nth-child(2) .ic-icon,.trust-item:nth-child(2) .trust-icon{background:linear-gradient(135deg,#f59e0b,#d97706)!important;box-shadow:0 4px 12px rgba(217,119,6,.3);}
@@ -1673,8 +1671,8 @@ body.gk-info .wa-big { border-radius: 18px !important; box-shadow: 0 10px 24px -
 .gk-nudge-t small{font-size:11.5px;color:#92400e;font-weight:600;}
 .gk-nudge-go{flex-shrink:0;padding:9px 14px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-weight:800;font-size:13px;text-decoration:none;box-shadow:0 5px 14px rgba(217,119,6,.35);white-space:nowrap;}
 .gk-nudge-x{flex-shrink:0;width:28px;height:28px;border:none;border-radius:50%;background:rgba(0,0,0,.06);color:#64748b;font-size:18px;line-height:1;cursor:pointer;}
-[data-theme="dark"] .gk-nudge{background:linear-gradient(135deg,#0f2a1e,#2a2410);border-color:rgba(245,158,11,.45);}
-[data-theme="dark"] .gk-nudge-t b{color:#ecfdf5;}
+[data-theme="dark"] .gk-nudge{background:linear-gradient(135deg,#1b1c1e,#2a2410);border-color:rgba(245,158,11,.45);}
+[data-theme="dark"] .gk-nudge-t b{color:#f4f4f5;}
 [data-theme="dark"] .gk-nudge-t small{color:#fcd34d;}
 @media(max-width:420px){.gk-nudge-go{padding:8px 11px;font-size:12px;}.gk-nudge-t b{font-size:12.5px;}}
 
@@ -1705,9 +1703,9 @@ body:has(.search-screen.open) #gkContact,body:has(#bkSearchScreen.open) #gkConta
 .gk-ib-x svg{width:20px;height:20px;}
 .gk-ib-x:hover{background:rgba(0,0,0,.06);}
 body.gk-ib-on #gkContact{display:none;}
-[data-theme="dark"] .gk-ib{background:#16211c;border-color:#24332b;}
-[data-theme="dark"] .gk-ib-tx b{color:#ecfdf5;}
-[data-theme="dark"] .gk-ib-tx span{color:#a7b8ae;}
+[data-theme="dark"] .gk-ib{background:#1a1b1d;border-color:#282a2f;}
+[data-theme="dark"] .gk-ib-tx b{color:#f4f4f5;}
+[data-theme="dark"] .gk-ib-tx span{color:#aaaeb5;}
 @media(max-width:380px){.gk-ib{gap:9px;padding:10px 8px 10px 10px;}.gk-ib-ic{width:40px;height:40px;}.gk-ib-go{padding:9px 13px;font-size:13.5px;}.gk-ib-tx b{font-size:14.5px;}.gk-ib-tx span{font-size:12px;}}
 
 /* ═══ মাসের বেস্টসেলার (common.js gkBsCardHtml) — হোমপেজে ফুটারের উপরে #gkBsHome, আর bestseller.html
@@ -1734,7 +1732,7 @@ body.gk-ib-on #gkContact{display:none;}
 .gk-bs-nav.prev i{transform:rotate(180deg);}
 .gk-bs-nav.next{right:-6px;}
 @media(max-width:600px){.gk-bs-nav{width:34px;height:34px;top:40%;}.gk-bs-nav i{width:15px;height:15px;}.gk-bs-nav.prev{left:-4px;}.gk-bs-nav.next{right:-4px;}}
-[data-theme="dark"] .gk-bs-nav{background:#1f2937;border-color:#7a2a3b;color:#fda4af;}
+[data-theme="dark"] .gk-bs-nav{background:#282a2e;border-color:#7a2a3b;color:#fda4af;}
 .gk-bs-card{display:flex;flex-direction:column;background:var(--card-solid,#fff);border:1.5px solid #8a1c34;border-radius:10px;overflow:hidden;font-family:'Hind Siliguri',Arial,sans-serif;}
 .gk-bs-hd{display:flex;align-items:center;gap:10px;padding:20px 22px;background:#8a1c34;color:#fff;font-size:18px;font-weight:700;}
 .gk-bs-trend{width:24px;height:24px;flex-shrink:0;opacity:.9;}
@@ -1760,5 +1758,72 @@ body.gk-ib-on #gkContact{display:none;}
 [data-theme="dark"] .gk-bs-card{border-color:#7a2a3b;}
 [data-theme="dark"] .gk-bs-row:hover{background:rgba(138,28,52,.12);}
 [data-theme="dark"] .gk-bs-more{background:rgba(138,28,52,.18);color:#fda4af;}
-[data-theme="dark"] .gk-bs-badge{background:#1f2937;}
+[data-theme="dark"] .gk-bs-badge{background:#282a2e;}
 @media(max-width:600px){.gk-bs-title{gap:10px;}.gk-bs-badge{padding:7px 10px;}.gk-bs-badge img{height:30px;}.gk-bs-sep{height:38px;}.gk-bs-ttx{font-size:17px;}.gk-bs-hd{padding:16px 18px;font-size:17px;}.gk-bs-row{padding:14px 16px;gap:15px;}.gk-bs-nm{font-size:15px;}}
+
+/* ═══ ভাসমান কার্ট (common.js — #gkFloatCart) — ডান পাশে মাঝখানে ═══ */
+.gk-fc { position: fixed; right: 0; top: 50%; z-index: 990; display: none; flex-direction: column; width: 84px; padding: 0; border: 0; border-radius: 14px 0 0 14px; overflow: hidden; background: var(--card-solid, #fff); box-shadow: 0 8px 26px rgba(1, 61, 43, 0.22), 0 2px 6px rgba(0, 0, 0, 0.08); cursor: pointer; font-family: 'Hind Siliguri', Arial, sans-serif; transform: translateY(-50%); transition: width .2s ease, box-shadow .2s ease; -webkit-tap-highlight-color: transparent; }
+.gk-fc.show { display: flex; }
+.gk-fc:hover { width: 90px; box-shadow: 0 10px 30px rgba(1, 61, 43, 0.30), 0 2px 6px rgba(0, 0, 0, 0.10); }
+.gk-fc:focus-visible { outline: 3px solid var(--green-light, #10b981); outline-offset: 2px; }
+.gk-fc-top { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 11px 6px 9px; background: linear-gradient(160deg, #059669, #047857); color: #fff; }
+.gk-fc-top svg { width: 26px; height: 26px; }
+.gk-fc-top b { font-size: 13.5px; font-weight: 700; line-height: 1.1; white-space: nowrap; }
+.gk-fc-sum { display: block; padding: 8px 4px 9px; font-size: 14px; font-weight: 800; color: #047857; text-align: center; white-space: nowrap; }
+[data-theme="dark"] .gk-fc-sum { color: #34d399; }
+.gk-fc.bump { animation: gkFcBump .45s ease; }
+@keyframes gkFcBump { 0%, 100% { transform: translateY(-50%) scale(1); } 40% { transform: translateY(-50%) scale(1.12); } }
+html.gkcb-lock .gk-fc { display: none; }
+@media (max-width: 700px) {
+    .gk-fc { width: 66px; border-radius: 12px 0 0 12px; }
+    .gk-fc:hover { width: 66px; }
+    .gk-fc-top { padding: 8px 4px 7px; gap: 3px; }
+    .gk-fc-top svg { width: 21px; height: 21px; }
+    .gk-fc-top b { font-size: 11.5px; }
+    .gk-fc-sum { padding: 6px 2px 7px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .gk-fc.bump { animation: none; } }
+
+/* ═══ ডিজাইন পরিষ্কার করা (২০২৬-১০-১০) ═══ */
+/* খালি কার্টে "0" ব্যাজ দেখাই না (common.js gk-zero দেয়) */
+#cartCount.gk-zero, #bnavBadge.gk-zero, #wishCount.gk-zero { display: none !important; }
+
+/* যোগাযোগ বোতাম — বড় "Contact us" পিলের বদলে শুধু গোল চ্যাট আইকন */
+.gkc-fab { width: 56px; height: 56px; padding: 0 !important; justify-content: center; border-radius: 50%; }
+.gkc-fab-txt { display: none !important; }
+.gkc-fab-ic { width: 40px; height: 40px; background: none; }
+.gkc-fab-ic svg { width: 26px; height: 26px; }
+.gkc-dot { top: 6px; left: auto; right: 6px; }
+@media (max-width: 700px) {
+    .gkc-fab { width: 50px; height: 50px; }
+    .gkc-fab-ic svg { width: 23px; height: 23px; }
+}
+
+/* ফুটারে পেমেন্ট ও ডেলিভারি পার্টনারের লোগো */
+.footer-payment.gk-pay { flex-direction: column; align-items: center; gap: 10px; margin-bottom: 18px; }
+.gk-pay-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+.gk-pay-lbl { width: 100%; text-align: center; font-size: 12px; font-weight: 700; color: var(--text2, #4b6b60); letter-spacing: .3px; }
+.gk-pay-chip { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; min-width: 56px; padding: 4px 10px; background: #fff; border: 1px solid rgba(5,150,105,.18); border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.gk-pay .gk-pay-chip img { width: auto; height: 26px; max-width: 76px; object-fit: contain; border: 0; border-radius: 4px; }
+.gk-pay-chip .gk-visa { width: 50px; height: 18px; }
+.gk-pay-chip.gk-cod { font-size: 12px; font-weight: 700; color: #047857; white-space: nowrap; font-family: 'Hind Siliguri', Arial, sans-serif; }
+.gk-pay-chip.gk-cod svg { width: 18px; height: 18px; }
+[data-theme="dark"] .gk-pay-chip { border-color: rgba(255, 255, 255, 0.175); }
+
+/* নিচের মেনুর "একাউন্ট" — আলাদা সবুজ পিলের বদলে বাকি ঘরগুলোর মতোই (আইকন + লেখা) */
+.bnav-login-pill { padding: 6px 14px !important; border-radius: 40px !important; }
+.bnav-login-inner { background: none !important; box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; }
+.bnav-login-svg { width: 23px !important; height: 23px !important; stroke: #9ca3af !important; stroke-width: 1.9 !important; }
+.bnav-login-text { display: none !important; }
+.bnav-login-pill .bnav-label { color: #9ca3af !important; margin-top: 0 !important; }
+
+/* ডার্ক মোড — কার্ট-ড্রয়ারের হাদিয়া-বার আর মুছে-ফেলার বোতাম উজ্জ্বল সাদা/হলুদ ছিল (২০২৬-১০-১০) */
+[data-theme="dark"] .gkcb-gift .gk-gift { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.55); }
+[data-theme="dark"] .gkcb-gift .gk-gift.done { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.5); }
+[data-theme="dark"] .gkcb-del { background: rgba(239,68,68,0.14); color: #fca5a5; }
+
+/* ডার্ক মোডে সাদা লেখার বোতামে হালকা সবুজ (#34d399) পেছন — লেখা ম্লান হতো; এখানে গাঢ় সবুজ/কমলা (২০২৬-১০-১০) */
+[data-theme="dark"] .back-btn,
+[data-theme="dark"] .al-tab.active,
+[data-theme="dark"] .p-circle.active { background: #059669 !important; color: #fff !important; }
+[data-theme="dark"] .price-disc { background: linear-gradient(135deg, #d97706, #b45309) !important; }
