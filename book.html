@@ -106,6 +106,20 @@
         .img-thumb:hover{transform:translateY(-2px);}
         .img-thumb.active{border-color:#059669;}
         .img-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+        /* খণ্ড বাছাইয়ের বাটন (দামের নিচে) */
+        .gk-vols{margin:2px 0 14px;}
+        .gk-vols-t{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:7px;}
+        .gk-vols-row{display:flex;flex-wrap:wrap;gap:8px;}
+        .vol-btn{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-width:86px;padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:14px;font-weight:600;line-height:1.3;text-decoration:none;text-align:center;transition:border-color .15s,color .15s,transform .15s;}
+        .vol-btn small{font-size:12px;font-weight:700;color:var(--text2);margin-top:2px;}
+        a.vol-btn:hover{border-color:#059669;color:#059669;transform:translateY(-1px);}
+        .vol-btn.on{border-color:#059669;color:#059669;background:rgba(5,150,105,.07);box-shadow:inset 0 0 0 1px #059669;}
+        .vol-btn.on small{color:#059669;}
+        @media(max-width:600px){.vol-btn{min-width:0;flex:0 0 calc((100% - 16px) / 3);padding:8px 6px;font-size:13px;}}
+        /* পণ্যের মূল বৈশিষ্ট্য (টিক-তালিকা) */
+        .gk-hl{list-style:none;margin:0 0 14px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);display:grid;gap:7px;}
+        .gk-hl li{display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.5;color:var(--text);}
+        .gk-hl li i{flex-shrink:0;width:18px;height:18px;margin-top:2px;color:#059669;}
         .share-btn{position:absolute;top:62px;right:14px;background:var(--card-solid);border:1.5px solid var(--border2);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--shadow);transition:0.2s;z-index:11;}
         .share-btn:hover{transform:scale(1.12);border-color:#059669;}
         .wl-btn-lg{position:absolute;top:14px;right:14px;background:var(--card-solid);border:1.5px solid var(--border2);border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:19px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px var(--shadow);transition:0.2s;}
@@ -652,6 +666,8 @@
             <div class="price-disc" id="bookDisc"></div>
         </div>
         <div id="savingsLabel" style="display:none;font-size:12px;color:#059669;font-weight:600;margin-bottom:10px;"><svg class="eico" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><path d="M7 13l3.5 3.5L17 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="savingsText"></span></div>
+        <div class="gk-vols" id="gkVols" style="display:none;"></div>
+        <ul class="gk-hl" id="gkHl" style="display:none;"></ul>
     <!-- BOOK DETAILS — নাম/দামের ঠিক পরে (ইনফো-কার্ডের ভেতরে), যাতে কাস্টমার সহজে বইয়ের তথ্য দেখে -->
     <div class="desc-card" id="bookDetailsCard">
         <h3 id="bookDetailsTitle"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> বইয়ের তথ্য</h3>
@@ -713,6 +729,7 @@
     <!-- ══ TABS (বিবরণ / রিভিউ) ══ -->
     <div class="tabs-nav">
         <button class="tab-btn active" onclick="gkSwitchTab('desc',this)">বিবরণ</button>
+        <button class="tab-btn" id="tabBtnUsage" style="display:none;" onclick="gkSwitchTab('usage',this)">ব্যবহারবিধি</button>
         <button class="tab-btn" onclick="gkSwitchTab('reviews',this)">রিভিউ</button>
     </div>
 
@@ -725,6 +742,13 @@
         <span class="desc-toggle" id="descToggle" onclick="toggleDesc()" style="display:none;">আরো দেখুন <i class=gi-down></i></span>
     </div>
     </div><!-- end tab-desc -->
+
+    <div class="tab-content" id="tab-usage">
+    <div class="desc-card">
+        <h3><i class=gi-info></i> ব্যবহারবিধি ও যত্ন</h3>
+        <div class="desc-text" id="bookUsage"></div>
+    </div>
+    </div>
 
     <div class="tab-content" id="tab-reviews">
     <!-- ══ RATING SUMMARY ══ -->
@@ -784,7 +808,7 @@
 
     <!-- ══ AI SUGGEST ══ -->
     <div class="ai-suggest-section">
-        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M12 2v4M8 11V9a4 4 0 0 1 8 0v2"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/><line x1="9" y1="19" x2="15" y2="19"/></svg> আপনার জন্য আরও বই</h3>
+        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M12 2v4M8 11V9a4 4 0 0 1 8 0v2"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/><line x1="9" y1="19" x2="15" y2="19"/></svg> <span id="aiTitle">আপনার জন্য আরও বই</span></h3>
         <div class="ai-tag-row" id="aiTagRow"></div>
         <div id="aiResultArea"><div class="ai-loading">বিষয় বেছে নিন...</div></div>
     </div>
@@ -793,7 +817,7 @@
 
     <!-- RELATED -->
     <div class="related-card" id="relatedSection">
-        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg> একই বিষয়ের বই</h3>
+        <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="2" x2="12" y2="17"/></svg> <span id="relTitle">একই বিষয়ের বই</span></h3>
         <div class="rel-row" id="relatedBooks"></div>
     </div>
     </div>
@@ -1341,6 +1365,36 @@ function orderViaWA(){
 
 /* প্যাকেজ — অ্যাডমিনে বাছাই করা pkgItems (ভেতরের বইগুলোর bid)। প্যাকেজের পাতায় ভেতরের বই + আলাদা
    কিনলে কত লাগত (সবার আসল দাম থাকলে তবেই); আর কোনো বই কোনো প্যাকেজে থাকলে সেই বইয়ের পাতায় প্যাকেজটা */
+/* খণ্ড — অ্যাডমিনে জুড়ে দেওয়া একই বইয়ের খণ্ডগুলো (b.vols = [{b: bid, l: বাটনের নাম}]); প্রতিটা খণ্ড আলাদা বই,
+   বাটনে চাপলে সেই খণ্ডের পাতা খোলে — তার নিজের ছবি ও দাম। লুকানো/মুছে ফেলা খণ্ড দেখাই না */
+/* পণ্যের পাতা — বইয়ের কথা ("অরিজিনাল বই", "আরও বই") পণ্যের মতো করে, মূল বৈশিষ্ট্যের টিক-তালিকা আর
+   "ব্যবহারবিধি" ট্যাব (অ্যাডমিনের পণ্য এডিটর থেকে highlights / usage) */
+function gkProductLook(b){
+    const isBook=(b.type||'বই')==='বই';
+    const set=(id,t)=>{ const e=document.getElementById(id); if(e) e.textContent=t; };
+    set('aiTitle', isBook?'আপনার জন্য আরও বই':'আপনার জন্য আরও পণ্য');
+    set('relTitle', isBook?'একই বিষয়ের বই':'একই ধরনের পণ্য');
+    document.querySelectorAll('#trustMini .row, .trust-mini .row').forEach(r=>{ r.childNodes.forEach(n=>{ if(n.nodeType===3) n.textContent=n.textContent.replace(isBook?/অরিজিনাল পণ্য/:/অরিজিনাল বই/, isBook?'অরিজিনাল বই':'অরিজিনাল পণ্য'); }); });
+    const im=document.getElementById('bookImg'); if(im) im.alt=b.name||'';
+    const hl=document.getElementById('gkHl'), items=(!isBook&&Array.isArray(b.highlights))?b.highlights.filter(x=>x&&String(x).trim()):[];
+    if(hl){ hl.innerHTML=items.map(x=>'<li><i class=gi-ok></i><span>'+escapeHTML(x)+'</span></li>').join(''); hl.style.display=items.length?'':'none'; }
+    const us=(!isBook&&b.usage)?String(b.usage).trim():'', ub=document.getElementById('tabBtnUsage'), ut=document.getElementById('bookUsage');
+    if(ub) ub.style.display=us?'':'none'; if(ut) ut.innerText=us;
+}
+function gkRenderVols(b){
+    const box=document.getElementById('gkVols'); if(!box||!b) return;
+    const bn=n=>(window.gkBn||String)(n);
+    const list=(Array.isArray(b.vols)?b.vols:[]).map(v=>({v, x:v&&v.b?books.find(y=>y&&y.bid===v.b):null}))
+        .filter(o=>o.x&&(o.x===b||!(typeof gkIsHiddenBook==='function'&&gkIsHiddenBook(o.x))));
+    if(list.length<2||!list.some(o=>o.x===b)){ box.style.display='none'; box.innerHTML=''; return; }
+    box.innerHTML='<div class="gk-vols-t">'+(((b.type||'বই')==='বই')?'খণ্ড বাছুন':'অপশন বাছুন')+'</div><div class="gk-vols-row">'+list.map(o=>{
+        const on=o.x===b, lbl=String(o.v.l||o.x.name);
+        return on
+            ? '<span class="vol-btn on" aria-current="true">'+escapeHTML(lbl)+'<small>৳'+bn(o.x.price)+'</small></span>'
+            : '<a class="vol-btn" href="book.html?id='+encodeURIComponent(o.x.bid)+'">'+escapeHTML(lbl)+'<small>৳'+bn(o.x.price)+'</small></a>';
+    }).join('')+'</div>';
+    box.style.display='';
+}
 function gkRenderPackage(b){
     const sec=document.getElementById('pkgSection'); if(!sec||!b) return;
     const bn=n=>typeof toBN==='function'?toBN(n):n;
@@ -1503,7 +1557,7 @@ function loadBook(){
         try{fbq('track','ViewContent',{content_name:b.name,value:b.price,currency:'BDT',contents:[{id:b.name,quantity:1}]});}catch(e){}
     }
     /* info-table: বই হলে আগের rows, প্রোডাক্ট হলে brand + custom attributes */
-    document.getElementById('bookDetailsTitle').innerHTML=`<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> ${isBook?'বইয়ের তথ্য':'প্রোডাক্টের তথ্য'}`;
+    document.getElementById('bookDetailsTitle').innerHTML=`<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> ${isBook?'বইয়ের তথ্য':'পণ্যের তথ্য'}`;
     const infoRows=document.getElementById('bookInfoRows');
     const mc=bookMainCat(b), sc=bookSubcat(b), tg=bookTags(b);
     let rows='';
@@ -1515,6 +1569,7 @@ function loadBook(){
         if(sc)rows+=`<tr><td class="info-label">বিষয়</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=subcat&value=${encodeURIComponent(sc)}'">${escapeHTML(sc)}</td></tr>`;
     } else {
         if(b.brand)rows+=`<tr><td class="info-label">ব্র্যান্ড</td><td class="info-val">${escapeHTML(b.brand)}</td></tr>`;
+        const pk=b.subcat||b.subject; if(pk)rows+=`<tr><td class="info-label">ধরন</td><td class="info-val info-link" onclick="window.location.href='filter.html?type=subcat&value=${encodeURIComponent(pk)}'">${escapeHTML(pk)}</td></tr>`;
         if(Array.isArray(b.attributes)){
             b.attributes.forEach(attr=>{ const lbl=attr.label||attr.name; if(lbl&&attr.value)rows+=`<tr><td class="info-label">${escapeHTML(lbl)}</td><td class="info-val">${escapeHTML(attr.value)}</td></tr>`; });
         }
@@ -1544,7 +1599,7 @@ function loadBook(){
     let descFromFb=false;
 
     function renderDesc(txt){
-        const d=txt||'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
+        const d=txt||(isBook?'বইটি':'পণ্যটি')+' সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
         descEl.innerText=window.gkStripEmoji?gkStripEmoji(d):d;
         const tog=document.getElementById('descToggle');
         if(d.length>200){descEl.style.maxHeight='80px';descEl.style.overflow='hidden';if(tog)tog.style.display='inline-block';}
@@ -1660,8 +1715,10 @@ function loadBook(){
     updateWLUI();
 
     const _mc=bookMainCat(b), _tg=bookTags(b);
-    const related=books.filter((rb,i)=>i!==idx&&!gkIsHiddenBook(rb)&&(isBook?rb.author!==b.author:true)&&((_mc&&bookMainCat(rb)===_mc)||(rb.subject&&rb.subject===b.subject)||bookTags(rb).some(t=>_tg.includes(t)))).slice(0,8);
+    const related=books.filter((rb,i)=>i!==idx&&!gkIsHiddenBook(rb)&&(isBook?rb.author!==b.author:(rb.type||'বই')!=='বই')&&((_mc&&bookMainCat(rb)===_mc)||(rb.subject&&rb.subject===b.subject)||bookTags(rb).some(t=>_tg.includes(t)))).slice(0,8);
     try{ gkRenderPackage(b); }catch(e){}
+    try{ gkRenderVols(b); }catch(e){}
+    try{ gkProductLook(b); }catch(e){}
     try{ gkRenderAlsoBought(b); }catch(e){}
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
     else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'',240);return `<div class="rel-book" onclick="window.location.href='book.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy"><div class="rel-name">${escapeHTML(rb.name)}</div><div class="rel-price">৳${(window.gkBn||String)(Number(rb.price)||0)}</div></div>`;}).join('');}
@@ -1989,6 +2046,7 @@ function renderAISuggest(){
     const cur=curBook||{};
     const pool=books.map((b,i)=>({b,i})).filter(({b,i})=>{
         if(i===curIdx||!b||gkIsHiddenBook(b))return false;
+        if(((cur.type||'বই')==='বই')!==((b.type||'বই')==='বই'))return false;   /* বইয়ের পাতায় বই, পণ্যের পাতায় পণ্য */
         return selectedTags.some(t=>bookMainCat(b)===t||bookTags(b).includes(t)||b.subject===t);
     }).map(x=>{
         const b=x.b;
@@ -1998,7 +2056,7 @@ function renderAISuggest(){
         return x;
     }).sort((a,b)=>b.score-a.score);
     const picks=pool.slice(0,8);
-    if(!picks.length){document.getElementById('aiResultArea').innerHTML='<div class="ai-loading">এই বিষয়ে আরো বই শীঘ্রই আসছে</div>';return;}
+    if(!picks.length){document.getElementById('aiResultArea').innerHTML='<div class="ai-loading">এই বিষয়ে আরো '+(((cur.type||'বই')==='বই')?'বই':'পণ্য')+' শীঘ্রই আসছে</div>';return;}
     document.getElementById('aiResultArea').innerHTML=`<div class="ai-result-row">${picks.map(({b,i,why})=>{
         const img=(window.gkImg||(u=>u))((typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'',200);
         return `<div class="ai-book" onclick="window.location.href='book.html?id=${encodeURIComponent(b.bid||i)}'">

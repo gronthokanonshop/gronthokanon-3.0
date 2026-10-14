@@ -1871,7 +1871,7 @@ function runSearch(){
             <img src="${escapeHTML(getImg(b))}" class="search-item-img" alt="" loading="lazy" decoding="async">
             <div style="flex:1;min-width:0;">
                 <div class="si-name">${escapeHTML(b.name)}</div>
-                <div class="si-author"><i class=gi-pen></i> ${escapeHTML(b.author||'')}</div>
+                <div class="si-author">${(b.type||'বই')==='বই'?'<i class=gi-pen></i> '+escapeHTML(b.author||''):(b.brand?'<i class=gi-tag></i> '+escapeHTML(b.brand):'')}</div>
                 <div class="si-pub"><i class=gi-building></i> ${escapeHTML(b.pub||'')}</div>
                 <div><span class="si-price">৳${(window.gkBn||String)(b.price)}</span>${b.original_price>b.price?`<span class="si-orig">৳${(window.gkBn||String)(b.original_price)}</span>`:''} ${out?`<span class="si-badge" style="background:#dc2626;">স্টক শেষ</span>`:(pct>0?`<span class="si-badge">${(window.gkBn||String)(pct)}% ছাড়</span>`:'')}</div>
             </div></div>`;
@@ -1985,7 +1985,7 @@ function openWLModal(added, b){
             <img src="${escapeHTML(bImg)}" style="width:64px;height:86px;object-fit:cover;border-radius:0;border:1px solid #111;flex-shrink:0;">
             <div>
                 <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${escapeHTML(b.name)}</div>
-                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${escapeHTML(b.author||'')}</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${(b.type||'বই')==='বই'?escapeHTML(b.author||''):escapeHTML(b.brand||'')}</div>
                 <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#ecfdf5':'#fff5f5'};border:1.5px solid ${added?'#6ee7b7':'#fca5a5'};border-radius:0;padding:5px 12px;">
                     <span style="font-size:15px;">${added?'<i class=gi-heart></i>':'<i class=gi-heart-o></i>'}</span>
                     <span style="font-size:12px;font-weight:700;color:${added?'#059669':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>

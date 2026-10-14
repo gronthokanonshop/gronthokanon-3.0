@@ -596,7 +596,7 @@ function makeCard(b, delay) {
         </div>
         <div class="bc-info">
             <div class="bc-name">${escapeHTML(b.name)}</div>
-            ${(b.type||'বই')==='বই' ? `<div class="bc-author"><i class=gi-pen></i> ${escapeHTML(b.author||'')}</div>` : ''}
+            ${(b.type||'বই')==='বই' ? `<div class="bc-author"><i class=gi-pen></i> ${escapeHTML(b.author||'')}</div>` : (b.brand ? `<div class="bc-author"><i class=gi-tag></i> ${escapeHTML(b.brand)}</div>` : '')}
             <div class="price-row">
                 <span class="price-sell">৳${(window.gkBn||String)(b.price)}</span>
                 ${b.original_price > b.price ? `<span class="price-orig">৳${(window.gkBn||String)(b.original_price)}</span>` : ''}

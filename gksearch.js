@@ -40,13 +40,15 @@
     }
 
     /* ব্যঞ্জনবর্ণের কঙ্কাল — বাংলা ও Banglish দুটোকেই একই রূপে আনে */
-    function skel(s) {
+    function skel(s, mSilent) {
         s = norm(s)
             .replace(/ক্ষ/g, 'k').replace(/জ্ঞ/g, 'g')
             .replace(/ড়|ঢ়/g, 'r')   // ড় ঢ় → r
             .replace(/য়/g, 'y')                // য় → y
             .replace(/[ৃঋ]/g, 'r')              // ৃ ঋ → r (হৃদয় = hridoy)
             .replace(/্[বয]/g, '');        // ব-ফলা/য-ফলা নীরব (স্বপ্ন = shopno, ব্যাখ্যা = bekkha)
+        /* ম-ফলা অনেক শব্দে নীরব (আত্মশুদ্ধি = attoshuddhi, পদ্ম = poddo) কিন্তু সবখানে নয় (জন্ম = jonmo) — তাই দুই রূপই রাখি */
+        if (mSilent) s = s.replace(/্ম/g, '');
         var out = '', prev = ' ';   // prev: 'c' ব্যঞ্জন, 'v' স্বর, ' ' শব্দের শুরু
         for (var i = 0; i < s.length; i++) {
             var ch = s[i];
@@ -77,6 +79,7 @@
         if (k) return k;
         var text = [b.name, b.author, b.pub, b.brand].filter(Boolean).join(' ');
         k = { bn: norm(text), sk: skel(text), bnName: norm(b.name), skName: skel(b.name) };
+        if (/্ম/.test(text)) { k.skM = skel(text, 1); k.skNameM = skel(b.name, 1); } else { k.skM = k.sk; k.skNameM = k.skName; }
         if (cache) cache.set(b, k);
         return k;
     }
@@ -102,8 +105,8 @@
             return 20 + (q.bnTok.every(function (t) { return atWordStart(k.bnName, t); }) ? 5 : 0);
         /* ইংরেজির "c" কখনো চ (cha), কখনো ক (paradoxical) — প্রতিটা শব্দে দুটোই চেষ্টা করি */
         var hit = function (hay, t) { return atWordStart(hay, t) || (t.indexOf('c') !== -1 && atWordStart(hay, t.replace(/c/g, 'k'))); };
-        if (q.skTok.length && q.skTok.every(function (t) { return hit(k.sk, t); }))
-            return 10 + (q.skTok.every(function (t) { return hit(k.skName, t); }) ? 5 : 0);
+        if (q.skTok.length && q.skTok.every(function (t) { return hit(k.sk, t) || hit(k.skM, t); }))
+            return 10 + (q.skTok.every(function (t) { return hit(k.skName, t) || hit(k.skNameM, t); }) ? 5 : 0);
         return 0;
     }
     /* list-এর যেসব বই মেলে, প্রাসঙ্গিকতা অনুযায়ী সাজিয়ে (একই স্তরে আগের ক্রম বজায়) */
