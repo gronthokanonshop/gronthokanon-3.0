@@ -88,12 +88,46 @@
             });
     }
 
+    /* শুধু বদলানো বইগুলো আনা (v4, ২০২৬-১০-১৪): পুরো bookList Firebase থেকে চাপ (gzip) ছাড়াই ~২.৩ MB আসে।
+       অ্যাডমিন siteConfig/bookListDelta-তে লিখে রাখে কোন ক্রমিকের বই কখন বদলাল। book.js-এর পরে যেগুলো বদলেছে
+       শুধু সেগুলো (প্রতিটা ~আধা KB) এনে তালিকায় বসাই। হিসাব না থাকলে, বেশি বদল হলে, বা কোনো বইয়ের আইডি
+       না মিললে → null, তখন আগের মতো পুরো তালিকা। */
+    function fetchDelta(ver) {
+        if (!fileVer || typeof books === 'undefined' || !Array.isArray(books) || !books.length) return Promise.resolve(null);
+        return fetch(BASE + 'siteConfig/bookListDelta.json')
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+                if (!d || !d.base || d.base > fileVer) return null;
+                var items = d.items || {};
+                var idx = Object.keys(items).filter(function (k) { return items[k] > fileVer; }).map(Number).sort(function (a, b) { return a - b; });
+                if (!idx.length || idx.length > 150 || idx.some(isNaN)) return null;
+                return Promise.all(idx.map(function (i) {
+                    return fetch(BASE + 'bookList/' + i + '.json').then(function (r) { return r.ok ? r.json() : Promise.reject(); });
+                })).then(function (list) {
+                    var arr = books.slice();
+                    for (var k = 0; k < idx.length; k++) {
+                        var i = idx[k], v = list[k];
+                        if (!v || typeof v !== 'object') return null;                       /* বই মোছা → পুরোটা */
+                        if (i < arr.length) {
+                            var cur = arr[i];
+                            if (cur && cur.bid && v.bid && String(cur.bid) !== String(v.bid)) return null;   /* ক্রম সরে গেছে */
+                            arr[i] = v;
+                        } else if (i === arr.length) arr.push(v);
+                        else return null;                                                   /* মাঝে ফাঁক */
+                    }
+                    writeCache(ver, arr);
+                    return applyBooks(arr);
+                });
+            })
+            .catch(function () { return null; });
+    }
+
     window.GK_BOOKS_LIVE = getVer().then(function (ver) {
         /* ভার্সন এখনো সেট হয়নি, বা book.js-এর সাথে মিলে গেছে → book.js-ই সর্বশেষ */
         if (ver === null || ver === undefined || ver === fileVer) return false;
         return readCache(ver).then(function (arr) {
             if (arr && arr.length) return applyBooks(arr);
-            return fetchFull(ver);
+            return fetchDelta(ver).then(function (ok) { return ok === null ? fetchFull(ver) : ok; });
         });
     }).catch(function () { return false; });
 })();

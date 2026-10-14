@@ -31,6 +31,13 @@ function escapeHTML(s) {
     });
 }
 
+/* ব্রাউজারের confirm/alert বাক্স HTML দেখায় না — আইকন-ট্যাগ (<i class=gi-…></i>) লেখা হয়ে ভেসে উঠত, তাই সরিয়ে দিই */
+(function () {
+    var strip = function (m) { return String(m == null ? '' : m).replace(/<i class=gi-[^>]*><\/i>\s*/g, ''); };
+    var c = window.confirm.bind(window), a = window.alert.bind(window);
+    window.confirm = function (m) { return c(strip(m)); };
+    window.alert = function (m) { return a(strip(m)); };
+})();
 /* সংখ্যা → বাংলা অঙ্ক (দাম, ছাড়ের % ইত্যাদি দেখানোর জন্য) */
 window.gkBn = function (n) {
     return String(n == null ? '' : n).replace(/\d/g, function (d) { return '০১২৩৪৫৬৭৮৯'[d]; });
@@ -578,6 +585,42 @@ window.gkCartMatch = function (item, key) {
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && typeof closeCart === 'function') closeCart(); });
 })();
 
+/* ═══ শুধু-আইকন বোতামে নাম (স্ক্রিন-রিডার/অ্যাক্সেসিবিলিটি) — কার্ড পরে আঁকা হলেও বসে যায় ═══ */
+(function () {
+    var MAP = [
+        ['.wl-btn, .wl-btn-lg', 'উইশলিস্টে রাখুন'],
+        ['.banner-dot', 'ব্যানার বদলান'],
+        ['.search-back, .back-btn', 'ফিরে যান'],
+        ['#darkBtn, .dark-pill', 'ডার্ক / লাইট মোড'],
+        ['#cartWrap, .nav-cart-btn', 'আপনার ব্যাগ'],
+        ['#sortSelect, #alSort', 'সাজানোর ধরন'],
+        ['.footer-social a', 'সোশ্যাল মিডিয়া']
+    ];
+    var pending = false;
+    function label() {
+        pending = false;
+        MAP.forEach(function (m) {
+            document.querySelectorAll(m[0]).forEach(function (el) {
+                if (el.hasAttribute('aria-label')) return;
+                var inner = el.querySelector('[aria-label]');
+                el.setAttribute('aria-label', (inner && inner.getAttribute('aria-label')) || el.getAttribute('title') || m[1]);
+                if (el.tagName === 'DIV' && !el.hasAttribute('role')) { el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0'); }
+            });
+        });
+    }
+    function schedule() { if (!pending) { pending = true; (window.requestAnimationFrame || setTimeout)(label); } }
+    function init() {
+        label();
+        try { new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+        /* role=button দেওয়া div-এ কিবোর্ডের Enter/Space-এও চাপ পড়ুক */
+        document.addEventListener('keydown', function (e) {
+            var t = e.target;
+            if ((e.key === 'Enter' || e.key === ' ') && t && t.getAttribute && t.getAttribute('role') === 'button' && t.tagName === 'DIV') { e.preventDefault(); t.click(); }
+        });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
 /* ═══ কার্টের সংখ্যা-ব্যাজ "0" হলে লুকাই (খালি কার্টে লাল "0" ভুলের মতো দেখায়) — পেজ যখনই সংখ্যা বদলায়, এটা দেখে নেয় ═══ */
 (function () {
     function sync(el) { var t = (el.textContent || '').trim(); el.classList.toggle('gk-zero', !t || t === '0' || t === '০'); }
@@ -1099,7 +1142,7 @@ window.gkCartMatch = function (item, key) {
                 var idx = books.indexOf(b);
                 var safeName = escapeHTML(name);
                 return '<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="gkWLOpen(' + idx + ')">' +
-                    '<img src="' + escapeHTML(imgOf(b)) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
+                    '<img src="' + escapeHTML(imgOf(b)) + '" alt="" loading="lazy" decoding="async" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
                     '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">' + safeName + '</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳' + window.gkBn(Number(b.price) || 0) + '</div></div>' +
                     '<button data-name="' + safeName + '" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()"><i class=gi-no></i></button></div>';
             }).join('');

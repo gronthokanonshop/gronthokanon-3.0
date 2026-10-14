@@ -24,6 +24,14 @@
 </script>
 
     <title>অর্ডার ট্র্যাক — গ্রন্থকানন</title>
+    <link rel="canonical" href="https://gronthokanon.com/track.html">
+    <meta property="og:site_name" content="গ্রন্থকানন">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="অর্ডার ট্র্যাক — গ্রন্থকানন">
+    <meta property="og:description" content="আপনার গ্রন্থকানন অর্ডার ট্র্যাক করুন — অর্ডার ID বা মোবাইল নম্বর দিয়ে অর্ডারের সর্বশেষ অবস্থা দেখুন।">
+    <meta property="og:url" content="https://gronthokanon.com/track.html">
+    <meta property="og:image" content="https://gronthokanon.com/icon-512.png">
+    <meta name="twitter:card" content="summary">
     <meta name="theme-color" content="#ffffff">
     <meta name="description" content="আপনার গ্রন্থকানন অর্ডার ট্র্যাক করুন — অর্ডার ID বা মোবাইল নম্বর দিয়ে অর্ডারের সর্বশেষ অবস্থা দেখুন।">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,7 +90,7 @@
 <nav class="navbar">
     <div class="navbar-top">
         <button class="back-btn" onclick="navigateTo('index.html')">‹</button>
-        <span class="navbar-title">অর্ডার ট্র্যাক করুন</span>
+        <h1 class="navbar-title">অর্ডার ট্র্যাক করুন</h1>
         <button class="dark-pill" onclick="toggleDark()" id="darkBtn"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
     </div>
 </nav>
@@ -146,6 +154,17 @@ async function fbGet(path){
     if(!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
 }
+/* অর্ডার আনা — Firebase নিয়মে কাস্টমারের নাম/ফোন/ঠিকানা বাইরে থেকে বন্ধ করা হলে (নিরাপত্তা, ২০২৬-১০)
+   পুরো অর্ডার পড়া যায় না; তখন ট্র্যাকিংয়ের দরকারি খোলা অংশগুলো আলাদা করে আনি। দুই নিয়মেই কাজ করে। */
+const GK_ORDER_PUBLIC=['orderId','status','books','items','total','createdAt','discount','coupon','payment','delivery'];
+async function fbGetOrder(id){
+    const base='/orders/'+encodeURIComponent(id);
+    try{ return await fbGet(base); }catch(e){ /* পুরো অর্ডার বন্ধ — নিচে অংশ ধরে */ }
+    const vals=await Promise.all(GK_ORDER_PUBLIC.map(f=>fbGet(base+'/'+f).catch(()=>null)));
+    if(vals.every(v=>v==null)) return null;
+    const o={}; GK_ORDER_PUBLIC.forEach((f,i)=>{ if(vals[i]!=null) o[f]=vals[i]; });
+    return o;
+}
 
 const STATUSES=[
     {key:'pending',   icon:'<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>', label:'অর্ডার গৃহীত',      sub:'আপনার অর্ডারটি আমরা পেয়েছি'},
@@ -154,8 +173,8 @@ const STATUSES=[
     {key:'shipped',   icon:'<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>', label:'ডেলিভারিতে',         sub:'বই রওনা দিয়েছে'},
     {key:'delivered', icon:'<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>', label:'ডেলিভারি সম্পন্ন',  sub:'আপনার কাছে পৌঁছে গেছে'},
 ];
-const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
-const STATUS_COLORS={pending:'background:#fef3c7;color:#92400e;',confirmed:'background:#dbeafe;color:#1e40af;',processing:'background:#ede9fe;color:#5b21b6;',shipped:'background:#fff7ed;color:#9a3412;',delivered:'background:#ecfdf5;color:#065f46;'};
+const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড',cancelled:'বাতিল',returned:'ফেরত',failed:'ডেলিভারি ব্যর্থ'};
+const STATUS_COLORS={pending:'background:#fef3c7;color:#92400e;',confirmed:'background:#dbeafe;color:#1e40af;',processing:'background:#ede9fe;color:#5b21b6;',shipped:'background:#fff7ed;color:#9a3412;',delivered:'background:#ecfdf5;color:#065f46;',cancelled:'background:#fee2e2;color:#b91c1c;',returned:'background:#e2e8f0;color:#334155;',failed:'background:#fef3c7;color:#92400e;'};
 
 function trackTab(tab){  /* আগে নাম ছিল switchTab — লগইন বক্সের ট্যাবের সাথে নাম মিলে যেত, ফলে এই পেজে লগইন/রেজিস্টার ট্যাব কাজ করত না */
     const isId=tab==='id';
@@ -171,7 +190,7 @@ async function searchOrder(){
     document.getElementById('trackError').style.display='none';
     document.getElementById('orderCard').style.display='none';
     try{
-        const data = await fbGet('/orders/' + encodeURIComponent(id));
+        const data = await fbGetOrder(id);
         if(!data){document.getElementById('trackError').style.display='block';return;}
         renderOrder(data);
     }catch(e){
@@ -198,7 +217,7 @@ async function searchByPhone(){
 
         // Promise.allSettled — একটা fail করলেও বাকিগুলো চলবে
         const results = await Promise.allSettled(
-            orderIds.map(oid => fbGet('/orders/' + encodeURIComponent(oid)))
+            orderIds.map(oid => fbGetOrder(oid))
         );
         let orders = results
             .filter(r => r.status === 'fulfilled' && r.value !== null)
@@ -245,9 +264,8 @@ function renderOrder(o){
     document.getElementById('orderIdBadge').innerText=o.orderId;
     const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${escapeHTML(o.coupon||'')})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
     document.getElementById('orderInfoRows').innerHTML=`
-        <div class="order-info-row"><span>নাম</span><span>${(()=>{const n=o.name||'';return n.length>2?escapeHTML(n[0]+'*'.repeat(n.length-2)+n[n.length-1]):escapeHTML(n);})()}</span></div>
-        <div class="order-info-row"><span>ফোন</span><span>${(()=>{const p=o.phone||'';return escapeHTML(p.length>5?p.slice(0,3)+'*'.repeat(p.length-5)+p.slice(-2):p);})()}</span></div>
-        <div class="order-info-row"><span>ঠিকানা</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.address)}</span></div>
+        ${o.name?`<div class="order-info-row"><span>নাম</span><span>${(()=>{const n=o.name;return n.length>2?escapeHTML(n[0]+'*'.repeat(n.length-2)+n[n.length-1]):escapeHTML(n);})()}</span></div>`:''}
+        ${o.phone?`<div class="order-info-row"><span>ফোন</span><span>${(()=>{const p=o.phone;return escapeHTML(p.length>5?p.slice(0,3)+'*'.repeat(p.length-5)+p.slice(-2):p);})()}</span></div>`:''}
         <div class="order-info-row"><span>পেমেন্ট</span><span>${escapeHTML(o.payment)}</span></div>
         <div class="order-info-row"><span>বই</span><span style="text-align:right;max-width:200px;">${escapeHTML(o.books)}</span></div>
         ${discRow}
@@ -272,6 +290,9 @@ function renderOrder(o){
             </div>
         </div>`;
     });
+    /* বাতিল/ফেরত/ব্যর্থ অর্ডারে ধাপের রেখা নয় — পরিষ্কার একটা বার্তা */
+    const deadMsg={cancelled:'এই অর্ডারটি বাতিল করা হয়েছে।',returned:'এই অর্ডারটি ফেরত এসেছে।',failed:'এই অর্ডারটি ডেলিভারি করা যায়নি।'}[o.status];
+    if(deadMsg) html='<div style="padding:14px;border-radius:10px;background:#fef2f2;color:#991b1b;font-weight:700;">'+deadMsg+' কোনো প্রশ্ন থাকলে আমাদের সাথে যোগাযোগ করুন।</div>';
     document.getElementById('timelineSteps').innerHTML=html;
     /* একই বইগুলো আবার অর্ডার — এক চাপে কার্টে বসে চেকআউটে যায় (দাম চেকআউটে আজকের দামে যাচাই হয়) */
     const items=Array.isArray(o.items)?o.items.filter(i=>i&&i.name):[];

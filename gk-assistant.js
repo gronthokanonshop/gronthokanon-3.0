@@ -152,6 +152,14 @@
     }
 
     function fbGet(path) { return fetch(DB + path + '.json').then(function (r) { return r.ok ? r.json() : null; }); }
+    /* অর্ডারের শুধু যে অংশগুলো দরকার (নাম/ফোন/ঠিকানা নয়) — Firebase নিয়মে ব্যক্তিগত অংশ বন্ধ থাকলেও কাজ করে */
+    function getOrder(id) {
+        var base = '/orders/' + encodeURIComponent(id), F = ['orderId', 'status', 'total', 'createdAt'];
+        return Promise.all(F.map(function (f) { return fbGet(base + '/' + f).catch(function () { return null; }); })).then(function (v) {
+            if (v.every(function (x) { return x == null; })) return null;
+            var o = {}; F.forEach(function (f, i) { if (v[i] != null) o[f] = v[i]; }); if (!o.orderId) o.orderId = id; return o;
+        });
+    }
     function orderLine(o) {
         var s = STATUS[o.status] || STATUS.pending;
         var d = o.createdAt ? new Date(o.createdAt).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long' }) : '';
@@ -160,7 +168,7 @@
     }
     function trackById(id) {
         var t = typing();
-        return fbGet('/orders/' + encodeURIComponent(id)).then(function (o) {
+        return getOrder(id).then(function (o) {
             t.remove();
             if (!o) return addMsg('এই ID-তে (<b>' + esc(id) + '</b>) কোনো অর্ডার পাইনি। ID-টা আরেকবার দেখে লিখুন, অথবা অর্ডারের মোবাইল নম্বর দিন।', 'bot');
             return addMsg('<i class=gi-package></i> আপনার অর্ডার:' + orderLine(o) + '<a href="track.html">বিস্তারিত ট্র্যাক করুন →</a>', 'bot');
@@ -171,7 +179,7 @@
         return fbGet('/phoneIndex/' + phone).then(function (idx) {
             if (!idx) { t.remove(); return addMsg('এই নম্বরে (<b>' + bn(phone) + '</b>) কোনো অর্ডার পাইনি।', 'bot'); }
             var ids = Object.keys(idx);
-            return Promise.all(ids.map(function (id) { return fbGet('/orders/' + encodeURIComponent(id)).catch(function () { return null; }); })).then(function (list) {
+            return Promise.all(ids.map(function (id) { return getOrder(id).catch(function () { return null; }); })).then(function (list) {
                 t.remove();
                 list = list.filter(Boolean).sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
                 if (!list.length) return addMsg('এই নম্বরে কোনো অর্ডার পাইনি।', 'bot');

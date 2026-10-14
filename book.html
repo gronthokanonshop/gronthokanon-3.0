@@ -27,6 +27,12 @@
 </script>
 
     <title>বই বিস্তারিত — গ্রন্থকানন</title>
+    <meta property="og:site_name" content="গ্রন্থকানন">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="বই বিস্তারিত — গ্রন্থকানন">
+    <meta property="og:description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বই। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
+    <meta property="og:image" content="https://gronthokanon.com/icon-512.png">
+    <meta name="twitter:card" content="summary">
     <meta name="description" content="গ্রন্থকানন — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বই। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।" id="metaDesc">
     <link rel="canonical" href="https://gronthokanon.com/book.html" id="canonicalLink">
     <meta name="theme-color" content="#ffffff">
@@ -1644,7 +1650,7 @@ function loadBook(){
         /* admin-এর স্টক সিস্টেম idx (array index) দিয়ে কাজ করে, তাই এখানেও একই key ব্যবহার করছি
            যাতে admin panel-এ কোন বইয়ের জন্য কারা নোটিফাই চেয়েছে সহজে মেলানো যায় */
         try{
-            await db.ref('stockNotify/'+idx+'/'+phone.replace(/\+/g,'_')).set({phone, bookName:curBook.name, requestedAt:Date.now()});
+            await db.ref('stockNotify/'+idx+'/'+phone.replace(/\+/g,'_')).set({phone, bookName:curBook.name, requestedAt:firebase.database.ServerValue.TIMESTAMP}); /* ফোনের ঘড়ি এগিয়ে থাকলেও Firebase-এর নিয়মে আটকাবে না */
             msgEl.style.display='block'; msgEl.style.color='#059669'; msgEl.innerHTML='<i class=gi-ok></i> ঠিক আছে! স্টকে এলেই জানানো হবে।';
             inp.value='';
         }catch(e){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.innerHTML='<i class=gi-no></i> কিছু ভুল হয়েছে, আবার চেষ্টা করুন'; }
@@ -1833,7 +1839,7 @@ function loadReviews(bookId){
                 updateRatingBars([]);return;
             }
             const reviews=[];
-            snap.forEach(child=>reviews.push({...child.val(),key:child.key}));
+            snap.forEach(child=>{ if(/^[A-Za-z0-9_-]{1,40}$/.test(child.key)) reviews.push({...child.val(),key:child.key}); });   /* অস্বাভাবিক আইডির রিভিউ (সরাসরি লেখা) দেখাই না */
             reviews.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
             updateRatingBars(reviews);
             const latest=reviews.slice(0,15);
@@ -1845,7 +1851,7 @@ function loadReviews(bookId){
                     </div>
                     <div style="color:#d97706;font-size:15px;margin-bottom:5px;">${'<svg class="eico" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>'.repeat(r.rating||0)+'<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>'.repeat(5-(r.rating||0))}</div>
                     <div style="font-size:13px;line-height:1.5;">${escapeHTML(window.gkStripEmoji?gkStripEmoji(r.comment||''):(r.comment||''))}</div>
-                    <div class="rv-helpful" onclick="markHelpful('${r.key}','${bookId}',this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> সহায়ক (<span>${r.helpful||0}</span>)</div>
+                    <div class="rv-helpful" data-rk="${escapeHTML(r.key)}" data-bk="${escapeHTML(bookId)}" onclick="markHelpful(this.dataset.rk,this.dataset.bk,this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> সহায়ক (<span>${r.helpful||0}</span>)</div>
                 </div>`).join('');
         }).catch(()=>{el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';});
     }

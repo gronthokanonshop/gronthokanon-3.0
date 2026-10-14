@@ -6,7 +6,7 @@
    • Firebase/বাইরের সাইট কখনো ক্যাশ করে না — সবসময় লাইভ
    নতুন ভার্সনে CACHE-এর নামটা বদলালেই পুরনো ক্যাশ মুছে যায়।
 ═══════════════════════════════════════════════ */
-const CACHE = 'gronthokanon-v6';
+const CACHE = 'gronthokanon-v7';
 const SLOW_MS = 3500;
 const SHELL = [
   './index.html',

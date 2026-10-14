@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Admin Panel — গ্রন্থকানন</title>
     <meta name="robots" content="noindex, nofollow">
+    <!-- নিরাপত্তা (২০২৬-১০-১৪): GitHub Pages হেডার বসাতে দেয় না, তাই এখানে — plugin/<base> বদল বন্ধ, বাইরে শুধু সাইটের নাম যায়, পুরো ঠিকানা নয় -->
+    <meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'self'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <!-- অন্য কোনো সাইট এই পেজ ফ্রেমের ভেতরে বসালে (clickjacking — লুকিয়ে বোতাম চাপানো) পুরো পেজ লুকিয়ে ফেলি -->
+    <style id="gkAntiFrame">html{display:none !important;}</style>
+    <script>if(window.self===window.top){var s=document.getElementById('gkAntiFrame');if(s)s.remove();}else{try{window.top.location=window.self.location;}catch(e){}}</script>
     <meta name="theme-color" content="#062E22">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>!function(){var t=localStorage.getItem('gronthokanon_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
@@ -1264,6 +1270,134 @@
         [data-theme="dark"] .drv-w.ok{background:rgba(16,185,129,.12);color:#6ee7b7;border-color:rgba(16,185,129,.3);}
         @media(max-width:600px){.drv-list{grid-template-columns:minmax(0,1fr);padding:10px 10px 90px;}.drv-publbl select{max-width:150px;}}
 
+
+        /* ══════════ অ্যাডমিনের নতুন রূপ (২০২৬-১০-১৪) — চারকোল মেনু, রঙিন কার্ড, টেবিল ══════════
+           এই অংশটা মুছে দিলে আগের চেহারায় ফিরে যাবে (নতুন ফাংশনগুলো তখনো কাজ করবে) */
+        :root{ --gk-side:#24282d; --gk-side2:#2c3137; --gk-side-txt:rgba(255,255,255,.78); --gk-acc:#0B6E4F; }
+        .sidebar{background:var(--gk-side)!important;border-right:0!important;}
+        .sidebar-logo{border-bottom:1px solid rgba(255,255,255,.07)!important;}
+        .sidebar-logo-text h2{color:#fff!important;}
+        .sidebar-nav-wrap::after,.sidebar-scroll-hint{background:linear-gradient(to bottom,rgba(36,40,45,0) 0%,var(--gk-side) 78%)!important;}
+        .nav-section-label{color:rgba(255,255,255,.38)!important;}
+        .nav-item,.nav-sub-item{color:var(--gk-side-txt)!important;border-radius:8px!important;}
+        .nav-item:hover,.nav-sub-item:hover{background:var(--gk-side2)!important;color:#fff!important;}
+        .nav-item.active,.nav-sub-item.active{background:var(--gk-acc)!important;color:#fff!important;box-shadow:0 4px 12px rgba(11,110,79,.35);}
+        .nav-item.active::before{display:none!important;}
+        .gk-nav-ic{width:18px;height:18px;flex-shrink:0;}
+        .sidebar-footer{border-top:1px solid rgba(255,255,255,.07)!important;}
+        .topbar-quick-btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:22px;padding:8px 16px;font:700 13.5px var(--font-main);color:#fff;cursor:pointer;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6);box-shadow:0 4px 14px rgba(99,102,241,.35);white-space:nowrap;}
+        .topbar-quick-btn:hover{filter:brightness(1.08);}
+        @media(max-width:600px){ .topbar-quick-btn{padding:8px 11px;font-size:12px;} }
+
+        /* পুরনো স্ট্যাট কার্ড (আইডিগুলো কোডে লাগে, তাই রেখে লুকাই) */
+        #tabPanelDashboard > .dash-stat-grid, #tabPanelOrders > .grid-2{display:none!important;}
+
+        /* ড্যাশবোর্ড — বড় রঙিন কার্ড */
+        .gk-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px;}
+        .gk-kpi{position:relative;overflow:hidden;border-radius:6px;padding:18px 20px 16px;color:#fff;min-height:150px;box-shadow:0 6px 18px rgba(0,0,0,.12);}
+        .gk-kpi::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 52%,rgba(255,255,255,.12) 52%);pointer-events:none;}
+        .gk-k1{background:linear-gradient(135deg,#f97316,#ea580c);} .gk-k2{background:linear-gradient(135deg,#0ea5e9,#2563eb);}
+        .gk-k3{background:linear-gradient(135deg,#14b8a6,#0d9488);} .gk-k4{background:linear-gradient(135deg,#6366f1,#4338ca);}
+        .gk-kpi-t{font-size:22px;font-weight:600;opacity:.95;} .gk-kpi-v{font-size:30px;font-weight:800;margin:4px 0 12px;line-height:1.1;}
+        .gk-kpi-ic{position:absolute;right:18px;top:26px;width:58px;height:58px;opacity:.85;}
+        .gk-kpi-btn{position:relative;z-index:1;background:#fff;color:#334155;border:0;border-radius:3px;padding:6px 14px;font:600 13px var(--font-main);cursor:pointer;}
+        .gk-kpi-btn:hover{background:#f1f5f9;}
+        .gk-rings{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;}
+        .gk-ring{background:var(--surface,#fff);border:1px solid var(--border);border-radius:12px;padding:22px 12px 18px;text-align:center;cursor:pointer;font-family:var(--font-main);color:var(--text-main);transition:transform .15s,box-shadow .15s;}
+        .gk-ring:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08);}
+        .gk-ring-c{display:flex;align-items:center;justify-content:center;width:96px;height:96px;margin:0 auto 12px;border-radius:50%;border:7px solid var(--rc);font-size:30px;font-weight:800;color:var(--text-main);}
+        .gk-ring b{display:block;font-size:17px;color:var(--rc);} .gk-ring small{display:block;font-size:12px;color:var(--text-muted);margin-top:2px;}
+
+        /* রঙিন ছোট পরিসংখ্যান (অর্ডার/বই পাতা) */
+        .gk-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
+        .gk-st{border-radius:6px;padding:14px 10px;text-align:center;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.08);}
+        .gk-st b{display:block;font-size:20px;font-weight:800;line-height:1.2;} .gk-st span{font-size:12.5px;opacity:.95;}
+        .gk-s1{background:#0e7490;} .gk-s2{background:#16a34a;} .gk-s3{background:#eab308;color:#422006;} .gk-s4{background:#64748b;}
+        .gk-s5{background:#dc2626;} .gk-s6{background:#1f2937;} .gk-s7{background:#15803d;} .gk-s8{background:#2563eb;}
+
+        /* প্যানেল + টুলবার */
+        .gk-panel{background:var(--surface,#fff);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+        .gk-toolbar,.gk-ord-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+        .gk-panel-t{font-size:17px;font-weight:700;margin-right:auto;}
+        .gk-toolbar .form-input,.gk-ord-tools .form-input{width:auto;min-width:130px;height:38px;padding:6px 10px;margin:0;}
+        .gk-tb-search{min-width:240px!important;flex:1 1 240px;max-width:380px;}
+        .gk-tb-courier{display:inline-flex;gap:6px;}
+        .gk-ord-tools .gk-panel-t{margin-right:8px;}
+        #orderList.gk-as-table{display:block!important;grid-template-columns:none!important;}
+
+        /* বোতাম */
+        .gk-btn{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--surface,#fff);color:var(--text-main);border-radius:6px;padding:6px 11px;font:600 13px var(--font-main);cursor:pointer;text-decoration:none;white-space:nowrap;}
+        .gk-btn:disabled{opacity:.5;cursor:not-allowed;}
+        .gk-btn-blue{background:#2563eb;border-color:#2563eb;color:#fff;} .gk-btn-teal{background:#0891b2;border-color:#0891b2;color:#fff;}
+        .gk-btn-red{background:#dc2626;border-color:#dc2626;color:#fff;} .gk-btn-green{background:#16a34a;border-color:#16a34a;color:#fff;}
+        .gk-btn-lg{padding:9px 16px;font-size:14px;}
+        .gk-btn:not(:disabled):hover{filter:brightness(1.07);}
+
+        /* টেবিল */
+        .gk-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:10px;background:var(--surface,#fff);}
+        .gk-tbl{width:100%;border-collapse:collapse;font-size:13.5px;}
+        .gk-tbl th{position:sticky;top:0;background:var(--bg);text-align:left;font-weight:700;padding:11px 10px;border-bottom:2px solid var(--border);white-space:nowrap;z-index:1;}
+        .gk-tbl td{padding:10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+        .gk-tbl tbody tr{cursor:pointer;transition:background .12s;} .gk-tbl tbody tr:hover{background:rgba(11,110,79,.05);}
+        .gk-tbl td small{display:block;font-size:12px;margin-top:2px;}
+        .gk-mut{color:var(--text-muted);} .gk-paid{color:#16a34a;} .gk-due{color:#dc2626;}
+        .gk-oid{display:flex;align-items:center;gap:6px;font-weight:700;white-space:nowrap;}
+        .gk-copy{border:1px solid var(--border);background:var(--bg);border-radius:5px;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-main);}
+        .gk-pb{display:inline-block;padding:3px 9px;border-radius:5px;font-size:12px;font-weight:700;white-space:nowrap;}
+        .gk-pb-paid{background:#16a34a;color:#fff;} .gk-pb-due{background:#dc2626;color:#fff;} .gk-pb-verify{background:#f59e0b;color:#fff;} .gk-pb-void{background:#94a3b8;color:#fff;}
+        .gk-src{display:inline-block;padding:3px 9px;border-radius:5px;font-size:12px;font-weight:700;background:#0891b2;color:#fff;} .gk-src-a{background:#7c3aed;}
+        .gk-chk{width:17px;height:17px;cursor:pointer;}
+        .status-cancelled{background:#fee2e2!important;color:#b91c1c!important;} .status-returned{background:#e2e8f0!important;color:#334155!important;} .status-failed{background:#fef3c7!important;color:#92400e!important;}
+        [data-theme="dark"] .status-cancelled{background:rgba(220,38,38,.18)!important;color:#fca5a5!important;}
+        [data-theme="dark"] .status-returned{background:rgba(148,163,184,.18)!important;color:#cbd5e1!important;}
+        [data-theme="dark"] .status-failed{background:rgba(234,179,8,.18)!important;color:#fde68a!important;}
+
+        /* বইয়ের টেবিল */
+        .gk-pimg{width:46px;height:62px;object-fit:cover;border-radius:4px;border:1px solid var(--border);display:block;background:var(--bg);}
+        .gk-pimg-0{display:flex;align-items:center;justify-content:center;color:var(--text-muted);}
+        .gk-pname{min-width:200px;max-width:340px;}
+        .gk-cat{color:#2563eb;font-weight:700;}
+        .gk-prod-tbl td s{display:block;font-size:12px;}
+        .gk-prod-tbl tbody tr{cursor:default;}
+        .gk-acts{white-space:nowrap;} .gk-acts .gk-btn{margin:2px;}
+        .gk-sw{position:relative;width:42px;height:24px;border-radius:14px;border:0;background:#cbd5e1;cursor:pointer;vertical-align:middle;transition:background .2s;}
+        .gk-sw span{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s;}
+        .gk-sw.on{background:#16a34a;} .gk-sw.on span{left:21px;}
+        .gk-notify{margin-left:6px;border:0;border-radius:12px;background:#fef3c7;color:#92400e;font:700 11.5px var(--font-main);padding:3px 8px;cursor:pointer;}
+        .gk-pager{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;padding:12px 2px 2px;font-size:13px;}
+        .gk-pager .gk-mut{margin-right:auto;}
+
+        /* পপআপ (কাস্টমার, দ্রুত অর্ডার) */
+        .gk-modal{position:fixed;inset:0;z-index:9000;display:none;align-items:flex-start;justify-content:center;background:rgba(15,23,42,.5);padding:40px 14px;overflow:auto;}
+        .gk-modal-box{width:100%;max-width:820px;background:var(--surface,#fff);color:var(--text-main);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.3);}
+        .gk-modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);font-size:17px;}
+        .gk-modal-x{border:0;background:none;font-size:28px;line-height:1;cursor:pointer;color:var(--text-muted);}
+        .gk-modal-body{padding:16px 18px 20px;}
+        .gk-qs label{display:block;font-size:13px;font-weight:600;color:var(--text-muted);}
+        .gk-qs label .form-input{margin-top:4px;color:var(--text-main);}
+        .gk-qs-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-bottom:10px;}
+        .gk-qs-full{grid-column:1/-1;}
+        .gk-qs-sug{display:flex;flex-direction:column;gap:4px;margin:6px 0;}
+        .gk-qs-sug button{display:flex;justify-content:space-between;gap:10px;text-align:left;border:1px solid var(--border);background:var(--bg);border-radius:8px;padding:8px 10px;cursor:pointer;font-family:var(--font-main);color:var(--text-main);}
+        .gk-qs-sug small{color:var(--text-muted);white-space:nowrap;}
+        .gk-qs-items{margin:8px 0 12px;}
+        .gk-qs-it{display:grid;grid-template-columns:1fr auto 90px;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);font-size:14px;}
+        .gk-qs-it > b{text-align:right;}
+        .gk-qs-q{display:inline-flex;align-items:center;gap:8px;} .gk-qs-q button{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:16px;color:var(--text-main);}
+        .gk-qs-sum{margin-top:10px;padding:10px 12px;border-radius:8px;background:rgba(11,110,79,.07);font-size:14.5px;}
+        .gk-paid-toggle{display:flex!important;align-items:center;gap:8px;margin:10px 0 2px;font-size:13.5px;font-weight:600;color:var(--text-main)!important;cursor:pointer;}
+        .gk-paid-toggle input{width:18px;height:18px;}
+
+        @media(max-width:1100px){ .gk-kpis,.gk-rings{grid-template-columns:repeat(2,1fr);} }
+        @media(max-width:600px){
+            .gk-kpis{gap:10px;} .gk-kpi{min-height:120px;padding:14px;} .gk-kpi-t{font-size:16px;} .gk-kpi-v{font-size:22px;} .gk-kpi-ic{width:40px;height:40px;top:18px;right:12px;}
+            .gk-rings{gap:10px;} .gk-ring{padding:14px 6px;} .gk-ring-c{width:70px;height:70px;font-size:22px;border-width:6px;} .gk-ring b{font-size:14px;}
+            .gk-stats{grid-template-columns:repeat(2,1fr);gap:8px;} .gk-st b{font-size:17px;}
+            .gk-tb-search{min-width:0!important;max-width:none;flex-basis:100%;}
+            .gk-qs-grid{grid-template-columns:1fr;}
+            .gk-modal{padding:12px 8px;}
+        }
     </style>
 </head>
 <body>
@@ -1342,7 +1476,12 @@
                     <option value="processing">প্যাকেজিং</option>
                     <option value="shipped">শিপড</option>
                     <option value="delivered">ডেলিভারড</option>
+                    <option value="cancelled">বাতিল</option>
+                    <option value="returned">ফেরত</option>
+                    <option value="failed">ডেলিভারি ব্যর্থ</option>
                 </select>
+                <!-- পেমেন্ট পেয়েছি (বিকাশ যাচাই / আগাম টাকা) — তালিকায় "পরিশোধিত" দেখায়; কুরিয়ারে তখন টাকা তোলা হয় না -->
+                <label class="gk-paid-toggle"><input type="checkbox" id="modalPaidChk" onchange="gkSetPaid(modalOrderId,this.checked)"> <span>পুরো টাকা পেয়েছি (পরিশোধিত)</span></label>
                 <button class="modal-update-btn" onclick="updateStatusFromModal()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> স্ট্যাটাস আপডেট করুন</button>
             </div>
             <div class="m-section courier-section">
@@ -1455,6 +1594,10 @@
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 দৈনিক
             </button>
+            <button class="nav-item" id="navCustomers" onclick="gkOpenCustomers()">
+                <i class="gi-users gk-nav-ic"></i>
+                কাস্টমার
+            </button>
             <div class="nav-section-label" style="margin-top:8px;">বই ও স্টক</div>
             <button class="nav-item" id="navBooks" onclick="switchTab('books',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
@@ -1552,6 +1695,7 @@
                                 <button class="topbar-icon-btn" onclick="toggleDark()" id="darkBtn" title="Dark Mode">
                     <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
+                <button class="topbar-quick-btn" onclick="gkOpenQuickSale()" title="ফোন/দোকানের অর্ডার হাতে বসান"><i class=gi-cart></i> দ্রুত অর্ডার</button>
                 <button class="topbar-new-btn" onclick="switchTab('editor',document.getElementById('navEditor'));beToggleAddForm()">
                     + নতুন বই
                 </button>
@@ -1563,6 +1707,7 @@
 
             <!-- ═══ DASHBOARD TAB ═══ -->
             <div id="tabPanelDashboard">
+                <div id="gkDashTop"></div>
                 <div class="dash-stat-grid">
                     <div class="stat-card">
                         <div class="stat-icon">
@@ -1650,6 +1795,14 @@
 
             <!-- ═══ ORDERS TAB ═══ -->
             <div id="tabPanelOrders" style="display:none;">
+                <div class="gk-stats" id="gkOrdStats"></div>
+                <div class="gk-panel gk-ord-tools">
+                    <b class="gk-panel-t">অর্ডার</b>
+                    <input class="form-input gk-tb-search" id="gkOrdSearch" placeholder="আইডি, নাম বা ফোন দিয়ে খুঁজুন" oninput="gkOrdQ=this.value;renderOrders()" aria-label="অর্ডার খুঁজুন">
+                    <select class="form-input" onchange="gkOrdPay=this.value;renderOrders()" aria-label="পেমেন্ট অবস্থা"><option value="all">পেমেন্ট: সব</option><option value="paid">পরিশোধিত</option><option value="due">বাকি</option><option value="verify">যাচাই বাকি</option></select>
+                    <span class="gk-tb-courier"><select class="form-input" id="gkCourierSel" aria-label="কুরিয়ার"><option value="steadfast">Steadfast</option><option value="redx">RedX</option></select>
+                    <button type="button" class="gk-btn gk-btn-green" id="gkBulkBtn" onclick="gkBulkCourier()" title="টেবিলে টিক দেওয়া অর্ডারগুলো কুরিয়ারে পাঠান"><i class=gi-truck></i> পাঠান</button></span>
+                </div>
                 <div class="grid-2">
                     <div class="stat-card">
                         <div class="stat-icon">
@@ -1688,6 +1841,9 @@
                     <button class="chip" onclick="filterOrders('processing',this)"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> প্যাকেজিং</button>
                     <button class="chip" onclick="filterOrders('shipped',this)"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg> শিপড</button>
                     <button class="chip" onclick="filterOrders('delivered',this)"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> ডেলিভারড</button>
+                    <button class="chip" onclick="filterOrders('cancelled',this)"><i class=gi-no></i> বাতিল</button>
+                    <button class="chip" onclick="filterOrders('returned',this)"><i class=gi-return></i> ফেরত</button>
+                    <button class="chip" onclick="filterOrders('failed',this)"><i class=gi-warn></i> ডেলিভারি ব্যর্থ</button>
                 </div>
                 <div class="view-toggle">
                     <button class="view-btn active" id="viewListBtn" onclick="setOrderView('list')">
@@ -2460,6 +2616,12 @@
 function escapeHTML(str){
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+/* onclick="…" ইত্যাদির ভেতরে আইডি/লেখা বসানোর নিরাপদ উপায় (নিরাপত্তা, ২০২৬-১০-১৪)।
+   escapeHTML একা যথেষ্ট নয় — ব্রাউজার কোড চালানোর আগে &#39; আবার ' বানিয়ে দেয়, তাই কেউ অর্ডার/ব্লগের আইডিতে
+   ');…(' লুকিয়ে দিলে অ্যাডমিনে চাপলেই সেটা চলত। এখন আগে JS-লেখা (JSON), তারপর HTML — মোড়ক সহ দেয়, আলাদা '…' লাগে না। */
+function jsArg(v){ return escapeHTML(JSON.stringify(String(v==null?'':v))); }
+/* ব্রাউজারের confirm/alert বাক্স HTML দেখায় না — আইকন-ট্যাগ (<i class=gi-…></i>) লেখা হয়ে ভেসে উঠত, তাই সরিয়ে দিই */
+(function(){ const strip=m=>String(m==null?'':m).replace(/<i class=gi-[^>]*><\/i>\s*/g,''); const c=window.confirm.bind(window), a=window.alert.bind(window); window.confirm=m=>c(strip(m)); window.alert=m=>a(strip(m)); })();
 
 function renderBookItemsTable(o){
     if(!o.items||!o.items.length) return `<div class="m-info">${renderBooksWithPublisher(o.books)}</div>`;
@@ -2517,8 +2679,12 @@ let ordersRef=null;
 let orderTrendChartInst=null;
 let orderStatusChartInst=null;
 
-const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
-const STATUS_CLASS={pending:'status-pending',confirmed:'status-confirmed',processing:'status-processing',shipped:'status-shipped',delivered:'status-delivered'};
+const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড',cancelled:'বাতিল',returned:'ফেরত',failed:'ডেলিভারি ব্যর্থ'};
+const STATUS_CLASS={pending:'status-pending',confirmed:'status-confirmed',processing:'status-processing',shipped:'status-shipped',delivered:'status-delivered',cancelled:'status-cancelled',returned:'status-returned',failed:'status-failed'};
+/* বাতিল/ফেরত/ব্যর্থ অর্ডার বিক্রির হিসাবে ধরি না (২০২৬-১০) */
+const GK_DEAD=new Set(['cancelled','returned','failed']);
+function gkIsDead(o){ return !!o&&GK_DEAD.has(o.status); }
+function gkAmt(o){ return parseInt(String((o&&o.total)||'').replace(/[^\d]/g,''))||0; }
 
 /* ── DARK MODE ── */
 function toggleDark(){
@@ -2666,6 +2832,8 @@ function switchTab(tab, btnEl){
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
+    if(tab==='dashboard') gkRenderDash();
+    if(tab==='orders') renderOrders();   /* পর্দার মাপ অনুযায়ী টেবিল/কার্ড */
     if(tab==='tools'){ renderOrderSummary(); loadTagsAdmin(); loadCatTreeAdmin(); apFixTypeChanged(); loadHomeCatsAdmin(); loadCatCardsAdmin(); loadSubTagAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadOfferPopupAdmin(); loadBlogAdmin(); loadModAdmin(); loadLandingAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
@@ -2800,7 +2968,7 @@ async function loadDriveFolderFiles(idx){
                 html+=`<div style="display:flex;align-items:center;gap:8px;padding:6px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;">
                     <img src="${viewUrl}" style="width:40px;height:50px;object-fit:cover;border-radius:4px;" onerror="this.style.display='none'">
                     <span style="flex:1;color:#374151;">${fi===0?'<i class=gi-star></i> ':''}${f.name}</span>
-                    <button onclick="setDriveImg(${idx},'${viewUrl}')" style="background:#059669;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">Cover সেট</button>
+                    <button onclick="setDriveImg(${idx},${jsArg(viewUrl)})" style="background:#059669;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">Cover সেট</button>
                 </div>`;
             });
         }
@@ -2811,7 +2979,7 @@ async function loadDriveFolderFiles(idx){
                 const pdfUrl=`https://drive.google.com/file/d/${f.id}/view`;
                 html+=`<div style="display:flex;align-items:center;gap:8px;padding:6px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;">
                     <span style="flex:1;color:#374151;"><i class=gi-doc></i> ${f.name}</span>
-                    <button onclick="setDrivePdf(${idx},'${pdfUrl}')" style="background:#1d4ed8;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">PDF সেট</button>
+                    <button onclick="setDrivePdf(${idx},${jsArg(pdfUrl)})" style="background:#1d4ed8;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">PDF সেট</button>
                 </div>`;
             });
         }
@@ -3513,7 +3681,7 @@ function drvRow(r,k){
     const thumb=id=>'https://drive.google.com/thumbnail?id='+encodeURIComponent(id)+'&sz=w220';
     const kindTxt=im=>im.kind==='portrait'?'সামনের কভার':im.kind==='landscape'?(im.w/im.h>=1.3&&!gkIsPhonePhotoName(im.name)?'পুরো কভার':'চওড়া ছবি'):im.kind==='square'?'বর্গাকার':'?';
     const best=r.imgs.find(im=>im.kind==='portrait');
-    const imgs=r.imgs.map(im=>`<button type="button" class="drv-img${r.pick===im.id?' on':''}" onclick="drvPick(${k},'${im.id}')" title="${escapeHTML(im.name)}"><img src="${thumb(im.id)}" loading="lazy" alt=""><span>${best&&best.id===im.id?'<i class=gi-star></i> ':''}${kindTxt(im)}</span></button>`).join('');
+    const imgs=r.imgs.map(im=>`<button type="button" class="drv-img${r.pick===im.id?' on':''}" onclick="drvPick(${k},${jsArg(im.id)})" title="${escapeHTML(im.name)}"><img src="${thumb(im.id)}" loading="lazy" alt=""><span>${best&&best.id===im.id?'<i class=gi-star></i> ':''}${kindTxt(im)}</span></button>`).join('');
     const cur=b?`<button type="button" class="drv-img cur${r.pick==='keep'?' on':''}" onclick="drvPick(${k},'keep')"><img src="${escapeHTML(drvHasCover(b)?b.img:'book-placeholder.svg')}" alt="" onerror="this.src='book-placeholder.svg'"><span>${drvHasCover(b)?'এখনকার কভার রাখুন':'কভার নেই'}</span></button>`:'';
     const pickIm=r.imgs.find(im=>im.id===r.pick);
     const cropRow=pickIm&&pickIm.kind==='landscape'?`<label class="drv-chk2"><input type="checkbox" ${r.crop?'checked':''} onchange="DRV.rows[${k}].crop=this.checked"> <i class=gi-scissors></i> পুরো কভার থেকে ডান পাশের সামনের অংশ কেটে নাও</label>`:'';
@@ -3918,7 +4086,7 @@ async function bsCompute(){
     const units=new Map(), ordersOf=new Map(); let used=0;
     orders.forEach(o=>{
         if(!o.createdAt||bsKey(o.createdAt)!==m) return;
-        if(/cancel|reject|return|বাতিল|ফেরত/i.test(String(o.status||''))) return;
+        if(/cancel|reject|return|fail|বাতিল|ফেরত|ব্যর্থ/i.test(String(o.status||''))) return;
         used++;
         const seen=new Set(), add=(name,q)=>{ const i=nameIdx.get(normalize(String(name).trim())); if(i==null) return; units.set(i,(units.get(i)||0)+q); if(!seen.has(i)){ seen.add(i); ordersOf.set(i,(ordersOf.get(i)||0)+1); } };
         const it=o.items, arr=Array.isArray(it)?it:(it&&typeof it==='object'?Object.values(it):[]);
@@ -3999,7 +4167,7 @@ async function abCompute(){
     localBooks.forEach((b,i)=>{ if(b&&b.name){ const k=normalize(b.name); if(!nameIdx.has(k)) nameIdx.set(k,i); } });
     const co=new Map(), sold=new Map(); let used=0, big=0, skipped=0;
     orders.forEach(o=>{
-        if(/cancel|reject|return|বাতিল|ফেরত/i.test(String(o.status||''))){ skipped++; return; }
+        if(/cancel|reject|return|fail|বাতিল|ফেরত|ব্যর্থ/i.test(String(o.status||''))){ skipped++; return; }
         const ids=abOrderIdxs(o,nameIdx);
         ids.forEach(i=>sold.set(i,(sold.get(i)||0)+1));
         if(ids.length<2) return;
@@ -4650,14 +4818,14 @@ async function loadModAdmin(){
             '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--border);border-radius:8px;">'
             +'<div style="min-width:0;"><div style="font-weight:700;">'+escapeHTML(r.name)+'</div><div class="text-sm text-muted" style="word-break:break-all;">'+escapeHTML(r.email)+'</div></div>'
             +'<div style="display:flex;gap:6px;flex-shrink:0;">'
-            +'<button class="btn btn-primary" style="padding:6px 12px;" onclick="approveMod(\''+r.uid+'\')">অনুমোদন</button>'
-            +'<button class="btn" style="padding:6px 12px;background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="rejectMod(\''+r.uid+'\')">বাতিল</button>'
+            +'<button class="btn btn-primary" style="padding:6px 12px;" onclick="approveMod('+jsArg(r.uid)+')">অনুমোদন</button>'
+            +'<button class="btn" style="padding:6px 12px;background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="rejectMod('+jsArg(r.uid)+')">বাতিল</button>'
             +'</div></div>'
         ).join(''):'<div class="text-sm text-muted">কোনো নতুন আবেদন নেই</div>';
         ml.innerHTML=mods.length?mods.map(m=>
             '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--border);border-radius:8px;">'
             +'<div style="min-width:0;"><div style="font-weight:700;">'+escapeHTML(m.name)+'</div><div class="text-sm text-muted" style="word-break:break-all;">'+escapeHTML(m.email)+'</div></div>'
-            +'<button class="btn" style="padding:6px 12px;background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="removeMod(\''+m.uid+'\')">সরান</button>'
+            +'<button class="btn" style="padding:6px 12px;background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="removeMod('+jsArg(m.uid)+')">সরান</button>'
             +'</div>'
         ).join(''):'<div class="text-sm text-muted">এখনো কোনো মডারেটর নেই</div>';
     }catch(e){
@@ -4728,7 +4896,7 @@ async function loadReviewsAdmin(){
                 +'<div class="text-sm" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;">'+escapeHTML(r.comment)+'</div>'
                 +(d?'<div class="text-sm text-muted" style="margin-top:4px;"><i class=gi-clock></i> '+d+'</div>':'')
                 +'</div>'
-                +'<button class="btn" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="deleteReviewAdmin(\''+r.bid+'\',\''+r.rid+'\')">মুছুন</button>'
+                +'<button class="btn" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="deleteReviewAdmin('+jsArg(r.bid)+','+jsArg(r.rid)+')">মুছুন</button>'
                 +'</div></div>';
         }).join('');
     }catch(e){
@@ -4754,7 +4922,14 @@ function loadOrders(){
     ordersRef=db.ref('orders');
     ordersRef.on('value',snap=>{
         allOrders=[];
-        snap.forEach(child=>{const val=child.val();if(val&&val.orderId)allOrders.push(val);});
+        /* নিরাপত্তা: আসল অর্ডার-আইডি শুধু ইংরেজি অক্ষর/সংখ্যা/-/_ দিয়ে, আর ভেতরের orderId = আইডি।
+           অন্য রকম হলে কেউ checkout এড়িয়ে সরাসরি লিখেছে (আইডিতে কোড লুকানোর চেষ্টা) — তালিকায় দেখাই না */
+        let gkBadOrders=0;
+        snap.forEach(child=>{const val=child.val();if(!val||!val.orderId)return;
+            if(!/^[A-Za-z0-9_-]{1,40}$/.test(child.key)||String(val.orderId)!==child.key){gkBadOrders++;return;}
+            allOrders.push(val);});
+        if(gkBadOrders&&!window.__gkBadOrdersWarned){window.__gkBadOrdersWarned=true;
+            showToast('<i class=gi-warn></i> '+gkBadOrders+'টি সন্দেহজনক অর্ডার (অস্বাভাবিক আইডি) লুকিয়ে রাখা হয়েছে — Firebase-এ orders দেখে মুছে দিন','#dc2626');}
         allOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         updateStats();
         processOrderNotifications(allOrders);
@@ -4768,6 +4943,7 @@ function loadOrders(){
         if(sv)sv.innerText=allOrders.filter(o=>o.status==='shipped').length;
         if(dv)dv.innerText=allOrders.filter(o=>o.status==='delivered').length;
         renderOrders();
+        gkRenderDash();
         if(document.getElementById('tabPanelDaily').style.display==='block') renderDailyOrders();
         if(document.getElementById('tabPanelDashboard').style.display!=='none') renderDashboard();
     },err=>{
@@ -4787,13 +4963,18 @@ function filterOrders(f,el){
     document.querySelectorAll('.chip').forEach(t=>t.classList.remove('active'));
     el.classList.add('active');
     const titles={all:'সব অর্ডার',pending:'পেন্ডিং অর্ডার',confirmed:'কনফার্ম অর্ডার',processing:'প্যাকেজিং',shipped:'শিপড অর্ডার',delivered:'ডেলিভারড অর্ডার'};
-    document.getElementById('ordersSecTitle').innerText=titles[f]||'অর্ডার';
+    document.getElementById('ordersSecTitle').innerText=titles[f]||(STATUS_LABELS[f]?STATUS_LABELS[f]+' অর্ডার':'অর্ডার');
     renderOrders();
 }
 
 function renderOrders(){
-    const list=curFilter==='all'?allOrders:allOrders.filter(o=>o.status===curFilter);
+    /* খোঁজ (আইডি/নাম/ফোন) + পেমেন্ট ছাঁকনি সহ; বড় পর্দায় টেবিল, ফোনে কার্ড (২০২৬-১০-১৪) */
+    const list=gkOrdFiltered();
+    if(typeof gkRenderOrdStats==='function') gkRenderOrdStats();
     const el=document.getElementById('orderList');
+    const asTable=list.length&&window.innerWidth>=900;
+    el.classList.toggle('gk-as-table',!!asTable);
+    if(asTable){ el.innerHTML=gkOrdTable(list); gkSelInfo(); if(curOrderView==='kanban') renderKanban(); return; }
     if(!list.length){el.innerHTML='<div class="empty-state"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg> কোনো অর্ডার নেই</div>';return;}
     el.innerHTML=list.map(o=>orderCardHTML(o)).join('');
     if(curOrderView==='kanban') renderKanban();
@@ -4801,7 +4982,7 @@ function renderOrders(){
 
 function orderCardHTML(o){
     const isPending=!o.status||o.status==='pending';
-    return `<div class="card" onclick="openModal('${escapeHTML(o.orderId)}')">
+    return `<div class="card" onclick="openModal(${jsArg(o.orderId)})">
         <div class="card-header">
             <div>
                 <div class="oid">${escapeHTML(o.orderId)}</div>
@@ -4819,8 +5000,8 @@ function orderCardHTML(o){
             <span class="pay-method"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> ${escapeHTML(o.payment)}</span>
         </div>
         ${isPending?`<div class="order-actions" onclick="event.stopPropagation()">
-            <button class="btn btn-primary btn-sm" onclick="quickConfirm('${escapeHTML(o.orderId)}')"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> কনফার্ম করুন</button>
-            <button class="btn btn-ghost btn-sm" onclick="openModal('${escapeHTML(o.orderId)}')">বিস্তারিত →</button>
+            <button class="btn btn-primary btn-sm" onclick="quickConfirm(${jsArg(o.orderId)})"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> কনফার্ম করুন</button>
+            <button class="btn btn-ghost btn-sm" onclick="openModal(${jsArg(o.orderId)})">বিস্তারিত →</button>
         </div>`:''}
     </div>`;
 }
@@ -4989,14 +5170,12 @@ function loadStockData(cb){
 let stockNotifyData={};
 
 function renderBookManage(){
+    /* স্টক পাতা এখন পুরো বইয়ের টেবিল (ছবি/দাম/স্টক/অ্যাকশন) — gkProdRender (২০২৬-১০-১৪) */
     const wrap=document.getElementById('bookManageWrap');
-    wrap.innerHTML='<div class="loading-spin"><svg class="spin-ic" style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg> বই লোড হচ্ছে...</div>';
+    if(!document.getElementById('gkProdQ')) wrap.innerHTML='<div class="loading-spin"><i class=gi-hourglass></i> লোড হচ্ছে...</div>';
     loadStockData(()=>{
-        if(typeof books==='undefined'||!books.length){wrap.innerHTML='<div class="empty-state">বই পাওয়া যায়নি</div>';return;}
-        wrap.innerHTML=`
-            <div class="search-wrap" style="margin-bottom:12px;"><span class="search-ic"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><input class="form-input" id="bookSearch" placeholder="বই খুঁজুন..." oninput="filterBookManage()"></div>
-            <div id="bookManageList"></div>`;
-        renderBookList(books);
+        if(!gkProdSrc().length){ wrap.innerHTML='<div class="empty-state">বই পাওয়া যায়নি</div>'; return; }
+        gkProdRender();
     });
 }
 
@@ -5157,23 +5336,50 @@ let GK_ADMIN_BOOKVER=null, gkOwnBumpAt=0, gkForeignBookEdit=false;
             return Object.keys(val).some(isBookPath);
         return false;
     }
-    let t=null;
-    function bump(){
+    /* কোন ক্রমিকের বই বদলাল — siteConfig/bookListDelta = {base, items:{ক্রমিক: সময়}} এ লিখি।
+       সাইট book.js পুরনো হলে পুরো ২+ MB তালিকা না নামিয়ে শুধু এই বইগুলো আনে (gkbooks-live.js)।
+       পুরো তালিকা একসাথে লিখলে (বই মোছা ইত্যাদি, ক্রম বদলাতে পারে) base নতুন করে দিই — তখন সাইট পুরোটা আনে। */
+    function changed(ref,val,method){
+        const p=refPath(ref).replace(/^\//,''); const out={full:false,idx:[]};
+        const one=s=>{ const mm=String(s).replace(/^\//,'').match(/^bookList(?:\/(\d+))?(?:\/|$)/); if(!mm) return; if(mm[1]===undefined) out.full=true; else out.idx.push(+mm[1]); };
+        if(method==='update'&&val&&typeof val==='object'&&(p===''||p==='bookList')) Object.keys(val).forEach(k=>one(p?'bookList/'+k:k));
+        else one(p);
+        return out;
+    }
+    let t=null, pendFull=false; const pendIdx=new Set();
+    function bump(ch){
+        if(ch){ if(ch.full) pendFull=true; ch.idx.forEach(i=>pendIdx.add(i)); }
         clearTimeout(t);
         t=setTimeout(()=>{
             gkOwnBumpAt=Date.now();
-            firebase.database().ref('siteConfig/bookListVer').set(firebase.database.ServerValue.TIMESTAMP).catch(e=>console.warn('bookListVer bump failed',e));
+            const TS=firebase.database.ServerValue.TIMESTAMP, D=firebase.database().ref('siteConfig/bookListDelta');
+            const full=pendFull, idx=[...pendIdx]; pendFull=false; pendIdx.clear();
+            const dp=full? D.set({base:TS}) : (idx.length? D.update(Object.fromEntries(idx.map(i=>['items/'+i,TS]))) : Promise.resolve());
+            /* আগে বদলের হিসাব, তারপর ভার্সন — সাইট নতুন ভার্সন দেখলে হিসাবও যেন পায় */
+            Promise.resolve(dp).catch(e=>console.warn('bookListDelta failed',e)).then(()=>
+                firebase.database().ref('siteConfig/bookListVer').set(TS).catch(e=>console.warn('bookListVer bump failed',e)));
         },400);
     }
     ['set','update','remove'].forEach(m=>{
         const orig=R[m];
         R[m]=function(val){
             const res=orig.apply(this,arguments);
-            if(touches(this,val,m)) Promise.resolve(res).then(bump).catch(()=>{});
+            if(touches(this,val,m)){ const ch=changed(this,val,m); Promise.resolve(res).then(()=>bump(ch)).catch(()=>{}); }
             return res;
         };
     });
 })();
+/* book.js ডাউনলোডের সময় — base না থাকলে বসাই, আর ১৪ দিনের পুরনো হিসাব ছেঁটে দিই (নোটটা ছোট থাকে) */
+function gkDeltaPrune(){
+    const v=Number(GK_ADMIN_BOOKVER); if(!v) return;
+    const D=firebase.database().ref('siteConfig/bookListDelta');
+    D.once('value').then(s=>{
+        const d=s.val()||{}, items=d.items||{}, cut=v-14*864e5;
+        const base=d.base?Math.max(d.base,Math.min(cut,v)):v;
+        const keep={}; Object.keys(items).forEach(k=>{ if(items[k]>base) keep[k]=items[k]; });
+        return D.set(Object.keys(keep).length?{base,items:keep}:{base});
+    }).catch(e=>console.warn('bookListDelta prune failed',e));
+}
 function gkWatchBookVer(){
     let first=true;
     db.ref('siteConfig/bookListVer').on('value',s=>{
@@ -6681,8 +6887,8 @@ function renderCouponList(){
         return `<div style="display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;background:var(--surface);flex-wrap:wrap;">
             <b style="flex:1;min-width:90px;">${escapeHTML(code)}</b>
             <span style="font-weight:700;color:#059669;">${couponAdminLabel(c)}</span>
-            <button class="btn btn-sm btn-ghost" onclick="toggleCoupon('${escapeHTML(code)}')" title="চালু/বন্ধ">${active?'<i class=gi-dot></i> চালু':'<i class=gi-dot-o></i> বন্ধ'}</button>
-            <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteCoupon('${escapeHTML(code)}')" title="মুছুন"><i class=gi-x></i></button>
+            <button class="btn btn-sm btn-ghost" onclick="toggleCoupon(${jsArg(code)})" title="চালু/বন্ধ">${active?'<i class=gi-dot></i> চালু':'<i class=gi-dot-o></i> বন্ধ'}</button>
+            <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteCoupon(${jsArg(code)})" title="মুছুন"><i class=gi-x></i></button>
         </div>`;
     }).join('');
     box.innerHTML=html;
@@ -6814,8 +7020,10 @@ function ofPopUploadImg(inp){
 ══════════════════════════════════════════════ */
 let blogSubs={}, blogPubs={};
 function loadBlogAdmin(){
-    db.ref('blogSubmissions').once('value').then(s=>{ blogSubs=s.val()||{}; renderBlogSubs(); }).catch(()=>{ blogSubs={}; renderBlogSubs(); });
-    db.ref('publishedBlogs').once('value').then(s=>{ blogPubs=s.val()||{}; renderBlogPubs(); }).catch(()=>{ blogPubs={}; renderBlogPubs(); });
+    /* নিরাপত্তা: Firebase-এর নিজের বানানো আইডি শুধু অক্ষর/সংখ্যা/-/_ — অন্য রকম আইডির লেখা দেখাই না */
+    const safeIds=o=>{ const r={}; Object.keys(o||{}).forEach(k=>{ if(/^[A-Za-z0-9_-]{1,40}$/.test(k)&&o[k]&&typeof o[k]==='object') r[k]=o[k]; }); return r; };
+    db.ref('blogSubmissions').once('value').then(s=>{ blogSubs=safeIds(s.val()); renderBlogSubs(); }).catch(()=>{ blogSubs={}; renderBlogSubs(); });
+    db.ref('publishedBlogs').once('value').then(s=>{ blogPubs=safeIds(s.val()); renderBlogPubs(); }).catch(()=>{ blogPubs={}; renderBlogPubs(); });
     /* প্রতিযোগিতার বিষয় লোড */
     db.ref('siteConfig/blogTopic').once('value').then(s=>{
         const el=document.getElementById('blogTopicInput');
@@ -6843,10 +7051,10 @@ function renderBlogSubs(){
                     <div style="font-size:11px;color:var(--text-muted);"><i class=gi-pen></i> ${escapeHTML(s.name||'')} · <i class=gi-mobile></i> ${escapeHTML(s.phone||'—')} · ${s.createdAt?new Date(s.createdAt).toLocaleDateString('bn-BD'):''}</div>
                 </div>
                 <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;">
-                    <button class="btn btn-sm btn-ghost" onclick="toggleSubView('${id}')"><i class=gi-eye></i> পড়ুন</button>
-                    <button class="btn btn-sm btn-ghost" onclick="downloadBlogPDFAdmin('sub','${id}',this)"><i class=gi-download></i> PDF</button>
-                    <button class="btn btn-sm" style="background:#d1fae5;color:#065f46;" onclick="publishBlog('${id}')"><i class=gi-ok></i> প্রকাশ করুন</button>
-                    <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteSubmission('${id}')"><i class=gi-x></i></button>
+                    <button class="btn btn-sm btn-ghost" onclick="toggleSubView(${jsArg(id)})"><i class=gi-eye></i> পড়ুন</button>
+                    <button class="btn btn-sm btn-ghost" onclick="downloadBlogPDFAdmin('sub',${jsArg(id)},this)"><i class=gi-download></i> PDF</button>
+                    <button class="btn btn-sm" style="background:#d1fae5;color:#065f46;" onclick="publishBlog(${jsArg(id)})"><i class=gi-ok></i> প্রকাশ করুন</button>
+                    <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deleteSubmission(${jsArg(id)})"><i class=gi-x></i></button>
                 </div>
             </div>
             <div id="subview-${id}" style="display:none;padding:12px 14px;border-top:1px dashed var(--border);font-size:13px;line-height:1.9;color:var(--text-main);white-space:pre-wrap;background:var(--bg-body);">${escapeHTML(s.content||'')}</div>
@@ -6869,8 +7077,8 @@ function renderBlogPubs(){
                 <div style="font-size:11px;color:var(--text-muted);"><i class=gi-pen></i> ${escapeHTML(p.author||'')} · ${p.publishedAt?new Date(p.publishedAt).toLocaleDateString('bn-BD'):''}</div>
             </div>
             <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;">
-                <button class="btn btn-sm btn-ghost" onclick="downloadBlogPDFAdmin('pub','${id}',this)"><i class=gi-download></i> PDF</button>
-                <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deletePublished('${id}')"><i class=gi-x></i> সরান</button>
+                <button class="btn btn-sm btn-ghost" onclick="downloadBlogPDFAdmin('pub',${jsArg(id)},this)"><i class=gi-download></i> PDF</button>
+                <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;" onclick="deletePublished(${jsArg(id)})"><i class=gi-x></i> সরান</button>
             </div>
         </div>`;
     }).join('');
@@ -7029,9 +7237,9 @@ function renderLandingList(){
             <div style="font-size:11.5px;color:var(--text-muted);margin-bottom:8px;"><i class=gi-book-open></i> ${escapeHTML(lp.bookName||'')}</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
                 <input class="form-input" readonly value="${escapeHTML(link)}" style="flex:1;min-width:160px;font-size:12px;" onclick="this.select()">
-                <button class="btn btn-ghost btn-sm" type="button" onclick="copyLandingLink('${escapeHTML(link)}',this)"><i class=gi-clipboard></i> কপি</button>
-                <button class="btn btn-ghost btn-sm" type="button" onclick="window.open('${escapeHTML(link)}','_blank')"><i class=gi-eye></i> দেখুন</button>
-                <button class="btn btn-ghost btn-sm" type="button" style="color:#dc2626;" onclick="deleteLandingPage('${escapeHTML(slug)}')"><i class=gi-trash></i> মুছুন</button>
+                <button class="btn btn-ghost btn-sm" type="button" onclick="copyLandingLink(${jsArg(link)},this)"><i class=gi-clipboard></i> কপি</button>
+                <button class="btn btn-ghost btn-sm" type="button" onclick="window.open(${jsArg(link)},'_blank')"><i class=gi-eye></i> দেখুন</button>
+                <button class="btn btn-ghost btn-sm" type="button" style="color:#dc2626;" onclick="deleteLandingPage(${jsArg(slug)})"><i class=gi-trash></i> মুছুন</button>
             </div>
         </div>`;
     }).join('');
@@ -7245,6 +7453,7 @@ function downloadBookJs(){
         setTimeout(()=>URL.revokeObjectURL(url), 1000);
     }
     dlBlob(bookJsCode,'book.js');
+    gkDeltaPrune();
     showToast('book.js ডাউনলোড হচ্ছে... বিবরণ (book-desc.js) জোড়া হচ্ছে','#0B6E4F');
 
     /* ── book-desc.js — বইয়ের বিবরণ বই-তালিকায় থাকে না (আলাদা রাখা হয়), তাই আগে শুধু তালিকা
@@ -7394,6 +7603,7 @@ function renderOrderSummary(){
     const el=document.getElementById('orderSummary');
     if(!allOrders.length){el.innerText='কোনো ডেটা নেই';return;}
     const totalRev=allOrders.reduce((s,o)=>{
+        if(gkIsDead(o)) return s;   /* বাতিল/ফেরত/ব্যর্থ বাদ */
         const t=String(o.total||'').replace(/[^\d]/g,'');
         return s+(parseInt(t)||0);
     },0);
@@ -7456,6 +7666,7 @@ function openModal(orderId){
         offerEl.innerHTML=o.offers.map(of=>`<div>${escapeHTML(of.icon)} <strong>${escapeHTML(of.label)}</strong></div>`).join('');
     }else{offerSec.classList.add('hidden');offerEl.innerHTML='';}
     document.getElementById('modalStatusSelect').value=o.status||'pending';
+    { const pc=document.getElementById('modalPaidChk'); if(pc) pc.checked=o.paid===true; }
     // Reset courier result
     const cr=document.getElementById('courierResult');
     if(cr){var _sf=o.steadfast&&o.steadfast.trackingCode,_rx=o.redx&&o.redx.parcelId;if(_sf||_rx){cr.style.display='block';cr.className='courier-result success';cr.innerHTML='<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> এই অর্ডার ইতিমধ্যে '+(_sf?'Steadfast':'RedX')+'-এ পাঠানো হয়েছে · '+(_sf?'CN# ':'Parcel# ')+escapeHTML(_sf||_rx);}else{cr.style.display='none';cr.className='courier-result';cr.innerText='';}}
@@ -7584,7 +7795,7 @@ function checkFraudPhone(){
         <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">সম্পূর্ণ অর্ডার হিস্ট্রি:</div>
         <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
             ${matches.map(o=>`
-                <div class="fraud-order-row" style="cursor:pointer;" onclick="switchTab('orders',document.getElementById('navOrders'));setTimeout(()=>openModal('${escapeHTML(o.orderId)}'),200);">
+                <div class="fraud-order-row" style="cursor:pointer;" onclick="switchTab('orders',document.getElementById('navOrders'));setTimeout(()=>openModal(${jsArg(o.orderId)}),200);">
                     <div>
                         <div style="font-weight:700;color:var(--text-main);">${escapeHTML(o.orderId)}</div>
                         <div style="color:var(--text-muted);font-size:11px;">${new Date(o.createdAt||0).toLocaleString('bn-BD')}</div>
@@ -7607,7 +7818,7 @@ function renderDashboard(){
     const now = Date.now();
     const ONE_DAY = 86400000;
     const todayCount = allOrders.filter(o => (now - (o.createdAt||0)) < ONE_DAY).length;
-    const totalRevenue = allOrders.reduce((s,o)=> s + (parseInt(String(o.total||'').replace(/[^\d]/g,''))||0), 0);
+    const totalRevenue = allOrders.reduce((s,o)=> gkIsDead(o) ? s : s + (parseInt(String(o.total||'').replace(/[^\d]/g,''))||0), 0);
     const deliveredCount = allOrders.filter(o=>o.status==='delivered').length;
     const successRate = allOrders.length ? Math.round((deliveredCount/allOrders.length)*100) : 0;
 
@@ -7634,7 +7845,7 @@ function renderDashboard(){
             recentEl.innerHTML='<div class="empty-state" style="padding:20px 0;"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg> কোনো অর্ডার নেই</div>';
         } else {
             recentEl.innerHTML=allOrders.slice(0,5).map(o=>`
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="openModal('${escapeHTML(o.orderId)}')">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="openModal(${jsArg(o.orderId)})">
                     <div>
                         <div style="font-size:12px;font-weight:700;color:var(--text-main);">${escapeHTML(o.name)}</div>
                         <div style="font-size:11px;color:var(--text-muted);">${escapeHTML(o.orderId)}</div>
@@ -7690,7 +7901,7 @@ function renderDashboardCharts(){
             const dayOrders=allOrders.filter(o=>(o.createdAt||0)>=dayStart&&(o.createdAt||0)<dayEnd);
             days.push(d.toLocaleDateString('bn-BD',{weekday:'short',day:'numeric',month:'short'}));
             counts.push(dayOrders.length);
-            revenue.push(dayOrders.reduce((s,o)=>s+(parseInt(String(o.total||'').replace(/[^\d]/g,''))||0),0));
+            revenue.push(dayOrders.reduce((s,o)=>gkIsDead(o)?s:s+(parseInt(String(o.total||'').replace(/[^\d]/g,''))||0),0));
         }
         if(orderTrendChartInst)orderTrendChartInst.destroy();
         orderTrendChartInst=new Chart(trendCanvas,{
@@ -7878,7 +8089,7 @@ function renderReport(){
     });
 
     // Stats
-    const revenue = filtered.reduce((s,o)=> s + (parseInt(String(o.total||'').replace(/[^\d]/g,''))||0), 0);
+    const revenue = filtered.reduce((s,o)=> gkIsDead(o) ? s : s + (parseInt(String(o.total||'').replace(/[^\d]/g,''))||0), 0);
     document.getElementById('rpTotalOrders').innerText = filtered.length;
     document.getElementById('rpTotalRevenue').innerText = '৳' + revenue.toLocaleString('bn-BD');
     document.getElementById('rpDelivered').innerText = filtered.filter(o=>o.status==='delivered').length;
@@ -7924,7 +8135,7 @@ function renderReport(){
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px;">এই সময়ে কোনো অর্ডার নেই</td></tr>';
         } else {
             tbody.innerHTML = [...filtered].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).map(o=>`
-                <tr onclick="openModal('${escapeHTML(o.orderId)}')" style="cursor:pointer;">
+                <tr onclick="openModal(${jsArg(o.orderId)})" style="cursor:pointer;">
                     <td>${new Date(o.createdAt).toLocaleDateString('bn-BD')}</td>
                     <td style="font-size:11px;color:var(--text-muted);">${escapeHTML(o.orderId)}</td>
                     <td>${escapeHTML(o.name)}</td>
@@ -8042,90 +8253,316 @@ let STEADFAST_API_KEY    = '';
 let STEADFAST_API_SECRET = '';
 let REDX_API_TOKEN       = '';
 
+/* কুরিয়ারে একটা অর্ডার পাঠানো — শুধু কাজটা (UI নয়)। অর্ডার খুলে পাঠানো আর তালিকা থেকে একসাথে অনেকগুলো
+   পাঠানো (gkBulkCourier) দুটোই এটা ব্যবহার করে। সফল হলে {code} দেয়, না হলে Error ছোড়ে। */
+async function gkCourierSend(o, provider){
+    if(provider==='steadfast' && (!STEADFAST_API_KEY || !STEADFAST_API_SECRET)) throw new Error('Steadfast API Key সেট করুন (Tools → কুরিয়ার)');
+    if(provider==='redx' && !REDX_API_TOKEN) throw new Error('Redx API Token সেট করুন (Tools → কুরিয়ার)');
+    const totalAmt = parseInt(String(o.total||'').replace(/[^\d]/g,'')) || 0;
+    const pay = String(o.payment||'').toLowerCase();
+    const isCOD = !pay.includes('bkash') && !pay.includes('nagad') && !/বিকাশ|নগদ/.test(String(o.payment||'')) && o.paid!==true;
+    // CORS proxy ব্যবহার করে courier API call
+    const PROXY = 'https://gronthokanon.gronthokanon4309.workers.dev/?url=';
+    if(provider === 'steadfast'){
+        const res = await fetch(PROXY + encodeURIComponent('https://portal.packzy.com/api/v1/create_order'), {
+            method: 'POST',
+            headers: { 'Api-Key': STEADFAST_API_KEY, 'Secret-Key': STEADFAST_API_SECRET, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ invoice: o.orderId, recipient_name: o.name, recipient_phone: o.phone, recipient_address: o.address, cod_amount: isCOD ? totalAmt : 0, note: o.books })
+        });
+        const data = await res.json();
+        if(data.status === 200 || data.consignment){
+            const code = (data.consignment && data.consignment.tracking_code) || data.tracking_code || '';
+            await db.ref('orders/' + o.orderId + '/steadfast').set({trackingCode: code, createdAt: Date.now()});
+            return {code: code || 'N/A'};
+        }
+        throw new Error(data.message || 'Steadfast error');
+    }
+    if(provider === 'redx'){
+        const res = await fetch(PROXY + encodeURIComponent('https://openapi.redx.com.bd/v1.0.0-beta/parcel'), {
+            method: 'POST',
+            headers: { 'Authorization': REDX_API_TOKEN, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ customer_name: o.name, customer_phone: o.phone, delivery_area: o.address, delivery_area_id: 1, merchant_invoice_id: o.orderId, cash_collection_amount: isCOD ? totalAmt : 0, parcel_weight: 500, instruction: o.books })
+        });
+        const data = await res.json();
+        if(data.parcel_id || res.ok){
+            await db.ref('orders/' + o.orderId + '/redx').set({parcelId: data.parcel_id || '', createdAt: Date.now()});
+            return {code: data.parcel_id || 'N/A'};
+        }
+        throw new Error(data.message || 'Redx error');
+    }
+    throw new Error('অজানা কুরিয়ার');
+}
 async function createCourierOrder(provider){
     const o = allOrders.find(x => x.orderId === modalOrderId);
     if(!o){ showToast('অর্ডার পাওয়া যায়নি','#dc2626'); return; }
-    // Check API keys
-    if(provider==='steadfast' && (!STEADFAST_API_KEY || !STEADFAST_API_SECRET)){
-        showToast('Steadfast API Key সেট করুন (Tools → Courier API Settings)','#dc2626'); return;
-    }
-    if(provider==='redx' && !REDX_API_TOKEN){
-        showToast('Redx API Token সেট করুন (Tools → Courier API Settings)','#dc2626'); return;
-    }
-
     const resultEl = document.getElementById('courierResult');
     resultEl.style.display = 'block';
     resultEl.className = 'courier-result';
-    resultEl.innerHTML = '<svg class="spin-ic" style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg> পিকআপ রিকোয়েস্ট পাঠানো হচ্ছে...';
-
-    const totalAmt = parseInt(String(o.total||'').replace(/[^\d]/g,'')) || 0;
-    const isCOD = !o.payment.toLowerCase().includes('bkash') && !o.payment.toLowerCase().includes('nagad');
-
+    resultEl.innerHTML = '<i class=gi-hourglass></i> পিকআপ রিকোয়েস্ট পাঠানো হচ্ছে...';
     try{
-        // CORS proxy ব্যবহার করে courier API call
-        const PROXY = 'https://gronthokanon.gronthokanon4309.workers.dev/?url=';
-
-        if(provider === 'steadfast'){
-            const sfUrl = PROXY + encodeURIComponent('https://portal.packzy.com/api/v1/create_order');
-            const res = await fetch(sfUrl, {
-                method: 'POST',
-                headers: {
-                    'Api-Key': STEADFAST_API_KEY,
-                    'Secret-Key': STEADFAST_API_SECRET,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    invoice: o.orderId,
-                    recipient_name: o.name,
-                    recipient_phone: o.phone,
-                    recipient_address: o.address,
-                    cod_amount: isCOD ? totalAmt : 0,
-                    note: o.books
-                })
-            });
-            const data = await res.json();
-            if(data.status === 200 || data.consignment){
-                resultEl.className = 'courier-result success';
-                resultEl.innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Steadfast পিকআপ রিকোয়েস্ট সম্পন্ন! Tracking: ' + escapeHTML(data.consignment?.tracking_code || data.tracking_code || 'N/A');
-                await db.ref('orders/' + o.orderId + '/steadfast').set({trackingCode: data.consignment?.tracking_code || '', createdAt: Date.now()});
-            } else {
-                throw new Error(data.message || 'Steadfast error');
-            }
-
-        } else if(provider === 'redx'){
-            const rdxUrl = PROXY + encodeURIComponent('https://openapi.redx.com.bd/v1.0.0-beta/parcel');
-            const res = await fetch(rdxUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': REDX_API_TOKEN,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    customer_name: o.name,
-                    customer_phone: o.phone,
-                    delivery_area: o.address,
-                    delivery_area_id: 1,
-                    merchant_invoice_id: o.orderId,
-                    cash_collection_amount: isCOD ? totalAmt : 0,
-                    parcel_weight: 500,
-                    instruction: o.books
-                })
-            });
-            const data = await res.json();
-            if(data.parcel_id || res.ok){
-                resultEl.className = 'courier-result success';
-                resultEl.innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Redx পিকআপ রিকোয়েস্ট সম্পন্ন! Parcel ID: ' + escapeHTML(data.parcel_id || 'N/A');
-                await db.ref('orders/' + o.orderId + '/redx').set({parcelId: data.parcel_id || '', createdAt: Date.now()});
-            } else {
-                throw new Error(data.message || 'Redx error');
-            }
-        }
+        const r = await gkCourierSend(o, provider);
+        resultEl.className = 'courier-result success';
+        resultEl.innerHTML = '<i class=gi-ok></i> ' + (provider==='steadfast' ? 'Steadfast পিকআপ রিকোয়েস্ট সম্পন্ন! Tracking: ' : 'Redx পিকআপ রিকোয়েস্ট সম্পন্ন! Parcel ID: ') + escapeHTML(r.code);
     } catch(e){
         resultEl.className = 'courier-result error';
-        resultEl.innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> ব্যর্থ: ' + escapeHTML(e.message);
+        resultEl.innerHTML = '<i class=gi-no></i> ব্যর্থ: ' + escapeHTML(e.message);
         console.error('Courier error:', e);
     }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   অ্যাডমিনের নতুন রূপ (২০২৬-১০-১৪) — মালিকের দেখানো প্যানেলের মতো:
+   ড্যাশবোর্ডে রঙিন কার্ড + অবস্থা-বৃত্ত, অর্ডারের টেবিল (খোঁজ, পেমেন্ট ছাঁকনি, একসাথে কুরিয়ারে পাঠানো),
+   বইয়ের টেবিল (স্টক/দাম/অ্যাকশন), কাস্টমারের তালিকা, দ্রুত অর্ডার (ফোন/দোকানের অর্ডার হাতে বসানো)।
+   সব হিসাব আসল ডেটা থেকে — বানানো সংখ্যা নেই।
+══════════════════════════════════════════════════════════════ */
+const gkBn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const gkTk=n=>'৳'+gkBn(Math.round(Number(n)||0).toLocaleString('en-IN'));
+const gkAsciiNum=s=>String(s==null?'':s).replace(/[০-৯]/g,d=>'০১২৩৪৫৬৭৮৯'.indexOf(d));
+function gkNormPhoneA(s){ s=gkAsciiNum(s).replace(/[^\d]/g,''); if(/^8801\d{9}$/.test(s)) s=s.slice(2); return s; }
+function gkIsAdminOrder(o){ return /^admin/.test(String(o&&o.userId||'')); }
+function gkTxid(o){ const m=String(o&&o.payment||'').match(/TxID:\s*([^)]+)/i); return m?m[1].trim():''; }
+/* পেমেন্ট অবস্থা — আসল তথ্য থেকে: হাতে "পরিশোধিত" দিলে বা ডেলিভারড হলে (ক্যাশ নেওয়া হয়ে গেছে) পরিশোধিত;
+   বিকাশের TxID আছে কিন্তু যাচাই হয়নি → যাচাই বাকি; বাতিল/ফেরত/ব্যর্থ → প্রযোজ্য নয় */
+function gkPayState(o){ if(o.paid===true||o.status==='delivered') return 'paid'; if(gkIsDead(o)) return 'void'; if(gkTxid(o)) return 'verify'; return 'due'; }
+const GK_PAY_LABEL={paid:'পরিশোধিত',due:'বাকি',verify:'যাচাই বাকি',void:'—'};
+function gkCourierOf(o){ if(o&&o.steadfast) return {name:'Steadfast',code:o.steadfast.trackingCode||''}; if(o&&o.redx) return {name:'RedX',code:o.redx.parcelId||''}; return null; }
+function gkThumb(u,w){ u=String(u||''); if(!/^https?:\/\//.test(u)) return ''; return /^https:\/\/i\.ibb\.co(\.com)?\//.test(u)?'https://wsrv.nl/?url='+encodeURIComponent(u)+'&w='+(w||80)+'&we&output=webp&q=75':u; }
+function gkDayStart(t){ const d=new Date(t); d.setHours(0,0,0,0); return d.getTime(); }
+
+/* ── ড্যাশবোর্ড ── */
+const GK_RINGS=[['pending','পেন্ডিং','#0ea5b7'],['confirmed','কনফার্ম','#2563eb'],['processing','প্যাকেজিং','#64748b'],['shipped','শিপড','#14b8a6'],
+                ['delivered','ডেলিভারড','#16a34a'],['cancelled','বাতিল','#dc2626'],['returned','ফেরত','#334155'],['failed','ডেলিভারি ব্যর্থ','#eab308']];
+function gkRenderDash(){
+    const el=document.getElementById('gkDashTop'); if(!el) return;
+    const live=allOrders.filter(o=>!gkIsDead(o)), sales=live.reduce((s,o)=>s+gkAmt(o),0);
+    const src=(typeof localBooks!=='undefined'&&localBooks.length)?localBooks:(typeof books!=='undefined'?books:[]);
+    const prod=src.filter(b=>b&&Number(b.price)>0).length, cust=new Set(allOrders.map(o=>o.phone).filter(Boolean)).size;
+    const cnt=s=>allOrders.filter(o=>(o.status||'pending')===s).length;
+    const K=(cls,title,val,ic,click)=>`<div class="gk-kpi ${cls}"><div class="gk-kpi-t">${title}</div><div class="gk-kpi-v">${val}</div><i class="${ic} gk-kpi-ic"></i><button type="button" class="gk-kpi-btn" onclick="${click}">সব দেখুন</button></div>`;
+    el.innerHTML=`<div class="gk-kpis">
+        ${K('gk-k1','অর্ডার',gkBn(allOrders.length),'gi-cart',"gkGoOrders('all')")}
+        ${K('gk-k2','বিক্রি',gkTk(sales),'gi-money',"switchTab('report',document.getElementById('navReport'))")}
+        ${K('gk-k3','বই',gkBn(prod),'gi-books',"switchTab('books',document.getElementById('navBooks'))")}
+        ${K('gk-k4','কাস্টমার',gkBn(cust),'gi-users',"gkOpenCustomers()")}
+    </div>
+    <div class="gk-rings">${GK_RINGS.map(([k,l,c])=>`<button type="button" class="gk-ring" onclick="gkGoOrders('${k}')" style="--rc:${c}">
+        <span class="gk-ring-c">${gkBn(cnt(k))}</span><b>${l}</b><small>মোট ${l} অর্ডার</small></button>`).join('')}</div>`;
+}
+function gkGoOrders(st){
+    switchTab('orders',document.getElementById('navOrders'));
+    const chip=[...document.querySelectorAll('#tabPanelOrders .chip')].find(c=>(c.getAttribute('onclick')||'').indexOf("'"+st+"'")>-1);
+    if(chip) filterOrders(st,chip);
+}
+
+/* ── অর্ডার: পরিসংখ্যান + খোঁজ + টেবিল + একসাথে কুরিয়ার ── */
+let gkOrdQ='', gkOrdPay='all'; const gkSel=new Set();
+function gkRenderOrdStats(){
+    const el=document.getElementById('gkOrdStats'); if(!el) return;
+    const now=Date.now(), today=gkDayStart(now), m=new Date(); m.setDate(1); m.setHours(0,0,0,0);
+    const live=allOrders.filter(o=>!gkIsDead(o)), rev=live.reduce((s,o)=>s+gkAmt(o),0);
+    const S=(cls,v,l)=>`<div class="gk-st ${cls}"><b>${v}</b><span>${l}</span></div>`;
+    el.innerHTML=S('gk-s1',gkBn(allOrders.length),'মোট অর্ডার')+S('gk-s2',gkTk(rev),'মোট বিক্রি')
+        +S('gk-s3',gkBn(allOrders.filter(o=>(o.createdAt||0)>=today).length),'আজকের অর্ডার')+S('gk-s4',gkBn(allOrders.filter(o=>(o.createdAt||0)>=m.getTime()).length),'এই মাসের অর্ডার')
+        +S('gk-s5',gkBn(allOrders.filter(o=>(o.status||'pending')==='pending').length),'পেন্ডিং')+S('gk-s6',gkTk(live.length?rev/live.length:0),'গড় অর্ডার মূল্য')
+        +S('gk-s7',gkBn(allOrders.filter(o=>o.status==='delivered').length),'ডেলিভারড')+S('gk-s8',gkBn(allOrders.filter(o=>gkCourierOf(o)).length),'কুরিয়ারে পাঠানো');
+}
+function gkOrdFiltered(){
+    let list=curFilter==='all'?allOrders:allOrders.filter(o=>(o.status||'pending')===curFilter);
+    const q=gkAsciiNum(gkOrdQ).trim().toLowerCase(), qp=gkNormPhoneA(gkOrdQ);
+    if(q) list=list.filter(o=>String(o.orderId||'').toLowerCase().includes(q)||String(o.name||'').toLowerCase().includes(q)||(qp.length>=3&&String(o.phone||'').includes(qp)));
+    if(gkOrdPay!=='all') list=list.filter(o=>gkPayState(o)===gkOrdPay);
+    return list;
+}
+function gkOrdTable(list){
+    const rows=list.map(o=>{
+        const id=o.orderId, ps=gkPayState(o), amt=gkAmt(o), c=gkCourierOf(o), tx=gkTxid(o);
+        const pay=String(o.payment||'').replace(/\s*\(TxID:[^)]*\)/i,'').replace(/^Cash on Delivery$/i,'ক্যাশ অন ডেলিভারি').replace(/^bKash$/i,'বিকাশ');
+        const paidCell=ps==='paid'?`<b class="gk-paid">${gkTk(amt)}</b>`:ps==='void'?'<span class="gk-mut">—</span>':`<b class="gk-due">৳০</b><small class="gk-mut">বাকি ${gkTk(amt)}</small>`;
+        return `<tr onclick="openModal(${jsArg(id)})">
+            <td onclick="event.stopPropagation()"><input type="checkbox" class="gk-chk" data-id="${escapeHTML(id)}" ${gkSel.has(id)?'checked':''} onchange="gkToggleSel(this.dataset.id,this.checked)" aria-label="বাছুন"></td>
+            <td><div class="gk-oid">${escapeHTML(id)}<button type="button" class="gk-copy" title="আইডি কপি" aria-label="আইডি কপি" onclick="event.stopPropagation();gkCopy(${jsArg(id)})"><i class=gi-clipboard></i></button></div><small class="gk-mut">${new Date(o.createdAt||0).toLocaleDateString('bn-BD',{day:'numeric',month:'short'})}</small></td>
+            <td><b>${escapeHTML(o.name||'')}</b><small class="gk-mut">${escapeHTML(o.phone||'')}</small></td>
+            <td><b>${gkTk(amt)}</b></td>
+            <td>${paidCell}</td>
+            <td>${escapeHTML(pay)}</td>
+            <td><span class="gk-pb gk-pb-${ps}">${GK_PAY_LABEL[ps]}</span></td>
+            <td class="gk-mut">${tx?escapeHTML(tx):'-'}</td>
+            <td><span class="gk-src ${gkIsAdminOrder(o)?'gk-src-a':''}">${gkIsAdminOrder(o)?'অ্যাডমিন':'ওয়েবসাইট'}</span></td>
+            <td><span class="status-badge ${STATUS_CLASS[o.status]||'status-pending'}">${STATUS_LABELS[o.status]||escapeHTML(o.status||'পেন্ডিং')}</span></td>
+            <td>${c?`<b>${c.name}</b><small class="gk-mut">${escapeHTML(c.code||'')}</small>`:'<span class="gk-mut">-</span>'}</td>
+        </tr>`;
+    }).join('');
+    const allSel=list.length&&list.every(o=>gkSel.has(o.orderId));
+    return `<div class="gk-tbl-wrap"><table class="gk-tbl gk-ord-tbl"><thead><tr>
+        <th><input type="checkbox" ${allSel?'checked':''} onchange="gkSelAll(this.checked)" aria-label="সব বাছুন"></th>
+        <th>অর্ডার আইডি</th><th>কাস্টমার</th><th>মোট</th><th>পরিশোধ</th><th>পেমেন্ট মাধ্যম</th><th>পেমেন্ট অবস্থা</th><th>TxID</th><th>উৎস</th><th>অবস্থা</th><th>কুরিয়ার</th>
+    </tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function gkToggleSel(id,on){ if(on) gkSel.add(id); else gkSel.delete(id); gkSelInfo(); }
+function gkSelAll(on){ gkOrdFiltered().forEach(o=>{ if(on) gkSel.add(o.orderId); else gkSel.delete(o.orderId); }); renderOrders(); }
+function gkSelInfo(){ const b=document.getElementById('gkBulkBtn'); if(b) b.innerHTML='<i class=gi-truck></i> পাঠান'+(gkSel.size?' ('+gkBn(gkSel.size)+')':''); }
+function gkCopy(t){ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>showToast('কপি হয়েছে: '+t,'#0B6E4F')).catch(()=>{ prompt('কপি করুন:',t); }); }
+async function gkBulkCourier(){
+    const prov=document.getElementById('gkCourierSel').value;
+    const list=[...gkSel].map(id=>allOrders.find(o=>o.orderId===id)).filter(Boolean);
+    if(!list.length){ showToast('<i class=gi-warn></i> আগে টেবিলে টিক দিয়ে অর্ডার বাছুন','#dc2626'); return; }
+    const todo=list.filter(o=>!gkCourierOf(o)&&!gkIsDead(o)), skip=list.length-todo.length;
+    if(!todo.length){ showToast('বাছাই করা সব অর্ডার আগেই কুরিয়ারে গেছে বা বাতিল','#dc2626'); return; }
+    const pname=prov==='steadfast'?'Steadfast':'RedX';
+    if(!confirm(gkBn(todo.length)+'টি অর্ডার '+pname+'-এ পাঠানো হবে'+(skip?' ('+gkBn(skip)+'টি আগেই পাঠানো/বাতিল — বাদ)':'')+'। এগিয়ে যাবেন?')) return;
+    const btn=document.getElementById('gkBulkBtn'); btn.disabled=true;
+    let ok=0; const fail=[];
+    for(let i=0;i<todo.length;i++){
+        btn.innerHTML='<i class=gi-hourglass></i> '+gkBn(i+1)+'/'+gkBn(todo.length);
+        try{ await gkCourierSend(todo[i],prov); ok++; }catch(e){ fail.push(todo[i].orderId+' — '+e.message); }
+    }
+    btn.disabled=false; gkSel.clear(); gkSelInfo(); renderOrders();
+    showToast((fail.length?'<i class=gi-warn></i> ':'<i class=gi-ok></i> ')+pname+'-এ '+gkBn(ok)+'টি পাঠানো হয়েছে'+(fail.length?', '+gkBn(fail.length)+'টি ব্যর্থ':''),fail.length?'#dc2626':'#0B6E4F');
+    if(fail.length) alert('যেগুলো যায়নি:\n\n'+fail.join('\n'));
+}
+async function gkSetPaid(id,on){
+    if(!id) return;
+    try{ await db.ref('orders/'+id+'/paid').set(on?true:null); showToast(on?'পরিশোধিত চিহ্ন দেওয়া হয়েছে':'পরিশোধিত চিহ্ন সরানো হয়েছে','#0B6E4F'); }
+    catch(e){ showToast('সেভ হয়নি: '+e.message,'#dc2626'); const c=document.getElementById('modalPaidChk'); if(c) c.checked=!on; }
+}
+
+/* ── কাস্টমারের তালিকা (অর্ডার থেকে — ফোন নম্বর ধরে) ── */
+function gkOpenCustomers(){
+    const by={};
+    allOrders.forEach(o=>{ const p=o.phone; if(!p) return; const c=by[p]||(by[p]={phone:p,name:'',n:0,spent:0,last:0});
+        c.n++; if(!gkIsDead(o)) c.spent+=gkAmt(o); if((o.createdAt||0)>=c.last){ c.last=o.createdAt||0; c.name=o.name||c.name; } });
+    const list=Object.values(by).sort((a,b)=>b.last-a.last);
+    gkModal('কাস্টমার ('+gkBn(list.length)+' জন)',`<input class="form-input" id="gkCustQ" placeholder="নাম বা ফোন দিয়ে খুঁজুন" oninput="gkCustFilter()" style="margin-bottom:10px;">
+        <div class="gk-tbl-wrap"><table class="gk-tbl"><thead><tr><th>নাম</th><th>ফোন</th><th>অর্ডার</th><th>মোট কেনা</th><th>শেষ অর্ডার</th></tr></thead><tbody id="gkCustBody">
+        ${list.map(c=>`<tr data-q="${escapeHTML((c.name+' '+c.phone).toLowerCase())}" data-p="${escapeHTML(c.phone)}" onclick="gkCustOpen(this.dataset.p)"><td><b>${escapeHTML(c.name)}</b></td><td>${escapeHTML(c.phone)}</td><td>${gkBn(c.n)}</td><td>${gkTk(c.spent)}</td><td class="gk-mut">${c.last?new Date(c.last).toLocaleDateString('bn-BD'):''}</td></tr>`).join('')}
+        </tbody></table></div><p class="gk-mut" style="margin-top:8px;font-size:12px;">সারিতে চাপ দিলে ওই নম্বরের সব অর্ডার দেখাবে।</p>`);
+}
+function gkCustFilter(){ const q=gkAsciiNum(document.getElementById('gkCustQ').value).trim().toLowerCase(); document.querySelectorAll('#gkCustBody tr').forEach(r=>{ r.style.display=!q||r.dataset.q.includes(q)?'':'none'; }); }
+function gkCustOpen(phone){ gkCloseModal(); gkGoOrders('all'); const s=document.getElementById('gkOrdSearch'); if(s){ s.value=phone; gkOrdQ=phone; renderOrders(); } }
+
+/* ── সাধারণ পপআপ ── */
+function gkModal(title,html){
+    let m=document.getElementById('gkModal');
+    if(!m){ m=document.createElement('div'); m.id='gkModal'; m.className='gk-modal'; m.onclick=e=>{ if(e.target===m) gkCloseModal(); }; document.body.appendChild(m); }
+    m.innerHTML=`<div class="gk-modal-box" role="dialog" aria-label="${escapeHTML(title)}"><div class="gk-modal-head"><b>${escapeHTML(title)}</b><button type="button" class="gk-modal-x" onclick="gkCloseModal()" aria-label="বন্ধ করুন">&times;</button></div><div class="gk-modal-body">${html}</div></div>`;
+    m.style.display='flex';
+}
+function gkCloseModal(){ const m=document.getElementById('gkModal'); if(m) m.style.display='none'; }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') gkCloseModal(); });
+
+/* ── বই / স্টক টেবিল ── */
+const gkProd={q:'',cat:'',stock:'all',page:1}; const GK_PER=50;
+function gkProdSrc(){ return (typeof localBooks!=='undefined'&&localBooks.length)?localBooks:(typeof books!=='undefined'?books:[]); }
+function gkProdRender(){
+    const wrap=document.getElementById('bookManageWrap'); if(!wrap) return;
+    const src=gkProdSrc(); const all=src.map((b,i)=>({b,i})).filter(x=>x.b&&x.b.name);
+    const inStock=x=>stockData[x.i]!==false, vis=x=>Number(x.b.price)>0;
+    const cats=[...new Set(all.map(x=>x.b.cat).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'bn'));
+    let list=all; const q=gkAsciiNum(gkProd.q).trim().toLowerCase();
+    if(q) list=list.filter(x=>[x.b.name,x.b.author,x.b.pub,x.b.bid].some(v=>String(v||'').toLowerCase().includes(q)));
+    if(gkProd.cat) list=list.filter(x=>x.b.cat===gkProd.cat);
+    if(gkProd.stock==='in') list=list.filter(x=>inStock(x)&&vis(x)); else if(gkProd.stock==='out') list=list.filter(x=>!inStock(x)); else if(gkProd.stock==='hidden') list=list.filter(x=>!vis(x));
+    const pages=Math.max(1,Math.ceil(list.length/GK_PER)); if(gkProd.page>pages) gkProd.page=pages;
+    const slice=list.slice((gkProd.page-1)*GK_PER,gkProd.page*GK_PER);
+    const S=(cls,v,l)=>`<div class="gk-st ${cls}"><b>${v}</b><span>${l}</span></div>`;
+    const rows=slice.map(x=>{ const b=x.b, i=x.i, on=inStock(x), th=gkThumb(b.img,80), nc=stockNotifyData[i]?Object.keys(stockNotifyData[i]).length:0;
+        const mrp=Number(b.original_price)>Number(b.price)?`<s class="gk-mut">${gkTk(b.original_price)}</s>`:'';
+        return `<tr>
+            <td class="gk-mut">${gkBn(i+1)}</td>
+            <td>${th?`<img src="${escapeHTML(th)}" alt="" loading="lazy" class="gk-pimg" onerror="this.onerror=null;this.src=${jsArg(String(b.img||''))}">`:'<span class="gk-pimg gk-pimg-0"><i class=gi-book-open></i></span>'}</td>
+            <td class="gk-pname"><b>${escapeHTML(b.name)}</b><small class="gk-mut">${escapeHTML(b.bid||'')}</small></td>
+            <td>${escapeHTML(b.author||b.brand||'')}<small class="gk-mut">${escapeHTML(b.pub||'')}</small></td>
+            <td><span class="gk-cat">${escapeHTML(b.cat||'—')}</span></td>
+            <td><b>${gkTk(b.price)}</b>${mrp}</td>
+            <td><button type="button" class="gk-sw ${on?'on':''}" onclick="toggleStock(${i},${on})" aria-label="${on?'স্টক আছে — চাপলে শেষ':'স্টক শেষ — চাপলে আছে'}"><span></span></button>${nc?`<button type="button" class="gk-notify" onclick="showStockNotifyList(${i})" title="স্টকে এলে জানাতে বলেছেন"><i class=gi-bell></i> ${gkBn(nc)}</button>`:''}</td>
+            <td>${vis(x)?'<span class="gk-pb gk-pb-paid">দেখায়</span>':'<span class="gk-pb gk-pb-void">লুকানো</span>'}</td>
+            <td class="gk-acts"><button type="button" class="gk-btn gk-btn-blue" onclick="dhEdit(${i})"><i class=gi-pen></i> এডিট</button><a class="gk-btn gk-btn-teal" target="_blank" rel="noopener" href="book.html?id=${encodeURIComponent(b.bid||i)}"><i class=gi-eye></i> দেখুন</a><button type="button" class="gk-btn gk-btn-red" onclick="gkProdDelete(${i})"><i class=gi-trash></i></button></td>
+        </tr>`; }).join('');
+    wrap.innerHTML=`<div class="gk-stats">${S('gk-s1',gkBn(all.length),'মোট বই/পণ্য')+S('gk-s7',gkBn(all.filter(x=>inStock(x)&&vis(x)).length),'স্টকে আছে')+S('gk-s5',gkBn(all.filter(x=>!inStock(x)).length),'স্টক শেষ')+S('gk-s3',gkBn(all.filter(x=>!vis(x)).length),'লুকানো (দাম ০)')}</div>
+    <div class="gk-panel"><div class="gk-toolbar"><b class="gk-panel-t">বইয়ের তালিকা</b>
+        <input class="form-input gk-tb-search" id="gkProdQ" placeholder="নাম, লেখক, প্রকাশনী দিয়ে খুঁজুন" value="${escapeHTML(gkProd.q)}" oninput="gkProd.q=this.value;gkProd.page=1;gkProdRenderKeep()">
+        <select class="form-input" onchange="gkProd.cat=this.value;gkProd.page=1;gkProdRender()" aria-label="ক্যাটাগরি"><option value="">সব ক্যাটাগরি</option>${cats.map(c=>`<option ${c===gkProd.cat?'selected':''} value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('')}</select>
+        <select class="form-input" onchange="gkProd.stock=this.value;gkProd.page=1;gkProdRender()" aria-label="স্টক"><option value="all">সব</option><option value="in" ${gkProd.stock==='in'?'selected':''}>স্টকে আছে</option><option value="out" ${gkProd.stock==='out'?'selected':''}>স্টক শেষ</option><option value="hidden" ${gkProd.stock==='hidden'?'selected':''}>লুকানো</option></select>
+        <button type="button" class="gk-btn gk-btn-blue gk-btn-lg" onclick="switchTab('editor',document.getElementById('navEditor'));beToggleAddForm()">+ নতুন বই</button></div>
+    <div class="gk-tbl-wrap"><table class="gk-tbl gk-prod-tbl"><thead><tr><th>#</th><th>ছবি</th><th>নাম</th><th>লেখক / প্রকাশনী</th><th>ক্যাটাগরি</th><th>দাম</th><th>স্টক</th><th>অবস্থা</th><th>অ্যাকশন</th></tr></thead><tbody>${rows||'<tr><td colspan="9" class="gk-mut" style="text-align:center;padding:24px;">কিছু পাওয়া যায়নি</td></tr>'}</tbody></table></div>
+    <div class="gk-pager"><span class="gk-mut">${gkBn(list.length)}টির মধ্যে ${gkBn(list.length?(gkProd.page-1)*GK_PER+1:0)}–${gkBn(Math.min(gkProd.page*GK_PER,list.length))}</span>
+        <button type="button" class="gk-btn" ${gkProd.page<=1?'disabled':''} onclick="gkProd.page--;gkProdRender();document.getElementById('bookManageWrap').scrollIntoView()">‹ আগের</button>
+        <span>পাতা ${gkBn(gkProd.page)}/${gkBn(pages)}</span>
+        <button type="button" class="gk-btn" ${gkProd.page>=pages?'disabled':''} onclick="gkProd.page++;gkProdRender();document.getElementById('bookManageWrap').scrollIntoView()">পরের ›</button></div></div>`;
+}
+/* খোঁজার ঘরে লেখার সময় পুরো পাতা আঁকলে কার্সর হারায় — তাই আঁকার পর ঘরে ফোকাস ফিরিয়ে দিই */
+function gkProdRenderKeep(){ const a=document.activeElement, pos=a&&a.selectionStart; gkProdRender(); const s=document.getElementById('gkProdQ'); if(s&&a&&a.id==='gkProdQ'){ s.focus(); try{ s.setSelectionRange(pos,pos); }catch(e){} } }
+function gkProdDelete(i){
+    if(!(typeof localBooks!=='undefined'&&localBooks.length)){ showToast('বইয়ের তালিকা এখনো লোড হয়নি — একটু পরে চেষ্টা করুন','#dc2626'); return; }
+    beDeleteBook(i); setTimeout(gkProdRender,400);
+}
+
+/* ── দ্রুত অর্ডার (ফোন/ফেসবুক/দোকানের অর্ডার হাতে বসানো) — ওয়েবসাইটের অর্ডারের মতোই একই আকারে লেখা ── */
+let gkQS={items:[]};
+function gkOpenQuickSale(){
+    gkQS={items:[]};
+    gkModal('দ্রুত অর্ডার',`<div class="gk-qs">
+        <div class="gk-qs-grid">
+            <label>নাম *<input class="form-input" id="qsName" maxlength="60"></label>
+            <label>মোবাইল নম্বর *<input class="form-input" id="qsPhone" inputmode="tel" maxlength="16" placeholder="01XXXXXXXXX"></label>
+            <label class="gk-qs-full">ঠিকানা *<input class="form-input" id="qsAddr" maxlength="280" placeholder="থানা, জেলা — বাসা/রোড"></label>
+        </div>
+        <label class="gk-qs-full">বই যোগ করুন<input class="form-input" id="qsSearch" placeholder="বইয়ের নাম লিখুন..." oninput="gkQsSuggest(this.value)" autocomplete="off"></label>
+        <div id="qsSug" class="gk-qs-sug"></div>
+        <div id="qsItems" class="gk-qs-items"></div>
+        <div class="gk-qs-grid">
+            <label>ডেলিভারি<select class="form-input" id="qsDeliv" onchange="gkQsTotals()"><option value="60">ঢাকার ভেতরে — ৳৬০</option><option value="80">ঢাকার আশপাশ — ৳৮০</option><option value="90">ঢাকার বাইরে — ৳৯০</option><option value="50">অফিস ডেলিভারি (সুন্দরবন) — ৳৫০</option><option value="0">ডেলিভারি নেই / দোকানে — ৳০</option></select></label>
+            <label>ছাড় (৳)<input class="form-input" id="qsDisc" type="number" min="0" value="0" oninput="gkQsTotals()"></label>
+            <label>পেমেন্ট<select class="form-input" id="qsPay" onchange="gkQsTotals()"><option>Cash on Delivery</option><option>bKash</option><option>নগদ</option><option>হাতে নগদ (দোকানে)</option></select></label>
+            <label>TxID (বিকাশ/নগদ হলে)<input class="form-input" id="qsTx" maxlength="30"></label>
+            <label class="gk-qs-full">নোট<input class="form-input" id="qsNote" maxlength="400"></label>
+        </div>
+        <label class="gk-paid-toggle"><input type="checkbox" id="qsDone"> <span>দোকানেই হাতে দিয়েছি — সাথে সাথে "ডেলিভারড" ও "পরিশোধিত" করে দিন</span></label>
+        <div class="gk-qs-sum" id="qsSum"></div>
+        <button type="button" class="gk-btn gk-btn-green gk-btn-lg" id="qsSave" onclick="gkQsSave()" style="width:100%;margin-top:10px;"><i class=gi-ok></i> অর্ডার সেভ করুন</button>
+    </div>`);
+    gkQsTotals();
+}
+function gkQsSuggest(v){
+    const box=document.getElementById('qsSug'); const q=String(v||'').trim().toLowerCase(); if(q.length<2){ box.innerHTML=''; return; }
+    const src=gkProdSrc(); const hits=[]; for(let i=0;i<src.length&&hits.length<8;i++){ const b=src[i]; if(b&&Number(b.price)>0&&String(b.name).toLowerCase().includes(q)) hits.push(i); }
+    box.innerHTML=hits.map(i=>{ const b=src[i]; return `<button type="button" onclick="gkQsAdd(${i})"><b>${escapeHTML(b.name)}</b><small>${escapeHTML(b.author||b.pub||'')} · ${gkTk(b.price)}</small></button>`; }).join('')||'<div class="gk-mut" style="padding:8px;">মেলেনি</div>';
+}
+function gkQsAdd(i){ const ex=gkQS.items.find(x=>x.i===i); if(ex) ex.n++; else gkQS.items.push({i,n:1}); document.getElementById('qsSearch').value=''; document.getElementById('qsSug').innerHTML=''; gkQsTotals(); }
+function gkQsQty(k,d){ const it=gkQS.items[k]; if(!it) return; it.n+=d; if(it.n<1) gkQS.items.splice(k,1); gkQsTotals(); }
+function gkQsCalc(){ const src=gkProdSrc(); const sub=gkQS.items.reduce((s,x)=>s+(Number(src[x.i]&&src[x.i].price)||0)*x.n,0); const del=Number(document.getElementById('qsDeliv').value)||0; const disc=Math.max(0,Number(document.getElementById('qsDisc').value)||0); return {sub,del,disc,grand:Math.max(0,sub+del-disc)}; }
+function gkQsTotals(){
+    const src=gkProdSrc(), box=document.getElementById('qsItems'); if(!box) return;
+    box.innerHTML=gkQS.items.map((x,k)=>{ const b=src[x.i]||{}; return `<div class="gk-qs-it"><span>${escapeHTML(b.name||'')}</span><span class="gk-qs-q"><button type="button" onclick="gkQsQty(${k},-1)" aria-label="কমান">−</button><b>${gkBn(x.n)}</b><button type="button" onclick="gkQsQty(${k},1)" aria-label="বাড়ান">+</button></span><b>${gkTk((Number(b.price)||0)*x.n)}</b></div>`; }).join('')||'<div class="gk-mut" style="padding:6px 0;">এখনো কোনো বই যোগ করা হয়নি</div>';
+    const c=gkQsCalc(); document.getElementById('qsSum').innerHTML=`বই ${gkTk(c.sub)} + ডেলিভারি ${gkTk(c.del)} − ছাড় ${gkTk(c.disc)} = <b>মোট ${gkTk(c.grand)}</b>`;
+}
+async function gkQsSave(){
+    const g=id=>document.getElementById(id), name=g('qsName').value.trim(), phone=gkNormPhoneA(g('qsPhone').value);
+    let addr=g('qsAddr').value.trim(); const pay=g('qsPay').value, tx=gkAsciiNum(g('qsTx').value).trim(), done=g('qsDone').checked;
+    if(!name){ showToast('নাম লিখুন','#dc2626'); return; }
+    if(!/^01[3-9]\d{8}$/.test(phone)){ showToast('সঠিক মোবাইল নম্বর দিন (01XXXXXXXXX)','#dc2626'); return; }
+    if(!addr){ if(done) addr='দোকান থেকে সরাসরি'; else { showToast('ঠিকানা লিখুন','#dc2626'); return; } }
+    if(!gkQS.items.length){ showToast('অন্তত একটা বই যোগ করুন','#dc2626'); return; }
+    const src=gkProdSrc(), c=gkQsCalc();
+    const items=[]; gkQS.items.forEach(x=>{ const b=src[x.i]; for(let k=0;k<x.n;k++) items.push({name:b.name,price:Number(b.price)||0,img:b.img||''}); });
+    let bookList=gkQS.items.map(x=>src[x.i].name+' ('+x.n+'টি)').join(', '); if(bookList.length>3000) bookList=bookList.slice(0,2960)+' … মোট '+items.length+'টি বই';
+    const orderId='GK-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase();
+    const uid=(auth.currentUser&&auth.currentUser.uid)||'';
+    const orderData={orderId,name:name.slice(0,60),phone,address:addr.slice(0,300),items,books:bookList,
+        payment:pay+(tx?` (TxID: ${tx})`:''), delivery:'৳'+c.del+(c.del===50?' (অফিস ডেলিভারি)':c.del?' (হোম ডেলিভারি)':' (ডেলিভারি নেই)'),
+        total:'৳'+c.grand, discount:c.disc, discountPct:0, coupon:'', couponType:'', customerNote:g('qsNote').value.trim().slice(0,500),
+        status:'pending', createdAt:firebase.database.ServerValue.TIMESTAMP, userId:('admin:'+uid).slice(0,60)}; /* সময় Firebase বসায় — নিয়মে "createdAt <= এখন", পিসির ঘড়ি এগিয়ে থাকলেও আটকাবে না */
+    const btn=g('qsSave'); btn.disabled=true; btn.innerHTML='<i class=gi-hourglass></i> সেভ হচ্ছে...';
+    try{
+        await db.ref('orders/'+orderId).set(orderData);
+        try{ await db.ref('phoneIndex/'+phone+'/'+orderId).set(true); }catch(e){}
+        if(done){ try{ await db.ref('orders/'+orderId).update({status:'delivered',paid:true}); }catch(e){ showToast('অর্ডার সেভ হয়েছে, কিন্তু "ডেলিভারড" করা যায়নি — অর্ডার খুলে করে দিন','#dc2626'); } }
+        gkCloseModal(); showToast('<i class=gi-ok></i> অর্ডার সেভ হয়েছে: '+orderId,'#0B6E4F');
+    }catch(e){ btn.disabled=false; btn.innerHTML='<i class=gi-ok></i> অর্ডার সেভ করুন'; showToast('সেভ হয়নি: '+e.message,'#dc2626'); }
+}
+/* বড় পর্দা ↔ মোবাইলের মাঝে গেলে অর্ডার তালিকা টেবিল/কার্ডে বদলাই */
+(function(){ let wide=window.innerWidth>=900; window.addEventListener('resize',()=>{ const w=window.innerWidth>=900; if(w!==wide){ wide=w; if(document.getElementById('tabPanelOrders')&&document.getElementById('tabPanelOrders').style.display!=='none') renderOrders(); } }); })();
 
 /* ══════════════════════════════════════════════
    AUTH STATE
@@ -8165,7 +8602,7 @@ function gsSearch(){
     ).slice(0,10);
     if(!results.length){el.innerHTML='<div class="gs-empty">কোনো ফলাফল পাওয়া যায়নি</div>';return;}
     el.innerHTML=results.map(o=>`
-        <div class="gs-item" onclick="gsOpenOrder('${escapeHTML(o.orderId)}')">
+        <div class="gs-item" onclick="gsOpenOrder(${jsArg(o.orderId)})">
             <div>
                 <div style="font-size:13px;font-weight:700;color:var(--text-main);">${escapeHTML(o.name)}</div>
                 <div style="font-size:11px;color:var(--text-muted);">${escapeHTML(o.orderId)} · ${escapeHTML(o.phone)}</div>
@@ -8210,9 +8647,9 @@ function renderKanban(){
         cnt.textContent=orders.length;
         col.innerHTML=orders.map(o=>`
             <div class="kb-card" draggable="true"
-                 ondragstart="kbDragStart(event,'${escapeHTML(o.orderId)}')"
+                 ondragstart="kbDragStart(event,${jsArg(o.orderId)})"
                  ondragend="kbDragEnd(event)"
-                 onclick="openModal('${escapeHTML(o.orderId)}')">
+                 onclick="openModal(${jsArg(o.orderId)})">
                 <div class="kb-card-id">${escapeHTML(o.orderId)}</div>
                 <div class="kb-card-name">${escapeHTML(o.name)}</div>
                 <div class="kb-card-book">${escapeHTML(o.books||'').substring(0,40)}</div>
@@ -8479,7 +8916,7 @@ function renderNotifPanel(orders){
     list.innerHTML=src.map(o=>{
         const unread=o.seen!==true;
         const t=o.createdAt?timeAgoNotif(o.createdAt):'';
-        return `<div class="notif-item ${unread?'unread':''}" onclick="openModal('${escapeHTML(o.orderId)}');markOrderSeen('${escapeHTML(o.orderId)}')">
+        return `<div class="notif-item ${unread?'unread':''}" onclick="openModal(${jsArg(o.orderId)});markOrderSeen(${jsArg(o.orderId)})">
             <div class="notif-item-body">
                 <div class="notif-item-name">${escapeHTML(o.name||'অর্ডার')} — ${escapeHTML(o.total||'')}</div>
                 <div class="notif-item-sub">${escapeHTML(o.orderId||'')}</div>
@@ -8596,7 +9033,7 @@ function showNewOrderPopup(o){
                 <div class="nop-title"><i class=gi-party></i> নতুন অর্ডার এসেছে!</div>
                 <div class="nop-sub">${escapeHTML(o.orderId||'')}</div>
             </div>
-            <button class="nop-close" onclick="closeOrderPopup('${id}')"><i class=gi-x></i></button>
+            <button class="nop-close" onclick="closeOrderPopup(${jsArg(id)})"><i class=gi-x></i></button>
         </div>
         <div class="nop-body">
             <div class="nop-name">${escapeHTML(o.name||'')}</div>
@@ -8607,7 +9044,7 @@ function showNewOrderPopup(o){
             <div class="nop-books">${escapeHTML(o.books||'')}</div>
             <div class="nop-foot">
                 <span class="nop-total">${escapeHTML(o.total||'')}</span>
-                <button class="nop-btn" onclick="openModal('${escapeHTML(o.orderId)}');closeOrderPopup('${id}')">দেখুন →</button>
+                <button class="nop-btn" onclick="openModal(${jsArg(o.orderId)});closeOrderPopup(${jsArg(id)})">দেখুন →</button>
             </div>
         </div>
         <div class="nop-progress"></div>`;

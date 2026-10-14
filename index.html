@@ -2599,7 +2599,11 @@ function loadRecentSalesTicker(){
     db.ref('recentSales').limitToLast(15).get().then(snap=>{
         if(!snap.exists())return;
         /* শুধু গত ৩০ দিনের অর্ডার — পুরনো অর্ডার "এইমাত্র বিক্রি" হিসেবে ঘুরিয়ে দেখাই না */
-        const arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.book&&v.t&&Date.now()-v.t<30*864e5)arr.push(v);});
+        /* recentSales-এ যে কেউ সরাসরি লিখতে পারে — তাই শুধু দোকানের আসল বইয়ের নাম আর সাধারণ বাংলা এলাকার নাম হলে দেখাই
+           (নইলে কেউ "এই নম্বরে ফোন দিন…" ধরনের লেখা সব ভিজিটরকে দেখাতে পারত) */
+        const realNames=new Set((typeof books!=='undefined'?books:[]).map(b=>b&&b.name).filter(Boolean));
+        const okArea=a=>!a||(String(a).length<=30&&/^[ঀ-৿\s.,()-]+$/.test(String(a)));
+        const arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.book&&v.t&&Date.now()-v.t<30*864e5&&realNames.has(v.book)&&okArea(v.area))arr.push(v);});
         if(!arr.length)return;
         arr.sort((a,b)=>(b.t||0)-(a.t||0));
         const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
