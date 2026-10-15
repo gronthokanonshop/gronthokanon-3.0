@@ -326,6 +326,7 @@ window.GK_ADMIN_EN={
 "এক-দুই লাইনে বইটা কেন কেনা উচিত লিখুন":"Write in a line or two why this book is worth buying",
 "একই দিনে":"On the same day",
 "একই নামের অন্য কোনো খণ্ড পাওয়া যায়নি — নিচে নাম লিখে বাছুন":"No other volume with the same name found — type a name below to pick",
+"একই নামের অন্য খণ্ড/সাইজ পাওয়া গেছে — নিচে দেখে \"সেভ ও আপলোড\" চাপুন":"Other volumes/sizes with the same name found — check below and tap \"Save & upload\"",
 "একই বই দুবার":"Same book twice",
 "একই বিবরণ — বাড়তি লাইন সরিয়ে পরিষ্কার করে বসবে)":"same description — will be cleaned of extra lines)",
 "একই লেখক মনে হচ্ছে — বানান মিলিয়ে নিন":"Looks like the same author — make the spelling match",
@@ -340,6 +341,7 @@ window.GK_ADMIN_EN={
 "একসাথে কেনা":"bought together",
 "একসাথে কেনা বই":"Books bought together",
 "একসাথে কেনা হলে দেখাবে":"shows if bought together",
+"একাধিক খণ্ড বা সাইজ?":"Several volumes or sizes?",
 "এক্সেল লাইব্রেরি লোড হয়নি — নেট চেক করুন":"Excel library didn't load — check the internet",
 "এক্সেল/CSV দিয়ে বাল্ক বই আপলোড":"Bulk upload books with Excel/CSV",
 "এখন এখানে ঠিক PDF বসানো হয়েছে":"The right PDF is now set here",
@@ -891,6 +893,7 @@ window.GK_ADMIN_EN={
 "প্রকাশিত লেখাটি সাইট থেকে সরাবেন":"Remove the published writing from the site",
 "প্রকাশিত হয়েছে — সাইটে লাইভ! লেখকের নম্বরে হাদিয়ার জন্য যোগাযোগ করুন":"Published — live on the site! Contact the writer's number for the gift",
 "প্রতিটা অপশন (যেমন ৬ মিলি, ১২ মিলি) দোকানে আলাদা পণ্য হিসেবে থাকতে হবে — নিজের ছবি ও দামসহ। বাটনের নাম দিন যেমন":"Each option (e.g. 6 ml, 12 ml) must be a separate product in the shop — with its own image and price. Name the button e.g.",
+"প্রতিটা খণ্ড (১ম খণ্ড, ২য় খণ্ড, সব খণ্ড একত্রে) বা পণ্যের সাইজ (নাম ইংরেজিতে, যেমন ROYAL OUD 5 ml, ROYAL OUD 10 ml, Honey 1 kg) আলাদা করে যোগ করুন — নিজের ছবি ও দামসহ। নামে খণ্ড বা সাইজ লিখলে, যোগ করার পর নিচে খণ্ডের ঘর নিজে থেকে খুলে আগের খণ্ডগুলো খুঁজে দেবে — দেখে নিয়ে \"সেভ ও আপলোড\" চাপলেই সাইটে বাটন বসে যাবে।":"Add each volume (Vol 1, Vol 2, all volumes together) or product size (name in English, e.g. ROYAL OUD 5 ml, ROYAL OUD 10 ml, Honey 1 kg) separately — with its own image and price. If the name has the volume or size, after adding, the volumes box below opens by itself and finds the earlier volumes — check it and tap \"Save & upload\" to put the buttons on the site.",
 "প্রতিটা খণ্ড দোকানে আলাদা বই হিসেবে থাকতে হবে (নিজের ছবি ও দামসহ)। এখানে সেভ করলে দলের সব খণ্ডের পাতায় একই বাটন বসে যাবে।":"Each volume must be a separate book in the shop (with its own image and price). Saving here puts the same buttons on every volume's page.",
 "প্রতিদিনের অর্ডার":"Daily orders",
 "প্রতিদিনের কাজ":"Daily work",
@@ -1039,6 +1042,7 @@ window.GK_ADMIN_EN={
 "ব্যবহার করুন।":".",
 "ব্যবহারবিধি":"How to use",
 "ব্যবহারবিধি / যত্ন (ঐচ্ছিক — সাইটে আলাদা ট্যাবে দেখাবে)":"How to use / care (optional — shown in a separate tab on the site)",
+"ব্যবহারবিধি / যত্ন (ঐচ্ছিক, ইংরেজিতে — সাইটে আলাদা ট্যাবে দেখাবে)":"How to use / care (optional, in English — shown in a separate tab on the site)",
 "ব্যর্থ":"Failed",
 "ব্যর্থ হলো":"Failed",
 "ব্যর্থ — কোনো দাম বদলায়নি।":"failed — no price changed.",
@@ -1085,6 +1089,7 @@ window.GK_ADMIN_EN={
 "মুদ্রিত দাম নেই — নিজে থেকে মেলানো যায়নি":"No printed price — couldn't match automatically",
 "মুদ্রিত দামের যোগফল হুবহু প্যাকেজের মুদ্রিত দামের সমান":"total printed price exactly equals the package's printed price",
 "মূল বৈশিষ্ট্য — প্রতি লাইনে একটা (সাইটে দামের নিচে টিক চিহ্নসহ দেখাবে)":"Key features — one per line (shown with ticks under the price on the site)",
+"মূল বৈশিষ্ট্য — প্রতি লাইনে একটা, ইংরেজিতে লিখুন (সাইটে দামের নিচে টিক চিহ্নসহ দেখাবে)":"Key features — one per line, in English (shown with ticks under the price on the site)",
 "মূল্য":"Price",
 "মূল্য (৳)":"Price (৳)",
 "মূল্য নেই/ভুল":"No/wrong price",
@@ -1400,7 +1405,8 @@ window.GK_ADMIN_EN_T=[
 ["{n} জন","{n} people"],
 ["{n}টির মধ্যে {n}–{n}","{2}–{3} of {1}"],
 ["পাতা {n}/{n}","Page {n}/{n}"],
-["মোট ৳{n}","Total ৳{n}"]
+["মোট ৳{n}","Total ৳{n}"],
+["{n}টা খণ্ড পাওয়া গেছে — নাম ঠিক আছে কিনা দেখে \"সেভ ও আপলোড\" চাপুন","{n} volumes found — check the names, then tap \"Save & upload\""]
 ];
 
 /* ══════════════════════════════════════════════════════════════
@@ -1469,7 +1475,7 @@ window.GK_ADMIN_EN_T=[
         return null;
     }
     function digits(s) { return s.replace(/[০-৯]/g, function (d) { return '০১২৩৪৫৬৭৮৯'.indexOf(d); }); }
-    function isB(ch) { return !!ch && /[ঀ-৿]/.test(ch); }
+    function isB(ch) { return !!ch && /[ঀ-৥ৰ-৿]/.test(ch); }   /* বাংলা অক্ষর — অঙ্ক (০-৯) বাদ */
     function phrase(s, list) {
         var hit = false;
         list = list || PH;

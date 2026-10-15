@@ -1298,6 +1298,9 @@
         .ac-sum{margin-top:10px;font-size:13px;font-weight:700;color:#b91c1c;}
         .ac-del{background:#dc2626;color:#fff;border:none;}
         .ac-del:disabled{opacity:.45;cursor:not-allowed;}
+        .fa-vol-hint{display:flex;gap:8px;align-items:flex-start;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:9px 11px;margin-bottom:12px;font-size:12.5px;line-height:1.6;color:var(--text-main);}
+        .fa-vol-hint i{color:#15803d;flex-shrink:0;margin-top:3px;}
+        [data-theme="dark"] .fa-vol-hint{background:rgba(22,163,74,.08);border-color:rgba(34,197,94,.3);}
         /* খণ্ডসমূহ (বই এডিটর, ২০২৬-১০-১৫) */
         .vol-rows{display:flex;flex-direction:column;gap:6px;}
         .vol-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--surface,#fff);border:1px solid var(--border);border-radius:8px;padding:6px;}
@@ -2012,6 +2015,7 @@
 
                 <div id="beAddForm" style="display:none;margin-bottom:16px;background:var(--surface);border-radius:14px;border:1px solid var(--primary);padding:16px;">
                     <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;">নতুন বই যোগ করুন</div>
+                    <div class="fa-vol-hint"><i class=gi-books></i> <span><b>একাধিক খণ্ড বা সাইজ?</b> প্রতিটা খণ্ড (১ম খণ্ড, ২য় খণ্ড, সব খণ্ড একত্রে) বা পণ্যের সাইজ (নাম ইংরেজিতে, যেমন ROYAL OUD 5 ml, ROYAL OUD 10 ml, Honey 1 kg) আলাদা করে যোগ করুন — নিজের ছবি ও দামসহ। নামে খণ্ড বা সাইজ লিখলে, যোগ করার পর নিচে খণ্ডের ঘর নিজে থেকে খুলে আগের খণ্ডগুলো খুঁজে দেবে — দেখে নিয়ে "সেভ ও আপলোড" চাপলেই সাইটে বাটন বসে যাবে।</span></div>
                     <div class="editor-grid">
                         <div class="form-group editor-full"><label class="be-label">প্রোডাক্ট টাইপ *</label>
                             <select class="form-input" id="fa_type" onchange="faOnTypeChange()">
@@ -4638,7 +4642,12 @@ function volLabelOf(b){
     const n=String((b&&b.name)||'');
     if(b&&(b.type||'বই')!=='বই'){   /* পণ্যের অপশন — নামের সাইজ/পরিমাণ ("৬ মিলি", "500g"), না পেলে নামই */
         const z=n.match(VOL_SIZE);
-        return z?z[0].trim():n.slice(0,24);
+        if(!z) return n.slice(0,24);
+        /* পণ্যের পাতা ইংরেজি — বাটনও "5 ml", "1 kg" */
+        const num=volDigits(z[0]).match(/[0-9]+(?:[.,][0-9]+)?/)[0].replace(',','.');
+        const u=z[0].replace(/[০-৯0-9.,\s]/g,'').toLowerCase();
+        const U={'মিলি':'ml','এমএল':'ml','ml':'ml','গ্রাম':'g','গ্রা':'g','g':'g','gm':'g','কেজি':'kg','kg':'kg','লিটার':'L','l':'L','ltr':'L','পিস':'pcs','pcs':'pcs','টি':'pcs','ইঞ্চি':'inch','inch':'inch','সেমি':'cm','cm':'cm'};
+        return num+' '+(U[u]||u);
     }
     const m=n.match(/[\(\[]?\s*(?:[০-৯0-9]+(?:ম|য়|য়|র্থ|ষ্ঠ|তম)?|প্রথম|দ্বিতীয়|তৃতীয়|চতুর্থ|পঞ্চম|ষষ্ঠ|সপ্তম|অষ্টম|নবম|দশম|দুই|তিন|চার|পাঁচ)?\s*(?:[-–—ও,]\s*(?:[০-৯0-9]+(?:ম|য়|য়|র্থ)?|দ্বিতীয়|তৃতীয়|চতুর্থ))*\s*[\)\]]?\s*(?:খ[ণন]্?[ডদ]|খণ্ড|খন্ড|পর্ব|ভলিউম)(?![\u0980-\u09FF])\s*(?:[০-৯0-9]+)?\s*(?:একত্রে|সেট)?\s*[\)\]]?/i);
     const t=m?m[0].replace(/^[\s\(\[]+|[\s\)\]]+$/g,'').replace(/\s*[\)\]]\s*/g,' ').replace(/\s+/g,' ').trim():'';
@@ -4690,10 +4699,10 @@ function beVolAdd(i,inp){
 }
 function beVolDel(i,k){ (beVolSel[i]||[]).splice(k,1); beVolRefresh(i); }
 function beVolMove(i,k,d){ const a=beVolSel[i]||[], j=k+d; if(j<0||j>=a.length) return; const t=a[k]; a[k]=a[j]; a[j]=t; beVolRefresh(i); }
-function beVolAuto(i){
+function beVolAuto(i,quiet){   /* quiet: নতুন বই যোগের পর নিজে থেকে চালানো — কিছু না পেলে চুপ থাকে */
     const b=localBooks[i]; if(!b) return;
     const base=volBase(b.name);
-    if(!base){ showToast('নাম থেকে মূল নাম বোঝা গেল না — নিচে নাম লিখে বাছুন','#b45309'); return; }
+    if(!base){ if(quiet) return 0; showToast('নাম থেকে মূল নাম বোঝা গেল না — নিচে নাম লিখে বাছুন','#b45309'); return 0; }
     const found=[];
     localBooks.forEach((x,j)=>{
         if(!x||j===i||!x.bid||!x.name) return;
@@ -4702,13 +4711,14 @@ function beVolAuto(i){
         if(x.name===b.name) return;
         found.push(x);
     });
-    if(!found.length){ showToast('একই নামের অন্য কোনো খণ্ড পাওয়া যায়নি — নিচে নাম লিখে বাছুন','#b45309'); return; }
+    if(!found.length){ if(quiet) return 0; showToast('একই নামের অন্য কোনো খণ্ড পাওয়া যায়নি — নিচে নাম লিখে বাছুন','#b45309'); return 0; }
     if(!beVolEnsureSelf(i)) return;
     const a=beVolSel[i]; let n=0;
     found.forEach(x=>{ if(!a.some(v=>v.b===x.bid)){ a.push({b:x.bid,l:volLabelOf(x)}); n++; } });
     a.sort((p,q)=>volRank(p.l)-volRank(q.l));
     beVolRefresh(i);
-    showToast(drvBn(n)+'টা খণ্ড পাওয়া গেছে — নাম ঠিক আছে কিনা দেখে "সেভ ও আপলোড" চাপুন','#0B6E4F');
+    if(!quiet) showToast(drvBn(n)+'টা খণ্ড পাওয়া গেছে — নাম ঠিক আছে কিনা দেখে "সেভ ও আপলোড" চাপুন','#0B6E4F');
+    return found.length;
 }
 function beVolShow(i){ const w=document.getElementById('beVolWrap_'+i), t=document.getElementById('beVolOpen_'+i); if(w) w.style.display=''; if(t) t.style.display='none'; }
 /* সেভের সময়: এই বইয়ের দল ঠিক করে দলের বাকি বইগুলোতেও একই তালিকা বসাই, আর যারা দল থেকে বাদ গেল তাদের থেকে সরাই */
@@ -5783,7 +5793,8 @@ function beAttrUpdate(key,ai,field,val){ if(!beAttrSel[key]||!beAttrSel[key][ai]
 /* ─── পণ্যের পেশাদার তথ্য (২০২৬-১০-১৫) — মূল বৈশিষ্ট্য (highlights), স্পেসিফিকেশন দ্রুত যোগ, ব্যবহারবিধি (usage).
    বইয়ের তথ্য আর পণ্যের তথ্য আলাদা — সাইটের পণ্যের পাতায় বৈশিষ্ট্যের তালিকা, স্পেসিফিকেশন টেবিল আর
    "ব্যবহারবিধি" ট্যাব দেখায় ─── */
-const BE_ATTR_QUICK=['ওজন / পরিমাণ','সাইজ','রং','উপাদান / কাপড়','উৎপত্তি দেশ','মেয়াদ','ঘ্রাণ','প্যাকে কয়টি','ওয়ারেন্টি'];
+/* পণ্যের পাতা ইংরেজিতে দেখায় — তাই বৈশিষ্ট্যের নামও ইংরেজি */
+const BE_ATTR_QUICK=['Weight / Quantity','Size','Colour','Material','Country of origin','Expiry','Scent','Pieces per pack','Warranty'];
 function beAttrQuick(key,label){
     beAttrSel[key]=beAttrSel[key]||[];
     if(beAttrSel[key].some(a=>(a.label||'').trim()===label)){ showToast('"'+label+'" আগেই আছে','#b45309'); return; }
@@ -5794,10 +5805,10 @@ function beProdExtraHtml(key,b){
     b=b||{};
     const hl=Array.isArray(b.highlights)?b.highlights.join('\n'):'';
     return `<div class="form-group editor-full be-attr-quick"><span>দ্রুত যোগ:</span>${BE_ATTR_QUICK.map(l=>`<button type="button" class="be-chip" onclick="beAttrQuick('${key}','${l}')">＋ ${l}</button>`).join('')}</div>
-        <div class="form-group editor-full"><label class="be-label">মূল বৈশিষ্ট্য — প্রতি লাইনে একটা (সাইটে দামের নিচে টিক চিহ্নসহ দেখাবে)</label>
-            <textarea class="form-input" id="be_hl_${key}" rows="4" placeholder="১০০% খাঁটি ও অ্যালকোহলমুক্ত\nদীর্ঘস্থায়ী সুগন্ধ — ১০-১২ ঘণ্টা\nসুন্দর কাঁচের বোতলে">${escapeHTML(hl)}</textarea></div>
-        <div class="form-group editor-full"><label class="be-label">ব্যবহারবিধি / যত্ন (ঐচ্ছিক — সাইটে আলাদা ট্যাবে দেখাবে)</label>
-            <textarea class="form-input" id="be_usage_${key}" rows="3" placeholder="যেমন: কব্জি ও কানের পেছনে অল্প করে লাগান। রোদ থেকে দূরে রাখুন।">${escapeHTML(b.usage||'')}</textarea></div>`;
+        <div class="form-group editor-full"><label class="be-label">মূল বৈশিষ্ট্য — প্রতি লাইনে একটা, ইংরেজিতে লিখুন (সাইটে দামের নিচে টিক চিহ্নসহ দেখাবে)</label>
+            <textarea class="form-input" id="be_hl_${key}" rows="4" placeholder="100% pure and alcohol-free\nLong-lasting scent — 10-12 hours\nIn an elegant glass bottle">${escapeHTML(hl)}</textarea></div>
+        <div class="form-group editor-full"><label class="be-label">ব্যবহারবিধি / যত্ন (ঐচ্ছিক, ইংরেজিতে — সাইটে আলাদা ট্যাবে দেখাবে)</label>
+            <textarea class="form-input" id="be_usage_${key}" rows="3" placeholder="e.g. Apply a little on the wrists and behind the ears. Keep away from sunlight.">${escapeHTML(b.usage||'')}</textarea></div>`;
 }
 function beReadProdExtra(key,b){
     const hl=(document.getElementById('be_hl_'+key)?.value||'').split('\n').map(s=>s.replace(/^[\s•\-–*✓✔]+/,'').trim()).filter(Boolean).slice(0,12);
@@ -5860,7 +5871,18 @@ function beAddBook(){
     beOpenIdx=localBooks.length-1;
     beUpdateStats();
     beRenderList();
-    syncBookToFirebase(localBooks.length-1, newBook, 'নতুন আইটেম যোগ ও Firebase-এ সেভ হয়েছে');
+    const newIdx=localBooks.length-1;
+    syncBookToFirebase(newIdx, newBook, 'নতুন আইটেম যোগ ও Firebase-এ সেভ হয়েছে');
+    /* নামে খণ্ড/পর্ব বা সাইজ ("৫ মিলি", "১ কেজি") থাকলে খণ্ডের ঘর নিজে খুলে একই নামের বাকিগুলো খুঁজে দিই —
+       মালিক দেখে "সেভ ও আপলোড" চাপলে তবেই দল তৈরি হয় (bid ওপরের sync-এর শুরুতেই বসে যায়) */
+    if(VOL_WORD.test(name)||VOL_SIZE.test(name)){
+        setTimeout(function(){
+            if(!localBooks[newIdx]||!localBooks[newIdx].bid) return;
+            if(!beVolAuto(newIdx,true)) return;   /* আর কোনো খণ্ড/সাইজ এখনো নেই (প্রথমটা) — কিছু দেখাই না */
+            beVolShow(newIdx); showToast('একই নামের অন্য খণ্ড/সাইজ পাওয়া গেছে — নিচে দেখে "সেভ ও আপলোড" চাপুন','#0B6E4F');
+            const w=document.getElementById('beVolWrap_'+newIdx); if(w) w.scrollIntoView({behavior:'smooth',block:'center'});
+        },400);
+    }
 }
 
 function beToggleBook(idx){
@@ -6517,7 +6539,8 @@ function beRenderList(){
         beAttrSel[i]=Array.isArray(b.attributes)?b.attributes.map(a=>({...a})):[];
         beImagesSel[i]=Array.isArray(b.images)?b.images.slice():[];
         bePkgSel[i]=Array.isArray(b.pkgItems)?b.pkgItems.slice():[];
-        beVolSel[i]=Array.isArray(b.vols)?b.vols.filter(v=>v&&v.b).map(v=>({b:v.b,l:v.l||''})):[];
+        /* খোলা বইয়ের এখনো-সেভ-না-করা খণ্ড বাছাই তালিকা আবার আঁকার সময় মুছে না যায় */
+        if(!(i===beOpenIdx&&beVolSel[i]&&beVolSel[i].length&&!(Array.isArray(b.vols)&&b.vols.length))) beVolSel[i]=Array.isArray(b.vols)?b.vols.filter(v=>v&&v.b).map(v=>({b:v.b,l:v.l||''})):[];
         const hasImg=isRealUrl(b.img);
         const isOpen=beOpenIdx===i;
         const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" loading="lazy" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;

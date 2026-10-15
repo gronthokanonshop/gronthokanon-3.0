@@ -1367,6 +1367,66 @@ function orderViaWA(){
    কিনলে কত লাগত (সবার আসল দাম থাকলে তবেই); আর কোনো বই কোনো প্যাকেজে থাকলে সেই বইয়ের পাতায় প্যাকেজটা */
 /* খণ্ড — অ্যাডমিনে জুড়ে দেওয়া একই বইয়ের খণ্ডগুলো (b.vols = [{b: bid, l: বাটনের নাম}]); প্রতিটা খণ্ড আলাদা বই,
    বাটনে চাপলে সেই খণ্ডের পাতা খোলে — তার নিজের ছবি ও দাম। লুকানো/মুছে ফেলা খণ্ড দেখাই না */
+/* পণ্যের পাতা ইংরেজিতে (২০২৬-১০-১৫, মালিকের অনুরোধ: "onnano product er khetre bangla lekha cai na") —
+   বই ছাড়া অন্য পণ্যের পাতায় পণ্যের অংশটা (নাম-দাম-অপশন-তথ্য-বাটন-ডেলিভারি-ট্যাব-সম্পর্কিত তালিকা)
+   ইংরেজিতে, অঙ্কও ইংরেজি। সাইটের উপরের মেনু, ফুটার, কার্ট আর রিভিউ আগের মতো বাংলা। বইয়ের পাতায় কিছুই বদলায় না। */
+const GK_PEN = {
+    'অপশন বাছুন': 'Choose option', 'পণ্যের তথ্য': 'Product details', 'ব্র্যান্ড': 'Brand', 'ধরন': 'Type', 'তথ্য': 'Info', 'শীঘ্রই যোগ হবে': 'Coming soon',
+    'স্টকে আছে': 'In stock', 'স্টক শেষ': 'Out of stock', 'পরিমাণ:': 'Quantity:',
+    'আজ অর্ডারে ঢাকায় পাবেন': 'Order today, get it in Dhaka by', 'ঢাকার বাইরে': 'Outside Dhaka', '· আনুমানিক, শুক্রবার ডেলিভারি বন্ধ': '· estimated, no delivery on Fridays',
+    'ক্যাশ অন ডেলিভারি সুবিধা': 'Cash on delivery', 'ডেলিভারি পেয়ে টাকা দিন': 'Pay when it arrives', 'সহজ রিটার্ন পলিসি': 'Easy returns', '৭ দিনের মধ্যে ফেরত দিন': 'Return within 7 days',
+    'ঢাকায় ডেলিভারি: ১-২ দিন': 'Dhaka delivery: 1-2 days', 'বাইরে: ৩-৫ কার্যদিবস': 'Outside Dhaka: 3-5 working days',
+    'উইশলিস্টে যোগ করুন': 'Add to wishlist', 'উইশলিস্ট থেকে সরান': 'Remove from wishlist', 'কার্টে যোগ করুন': 'Add to cart', 'এখনই কিনুন': 'Buy now', 'প্রি-অর্ডার করুন': 'Pre-order',
+    'WhatsApp-এ অর্ডার করুন': 'Order on WhatsApp', '১০০% অরিজিনাল পণ্য': '100% original product', 'সারাদেশে হোম ডেলিভারি': 'Home delivery across Bangladesh',
+    'বিবরণ': 'Description', 'রিভিউ': 'Reviews', 'ব্যবহারবিধি': 'How to use', 'ব্যবহারবিধি ও যত্ন': 'How to use & care', 'বিস্তারিত': 'Details', 'আরো দেখুন': 'See more',
+    'পণ্যটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।': 'Details about this product will be added soon.',
+    'আপনার জন্য আরও পণ্য': 'More products for you', 'একই ধরনের পণ্য': 'Similar products', 'এই বিষয়ে আরো পণ্য শীঘ্রই আসছে': 'More products coming soon',
+    'যাঁরা এই বইটি কিনেছেন, তাঁরা আরও কিনেছেন': 'Customers also bought', 'একই লেখক': 'Same author', 'একই বিষয়': 'Same type', 'একই প্রকাশনী': 'Same brand',
+    'হোম': 'Home', 'বিষয়': 'Categories', 'ছাড়': 'off',
+    'WhatsApp শেয়ার': 'Share on WhatsApp', 'লিঙ্ক কপি করুন': 'Copy link', 'লিঙ্ক কপি হয়েছে!': 'Link copied!', 'কপি হয়েছে!': 'Copied!', 'একটু পড়ে দেখুন': 'Take a look',
+    'সুন্নাহ আইটেম': 'Sunnah Item', 'খাবার': 'Food', 'স্টেশনারি': 'Stationery',
+    'আতর': 'Attar', 'মিসওয়াক': 'Miswak', 'পাঞ্জাবি': 'Panjabi', 'টুপি': 'Cap', 'হিজাব': 'Hijab', 'মধু': 'Honey', 'খেজুর': 'Dates', 'কালোজিরা': 'Black seed'
+};
+const GK_PEN_MONTH = { 'জানুয়ারি': 'January', 'ফেব্রুয়ারি': 'February', 'মার্চ': 'March', 'এপ্রিল': 'April', 'মে': 'May', 'জুন': 'June', 'জুলাই': 'July', 'আগস্ট': 'August', 'সেপ্টেম্বর': 'September', 'অক্টোবর': 'October', 'নভেম্বর': 'November', 'ডিসেম্বর': 'December' };
+function gkPenAscii(s) { return String(s).replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d)); }
+function gkPenText(v) {
+    if (!/[ঀ-৿]/.test(v)) return v;
+    const lead = v.match(/^\s*/)[0], trail = v.match(/\s*$/)[0], c = v.trim().replace(/\s+/g, ' ');
+    if (GK_PEN[c]) return lead + GK_PEN[c] + trail;
+    let m;
+    if ((m = c.match(/^([০-৯\d]+)% ডিসকাউন্টে ৳([০-৯\d,]+) সাশ্রয়$/))) return lead + 'Save ৳' + gkPenAscii(m[2]) + ' (' + gkPenAscii(m[1]) + '% off)' + trail;
+    if ((m = c.match(/^([০-৯\d]+)% ছাড়$/))) return lead + gkPenAscii(m[1]) + '% off' + trail;
+    if ((m = c.match(/^([০-৯\d]+) বার দেখা হয়েছে$/))) return lead + 'Viewed ' + gkPenAscii(m[1]) + ' times' + trail;
+    if ((m = c.match(/^এই (?:প্যাকেজের|বইয়ের) সাথে ফ্রি: (.*)$/))) return lead + 'Free with this item: ' + m[1] + trail;
+    /* তারিখ ("১৭–১৮ অক্টোবর") আর শুধু অঙ্ক/দাম */
+    let s = c.replace(/(^|[^ঀ-৿])(জানুয়ারি|ফেব্রুয়ারি|মার্চ|এপ্রিল|মে|জুন|জুলাই|আগস্ট|সেপ্টেম্বর|অক্টোবর|নভেম্বর|ডিসেম্বর)(?![ঀ-৿])/g, (x, p, mo) => p + GK_PEN_MONTH[mo]);
+    s = gkPenAscii(s);
+    return s === c ? v : lead + s + trail;
+}
+function gkPenWalk(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { const n = gkPenText(root.nodeValue); if (n !== root.nodeValue) root.nodeValue = n; return; }
+    if (root.nodeType !== 1 || root.closest('.reviews-list,.rating-section,#tab-reviews,.review-form')) return;
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) {
+        if (n.parentElement && n.parentElement.closest('#tab-reviews,script,style,textarea')) continue;
+        const t = gkPenText(n.nodeValue); if (t !== n.nodeValue) n.nodeValue = t;
+    }
+}
+let gkPenObs = null;
+function gkProductEnglish(b) {
+    const isProduct = b && (b.type || 'বই') !== 'বই';
+    if (!isProduct) { if (gkPenObs) { gkPenObs.disconnect(); gkPenObs = null; } return; }
+    const sel = ['#bookCrumb', '.img-card', '#mainSection', '.tabs-nav', '#tab-desc', '#tab-usage', '#pkgSection', '#alsoSection', '.ai-suggest-section', '#relatedSection', '#stickyBar', '#discRibbon'];
+    const roots = sel.map(s => document.querySelector(s)).filter(Boolean);
+    roots.forEach(gkPenWalk);
+    if (!gkPenObs) {
+        gkPenObs = new MutationObserver(ms => ms.forEach(m => {
+            if (m.type === 'characterData') gkPenWalk(m.target); else m.addedNodes.forEach(gkPenWalk);
+        }));
+        roots.forEach(r => gkPenObs.observe(r, { childList: true, subtree: true, characterData: true }));
+    }
+}
 /* পণ্যের পাতা — বইয়ের কথা ("অরিজিনাল বই", "আরও বই") পণ্যের মতো করে, মূল বৈশিষ্ট্যের টিক-তালিকা আর
    "ব্যবহারবিধি" ট্যাব (অ্যাডমিনের পণ্য এডিটর থেকে highlights / usage) */
 function gkProductLook(b){
@@ -1380,6 +1440,7 @@ function gkProductLook(b){
     if(hl){ hl.innerHTML=items.map(x=>'<li><i class=gi-ok></i><span>'+escapeHTML(x)+'</span></li>').join(''); hl.style.display=items.length?'':'none'; }
     const us=(!isBook&&b.usage)?String(b.usage).trim():'', ub=document.getElementById('tabBtnUsage'), ut=document.getElementById('bookUsage');
     if(ub) ub.style.display=us?'':'none'; if(ut) ut.innerText=us;
+    gkProductEnglish(b);
 }
 function gkRenderVols(b){
     const box=document.getElementById('gkVols'); if(!box||!b) return;
@@ -2028,7 +2089,8 @@ function loadAISuggest(b){
     const own=[]; const mc=bookMainCat(b); if(mc)own.push(mc); bookTags(b).forEach(t=>{if(!own.includes(t))own.push(t);});
     const tags=own.slice();
     if(b.subject&&!tags.includes(b.subject))tags.push(b.subject);
-    const more=[...new Set(books.map(bookMainCat).filter(Boolean))].slice(0,5);
+    /* পণ্যের পাতায় বইয়ের ক্যাটাগরির চিপ দেখাই না (ওখানে শুধু পণ্য আসে) */
+    const more=(b.type||'বই')!=='বই'?[]:[...new Set(books.map(bookMainCat).filter(Boolean))].slice(0,5);
     more.forEach(c=>{if(!tags.includes(c))tags.push(c);});
     const uniqueTags=[...new Set(tags)].slice(0,5);
     document.getElementById('aiTagRow').innerHTML=uniqueTags.map(t=>`<div class="ai-tag${own.includes(t)?' sel':''}" onclick="toggleAiTag(this,'${escapeHTML(t)}')">${escapeHTML(window.gkCatLabel?gkCatLabel(t):t)}</div>`).join('');
